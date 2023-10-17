@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="false"
+    android:paddingStart="24dp"
+    android:paddingEnd="24dp"
+    app:spanCount="2"
+    tools:itemCount="2"
+    tools:layoutManager="GridLayoutManager"
+    tools:listitem="@layout/item_episode_grid"
+    tools:orientation="vertical">
+
+</androidx.recyclerview.widget.RecyclerView>

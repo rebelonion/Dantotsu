@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/itemEpisodeCont"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/nav_bg"
+    app:cardCornerRadius="16dp">
+
+    <LinearLayout
+        android:id="@+id/itemEpisodeProgressCont"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/itemEpisodeProgress"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="0"
+            android:background="@color/pink_500" />
+
+        <View
+            android:id="@+id/itemEpisodeProgressEmpty"
+            android:layout_width="0dp"
+            android:layout_height="2dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/itemEpisodeFillerView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/filler"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/itemEpisodeNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:fontFamily="@font/poppins_bold"
+        android:textSize="16sp" />
+
+    <View
+        android:id="@+id/itemEpisodeViewedCover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.33"
+        android:background="@color/bg"
+        android:visibility="gone" />
+</androidx.cardview.widget.CardView>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/nav_bg"
+    app:cardCornerRadius="12dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center_vertical"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_bold"
+                android:singleLine="true"
+                android:text="@string/chap"
+                android:textSize="14dp"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/colon"
+                android:textSize="14dp"
+                tools:ignore="SpUsage" />
+
+            <TextView
+                android:id="@+id/itemChapterNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_bold"
+                android:singleLine="true"
+                android:textSize="14dp"
+                tools:ignore="SpUsage"
+                tools:text="1" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/itemChapterTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.66"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_bold"
+            android:maxLines="1"
+            android:textSize="14dp"
+            android:visibility="gone"
+            tools:ignore="SpUsage" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/itemEpisodeViewedCover"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0.33"
+        android:background="@color/bg"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/itemEpisodeViewed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_margin="8dp"
+        android:visibility="gone"
+        app:srcCompat="@drawable/ic_round_remove_red_eye_24"
+        tools:ignore="ContentDescription" />
+
+</androidx.cardview.widget.CardView>

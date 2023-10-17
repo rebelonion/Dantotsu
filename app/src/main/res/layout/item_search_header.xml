@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="-16dp"
+    android:layout_marginEnd="-16dp"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchBar"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_margin="16dp"
+        android:hint="@string/anime"
+        android:transitionName="@string/search"
+        app:boxBackgroundColor="@color/bg"
+        app:boxBackgroundMode="outline"
+        app:boxCornerRadiusBottomEnd="28dp"
+        app:boxCornerRadiusBottomStart="28dp"
+        app:boxCornerRadiusTopEnd="28dp"
+        app:boxCornerRadiusTopStart="28dp"
+        app:endIconDrawable="@drawable/ic_round_search_24"
+        app:hintAnimationEnabled="true">
+
+        <AutoCompleteTextView
+            android:id="@+id/searchBarText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_bold"
+            android:imeOptions="actionSearch"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:padding="8dp"
+            android:textColor="?android:attr/textColorSecondary"
+            android:textSize="14sp"
+            tools:ignore="LabelFor,TextContrastCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="-16dp"
+        android:layout_marginBottom="-4dp"
+        android:minHeight="16dp"
+        android:orientation="horizontal">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/searchList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_weight="1"
+            android:layoutDirection="inherit"
+            android:text="@string/list_only"
+            android:visibility="visible"
+            app:checkedState="indeterminate"
+            tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/searchAdultCheck"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:layout_weight="1"
+            android:layoutDirection="rtl"
+            android:text="@string/adult"
+            android:textAlignment="textEnd"
+            android:visibility="visible"
+            tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:clipToPadding="false"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/searchChipRecycler"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:fadeScrollbars="true"
+            android:fadingEdge="horizontal"
+            android:requiresFadingEdge="horizontal"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:spanCount="6"
+            tools:listitem="@layout/item_chip" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/searchFilter"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            app:cardBackgroundColor="@color/nav_bg"
+            app:cardCornerRadius="16dp"
+            app:contentPadding="4dp"
+            app:contentPaddingLeft="8dp"
+            app:contentPaddingRight="8dp"
+            tools:ignore="ContentDescription,TextContrastCheck">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/filter"
+                android:textColor="?attr/colorPrimary"
+                app:drawableStartCompat="@drawable/ic_round_filter_alt_24"
+                app:drawableTint="?attr/colorPrimary" />
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/search_results"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:id="@+id/searchResultList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.33"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_round_view_list_24"
+            app:tint="@color/bg_opp"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
+
+        <ImageView
+            android:id="@+id/searchResultGrid"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.33"
+            android:padding="8dp"
+            app:srcCompat="@drawable/ic_round_grid_view_24"
+            app:tint="@color/bg_opp"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
+
+    </LinearLayout>
+
+</LinearLayout>

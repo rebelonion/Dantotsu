@@ -1,0 +1,57 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.Base" parent="Theme.Material3.DayNight">
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/status</item>
+
+        <item name="colorPrimary">@color/pink_500</item>
+        <item name="colorPrimaryVariant">@color/pink_700</item>
+        <item name="colorOnPrimary">@color/bg_white</item>
+        <item name="colorSecondary">@color/violet_400</item>
+        <item name="colorSecondaryVariant">@color/violet_700</item>
+        <item name="colorOnSecondary">@color/bg_black</item>
+        <item name="colorSecondaryContainer">?attr/colorSecondary</item>
+        <item name="colorOnSecondaryContainer">?attr/colorOnSecondary</item>
+        <item name="colorOnSurfaceVariant">@color/nav_tab</item>
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowBackground">@color/bg</item>
+        <item name="android:fontFamily">@font/poppins</item>
+        <item name="android:textColor">@color/bg_black</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceOverlay.Demo</item>
+        <item name="android:ambientShadowAlpha">0.08</item>
+        <item name="android:spotShadowAlpha">0.08</item>
+        <item name="snackbarStyle">@style/MySnackbar</item>
+        <item name="snackbarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton.Snackbar</item>
+        <item name="snackbarTextViewStyle">@string/MySnackBarText</item>
+        <item name="popupMenuStyle">@style/MyPopup</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+    </style>
+
+    <style name="Theme.Dantotsu" parent="Theme.Base">
+        <item name="android:windowLightStatusBar" >true</item>
+    </style>
+
+    <style name="Theme.Dantotsu.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Dantotsu.AppBarOverlay" parent="Theme.Dantotsu" />
+    <style name="Theme.Dantotsu.PopupOverlay" parent="Theme.Dantotsu" />
+
+    <style name="Theme.Dantotsu.NeverCutout" parent="@style/Theme.Dantotsu.NoActionBar">
+        <item name="android:navigationBarColor">@color/nav_bg</item>
+    </style>
+
+    <style name="DialogTheme" parent="Theme.Dantotsu">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@drawable/shape_corner_16dp</item>
+    </style>
+</resources>

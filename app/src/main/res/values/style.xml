@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="NavBarText">
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:padding">2sp</item>
+    </style>
+
+    <style name="Suffix">
+        <item name="android:height">54dp</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_gravity">center</item>
+    </style>
+
+    <style name="text10sp">
+        <item name="android:textSize">10sp</item>
+        <item name="fontFamily">@font/poppins_family</item>
+    </style>
+
+    <style name="ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
+        <item name="backgroundTint">@color/nav_bg</item>
+        <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Demo</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.Demo" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="cornerSize">20dp</item>
+        <item name="background">@id/bg</item>
+        <item name="cornerFamily">rounded</item>
+    </style>
+    <style name="roundedImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
+    <style name="MySnackbar" parent="Widget.MaterialComponents.Snackbar">
+        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:background">@drawable/round_corner</item>
+    </style>
+    <string name="MySnackBarText" parent="Widget.MaterialComponents.Snackbar.TextView">
+        <item name="android:textColor">@color/bg_opp</item>
+    </string>
+    
+    <style name="fontTooltip" parent="Widget.Material3.Tooltip">
+        <item name="android:padding">8dp</item>
+        <item name="android:textAppearance">@style/Suffix</item>
+        <item name="android:layout_margin">48dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.MaterialComponents.Tooltip</item>
+    </style>
+
+    <style name="MyPopup" parent="@style/Widget.MaterialComponents.PopupMenu">
+        <item name="android:popupBackground">@color/bg</item>
+    </style>
+
+    <style name="BottomNavBar" parent="Widget.Material3.BottomNavigationView.ActiveIndicator"/>
+</resources>

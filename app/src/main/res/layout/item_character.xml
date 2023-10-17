@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="-12dp"
+    android:layout_marginTop="-12dp"
+    android:layout_marginEnd="-12dp"
+    android:orientation="vertical">
+
+
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clipToPadding="false"
+        android:padding="24dp">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/itemCompactCard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:translationZ="8dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/itemCompactImage"
+                android:layout_width="108dp"
+                android:layout_height="160dp"
+                android:scaleType="centerCrop"
+                android:transitionName="characterCover"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
+                tools:ignore="ContentDescription,ImageContrastCheck"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical">
+
+        <View
+            android:layout_width="108dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/itemCompactTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:transitionName="mediaTitle" />
+
+        <TextView
+            android:id="@+id/itemCompactRelation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.58"
+            android:ellipsize="marquee"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textAlignment="textEnd"
+            android:textAllCaps="true"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:transitionName="mediaTitle"
+            tools:ignore="TextContrastCheck"
+            tools:text="SOURCE " />
+
+    </LinearLayout>
+
+</FrameLayout>

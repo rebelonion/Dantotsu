@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:minHeight="64dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/settingsUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-4dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center"
+                    android:text="@string/username"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/settingsLogin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginTop="-16dp"
+                    android:layout_marginBottom="-16dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:padding="16dp"
+                    android:text="@string/logout"
+                    android:textColor="?attr/colorSecondaryVariant"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/homeUserAvatarContainer"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="4dp"
+                android:backgroundTint="@color/nav_bg_inv"
+                app:cardCornerRadius="26dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/settingsUserAvatar"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_round_person_24"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/image_search"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/search_by_image"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="@color/bg_opp"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_round_image_search_24"
+            app:iconPadding="16dp"
+            app:iconSize="24dp" />
+
+        <Button
+            android:id="@+id/settingsDownloads"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/downloads"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="@color/bg_opp"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_round_download_24"
+            app:iconPadding="16dp"
+            app:iconSize="24dp" />
+
+        <Button
+            android:id="@+id/settingsAnilistSettings"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/anilist_settings"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="@color/bg_opp"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_anilist"
+            app:iconPadding="16dp"
+            app:iconSize="24dp" />
+
+        <Button
+            android:id="@+id/settingsExtensionSettings"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/extension_settings"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="@color/bg_opp"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_extension"
+            app:iconPadding="16dp"
+            app:iconSize="24dp" />
+
+        <Button
+            android:id="@+id/settingsSettings"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/settings"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="@color/bg_opp"
+            app:cornerRadius="0dp"
+
+            app:icon="@drawable/ic_round_settings_24"
+            app:iconPadding="16dp"
+            app:iconSize="24dp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

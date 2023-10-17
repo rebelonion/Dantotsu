@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/info"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_info_24"
+        android:title="@string/info" />
+
+    <item
+        android:id="@+id/watch"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_movie_filter_24"
+        android:title="@string/watch" />
+</menu>

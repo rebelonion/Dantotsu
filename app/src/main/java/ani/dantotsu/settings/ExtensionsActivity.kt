@@ -1,0 +1,231 @@
+package ani.dantotsu.settings
+
+import android.annotation.SuppressLint
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Build.*
+import android.os.Build.VERSION.*
+import android.os.Bundle
+import android.provider.Settings
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationCompat
+import androidx.core.view.updateLayoutParams
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.*
+import ani.dantotsu.aniyomi.anime.AnimeExtensionManager
+import ani.dantotsu.aniyomi.anime.model.AnimeExtension
+import ani.dantotsu.databinding.ActivityExtensionsBinding
+import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import rx.android.schedulers.AndroidSchedulers
+import uy.kohesive.injekt.injectLazy
+
+
+class ExtensionsActivity : AppCompatActivity() {
+    private val restartMainActivity = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() = startMainActivity(this@ExtensionsActivity)
+    }
+    lateinit var binding: ActivityExtensionsBinding
+    private lateinit var extensionsRecyclerView: RecyclerView
+    private lateinit var allextenstionsRecyclerView: RecyclerView
+    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
+    private val extensionsAdapter = ExtensionsAdapter { pkgName ->
+        animeExtensionManager.uninstallExtension(pkgName)
+    }
+    private val allExtensionsAdapter = AllExtensionsAdapter(lifecycleScope) { pkgName ->
+        if (SDK_INT >= VERSION_CODES.O) {
+            // If we don't have permission to install unknown apps, request it
+            if (!packageManager.canRequestPackageInstalls()) {
+                startActivityForResult(
+                    Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES).setData(
+                        Uri.parse("package:$packageName")
+                    ), 1
+                )
+            }
+        }
+
+        val notificationManager =
+            getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Start the installation process
+        animeExtensionManager.installExtension(pkgName)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { installStep ->
+                    val builder = NotificationCompat.Builder(this,
+                        ani.dantotsu.aniyomi.data.Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                    )
+                        .setSmallIcon(R.drawable.ic_round_sync_24)
+                        .setContentTitle("Installing extension")
+                        .setContentText("Step: $installStep")
+                        .setPriority(NotificationCompat.PRIORITY_LOW)
+                    notificationManager.notify(1, builder.build())
+                },
+                { error ->
+                    val builder = NotificationCompat.Builder(this,
+                        ani.dantotsu.aniyomi.data.Notifications.CHANNEL_DOWNLOADER_ERROR
+                    )
+                        .setSmallIcon(R.drawable.ic_round_info_24)
+                        .setContentTitle("Installation failed")
+                        .setContentText("Error: ${error.message}")
+                        .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    notificationManager.notify(1, builder.build())
+                },
+                {
+                    val builder = NotificationCompat.Builder(this,
+                        ani.dantotsu.aniyomi.data.Notifications.CHANNEL_DOWNLOADER_PROGRESS)
+                        .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
+                        .setContentTitle("Installation complete")
+                        .setContentText("The extension has been successfully installed.")
+                        .setPriority(NotificationCompat.PRIORITY_LOW)
+                    notificationManager.notify(1, builder.build())
+                }
+            )
+    }
+
+
+
+    @SuppressLint("SetTextI18n")
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityExtensionsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        extensionsRecyclerView = findViewById(R.id.extensionsRecyclerView)
+        extensionsRecyclerView.layoutManager = LinearLayoutManager(this)
+        extensionsRecyclerView.adapter = extensionsAdapter
+
+        allextenstionsRecyclerView = findViewById(R.id.allExtensionsRecyclerView)
+        allextenstionsRecyclerView.layoutManager = LinearLayoutManager(this)
+        allextenstionsRecyclerView.adapter = allExtensionsAdapter
+
+        lifecycleScope.launch {
+            animeExtensionManager.installedExtensionsFlow.collect { extensions ->
+                extensionsAdapter.updateData(extensions)
+            }
+        }
+        lifecycleScope.launch {
+            animeExtensionManager.availableExtensionsFlow.collect { extensions ->
+                allExtensionsAdapter.updateData(extensions)
+            }
+        }
+
+
+        initActivity(this)
+
+
+
+        binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight
+            bottomMargin = navBarHeight
+        }
+
+        onBackPressedDispatcher.addCallback(this, restartMainActivity)
+
+        binding.settingsBack.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+    }
+
+    private class ExtensionsAdapter(private val onUninstallClicked: (String) -> Unit) : RecyclerView.Adapter<ExtensionsAdapter.ViewHolder>() {
+
+        private var extensions: List<AnimeExtension.Installed> = emptyList()
+
+        fun updateData(newExtensions: List<AnimeExtension.Installed>) {
+            extensions = newExtensions
+            notifyDataSetChanged()
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_extension, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val extension = extensions[position]
+            holder.extensionNameTextView.text = extension.name
+            holder.extensionIconImageView.setImageDrawable(extension.icon)
+            holder.closeTextView.text = "Uninstall"
+            holder.closeTextView.setOnClickListener {
+                onUninstallClicked(extension.pkgName)
+            }
+        }
+
+        override fun getItemCount(): Int = extensions.size
+
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val extensionNameTextView: TextView = view.findViewById(R.id.extensionNameTextView)
+            val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
+            val closeTextView: TextView = view.findViewById(R.id.closeTextView)
+        }
+    }
+
+    private class AllExtensionsAdapter(private val coroutineScope: CoroutineScope,
+                                       private val onButtonClicked: (AnimeExtension.Available) -> Unit) : RecyclerView.Adapter<AllExtensionsAdapter.ViewHolder>() {
+        private var extensions: List<AnimeExtension.Available> = emptyList()
+
+        fun updateData(newExtensions: List<AnimeExtension.Available>) {
+            extensions = newExtensions
+            println("Extensions update: $extensions")
+            notifyDataSetChanged()
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllExtensionsAdapter.ViewHolder {
+            val view = LayoutInflater.from(parent.context)
+                .inflate(R.layout.item_extension_all, parent, false)
+            return ViewHolder(view)
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val extension = extensions[position]
+            holder.extensionNameTextView.text = extension.name
+            coroutineScope.launch {
+                val drawable = urlToDrawable(holder.itemView.context, extension.iconUrl)
+                holder.extensionIconImageView.setImageDrawable(drawable)
+            }
+            holder.closeTextView.text = "Install"
+            holder.closeTextView.setOnClickListener {
+                onButtonClicked(extension)
+            }
+        }
+
+        override fun getItemCount(): Int = extensions.size
+
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val extensionNameTextView: TextView = view.findViewById(R.id.extensionNameTextView)
+            val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
+            val closeTextView: TextView = view.findViewById(R.id.closeTextView)
+        }
+
+        suspend fun urlToDrawable(context: Context, url: String): Drawable? {
+            return withContext(Dispatchers.IO) {
+                try {
+                    return@withContext Glide.with(context)
+                        .load(url)
+                        .submit()
+                        .get()
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return@withContext null
+                }
+            }
+        }
+    }
+
+}

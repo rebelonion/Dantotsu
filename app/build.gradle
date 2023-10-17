@@ -1,0 +1,119 @@
+plugins {
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+    id 'kotlin-android'
+    id 'kotlinx-serialization'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
+
+}
+
+def gitCommitHash = providers.exec {
+    commandLine("git", "rev-parse", "--verify", "--short", "HEAD")
+}.standardOutput.asText.get().trim()
+
+android {
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "ani.dantotsu"
+        minSdk 23
+        targetSdk 34
+        versionCode ((System.currentTimeMillis() / 60000).toInteger())
+        versionName "0.0.1"
+        signingConfig signingConfigs.debug
+    }
+
+    buildTypes {
+        debug {
+            //applicationIdSuffix ".beta"
+            debuggable true
+            versionNameSuffix "." + gitCommitHash
+        }
+        release {
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildFeatures {
+        viewBinding true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+        freeCompilerArgs = ["-Xcontext-receivers", "-Xmulti-platform"]
+    }
+    namespace 'ani.dantotsu'
+}
+
+dependencies {
+//    Core
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.browser:browser:1.6.0'
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.fragment:fragment-ktx:1.6.1'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation "androidx.work:work-runtime-ktx:2.8.1"
+    implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.github.Blatzar:NiceHttp:0.4.3'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
+
+//    Glide
+    ext.glide_version = '4.16.0'
+    api "com.github.bumptech.glide:glide:$glide_version"
+    implementation "com.github.bumptech.glide:glide:$glide_version"
+    ksp "com.github.bumptech.glide:ksp:$glide_version"
+    implementation "com.github.bumptech.glide:okhttp3-integration:$glide_version"
+    implementation 'jp.wasabeef:glide-transformations:4.3.0'
+
+//    FireBase
+    implementation platform('com.google.firebase:firebase-bom:32.2.3')
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.3'
+
+//    Exoplayer
+    ext.exo_version = '1.1.1'
+    implementation "androidx.media3:media3-exoplayer:$exo_version"
+    implementation "androidx.media3:media3-ui:$exo_version"
+    implementation "androidx.media3:media3-exoplayer-hls:$exo_version"
+    implementation "androidx.media3:media3-exoplayer-dash:$exo_version"
+    implementation "androidx.media3:media3-datasource-okhttp:$exo_version"
+    implementation "androidx.media3:media3-session:$exo_version"
+
+//    UI
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'nl.joery.animatedbottombar:library:1.1.0'
+    implementation 'io.noties.markwon:core:4.6.2'
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
+    implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
+    implementation 'com.alexvasilkov:gesture-views:2.8.3'
+    implementation 'com.github.VipulOG:ebook-reader:0.1.6'
+
+//    Aniyomi
+    implementation 'io.reactivex:rxjava:1.3.8'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'ru.beryukhov:flowreactivenetwork:1.0.4'
+    implementation 'ca.gosyer:voyager-navigator:1.0.0-rc07'
+    implementation 'com.squareup.logcat:logcat:0.1'
+    implementation 'com.github.inorichi.injekt:injekt-core:65b0440'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
+    implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps'
+    implementation 'com.squareup.okio:okio:3.3.0'
+    implementation 'ch.acra:acra-http:5.9.7'
+    implementation 'org.jsoup:jsoup:1.15.4'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-okio:1.5.0'
+    implementation 'com.jakewharton.rxrelay:rxrelay:1.2.0'
+    implementation 'com.github.tachiyomiorg:unifile:17bec43'
+    implementation 'com.github.gpanther:java-nat-sort:natural-comparator-1.1'
+    implementation 'androidx.preference:preference-ktx:1.2.0'
+
+}

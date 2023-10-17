@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/anime"
+        android:icon="@drawable/ic_round_movie_filter_24"
+        android:title="@string/anime" />
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/ic_round_home_24"
+        android:title="@string/home" />
+
+    <item
+        android:id="@+id/manga"
+        android:icon="@drawable/ic_round_import_contacts_24"
+        android:title="@string/manga"/>
+</menu>
