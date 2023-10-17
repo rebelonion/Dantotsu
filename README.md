@@ -1,9 +1,12 @@
-# **Dantotsu**
+# **Dantotsu** (🚧 ALPHA 🚧)
+
+> ⚠️ **WARNING**: This project is in alpha stage. Things may not work as expected.
+
 <p align="center">
    <a href="https://discord.gg/4HPZ5nAWwM"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
-   <a href="https://github.com/saikou-app/saikou/releases"><img src="https://img.shields.io/github/downloads/saikou-app/saikou/total?color=%233DDC84&logo=android&logoColor=%23fff&style=for-the-badge"></a>
+   <a href="https://github.com/saikou-app/saikou/releases"><img src="https://img.shields.io/github/downloads/rebelonion/Dantotsu/total?color=%233DDC84&logo=android&logoColor=%23fff&style=for-the-badge"></a>
 </p>
-Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an [Anilist](https://anilist.co/) only client, which also lets you stream-download Anime & Manga through extensions.
+Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an <a href="https://anilist.co/">Anilist</a> only client, which also lets you stream-download Anime & Manga through extensions.
 <br><br>
 <i>Dantotsu (断トツ; Dan-totsu) literally means the best of the best in Japanese. Well, we would like to say this is the best open source app for anime and manga on Android, but hey, try it out yourself & judge!
 </i> 
@@ -11,13 +14,21 @@ Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-o
 <br>
 <a href="https://www.buymeacoffee.com/rebelonion"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=rebelonion&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" /></a>
 <br>
+
 ### 🌟STAR THIS REPOSITORY TO SUPPORT THE DEVELOPER AND ENCOURAGE THE DEVELOPMENT OF THE APPLICATION!
 
 > **Warning**
 > 
 > Please do not attempt to upload Dantotsu or any of it's forks on Playstore or any other Android appstores on the internet. Doing so, may infringe their terms and conditions. This may result to legal action or immediate take-down of the app.
 
-<!--<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-175525.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-175542.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-175551.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-175600.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-183102.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-183112.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-183120.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-182352.png?raw=true" style="width: 23%;margin:16px;" />&nbsp;&nbsp;<img src="https://github.com/saikou-app/saikou-app.github.io/blob/main/assets/Screenshot_20220330-182421.png?raw=true" style="width: 23%;margin:16px;" />-->
+## Extension Status
+
+| Type             | Status  |
+| ---------------- | ------- |
+| Anime Extensions | Working |
+| Manga Extensions | Not Working |
+| Light Novel Extensions | Not Working |
+
 
 
 ## APP FEATURES
@@ -39,12 +50,12 @@ Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-o
 
 * **Available Anime sources:-**
 NONE BUILT IN!
-add your own extensions in the settings menu (Dantotsu has affiliation with any of the extensions)
+add your own extensions in the settings menu (Dantotsu has no affiliation with any of the extensions)
 
 
 * **Available Manga sources:-**
-  NONE BUILT IN!
-  add your own extensions in the settings menu (Dantotsu has affiliation with any of the extensions)
+NONE BUILT IN!
+add your own extensions in the settings menu (Dantotsu has no affiliation with any of the extensions)
 
 ## Planned Stuff
 
@@ -79,7 +90,7 @@ add your own extensions in the settings menu (Dantotsu has affiliation with any 
 
 ### VISIT FOR MORE INFORMATION:-
 
-https://saikou.me/
+no website yet :(
 
 ## DISCLAIMER
 
