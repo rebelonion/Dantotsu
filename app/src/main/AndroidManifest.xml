@@ -48,7 +48,7 @@
         android:theme="@style/Theme.Dantotsu"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup"
-        tools:targetApi="m">
+        >
         <activity
             android:name="ani.dantotsu.media.novel.novelreader.NovelReaderActivity"
             android:configChanges="orientation|screenSize"
