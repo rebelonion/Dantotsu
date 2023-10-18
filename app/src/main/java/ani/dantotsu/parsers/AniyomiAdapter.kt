@@ -10,6 +10,8 @@ import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
+import java.net.URL
+import java.net.URLDecoder
 
 class AniyomiAdapter {
     fun aniyomiToAnimeParser(extension: AnimeExtension.Installed): DynamicAnimeParser {
@@ -151,12 +153,39 @@ class VideoServerPassthrough : VideoExtractor{
         val result = regex.find(aniVideo.quality)
         val number = result?.value?.toInt() ?: 0
         val videoUrl = aniVideo.videoUrl ?: throw Exception("Video URL is null")
+        val urlObj = URL(videoUrl)
+        val path = urlObj.path
+        val query = urlObj.query
 
-        val format = when {
-            videoUrl.endsWith(".mp4", ignoreCase = true) || videoUrl.endsWith(".mkv", ignoreCase = true) -> VideoType.CONTAINER
-            videoUrl.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
-            videoUrl.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
-            else -> throw Exception("Unknown video format")
+
+        var format = when {
+            path.endsWith(".mp4", ignoreCase = true) || videoUrl.endsWith(".mkv", ignoreCase = true) -> VideoType.CONTAINER
+            path.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
+            path.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
+            else -> null
+        }
+        if (format == null) {
+            val queryPairs: List<Pair<String, String>> = query.split("&").map {
+                val idx = it.indexOf("=")
+                val key = URLDecoder.decode(it.substring(0, idx), "UTF-8")
+                val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")
+                Pair(key, value)
+            }
+
+            // Assume the file is named under the "file" query parameter
+            val fileName = queryPairs.find { it.first == "file" }?.second ?: ""
+
+            format = when {
+                fileName.endsWith(".mp4", ignoreCase = true) || fileName.endsWith(".mkv", ignoreCase = true) -> VideoType.CONTAINER
+                fileName.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
+                fileName.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
+                else -> null
+            }
+        }
+        // If the format is still undetermined, log an error or handle it appropriately
+        if (format == null) {
+            logger("Unknown video format: $videoUrl")
+            throw Exception("Unknown video format")
         }
         val headersMap: Map<String, String> = aniVideo.headers?.toMultimap()?.mapValues { it.value.joinToString() } ?: mapOf()
 
