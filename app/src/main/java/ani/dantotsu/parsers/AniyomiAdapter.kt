@@ -1,8 +1,11 @@
 package ani.dantotsu.parsers
 
+import android.widget.Toast
 import ani.dantotsu.FileUrl
 import ani.dantotsu.aniyomi.anime.model.AnimeExtension
 import ani.dantotsu.aniyomi.animesource.AnimeCatalogueSource
+import ani.dantotsu.aniyomi.util.network.interceptor.CloudflareBypassException
+import ani.dantotsu.currContext
 import ani.dantotsu.logger
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
@@ -73,11 +76,13 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
 
             var res: AnimesPage? = null
             try {
-                res = source.fetchSearchAnime(0, query, AnimeFilterList()).toBlocking().first()
-                println("res: $res")
+                res = source.fetchSearchAnime(1, query, AnimeFilterList()).toBlocking().first()
+                logger("res observable: $res")
             }
-            catch (e: Exception) {
-                logger("Exception: $e")
+            catch (e: CloudflareBypassException) {
+                logger("Exception in search: $e")
+                //toast
+                Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT).show()
             }
 
             val conv = convertAnimesPageToShowResponse(res!!)

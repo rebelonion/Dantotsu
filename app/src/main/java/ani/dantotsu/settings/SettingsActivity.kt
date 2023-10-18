@@ -497,7 +497,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
                         title = "Enjoying the App?"
                         addView(TextView(this@SettingsActivity).apply {
                             text =
-                                "Consider donating!\nOnce we reach the goal of $1000 (60%+ already reached!), Get ready to get an Offline Player & Manga Downloads!"
+                                "Consider donating!r"
                         })
 
                         setNegativeButton("no moners :(") {
