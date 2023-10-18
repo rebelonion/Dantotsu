@@ -21,6 +21,7 @@ import logcat.LogPriority
 import rx.Observable
 import ani.dantotsu.aniyomi.util.logcat
 import ani.dantotsu.aniyomi.util.withUIContext
+import ani.dantotsu.logger
 
 /**
  * The manager of anime extensions installed as another apk which extend the available sources. It handles
@@ -116,11 +117,13 @@ class AnimeExtensionManager(
                         }*/
 
 
+                    }else{
+                        println("${sc.name} is not AnimeCatalogueSource")
                     }
                 }
 
                 else -> {
-                    logcat(LogPriority.ERROR) { "Error loading anime extension: $result" }
+                    logcat(LogPriority.ERROR) { "Error loading anime extension: $result." }
                 }
             }
         }
