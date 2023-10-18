@@ -4,7 +4,7 @@
 
 <p align="center">
    <a href="https://discord.gg/4HPZ5nAWwM"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
-   <a href="https://github.com/saikou-app/saikou/releases"><img src="https://img.shields.io/github/downloads/rebelonion/Dantotsu/total?color=%233DDC84&logo=android&logoColor=%23fff&style=for-the-badge"></a>
+   <a href="https://github.com/downloads/rebelonion/releases"><img src="https://img.shields.io/github/downloads/rebelonion/Dantotsu/total?color=%233DDC84&logo=android&logoColor=%23fff&style=for-the-badge"></a>
 </p>
 Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an <a href="https://anilist.co/">Anilist</a> only client, which also lets you stream-download Anime & Manga through extensions.
 <br><br>
