@@ -238,7 +238,7 @@ class MediaDetailsViewModel : ViewModel() {
     suspend fun loadMangaChapterImages(chapter: MangaChapter, selected: Selected, post: Boolean = true): Boolean {
         return tryWithSuspend(true) {
             chapter.addImages(
-                mangaReadSources?.get(selected.source)?.loadImages(chapter.link) ?: return@tryWithSuspend false
+                mangaReadSources?.get(selected.source)?.loadImages(chapter.link, chapter.sChapter) ?: return@tryWithSuspend false
             )
             if (post) mangaChapter.postValue(chapter)
             true

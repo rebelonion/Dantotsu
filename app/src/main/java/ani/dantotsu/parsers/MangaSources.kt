@@ -2,10 +2,30 @@ package ani.dantotsu.parsers
 
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
+import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 
 object MangaSources : MangaReadSources() {
-    override val list: List<Lazier<BaseParser>> = lazyList(
-    )
+    override var list: List<Lazier<BaseParser>> = emptyList()
+
+    suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
+        // Initialize with the first value from StateFlow
+        val initialExtensions = fromExtensions.first()
+        list = createParsersFromExtensions(initialExtensions)
+
+        // Update as StateFlow emits new values
+        fromExtensions.collect { extensions ->
+            list = createParsersFromExtensions(extensions)
+        }
+    }
+
+    private fun createParsersFromExtensions(extensions: List<MangaExtension.Installed>): List<Lazier<BaseParser>> {
+        return extensions.map { extension ->
+            val name = extension.name
+            Lazier({ DynamicMangaParser(extension) }, name)
+        }
+    }
 }
 
 object HMangaSources : MangaReadSources() {

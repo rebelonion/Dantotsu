@@ -3,13 +3,11 @@ package ani.dantotsu.settings
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
-import android.net.Uri
 import android.os.Build.*
 import android.os.Build.VERSION.*
 import android.os.Bundle
-import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,16 +17,19 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
-import ani.dantotsu.aniyomi.anime.AnimeExtensionManager
-import ani.dantotsu.aniyomi.anime.model.AnimeExtension
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import ani.dantotsu.databinding.ActivityExtensionsBinding
 import com.bumptech.glide.Glide
+import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.combine
@@ -60,7 +61,7 @@ class ExtensionsActivity : AppCompatActivity() {
             .subscribe(
                 { installStep ->
                     val builder = NotificationCompat.Builder(this,
-                        ani.dantotsu.aniyomi.data.Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                        Notifications.CHANNEL_DOWNLOADER_PROGRESS
                     )
                         .setSmallIcon(R.drawable.ic_round_sync_24)
                         .setContentTitle("Installing extension")
@@ -70,7 +71,7 @@ class ExtensionsActivity : AppCompatActivity() {
                 },
                 { error ->
                     val builder = NotificationCompat.Builder(this,
-                        ani.dantotsu.aniyomi.data.Notifications.CHANNEL_DOWNLOADER_ERROR
+                        Notifications.CHANNEL_DOWNLOADER_ERROR
                     )
                         .setSmallIcon(R.drawable.ic_round_info_24)
                         .setContentTitle("Installation failed")
@@ -80,7 +81,7 @@ class ExtensionsActivity : AppCompatActivity() {
                 },
                 {
                     val builder = NotificationCompat.Builder(this,
-                        ani.dantotsu.aniyomi.data.Notifications.CHANNEL_DOWNLOADER_PROGRESS)
+                        Notifications.CHANNEL_DOWNLOADER_PROGRESS)
                         .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
                         .setContentTitle("Installation complete")
                         .setContentText("The extension has been successfully installed.")
@@ -164,7 +165,10 @@ class ExtensionsActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+
     }
+
+
 
     private class ExtensionsAdapter(private val onUninstallClicked: (String) -> Unit) : RecyclerView.Adapter<ExtensionsAdapter.ViewHolder>() {
 

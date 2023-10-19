@@ -1,6 +1,7 @@
 package ani.dantotsu.parsers
 
 import ani.dantotsu.Lazier
+import ani.dantotsu.logger
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.media.Media
@@ -52,11 +53,17 @@ abstract class MangaReadSources : BaseSources() {
     suspend fun loadChapters(i: Int, show: ShowResponse): MutableMap<String, MangaChapter> {
         val map = mutableMapOf<String, MangaChapter>()
         val parser = get(i)
-        tryWithSuspend(true) {
-            parser.loadChapters(show.link, show.extra).forEach {
-                map[it.number] = MangaChapter(it)
+        show.sManga?.let { sManga ->
+            tryWithSuspend(true) {
+                parser.loadChapters(show.link, show.extra, sManga).forEach {
+                    map[it.number] = MangaChapter(it)
+                }
             }
         }
+        if(show.sManga == null) {
+            logger("sManga is null")
+        }
+        logger("map size ${map.size}")
         return map
     }
 }

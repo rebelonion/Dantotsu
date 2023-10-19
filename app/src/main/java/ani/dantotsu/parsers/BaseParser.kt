@@ -3,6 +3,7 @@ package ani.dantotsu.parsers
 import ani.dantotsu.*
 import ani.dantotsu.media.Media
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.source.model.SManga
 import java.io.Serializable
 import java.net.URLDecoder
 import java.net.URLEncoder
@@ -141,7 +142,10 @@ data class ShowResponse(
     val extra : Map<String,String>?=null,
 
     //SAnime object from Aniyomi
-    val sAnime: SAnime?=null
+    val sAnime: SAnime? = null,
+
+    //SManga object from Aniyomi
+    val sManga: SManga? = null
 ) : Serializable {
     constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf(), total: Int? = null, extra: Map<String, String>?=null)
             : this(name, link, FileUrl(coverUrl), otherNames, total, extra)
@@ -157,6 +161,9 @@ data class ShowResponse(
 
     constructor(name: String, link: String, coverUrl: String, sAnime: SAnime)
             : this(name, link, FileUrl(coverUrl), sAnime = sAnime)
+
+    constructor(name: String, link: String, coverUrl: String, sManga: SManga)
+            : this(name, link, FileUrl(coverUrl), sManga = sManga)
 }
 
 

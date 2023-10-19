@@ -1,6 +1,6 @@
 package eu.kanade.tachiyomi.animesource.online
 
-import ani.dantotsu.aniyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime

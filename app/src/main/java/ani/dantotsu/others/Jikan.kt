@@ -25,7 +25,7 @@ object Jikan {
                 val ep = it.malID.toString()
                 eps[ep] = Episode(ep, title = it.title,
                     //Personal revenge with 34566 :prayge:
-                    filler = if(malId!=34566) it.filler else true
+                    filler = if(malId!=34566) it.filler else true,
                 )
             }
             hasNextPage = res?.pagination?.hasNextPage == true

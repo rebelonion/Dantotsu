@@ -1,7 +1,6 @@
 package eu.kanade.tachiyomi.animesource
 
-import ani.dantotsu.aniyomi.animesource.AnimeSource
-import ani.dantotsu.aniyomi.PreferenceScreen
+import eu.kanade.tachiyomi.PreferenceScreen
 
 interface ConfigurableAnimeSource : AnimeSource {
 

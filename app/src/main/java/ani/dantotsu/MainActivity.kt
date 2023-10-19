@@ -24,7 +24,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ani.dantotsu.aniyomi.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
@@ -37,13 +37,16 @@ import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.parsers.AnimeSources
+import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
@@ -58,6 +61,7 @@ class MainActivity : AppCompatActivity() {
 
     private var uiSettings = UserInterfaceSettings()
     private val animeExtensionManager: AnimeExtensionManager by injectLazy()
+    private val mangaExtensionManager: MangaExtensionManager by injectLazy()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,11 +69,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val myScope = CoroutineScope(Dispatchers.Default)
-        myScope.launch {
+        val animeScope = CoroutineScope(Dispatchers.Default)
+        animeScope.launch {
             animeExtensionManager.findAvailableExtensions()
+            logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
             AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
-
+        }
+        val mangaScope = CoroutineScope(Dispatchers.Default)
+        mangaScope.launch {
+            mangaExtensionManager.findAvailableExtensions()
+            logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
+            MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
 
         var doubleBackToExitPressedOnce = false

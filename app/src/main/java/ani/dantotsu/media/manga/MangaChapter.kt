@@ -2,6 +2,7 @@ package ani.dantotsu.media.manga
 
 import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.parsers.MangaImage
+import eu.kanade.tachiyomi.source.model.SChapter
 import java.io.Serializable
 import kotlin.math.floor
 
@@ -10,8 +11,9 @@ data class MangaChapter(
     var link: String,
     var title: String? = null,
     var description: String? = null,
+    var sChapter: SChapter
 ) : Serializable {
-    constructor(chapter: MangaChapter) : this(chapter.number, chapter.link, chapter.title, chapter.description)
+    constructor(chapter: MangaChapter) : this(chapter.number, chapter.link, chapter.title, chapter.description, chapter.sChapter)
 
     private val images = mutableListOf<MangaImage>()
     fun images(): List<MangaImage> = images

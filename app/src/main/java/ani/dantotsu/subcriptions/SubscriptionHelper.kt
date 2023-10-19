@@ -66,7 +66,10 @@ class SubscriptionHelper {
             val chp = withTimeoutOrNull(10 * 1000) {
                 tryWithSuspend {
                     val show = parser.loadSavedShowResponse(id) ?: throw Exception(currContext()?.getString(R.string.failed_to_load_data, id))
-                    parser.getLatestChapter(show.link, show.extra, selected.latest)
+                    show.sManga?.let {
+                        parser.getLatestChapter(show.link, show.extra,
+                            it, selected.latest)
+                    }
                 }
             }
 

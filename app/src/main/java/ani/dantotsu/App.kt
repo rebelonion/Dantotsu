@@ -8,8 +8,8 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
-import ani.dantotsu.aniyomi.data.Notifications
-import ani.dantotsu.aniyomi.util.logcat
+import eu.kanade.tachiyomi.data.notification.Notifications
+import tachiyomi.core.util.system.logcat
 import ani.dantotsu.others.DisabledReports
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
