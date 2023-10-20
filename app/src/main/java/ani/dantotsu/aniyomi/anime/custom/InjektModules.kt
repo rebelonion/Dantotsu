@@ -1,6 +1,8 @@
 package ani.dantotsu.aniyomi.anime.custom
 
+
 import android.app.Application
+import ani.dantotsu.media.manga.MangaCache
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import tachiyomi.core.preference.PreferenceStore
 import eu.kanade.domain.base.BasePreferences
@@ -31,6 +33,8 @@ class AppModule(val app: Application) : InjektModule {
                 explicitNulls = false
             }
         }
+
+        addSingletonFactory { MangaCache() }
     }
 }
 

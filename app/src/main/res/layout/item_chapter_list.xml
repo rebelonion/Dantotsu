@@ -31,7 +31,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_bold"
                 android:singleLine="true"
-                android:text="@string/chap"
+                android:text=""
                 android:textSize="14dp"
                 tools:ignore="SpUsage" />
 
@@ -39,7 +39,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
-                android:text="@string/colon"
+                android:text=""
                 android:textSize="14dp"
                 tools:ignore="SpUsage" />
 

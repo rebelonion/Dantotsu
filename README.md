@@ -26,7 +26,7 @@ Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-o
 | Type             | Status  |
 | ---------------- | ------- |
 | Anime Extensions | Working |
-| Manga Extensions | Not Working |
+| Manga Extensions | "Working" |
 | Light Novel Extensions | Not Working |
 
 

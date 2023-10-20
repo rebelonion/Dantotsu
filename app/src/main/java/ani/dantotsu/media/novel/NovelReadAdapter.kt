@@ -35,7 +35,7 @@ class NovelReadAdapter(
 
         fun search(): Boolean {
             val query = binding.searchBarText.text.toString()
-            val source = media.selected!!.source.let { if (it >= novelReadSources.names.size) 0 else it }
+            val source = media.selected!!.sourceIndex.let { if (it >= novelReadSources.names.size) 0 else it }
             fragment.source = source
 
             binding.searchBarText.clearFocus()
@@ -44,7 +44,7 @@ class NovelReadAdapter(
             return true
         }
 
-        val source = media.selected!!.source.let { if (it >= novelReadSources.names.size) 0 else it }
+        val source = media.selected!!.sourceIndex.let { if (it >= novelReadSources.names.size) 0 else it }
         if (novelReadSources.names.isNotEmpty() && source in 0 until novelReadSources.names.size) {
             binding.animeSource.setText(novelReadSources.names[source], false)
         }

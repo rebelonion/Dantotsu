@@ -57,7 +57,7 @@ class SourceSearchDialogFragment : BottomSheetDialogFragment() {
                 binding.searchRecyclerView.visibility = View.GONE
                 binding.searchProgress.visibility = View.VISIBLE
 
-                i = media!!.selected!!.source
+                i = media!!.selected!!.sourceIndex
 
                 val source = if (media!!.anime != null) {
                     (if (!media!!.isAdult) AnimeSources else HAnimeSources)[i!!]

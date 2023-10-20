@@ -68,7 +68,7 @@ class AnimeWatchAdapter(
         }
 
         //Source Selection
-        val source = media.selected!!.source.let { if (it >= watchSources.names.size) 0 else it }
+        val source = media.selected!!.sourceIndex.let { if (it >= watchSources.names.size) 0 else it }
         if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
             binding.animeSource.setText(watchSources.names[source])
             watchSources[source].apply {

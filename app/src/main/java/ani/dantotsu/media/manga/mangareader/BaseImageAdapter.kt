@@ -14,15 +14,21 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
 import ani.dantotsu.media.manga.MangaChapter
+import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.settings.CurrentReaderSettings
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
+import eu.kanade.tachiyomi.source.model.Page
+import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ani.dantotsu.media.manga.MangaCache
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 abstract class BaseImageAdapter(
     val activity: MangaReaderActivity,
@@ -44,10 +50,33 @@ abstract class BaseImageAdapter(
         if (settings.layout != CurrentReaderSettings.Layouts.PAGED) {
             if (settings.padding) {
                 when (settings.direction) {
-                    CurrentReaderSettings.Directions.TOP_TO_BOTTOM -> view.setPadding(0, 0, 0, 16f.px)
-                    CurrentReaderSettings.Directions.LEFT_TO_RIGHT -> view.setPadding(0, 0, 16f.px, 0)
-                    CurrentReaderSettings.Directions.BOTTOM_TO_TOP -> view.setPadding(0, 16f.px, 0, 0)
-                    CurrentReaderSettings.Directions.RIGHT_TO_LEFT -> view.setPadding(16f.px, 0, 0, 0)
+                    CurrentReaderSettings.Directions.TOP_TO_BOTTOM -> view.setPadding(
+                        0,
+                        0,
+                        0,
+                        16f.px
+                    )
+
+                    CurrentReaderSettings.Directions.LEFT_TO_RIGHT -> view.setPadding(
+                        0,
+                        0,
+                        16f.px,
+                        0
+                    )
+
+                    CurrentReaderSettings.Directions.BOTTOM_TO_TOP -> view.setPadding(
+                        0,
+                        16f.px,
+                        0,
+                        0
+                    )
+
+                    CurrentReaderSettings.Directions.RIGHT_TO_LEFT -> view.setPadding(
+                        16f.px,
+                        0,
+                        0,
+                        0
+                    )
                 }
             }
             view.updateLayoutParams {
@@ -87,7 +116,7 @@ abstract class BaseImageAdapter(
     abstract suspend fun loadImage(position: Int, parent: View): Boolean
 
     companion object {
-        suspend fun Context.loadBitmap(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? {
+        /*suspend fun Context.loadBitmap(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? {
             return tryWithSuspend {
                 withContext(Dispatchers.IO) {
                     Glide.with(this@loadBitmap)
@@ -113,6 +142,43 @@ abstract class BaseImageAdapter(
                         .get()
                 }
             }
+        }*/
+
+        suspend fun Context.loadBitmap(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? {
+            return tryWithSuspend {
+                val mangaCache = uy.kohesive.injekt.Injekt.get<MangaCache>()
+                withContext(Dispatchers.IO) {
+                    Glide.with(this@loadBitmap)
+                        .asBitmap()
+                        .let {
+                            if (link.url.startsWith("file://")) {
+                                it.load(link.url)
+                                    .skipMemoryCache(true)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            } else {
+                                println("bitmap from cache")
+                                println(link.url)
+                                println(mangaCache.get(link.url))
+                                println("cache size: ${mangaCache.size()}")
+                                mangaCache.get(link.url)?.let { imageData ->
+                                    val bitmap = imageData.fetchAndProcessImage(imageData.page, imageData.source)
+                                    it.load(bitmap)
+                                        .skipMemoryCache(true)
+                                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                                }
+                            }
+                        }
+                        ?.let {
+                            if (transforms.isNotEmpty()) {
+                                it.transform(*transforms.toTypedArray())
+                            } else {
+                                it
+                            }
+                        }
+                        ?.submit()
+                        ?.get()
+                }
+            }
         }
 
         fun mergeBitmap(bitmap1: Bitmap, bitmap2: Bitmap, scale: Boolean = false): Bitmap {
@@ -133,4 +199,8 @@ abstract class BaseImageAdapter(
         }
     }
 
+}
+
+interface ImageFetcher {
+    suspend fun fetchImage(page: Page): Bitmap?
 }

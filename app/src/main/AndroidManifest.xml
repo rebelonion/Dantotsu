@@ -210,6 +210,15 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false" />
+
+        <activity
+            android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:exported="false" />
 
         <receiver
             android:name=".subcriptions.AlarmReceiver"
@@ -242,7 +251,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </service>
-        <service android:name=".aniyomi.anime.util.AnimeExtensionInstallService"
+        <service android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallService"
+            android:exported="false" />
+
+        <service android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallService"
             android:exported="false" />
     </application>
 

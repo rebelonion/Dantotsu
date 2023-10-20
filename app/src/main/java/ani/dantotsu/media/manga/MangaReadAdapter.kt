@@ -49,7 +49,7 @@ class MangaReadAdapter(
         }
 
         //Source Selection
-        val source = media.selected!!.source.let { if (it >= mangaReadSources.names.size) 0 else it }
+        val source = media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
         if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
             binding.animeSource.setText(mangaReadSources.names[source])
 

@@ -135,7 +135,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                 }
                             }
                             scope.launch(Dispatchers.IO) {
-                                model.loadEpisodeVideos(ep, media!!.selected!!.source)
+                                model.loadEpisodeVideos(ep, media!!.selected!!.sourceIndex)
                                 withContext(Dispatchers.Main){
                                     binding.selectorProgressBar.visibility = View.GONE
                                 }

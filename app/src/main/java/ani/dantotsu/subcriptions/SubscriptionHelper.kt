@@ -14,14 +14,23 @@ import kotlinx.coroutines.withTimeoutOrNull
 class SubscriptionHelper {
     companion object {
         private fun loadSelected(context: Context, mediaId: Int, isAdult: Boolean, isAnime: Boolean): Selected {
-            return loadData<Selected>("${mediaId}-select", context) ?: Selected().let {
+            val data = loadData<Selected>("${mediaId}-select", context) ?: Selected().let {
                 it.source =
-                    if (isAdult) 0
-                    else if (isAnime) loadData("settings_def_anime_source", context) ?: 0
-                    else loadData("settings_def_manga_source", context) ?: 0
+                    if (isAdult) ""
+                    else if (isAnime) {loadData("settings_def_anime_source", context) ?: ""}
+                    else loadData("settings_def_manga_source", context) ?: ""
                 it.preferDub = loadData("settings_prefer_dub", context) ?: false
                 it
             }
+            if (isAnime){
+                val sources = if (isAdult) HAnimeSources else AnimeSources
+                data.sourceIndex = sources.list.indexOfFirst { it.name == data.source }
+            }else{
+                val sources = if (isAdult) HMangaSources else MangaSources
+                data.sourceIndex = sources.list.indexOfFirst { it.name == data.source }
+            }
+            if (data.sourceIndex == -1) {data.sourceIndex = 0}
+            return data
         }
 
         private fun saveSelected(context: Context, mediaId: Int, data: Selected) {
@@ -31,7 +40,9 @@ class SubscriptionHelper {
         fun getAnimeParser(context: Context, isAdult: Boolean, id: Int): AnimeParser {
             val sources = if (isAdult) HAnimeSources else AnimeSources
             val selected = loadSelected(context, id, isAdult, true)
-            val parser = sources[selected.source]
+            var location = sources.list.indexOfFirst { it.name == selected.source }
+            if (location == -1) {location = 0}
+            val parser = sources[location]
             parser.selectDub = selected.preferDub
             return parser
         }
@@ -58,7 +69,9 @@ class SubscriptionHelper {
         fun getMangaParser(context: Context, isAdult: Boolean, id: Int): MangaParser {
             val sources = if (isAdult) HMangaSources else MangaSources
             val selected = loadSelected(context, id, isAdult, false)
-            return sources[selected.source]
+            var location = sources.list.indexOfFirst { it.name == selected.source }
+            if (location == -1) {location = 0}
+            return sources[location]
         }
 
         suspend fun getChapter(context: Context, parser: MangaParser, id: Int, isAdult: Boolean): MangaChapter? {

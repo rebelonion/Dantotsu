@@ -30,6 +30,7 @@ import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityMangaReaderBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
@@ -47,12 +48,16 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.*
 import kotlin.math.min
 import kotlin.properties.Delegates
 
 @SuppressLint("SetTextI18n")
 class MangaReaderActivity : AppCompatActivity() {
+    private val mangaCache = Injekt.get<MangaCache>()
+
     private lateinit var binding: ActivityMangaReaderBinding
     private val model: MediaDetailsViewModel by viewModels()
     private val scope = lifecycleScope
@@ -106,6 +111,7 @@ class MangaReaderActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
+        mangaCache.clear()
         rpc?.close()
         super.onDestroy()
     }
@@ -174,7 +180,7 @@ class MangaReaderActivity : AppCompatActivity() {
 
         model.mangaReadSources = if (media.isAdult) HMangaSources else MangaSources
         binding.mangaReaderSource.visibility = if (settings.showSource) View.VISIBLE else View.GONE
-        binding.mangaReaderSource.text = model.mangaReadSources!!.names[media.selected!!.source]
+        binding.mangaReaderSource.text = model.mangaReadSources!!.names[media.selected!!.sourceIndex]
 
         binding.mangaReaderTitle.text = media.userPreferredName
 
@@ -205,6 +211,7 @@ class MangaReaderActivity : AppCompatActivity() {
 
         //Chapter Change
         fun change(index: Int) {
+            mangaCache.clear()
             saveData("${media.id}_${chaptersArr[currentChapterIndex]}", currentChapterPage, this)
             ChapterLoaderDialog.newInstance(chapters[chaptersArr[index]]!!).show(supportFragmentManager, "dialog")
         }
@@ -258,7 +265,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     type = RPC.Type.WATCHING
                     activityName = media.userPreferredName
                     details =  chap.title?.takeIf { it.isNotEmpty() } ?: getString(R.string.chapter_num, chap.number)
-                    state = "Chapter : ${chap.number}/${media.manga?.totalChapters ?: "??"}"
+                    state = "${chap.number}/${media.manga?.totalChapters ?: "??"}"
                     media.cover?.let { cover ->
                         largeImage = RPC.Link(media.userPreferredName, cover)
                     }
@@ -691,7 +698,7 @@ class MangaReaderActivity : AppCompatActivity() {
     }
 
     fun getTransformation(mangaImage: MangaImage): BitmapTransformation? {
-        return model.loadTransformation(mangaImage, media.selected!!.source)
+        return model.loadTransformation(mangaImage, media.selected!!.sourceIndex)
     }
 
     fun onImageLongClicked(

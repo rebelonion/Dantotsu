@@ -15,6 +15,8 @@ import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.network.interceptor.CloudflareBypassException
 import ani.dantotsu.currContext
 import ani.dantotsu.logger
+import ani.dantotsu.media.manga.ImageData
+import ani.dantotsu.media.manga.MangaCache
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
@@ -29,9 +31,11 @@ import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
-import eu.kanade.tachiyomi.util.lang.awaitSingle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -39,6 +43,10 @@ import java.io.FileOutputStream
 import java.io.OutputStream
 import java.net.URL
 import java.net.URLDecoder
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.*
+import java.io.UnsupportedEncodingException
+import java.util.regex.Pattern
 
 class AniyomiAdapter {
     fun aniyomiToAnimeParser(extension: AnimeExtension.Installed): DynamicAnimeParser {
@@ -60,60 +68,58 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     override suspend fun loadEpisodes(animeLink: String, extra: Map<String, String>?, sAnime: SAnime): List<Episode> {
         val source = extension.sources.first()
         if (source is AnimeCatalogueSource) {
-            var res: SEpisode? = null
             try {
                 val res = source.getEpisodeList(sAnime)
-                var EpisodeList: List<Episode> = emptyList()
-                for (episode in res) {
-                    println("episode: $episode")
-                    EpisodeList += SEpisodeToEpisode(episode)
-                }
-                return EpisodeList
-            }
-            catch (e: Exception) {
+
+                // Sort episodes by episode_number
+                val sortedEpisodes = res.sortedBy { it.episode_number }
+
+                // Transform SEpisode objects to Episode objects
+
+                return sortedEpisodes.map { SEpisodeToEpisode(it) }
+            } catch (e: Exception) {
                 println("Exception: $e")
             }
             return emptyList()
         }
         return emptyList()  // Return an empty list if source is not an AnimeCatalogueSource
     }
+
     override suspend fun loadVideoServers(episodeLink: String, extra: Map<String, String>?, sEpisode: SEpisode): List<VideoServer> {
-        val source = extension.sources.first()
-        if (source is AnimeCatalogueSource) {
-            val video = source.getVideoList(sEpisode)
-            var VideoList: List<VideoServer> = emptyList()
-            for (videoServer in video) {
-                VideoList += VideoToVideoServer(videoServer)
-            }
-            return VideoList
+        val source = extension.sources.first() as? AnimeCatalogueSource ?: return emptyList()
+
+        return try {
+            val videos = source.getVideoList(sEpisode)
+            videos.map { VideoToVideoServer(it) }
+        } catch (e: Exception) {
+            logger("Exception occurred: ${e.message}")
+            emptyList()
         }
-        return emptyList()
     }
+
 
     override suspend fun getVideoExtractor(server: VideoServer): VideoExtractor? {
         return VideoServerPassthrough(server)
     }
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val source = extension.sources.first()
-        if (source is AnimeCatalogueSource) {
+        val source = extension.sources.first() as? AnimeCatalogueSource ?: return emptyList()
 
-            var res: AnimesPage? = null
-            try {
-                res = source.fetchSearchAnime(1, query, AnimeFilterList()).toBlocking().first()
-                logger("res observable: $res")
-            }
-            catch (e: CloudflareBypassException) {
-                logger("Exception in search: $e")
-                //toast
+        return try {
+            val res = source.fetchSearchAnime(1, query, AnimeFilterList()).toBlocking().first()
+            convertAnimesPageToShowResponse(res)
+        } catch (e: CloudflareBypassException) {
+            logger("Exception in search: $e")
+            withContext(Dispatchers.Main) {
                 Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT).show()
             }
-
-            val conv = convertAnimesPageToShowResponse(res!!)
-            return conv
+            emptyList()
+        } catch (e: Exception) {
+            logger("General exception in search: $e")
+            emptyList()
         }
-        return emptyList()  // Return an empty list if source is not an AnimeCatalogueSource
     }
+
 
     private fun convertAnimesPageToShowResponse(animesPage: AnimesPage): List<ShowResponse> {
         return animesPage.animes.map { sAnime ->
@@ -161,6 +167,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
 }
 
 class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
+    val mangaCache = Injekt.get<MangaCache>()
     val extension: MangaExtension.Installed
     init {
         this.extension = extension
@@ -170,67 +177,127 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
     override val hostUrl = extension.sources.first().name
 
     override suspend fun loadChapters(mangaLink: String, extra: Map<String, String>?, sManga: SManga): List<MangaChapter> {
-        val source = extension.sources.first()
-        if (source is CatalogueSource) {
-            try {
-                val res = source.getChapterList(sManga)
-                var chapterList: List<MangaChapter> = emptyList()
-                for (chapter in res) {
-                    chapterList += SChapterToMangaChapter(chapter)
-                }
-                logger("chapterList size: ${chapterList.size}")
-                return chapterList
-            }
-            catch (e: Exception) {
-                logger("loadChapters Exception: $e")
-            }
-            return emptyList()
+        val source = extension.sources.first() as? CatalogueSource ?: return emptyList()
+
+        return try {
+            val res = source.getChapterList(sManga)
+            val reversedRes = res.reversed()
+            val chapterList = reversedRes.map { SChapterToMangaChapter(it) }
+            logger("chapterList size: ${chapterList.size}")
+            logger("chapterList: ${chapterList[1].title}")
+            logger("chapterList: ${chapterList[1].description}")
+            chapterList
+        } catch (e: Exception) {
+            logger("loadChapters Exception: $e")
+            emptyList()
         }
-        return emptyList()  // Return an empty list if source is not a catalogueSource
     }
+
 
     override suspend fun loadImages(chapterLink: String, sChapter: SChapter): List<MangaImage> {
-        val source = extension.sources.first()
-        if (source is HttpSource) {
-            //try {
+        val source = extension.sources.first() as? HttpSource ?: return emptyList()
+
+        return coroutineScope {
+            try {
                 val res = source.getPageList(sChapter)
-                var chapterList: List<MangaImage> = emptyList()
-                for (page in res) {
-                    println("page: $page")
-                    currContext()?.let { fetchAndProcessImage(page, source, it.contentResolver) }
-                    logger("new image url: ${page.imageUrl}")
-                    chapterList += PageToMangaImage(page)
+                val reIndexedPages = res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
+
+                val deferreds = reIndexedPages.map { page ->
+                    async(Dispatchers.IO) {
+                        mangaCache.put(page.imageUrl ?: "", ImageData(page, source))
+                        pageToMangaImage(page)
+                    }
                 }
-                logger("image url: chapterList size: ${chapterList.size}")
-                return chapterList
-            //}
-            //catch (e: Exception) {
-           //     logger("loadImages Exception: $e")
-            //}
-            return emptyList()
+
+                deferreds.awaitAll()
+            } catch (e: Exception) {
+                logger("loadImages Exception: $e")
+                emptyList()
+            }
         }
-        return emptyList()  // Return an empty list if source is not a CatalogueSource
     }
 
-    
-    override suspend fun search(query: String): List<ShowResponse> {
-        val source = extension.sources.first()
-        if (source is HttpSource) {
-            var res: MangasPage? = null
+
+
+    fun fetchAndSaveImage(page: Page, httpSource: HttpSource, contentResolver: ContentResolver) {
+        CoroutineScope(Dispatchers.IO).launch {
             try {
-                res = source.fetchSearchManga(1, query, FilterList()).toBlocking().first()
-                logger("res observable: $res")
+                // Fetch the image
+                val response = httpSource.getImage(page)
+
+                // Convert the Response to an InputStream
+                val inputStream = response.body?.byteStream()
+
+                // Convert InputStream to Bitmap
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+
+                withContext(Dispatchers.IO) {
+                    // Save the Bitmap using MediaStore API
+                    saveImage(bitmap, contentResolver, "image_${System.currentTimeMillis()}.jpg", Bitmap.CompressFormat.JPEG, 100)
+                }
+
+                inputStream?.close()
+            } catch (e: Exception) {
+                // Handle any exceptions
+                println("An error occurred: ${e.message}")
             }
-            catch (e: CloudflareBypassException) {
-                logger("Exception in search: $e")
+        }
+    }
+
+    fun saveImage(bitmap: Bitmap, contentResolver: ContentResolver, filename: String, format: Bitmap.CompressFormat, quality: Int) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                val contentValues = ContentValues().apply {
+                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                    put(MediaStore.MediaColumns.MIME_TYPE, "image/${format.name.lowercase()}")
+                    put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Anime")
+                }
+
+                val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+                uri?.let {
+                    contentResolver.openOutputStream(it)?.use { os ->
+                        bitmap.compress(format, quality, os)
+                    }
+                }
+            } else {
+                val directory = File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Anime")
+                if (!directory.exists()) {
+                    directory.mkdirs()
+                }
+
+                val file = File(directory, filename)
+                FileOutputStream(file).use { outputStream ->
+                    bitmap.compress(format, quality, outputStream)
+                }
+            }
+        } catch (e: Exception) {
+            // Handle exception here
+            println("Exception while saving image: ${e.message}")
+        }
+    }
+
+
+
+    override suspend fun search(query: String): List<ShowResponse> {
+        val source = extension.sources.first() as? HttpSource ?: return emptyList()
+
+        return try {
+            val res = source.fetchSearchManga(1, query, FilterList()).toBlocking().first()
+            logger("res observable: $res")
+            convertMangasPageToShowResponse(res)
+        } catch (e: CloudflareBypassException) {
+            logger("Exception in search: $e")
+            withContext(Dispatchers.Main) {
                 Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT).show()
             }
-
-            val conv = convertMangasPageToShowResponse(res!!)
-            return conv
+            emptyList()
+        } catch (e: Exception) {
+            logger("General exception in search: $e")
+            emptyList()
         }
-        return emptyList()  // Return an empty list if source is not a CatalogueSource
     }
+
 
     private fun convertMangasPageToShowResponse(mangasPage: MangasPage): List<ShowResponse> {
         return mangasPage.mangas.map { sManga ->
@@ -239,7 +306,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             val link = sManga.url
             val coverUrl = sManga.thumbnail_url ?: ""
             val otherNames = emptyList<String>() // Populate as needed
-            val total = 20
+            val total = 1
             val extra: Map<String, String>? = null // Populate as needed
 
             // Create a new ShowResponse
@@ -247,23 +314,32 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         }
     }
 
-    private fun PageToMangaImage(page: Page): MangaImage {
-        //find and move any headers from page.imageUrl to headersMap
-        val headersMap: Map<String, String> = page.imageUrl?.split("&")?.mapNotNull {
-            val idx = it.indexOf("=")
-            if (idx != -1) {
-                val key = URLDecoder.decode(it.substring(0, idx), "UTF-8")
-                val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")
-                Pair(key, value)
-            } else {
-                null  // Or some other default value
-            }
-        }?.toMap() ?: mapOf()
-        val urlWithoutHeaders = page.imageUrl?.split("&")?.get(0) ?: ""
-        val url = page.imageUrl ?: ""
-        logger("Pageurl: $url")
-        logger("regularurl: ${page.url}")
-        logger("regularurl: ${page.status}")
+    private fun pageToMangaImage(page: Page): MangaImage {
+        var headersMap = mapOf<String, String>()
+        var urlWithoutHeaders = ""
+        var url = ""
+
+        page.imageUrl?.let {
+            val splitUrl = it.split("&")
+            urlWithoutHeaders = splitUrl.getOrNull(0) ?: ""
+            url = it
+
+            headersMap = splitUrl.mapNotNull { part ->
+                val idx = part.indexOf("=")
+                if (idx != -1) {
+                    try {
+                        val key = URLDecoder.decode(part.substring(0, idx), "UTF-8")
+                        val value = URLDecoder.decode(part.substring(idx + 1), "UTF-8")
+                        Pair(key, value)
+                    } catch (e: UnsupportedEncodingException) {
+                        null
+                    }
+                } else {
+                    null
+                }
+            }.toMap()
+        }
+
         return MangaImage(
             FileUrl(url, headersMap),
             false,
@@ -271,55 +347,81 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         )
     }
 
+
     private fun SChapterToMangaChapter(sChapter: SChapter): MangaChapter {
+        val parsedChapterTitle = parseChapterTitle(sChapter.name)
+        val number = if (sChapter.chapter_number.toInt() != -1){
+            sChapter.chapter_number.toString()
+        } else if(parsedChapterTitle.first != null || parsedChapterTitle.second != null){
+            (parsedChapterTitle.first ?: "") + "." + (parsedChapterTitle.second ?: "")
+        }else{
+            sChapter.name
+        }
         return MangaChapter(
-            sChapter.name,
+            number,
             sChapter.url,
-            sChapter.name,
+            if (parsedChapterTitle.first != null || parsedChapterTitle.second != null) {
+                parsedChapterTitle.third
+            } else {
+                sChapter.name
+            },
             null,
             sChapter
         )
+    }
+
+    fun parseChapterTitle(title: String): Triple<String?, String?, String> {
+        val volumePattern = Pattern.compile("(?:vol\\.?|v|volume\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
+        val chapterPattern = Pattern.compile("(?:ch\\.?|chapter\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
+
+        val volumeMatcher = volumePattern.matcher(title)
+        val chapterMatcher = chapterPattern.matcher(title)
+
+        val volumeNumber = if (volumeMatcher.find()) volumeMatcher.group(1) else null
+        val chapterNumber = if (chapterMatcher.find()) chapterMatcher.group(1) else null
+
+        var remainingTitle = title
+        if (volumeNumber != null) {
+            remainingTitle = volumeMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
+        }
+        if (chapterNumber != null) {
+            remainingTitle = chapterMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
+        }
+
+        return Triple(volumeNumber, chapterNumber, remainingTitle.trim())
     }
 
 }
 
 class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
     override val server: VideoServer
-        get() {
-            return videoServer
-        }
+        get() = videoServer
 
     override suspend fun extract(): VideoContainer {
         val vidList = listOfNotNull(videoServer.video?.let { AniVideoToSaiVideo(it) })
-        var subList: List<Subtitle> = emptyList()
-        for(sub in videoServer.video?.subtitleTracks ?: emptyList()) {
-            subList += TrackToSubtitle(sub)
-        }
-        if(vidList.isEmpty()) {
+        val subList = videoServer.video?.subtitleTracks?.map { TrackToSubtitle(it) } ?: emptyList()
+
+        return if (vidList.isNotEmpty()) {
+            VideoContainer(vidList, subList)
+        } else {
             throw Exception("No videos found")
-        }else{
-            return VideoContainer(vidList, subList)
         }
     }
 
     private fun AniVideoToSaiVideo(aniVideo: eu.kanade.tachiyomi.animesource.model.Video) : ani.dantotsu.parsers.Video {
-        //try to find the number value from the .quality string
-        val regex = Regex("""\d+""")
-        val result = regex.find(aniVideo.quality)
-        val number = result?.value?.toInt() ?: 0
+        // Find the number value from the .quality string
+        val number = Regex("""\d+""").find(aniVideo.quality)?.value?.toInt() ?: 0
+
+        // Check for null video URL
         val videoUrl = aniVideo.videoUrl ?: throw Exception("Video URL is null")
+
         val urlObj = URL(videoUrl)
         val path = urlObj.path
         val query = urlObj.query
 
+        var format = getVideoType(path)
 
-        var format = when {
-            path.endsWith(".mp4", ignoreCase = true) || videoUrl.endsWith(".mkv", ignoreCase = true) -> VideoType.CONTAINER
-            path.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
-            path.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
-            else -> null
-        }
-        if (format == null) {
+        if (format == null && query != null) {
             val queryPairs: List<Pair<String, String>> = query.split("&").map {
                 val idx = it.indexOf("=")
                 val key = URLDecoder.decode(it.substring(0, idx), "UTF-8")
@@ -330,13 +432,9 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
             // Assume the file is named under the "file" query parameter
             val fileName = queryPairs.find { it.first == "file" }?.second ?: ""
 
-            format = when {
-                fileName.endsWith(".mp4", ignoreCase = true) || fileName.endsWith(".mkv", ignoreCase = true) -> VideoType.CONTAINER
-                fileName.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
-                fileName.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
-                else -> null
-            }
+            format = getVideoType(fileName)
         }
+
         // If the format is still undetermined, log an error or handle it appropriately
         if (format == null) {
             logger("Unknown video format: $videoUrl")
@@ -351,6 +449,15 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
             FileUrl(videoUrl, headersMap),
             aniVideo.totalContentLength.toDouble()
         )
+    }
+
+    private fun getVideoType(fileName: String): VideoType? {
+        return when {
+            fileName.endsWith(".mp4", ignoreCase = true) || fileName.endsWith(".mkv", ignoreCase = true) -> VideoType.CONTAINER
+            fileName.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
+            fileName.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
+            else -> null
+        }
     }
 
     private fun TrackToSubtitle(track: Track, type: SubtitleType = SubtitleType.VTT): Subtitle {

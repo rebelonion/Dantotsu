@@ -622,5 +622,7 @@
     <string name="warning">Warning</string>
     <string name="view_anime">View Anime</string>
     <string name="view_manga">View Manga</string>
+    <string name="force_legacy_installer">Force Legacy Installer</string>
+    <string name="extensions_settings">Extensions</string>
 
 </resources>

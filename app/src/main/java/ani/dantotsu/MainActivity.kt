@@ -2,6 +2,7 @@ package ani.dantotsu
 
 import android.animation.ObjectAnimator
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.drawable.Animatable
 import android.net.Uri
 import android.os.Build
@@ -17,6 +18,8 @@ import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
@@ -222,6 +225,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
 
     //ViewPager

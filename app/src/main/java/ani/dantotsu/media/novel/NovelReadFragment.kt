@@ -67,7 +67,7 @@ class NovelReadFragment : Fragment() {
                     binding.animeSourceRecycler.adapter = ConcatAdapter(headerAdapter, novelResponseAdapter)
                     loaded = true
                     Handler(Looper.getMainLooper()).postDelayed({
-                        search(searchQuery, sel?.source ?: 0, auto = sel?.server == null)
+                        search(searchQuery, sel?.sourceIndex ?: 0, auto = sel?.server == null)
                     }, 100)
                 }
             }
@@ -103,7 +103,7 @@ class NovelReadFragment : Fragment() {
 
     fun onSourceChange(i: Int) {
         val selected = model.loadSelected(media)
-        selected.source = i
+        selected.sourceIndex = i
         source = i
         selected.server = null
         model.saveSelected(media.id, selected, requireActivity())

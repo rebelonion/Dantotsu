@@ -1,5 +1,6 @@
 package ani.dantotsu.parsers
 
+import android.graphics.Bitmap
 import ani.dantotsu.FileUrl
 import ani.dantotsu.media.Media
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation

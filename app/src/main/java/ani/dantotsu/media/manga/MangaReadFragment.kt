@@ -121,7 +121,7 @@ open class MangaReadFragment : Fragment() {
                         binding.animeSourceRecycler.adapter = ConcatAdapter(headerAdapter, chapterAdapter)
 
                         lifecycleScope.launch(Dispatchers.IO) {
-                            model.loadMangaChapters(media, media.selected!!.source)
+                            model.loadMangaChapters(media, media.selected!!.sourceIndex)
                         }
                         loaded = true
                     } else {
@@ -136,7 +136,7 @@ open class MangaReadFragment : Fragment() {
 
         model.getMangaChapters().observe(viewLifecycleOwner) { loadedChapters ->
             if (loadedChapters != null) {
-                val chapters = loadedChapters[media.selected!!.source]
+                val chapters = loadedChapters[media.selected!!.sourceIndex]
                 if (chapters != null) {
                     media.manga?.chapters = chapters
 
@@ -177,8 +177,8 @@ open class MangaReadFragment : Fragment() {
         media.manga?.chapters = null
         reload()
         val selected = model.loadSelected(media)
-        model.mangaReadSources?.get(selected.source)?.showUserTextListener = null
-        selected.source = i
+        model.mangaReadSources?.get(selected.sourceIndex)?.showUserTextListener = null
+        selected.sourceIndex = i
         selected.server = null
         model.saveSelected(media.id, selected, requireActivity())
         media.selected = selected

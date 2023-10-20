@@ -28,10 +28,18 @@ import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
 import ani.dantotsu.currContext
 import ani.dantotsu.R
+import ani.dantotsu.parsers.AnimeSources
+import ani.dantotsu.parsers.AniyomiAdapter
+import ani.dantotsu.parsers.DynamicMangaParser
+import ani.dantotsu.parsers.HAnimeSources
+import ani.dantotsu.parsers.HMangaSources
+import ani.dantotsu.parsers.MangaSources
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
+import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class MediaDetailsViewModel : ViewModel() {
     val scrolledToTop = MutableLiveData(true)
@@ -41,15 +49,34 @@ class MediaDetailsViewModel : ViewModel() {
     }
 
     fun loadSelected(media: Media): Selected {
-        return loadData<Selected>("${media.id}-select") ?: Selected().let {
-            it.source = if (media.isAdult) 0 else when (media.anime != null) {
-                true -> loadData("settings_def_anime_source") ?: 0
-                else -> loadData("settings_def_manga_source") ?: 0
+        val data = loadData<Selected>("${media.id}-select") ?: Selected().let {
+            it.source = if (media.isAdult) "" else when (media.anime != null) {
+                true -> loadData("settings_def_anime_source") ?: ""
+                else -> loadData("settings_def_manga_source") ?: ""
             }
             it.preferDub = loadData("settings_prefer_dub") ?: false
+            it.sourceIndex = loadSelectedStringLocation(it.source)
             saveSelected(media.id, it)
             it
         }
+        if (media.anime != null) {
+            val sources = if (media.isAdult) HAnimeSources else AnimeSources
+            data.sourceIndex = sources.list.indexOfFirst { it.name == data.source }
+        } else {
+            val sources = if (media.isAdult) HMangaSources else MangaSources
+            data.sourceIndex = sources.list.indexOfFirst { it.name == data.source }
+        }
+        if (data.sourceIndex == -1) {
+            data.sourceIndex = 0
+        }
+        return data
+    }
+
+    fun loadSelectedStringLocation(sourceName: String): Int {
+        //find the location of the source in the list
+        var location = watchSources?.list?.indexOfFirst { it.name == sourceName } ?: 0
+        if (location == -1) {location = 0}
+        return location
     }
 
     var continueMedia: Boolean? = null
@@ -167,7 +194,8 @@ class MediaDetailsViewModel : ViewModel() {
             val server = selected.server ?: return false
             val link = ep.link ?: return false
 
-            ep.extractors = mutableListOf(watchSources?.get(selected.source)?.let {
+            ep.extractors = mutableListOf(watchSources?.get(loadSelectedStringLocation(selected.source))?.let {
+                selected.sourceIndex = loadSelectedStringLocation(selected.source)
                 if (!post && !it.allowsPreloading) null
                 else ep.sEpisode?.let { it1 ->
                     it.loadSingleVideoServer(server, link, ep.extra,
@@ -238,7 +266,7 @@ class MediaDetailsViewModel : ViewModel() {
     suspend fun loadMangaChapterImages(chapter: MangaChapter, selected: Selected, post: Boolean = true): Boolean {
         return tryWithSuspend(true) {
             chapter.addImages(
-                mangaReadSources?.get(selected.source)?.loadImages(chapter.link, chapter.sChapter) ?: return@tryWithSuspend false
+                mangaReadSources?.get(loadSelectedStringLocation(selected.source))?.loadImages(chapter.link, chapter.sChapter) ?: return@tryWithSuspend false
             )
             if (post) mangaChapter.postValue(chapter)
             true
@@ -261,7 +289,7 @@ class MediaDetailsViewModel : ViewModel() {
     }
 
     suspend fun autoSearchNovels(media: Media) {
-        val source = novelSources[media.selected?.source ?: 0]
+        val source = novelSources[loadSelectedStringLocation(media.selected?.source?:"")]
         tryWithSuspend(post = true) {
             if (source != null) {
                 novelResponses.postValue(source.sortedSearch(media))

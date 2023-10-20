@@ -130,7 +130,7 @@ class AnimeWatchFragment : Fragment() {
                             async { model.loadKitsuEpisodes(media) },
                             async { model.loadFillerEpisodes(media) }
                         )
-                        model.loadEpisodes(media, media.selected!!.source)
+                        model.loadEpisodes(media, media.selected!!.sourceIndex)
                     }
                     loaded = true
                 } else {
@@ -140,7 +140,7 @@ class AnimeWatchFragment : Fragment() {
         }
         model.getEpisodes().observe(viewLifecycleOwner) { loadedEpisodes ->
             if (loadedEpisodes != null) {
-                val episodes = loadedEpisodes[media.selected!!.source]
+                val episodes = loadedEpisodes[media.selected!!.sourceIndex]
                 if (episodes != null) {
                     episodes.forEach { (i, episode) ->
                         if (media.anime?.fillerEpisodes != null) {
@@ -206,8 +206,8 @@ class AnimeWatchFragment : Fragment() {
         media.anime?.episodes = null
         reload()
         val selected = model.loadSelected(media)
-        model.watchSources?.get(selected.source)?.showUserTextListener = null
-        selected.source = i
+        model.watchSources?.get(selected.sourceIndex)?.showUserTextListener = null
+        selected.sourceIndex = i
         selected.server = null
         model.saveSelected(media.id, selected, requireActivity())
         media.selected = selected
@@ -216,11 +216,11 @@ class AnimeWatchFragment : Fragment() {
 
     fun onDubClicked(checked: Boolean) {
         val selected = model.loadSelected(media)
-        model.watchSources?.get(selected.source)?.selectDub = checked
+        model.watchSources?.get(selected.sourceIndex)?.selectDub = checked
         selected.preferDub = checked
         model.saveSelected(media.id, selected, requireActivity())
         media.selected = selected
-        lifecycleScope.launch(Dispatchers.IO) { model.forceLoadEpisode(media, selected.source) }
+        lifecycleScope.launch(Dispatchers.IO) { model.forceLoadEpisode(media, selected.sourceIndex) }
     }
 
     fun loadEpisodes(i: Int) {

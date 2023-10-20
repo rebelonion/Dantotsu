@@ -817,7 +817,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         model.watchSources = if (media.isAdult) HAnimeSources else AnimeSources
-        serverInfo.text = model.watchSources!!.names.getOrNull(media.selected!!.source) ?: model.watchSources!!.names[0]
+        serverInfo.text = model.watchSources!!.names.getOrNull(media.selected!!.sourceIndex) ?: model.watchSources!!.names[0]
 
         model.epChanged.observe(this) {
             epChanging = !it
@@ -1353,7 +1353,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                         if (media.selected!!.server != null)
                             model.loadEpisodeSingleVideo(ep, selected, false)
                         else
-                            model.loadEpisodeVideos(ep, selected.source, false)
+                            model.loadEpisodeVideos(ep, selected.sourceIndex, false)
                     }
                 }
             }
