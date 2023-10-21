@@ -1,11 +1,11 @@
-# 0.1.0
+# 0.1.1
 
 - **Bugfixes:**
-  - Fixed bugs on some extensions
-  - Fixed bug with default extension not working
-  - Fixed title formatting issue
-  - Fixed prev ep to next ep bug
+  - Fixes for manga and anime extensions
+  - Auto search is now more likely to find correct series
 
 - **New Features:**
-  - Manga extension support
-  - Added support for legacy installer (switch in settings)
+  - Added ability to update extensions
+  - Added option to skip loading extension icon to help lag
+  - Added option to use custom user agent
+  - Added Material You support
