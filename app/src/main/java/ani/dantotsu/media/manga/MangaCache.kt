@@ -1,22 +1,33 @@
 package ani.dantotsu.media.manga
 
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.LruCache
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileOutputStream
 
 data class ImageData(
     val page: Page,
-    val source: HttpSource,
+    val source: HttpSource
 ){
-    suspend fun fetchAndProcessImage(page: Page, httpSource: HttpSource): Bitmap? {
+    suspend fun fetchAndProcessImage(page: Page, httpSource: HttpSource, context: Context): Bitmap? {
         return withContext(Dispatchers.IO) {
             try {
                 // Fetch the image
                 val response = httpSource.getImage(page)
+                println("Response: ${response.code}")
+                println("Response: ${response.message}")
 
                 // Convert the Response to an InputStream
                 val inputStream = response.body?.byteStream()
@@ -25,6 +36,7 @@ data class ImageData(
                 val bitmap = BitmapFactory.decodeStream(inputStream)
 
                 inputStream?.close()
+                saveImage(bitmap, context.contentResolver, page.imageUrl!!, Bitmap.CompressFormat.JPEG, 100)
 
                 return@withContext bitmap
             } catch (e: Exception) {
@@ -33,6 +45,39 @@ data class ImageData(
                 return@withContext null
             }
         }
+    }
+}
+
+fun saveImage(bitmap: Bitmap, contentResolver: ContentResolver, filename: String, format: Bitmap.CompressFormat, quality: Int) {
+    try {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
+                put(MediaStore.MediaColumns.MIME_TYPE, "image/${format.name.lowercase()}")
+                put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Manga")
+            }
+
+            val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+            uri?.let {
+                contentResolver.openOutputStream(it)?.use { os ->
+                    bitmap.compress(format, quality, os)
+                }
+            }
+        } else {
+            val directory = File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Anime")
+            if (!directory.exists()) {
+                directory.mkdirs()
+            }
+
+            val file = File(directory, filename)
+            FileOutputStream(file).use { outputStream ->
+                bitmap.compress(format, quality, outputStream)
+            }
+        }
+    } catch (e: Exception) {
+        // Handle exception here
+        println("Exception while saving image: ${e.message}")
     }
 }
 

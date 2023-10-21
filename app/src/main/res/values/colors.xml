@@ -21,4 +21,5 @@
     <color name="nav_status">#80FFFFFF</color>
     <color name="fav">#ad5edd</color>
     <color name="filler">#54FF8400</color>
+    <color name="warning">#FF0000</color>
 </resources>

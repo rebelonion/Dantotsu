@@ -7,6 +7,8 @@ import eu.kanade.tachiyomi.source.model.SManga
 import java.io.Serializable
 import java.net.URLDecoder
 import java.net.URLEncoder
+import me.xdrop.fuzzywuzzy.FuzzySearch
+
 
 abstract class BaseParser {
 
@@ -55,21 +57,41 @@ abstract class BaseParser {
             setUserText("Searching : ${mediaObj.mainName()}")
             val results = search(mediaObj.mainName())
             val sortedResults = if (results.isNotEmpty()) {
-                StringMatcher.closestShowMovedToTop(mediaObj.mainName(), results)
+                results.sortedByDescending { FuzzySearch.ratio(it.name, mediaObj.mainName()) }
             } else {
                 emptyList()
             }
             response = sortedResults.firstOrNull()
 
-            if (response == null) {
+            if (response == null || FuzzySearch.ratio(response.name, mediaObj.mainName()) < 100) {
                 setUserText("Searching : ${mediaObj.nameRomaji}")
                 val romajiResults = search(mediaObj.nameRomaji)
                 val sortedRomajiResults = if (romajiResults.isNotEmpty()) {
-                    StringMatcher.closestShowMovedToTop(mediaObj.nameRomaji, romajiResults)
+                    romajiResults.sortedByDescending { FuzzySearch.ratio(it.name, mediaObj.nameRomaji) }
                 } else {
                     emptyList()
                 }
-                response = sortedRomajiResults.firstOrNull()
+                val closestRomaji = sortedRomajiResults.firstOrNull()
+                logger("Closest match from RomajiResults: ${closestRomaji?.name ?: "None"}")
+
+                response = if (response == null) {
+                    logger("No exact match found in results. Using closest match from RomajiResults.")
+                    closestRomaji
+                } else {
+                    val romajiRatio = FuzzySearch.ratio(closestRomaji?.name ?: "", mediaObj.nameRomaji)
+                    val mainNameRatio = FuzzySearch.ratio(response.name, mediaObj.mainName())
+                    logger("Fuzzy ratio for closest match in results: $mainNameRatio")
+                    logger("Fuzzy ratio for closest match in RomajiResults: $romajiRatio")
+
+                    if (romajiRatio > mainNameRatio) {
+                        logger("RomajiResults has a closer match. Replacing response.")
+                        closestRomaji
+                    } else {
+                        logger("Results has a closer or equal match. Keeping existing response.")
+                        response
+                    }
+                }
+
             }
             saveShowResponse(mediaObj.id, response)
         }

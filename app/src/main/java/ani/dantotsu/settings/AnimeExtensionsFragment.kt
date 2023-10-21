@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
+import ani.dantotsu.loadData
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -35,13 +37,57 @@ class AnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentAnimeExtensionsBinding? = null
     private val binding get() = _binding!!
 
+    val skipIcons = loadData("skip_extension_icons") ?: false
+
     private lateinit var extensionsRecyclerView: RecyclerView
     private lateinit var allextenstionsRecyclerView: RecyclerView
     private val animeExtensionManager: AnimeExtensionManager = Injekt.get<AnimeExtensionManager>()
-    private val extensionsAdapter = AnimeExtensionsAdapter { pkgName ->
-        animeExtensionManager.uninstallExtension(pkgName)
-    }
-    private val allExtensionsAdapter = AllAnimeExtensionsAdapter(lifecycleScope) { pkgName ->
+    private val extensionsAdapter = AnimeExtensionsAdapter ({ pkg ->
+        if(pkg.hasUpdate){
+            val notificationManager =
+                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            animeExtensionManager.updateExtension(pkg)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { installStep ->
+                        val builder = NotificationCompat.Builder(
+                            requireContext(),
+                            Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                        )
+                            .setSmallIcon(R.drawable.ic_round_sync_24)
+                            .setContentTitle("Updating extension")
+                            .setContentText("Step: $installStep")
+                            .setPriority(NotificationCompat.PRIORITY_LOW)
+                        notificationManager.notify(1, builder.build())
+                    },
+                    { error ->
+                        val builder = NotificationCompat.Builder(
+                            requireContext(),
+                            Notifications.CHANNEL_DOWNLOADER_ERROR
+                        )
+                            .setSmallIcon(R.drawable.ic_round_info_24)
+                            .setContentTitle("Update failed")
+                            .setContentText("Error: ${error.message}")
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        notificationManager.notify(1, builder.build())
+                    },
+                    {
+                        val builder = NotificationCompat.Builder(
+                            requireContext(),
+                            Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                        )
+                            .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
+                            .setContentTitle("Update complete")
+                            .setContentText("The extension has been successfully updated.")
+                            .setPriority(NotificationCompat.PRIORITY_LOW)
+                        notificationManager.notify(1, builder.build())
+                    }
+                )
+            }else {
+            animeExtensionManager.uninstallExtension(pkg.pkgName)
+        }
+    }, skipIcons)
+    private val allExtensionsAdapter = AllAnimeExtensionsAdapter(lifecycleScope, { pkgName ->
 
             val notificationManager =
                 requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -84,7 +130,7 @@ class AnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                         notificationManager.notify(1, builder.build())
                     }
                 )
-        }
+        }, skipIcons)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentAnimeExtensionsBinding.inflate(inflater, container, false)
 
@@ -136,9 +182,10 @@ class AnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
 
-    private class AnimeExtensionsAdapter(private val onUninstallClicked: (String) -> Unit) : RecyclerView.Adapter<AnimeExtensionsAdapter.ViewHolder>() {
+    private class AnimeExtensionsAdapter(private val onUninstallClicked: (AnimeExtension.Installed) -> Unit, skipIcons: Boolean) : RecyclerView.Adapter<AnimeExtensionsAdapter.ViewHolder>() {
 
         private var extensions: List<AnimeExtension.Installed> = emptyList()
+        val skipIcons = skipIcons
 
         fun updateData(newExtensions: List<AnimeExtension.Installed>) {
             extensions = newExtensions
@@ -154,10 +201,17 @@ class AnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = extensions[position]
             holder.extensionNameTextView.text = extension.name
-            holder.extensionIconImageView.setImageDrawable(extension.icon)
-            holder.closeTextView.text = "Uninstall"
+            if (!skipIcons) {
+                holder.extensionIconImageView.setImageDrawable(extension.icon)
+            }
+            if(extension.hasUpdate){
+                holder.closeTextView.text = "Update"
+                holder.closeTextView.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.warning))
+            }else{
+                holder.closeTextView.text = "Uninstall"
+            }
             holder.closeTextView.setOnClickListener {
-                onUninstallClicked(extension.pkgName)
+                onUninstallClicked(extension)
             }
         }
 
@@ -171,8 +225,9 @@ class AnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
     private class AllAnimeExtensionsAdapter(private val coroutineScope: CoroutineScope,
-                                       private val onButtonClicked: (AnimeExtension.Available) -> Unit) : RecyclerView.Adapter<AllAnimeExtensionsAdapter.ViewHolder>() {
+                                       private val onButtonClicked: (AnimeExtension.Available) -> Unit, skipIcons: Boolean) : RecyclerView.Adapter<AllAnimeExtensionsAdapter.ViewHolder>() {
         private var extensions: List<AnimeExtension.Available> = emptyList()
+        val skipIcons = skipIcons
 
         fun updateData(newExtensions: List<AnimeExtension.Available>, installedExtensions: List<AnimeExtension.Installed> = emptyList()) {
             val installedPkgNames = installedExtensions.map { it.pkgName }.toSet()
@@ -190,9 +245,11 @@ class AnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = filteredExtensions[position]
             holder.extensionNameTextView.text = extension.name
-            coroutineScope.launch {
-                val drawable = urlToDrawable(holder.itemView.context, extension.iconUrl)
-                holder.extensionIconImageView.setImageDrawable(drawable)
+            if (!skipIcons) {
+                coroutineScope.launch {
+                    val drawable = urlToDrawable(holder.itemView.context, extension.iconUrl)
+                    holder.extensionIconImageView.setImageDrawable(drawable)
+                }
             }
             holder.closeTextView.text = "Install"
             holder.closeTextView.setOnClickListener {

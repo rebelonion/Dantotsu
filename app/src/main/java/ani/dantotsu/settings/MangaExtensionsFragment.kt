@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentMangaBinding
 import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
+import ani.dantotsu.loadData
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -34,14 +36,58 @@ class MangaExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentMangaExtensionsBinding? = null
     private val binding get() = _binding!!
 
+    val skipIcons = loadData("skip_extension_icons") ?: false
+
     private lateinit var extensionsRecyclerView: RecyclerView
     private lateinit var allextenstionsRecyclerView: RecyclerView
     private val mangaExtensionManager:MangaExtensionManager = Injekt.get<MangaExtensionManager>()
-    private val extensionsAdapter = MangaExtensionsAdapter { pkgName ->
-        mangaExtensionManager.uninstallExtension(pkgName)
-    }
+    private val extensionsAdapter = MangaExtensionsAdapter ({ pkg ->
+        if(pkg.hasUpdate){
+            val notificationManager =
+                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mangaExtensionManager.updateExtension(pkg)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { installStep ->
+                        val builder = NotificationCompat.Builder(
+                            requireContext(),
+                            Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                        )
+                            .setSmallIcon(R.drawable.ic_round_sync_24)
+                            .setContentTitle("Updating extension")
+                            .setContentText("Step: $installStep")
+                            .setPriority(NotificationCompat.PRIORITY_LOW)
+                        notificationManager.notify(1, builder.build())
+                    },
+                    { error ->
+                        val builder = NotificationCompat.Builder(
+                            requireContext(),
+                            Notifications.CHANNEL_DOWNLOADER_ERROR
+                        )
+                            .setSmallIcon(R.drawable.ic_round_info_24)
+                            .setContentTitle("Update failed")
+                            .setContentText("Error: ${error.message}")
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                        notificationManager.notify(1, builder.build())
+                    },
+                    {
+                        val builder = NotificationCompat.Builder(
+                            requireContext(),
+                            Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                        )
+                            .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
+                            .setContentTitle("Update complete")
+                            .setContentText("The extension has been successfully updated.")
+                            .setPriority(NotificationCompat.PRIORITY_LOW)
+                        notificationManager.notify(1, builder.build())
+                    }
+                )
+        }else {
+            mangaExtensionManager.uninstallExtension(pkg.pkgName)
+        }
+    }, skipIcons)
     private val allExtensionsAdapter =
-        AllMangaExtensionsAdapter(lifecycleScope) { pkgName ->
+        AllMangaExtensionsAdapter(lifecycleScope, { pkgName ->
 
             val notificationManager =
                 requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
@@ -84,7 +130,8 @@ class MangaExtensionsFragment : Fragment(), SearchQueryHandler {
                         notificationManager.notify(1, builder.build())
                     }
                 )
-        }
+        }, skipIcons)
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = FragmentMangaExtensionsBinding.inflate(inflater, container, false)
 
@@ -134,9 +181,10 @@ class MangaExtensionsFragment : Fragment(), SearchQueryHandler {
         super.onDestroyView();_binding = null
     }
 
-    private class MangaExtensionsAdapter(private val onUninstallClicked: (String) -> Unit) : RecyclerView.Adapter<MangaExtensionsAdapter.ViewHolder>() {
+    private class MangaExtensionsAdapter(private val onUninstallClicked: (MangaExtension.Installed) -> Unit, skipIcons: Boolean) : RecyclerView.Adapter<MangaExtensionsAdapter.ViewHolder>() {
 
         private var extensions: List<MangaExtension.Installed> = emptyList()
+        val skipIcons = skipIcons
 
         fun updateData(newExtensions: List<MangaExtension.Installed>) {
             extensions = newExtensions
@@ -152,10 +200,17 @@ class MangaExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = extensions[position]
             holder.extensionNameTextView.text = extension.name
-            holder.extensionIconImageView.setImageDrawable(extension.icon)
-            holder.closeTextView.text = "Uninstall"
+            if(!skipIcons) {
+                holder.extensionIconImageView.setImageDrawable(extension.icon)
+            }
+            if(extension.hasUpdate){
+                holder.closeTextView.text = "Update"
+                holder.closeTextView.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.warning))
+            }else{
+                holder.closeTextView.text = "Uninstall"
+            }
             holder.closeTextView.setOnClickListener {
-                onUninstallClicked(extension.pkgName)
+                onUninstallClicked(extension)
             }
         }
 
@@ -169,8 +224,9 @@ class MangaExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
     private class AllMangaExtensionsAdapter(private val coroutineScope: CoroutineScope,
-                                            private val onButtonClicked: (MangaExtension.Available) -> Unit) : RecyclerView.Adapter<AllMangaExtensionsAdapter.ViewHolder>() {
+                                            private val onButtonClicked: (MangaExtension.Available) -> Unit, skipIcons: Boolean) : RecyclerView.Adapter<AllMangaExtensionsAdapter.ViewHolder>() {
         private var extensions: List<MangaExtension.Available> = emptyList()
+        val skipIcons = skipIcons
 
         fun updateData(newExtensions: List<MangaExtension.Available>, installedExtensions: List<MangaExtension.Installed> = emptyList()) {
             val installedPkgNames = installedExtensions.map { it.pkgName }.toSet()
@@ -188,9 +244,11 @@ class MangaExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = filteredExtensions[position]
             holder.extensionNameTextView.text = extension.name
-            coroutineScope.launch {
-                val drawable = urlToDrawable(holder.itemView.context, extension.iconUrl)
-                holder.extensionIconImageView.setImageDrawable(drawable)
+            if (!skipIcons) {
+                coroutineScope.launch {
+                    val drawable = urlToDrawable(holder.itemView.context, extension.iconUrl)
+                    holder.extensionIconImageView.setImageDrawable(drawable)
+                }
             }
             holder.closeTextView.text = "Install"
             holder.closeTextView.setOnClickListener {

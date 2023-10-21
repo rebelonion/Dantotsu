@@ -2,6 +2,7 @@ package ani.dantotsu.parsers
 
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -199,12 +200,14 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
         return coroutineScope {
             try {
+            println("source.name " + source.name)
                 val res = source.getPageList(sChapter)
                 val reIndexedPages = res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
 
                 val deferreds = reIndexedPages.map { page ->
                     async(Dispatchers.IO) {
                         mangaCache.put(page.imageUrl ?: "", ImageData(page, source))
+                        logger("put page: ${page.imageUrl}")
                         pageToMangaImage(page)
                     }
                 }
@@ -212,7 +215,40 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 deferreds.awaitAll()
             } catch (e: Exception) {
                 logger("loadImages Exception: $e")
+                Toast.makeText(currContext(), "Failed to load images: $e", Toast.LENGTH_SHORT).show()
                 emptyList()
+            }
+        }
+    }
+
+    suspend fun fetchAndProcessImage(page: Page, httpSource: HttpSource, context: Context): Bitmap? {
+        return withContext(Dispatchers.IO) {
+            try {
+                // Fetch the image
+                val response = httpSource.getImage(page)
+                println("Response: ${response.code}")
+                println("Response: ${response.message}")
+
+                // Convert the Response to an InputStream
+                val inputStream = response.body?.byteStream()
+
+                // Convert InputStream to Bitmap
+                val bitmap = BitmapFactory.decodeStream(inputStream)
+
+                inputStream?.close()
+                ani.dantotsu.media.manga.saveImage(
+                    bitmap,
+                    context.contentResolver,
+                    page.imageUrl!!,
+                    Bitmap.CompressFormat.JPEG,
+                    100
+                )
+
+                return@withContext bitmap
+            } catch (e: Exception) {
+                // Handle any exceptions
+                println("An error occurred: ${e.message}")
+                return@withContext null
             }
         }
     }

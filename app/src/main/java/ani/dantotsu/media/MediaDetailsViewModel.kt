@@ -50,24 +50,13 @@ class MediaDetailsViewModel : ViewModel() {
 
     fun loadSelected(media: Media): Selected {
         val data = loadData<Selected>("${media.id}-select") ?: Selected().let {
-            it.source = if (media.isAdult) "" else when (media.anime != null) {
-                true -> loadData("settings_def_anime_source") ?: ""
-                else -> loadData("settings_def_manga_source") ?: ""
+            it.sourceIndex = if (media.isAdult) 0 else when (media.anime != null) {
+                true -> loadData("settings_def_anime_source_s_r") ?: 0
+                else -> loadData("settings_def_manga_source_s_r") ?: 0
             }
             it.preferDub = loadData("settings_prefer_dub") ?: false
-            it.sourceIndex = loadSelectedStringLocation(it.source)
             saveSelected(media.id, it)
             it
-        }
-        if (media.anime != null) {
-            val sources = if (media.isAdult) HAnimeSources else AnimeSources
-            data.sourceIndex = sources.list.indexOfFirst { it.name == data.source }
-        } else {
-            val sources = if (media.isAdult) HMangaSources else MangaSources
-            data.sourceIndex = sources.list.indexOfFirst { it.name == data.source }
-        }
-        if (data.sourceIndex == -1) {
-            data.sourceIndex = 0
         }
         return data
     }
@@ -194,8 +183,8 @@ class MediaDetailsViewModel : ViewModel() {
             val server = selected.server ?: return false
             val link = ep.link ?: return false
 
-            ep.extractors = mutableListOf(watchSources?.get(loadSelectedStringLocation(selected.source))?.let {
-                selected.sourceIndex = loadSelectedStringLocation(selected.source)
+            ep.extractors = mutableListOf(watchSources?.get(selected.sourceIndex)?.let {
+                selected.sourceIndex = selected.sourceIndex
                 if (!post && !it.allowsPreloading) null
                 else ep.sEpisode?.let { it1 ->
                     it.loadSingleVideoServer(server, link, ep.extra,
@@ -266,7 +255,7 @@ class MediaDetailsViewModel : ViewModel() {
     suspend fun loadMangaChapterImages(chapter: MangaChapter, selected: Selected, post: Boolean = true): Boolean {
         return tryWithSuspend(true) {
             chapter.addImages(
-                mangaReadSources?.get(loadSelectedStringLocation(selected.source))?.loadImages(chapter.link, chapter.sChapter) ?: return@tryWithSuspend false
+                mangaReadSources?.get(selected.sourceIndex)?.loadImages(chapter.link, chapter.sChapter) ?: return@tryWithSuspend false
             )
             if (post) mangaChapter.postValue(chapter)
             true
@@ -289,7 +278,7 @@ class MediaDetailsViewModel : ViewModel() {
     }
 
     suspend fun autoSearchNovels(media: Media) {
-        val source = novelSources[loadSelectedStringLocation(media.selected?.source?:"")]
+        val source = novelSources[media.selected?.sourceIndex?:0]
         tryWithSuspend(post = true) {
             if (source != null) {
                 novelResponses.postValue(source.sortedSearch(media))

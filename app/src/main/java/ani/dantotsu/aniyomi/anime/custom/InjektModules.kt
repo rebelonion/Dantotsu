@@ -10,6 +10,7 @@ import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.core.preference.AndroidPreferenceStore
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.network.NetworkHelper
+import eu.kanade.tachiyomi.network.NetworkPreferences
 import kotlinx.serialization.json.Json
 import uy.kohesive.injekt.api.InjektModule
 import uy.kohesive.injekt.api.InjektRegistrar
@@ -21,7 +22,7 @@ class AppModule(val app: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(app)
 
-        addSingletonFactory { NetworkHelper(app) }
+        addSingletonFactory { NetworkHelper(app, get()) }
 
         addSingletonFactory { AnimeExtensionManager(app) }
 
@@ -42,6 +43,13 @@ class PreferenceModule(val application: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingletonFactory<PreferenceStore> {
             AndroidPreferenceStore(application)
+        }
+
+        addSingletonFactory {
+            NetworkPreferences(
+                preferenceStore = get(),
+                verboseLogging = false,
+            )
         }
 
         addSingletonFactory {

@@ -11,6 +11,7 @@ import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import eu.kanade.tachiyomi.data.notification.Notifications
 import tachiyomi.core.util.system.logcat
 import ani.dantotsu.others.DisabledReports
+import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import logcat.AndroidLogcatLogger
@@ -33,6 +34,11 @@ class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
+        val sharedPreferences = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+        val useMaterialYou = sharedPreferences.getBoolean("use_material_you", false)
+        if(useMaterialYou) {
+            DynamicColors.applyToActivitiesIfAvailable(this)
+        }
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
         Firebase.crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)

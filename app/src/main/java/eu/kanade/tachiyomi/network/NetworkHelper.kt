@@ -11,11 +11,13 @@ import eu.kanade.tachiyomi.network.interceptor.UncaughtExceptionInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UserAgentInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import java.io.File
 import java.util.concurrent.TimeUnit
 
 class NetworkHelper(
     context: Context,
+    private val preferences: NetworkPreferences,
 ) {
 
     private val cacheDir = File(context.cacheDir, "network_cache")
@@ -40,18 +42,17 @@ class NetworkHelper(
                 .addInterceptor(UncaughtExceptionInterceptor())
                 .addInterceptor(userAgentInterceptor)
 
-            /*if (preferences.verboseLogging().get()) {
+            if (preferences.verboseLogging().get()) {
                 val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.HEADERS
                 }
                 builder.addNetworkInterceptor(httpLoggingInterceptor)
-            }*/
+            }
 
-            //when (preferences.dohProvider().get()) {
-            when (PREF_DOH_CLOUDFLARE) {
+            when (preferences.dohProvider().get()) {
                 PREF_DOH_CLOUDFLARE -> builder.dohCloudflare()
                 PREF_DOH_GOOGLE -> builder.dohGoogle()
-                /*PREF_DOH_ADGUARD -> builder.dohAdGuard()
+                PREF_DOH_ADGUARD -> builder.dohAdGuard()
                 PREF_DOH_QUAD9 -> builder.dohQuad9()
                 PREF_DOH_ALIDNS -> builder.dohAliDNS()
                 PREF_DOH_DNSPOD -> builder.dohDNSPod()
@@ -60,7 +61,7 @@ class NetworkHelper(
                 PREF_DOH_MULLVAD -> builder.dohMullvad()
                 PREF_DOH_CONTROLD -> builder.dohControlD()
                 PREF_DOH_NJALLA -> builder.dohNajalla()
-                PREF_DOH_SHECAN -> builder.dohShecan()*/
+                PREF_DOH_SHECAN -> builder.dohShecan()
             }
 
             return builder
@@ -75,5 +76,5 @@ class NetworkHelper(
             .build()
     }
 
-    fun defaultUserAgentProvider() = "Mozilla/5.0 (Linux; Android %s; %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"//preferences.defaultUserAgent().get().trim()
+    fun defaultUserAgentProvider() = preferences.defaultUserAgent().get().trim()
 }

@@ -2,6 +2,7 @@ package ani.dantotsu.settings
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Build.*
@@ -31,6 +32,7 @@ import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -47,6 +49,7 @@ class SettingsActivity : AppCompatActivity() {
     }
     lateinit var binding: ActivitySettingsBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
+    private val networkPreferences = Injekt.get<NetworkPreferences>()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -92,18 +95,21 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val animeSourceName = loadData<String>("settings_def_anime_source") ?: AnimeSources.names[0]
-        // Set the dropdown item in the UI if the name exists in the list.
-        if (AnimeSources.names.contains(animeSourceName)) {
-            binding.animeSource.setText(animeSourceName, false)
+        binding.settingsUseMaterialYou.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_material_you", false)
+        binding.settingsUseMaterialYou.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_material_you", isChecked).apply()
+        }
+
+        val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
+        if (MangaSources.names.isNotEmpty() && animeSource in 0 until MangaSources.names.size) {
+            binding.mangaSource.setText(MangaSources.names[animeSource], false)
+
         }
 
         binding.animeSource.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, AnimeSources.names))
-        // Set up the item click listener for the dropdown.
+
         binding.animeSource.setOnItemClickListener { _, _, i, _ ->
-            val selectedName = AnimeSources.names[i]
-            // Save the string name of the selected item.
-            saveData("settings_def_anime_source", selectedName)
+            saveData("settings_def_anime_source_s", i)
             binding.animeSource.clearFocus()
         }
 
@@ -129,6 +135,17 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             }else{
                 extensionInstaller.set(BasePreferences.ExtensionInstaller.PACKAGEINSTALLER)
             }
+        }
+
+        binding.skipExtensionIcons.isChecked = loadData("skip_extension_icons") ?: false
+        binding.skipExtensionIcons.setOnCheckedChangeListener { _, isChecked ->
+            saveData("skip_extension_icons", isChecked)
+        }
+
+        binding.userAgent.setText(networkPreferences.defaultUserAgent().get())
+        binding.userAgent.setOnEditorActionListener { _, _, _ ->
+            networkPreferences.defaultUserAgent().set(binding.userAgent.text.toString())
+            true
         }
 
         binding.settingsDownloadInSd.isChecked = loadData("sd_dl") ?: false
@@ -169,12 +186,9 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             saveData("settings_prefer_dub", isChecked)
         }
 
-        // Load the saved manga source name from data storage.
-        val mangaSourceName = loadData<String>("settings_def_manga_source") ?: MangaSources.names[0]
-
-        // Set the dropdown item in the UI if the name exists in the list.
-        if (MangaSources.names.contains(mangaSourceName)) {
-            binding.mangaSource.setText(mangaSourceName, false)
+            val mangaSource = loadData<Int>("settings_def_manga_source_s")?.let { if (it >= MangaSources.names.size) 0 else it } ?: 0
+            if (MangaSources.names.isNotEmpty() && mangaSource in 0 until MangaSources.names.size) {
+                binding.mangaSource.setText(MangaSources.names[mangaSource], false)
         }
 
         // Set up the dropdown adapter.
@@ -182,9 +196,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
 
         // Set up the item click listener for the dropdown.
         binding.mangaSource.setOnItemClickListener { _, _, i, _ ->
-            val selectedName = MangaSources.names[i]
-            // Save the string name of the selected item.
-            saveData("settings_def_manga_source", selectedName)
+            saveData("settings_def_manga_source_s", i)
             binding.mangaSource.clearFocus()
         }
 
