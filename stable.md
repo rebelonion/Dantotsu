@@ -1,11 +1,12 @@
-# 0.1.1
+# 0.1.2
 
 - **Bugfixes:**
   - Fixes for manga and anime extensions
-  - Auto search is now more likely to find correct series
+  - Auto search is now EVEN MORE likely to find correct series
+  - Fixed a crash for large manga chapters
+  - Fixed most manga titles
+  - Fixed manga Anilist logging
+  - probably other stuff I forgor
 
 - **New Features:**
-  - Added ability to update extensions
-  - Added option to skip loading extension icon to help lag
-  - Added option to use custom user agent
-  - Added Material You support
+  - none
