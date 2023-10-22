@@ -33,7 +33,7 @@ abstract class MangaParser : BaseParser() {
      * **/
     abstract suspend fun loadImages(chapterLink: String, sChapter: SChapter): List<MangaImage>
 
-    override suspend fun autoSearch(mediaObj: Media): ShowResponse? {
+    /*override suspend fun autoSearch(mediaObj: Media): ShowResponse? {
         var response = loadSavedShowResponse(mediaObj.id)
         if (response != null) {
             saveShowResponse(mediaObj.id, response, true)
@@ -48,9 +48,20 @@ abstract class MangaParser : BaseParser() {
             saveShowResponse(mediaObj.id, response)
         }
         return response
-    }
+    }*/
 
     open fun getTransformation(): BitmapTransformation? = null
+}
+
+class EmptyMangaParser: MangaParser() {
+    override val name: String = "None"
+    override val saveName: String = "None"
+
+    override suspend fun loadChapters(mangaLink: String, extra: Map<String, String>?, sManga: SManga): List<MangaChapter> = emptyList()
+
+    override suspend fun loadImages(chapterLink: String, sChapter: SChapter): List<MangaImage> = emptyList()
+
+    override suspend fun search(query: String): List<ShowResponse> = emptyList()
 }
 
 data class MangaChapter(

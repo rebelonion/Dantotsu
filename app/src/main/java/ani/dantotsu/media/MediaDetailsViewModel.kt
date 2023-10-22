@@ -1,6 +1,8 @@
 package ani.dantotsu.media
 
 import android.app.Activity
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentManager
@@ -40,6 +42,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 class MediaDetailsViewModel : ViewModel() {
     val scrolledToTop = MutableLiveData(true)
@@ -48,11 +52,13 @@ class MediaDetailsViewModel : ViewModel() {
         saveData("$id-select", data, activity)
     }
 
+
     fun loadSelected(media: Media): Selected {
+        val sharedPreferences = Injekt.get<SharedPreferences>()
         val data = loadData<Selected>("${media.id}-select") ?: Selected().let {
             it.sourceIndex = if (media.isAdult) 0 else when (media.anime != null) {
-                true -> loadData("settings_def_anime_source_s_r") ?: 0
-                else -> loadData("settings_def_manga_source_s_r") ?: 0
+                true -> sharedPreferences.getInt("settings_def_anime_source_s_r", 0)
+                else -> sharedPreferences.getInt(("settings_def_manga_source_s_r"), 0)
             }
             it.preferDub = loadData("settings_prefer_dub") ?: false
             saveSelected(media.id, it)

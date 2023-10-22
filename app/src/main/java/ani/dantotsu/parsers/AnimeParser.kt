@@ -171,6 +171,17 @@ abstract class AnimeParser : BaseParser() {
     }
 }
 
+class EmptyAnimeParser: AnimeParser() {
+    override val name: String = "None"
+    override val saveName: String = "None"
+
+    override val isDubAvailableSeparately: Boolean = false
+    override suspend fun loadEpisodes(animeLink: String, extra: Map<String, String>?, sAnime: SAnime): List<Episode> = emptyList()
+    override suspend fun loadVideoServers(episodeLink: String, extra: Map<String, String>?, sEpisode: SEpisode): List<VideoServer> = emptyList()
+
+    override suspend fun search(query: String): List<ShowResponse> = emptyList()
+}
+
 /**
  * A class for containing Episode data of a particular parser
  * **/

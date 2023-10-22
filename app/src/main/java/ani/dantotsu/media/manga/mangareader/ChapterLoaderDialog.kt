@@ -14,6 +14,7 @@ import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaSingleton
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.tryWith
 import kotlinx.coroutines.Dispatchers
@@ -49,7 +50,8 @@ class ChapterLoaderDialog : BottomSheetDialogFragment() {
                         activity?.runOnUiThread {
                             tryWith { dismiss() }
                             if(launch) {
-                                val intent = Intent(activity, MangaReaderActivity::class.java).apply { putExtra("media", m) }
+                                MediaSingleton.media = m
+                                val intent = Intent(activity, MangaReaderActivity::class.java)//.apply { putExtra("media", m) }
                                 activity.startActivity(intent)
                             }
                         }

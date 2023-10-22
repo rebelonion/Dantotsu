@@ -11,8 +11,10 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 abstract class WatchSources : BaseSources() {
 
     override operator fun get(i: Int): AnimeParser {
-        return (list.getOrNull(i)?:list[0]).get.value as AnimeParser
+        return (list.getOrNull(i) ?: list.firstOrNull())?.get?.value as? AnimeParser
+            ?: EmptyAnimeParser()
     }
+
 
     suspend fun loadEpisodesFromMedia(i: Int, media: Media): MutableMap<String, Episode> {
         return tryWithSuspend(true) {
@@ -40,7 +42,8 @@ abstract class WatchSources : BaseSources() {
 abstract class MangaReadSources : BaseSources() {
 
     override operator fun get(i: Int): MangaParser {
-        return (list.getOrNull(i)?:list[0]).get.value as MangaParser
+        return (list.getOrNull(i)?:list.firstOrNull())?.get?.value as? MangaParser
+            ?: EmptyMangaParser()
     }
 
     suspend fun loadChaptersFromMedia(i: Int, media: Media): MutableMap<String, MangaChapter> {

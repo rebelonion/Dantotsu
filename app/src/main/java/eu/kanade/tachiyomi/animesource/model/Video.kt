@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.Headers
 import rx.subjects.Subject
+import java.io.Serializable
 
 data class Track(val url: String, val lang: String)
 
@@ -17,7 +18,7 @@ open class Video(
     // "url", "language-label-2", "url2", "language-label-2"
     val subtitleTracks: List<Track> = emptyList(),
     val audioTracks: List<Track> = emptyList(),
-) : ProgressListener {
+) : Serializable, ProgressListener {
 
     @Suppress("UNUSED_PARAMETER")
     constructor(

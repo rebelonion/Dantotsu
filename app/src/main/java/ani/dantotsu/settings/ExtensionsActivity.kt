@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -49,15 +50,11 @@ import uy.kohesive.injekt.injectLazy
 import javax.inject.Inject
 
 
-class ExtensionsActivity : AppCompatActivity() {
+class ExtensionsActivity : AppCompatActivity()  {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@ExtensionsActivity)
     }
     lateinit var binding: ActivityExtensionsBinding
-
-
-
-
 
 
     @SuppressLint("SetTextI18n")

@@ -66,6 +66,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     override val saveName = extension.name
     override val hostUrl = extension.sources.first().name
     override val isDubAvailableSeparately = false
+    override val isNSFW = extension.isNsfw
     override suspend fun loadEpisodes(animeLink: String, extra: Map<String, String>?, sAnime: SAnime): List<Episode> {
         val source = extension.sources.first()
         if (source is AnimeCatalogueSource) {
@@ -176,6 +177,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
     override val name = extension.name
     override val saveName = extension.name
     override val hostUrl = extension.sources.first().name
+    override val isNSFW = extension.isNsfw
 
     override suspend fun loadChapters(mangaLink: String, extra: Map<String, String>?, sManga: SManga): List<MangaChapter> {
         val source = extension.sources.first() as? CatalogueSource ?: return emptyList()
@@ -385,22 +387,22 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
 
     private fun SChapterToMangaChapter(sChapter: SChapter): MangaChapter {
-        val parsedChapterTitle = parseChapterTitle(sChapter.name)
+        /*val parsedChapterTitle = parseChapterTitle(sChapter.name)
         val number = if (sChapter.chapter_number.toInt() != -1){
             sChapter.chapter_number.toString()
         } else if(parsedChapterTitle.first != null || parsedChapterTitle.second != null){
             (parsedChapterTitle.first ?: "") + "." + (parsedChapterTitle.second ?: "")
         }else{
             sChapter.name
-        }
+        }*/
         return MangaChapter(
-            number,
+            sChapter.name,
             sChapter.url,
-            if (parsedChapterTitle.first != null || parsedChapterTitle.second != null) {
-                parsedChapterTitle.third
-            } else {
-                sChapter.name
-            },
+            //if (parsedChapterTitle.first != null || parsedChapterTitle.second != null) {
+            //    parsedChapterTitle.third
+            //} else {
+                sChapter.name,
+            //},
             null,
             sChapter
         )

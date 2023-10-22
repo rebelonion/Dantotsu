@@ -113,6 +113,10 @@ data class Media(
         this.relation = mediaEdge.relationType?.toString()
     }
 
-    fun mainName() = nameMAL ?: name ?: nameRomaji
+    fun mainName() = name ?: nameMAL ?: nameRomaji
     fun mangaName() = if (countryOfOrigin != "JP") mainName() else nameRomaji
+}
+
+object MediaSingleton {
+    var media: Media? = null
 }

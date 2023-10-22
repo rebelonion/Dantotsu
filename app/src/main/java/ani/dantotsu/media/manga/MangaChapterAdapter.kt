@@ -9,6 +9,8 @@ import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.setAnimation
 import ani.dantotsu.connections.updateProgress
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 
 class MangaChapterAdapter(
     private var type: Int,
@@ -63,12 +65,12 @@ class MangaChapterAdapter(
                 val ep = arr[position]
                 binding.itemEpisodeNumber.text = ep.number
                 if (media.userProgress != null) {
-                    if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat())
+                    if ((MangaNameAdapter.findChapterNumber(ep.number) ?: 9999f) <= media.userProgress!!.toFloat())
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
                     else {
                         binding.itemEpisodeViewedCover.visibility = View.GONE
                         binding.itemEpisodeCont.setOnLongClickListener {
-                            updateProgress(media, ep.number)
+                            updateProgress(media, MangaNameAdapter.findChapterNumber(ep.number).toString())
                             true
                         }
                     }
@@ -91,14 +93,14 @@ class MangaChapterAdapter(
                 } else binding.itemChapterTitle.visibility = View.GONE
 
                 if (media.userProgress != null) {
-                    if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat()) {
+                    if ((MangaNameAdapter.findChapterNumber(ep.number) ?: 9999f) <= media.userProgress!!.toFloat()) {
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
                         binding.itemEpisodeViewed.visibility = View.VISIBLE
                     } else {
                         binding.itemEpisodeViewedCover.visibility = View.GONE
                         binding.itemEpisodeViewed.visibility = View.GONE
                         binding.root.setOnLongClickListener {
-                            updateProgress(media, ep.number)
+                            updateProgress(media, MangaNameAdapter.findChapterNumber(ep.number).toString())
                             true
                         }
                     }
@@ -113,4 +115,6 @@ class MangaChapterAdapter(
     fun updateType(t: Int) {
         type = t
     }
+
+
 }

@@ -29,7 +29,9 @@ object MangaSources : MangaReadSources() {
 }
 
 object HMangaSources : MangaReadSources() {
-    val aList: List<Lazier<BaseParser>> = lazyList(
-    )
+    val aList: List<Lazier<BaseParser>> = lazyList()
+    suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
+         //todo
+    }
     override val list = listOf(aList,MangaSources.list).flatten()
 }

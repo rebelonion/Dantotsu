@@ -30,8 +30,10 @@ import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityMangaReaderBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaSingleton
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
+import ani.dantotsu.media.manga.MangaNameAdapter
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.HMangaSources
@@ -46,7 +48,12 @@ import ani.dantotsu.settings.UserInterfaceSettings
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.ktx.Firebase
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -164,10 +171,13 @@ class MangaReaderActivity : AppCompatActivity() {
 
         media = if (model.getMedia().value == null)
             try {
-                (intent.getSerialized("media")) ?: return
+                //(intent.getSerialized("media")) ?: return
+                MediaSingleton.media ?: return
             } catch (e: Exception) {
                 logError(e)
                 return
+            } finally {
+                MediaSingleton.media = null
             }
         else model.getMedia().value ?: return
         model.setMedia(media)
@@ -180,6 +190,29 @@ class MangaReaderActivity : AppCompatActivity() {
 
         model.mangaReadSources = if (media.isAdult) HMangaSources else MangaSources
         binding.mangaReaderSource.visibility = if (settings.showSource) View.VISIBLE else View.GONE
+        if(model.mangaReadSources!!.names.isEmpty()){
+            //try to reload sources
+            try {
+            if (media.isAdult) {
+                val mangaSources = MangaSources
+                val scope = lifecycleScope
+                scope.launch(Dispatchers.IO) {
+                    mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
+                }
+                model.mangaReadSources = mangaSources
+            }else{
+                val mangaSources = HMangaSources
+                val scope = lifecycleScope
+                scope.launch(Dispatchers.IO) {
+                    mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
+                }
+                model.mangaReadSources = mangaSources
+            }
+            }catch (e: Exception){
+                Firebase.crashlytics.recordException(e)
+                logError(e)
+            }
+        }
         binding.mangaReaderSource.text = model.mangaReadSources!!.names[media.selected!!.sourceIndex]
 
         binding.mangaReaderTitle.text = media.userPreferredName
@@ -677,7 +710,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 progressDialog?.setCancelable(false)
                     ?.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                         saveData("${media.id}_save_progress", true)
-                        updateProgress(media, media.manga!!.selectedChapter!!)
+                        updateProgress(media, MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!).toString())
                         dialog.dismiss()
                         runnable.run()
                     }
@@ -689,7 +722,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 progressDialog?.show()
             } else {
                 if (loadData<Boolean>("${media.id}_save_progress") != false && if (media.isAdult) settings.updateForH else true)
-                    updateProgress(media, media.manga!!.selectedChapter!!)
+                    updateProgress(media, MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!).toString())
                 runnable.run()
             }
         } else {

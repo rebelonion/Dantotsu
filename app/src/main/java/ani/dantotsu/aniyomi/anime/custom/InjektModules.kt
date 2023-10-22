@@ -2,6 +2,7 @@ package ani.dantotsu.aniyomi.anime.custom
 
 
 import android.app.Application
+import android.content.Context
 import ani.dantotsu.media.manga.MangaCache
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import tachiyomi.core.preference.PreferenceStore
@@ -27,6 +28,9 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory { AnimeExtensionManager(app) }
 
         addSingletonFactory { MangaExtensionManager(app) }
+
+        val sharedPreferences = app.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+        addSingleton(sharedPreferences)
 
         addSingletonFactory {
             Json {

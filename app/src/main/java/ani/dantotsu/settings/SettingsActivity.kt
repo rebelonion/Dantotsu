@@ -100,16 +100,18 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_material_you", isChecked).apply()
         }
 
-        val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
-        if (MangaSources.names.isNotEmpty() && animeSource in 0 until MangaSources.names.size) {
-            binding.mangaSource.setText(MangaSources.names[animeSource], false)
+        //val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
+        val animeSource = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("settings_def_anime_source_s_r", 0)
+        if (AnimeSources.names.isNotEmpty() && animeSource in 0 until AnimeSources.names.size) {
+            binding.animeSource.setText(AnimeSources.names[animeSource], false)
 
         }
 
         binding.animeSource.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, AnimeSources.names))
 
         binding.animeSource.setOnItemClickListener { _, _, i, _ ->
-            saveData("settings_def_anime_source_s", i)
+            //saveData("settings_def_anime_source_s", i)
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("settings_def_anime_source_s_r", i).apply()
             binding.animeSource.clearFocus()
         }
 
@@ -186,7 +188,8 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             saveData("settings_prefer_dub", isChecked)
         }
 
-            val mangaSource = loadData<Int>("settings_def_manga_source_s")?.let { if (it >= MangaSources.names.size) 0 else it } ?: 0
+            //val mangaSource = loadData<Int>("settings_def_manga_source_s")?.let { if (it >= MangaSources.names.size) 0 else it } ?: 0
+            val mangaSource = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("settings_def_manga_source_s_r", 0)
             if (MangaSources.names.isNotEmpty() && mangaSource in 0 until MangaSources.names.size) {
                 binding.mangaSource.setText(MangaSources.names[mangaSource], false)
         }
@@ -196,7 +199,8 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
 
         // Set up the item click listener for the dropdown.
         binding.mangaSource.setOnItemClickListener { _, _, i, _ ->
-            saveData("settings_def_manga_source_s", i)
+            //saveData("settings_def_manga_source_s", i)
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("settings_def_manga_source_s_r", i).apply()
             binding.mangaSource.clearFocus()
         }
 
