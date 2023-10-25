@@ -169,13 +169,28 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                     R.drawable.ic_round_favorite_24
                 )
             )
+            val typedValue = TypedValue()
+            this.theme.resolveAttribute(
+                com.google.android.material.R.attr.colorSecondary,
+                typedValue,
+                true
+            )
+            val color = typedValue.data
+            val typedValue2 = TypedValue()
+            this.theme.resolveAttribute(
+                com.google.android.material.R.attr.colorSecondary,
+                typedValue2,
+                true
+            )
+            val color2 = typedValue.data
+
             PopImageButton(
                 scope,
                 binding.mediaFav,
                 R.drawable.ic_round_favorite_24,
                 R.drawable.ic_round_favorite_border_24,
-                com.google.android.material.R.attr.colorSecondary,
-                com.google.android.material.R.attr.colorSecondary,
+                R.color.bg_opp,
+                R.color.violet_400,
                 media.isFav
             ) {
                 media.isFav = it
@@ -191,7 +206,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         fun total() {
             val text = SpannableStringBuilder().apply {
                 val typedValue = TypedValue()
-                this@MediaDetailsActivity.theme.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue, true)
+                this@MediaDetailsActivity.theme.resolveAttribute(
+                    com.google.android.material.R.attr.colorOnBackground,
+                    typedValue,
+                    true
+                )
                 val white = typedValue.data
                 if (media.userStatus != null) {
                     append(if (media.anime != null) getString(R.string.watched_num) else getString(R.string.read_num))
@@ -401,7 +420,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             if (binding.mediaCover.scaleX == 0f) View.GONE else View.VISIBLE
         val duration = (200 * uiSettings.animationSpeed).toLong()
         val typedValue = TypedValue()
-        this@MediaDetailsActivity.theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue, true)
+        this@MediaDetailsActivity.theme.resolveAttribute(
+            com.google.android.material.R.attr.colorSecondary,
+            typedValue,
+            true
+        )
         val color = typedValue.data
         if (percentage >= percent && !isCollapsed) {
             isCollapsed = true
@@ -473,6 +496,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(image, "scaleX", 1f, 0f).setDuration(69).start()
             ObjectAnimator.ofFloat(image, "scaleY", 1f, 0f).setDuration(100).start()
             delay(100)
+
             if (clicked) {
                 ObjectAnimator.ofArgb(
                     image,
@@ -488,12 +512,14 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(image, "scaleX", 1.5f, 1f).setDuration(100).start()
             ObjectAnimator.ofFloat(image, "scaleY", 1.5f, 1f).setDuration(100).start()
             delay(200)
-            if (clicked) ObjectAnimator.ofArgb(
-                image,
-                "ColorFilter",
-                ContextCompat.getColor(context, c2),
-                ContextCompat.getColor(context, c1)
-            ).setDuration(200).start()
+            if (clicked) {
+                ObjectAnimator.ofArgb(
+                    image,
+                    "ColorFilter",
+                    ContextCompat.getColor(context, c2),
+                    ContextCompat.getColor(context, c1)
+                ).setDuration(200).start()
+            }
         }
 
         fun enabled(enabled: Boolean) {
