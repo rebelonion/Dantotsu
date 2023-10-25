@@ -24,15 +24,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="@color/fav"
+            android:backgroundTint="?attr/colorSecondaryContainer"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/play_yt"
-            android:textColor="@color/bg_white"
+            android:textColor="?attr/colorOnSecondaryContainer"
             android:visibility="gone"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_round_play_circle_24"
-            app:iconTint="@color/bg_white"
+            app:iconTint="?attr/colorOnSecondaryContainer"
             tools:ignore="TextContrastCheck" />
 
         <TextView
@@ -66,6 +66,7 @@
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusTopStart="8dp"
                 app:hintAnimationEnabled="true"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:startIconDrawable="@drawable/ic_round_source_24">
 
                 <AutoCompleteTextView
@@ -90,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 app:srcCompat="@drawable/ic_round_notifications_none_24"
-                app:tint="@color/bg_opp"
+                app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
         </LinearLayout>
 
@@ -170,7 +171,7 @@
                 android:alpha="0.33"
                 android:padding="8dp"
                 app:srcCompat="@drawable/ic_round_view_list_24"
-                app:tint="@color/bg_opp"
+                app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
 
             <ImageView
@@ -180,7 +181,7 @@
                 android:alpha="0.33"
                 android:padding="8dp"
                 app:srcCompat="@drawable/ic_round_grid_view_24"
-                app:tint="@color/bg_opp"
+                app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
 
             <ImageView
@@ -190,7 +191,7 @@
                 android:alpha="0.33"
                 android:padding="8dp"
                 app:srcCompat="@drawable/ic_round_view_comfy_24"
-                app:tint="@color/bg_opp"
+                app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
 
             <ImageView
@@ -201,7 +202,7 @@
                 android:padding="8dp"
                 android:rotation="90"
                 app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
-                app:tint="@color/bg_opp"
+                app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
         </LinearLayout>
 
@@ -263,7 +264,7 @@
                     android:layout_width="0dp"
                     android:layout_height="2dp"
                     android:layout_weight="0"
-                    android:background="@color/pink_500" />
+                    android:background="?attr/colorPrimary" />
 
                 <View
                     android:id="@+id/itemEpisodeProgressEmpty"

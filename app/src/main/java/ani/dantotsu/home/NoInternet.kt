@@ -9,10 +9,12 @@ import ani.dantotsu.isOnline
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.themes.ThemeManager
 
 class NoInternet : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
 
         val binding = ActivityNoInternetBinding.inflate(layoutInflater)
         setContentView(binding.root)

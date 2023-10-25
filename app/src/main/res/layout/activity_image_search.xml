@@ -21,7 +21,7 @@
             android:paddingEnd="16dp"
             android:text="@string/search_by_image"
             app:drawableStartCompat="@drawable/ic_round_arrow_back_ios_new_24"
-            app:drawableTint="@color/bg_opp" />
+            app:drawableTint="?attr/colorOnBackground" />
 
 
         <androidx.recyclerview.widget.RecyclerView
@@ -47,10 +47,10 @@
         android:elegantTextHeight="true"
         android:fontFamily="@font/poppins_bold"
         android:text="@string/upload_image"
-        android:textColor="@color/button_icon"
+        android:textColor="?attr/colorOnPrimary"
         app:cornerRadius="16dp"
         app:icon="@drawable/ic_round_image_search_24"
-        app:iconTint="@color/button_icon" />
+        app:iconTint="?attr/colorOnPrimary"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

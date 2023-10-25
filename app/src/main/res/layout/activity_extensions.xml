@@ -38,7 +38,7 @@
                         android:background="@color/nav_bg_inv"
                         android:padding="16dp"
                         app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
-                        app:tint="@color/bg_opp"
+                        app:tint="?attr/colorOnBackground"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
                 </androidx.cardview.widget.CardView>
 

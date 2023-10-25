@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityAuthorBinding
 import ani.dantotsu.others.getSerialized
+import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -28,6 +29,7 @@ class AuthorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityAuthorBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

@@ -21,6 +21,7 @@
         app:boxCornerRadiusTopEnd="8dp"
         app:boxCornerRadiusTopStart="8dp"
         app:hintAnimationEnabled="true"
+        app:boxStrokeColor="@color/text_input_layout_stroke_color"
         app:startIconDrawable="@drawable/ic_round_source_24">
 
         <AutoCompleteTextView
@@ -62,6 +63,7 @@
         app:boxCornerRadiusTopEnd="28dp"
         app:boxCornerRadiusTopStart="28dp"
         app:endIconDrawable="@drawable/ic_round_search_24"
+        app:boxStrokeColor="@color/text_input_layout_stroke_color"
         app:hintAnimationEnabled="true">
 
         <AutoCompleteTextView
@@ -74,7 +76,6 @@
             android:inputType="textPersonName"
             android:padding="8dp"
             android:selectAllOnFocus="true"
-            android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
             tools:ignore="LabelFor,TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>

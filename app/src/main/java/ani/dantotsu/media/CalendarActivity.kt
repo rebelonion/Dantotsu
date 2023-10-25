@@ -12,6 +12,7 @@ import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
 import ani.dantotsu.media.user.ListViewPagerAdapter
+import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
@@ -27,6 +28,7 @@ class CalendarActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

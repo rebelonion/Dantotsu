@@ -32,8 +32,10 @@ abstract class AnimeParser : BaseParser() {
      * Returns null, if no latest episode is found.
      * **/
     open suspend fun getLatestEpisode(animeLink: String, extra: Map<String, String>?, sAnime: SAnime, latest: Float): Episode?{
-        return loadEpisodes(animeLink, extra, sAnime)
+        val episodes = loadEpisodes(animeLink, extra, sAnime)
+        val max = episodes
             .maxByOrNull { it.number.toFloatOrNull()?:0f }
+        return max
             ?.takeIf { latest < (it.number.toFloatOrNull() ?: 0.001f) }
     }
 

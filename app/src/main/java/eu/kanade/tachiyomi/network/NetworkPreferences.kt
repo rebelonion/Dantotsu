@@ -13,7 +13,7 @@ class NetworkPreferences(
     }
 
     fun dohProvider(): Preference<Int> {
-        return preferenceStore.getInt("doh_provider", 1)
+        return preferenceStore.getInt("doh_provider", 0)
     }
 
     fun defaultUserAgent(): Preference<String> {

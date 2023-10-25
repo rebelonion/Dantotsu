@@ -11,12 +11,14 @@ import androidx.appcompat.app.AppCompatActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.discord.Discord.saveToken
 import ani.dantotsu.startMainActivity
+import ani.dantotsu.themes.ThemeManager
 
 class Login : AppCompatActivity() {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val process = getProcessName()
             if (packageName != process) WebView.setDataDirectorySuffix(process)

@@ -47,7 +47,7 @@
                     android:fontFamily="@font/poppins_bold"
                     android:padding="16dp"
                     android:text="@string/logout"
-                    android:textColor="?attr/colorSecondaryVariant"
+                    android:textColor="?attr/colorSecondary"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -85,7 +85,7 @@
             android:text="@string/search_by_image"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:icon="@drawable/ic_round_image_search_24"
             app:iconPadding="16dp"
@@ -104,7 +104,7 @@
             android:text="@string/downloads"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:icon="@drawable/ic_round_download_24"
             app:iconPadding="16dp"
@@ -123,7 +123,7 @@
             android:text="@string/anilist_settings"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:icon="@drawable/ic_anilist"
             app:iconPadding="16dp"
@@ -142,7 +142,7 @@
             android:text="@string/extension_settings"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:icon="@drawable/ic_extension"
             app:iconPadding="16dp"
@@ -162,7 +162,7 @@
             android:text="@string/settings"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
 
             app:icon="@drawable/ic_round_settings_24"

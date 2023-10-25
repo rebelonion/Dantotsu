@@ -13,6 +13,7 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.ShowResponse
+import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

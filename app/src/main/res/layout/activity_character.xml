@@ -9,14 +9,14 @@
         android:id="@+id/characterAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg">
+        app:contentScrim="?android:colorBackground">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/characterCollapsing"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="false"
-            app:contentScrim="@color/nav_bg"
+            app:contentScrim="?android:colorBackground"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.flaviofaria.kenburnsview.KenBurnsView
@@ -98,7 +98,7 @@
         android:layout_gravity="end"
         android:layout_margin="16dp"
         android:translationZ="2dp"
-        app:cardBackgroundColor="@color/nav_bg"
+        app:cardBackgroundColor="?android:colorBackground"
         app:cardCornerRadius="16dp">
 
         <androidx.constraintlayout.utils.widget.ImageFilterView

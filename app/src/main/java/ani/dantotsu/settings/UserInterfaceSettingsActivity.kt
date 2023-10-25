@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityUserInterfaceSettingsBinding
+import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
 
 class UserInterfaceSettingsActivity : AppCompatActivity() {
@@ -15,6 +16,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
     private val ui = "ui_settings"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityUserInterfaceSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

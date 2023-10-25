@@ -176,6 +176,7 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintWidth_max="256dp"
+                            app:boxStrokeColor="@color/text_input_layout_stroke_color"
                             tools:visibility="visible">
 
                             <ImageView
@@ -230,6 +231,7 @@
                             app:layout_constraintStart_toEndOf="@+id/homeAnimeList"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintWidth_max="256dp"
+                            app:boxStrokeColor="@color/text_input_layout_stroke_color"
                             tools:visibility="visible">
 
                             <ImageView
@@ -389,7 +391,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="32dp"
                             android:src="@drawable/ic_round_heart_broken_24"
-                            app:tint="@color/fav"
+                            app:tint="?attr/colorPrimary"
                             tools:ignore="ContentDescription" />
 
                         <TextView
@@ -615,7 +617,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="32dp"
                             android:src="@drawable/ic_round_heart_broken_24"
-                            app:tint="@color/fav"
+                            app:tint="?attr/colorPrimary"
                             tools:ignore="ContentDescription" />
 
                         <TextView

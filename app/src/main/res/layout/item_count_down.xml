@@ -17,6 +17,7 @@
         android:fontFamily="@font/poppins_bold"
         android:textAlignment="center"
         android:textAllCaps="true"
+        android:textColor="?attr/colorPrimary"
         tools:text="Episode 2 will be released in" />
 
     <TextView

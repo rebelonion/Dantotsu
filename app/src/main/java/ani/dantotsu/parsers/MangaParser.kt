@@ -3,6 +3,7 @@ package ani.dantotsu.parsers
 import android.graphics.Bitmap
 import ani.dantotsu.FileUrl
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.manga.MangaNameAdapter
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
@@ -23,9 +24,11 @@ abstract class MangaParser : BaseParser() {
      * Returns null, if no latest chapter is found.
      * **/
     open suspend fun getLatestChapter(mangaLink: String, extra: Map<String, String>?, sManga: SManga, latest: Float): MangaChapter? {
-        return loadChapters(mangaLink, extra, sManga)
-            .maxByOrNull { it.number.toFloatOrNull() ?: 0f }
-            ?.takeIf { latest < (it.number.toFloatOrNull() ?: 0.001f) }
+        val chapter =  loadChapters(mangaLink, extra, sManga)
+        val max =  chapter
+            .maxByOrNull { MangaNameAdapter.findChapterNumber(it.number) ?: 0f }
+        return max
+            ?.takeIf { latest < (MangaNameAdapter.findChapterNumber(it.number) ?: 0.001f) }
     }
 
     /**
@@ -33,22 +36,6 @@ abstract class MangaParser : BaseParser() {
      * **/
     abstract suspend fun loadImages(chapterLink: String, sChapter: SChapter): List<MangaImage>
 
-    /*override suspend fun autoSearch(mediaObj: Media): ShowResponse? {
-        var response = loadSavedShowResponse(mediaObj.id)
-        if (response != null) {
-            saveShowResponse(mediaObj.id, response, true)
-        } else {
-            setUserText("Searching : ${mediaObj.mangaName()}")
-            response = search(mediaObj.mangaName()).let { if (it.isNotEmpty()) it[0] else null }
-
-            if (response == null) {
-                setUserText("Searching : ${mediaObj.nameRomaji}")
-                response = search(mediaObj.nameRomaji).let { if (it.isNotEmpty()) it[0] else null }
-            }
-            saveShowResponse(mediaObj.id, response)
-        }
-        return response
-    }*/
 
     open fun getTransformation(): BitmapTransformation? = null
 }

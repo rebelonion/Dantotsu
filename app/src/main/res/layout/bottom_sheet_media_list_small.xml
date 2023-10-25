@@ -55,6 +55,7 @@
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
             app:hintAnimationEnabled="true"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:startIconDrawable="@drawable/ic_round_playlist_play_24">
 
             <AutoCompleteTextView
@@ -92,6 +93,7 @@
                 app:boxCornerRadiusTopStart="16dp"
                 app:endIconMode="none"
                 app:hintAnimationEnabled="true"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:startIconDrawable="@drawable/ic_round_add_circle_outline_24"
                 app:suffixTextAppearance="@style/Suffix">
 
@@ -122,6 +124,7 @@
                 android:layout_marginTop="-2dp"
                 android:elevation="0dp"
                 android:fontFamily="@font/poppins_bold"
+                app:strokeColor="?attr/colorPrimaryContainer"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minWidth="@null"
@@ -150,6 +153,7 @@
             app:hintAnimationEnabled="true"
             app:startIconDrawable="@drawable/ic_round_star_24"
             app:suffixText="@string/score_suffix"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:suffixTextAppearance="@style/Suffix">
 
             <AutoCompleteTextView
@@ -180,6 +184,7 @@
             android:layout_height="56dp"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/poppins_bold"
+            app:strokeColor="?attr/colorPrimaryContainer"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:padding="8dp"
@@ -195,7 +200,7 @@
         android:layout_height="4dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="14dp"
-        app:cardBackgroundColor="@color/nav_tab"
+        app:cardBackgroundColor="?attr/colorPrimary"
         app:cardCornerRadius="2dp"
         app:cardElevation="0dp" >
 

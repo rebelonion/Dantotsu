@@ -9,7 +9,7 @@
         android:id="@+id/mediaAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg"
+        android:background="?android:colorBackground"
         android:translationZ="5dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="false"
-            app:contentScrim="@color/nav_bg"
+            app:contentScrim="?android:colorBackground"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <com.flaviofaria.kenburnsview.KenBurnsView
@@ -85,6 +85,7 @@
                         android:singleLine="false"
                         android:text="@string/slogan"
                         android:textSize="16sp"
+                        android:textColor="?attr/colorOnBackground"
                         android:transitionName="mediaTitle" />
 
                     <TextView
@@ -121,7 +122,7 @@
                     android:singleLine="true"
                     android:text="@string/add"
                     android:textAllCaps="true"
-                    android:textColor="?attr/colorSecondary"
+                    android:textColor="?attr/colorPrimary"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:cornerRadius="16dp"
@@ -153,7 +154,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:background="@color/nav_bg"
+                    app:contentScrim="?android:colorBackground"
                     android:ellipsize="marquee"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
@@ -188,7 +189,7 @@
                         android:lineSpacingExtra="-8sp"
                         android:marqueeRepeatLimit="marquee_forever"
                         android:maxLines="2"
-                        android:textColor="@color/fg"
+                        android:textColor="?attr/colorOnBackground"
                         android:textSize="16sp"
                         tools:text="Watched 10 out of 10" />
 
@@ -200,7 +201,7 @@
                         android:padding="8dp"
                         android:tintMode="src_atop"
                         app:srcCompat="@drawable/ic_round_favorite_border_24"
-                        app:tint="@color/nav_tab"
+                        app:tint="?attr/colorSecondary"
                         tools:ignore="ContentDescription,ImageContrastCheck" />
 
                     <ImageView
@@ -210,7 +211,7 @@
                         android:layout_marginStart="-8dp"
                         android:padding="8dp"
                         app:srcCompat="@drawable/ic_round_share_24"
-                        app:tint="@color/nav_tab"
+                        app:tint="?attr/colorSecondary"
                         app:tintMode="src_atop"
                         tools:ignore="ContentDescription,ImageContrastCheck" />
 
@@ -241,14 +242,14 @@
         android:layout_height="wrap_content"
         android:padding="0dp"
         android:layout_gravity="bottom"
-        android:background="@color/nav_bg"
+        android:background="?attr/colorPrimaryContainer"
         android:translationZ="1dp"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
         app:itemRippleColor="?attr/colorSecondary"
         app:itemTextAppearanceActive="@style/NavBarText"
         app:itemTextAppearanceInactive="@style/NavBarText"
-        app:itemTextColor="@color/tab_layout_text"
+        app:itemTextColor="?attr/colorOnPrimaryContainer"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     <androidx.cardview.widget.CardView

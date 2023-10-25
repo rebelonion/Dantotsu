@@ -116,10 +116,10 @@ abstract class BaseImageAdapter(
     abstract suspend fun loadImage(position: Int, parent: View): Boolean
 
     companion object {
-        /*suspend fun Context.loadBitmap(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? {
+        suspend fun Context.loadBitmap_old(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? {
             return tryWithSuspend {
                 withContext(Dispatchers.IO) {
-                    Glide.with(this@loadBitmap)
+                    Glide.with(this@loadBitmap_old)
                         .asBitmap()
                         .let {
                             if (link.url.startsWith("file://")) {
@@ -142,7 +142,7 @@ abstract class BaseImageAdapter(
                         .get()
                 }
             }
-        }*/
+        }
 
         suspend fun Context.loadBitmap(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? {
             return tryWithSuspend {

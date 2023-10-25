@@ -38,8 +38,8 @@
             android:inputType="textPersonName"
             android:selectAllOnFocus="true"
             android:padding="8dp"
-            android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             tools:ignore="LabelFor,TextContrastCheck" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,6 +75,7 @@
             android:text="@string/adult"
             android:textAlignment="textEnd"
             android:visibility="visible"
+            app:buttonTint="?attr/colorPrimaryContainer"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
     </LinearLayout>
 
@@ -117,6 +118,7 @@
             app:contentPadding="4dp"
             app:contentPaddingLeft="8dp"
             app:contentPaddingRight="8dp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             tools:ignore="ContentDescription,TextContrastCheck">
 
             <TextView
@@ -158,7 +160,7 @@
             android:alpha="0.33"
             android:padding="8dp"
             app:srcCompat="@drawable/ic_round_view_list_24"
-            app:tint="@color/bg_opp"
+            app:tint="?attr/colorOnBackground"
             tools:ignore="ContentDescription,ImageContrastCheck" />
 
         <ImageView
@@ -168,7 +170,7 @@
             android:alpha="0.33"
             android:padding="8dp"
             app:srcCompat="@drawable/ic_round_grid_view_24"
-            app:tint="@color/bg_opp"
+            app:tint="?attr/colorOnBackground"
             tools:ignore="ContentDescription,ImageContrastCheck" />
 
     </LinearLayout>

@@ -8,7 +8,7 @@
     <com.google.android.material.appbar.AppBarLayout
 
         android:layout_width="match_parent"
-        android:background="@color/nav_bg"
+        android:background="?attr/colorSecondary"
         android:layout_height="wrap_content">
 
         <TextView
@@ -21,6 +21,7 @@
             android:singleLine="true"
             android:textAlignment="center"
             android:textSize="20sp"
+            android:textColor="?attr/colorOnSecondary"
             tools:text="@string/main_studio" />
 
 
@@ -56,7 +57,7 @@
         android:layout_gravity="end"
         android:layout_margin="16dp"
         android:translationZ="2dp"
-        app:cardBackgroundColor="@color/nav_bg"
+        app:cardBackgroundColor="?attr/colorSecondary"
         app:cardCornerRadius="16dp">
 
         <androidx.constraintlayout.utils.widget.ImageFilterView

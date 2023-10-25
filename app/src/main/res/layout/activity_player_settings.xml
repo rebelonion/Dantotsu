@@ -34,7 +34,7 @@
                     android:background="@color/nav_bg_inv"
                     android:padding="16dp"
                     app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -106,7 +106,7 @@
                 android:paddingEnd="32dp"
                 android:text="@string/video_info"
                 android:textAlignment="viewStart"
-                android:textColor="@color/bg_opp"
+                android:textColor="?attr/colorOnBackground"
                 app:cornerRadius="0dp"
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">

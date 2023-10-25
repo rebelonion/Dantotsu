@@ -18,6 +18,7 @@ import ani.dantotsu.databinding.ActivityCharacterBinding
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +34,7 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityCharacterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

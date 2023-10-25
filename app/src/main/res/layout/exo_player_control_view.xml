@@ -529,8 +529,8 @@
                 android:layout_height="24dp"
                 app:ad_marker_color="#A9FFFFFF"
                 app:bar_height="2dp"
-                app:played_color="@color/pink_700"
-                app:scrubber_color="@color/pink_500"
+                app:played_color="?attr/colorPrimary"
+                app:scrubber_color="?attr/colorPrimaryContainer"
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </LinearLayout>

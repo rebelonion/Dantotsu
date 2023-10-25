@@ -28,6 +28,6 @@
         android:layout_gravity="center_vertical"
         android:textStyle="bold"
         android:text="Uninstall"
-        android:textColor="@color/pink_500"
+        android:textColor="?attr/colorPrimary"
         android:textSize="14sp"/>
 </LinearLayout>

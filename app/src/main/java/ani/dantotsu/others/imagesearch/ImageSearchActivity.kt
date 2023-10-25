@@ -15,6 +15,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ActivityImageSearchBinding
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -46,6 +47,7 @@ class ImageSearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityImageSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

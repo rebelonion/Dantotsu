@@ -13,7 +13,7 @@
     android:paddingEnd="64dp"
     android:textAlignment="viewStart"
     android:textAllCaps="false"
-    android:textColor="@color/bg_opp"
+    android:textColor="?attr/colorOnBackground"
     app:cornerRadius="0dp"
     app:iconPadding="16dp"
     app:iconSize="24dp"

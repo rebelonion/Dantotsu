@@ -53,6 +53,7 @@ import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
+import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.*
 import androidx.media3.ui.CaptionStyleCompat.*
@@ -65,6 +66,7 @@ import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
 import ani.dantotsu.others.Download.download
@@ -74,6 +76,7 @@ import ani.dantotsu.parsers.*
 import ani.dantotsu.settings.PlayerSettings
 import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.Slider
 import com.lagradost.nicehttp.ignoreAllSSLErrors
@@ -81,11 +84,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import okhttp3.internal.immutableListOf
 import java.util.*
 import java.util.concurrent.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
+
 
 @UnstableApi
 @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
@@ -183,7 +189,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
             if (displayCutout != null) {
                 if (displayCutout.boundingRects.size > 0) {
-                    notchHeight = min(displayCutout.boundingRects[0].width(), displayCutout.boundingRects[0].height())
+                    notchHeight = min(
+                        displayCutout.boundingRects[0].width(),
+                        displayCutout.boundingRects[0].height()
+                    )
                     checkNotch()
                 }
             }
@@ -194,101 +203,104 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     private fun checkNotch() {
         if (notchHeight != 0) {
             val orientation = resources.configuration.orientation
-            playerView.findViewById<View>(R.id.exo_controller_margin).updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                    marginStart = notchHeight
-                    marginEnd = notchHeight
-                    topMargin = 0
-                } else {
-                    topMargin = notchHeight
-                    marginStart = 0
-                    marginEnd = 0
+            playerView.findViewById<View>(R.id.exo_controller_margin)
+                .updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        marginStart = notchHeight
+                        marginEnd = notchHeight
+                        topMargin = 0
+                    } else {
+                        topMargin = notchHeight
+                        marginStart = 0
+                        marginEnd = 0
+                    }
                 }
-            }
             playerView.findViewById<View>(androidx.media3.ui.R.id.exo_buffering).translationY =
                 (if (orientation == Configuration.ORIENTATION_LANDSCAPE) 0 else (notchHeight + 8f.px)).dp
             exoBrightnessCont.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                marginEnd = if (orientation == Configuration.ORIENTATION_LANDSCAPE) notchHeight else 0
+                marginEnd =
+                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) notchHeight else 0
             }
             exoVolumeCont.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                marginStart = if (orientation == Configuration.ORIENTATION_LANDSCAPE) notchHeight else 0
+                marginStart =
+                    if (orientation == Configuration.ORIENTATION_LANDSCAPE) notchHeight else 0
             }
         }
     }
 
     private fun setupSubFormatting(playerView: PlayerView, settings: PlayerSettings) {
         val primaryColor = when (settings.primaryColor) {
-            0    -> Color.BLACK
-            1    -> Color.DKGRAY
-            2    -> Color.GRAY
-            3    -> Color.LTGRAY
-            4    -> Color.WHITE
-            5    -> Color.RED
-            6    -> Color.YELLOW
-            7    -> Color.GREEN
-            8    -> Color.CYAN
-            9    -> Color.BLUE
-            10   -> Color.MAGENTA
-            11   -> Color.TRANSPARENT
+            0 -> Color.BLACK
+            1 -> Color.DKGRAY
+            2 -> Color.GRAY
+            3 -> Color.LTGRAY
+            4 -> Color.WHITE
+            5 -> Color.RED
+            6 -> Color.YELLOW
+            7 -> Color.GREEN
+            8 -> Color.CYAN
+            9 -> Color.BLUE
+            10 -> Color.MAGENTA
+            11 -> Color.TRANSPARENT
             else -> Color.WHITE
         }
         val secondaryColor = when (settings.secondaryColor) {
-            0    -> Color.BLACK
-            1    -> Color.DKGRAY
-            2    -> Color.GRAY
-            3    -> Color.LTGRAY
-            4    -> Color.WHITE
-            5    -> Color.RED
-            6    -> Color.YELLOW
-            7    -> Color.GREEN
-            8    -> Color.CYAN
-            9    -> Color.BLUE
-            10   -> Color.MAGENTA
-            11   -> Color.TRANSPARENT
+            0 -> Color.BLACK
+            1 -> Color.DKGRAY
+            2 -> Color.GRAY
+            3 -> Color.LTGRAY
+            4 -> Color.WHITE
+            5 -> Color.RED
+            6 -> Color.YELLOW
+            7 -> Color.GREEN
+            8 -> Color.CYAN
+            9 -> Color.BLUE
+            10 -> Color.MAGENTA
+            11 -> Color.TRANSPARENT
             else -> Color.BLACK
         }
         val outline = when (settings.outline) {
-            0    -> EDGE_TYPE_OUTLINE // Normal
-            1    -> EDGE_TYPE_DEPRESSED // Shine
-            2    -> EDGE_TYPE_DROP_SHADOW // Drop shadow
-            3    -> EDGE_TYPE_NONE // No outline
+            0 -> EDGE_TYPE_OUTLINE // Normal
+            1 -> EDGE_TYPE_DEPRESSED // Shine
+            2 -> EDGE_TYPE_DROP_SHADOW // Drop shadow
+            3 -> EDGE_TYPE_NONE // No outline
             else -> EDGE_TYPE_OUTLINE // Normal
         }
         val subBackground = when (settings.subBackground) {
-            0    -> Color.TRANSPARENT
-            1    -> Color.BLACK
-            2    -> Color.DKGRAY
-            3    -> Color.GRAY
-            4    -> Color.LTGRAY
-            5    -> Color.WHITE
-            6    -> Color.RED
-            7    -> Color.YELLOW
-            8    -> Color.GREEN
-            9    -> Color.CYAN
-            10   -> Color.BLUE
-            11   -> Color.MAGENTA
+            0 -> Color.TRANSPARENT
+            1 -> Color.BLACK
+            2 -> Color.DKGRAY
+            3 -> Color.GRAY
+            4 -> Color.LTGRAY
+            5 -> Color.WHITE
+            6 -> Color.RED
+            7 -> Color.YELLOW
+            8 -> Color.GREEN
+            9 -> Color.CYAN
+            10 -> Color.BLUE
+            11 -> Color.MAGENTA
             else -> Color.TRANSPARENT
         }
         val subWindow = when (settings.subWindow) {
-            0    -> Color.TRANSPARENT
-            1    -> Color.BLACK
-            2    -> Color.DKGRAY
-            3    -> Color.GRAY
-            4    -> Color.LTGRAY
-            5    -> Color.WHITE
-            6    -> Color.RED
-            7    -> Color.YELLOW
-            8    -> Color.GREEN
-            9    -> Color.CYAN
-            10   -> Color.BLUE
-            11   -> Color.MAGENTA
+            0 -> Color.TRANSPARENT
+            1 -> Color.BLACK
+            2 -> Color.DKGRAY
+            3 -> Color.GRAY
+            4 -> Color.LTGRAY
+            5 -> Color.WHITE
+            6 -> Color.RED
+            7 -> Color.YELLOW
+            8 -> Color.GREEN
+            9 -> Color.CYAN
+            10 -> Color.BLUE
+            11 -> Color.MAGENTA
             else -> Color.TRANSPARENT
         }
         val font = when (settings.font) {
-            0    -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
-            1    -> ResourcesCompat.getFont(this, R.font.poppins_bold)
-            2    -> ResourcesCompat.getFont(this, R.font.poppins)
-            3    -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+            0 -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
+            1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
+            2 -> ResourcesCompat.getFont(this, R.font.poppins)
+            3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
             else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
         }
         playerView.subtitleView?.setStyle(
@@ -305,6 +317,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityExoplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -316,8 +329,18 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             finishAndRemoveTask()
         }
 
-        settings = loadData("player_settings") ?: PlayerSettings().apply { saveData("player_settings", this) }
-        uiSettings = loadData("ui_settings") ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
+        settings = loadData("player_settings") ?: PlayerSettings().apply {
+            saveData(
+                "player_settings",
+                this
+            )
+        }
+        uiSettings = loadData("ui_settings") ?: UserInterfaceSettings().apply {
+            saveData(
+                "ui_settings",
+                this
+            )
+        }
 
         playerView = findViewById(R.id.player_view)
         exoQuality = playerView.findViewById(R.id.exo_quality)
@@ -360,17 +383,20 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 requestedOrientation = rotation
                 it.visibility = View.GONE
             }
-            orientationListener = object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
-                override fun onOrientationChanged(orientation: Int) {
-                    if (orientation in 45..135) {
-                        if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) exoRotate.visibility = View.VISIBLE
-                        rotation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-                    } else if (orientation in 225..315) {
-                        if (rotation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) exoRotate.visibility = View.VISIBLE
-                        rotation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            orientationListener =
+                object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
+                    override fun onOrientationChanged(orientation: Int) {
+                        if (orientation in 45..135) {
+                            if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) exoRotate.visibility =
+                                View.VISIBLE
+                            rotation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                        } else if (orientation in 225..315) {
+                            if (rotation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) exoRotate.visibility =
+                                View.VISIBLE
+                            rotation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                        }
                     }
                 }
-            }
             orientationListener?.enable()
         }
 
@@ -378,7 +404,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
 
         playerView.subtitleView?.alpha = when (settings.subtitles) {
-            true  -> 1f
+            true -> 1f
             false -> 0f
         }
         val fontSize = settings.fontSize.toFloat()
@@ -401,7 +427,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             isTimeStampsLoaded = true
             exoSkipOpEd.visibility = if (it != null) {
                 val adGroups = it.flatMap {
-                    listOf(it.interval.startTime.toLong() * 1000, it.interval.endTime.toLong() * 1000)
+                    listOf(
+                        it.interval.startTime.toLong() * 1000,
+                        it.interval.endTime.toLong() * 1000
+                    )
                 }.toLongArray()
                 val playedAdGroups = it.flatMap {
                     listOf(false, false)
@@ -441,7 +470,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         // Picture-in-picture
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            pipEnabled = packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && settings.pip
+            pipEnabled =
+                packageManager.hasSystemFeature(PackageManager.FEATURE_PICTURE_IN_PICTURE) && settings.pip
             if (pipEnabled) {
                 exoPip.visibility = View.VISIBLE
                 exoPip.setOnClickListener {
@@ -456,7 +486,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         val container = playerView.findViewById<View>(R.id.exo_controller_cont)
         val screen = playerView.findViewById<View>(R.id.exo_black_screen)
         val lockButton = playerView.findViewById<ImageButton>(R.id.exo_unlock)
-        val timeline = playerView.findViewById<ExtendedTimeBar>(androidx.media3.ui.R.id.exo_progress)
+        val timeline =
+            playerView.findViewById<ExtendedTimeBar>(androidx.media3.ui.R.id.exo_progress)
         playerView.findViewById<ImageButton>(R.id.exo_lock).setOnClickListener {
             locked = true
             screen.visibility = View.GONE
@@ -496,17 +527,22 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 dialog.findViewById<Slider>(R.id.seekbar).addOnChangeListener { _, value, _ ->
                     settings.skipTime = value.toInt()
                     saveData(player, settings)
-                    playerView.findViewById<TextView>(R.id.exo_skip_time).text = settings.skipTime.toString()
-                    dialog.findViewById<TextView>(R.id.seekbar_value).text = settings.skipTime.toString()
+                    playerView.findViewById<TextView>(R.id.exo_skip_time).text =
+                        settings.skipTime.toString()
+                    dialog.findViewById<TextView>(R.id.seekbar_value).text =
+                        settings.skipTime.toString()
                 }
-                dialog.findViewById<Slider>(R.id.seekbar).addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-                    override fun onStartTrackingTouch(slider: Slider) {}
-                    override fun onStopTrackingTouch(slider: Slider) {
-                        dialog.dismiss()
-                    }
-                })
-                dialog.findViewById<TextView>(R.id.seekbar_title).text = getString(R.string.skip_time)
-                dialog.findViewById<TextView>(R.id.seekbar_value).text = settings.skipTime.toString()
+                dialog.findViewById<Slider>(R.id.seekbar)
+                    .addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                        override fun onStartTrackingTouch(slider: Slider) {}
+                        override fun onStopTrackingTouch(slider: Slider) {
+                            dialog.dismiss()
+                        }
+                    })
+                dialog.findViewById<TextView>(R.id.seekbar_title).text =
+                    getString(R.string.skip_time)
+                dialog.findViewById<TextView>(R.id.seekbar_value).text =
+                    settings.skipTime.toString()
                 @Suppress("DEPRECATION")
                 dialog.window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 dialog.show()
@@ -521,7 +557,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         val brightnessRunnable = Runnable {
             if (exoBrightnessCont.alpha == 1f)
                 lifecycleScope.launch {
-                    ObjectAnimator.ofFloat(exoBrightnessCont, "alpha", 1f, 0f).setDuration(gestureSpeed).start()
+                    ObjectAnimator.ofFloat(exoBrightnessCont, "alpha", 1f, 0f)
+                        .setDuration(gestureSpeed).start()
                     delay(gestureSpeed)
                     exoBrightnessCont.visibility = View.GONE
                     checkNotch()
@@ -530,7 +567,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         val volumeRunnable = Runnable {
             if (exoVolumeCont.alpha == 1f)
                 lifecycleScope.launch {
-                    ObjectAnimator.ofFloat(exoVolumeCont, "alpha", 1f, 0f).setDuration(gestureSpeed).start()
+                    ObjectAnimator.ofFloat(exoVolumeCont, "alpha", 1f, 0f).setDuration(gestureSpeed)
+                        .start()
                     delay(gestureSpeed)
                     exoVolumeCont.visibility = View.GONE
                     checkNotch()
@@ -548,25 +586,65 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         fun handleController() {
             if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) !isInPictureInPictureMode else true) {
                 if (playerView.isControllerFullyVisible) {
-                    ObjectAnimator.ofFloat(playerView.findViewById(R.id.exo_controller), "alpha", 1f, 0f)
+                    ObjectAnimator.ofFloat(
+                        playerView.findViewById(R.id.exo_controller),
+                        "alpha",
+                        1f,
+                        0f
+                    )
                         .setDuration(controllerDuration).start()
-                    ObjectAnimator.ofFloat(playerView.findViewById(R.id.exo_bottom_cont), "translationY", 0f, 128f)
+                    ObjectAnimator.ofFloat(
+                        playerView.findViewById(R.id.exo_bottom_cont),
+                        "translationY",
+                        0f,
+                        128f
+                    )
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
-                    ObjectAnimator.ofFloat(playerView.findViewById(R.id.exo_timeline_cont), "translationY", 0f, 128f)
+                    ObjectAnimator.ofFloat(
+                        playerView.findViewById(R.id.exo_timeline_cont),
+                        "translationY",
+                        0f,
+                        128f
+                    )
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
-                    ObjectAnimator.ofFloat(playerView.findViewById(R.id.exo_top_cont), "translationY", 0f, -128f)
+                    ObjectAnimator.ofFloat(
+                        playerView.findViewById(R.id.exo_top_cont),
+                        "translationY",
+                        0f,
+                        -128f
+                    )
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
                     playerView.postDelayed({ playerView.hideController() }, controllerDuration)
                 } else {
                     checkNotch()
                     playerView.showController()
-                    ObjectAnimator.ofFloat(playerView.findViewById(R.id.exo_controller), "alpha", 0f, 1f)
+                    ObjectAnimator.ofFloat(
+                        playerView.findViewById(R.id.exo_controller),
+                        "alpha",
+                        0f,
+                        1f
+                    )
                         .setDuration(controllerDuration).start()
-                    ObjectAnimator.ofFloat(playerView.findViewById(R.id.exo_bottom_cont), "translationY", 128f, 0f)
+                    ObjectAnimator.ofFloat(
+                        playerView.findViewById(R.id.exo_bottom_cont),
+                        "translationY",
+                        128f,
+                        0f
+                    )
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
-                    ObjectAnimator.ofFloat(playerView.findViewById(R.id.exo_timeline_cont), "translationY", 128f, 0f)
+                    ObjectAnimator.ofFloat(
+                        playerView.findViewById(R.id.exo_timeline_cont),
+                        "translationY",
+                        128f,
+                        0f
+                    )
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
-                    ObjectAnimator.ofFloat(playerView.findViewById(R.id.exo_top_cont), "translationY", -128f, 0f)
+                    ObjectAnimator.ofFloat(
+                        playerView.findViewById(R.id.exo_top_cont),
+                        "translationY",
+                        -128f,
+                        0f
+                    )
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
                 }
             }
@@ -651,8 +729,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         if (!settings.doubleTap) {
-            playerView.findViewById<View>(R.id.exo_fast_forward_button_cont).visibility = View.VISIBLE
-            playerView.findViewById<View>(R.id.exo_fast_rewind_button_cont).visibility = View.VISIBLE
+            playerView.findViewById<View>(R.id.exo_fast_forward_button_cont).visibility =
+                View.VISIBLE
+            playerView.findViewById<View>(R.id.exo_fast_rewind_button_cont).visibility =
+                View.VISIBLE
             playerView.findViewById<ImageButton>(R.id.exo_fast_forward_button).setOnClickListener {
                 if (isInitialized) {
                     seek(true)
@@ -696,7 +776,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
             exoBrightness.addOnChangeListener { _, value, _ ->
                 val lp = window.attributes
-                lp.screenBrightness = brightnessConverter((value.takeIf { !it.isNaN() } ?: 0f) / 10, false)
+                lp.screenBrightness =
+                    brightnessConverter((value.takeIf { !it.isNaN() } ?: 0f) / 10, false)
                 window.attributes = lp
                 brightnessHide()
             }
@@ -757,7 +838,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     }
                 }
 
-                override fun onSingleClick(event: MotionEvent) = if (isSeeking) doubleTap(false, event) else handleController()
+                override fun onSingleClick(event: MotionEvent) =
+                    if (isSeeking) doubleTap(false, event) else handleController()
             })
             val rewindArea = playerView.findViewById<View>(R.id.exo_rewind_area)
             rewindArea.isClickable = true
@@ -786,7 +868,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     }
                 }
 
-                override fun onSingleClick(event: MotionEvent) = if (isSeeking) doubleTap(true, event) else handleController()
+                override fun onSingleClick(event: MotionEvent) =
+                    if (isSeeking) doubleTap(true, event) else handleController()
             })
             val forwardArea = playerView.findViewById<View>(R.id.exo_forward_area)
             forwardArea.isClickable = true
@@ -817,7 +900,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         model.watchSources = if (media.isAdult) HAnimeSources else AnimeSources
-        serverInfo.text = model.watchSources!!.names.getOrNull(media.selected!!.sourceIndex) ?: model.watchSources!!.names[0]
+        serverInfo.text = model.watchSources!!.names.getOrNull(media.selected!!.sourceIndex)
+            ?: model.watchSources!!.names[0]
 
         model.epChanged.observe(this) {
             epChanging = !it
@@ -906,7 +990,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 rpc?.send {
                     type = RPC.Type.WATCHING
                     activityName = media.userPreferredName
-                    details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(R.string.episode_num, ep.number)
+                    details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
+                        R.string.episode_num,
+                        ep.number
+                    )
                     state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}"
                     media.cover?.let { cover ->
                         largeImage = RPC.Link(media.userPreferredName, cover)
@@ -922,25 +1009,25 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         //FullScreen
         isFullscreen = loadData("${media.id}_fullscreenInt", this) ?: isFullscreen
         playerView.resizeMode = when (isFullscreen) {
-            0    -> AspectRatioFrameLayout.RESIZE_MODE_FIT
-            1    -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-            2    -> AspectRatioFrameLayout.RESIZE_MODE_FILL
+            0 -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+            1 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+            2 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
             else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
         }
 
         exoScreen.setOnClickListener {
             if (isFullscreen < 2) isFullscreen += 1 else isFullscreen = 0
             playerView.resizeMode = when (isFullscreen) {
-                0    -> AspectRatioFrameLayout.RESIZE_MODE_FIT
-                1    -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-                2    -> AspectRatioFrameLayout.RESIZE_MODE_FILL
+                0 -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+                1 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+                2 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
                 else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
             }
             snackString(
                 when (isFullscreen) {
-                    0    -> "Original"
-                    1    -> "Zoom"
-                    2    -> "Stretch"
+                    0 -> "Original"
+                    1 -> "Zoom"
+                    2 -> "Stretch"
                     else -> "Original"
                 }
             )
@@ -959,7 +1046,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         //Settings
         exoSettings.setOnClickListener {
-            saveData("${media.id}_${media.anime!!.selectedEpisode}", exoPlayer.currentPosition, this)
+            saveData(
+                "${media.id}_${media.anime!!.selectedEpisode}",
+                exoPlayer.currentPosition,
+                this
+            )
             val intent = Intent(this, PlayerSettingsActivity::class.java).apply {
                 putExtra("subtitle", subtitle)
             }
@@ -979,7 +1070,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         playbackParameters = PlaybackParameters(speeds[curSpeed])
         var speed: Float
-        val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.speed))
+        val speedDialog =
+            AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.speed))
         exoSpeed.setOnClickListener {
             speedDialog.setSingleChoiceItems(speedsName, curSpeed) { dialog, i ->
                 if (isInitialized) {
@@ -1018,16 +1110,19 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         isFullscreen = settings.resize
         playerView.resizeMode = when (settings.resize) {
-            0    -> AspectRatioFrameLayout.RESIZE_MODE_FIT
-            1    -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-            2    -> AspectRatioFrameLayout.RESIZE_MODE_FILL
+            0 -> AspectRatioFrameLayout.RESIZE_MODE_FIT
+            1 -> AspectRatioFrameLayout.RESIZE_MODE_ZOOM
+            2 -> AspectRatioFrameLayout.RESIZE_MODE_FILL
             else -> AspectRatioFrameLayout.RESIZE_MODE_FIT
         }
 
         preloading = false
-        val showProgressDialog = if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog") ?: true else false
+        val showProgressDialog =
+            if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
+                ?: true else false
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
-            AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.auto_update, media.userPreferredName))
+            AlertDialog.Builder(this, R.style.DialogTheme)
+                .setTitle(getString(R.string.auto_update, media.userPreferredName))
                 .apply {
                     setOnCancelListener { hideSystemBars() }
                     setCancelable(false)
@@ -1074,16 +1169,16 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         subtitle = intent.getSerialized("subtitle")
             ?: when (val subLang: String? = loadData("subLang_${media.id}", this)) {
-                null   -> {
+                null -> {
                     when (episode.selectedSubtitle) {
                         null -> null
-                        -1   -> ext.subtitles.find { it.language.trim() == "English" || it.language == "en-US" }
+                        -1 -> ext.subtitles.find { it.language.trim() == "English" || it.language == "en-US" }
                         else -> ext.subtitles.getOrNull(episode.selectedSubtitle!!)
                     }
                 }
 
                 "None" -> ext.subtitles.let { null }
-                else   -> ext.subtitles.find { it.language == subLang }
+                else -> ext.subtitles.find { it.language == subLang }
             }
 
         //Subtitles
@@ -1091,21 +1186,44 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         exoSubtitle.setOnClickListener {
             subClick()
         }
-
         var sub: MediaItem.SubtitleConfiguration? = null
         if (subtitle != null) {
-            sub = MediaItem.SubtitleConfiguration
-                .Builder(Uri.parse(subtitle!!.file.url))
-                .setSelectionFlags(C.SELECTION_FLAG_FORCED)
-                .setMimeType(
-                    when (subtitle?.type) {
-                        SubtitleType.VTT -> MimeTypes.TEXT_VTT
-                        SubtitleType.ASS -> MimeTypes.TEXT_SSA
-                        SubtitleType.SRT -> MimeTypes.APPLICATION_SUBRIP
-                        else             -> MimeTypes.TEXT_UNKNOWN
-                    }
-                )
-                .build()
+            //var localFile: String? = null
+            if (subtitle?.type == SubtitleType.UNKNOWN) {
+                val context = this
+                runBlocking {
+                    val type = SubtitleDownloader.downloadSubtitles(context, subtitle!!.file.url)
+                    val fileUri = Uri.parse(subtitle!!.file.url)
+                    sub = MediaItem.SubtitleConfiguration
+                        .Builder(fileUri)
+                        .setSelectionFlags(C.SELECTION_FLAG_DEFAULT)
+                        .setMimeType(
+                            when (type) {
+                                SubtitleType.VTT -> MimeTypes.TEXT_SSA
+                                SubtitleType.ASS -> MimeTypes.TEXT_SSA
+                                SubtitleType.SRT -> MimeTypes.TEXT_SSA
+                                else -> MimeTypes.TEXT_SSA
+                            }
+                        )
+                        .setId("2")
+                        .build()
+                }
+                println("sub: $sub")
+            } else {
+                sub = MediaItem.SubtitleConfiguration
+                    .Builder(Uri.parse(subtitle!!.file.url))
+                    .setSelectionFlags(C.SELECTION_FLAG_FORCED)
+                    .setMimeType(
+                        when (subtitle?.type) {
+                            SubtitleType.VTT -> MimeTypes.TEXT_VTT
+                            SubtitleType.ASS -> MimeTypes.TEXT_SSA
+                            SubtitleType.SRT -> MimeTypes.APPLICATION_SUBRIP
+                            else -> MimeTypes.TEXT_UNKNOWN
+                        }
+                    )
+                    .setId("2")
+                    .build()
+            }
         }
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -1113,7 +1231,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         val but = playerView.findViewById<ImageButton>(R.id.exo_download)
-        if (video?.format == VideoType.CONTAINER || (loadData<Int>("settings_download_manager") ?: 0) != 0) {
+        if (video?.format == VideoType.CONTAINER || (loadData<Int>("settings_download_manager")
+                ?: 0) != 0
+        ) {
             but.visibility = View.VISIBLE
             but.setOnClickListener {
                 download(this, episode, animeTitle.text.toString())
@@ -1146,12 +1266,15 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         val mimeType = when (video?.format) {
             VideoType.M3U8 -> MimeTypes.APPLICATION_M3U8
             VideoType.DASH -> MimeTypes.APPLICATION_MPD
-            else           -> MimeTypes.APPLICATION_MP4
+            else -> MimeTypes.APPLICATION_MP4
         }
 
         val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
 
-        if (sub != null) builder.setSubtitleConfigurations(mutableListOf(sub))
+        if (sub != null) {
+            val listofnotnullsubs = immutableListOf(sub).filterNotNull()
+            builder.setSubtitleConfigurations(listofnotnullsubs)
+        }
         mediaItem = builder.build()
 
         //Source
@@ -1163,8 +1286,22 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         trackSelector = DefaultTrackSelector(this)
         trackSelector.setParameters(
             trackSelector.buildUponParameters()
-                .setMinVideoSize(loadData("maxWidth", this) ?: 720, loadData("maxHeight", this) ?: 480)
+                .setAllowVideoMixedMimeTypeAdaptiveness(true)
+                .setAllowVideoNonSeamlessAdaptiveness(true)
+                .setSelectUndeterminedTextLanguage(true)
+                .setAllowAudioMixedMimeTypeAdaptiveness(true)
+                .setAllowMultipleAdaptiveSelections(true)
+                .setPreferredTextLanguage(subtitle?.language ?: "en")
+                .setPreferredTextRoleFlags(C.ROLE_FLAG_SUBTITLE)
+                .setRendererDisabled(C.TRACK_TYPE_VIDEO, false)
+                .setRendererDisabled(C.TRACK_TYPE_AUDIO, false)
+                .setRendererDisabled(C.TRACK_TYPE_TEXT, false)
+                .setMinVideoSize(
+                    loadData("maxWidth", this) ?: 720,
+                    loadData("maxHeight", this) ?: 480
+                )
                 .setMaxVideoSize(1, 1)
+            //.setOverrideForType(
         )
 
         if (playbackPosition != 0L && !changingServer && !settings.alwaysContinue) {
@@ -1181,7 +1318,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     )
                 )
             )
-            AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.continue_from, time)).apply {
+            AlertDialog.Builder(this, R.style.DialogTheme)
+                .setTitle(getString(R.string.continue_from, time)).apply {
                 setCancelable(false)
                 setPositiveButton(getString(R.string.yes)) { d, _ ->
                     buildExoplayer()
@@ -1221,8 +1359,34 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         exoPlayer.addListener(this)
+        exoPlayer.addAnalyticsListener(EventLogger())
         isInitialized = true
     }
+    /*private fun selectSubtitleTrack() {
+        // Get the current track groups
+        val trackGroups = exoPlayer.currentTrackGroups
+
+        // Prepare a track selector parameters builder
+        val parametersBuilder = DefaultTrackSelector.ParametersBuilder(this)
+
+        // Iterate through the track groups to find the subtitle tracks
+        for (i in 0 until trackGroups.length) {
+            val trackGroup = trackGroups[i]
+            for (j in 0 until trackGroup.length) {
+                val trackMetadata = trackGroup.getFormat(j)
+
+                // Check if the track is a subtitle track
+                if (MimeTypes.isText(trackMetadata.sampleMimeType)) {
+                    parametersBuilder.setRendererDisabled(i, false) // Enable the renderer for this track group
+                    parametersBuilder.setSelectionOverride(i, trackGroups, DefaultTrackSelector.SelectionOverride(j, 0)) // Override to select this track
+                    break
+                }
+            }
+        }
+
+        // Apply the track selector parameters to select the subtitle
+        trackSelector.setParameters(parametersBuilder)
+    }*/
 
     private fun releasePlayer() {
         isPlayerPlaying = exoPlayer.playWhenReady
@@ -1266,7 +1430,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         orientationListener?.disable()
         if (isInitialized) {
             playerView.player?.pause()
-            saveData("${media.id}_${media.anime!!.selectedEpisode}", exoPlayer.currentPosition, this)
+            saveData(
+                "${media.id}_${media.anime!!.selectedEpisode}",
+                exoPlayer.currentPosition,
+                this
+            )
         }
     }
 
@@ -1304,7 +1472,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             playerView.keepScreenOn = isPlaying
             (exoPlay.drawable as Animatable?)?.start()
             if (!this.isDestroyed) Glide.with(this)
-                .load(if (isPlaying) R.drawable.anim_play_to_pause else R.drawable.anim_pause_to_play).into(exoPlay)
+                .load(if (isPlaying) R.drawable.anim_play_to_pause else R.drawable.anim_pause_to_play)
+                .into(exoPlay)
         }
     }
 
@@ -1383,7 +1552,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                         exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                     }
                 }
-                if (settings.autoSkipOPED && (new.skipType == "op" || new.skipType == "ed") && !skippedTimeStamps.contains(new)) {
+                if (settings.autoSkipOPED && (new.skipType == "op" || new.skipType == "ed") && !skippedTimeStamps.contains(
+                        new
+                    )
+                ) {
                     exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                     skippedTimeStamps.add(new)
                 }
@@ -1426,6 +1598,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     private var isBuffering = true
     override fun onPlaybackStateChanged(playbackState: Int) {
         if (playbackState == ExoPlayer.STATE_READY) {
+
             exoPlayer.play()
             if (episodeLength == 0f) {
                 episodeLength = exoPlayer.duration.toFloat()
@@ -1453,7 +1626,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         var i = 1
         while (isFiller) {
             if (episodeArr.size > currentEpisodeIndex + i) {
-                isFiller = if (settings.autoSkipFiller) episodes[episodeArr[currentEpisodeIndex + i]]?.filler ?: false else false
+                isFiller =
+                    if (settings.autoSkipFiller) episodes[episodeArr[currentEpisodeIndex + i]]?.filler
+                        ?: false else false
                 if (!isFiller) runnable.invoke(i)
                 i++
             } else {
@@ -1509,7 +1684,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         shareVideo.setDataAndType(Uri.parse(videoURL), "video/*")
         shareVideo.setPackage("com.instantbits.cast.webvideo")
         if (subtitle != null) shareVideo.putExtra("subtitle", subtitle!!.file.url)
-        shareVideo.putExtra("title", media.userPreferredName + " : Ep " + episodeTitleArr[currentEpisodeIndex])
+        shareVideo.putExtra(
+            "title",
+            media.userPreferredName + " : Ep " + episodeTitleArr[currentEpisodeIndex]
+        )
         shareVideo.putExtra("poster", episode.thumb?.url ?: media.cover)
         val headers = Bundle()
         defaultHeaders.forEach {
@@ -1579,7 +1757,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onPictureInPictureModeChanged(isInPictureInPictureMode: Boolean, newConfig: Configuration) {
+    override fun onPictureInPictureModeChanged(
+        isInPictureInPictureMode: Boolean,
+        newConfig: Configuration
+    ) {
         onPiPChanged(isInPictureInPictureMode)
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
     }

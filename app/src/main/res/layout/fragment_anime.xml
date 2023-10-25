@@ -29,7 +29,7 @@
         android:layout_height="48dp"
         android:layout_gravity="bottom|center_horizontal"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="@color/nav_bg"
+        app:cardBackgroundColor="?android:colorBackground"
         app:cardCornerRadius="24dp"
         app:contentPadding="12dp">
 

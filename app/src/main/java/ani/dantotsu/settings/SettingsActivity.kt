@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -31,6 +32,7 @@ import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
+import ani.dantotsu.themes.ThemeManager
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
@@ -54,6 +56,7 @@ class SettingsActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -98,6 +101,23 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         binding.settingsUseMaterialYou.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_material_you", false)
         binding.settingsUseMaterialYou.setOnCheckedChangeListener { _, isChecked ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_material_you", isChecked).apply()
+            Toast.makeText(this, "Restart app to apply changes", Toast.LENGTH_LONG).show()
+        }
+
+        val themeString  = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getString("theme", "PURPLE")!!
+        binding.themeSwitcher.setText(themeString.substring(0, 1) + themeString.substring(1).lowercase())
+
+        binding.themeSwitcher.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, ThemeManager.Companion.Theme.values().map { it.theme.substring(0, 1) + it.theme.substring(1).lowercase() }))
+
+        binding.themeSwitcher.setOnItemClickListener { _, _, i, _ ->
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putString("theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
+            ActivityHelper.shouldRefreshMainActivity = true
+            binding.themeSwitcher.clearFocus()
+            Refresh.all()
+            finish()
+            startActivity(Intent(this, SettingsActivity::class.java))
+            initActivity(this)
+
         }
 
         //val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
@@ -148,6 +168,15 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         binding.userAgent.setOnEditorActionListener { _, _, _ ->
             networkPreferences.defaultUserAgent().set(binding.userAgent.text.toString())
             true
+        }
+
+        val exDns = listOf("None", "Cloudflare", "Google", "AdGuard", "Quad9", "AliDNS", "DNSPod", "360", "Quad101", "Mullvad", "Controld", "Njalla", "Shecan")
+        binding.settingsExtensionDns.setText(exDns[networkPreferences.dohProvider().get()], false)
+        binding.settingsExtensionDns.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, exDns))
+        binding.settingsExtensionDns.setOnItemClickListener { _, _, i, _ ->
+            networkPreferences.dohProvider().set(i)
+            binding.settingsExtensionDns.clearFocus()
+            Toast.makeText(this, "Restart app to apply changes", Toast.LENGTH_LONG).show()
         }
 
         binding.settingsDownloadInSd.isChecked = loadData("sd_dl") ?: false
@@ -381,7 +410,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             }
         }
 
-        var curTime = loadData<Int>("subscriptions_time") ?: defaultTime
+        var curTime = loadData<Int>("subscriptions_time_r") ?: defaultTime
         val timeNames = timeMinutes.map {
             val mins = it % 60
             val hours = it / 60
@@ -394,7 +423,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             speedDialog.setSingleChoiceItems(timeNames, curTime) { dialog, i ->
                 curTime = i
                 binding.settingsSubscriptionsTime.text = getString(R.string.subscriptions_checking_time_s, timeNames[i])
-                saveData("subscriptions_time", curTime)
+                saveData("subscriptions_time_r", curTime)
                 dialog.dismiss()
                 startSubscription(true)
             }.show()
@@ -538,7 +567,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
                         title = "Enjoying the App?"
                         addView(TextView(this@SettingsActivity).apply {
                             text =
-                                "Consider donating!r"
+                                "Consider donating!"
                         })
 
                         setNegativeButton("no moners :(") {

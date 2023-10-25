@@ -34,6 +34,7 @@ import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import ani.dantotsu.databinding.ActivityExtensionsBinding
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.MangaFragment
+import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -60,6 +61,7 @@ class ExtensionsActivity : AppCompatActivity()  {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityExtensionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

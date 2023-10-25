@@ -1,7 +1,11 @@
 package ani.dantotsu
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.drawable.Animatable
 import android.net.Uri
@@ -10,6 +14,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -41,8 +46,10 @@ import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
+import ani.dantotsu.themes.ThemeManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
@@ -68,6 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -228,6 +236,18 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (ActivityHelper.shouldRefreshMainActivity) {
+            ActivityHelper.shouldRefreshMainActivity = false
+            Refresh.all()
+            finish()
+            startActivity(Intent(this, MainActivity::class.java))
+            initActivity(this)
+        }
+    }
+
+
     //ViewPager
     private class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
@@ -244,4 +264,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+}
+
+object ActivityHelper {
+    var shouldRefreshMainActivity: Boolean = false
 }

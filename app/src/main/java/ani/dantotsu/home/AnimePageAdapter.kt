@@ -163,6 +163,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
     fun updateAvatar() {
         if (Anilist.avatar != null && ready.value == true) {
             binding.animeUserAvatar.loadImage(Anilist.avatar)
+            binding.animeUserAvatar.imageTintList = null
         }
     }
 

@@ -35,15 +35,16 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:hint="@string/manga"
-                android:textColorHint="@color/bg_opp"
+                android:textColorHint="?attr/colorOnPrimaryContainer"
                 android:transitionName="@string/search"
-                app:boxBackgroundColor="@color/status"
+                app:boxBackgroundColor="?attr/colorPrimaryContainer"
                 app:boxCornerRadiusBottomEnd="28dp"
                 app:boxCornerRadiusBottomStart="28dp"
                 app:boxCornerRadiusTopEnd="28dp"
                 app:boxCornerRadiusTopStart="28dp"
                 app:endIconDrawable="@drawable/ic_round_search_24"
-                app:endIconTint="@color/bg_opp"
+                app:endIconTint="?attr/colorOnPrimaryContainer"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:hintAnimationEnabled="true">
 
                 <AutoCompleteTextView
@@ -64,7 +65,7 @@
                 android:layout_width="52dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
-                android:backgroundTint="@color/status"
+                android:backgroundTint="?attr/colorPrimaryContainer"
                 app:cardCornerRadius="26dp">
 
                 <com.google.android.material.imageview.ShapeableImageView
@@ -72,6 +73,7 @@
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     android:scaleType="center"
+                    android:tint="?attr/colorOnPrimaryContainer"
                     app:srcCompat="@drawable/ic_round_settings_24"
                     tools:ignore="ContentDescription,ImageContrastCheck" />
 

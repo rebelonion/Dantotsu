@@ -15,6 +15,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class GenreActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityGenreBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initActivity(this)

@@ -8,7 +8,7 @@
     android:layout_margin="8dp"
     android:clipToPadding="false"
     android:translationZ="8dp"
-    app:cardBackgroundColor="@color/nav_bg"
+    app:cardBackgroundColor="?android:colorBackground"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
 
@@ -96,7 +96,7 @@
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:layout_weight="0"
-            android:background="@color/pink_500" />
+            android:background="?attr/colorPrimary" />
 
         <View
             android:id="@+id/itemEpisodeProgressEmpty"
@@ -122,6 +122,6 @@
         android:layout_margin="8dp"
         android:visibility="gone"
         app:srcCompat="@drawable/ic_round_remove_red_eye_24"
-        app:tint="@color/bg_opp"
+        app:tint="?attr/colorOnBackground"
         tools:ignore="ContentDescription" />
 </androidx.cardview.widget.CardView>

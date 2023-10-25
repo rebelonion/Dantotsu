@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_thin"
                 android:text="@string/sad"
-                android:textColor="@color/pink_500"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="64sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/no_internet"
                 android:textAlignment="center"
+                android:textColor="?attr/colorOnBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/noInternetSad" />

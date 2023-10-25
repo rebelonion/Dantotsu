@@ -8,7 +8,7 @@
     android:layout_margin="8dp"
     android:backgroundTintMode="src_atop"
     android:longClickable="true"
-    app:cardBackgroundColor="@color/nav_bg"
+    app:cardBackgroundColor="?attr/colorSurface"
     app:cardCornerRadius="16dp">
 
     <View
@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="-10dp"
                     android:layout_marginTop="-18dp"
-                    app:cardBackgroundColor="@color/bg_opp"
+                    app:cardBackgroundColor="?attr/colorOnBackground"
                     app:cardCornerRadius="16dp">
 
                     <TextView
@@ -70,7 +70,7 @@
                         android:layout_marginTop="19dp"
                         android:layout_marginEnd="8dp"
                         android:fontFamily="@font/poppins_bold"
-                        android:textColor="@color/bg"
+                        android:textColor="?android:colorBackground"
                         android:textSize="20sp"
                         tools:text="12" />
                 </androidx.cardview.widget.CardView>
@@ -88,7 +88,7 @@
                         android:layout_width="0dp"
                         android:layout_height="2dp"
                         android:layout_weight="0"
-                        android:background="@color/pink_500" />
+                        android:background="?attr/colorPrimary" />
 
                     <View
                         android:id="@+id/itemEpisodeProgressEmpty"
@@ -153,7 +153,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.33"
-        android:background="@color/bg"
+        android:background="?android:colorBackground"
         android:visibility="gone" />
 
     <ImageView

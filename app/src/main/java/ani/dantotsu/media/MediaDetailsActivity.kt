@@ -47,6 +47,7 @@ import ani.dantotsu.saveData
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.themes.ThemeManager
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationBarView
@@ -71,6 +72,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
@@ -79,7 +81,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         initActivity(this)
         uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-        if (!uiSettings.immersiveMode) this.window.statusBarColor = ContextCompat.getColor(this, R.color.nav_bg_inv)
+        if (!uiSettings.immersiveMode) this.window.statusBarColor =
+            ContextCompat.getColor(this, R.color.nav_bg_inv)
 
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
@@ -101,10 +104,14 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         if (uiSettings.bannerAnimations) {
             val adi = AccelerateDecelerateInterpolator()
-            val generator = RandomTransitionGenerator((10000 + 15000 * (uiSettings.animationSpeed)).toLong(), adi)
+            val generator = RandomTransitionGenerator(
+                (10000 + 15000 * (uiSettings.animationSpeed)).toLong(),
+                adi
+            )
             binding.mediaBanner.setTransitionGenerator(generator)
         }
-        val banner = if (uiSettings.bannerAnimations) binding.mediaBanner else binding.mediaBannerNoKen
+        val banner =
+            if (uiSettings.bannerAnimations) binding.mediaBanner else binding.mediaBannerNoKen
         val viewPager = binding.mediaViewPager
         tabLayout = binding.mediaTab as NavigationBarView
         viewPager.isUserInputEnabled = false
@@ -167,8 +174,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 binding.mediaFav,
                 R.drawable.ic_round_favorite_24,
                 R.drawable.ic_round_favorite_border_24,
-                R.color.nav_tab,
-                R.color.fav,
+                com.google.android.material.R.attr.colorSecondary,
+                com.google.android.material.R.attr.colorSecondary,
                 media.isFav
             ) {
                 media.isFav = it
@@ -180,17 +187,32 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             null
         }
 
+        @SuppressLint("ResourceType")
         fun total() {
             val text = SpannableStringBuilder().apply {
-                val white = ContextCompat.getColor(this@MediaDetailsActivity, R.color.bg_opp)
+                val typedValue = TypedValue()
+                this@MediaDetailsActivity.theme.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue, true)
+                val white = typedValue.data
                 if (media.userStatus != null) {
                     append(if (media.anime != null) getString(R.string.watched_num) else getString(R.string.read_num))
                     val typedValue = TypedValue()
-                    theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue, true)
+                    theme.resolveAttribute(
+                        com.google.android.material.R.attr.colorSecondary,
+                        typedValue,
+                        true
+                    )
                     bold { color(typedValue.data) { append("${media.userProgress}") } }
-                    append(if (media.anime != null) getString(R.string.episodes_out_of) else getString(R.string.chapters_out_of))
+                    append(
+                        if (media.anime != null) getString(R.string.episodes_out_of) else getString(
+                            R.string.chapters_out_of
+                        )
+                    )
                 } else {
-                    append(if (media.anime != null) getString(R.string.episodes_total_of) else getString(R.string.chapters_total_of))
+                    append(
+                        if (media.anime != null) getString(R.string.episodes_total_of) else getString(
+                            R.string.chapters_total_of
+                        )
+                    )
                 }
                 if (media.anime != null) {
                     if (media.anime!!.nextAiringEpisode != null) {
@@ -206,8 +228,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         fun progress() {
             val statuses: Array<String> = resources.getStringArray(R.array.status)
-            val statusStrings = if (media.manga==null) resources.getStringArray(R.array.status_anime) else resources.getStringArray(R.array.status_manga)
-            val userStatus = if(media.userStatus != null) statusStrings[statuses.indexOf(media.userStatus)] else statusStrings[0]
+            val statusStrings =
+                if (media.manga == null) resources.getStringArray(R.array.status_anime) else resources.getStringArray(
+                    R.array.status_manga
+                )
+            val userStatus =
+                if (media.userStatus != null) statusStrings[statuses.indexOf(media.userStatus)] else statusStrings[0]
 
             if (media.userStatus != null) {
                 binding.mediaTotal.visibility = View.VISIBLE
@@ -234,7 +260,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             if (it != null) {
                 media = it
                 scope.launch {
-                    if(media.isFav!=favButton?.clicked) favButton?.clicked()
+                    if (media.isFav != favButton?.clicked) favButton?.clicked()
                 }
 
                 binding.mediaNotify.setOnClickListener {
@@ -258,10 +284,15 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         tabLayout.menu.clear()
         if (media.anime != null) {
-            viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME)
+            viewPager.adapter =
+                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME)
             tabLayout.inflateMenu(R.menu.anime_menu_detail)
         } else if (media.manga != null) {
-            viewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, if(media.format=="NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA)
+            viewPager.adapter = ViewPagerAdapter(
+                supportFragmentManager,
+                lifecycle,
+                if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA
+            )
             tabLayout.inflateMenu(R.menu.manga_menu_detail)
             anime = false
         }
@@ -303,9 +334,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
     private fun selectFromID(id: Int) {
         when (id) {
-            R.id.info             -> {
+            R.id.info -> {
                 selected = 0
             }
+
             R.id.watch, R.id.read -> {
                 selected = 1
             }
@@ -329,9 +361,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         super.onResume()
     }
 
-    private enum class SupportedMedia{
+    private enum class SupportedMedia {
         ANIME, MANGA, NOVEL
     }
+
     //ViewPager
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
@@ -342,13 +375,14 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         override fun getItemCount(): Int = 2
 
-        override fun createFragment(position: Int): Fragment = when (position){
+        override fun createFragment(position: Int): Fragment = when (position) {
             0 -> MediaInfoFragment()
-            1 -> when(media){
+            1 -> when (media) {
                 SupportedMedia.ANIME -> AnimeWatchFragment()
                 SupportedMedia.MANGA -> MangaReadFragment()
                 SupportedMedia.NOVEL -> NovelReadFragment()
             }
+
             else -> MediaInfoFragment()
         }
     }
@@ -363,27 +397,41 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange
         val percentage = abs(i) * 100 / mMaxScrollSize
 
-        binding.mediaCover.visibility = if (binding.mediaCover.scaleX == 0f) View.GONE else View.VISIBLE
+        binding.mediaCover.visibility =
+            if (binding.mediaCover.scaleX == 0f) View.GONE else View.VISIBLE
         val duration = (200 * uiSettings.animationSpeed).toLong()
+        val typedValue = TypedValue()
+        this@MediaDetailsActivity.theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue, true)
+        val color = typedValue.data
         if (percentage >= percent && !isCollapsed) {
             isCollapsed = true
-            ObjectAnimator.ofFloat(binding.mediaTitle, "translationX", 0f).setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.mediaAccessContainer, "translationX", screenWidth).setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.mediaCover, "translationX", screenWidth).setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", screenWidth).setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.mediaTitle, "translationX", 0f).setDuration(duration)
+                .start()
+            ObjectAnimator.ofFloat(binding.mediaAccessContainer, "translationX", screenWidth)
+                .setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.mediaCover, "translationX", screenWidth)
+                .setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", screenWidth)
+                .setDuration(duration).start()
             binding.mediaBanner.pause()
-            if (!uiSettings.immersiveMode) this.window.statusBarColor = ContextCompat.getColor(this, R.color.nav_bg)
+            if (!uiSettings.immersiveMode) this.window.statusBarColor = color
         }
         if (percentage <= percent && isCollapsed) {
             isCollapsed = false
-            ObjectAnimator.ofFloat(binding.mediaTitle, "translationX", -screenWidth).setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.mediaAccessContainer, "translationX", 0f).setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.mediaCover, "translationX", 0f).setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", 0f).setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.mediaTitle, "translationX", -screenWidth)
+                .setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.mediaAccessContainer, "translationX", 0f)
+                .setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.mediaCover, "translationX", 0f).setDuration(duration)
+                .start()
+            ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", 0f)
+                .setDuration(duration).start()
             if (uiSettings.bannerAnimations) binding.mediaBanner.resume()
-            if (!uiSettings.immersiveMode) this.window.statusBarColor = ContextCompat.getColor(this, R.color.nav_bg_inv)
+            if (!uiSettings.immersiveMode) this.window.statusBarColor = color
         }
-        if (percentage == 1 && model.scrolledToTop.value != false) model.scrolledToTop.postValue(false)
+        if (percentage == 1 && model.scrolledToTop.value != false) model.scrolledToTop.postValue(
+            false
+        )
         if (percentage == 0 && model.scrolledToTop.value != true) model.scrolledToTop.postValue(true)
     }
 
@@ -426,7 +474,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(image, "scaleY", 1f, 0f).setDuration(100).start()
             delay(100)
             if (clicked) {
-                ObjectAnimator.ofArgb(image,
+                ObjectAnimator.ofArgb(
+                    image,
                     "ColorFilter",
                     ContextCompat.getColor(context, c1),
                     ContextCompat.getColor(context, c2)
@@ -449,7 +498,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         fun enabled(enabled: Boolean) {
             disabled = !enabled
-            image.alpha = if(disabled)  0.33f else 1f
+            image.alpha = if (disabled) 0.33f else 1f
         }
     }
 }

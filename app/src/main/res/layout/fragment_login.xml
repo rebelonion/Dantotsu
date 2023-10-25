@@ -43,7 +43,7 @@
             android:layout_margin="32dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/login"
-            android:textColor="@color/button_icon"
+            android:textColor="?attr/colorOnPrimary"
             app:cornerRadius="16dp"
             app:icon="@drawable/ic_anilist"
             app:iconTint="@color/button_icon" />
@@ -63,7 +63,7 @@
                 android:layout_weight="1"
                 android:padding="6dp"
                 android:src="@drawable/ic_discord"
-                app:tint="@color/bg_opp"
+                app:tint="?attr/colorSecondary"
                 tools:ignore="ContentDescription" />
 
             <ImageView
@@ -73,7 +73,7 @@
                 android:layout_margin="8dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_github"
-                app:tint="@color/bg_opp"
+                app:tint="?attr/colorSecondary"
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>

@@ -38,7 +38,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -498,7 +501,24 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         }
     }
 
-    private fun TrackToSubtitle(track: Track, type: SubtitleType = SubtitleType.VTT): Subtitle {
-        return Subtitle(track.lang, track.url, type)
+    private fun TrackToSubtitle(track: Track): Subtitle {
+        //use Dispatchers.IO to make a HTTP request to determine the subtitle type
+        var type: SubtitleType? = null
+        runBlocking {
+            type = findSubtitleType(track.url)
+        }
+        return Subtitle(track.lang, track.url, type?: SubtitleType.SRT)
+    }
+
+    private fun findSubtitleType(url: String): SubtitleType? {
+        // First, try to determine the type based on the URL file extension
+        var type: SubtitleType? = when {
+            url.endsWith(".vtt", true) -> SubtitleType.VTT
+            url.endsWith(".ass", true) -> SubtitleType.ASS
+            url.endsWith(".srt", true) -> SubtitleType.SRT
+            else -> SubtitleType.UNKNOWN
+        }
+
+        return type
     }
 }

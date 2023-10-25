@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.MediaPageTransformer
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemMangaPageBinding
 import ani.dantotsu.loadData
@@ -153,6 +154,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
     fun updateAvatar() {
         if (Anilist.avatar != null && ready.value == true) {
             binding.mangaUserAvatar.loadImage(Anilist.avatar)
+            binding.mangaUserAvatar.imageTintList = null
         }
     }
 

@@ -20,7 +20,7 @@
     </style>
 
     <style name="ModalBottomSheetDialog" parent="Widget.MaterialComponents.BottomSheet.Modal">
-        <item name="backgroundTint">@color/nav_bg</item>
+        <item name="backgroundTint">?android:colorBackground</item>
         <item name="shapeAppearance">@style/ShapeAppearanceOverlay.Demo</item>
     </style>
 
@@ -39,7 +39,7 @@
         <item name="android:background">@drawable/round_corner</item>
     </style>
     <string name="MySnackBarText" parent="Widget.MaterialComponents.Snackbar.TextView">
-        <item name="android:textColor">@color/bg_opp</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
     </string>
     
     <style name="fontTooltip" parent="Widget.Material3.Tooltip">
@@ -50,7 +50,7 @@
     </style>
 
     <style name="MyPopup" parent="@style/Widget.MaterialComponents.PopupMenu">
-        <item name="android:popupBackground">@color/bg</item>
+        <item name="android:popupBackground">?android:colorBackground</item>
     </style>
 
     <style name="BottomNavBar" parent="Widget.Material3.BottomNavigationView.ActiveIndicator"/>

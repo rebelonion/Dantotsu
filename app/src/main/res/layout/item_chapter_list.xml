@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/nav_bg"
+    app:cardBackgroundColor="?android:colorBackground"
     app:cardCornerRadius="12dp">
 
     <LinearLayout
@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.33"
-        android:background="@color/bg"
+        android:background="?android:colorBackground"
         android:visibility="gone" />
 
     <ImageView

@@ -16,7 +16,7 @@
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/nav_bg"
+        android:background="?attr/colorPrimaryContainer"
         android:theme="@style/Theme.Dantotsu.AppBarOverlay">
 
         <LinearLayout
@@ -34,6 +34,7 @@
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:textSize="16sp"
+                android:textColor="?attr/colorOnPrimaryContainer"
                 tools:text="@string/app_name" />
 
             <Space
@@ -49,7 +50,7 @@
                 android:layout_marginRight="16dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/sort_by"
-                app:tint="@color/bg_opp"
+                app:tint="?attr/colorOnBackground"
                 app:srcCompat="@drawable/ic_round_sort_24" />
 
         </LinearLayout>
@@ -58,7 +59,7 @@
             android:id="@+id/listTabLayout"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/nav_bg"
+            android:background="?attr/colorPrimaryContainer"
             app:tabContentStart="32dp"
             app:tabMode="scrollable"
             app:tabPaddingEnd="16dp"

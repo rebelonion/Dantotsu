@@ -479,7 +479,7 @@
     <string name="read_on_dantotsu">Read on Dantotsu</string>
     <string name="watch_on_dantotsu">Watch on Dantotsu</string>
     <string name="continue_episode">"Continue : Episode "</string>
-    <string name="continue_chapter">"Continue : Chapter "</string>
+    <string name="continue_chapter">"Continue : "</string>
     <string name="episode">"Episode "</string>
     <string name="episode_num">"Episode %1$s"</string>
     <string name="chapter">"Chapter "</string>
@@ -626,5 +626,7 @@
     <string name="extensions_settings">Extensions</string>
     <string name="skip_loading_extension_icons">skip loading extension icons</string>
     <string name="use_material_you">Use Material You</string>
+    <string name="extension_specific_dns">Extension-specific DNS</string>
+    <string name="theme_">Theme:</string>
 
 </resources>

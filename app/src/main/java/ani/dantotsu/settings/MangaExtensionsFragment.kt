@@ -23,6 +23,7 @@ import ani.dantotsu.databinding.FragmentMangaBinding
 import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
 import ani.dantotsu.loadData
 import com.bumptech.glide.Glide
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -67,6 +68,7 @@ class MangaExtensionsFragment : Fragment(),
                             notificationManager.notify(1, builder.build())
                         },
                         { error ->
+                            FirebaseCrashlytics.getInstance().recordException(error)
                             Log.e("MangaExtensionsAdapter", "Error: ", error)  // Log the error
                             val builder = NotificationCompat.Builder(
                                 context,
@@ -98,48 +100,51 @@ class MangaExtensionsFragment : Fragment(),
 
     private val allExtensionsAdapter =
         AllMangaExtensionsAdapter(lifecycleScope, { pkgName ->
+            if (isAdded) {  // Check if the fragment is currently added to its activity
+                val context = requireContext()
+                val notificationManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
-            val notificationManager =
-                requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-
-            // Start the installation process
-            mangaExtensionManager.installExtension(pkgName)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { installStep ->
-                        val builder = NotificationCompat.Builder(
-                            requireContext(),
-                            Notifications.CHANNEL_DOWNLOADER_PROGRESS
-                        )
-                            .setSmallIcon(R.drawable.ic_round_sync_24)
-                            .setContentTitle("Installing extension")
-                            .setContentText("Step: $installStep")
-                            .setPriority(NotificationCompat.PRIORITY_LOW)
-                        notificationManager.notify(1, builder.build())
-                    },
-                    { error ->
-                        val builder = NotificationCompat.Builder(
-                            requireContext(),
-                            Notifications.CHANNEL_DOWNLOADER_ERROR
-                        )
-                            .setSmallIcon(R.drawable.ic_round_info_24)
-                            .setContentTitle("Installation failed")
-                            .setContentText("Error: ${error.message}")
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        notificationManager.notify(1, builder.build())
-                    },
-                    {
-                        val builder = NotificationCompat.Builder(
-                            requireContext(),
-                            Notifications.CHANNEL_DOWNLOADER_PROGRESS
-                        )
-                            .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
-                            .setContentTitle("Installation complete")
-                            .setContentText("The extension has been successfully installed.")
-                            .setPriority(NotificationCompat.PRIORITY_LOW)
-                        notificationManager.notify(1, builder.build())
-                    }
-                )
+                // Start the installation process
+                mangaExtensionManager.installExtension(pkgName)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                        { installStep ->
+                            val builder = NotificationCompat.Builder(
+                                context,
+                                Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                            )
+                                .setSmallIcon(R.drawable.ic_round_sync_24)
+                                .setContentTitle("Installing extension")
+                                .setContentText("Step: $installStep")
+                                .setPriority(NotificationCompat.PRIORITY_LOW)
+                            notificationManager.notify(1, builder.build())
+                        },
+                        { error ->
+                            FirebaseCrashlytics.getInstance().recordException(error)
+                            val builder = NotificationCompat.Builder(
+                                context,
+                                Notifications.CHANNEL_DOWNLOADER_ERROR
+                            )
+                                .setSmallIcon(R.drawable.ic_round_info_24)
+                                .setContentTitle("Installation failed: ${error.message}")
+                                .setContentText("Error: ${error.message}")
+                                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            notificationManager.notify(1, builder.build())
+                        },
+                        {
+                            val builder = NotificationCompat.Builder(
+                                context,
+                                Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                            )
+                                .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
+                                .setContentTitle("Installation complete")
+                                .setContentText("The extension has been successfully installed.")
+                                .setPriority(NotificationCompat.PRIORITY_LOW)
+                            notificationManager.notify(1, builder.build())
+                        }
+                    )
+            }
         }, skipIcons)
 
     override fun onCreateView(

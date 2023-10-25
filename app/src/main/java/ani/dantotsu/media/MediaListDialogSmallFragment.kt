@@ -15,6 +15,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetMediaListSmallBinding
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.others.getSerialized
+import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

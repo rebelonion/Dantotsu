@@ -16,8 +16,8 @@ import kotlinx.coroutines.launch
 @SuppressLint("MissingPermission")
 class Subscription {
     companion object {
-        const val defaultTime = 8
-        val timeMinutes = arrayOf(0L, 5, 10, 15, 30, 45, 60, 90, 120, 180, 240, 360, 480, 720, 1440)
+        const val defaultTime = 3
+        val timeMinutes = arrayOf(0L, 120, 180, 240, 360, 480, 720, 1440)
 
         private var alreadyStarted = false
         fun Context.startSubscription(force: Boolean = false) {

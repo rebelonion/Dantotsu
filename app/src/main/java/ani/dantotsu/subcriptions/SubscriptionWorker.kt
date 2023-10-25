@@ -22,7 +22,7 @@ class SubscriptionWorker(val context: Context, params: WorkerParameters) : Corou
 
         private const val SUBSCRIPTION_WORK_NAME = "work_subscription"
         fun enqueue(context: Context) {
-            val curTime = loadData<Int>("subscriptions_time") ?: defaultTime
+            val curTime = loadData<Int>("subscriptions_time_r") ?: defaultTime
             if(timeMinutes[curTime]>0L) {
                 val constraints = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
                 val periodicSyncDataWork = PeriodicWorkRequest.Builder(

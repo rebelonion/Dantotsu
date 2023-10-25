@@ -41,6 +41,7 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:hintAnimationEnabled="true">
 
             <AutoCompleteTextView
@@ -71,6 +72,7 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:hintAnimationEnabled="true">
 
             <AutoCompleteTextView
@@ -110,6 +112,7 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:hintAnimationEnabled="true">
 
             <AutoCompleteTextView
@@ -140,6 +143,7 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:hintAnimationEnabled="true">
 
             <AutoCompleteTextView
@@ -248,6 +252,7 @@
         <Button
             android:id="@+id/searchFilterCancel"
             style="@style/Widget.Material3.Button.OutlinedButton"
+            app:strokeColor="?attr/colorPrimaryContainer"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_margin="8dp"
@@ -264,6 +269,7 @@
         <Button
             android:id="@+id/searchFilterApply"
             style="@style/Widget.Material3.Button.OutlinedButton"
+            app:strokeColor="?attr/colorPrimaryContainer"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_margin="8dp"

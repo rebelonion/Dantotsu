@@ -9,6 +9,7 @@ import ani.dantotsu.parsers.*
 import ani.dantotsu.saveData
 import ani.dantotsu.tryWithSuspend
 import ani.dantotsu.R
+import ani.dantotsu.media.manga.MangaNameAdapter
 import kotlinx.coroutines.withTimeoutOrNull
 
 class SubscriptionHelper {
@@ -76,7 +77,7 @@ class SubscriptionHelper {
             }
 
             return chp?.apply {
-                selected.latest = number.toFloat()
+                selected.latest = MangaNameAdapter.findChapterNumber(number) ?: 0f
                 saveSelected(context, id, selected)
             }
         }

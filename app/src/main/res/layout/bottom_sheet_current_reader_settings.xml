@@ -68,7 +68,7 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleX="-1"
                     android:src="@drawable/ic_round_amp_stories_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -86,7 +86,7 @@
                     android:alpha="0.33"
                     android:background="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_round_view_array_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -104,7 +104,7 @@
                     android:alpha="0.33"
                     android:background="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_round_view_column_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -154,7 +154,7 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:rotation="0"
                     android:src="@drawable/ic_round_swipe_up_alt_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -206,7 +206,7 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:scaleX="-1"
                     android:src="@drawable/ic_round_close_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -224,7 +224,7 @@
                     android:alpha="0.33"
                     android:background="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_round_screen_rotation_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -242,7 +242,7 @@
                     android:alpha="0.33"
                     android:background="?android:attr/selectableItemBackground"
                     android:src="@drawable/ic_round_menu_book_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -270,7 +270,7 @@
             android:minHeight="64dp"
             android:text="@string/over_scroll"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -288,7 +288,7 @@
             android:minHeight="64dp"
             android:text="@string/true_colors"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -316,7 +316,7 @@
             android:minHeight="64dp"
             android:text="@string/image_rotation"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -334,7 +334,7 @@
             android:minHeight="64dp"
             android:text="@string/crop_borders"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -353,7 +353,7 @@
             android:minHeight="64dp"
             android:text="@string/spaced_pages"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -371,7 +371,7 @@
             android:minHeight="64dp"
             android:text="@string/hide_page_numbers"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -389,7 +389,7 @@
             android:minHeight="64dp"
             android:text="@string/horizontal_scroll_bar"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -407,7 +407,7 @@
             android:minHeight="64dp"
             android:text="@string/keep_screen_on"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -425,7 +425,7 @@
             android:minHeight="64dp"
             android:text="@string/volume_buttons"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -443,7 +443,7 @@
             android:minHeight="64dp"
             android:text="@string/wrap_images"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
@@ -470,7 +470,7 @@
             android:minHeight="64dp"
             android:text="@string/image_long_clicking"
             android:textAlignment="viewStart"
-            android:textColor="@color/bg_opp"
+            android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"

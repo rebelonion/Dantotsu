@@ -23,7 +23,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/bg"
+                android:background="?android:colorBackground"
                 android:focusable="false">
 
                 <ani.dantotsu.NoGestureSubsamplingImageView
@@ -52,7 +52,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/bg"
+                android:background="?android:colorBackground"
                 android:focusable="false">
 
                 <ani.dantotsu.NoGestureSubsamplingImageView

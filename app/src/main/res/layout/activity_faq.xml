@@ -19,7 +19,7 @@
         android:text="@string/faq"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:drawableTint="@color/bg_opp"
+        app:drawableTint="?attr/colorOnBackground"
         app:drawableStartCompat="@drawable/ic_round_arrow_back_ios_new_24" />
 
     <ani.dantotsu.FadingEdgeRecyclerView

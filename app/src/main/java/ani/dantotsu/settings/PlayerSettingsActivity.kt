@@ -16,6 +16,7 @@ import ani.dantotsu.databinding.ActivityPlayerSettingsBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.roundToInt
 
@@ -30,6 +31,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityPlayerSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

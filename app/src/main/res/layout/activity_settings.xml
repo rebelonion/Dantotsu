@@ -33,7 +33,7 @@
                     android:background="@color/nav_bg_inv"
                     android:padding="16dp"
                     app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
             </androidx.cardview.widget.CardView>
 
@@ -117,7 +117,7 @@
                                 android:alpha="0.33"
                                 android:background="?android:attr/selectableItemBackground"
                                 android:src="@drawable/ic_round_brightness_high_24"
-                                app:tint="@color/bg_opp"
+                                app:tint="?attr/colorOnBackground"
                                 tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
                         </androidx.cardview.widget.CardView>
 
@@ -136,7 +136,7 @@
                                 android:background="?android:attr/selectableItemBackground"
                                 android:scaleX="-1"
                                 android:src="@drawable/ic_round_brightness_4_24"
-                                app:tint="@color/bg_opp"
+                                app:tint="?attr/colorOnBackground"
                                 tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
                         </androidx.cardview.widget.CardView>
 
@@ -154,7 +154,7 @@
                                 android:alpha="0.33"
                                 android:background="?android:attr/selectableItemBackground"
                                 android:src="@drawable/ic_round_brightness_auto_24"
-                                app:tint="@color/bg_opp"
+                                app:tint="?attr/colorOnBackground"
                                 tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
                         </androidx.cardview.widget.CardView>
                     </LinearLayout>
@@ -172,11 +172,45 @@
                     android:minHeight="64dp"
                     android:text="@string/use_material_you"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/theme_" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:hintAnimationEnabled="true"
+                    app:startIconDrawable="@drawable/ic_round_source_24">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/themeSwitcher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_bold"
+                        android:freezesText="false"
+                        android:inputType="none"
+                        android:padding="8dp"
+                        android:text="@string/watch"
+                        android:textAllCaps="true"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="14sp"
+                        tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
             </ani.dantotsu.others.Xpandable>
 
             <ani.dantotsu.others.Xpandable
@@ -236,7 +270,7 @@
                             android:fontFamily="@font/poppins_bold"
                             android:padding="16dp"
                             android:text="@string/logout"
-                            android:textColor="?attr/colorSecondaryVariant"
+                            android:textColor="?attr/colorSecondary"
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -312,7 +346,7 @@
                             android:fontFamily="@font/poppins_bold"
                             android:padding="16dp"
                             android:text="@string/logout"
-                            android:textColor="?attr/colorSecondaryVariant"
+                            android:textColor="?attr/colorSecondary"
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -348,7 +382,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginEnd="16dp"
                         android:src="@drawable/ic_discord"
-                        app:tint="@color/bg_opp"
+                        app:tint="?attr/colorOnBackground"
                         tools:ignore="ContentDescription" />
 
                     <LinearLayout
@@ -380,7 +414,7 @@
                             android:fontFamily="@font/poppins_bold"
                             android:padding="16dp"
                             android:text="@string/logout"
-                            android:textColor="?attr/colorSecondaryVariant"
+                            android:textColor="?attr/colorSecondary"
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -411,7 +445,7 @@
                     android:layout_height="64dp"
                     android:layout_marginStart="-32dp"
                     android:layout_marginEnd="-32dp"
-                    android:background="@color/bg"
+                    android:background="?android:colorBackground"
                     android:drawablePadding="16dp"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center_vertical"
@@ -421,7 +455,7 @@
                     android:paddingEnd="32dp"
                     android:text="@string/account_help"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableStartCompat="@drawable/ic_round_help_24"
                     app:drawableTint="?attr/colorPrimary" />
@@ -456,7 +490,7 @@
                     android:minHeight="64dp"
                     android:text="@string/force_legacy_installer"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -474,7 +508,7 @@
                     android:minHeight="64dp"
                     android:text="@string/skip_loading_extension_icons"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -497,6 +531,40 @@
                         app:boxCornerRadiusTopStart="8dp"
                         app:hintAnimationEnabled="true" />
 
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/extension_specific_dns" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:hintAnimationEnabled="true"
+                    app:startIconDrawable="@drawable/ic_round_dns_24">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/settingsExtensionDns"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_bold"
+                        android:freezesText="false"
+                        android:inputType="none"
+                        android:padding="8dp"
+                        android:text="@string/none"
+                        android:textAllCaps="true"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="14sp"
+                        tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -547,7 +615,7 @@
                             android:alpha="0.33"
                             android:background="?android:attr/selectableItemBackground"
                             android:src="@drawable/ic_round_movie_filter_24"
-                            app:tint="@color/bg_opp"
+                            app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
                     </androidx.cardview.widget.CardView>
 
@@ -566,7 +634,7 @@
                             android:background="?android:attr/selectableItemBackground"
                             android:scaleX="-1"
                             android:src="@drawable/ic_round_home_24"
-                            app:tint="@color/bg_opp"
+                            app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
                     </androidx.cardview.widget.CardView>
 
@@ -584,7 +652,7 @@
                             android:alpha="0.33"
                             android:background="?android:attr/selectableItemBackground"
                             android:src="@drawable/ic_round_import_contacts_24"
-                            app:tint="@color/bg_opp"
+                            app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
                     </androidx.cardview.widget.CardView>
 
@@ -613,7 +681,7 @@
                     android:text="@string/ui_settings"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_auto_awesome_24"
                     app:iconPadding="16dp"
@@ -687,7 +755,7 @@
                     android:text="@string/download_manager_select"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_download_24"
                     app:iconPadding="16dp"
@@ -705,7 +773,7 @@
                     android:minHeight="64dp"
                     android:text="@string/downloadInSd"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -723,7 +791,7 @@
                     android:minHeight="64dp"
                     android:text="@string/always_continue_shows"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -741,7 +809,7 @@
                     android:minHeight="64dp"
                     android:text="@string/recentlyListOnly"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -777,7 +845,7 @@
                     android:text="@string/subscriptions_checking_time_s"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_notifications_none_24"
                     app:iconPadding="16dp"
@@ -804,7 +872,7 @@
                     android:minHeight="64dp"
                     android:text="@string/notification_for_checking_subscriptions"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -873,7 +941,7 @@
                     android:minHeight="64dp"
                     android:text="@string/prefer_dub"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -892,7 +960,7 @@
                     android:minHeight="64dp"
                     android:text="@string/show_yt"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -927,7 +995,7 @@
                             android:alpha="0.33"
                             android:background="?android:attr/selectableItemBackground"
                             android:src="@drawable/ic_round_view_list_24"
-                            app:tint="@color/bg_opp"
+                            app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
                     </androidx.cardview.widget.CardView>
 
@@ -946,7 +1014,7 @@
                             android:background="?android:attr/selectableItemBackground"
                             android:scaleX="-1"
                             android:src="@drawable/ic_round_grid_view_24"
-                            app:tint="@color/bg_opp"
+                            app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
                     </androidx.cardview.widget.CardView>
 
@@ -964,7 +1032,7 @@
                             android:alpha="0.33"
                             android:background="?android:attr/selectableItemBackground"
                             android:src="@drawable/ic_round_view_comfy_24"
-                            app:tint="@color/bg_opp"
+                            app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
                     </androidx.cardview.widget.CardView>
 
@@ -995,7 +1063,7 @@
                     android:text="@string/player_settings"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_video_settings_24"
                     app:iconPadding="16dp"
@@ -1090,7 +1158,7 @@
                             android:alpha="0.33"
                             android:background="?android:attr/selectableItemBackground"
                             android:src="@drawable/ic_round_view_list_24"
-                            app:tint="@color/bg_opp"
+                            app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
                     </androidx.cardview.widget.CardView>
 
@@ -1108,7 +1176,7 @@
                             android:alpha="0.33"
                             android:background="?android:attr/selectableItemBackground"
                             android:src="@drawable/ic_round_view_comfy_24"
-                            app:tint="@color/bg_opp"
+                            app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
                     </androidx.cardview.widget.CardView>
 
@@ -1138,7 +1206,7 @@
                     android:text="@string/reader_settings"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_reader_settings"
                     app:iconPadding="16dp"
@@ -1178,7 +1246,7 @@
                     android:layout_marginStart="-32dp"
                     android:layout_marginEnd="-32dp"
                     android:background="@drawable/ui_bg"
-                    android:backgroundTint="@color/bg_opp"
+                    android:backgroundTint="?attr/colorOnBackground"
                     android:backgroundTintMode="src_atop"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
@@ -1188,7 +1256,7 @@
                     android:text="@string/faq"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_help_24"
                     app:iconPadding="16dp"
@@ -1207,7 +1275,7 @@
                     android:minHeight="64dp"
                     android:text="@string/check_app_updates"
                     android:textAlignment="viewStart"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -1228,7 +1296,7 @@
                     android:text="@string/devs"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_accessible_forward_24"
                     app:iconPadding="16dp"
@@ -1249,7 +1317,7 @@
                     android:text="@string/forks"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_restaurant_24"
                     app:iconPadding="16dp"
@@ -1270,7 +1338,7 @@
                     android:text="@string/disclaimer"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
-                    android:textColor="@color/bg_opp"
+                    android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_info_24"
                     app:iconPadding="16dp"
@@ -1347,7 +1415,7 @@
                     android:layout_weight="1"
                     android:padding="6dp"
                     android:src="@drawable/ic_discord"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
@@ -1357,7 +1425,7 @@
                     android:layout_margin="8dp"
                     android:padding="6dp"
                     android:src="@drawable/ic_github"
-                    app:tint="@color/bg_opp"
+                    app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription" />
 
 

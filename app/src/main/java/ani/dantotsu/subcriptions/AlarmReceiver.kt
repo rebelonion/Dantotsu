@@ -40,7 +40,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val curTime = loadData<Int>("subscriptions_time", context) ?: defaultTime
+            val curTime = loadData<Int>("subscriptions_time_r", context) ?: defaultTime
 
             if (timeMinutes[curTime] > 0)
                 alarmManager.setRepeating(

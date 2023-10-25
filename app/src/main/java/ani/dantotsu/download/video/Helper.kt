@@ -63,6 +63,7 @@ object Helper {
                         SubtitleType.VTT -> MimeTypes.TEXT_VTT
                         SubtitleType.ASS -> MimeTypes.TEXT_SSA
                         SubtitleType.SRT -> MimeTypes.APPLICATION_SUBRIP
+                        SubtitleType.UNKNOWN -> MimeTypes.TEXT_SSA
                     }
                 )
                 .build()

@@ -12,12 +12,14 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.saveData
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.themes.ThemeManager
 
 class ReaderSettingsActivity : AppCompatActivity() {
     lateinit var binding: ActivityReaderSettingsBinding
     private val reader = "reader_settings"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         binding = ActivityReaderSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

@@ -17,7 +17,7 @@
             android:layout_height="4dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="8dp"
-            app:cardBackgroundColor="@color/nav_tab"
+            app:cardBackgroundColor="?attr/colorPrimary"
             app:cardCornerRadius="2dp"
             app:cardElevation="0dp" />
 
@@ -99,6 +99,7 @@
             android:textSize="16sp"
             android:visibility="gone"
             app:cornerRadius="16dp"
+            app:strokeColor="?attr/colorPrimaryContainer"
             tools:ignore="SpeakableTextPresentCheck"
             tools:visibility="visible" />
 
@@ -117,6 +118,7 @@
             android:text="@string/save"
             android:textSize="16sp"
             app:cornerRadius="16dp"
+            app:strokeColor="?attr/colorPrimaryContainer"
             tools:ignore="SpeakableTextPresentCheck" />
 
         <Button
@@ -134,6 +136,7 @@
             android:text="@string/share"
             android:textSize="16sp"
             app:cornerRadius="16dp"
+            app:strokeColor="?attr/colorPrimaryContainer"
             tools:ignore="SpeakableTextPresentCheck" />
 
     </LinearLayout>

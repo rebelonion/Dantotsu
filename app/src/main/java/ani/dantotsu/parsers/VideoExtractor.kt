@@ -159,5 +159,5 @@ enum class VideoType{
 }
 
 enum class SubtitleType{
-    VTT, ASS, SRT
+    VTT, ASS, SRT, UNKNOWN
 }

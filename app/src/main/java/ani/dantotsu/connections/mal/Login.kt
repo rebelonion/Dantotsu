@@ -7,12 +7,14 @@ import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.*
 import ani.dantotsu.connections.mal.MAL.clientId
 import ani.dantotsu.connections.mal.MAL.saveResponse
+import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         try {
             val data: Uri = intent?.data
                 ?: throw Exception(getString(R.string.mal_login_uri_not_found))

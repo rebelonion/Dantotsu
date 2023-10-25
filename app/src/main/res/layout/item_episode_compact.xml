@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/nav_bg"
+    app:cardBackgroundColor="?android:colorBackground"
     app:cardCornerRadius="16dp">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:layout_width="0dp"
             android:layout_height="2dp"
             android:layout_weight="0"
-            android:background="@color/pink_500" />
+            android:background="?attr/colorPrimary" />
 
         <View
             android:id="@+id/itemEpisodeProgressEmpty"
@@ -50,6 +50,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.33"
-        android:background="@color/bg"
+        android:background="?android:colorBackground"
         android:visibility="gone" />
 </androidx.cardview.widget.CardView>

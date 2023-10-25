@@ -6,10 +6,12 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import ani.dantotsu.loadMedia
 import ani.dantotsu.startMainActivity
+import ani.dantotsu.themes.ThemeManager
 
 class UrlMedia : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        ThemeManager(this).applyTheme()
         var id: Int? = intent?.extras?.getInt("media", 0) ?: 0
         var isMAL = false
         var continueMedia = true

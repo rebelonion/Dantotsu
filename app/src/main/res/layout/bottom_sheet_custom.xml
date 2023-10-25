@@ -48,6 +48,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/poppins_bold"
+            android:buttonTint="?attr/colorPrimary"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -69,6 +70,7 @@
                 android:insetBottom="0dp"
                 android:padding="8dp"
                 android:textSize="16sp"
+                app:strokeColor="?attr/colorPrimaryContainer"
                 android:visibility="gone"
                 app:cornerRadius="16dp"
                 tools:ignore="SpeakableTextPresentCheck"
@@ -86,6 +88,7 @@
                 android:insetBottom="0dp"
                 android:padding="8dp"
                 android:textSize="16sp"
+                app:strokeColor="?attr/colorPrimaryContainer"
                 android:visibility="gone"
                 app:cornerRadius="16dp"
                 tools:ignore="SpeakableTextPresentCheck"
