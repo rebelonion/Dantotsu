@@ -5,7 +5,7 @@
   - Fixed softsubs not showing
   - Fixed various crashes
   - Fixed manga continue button not showing
-  - Fixed calendat/anime list page not following Material You
+  - Fixed calendar/anime list page not following Material You
   - probably other stuff I forgor
 
 - **New Features:**
