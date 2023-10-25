@@ -1,12 +1,14 @@
-# 0.1.2
+# 0.1.3
 
 - **Bugfixes:**
   - Fixes for manga and anime extensions
-  - Auto search is now EVEN MORE likely to find correct series
-  - Fixed a crash for large manga chapters
-  - Fixed most manga titles
-  - Fixed manga Anilist logging
+  - Fixed softsubs not showing
+  - Fixed various crashes
+  - Fixed manga continue button not showing
+  - Fixed calendat/anime list page not following Material You
   - probably other stuff I forgor
 
 - **New Features:**
-  - none
+  - App coloring rework
+  - Themes! 4 themes added
+  - Added Extension-specific DNS

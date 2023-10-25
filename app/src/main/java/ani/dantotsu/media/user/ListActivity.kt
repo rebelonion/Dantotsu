@@ -2,6 +2,7 @@ package ani.dantotsu.media.user
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -31,7 +32,24 @@ class ListActivity : AppCompatActivity() {
         binding = ActivityListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        window.statusBarColor = ContextCompat.getColor(this, R.color.nav_bg)
+        val typedValue = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true)
+        val primaryColor = typedValue.data
+        val typedValue2 = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue2, true)
+        val primaryTextColor = typedValue2.data
+        val typedValue3 = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimaryContainer, typedValue3, true)
+        val secondaryColor = typedValue3.data
+
+        window.statusBarColor = primaryColor
+        window.navigationBarColor = primaryColor
+        binding.listTabLayout.setBackgroundColor(primaryColor)
+        binding.listAppBar.setBackgroundColor(primaryColor)
+        binding.listTitle.setTextColor(primaryTextColor)
+        binding.listTabLayout.setTabTextColors(primaryTextColor, secondaryColor)
+        binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
+
         val anime = intent.getBooleanExtra("anime", true)
         binding.listTitle.text = intent.getStringExtra("username") + "'s " + (if (anime) "Anime" else "Manga") + " List"
 
