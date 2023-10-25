@@ -190,7 +190,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 R.drawable.ic_round_favorite_24,
                 R.drawable.ic_round_favorite_border_24,
                 R.color.bg_opp,
-                R.color.violet_400,
+                R.color.violet_400,//TODO: Change to colorSecondary
                 media.isFav
             ) {
                 media.isFav = it

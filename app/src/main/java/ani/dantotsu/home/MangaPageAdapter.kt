@@ -31,6 +31,8 @@ import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.statusBarHeight
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textfield.TextInputLayout
 
 class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHolder>() {
     val ready = MutableLiveData(false)
@@ -48,6 +50,13 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
     override fun onBindViewHolder(holder: MangaPageViewHolder, position: Int) {
         binding = holder.binding
         trendingViewPager = binding.mangaTrendingViewPager
+
+        val textInputLayout = holder.itemView.findViewById<TextInputLayout>(R.id.mangaSearchBar)
+        val currentColor = textInputLayout.boxBackgroundColor
+        val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0x80000000.toInt()
+        textInputLayout.boxBackgroundColor = semiTransparentColor
+        val materialCardView = holder.itemView.findViewById<MaterialCardView>(R.id.mangaUserAvatarContainer)
+        materialCardView.setCardBackgroundColor(semiTransparentColor)
 
         binding.mangaTitleContainer.updatePadding(top = statusBarHeight)
 

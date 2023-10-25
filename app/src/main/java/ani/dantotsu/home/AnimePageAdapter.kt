@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.MediaPageTransformer
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemAnimePageBinding
 import ani.dantotsu.loadData
@@ -31,6 +32,8 @@ import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.statusBarHeight
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.textfield.TextInputLayout
 
 class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHolder>() {
     val ready = MutableLiveData(false)
@@ -48,6 +51,13 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
     override fun onBindViewHolder(holder: AnimePageViewHolder, position: Int) {
         binding = holder.binding
         trendingViewPager = binding.animeTrendingViewPager
+
+        val textInputLayout = holder.itemView.findViewById<TextInputLayout>(R.id.animeSearchBar)
+        val currentColor = textInputLayout.boxBackgroundColor
+        val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0x80000000.toInt()
+        textInputLayout.boxBackgroundColor = semiTransparentColor
+        val materialCardView = holder.itemView.findViewById<MaterialCardView>(R.id.animeUserAvatarContainer)
+        materialCardView.setCardBackgroundColor(semiTransparentColor)
 
         binding.animeTitleContainer.updatePadding(top = statusBarHeight)
 

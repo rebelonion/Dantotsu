@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import android.view.Window
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -12,7 +14,9 @@ import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
+import ani.dantotsu.loadData
 import ani.dantotsu.media.user.ListViewPagerAdapter
+import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -31,16 +35,16 @@ class CalendarActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
 
         val typedValue = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true)
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
         val primaryColor = typedValue.data
         val typedValue2 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue2, true)
+        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue2, true)
         val primaryTextColor = typedValue2.data
         val typedValue3 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimaryContainer, typedValue3, true)
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue3, true)
         val secondaryColor = typedValue3.data
 
         window.statusBarColor = primaryColor
@@ -48,8 +52,21 @@ class CalendarActivity : AppCompatActivity() {
         binding.listTabLayout.setBackgroundColor(primaryColor)
         binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(primaryTextColor)
-        binding.listTabLayout.setTabTextColors(primaryTextColor, secondaryColor)
+        binding.listTabLayout.setTabTextColors(primaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
+        val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
+        if (!uiSettings.immersiveMode) {
+            this.window.statusBarColor =
+                ContextCompat.getColor(this, R.color.nav_bg_inv)
+            binding.root.fitsSystemWindows = true
+
+        }else{
+            binding.root.fitsSystemWindows = false
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        }
+        setContentView(binding.root)
+
         binding.listTitle.setText(R.string.release_calendar)
         binding.listSort.visibility = View.GONE
 

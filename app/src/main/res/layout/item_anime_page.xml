@@ -60,6 +60,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.card.MaterialCardView
+                android:id="@+id/animeUserAvatarContainer"
                 android:layout_width="52dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"

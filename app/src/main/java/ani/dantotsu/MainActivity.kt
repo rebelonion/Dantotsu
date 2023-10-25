@@ -7,7 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.graphics.drawable.Animatable
+import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +24,7 @@ import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.app.ActivityCompat
@@ -79,6 +83,17 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            val bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
+            val backgroundDrawable = bottomBar.background as GradientDrawable
+            val currentColor = backgroundDrawable.color?.defaultColor ?: 0
+            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0x80000000.toInt()
+            backgroundDrawable.setColor(semiTransparentColor)
+            bottomBar.background = backgroundDrawable
+        }
+
 
         val animeScope = CoroutineScope(Dispatchers.Default)
         animeScope.launch {
@@ -238,13 +253,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (ActivityHelper.shouldRefreshMainActivity) {
-            ActivityHelper.shouldRefreshMainActivity = false
-            Refresh.all()
-            finish()
-            startActivity(Intent(this, MainActivity::class.java))
-            initActivity(this)
-        }
     }
 
 
@@ -264,8 +272,4 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-}
-
-object ActivityHelper {
-    var shouldRefreshMainActivity: Boolean = false
 }

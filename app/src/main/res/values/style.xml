@@ -53,5 +53,8 @@
         <item name="android:popupBackground">?android:colorBackground</item>
     </style>
 
-    <style name="BottomNavBar" parent="Widget.Material3.BottomNavigationView.ActiveIndicator"/>
+    <style name="BottomNavBar" parent="">
+        <!-- set background color  to transparent -->
+        <item name="android:background">@android:color/transparent</item>
+    </style>
 </resources>

@@ -33,6 +33,7 @@ import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
+import com.google.android.material.snackbar.Snackbar
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
@@ -101,7 +102,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         binding.settingsUseMaterialYou.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_material_you", false)
         binding.settingsUseMaterialYou.setOnCheckedChangeListener { _, isChecked ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_material_you", isChecked).apply()
-            Toast.makeText(this, "Restart app to apply changes", Toast.LENGTH_LONG).show()
+            restartApp()
         }
 
         val themeString  = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getString("theme", "PURPLE")!!
@@ -111,12 +112,9 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
 
         binding.themeSwitcher.setOnItemClickListener { _, _, i, _ ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putString("theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
-            ActivityHelper.shouldRefreshMainActivity = true
+            //ActivityHelper.shouldRefreshMainActivity = true
             binding.themeSwitcher.clearFocus()
-            Refresh.all()
-            finish()
-            startActivity(Intent(this, SettingsActivity::class.java))
-            initActivity(this)
+            restartApp()
 
         }
 
@@ -584,6 +582,20 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
                     }
                 }
             }
+        }
+    }
+    private fun restartApp() {
+        Snackbar.make(
+            binding.root,
+            R.string.restart_app, Snackbar.LENGTH_SHORT
+        ).apply {
+            val mainIntent =
+                Intent.makeRestartActivityTask(context.packageManager.getLaunchIntentForPackage(context.packageName)!!.component)
+            setAction("Do it!") {
+                context.startActivity(mainIntent)
+                Runtime.getRuntime().exit(0)
+            }
+            show()
         }
     }
 }

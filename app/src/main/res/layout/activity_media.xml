@@ -242,14 +242,14 @@
         android:layout_height="wrap_content"
         android:padding="0dp"
         android:layout_gravity="bottom"
-        android:background="?attr/colorPrimaryContainer"
+        android:background="?attr/colorSurface"
         android:translationZ="1dp"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
-        app:itemRippleColor="?attr/colorSecondary"
+        app:itemRippleColor="?attr/colorPrimary"
         app:itemTextAppearanceActive="@style/NavBarText"
         app:itemTextAppearanceInactive="@style/NavBarText"
-        app:itemTextColor="?attr/colorOnPrimaryContainer"
+        app:itemTextColor="@color/tab_layout_icon"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     <androidx.cardview.widget.CardView
