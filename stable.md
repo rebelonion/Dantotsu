@@ -5,7 +5,7 @@
   - Search is now EVEN MORE likely to select the right source
   - Fixed more softsubs not showing
   - Fixed various crashes
-  - Fixeded anilist not working sometimes after theme switch
+  - Fixed anilist not working sometimes after theme switch
   - Fixed various theme problems/annoyances
   - Fixed manga image not loading on tap and hold
   - Fixed Dantotsu re-setting progress on re-watching.
