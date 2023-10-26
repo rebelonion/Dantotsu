@@ -12,9 +12,6 @@ class ThemeManager(private val context: Context) {
             "PURPLE" -> {
                 context.setTheme(R.style.Theme_Dantotsu_Purple)
             }
-            //"MONOCHROME" -> {
-            //    context.setTheme(R.style.Theme_Dantotsu_Monochrome)
-            //}
             "BLUE" -> {
                 context.setTheme(R.style.Theme_Dantotsu_Blue)
             }
@@ -23,6 +20,15 @@ class ThemeManager(private val context: Context) {
             }
             "PINK" -> {
                 context.setTheme(R.style.Theme_Dantotsu_Pink)
+            }
+            "RED" -> {
+                context.setTheme(R.style.Theme_Dantotsu_Red)
+            }
+            "LAVENDER" -> {
+                context.setTheme(R.style.Theme_Dantotsu_Lavender)
+            }
+            "MONOCHROME (BETA)" -> {
+                context.setTheme(R.style.Theme_Dantotsu_Monochrome)
             }
             else -> {
                 context.setTheme(R.style.Theme_Dantotsu_Purple)
@@ -35,8 +41,10 @@ class ThemeManager(private val context: Context) {
             PURPLE("PURPLE"),
             BLUE("BLUE"),
             GREEN("GREEN"),
-            PINK("PINK");
-            //MONOCHROME("MONOCHROME");
+            PINK("PINK"),
+            RED("RED"),
+            LAVENDER("LAVENDER"),
+            MONOCHROME("MONOCHROME (BETA)");
 
             companion object {
                 fun fromString(value: String): Theme {
