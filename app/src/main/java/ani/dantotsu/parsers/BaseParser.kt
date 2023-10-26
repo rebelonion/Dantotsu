@@ -57,17 +57,17 @@ abstract class BaseParser {
             setUserText("Searching : ${mediaObj.mainName()}")
             val results = search(mediaObj.mainName())
             val sortedResults = if (results.isNotEmpty()) {
-                results.sortedByDescending { FuzzySearch.ratio(it.name, mediaObj.mainName()) }
+                results.sortedByDescending { FuzzySearch.ratio(it.name.lowercase(), mediaObj.mainName().lowercase()) }
             } else {
                 emptyList()
             }
             response = sortedResults.firstOrNull()
 
-            if (response == null || FuzzySearch.ratio(response.name, mediaObj.mainName()) < 100) {
+            if (response == null || FuzzySearch.ratio(response.name.lowercase(), mediaObj.mainName().lowercase()) < 100) {
                 setUserText("Searching : ${mediaObj.nameRomaji}")
                 val romajiResults = search(mediaObj.nameRomaji)
                 val sortedRomajiResults = if (romajiResults.isNotEmpty()) {
-                    romajiResults.sortedByDescending { FuzzySearch.ratio(it.name, mediaObj.nameRomaji) }
+                    romajiResults.sortedByDescending { FuzzySearch.ratio(it.name.lowercase(), mediaObj.nameRomaji.lowercase()) }
                 } else {
                     emptyList()
                 }
@@ -78,10 +78,10 @@ abstract class BaseParser {
                     logger("No exact match found in results. Using closest match from RomajiResults.")
                     closestRomaji
                 } else {
-                    val romajiRatio = FuzzySearch.ratio(closestRomaji?.name ?: "", mediaObj.nameRomaji)
-                    val mainNameRatio = FuzzySearch.ratio(response.name, mediaObj.mainName())
-                    logger("Fuzzy ratio for closest match in results: $mainNameRatio for ${response.name}")
-                    logger("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name ?: "None"}")
+                    val romajiRatio = FuzzySearch.ratio(closestRomaji?.name?.lowercase() ?: "", mediaObj.nameRomaji.lowercase())
+                    val mainNameRatio = FuzzySearch.ratio(response.name.lowercase(), mediaObj.mainName().lowercase())
+                    logger("Fuzzy ratio for closest match in results: $mainNameRatio for ${response.name.lowercase()}")
+                    logger("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name?.lowercase() ?: "None"}")
 
                     if (romajiRatio > mainNameRatio) {
                         logger("RomajiResults has a closer match. Replacing response.")

@@ -11,7 +11,7 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.Serializable
 
-data class Track(val url: String, val lang: String)
+data class Track(val url: String, val lang: String) : Serializable
 
 open class Video(
     val url: String = "",

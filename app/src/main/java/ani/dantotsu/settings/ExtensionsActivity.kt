@@ -70,12 +70,14 @@ class ExtensionsActivity : AppCompatActivity()  {
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
 
         viewPager.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 2
+            override fun getItemCount(): Int = 4
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
-                    0 -> AnimeExtensionsFragment()
-                    1 -> MangaExtensionsFragment()
+                    0 -> InstalledAnimeExtensionsFragment()
+                    1 -> AnimeExtensionsFragment()
+                    2 -> InstalledMangaExtensionsFragment()
+                    3 -> MangaExtensionsFragment()
                     else -> AnimeExtensionsFragment()
                 }
             }
@@ -83,8 +85,10 @@ class ExtensionsActivity : AppCompatActivity()  {
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
-                0 -> "Anime" // Your tab title
-                1 -> "Manga" // Your tab title
+                0 -> "Installed Anime"
+                1 -> "Available Anime"
+                2 -> "Installed Manga"
+                3 -> "Available Manga"
                 else -> null
             }
         }.attach()

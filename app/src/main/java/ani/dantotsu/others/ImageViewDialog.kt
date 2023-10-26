@@ -11,6 +11,7 @@ import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.databinding.BottomSheetImageBinding
+import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmap
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmap_old
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.mergeBitmap
 import ani.dantotsu.openLinkInBrowser
@@ -78,7 +79,11 @@ class ImageViewDialog : BottomSheetDialogFragment() {
             val binding = _binding ?: return@launch
 
             var bitmap = requireContext().loadBitmap_old(image, trans1 ?: listOf())
-            val bitmap2 = if (image2 != null) requireContext().loadBitmap_old(image2, trans2 ?: listOf()) else null
+            var bitmap2 = if (image2 != null) requireContext().loadBitmap_old(image2, trans2 ?: listOf()) else null
+            if (bitmap == null) {
+                bitmap = requireContext().loadBitmap(image, trans1 ?: listOf())
+                bitmap2 = if (image2 != null) requireContext().loadBitmap(image2, trans2 ?: listOf()) else null
+            }
 
             bitmap = if (bitmap2 != null && bitmap != null) mergeBitmap(bitmap, bitmap2,) else bitmap
 

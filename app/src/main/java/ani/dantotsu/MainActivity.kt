@@ -64,6 +64,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.io.Serializable
 
@@ -74,9 +76,8 @@ class MainActivity : AppCompatActivity() {
     private var load = false
 
     private var uiSettings = UserInterfaceSettings()
-    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
-    private val mangaExtensionManager: MangaExtensionManager by injectLazy()
-
+    private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
+    private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()

@@ -1205,7 +1205,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                                 else -> MimeTypes.TEXT_SSA
                             }
                         )
-                        .setId("2")
+                        .setId("69")
                         .build()
                 }
                 println("sub: $sub")
@@ -1221,7 +1221,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                             else -> MimeTypes.TEXT_UNKNOWN
                         }
                     )
-                    .setId("2")
+                    .setId("69")
                     .build()
             }
         }
@@ -1302,6 +1302,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 )
                 .setMaxVideoSize(1, 1)
             //.setOverrideForType(
+           //     TrackSelectionOverride(trackSelector, 2))
         )
 
         if (playbackPosition != 0L && !changingServer && !settings.alwaysContinue) {
@@ -1351,6 +1352,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 seekTo(playbackPosition)
             }
         playerView.player = exoPlayer
+
 
         try {
             mediaSession = MediaSession.Builder(this, exoPlayer).build()
@@ -1572,6 +1574,27 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     }
 
     override fun onTracksChanged(tracks: Tracks) {
+        tracks.groups.forEach {
+            println("Track__: $it")
+            println("Track__: ${it.length}")
+            println("Track__: ${it.isSelected}")
+            println("Track__: ${it.type}")
+            println("Track__: ${it.mediaTrackGroup.id}")
+            if (it.type == 3 && it.mediaTrackGroup.id == "1:"){
+                playerView.player?.trackSelectionParameters =
+                    playerView.player?.trackSelectionParameters?.buildUpon()
+                        ?.setOverrideForType(
+                        TrackSelectionOverride(it.mediaTrackGroup, it.length - 1))
+                        ?.build()!!
+            }else if(it.type == 3){
+                playerView.player?.trackSelectionParameters =
+                    playerView.player?.trackSelectionParameters?.buildUpon()
+                        ?.addOverride(
+                            TrackSelectionOverride(it.mediaTrackGroup, listOf()))
+                        ?.build()!!
+            }
+        }
+        println("Track: ${tracks.groups.size}")
         if (tracks.groups.size <= 2) exoQuality.visibility = View.GONE
         else {
             exoQuality.visibility = View.VISIBLE

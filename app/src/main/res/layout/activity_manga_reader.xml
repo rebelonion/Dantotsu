@@ -55,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            app:cardBackgroundColor="#000000"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="16dp"
             app:contentPadding="8dp"
             app:strokeColor="?attr/colorSecondary"
@@ -70,7 +70,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/app_name"
-                android:textColor="?android:colorBackground"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -93,7 +93,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            app:cardBackgroundColor="#000000"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="16dp"
             app:contentPadding="8dp"
             app:strokeColor="?attr/colorSecondary"
@@ -108,7 +108,7 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/app_name"
-                android:textColor="?android:colorBackground"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp" />
         </com.google.android.material.card.MaterialCardView>
 
@@ -268,7 +268,11 @@
                             android:layout_marginEnd="48dp"
                             android:fontFamily="@font/poppins"
                             android:singleLine="false"
-                            android:textColor="?android:colorBackground"
+                            android:textColor="@color/bg_white"
+                            android:shadowColor="#000"
+                            android:shadowDx="1"
+                            android:shadowDy="1"
+                            android:shadowRadius="1"
                             android:textSize="12sp"
                             tools:ignore="TextContrastCheck"
                             tools:text="@string/popular_anime" />

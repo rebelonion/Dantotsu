@@ -108,8 +108,11 @@ internal class AnimeExtensionInstaller(private val context: Context) {
             // Get the current download status
             .map {
                 downloadManager.query(query).use { cursor ->
-                    cursor.moveToFirst()
-                    cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS))
+                    if (cursor.moveToFirst()) {
+                        cursor.getInt(cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_STATUS))
+                    } else {
+                        DownloadManager.STATUS_FAILED
+                    }
                 }
             }
             // Ignore duplicate results

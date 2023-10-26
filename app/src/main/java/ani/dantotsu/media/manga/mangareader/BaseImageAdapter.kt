@@ -156,10 +156,6 @@ abstract class BaseImageAdapter(
                                     .skipMemoryCache(true)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                             } else {
-                                println("bitmap from cache")
-                                println(link.url)
-                                println(mangaCache.get(link.url))
-                                println("cache size: ${mangaCache.size()}")
                                 mangaCache.get(link.url)?.let { imageData ->
                                     val bitmap = imageData.fetchAndProcessImage(imageData.page, imageData.source, context = this@loadBitmap)
                                     it.load(bitmap)
