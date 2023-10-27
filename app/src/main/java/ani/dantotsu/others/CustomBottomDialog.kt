@@ -1,6 +1,8 @@
 package ani.dantotsu.others
 
+import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,6 +48,12 @@ open class CustomBottomDialog : BottomSheetDialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         _binding = BottomSheetCustomBinding.inflate(inflater, container, false)
+        val window = dialog?.window
+        window?.statusBarColor = Color.TRANSPARENT
+        val typedValue = TypedValue()
+        val theme = requireContext().theme
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
+        window?.navigationBarColor = typedValue.data
         return binding.root
     }
 

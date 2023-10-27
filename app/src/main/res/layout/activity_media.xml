@@ -123,6 +123,7 @@
                     android:text="@string/add"
                     android:textAllCaps="true"
                     android:textColor="?attr/colorPrimary"
+                    app:strokeColor="?attr/colorPrimary"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:cornerRadius="16dp"

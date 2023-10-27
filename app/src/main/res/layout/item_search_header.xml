@@ -60,6 +60,8 @@
             android:layout_weight="1"
             android:layoutDirection="inherit"
             android:text="@string/list_only"
+            android:textColor="?attr/colorOnBackground"
+            app:buttonTint="?attr/colorPrimary"
             android:visibility="visible"
             app:checkedState="indeterminate"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
@@ -75,7 +77,8 @@
             android:text="@string/adult"
             android:textAlignment="textEnd"
             android:visibility="visible"
-            app:buttonTint="?attr/colorPrimaryContainer"
+            android:textColor="?attr/colorOnBackground"
+            app:buttonTint="?attr/colorPrimary"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
     </LinearLayout>
 

@@ -1,6 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Base" parent="Theme.Material3.DayNight">
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="elevationOverlayEnabled">false</item>
         <item name="windowActionBar">false</item>
@@ -14,6 +15,8 @@
         <item name="snackbarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton.Snackbar</item>
         <item name="snackbarTextViewStyle">@string/MySnackBarText</item>
         <item name="popupMenuStyle">@style/MyPopup</item>
+        <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/anim_splash</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
     </style>
 
@@ -189,13 +192,13 @@
     </style>
 
     <style name="Theme.Dantotsu.Monochrome" parent="Theme.Base">
-        <item name="colorPrimary">@color/grey_20</item>
+        <item name="colorPrimary">@color/bg_black</item>
         <item name="colorOnPrimary">@color/bg_white</item>
         <item name="colorPrimaryContainer">@color/bg_black</item>
         <item name="colorOnPrimaryContainer">@color/bg_white</item>
         <item name="colorSecondary">@color/bg_black</item>
         <item name="colorOnSecondary">@color/bg_white</item>
-        <item name="colorSecondaryContainer">@color/grey_60</item>
+        <item name="colorSecondaryContainer">@color/bg_black</item>
         <item name="colorOnSecondaryContainer">@color/bg_white</item>
         <item name="colorTertiary">@color/bg_black</item>
         <item name="colorOnTertiary">@color/bg_white</item>

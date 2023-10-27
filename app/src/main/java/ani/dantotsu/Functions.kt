@@ -188,6 +188,9 @@ fun Activity.hideStatusBar() {
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
+        val window = dialog?.window
+        val decorView: View = window?.decorView ?: return
+        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
             val behavior = BottomSheetBehavior.from(requireView().parent as View)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED

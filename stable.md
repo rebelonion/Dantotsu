@@ -1,15 +1,10 @@
-# 0.1.5
+# 1.0.0
 
 - **Bugfixes:**
-  - Fixed very annoying bug with extension page freezing/crashing
-  - Search is now EVEN MORE likely to select the right source
-  - Fixed more softsubs not showing
-  - Fixed various crashes
-  - Fixed anilist not working sometimes after theme switch
-  - Fixed various theme problems/annoyances
-  - Fixed manga image not loading on tap and hold
-  - Fixed Dantotsu re-setting progress on re-watching.
+  - Fixed extension page hiding icons on first install
+  - Various bug/crash fixes
+  - Fixes for monochrome theme
+  - General theme tweaks
 
 - **New Features:**
-  - 3 themes added
-  - OLED theme (Monochrome in darkmode) -> testing
+  - added oled variant to all themes

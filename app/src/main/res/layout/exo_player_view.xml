@@ -248,7 +248,8 @@
                 android:valueTo="10"
                 app:labelBehavior="gone"
                 app:thumbElevation="0dp"
-                app:trackColorInactive="?attr/colorSecondary"
+                app:trackColorInactive="?attr/colorOnSecondary"
+                app:trackColorActive="?attr/colorSecondary"
                 app:trackHeight="24dp" />
 
             <ImageView
@@ -290,7 +291,8 @@
                 android:valueTo="10"
                 app:labelBehavior="gone"
                 app:thumbElevation="0dp"
-                app:trackColorInactive="?attr/colorSecondary"
+                app:trackColorInactive="?attr/colorOnSecondary"
+                app:trackColorActive="?attr/colorSecondary"
                 app:trackHeight="24dp" />
 
             <ImageView

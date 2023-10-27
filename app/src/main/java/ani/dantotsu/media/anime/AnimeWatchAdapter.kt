@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
@@ -177,6 +178,7 @@ class AnimeWatchAdapter(
                     binding.animeWatchChipScroll.smoothScrollTo((chip.left - screenWidth / 2) + (chip.width / 2), 0)
                 }
                 chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
+                chip.setTextColor(ContextCompat.getColorStateList(fragment.requireContext(), R.color.chip_text_color))
 
                 chip.setOnClickListener {
                     selected()

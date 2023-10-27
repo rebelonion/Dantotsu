@@ -49,16 +49,18 @@ class AnimeExtensionsFragment : Fragment(),
     ): View {
         _binding = FragmentAnimeExtensionsBinding.inflate(inflater, container, false)
 
-        binding.allAnimeExtensionsRecyclerView.isNestedScrollingEnabled = true
+        binding.allAnimeExtensionsRecyclerView.isNestedScrollingEnabled = false
         binding.allAnimeExtensionsRecyclerView.adapter = adapter
         binding.allAnimeExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        (binding.allAnimeExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = false
+        (binding.allAnimeExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = true
 
         lifecycleScope.launch {
             viewModel.pagerFlow.collectLatest {
                 adapter.submitData(it)
             }
         }
+
+        viewModel.invalidatePager() // Force a refresh of the pager
 
         return binding.root
     }

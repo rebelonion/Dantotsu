@@ -8,7 +8,7 @@
     android:layout_margin="8dp"
     android:clipToPadding="false"
     android:translationZ="8dp"
-    app:cardBackgroundColor="?android:colorBackground"
+    android:background="@drawable/card_outline"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
 

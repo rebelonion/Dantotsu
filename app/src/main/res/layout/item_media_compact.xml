@@ -55,7 +55,7 @@
                     android:layout_marginStart="2dp"
                     android:fontFamily="@font/poppins_bold"
                     android:paddingTop="2dp"
-                    android:textColor="@color/bg_white"
+                    android:textColor="?attr/colorOnPrimary"
                     android:textSize="12sp"
                     tools:ignore="TextContrastCheck"
                     tools:text="0.0" />
@@ -65,6 +65,7 @@
                     android:layout_width="12dp"
                     android:layout_height="match_parent"
                     app:srcCompat="@drawable/ic_round_star_24"
+                    app:tint="?attr/colorOnPrimary"
                     tools:ignore="ContentDescription" />
 
             </LinearLayout>

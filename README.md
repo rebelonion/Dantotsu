@@ -1,6 +1,4 @@
-# **Dantotsu** (🚧 ALPHA 🚧)
-
-> ⚠️ **WARNING**: This project is in alpha stage. Things may not work as expected.
+# **Dantotsu**
 
 <p align="center">
    <a href="https://discord.gg/4HPZ5nAWwM"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
@@ -26,14 +24,14 @@ Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-o
 | Type             | Status  |
 | ---------------- | ------- |
 | Anime Extensions | Working |
-| Manga Extensions | "Working" |
+| Manga Extensions | Working |
 | Light Novel Extensions | Not Working |
 
 
 
 ## APP FEATURES
 
-- Easy and functional way to both, watch anime and read manga, ad-free.
+- Easy and functional way to both, watch anime and read manga.
 
 - A completely open source app with a nice UI & Animations :)
 
@@ -59,14 +57,16 @@ add your own extensions in the settings menu (Dantotsu has no affiliation with a
 
 ## Planned Stuff
 
-- get app out of alpha
+- TV Support
 
-- Accent Color Change (RIP Hot Pink Supremacy.)
+- LN Support
+
+- Offline Viewing
  
 
 ## Rejected Stuff (still rejected)
 
-- Sources of any language except English
+- Official support of any language except English
 
 - News Section in the App
  

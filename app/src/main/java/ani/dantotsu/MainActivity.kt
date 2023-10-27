@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
             val bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
             val backgroundDrawable = bottomBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
-            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0x80000000.toInt()
+            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xE8000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
             bottomBar.background = backgroundDrawable
         }
@@ -125,24 +125,40 @@ class MainActivity : AppCompatActivity() {
         binding.root.isMotionEventSplittingEnabled = false
 
         lifecycleScope.launch {
-            val splash = SplashScreenBinding.inflate(layoutInflater)
-            binding.root.addView(splash.root)
-            (splash.splashImage.drawable as Animatable).start()
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                val splash = SplashScreenBinding.inflate(layoutInflater)
+                binding.root.addView(splash.root)
+                (splash.splashImage.drawable as Animatable).start()
 
-            // Wait for 2 seconds (2000 milliseconds)
-            delay(2000)
+                delay(1200)
 
-            // Now perform the animation
-            ObjectAnimator.ofFloat(
-                splash.root,
-                View.TRANSLATION_Y,
-                0f,
-                -splash.root.height.toFloat()
-            ).apply {
-                interpolator = AnticipateInterpolator()
-                duration = 200L
-                doOnEnd { binding.root.removeView(splash.root) }
-                start()
+                ObjectAnimator.ofFloat(
+                    splash.root,
+                    View.TRANSLATION_Y,
+                    0f,
+                    -splash.root.height.toFloat()
+                ).apply {
+                    interpolator = AnticipateInterpolator()
+                    duration = 200L
+                    doOnEnd { binding.root.removeView(splash.root) }
+                    start()
+                }
+            }
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            splashScreen.setOnExitAnimationListener { splashScreenView ->
+                ObjectAnimator.ofFloat(
+                    splashScreenView,
+                    View.TRANSLATION_Y,
+                    0f,
+                    -splashScreenView.height.toFloat()
+                ).apply {
+                    interpolator = AnticipateInterpolator()
+                    duration = 200L
+                    doOnEnd { splashScreenView.remove() }
+                    start()
+                }
             }
         }
 

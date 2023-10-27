@@ -74,15 +74,16 @@ class ImageViewDialog : BottomSheetDialogFragment() {
             if (image2 != null) openLinkInBrowser(image2.url)
             true
         }
+        val context = requireContext()
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             val binding = _binding ?: return@launch
 
-            var bitmap = requireContext().loadBitmap_old(image, trans1 ?: listOf())
-            var bitmap2 = if (image2 != null) requireContext().loadBitmap_old(image2, trans2 ?: listOf()) else null
+            var bitmap = context.loadBitmap_old(image, trans1 ?: listOf())
+            var bitmap2 = if (image2 != null) context.loadBitmap_old(image2, trans2 ?: listOf()) else null
             if (bitmap == null) {
-                bitmap = requireContext().loadBitmap(image, trans1 ?: listOf())
-                bitmap2 = if (image2 != null) requireContext().loadBitmap(image2, trans2 ?: listOf()) else null
+                bitmap = context.loadBitmap(image, trans1 ?: listOf())
+                bitmap2 = if (image2 != null) context.loadBitmap(image2, trans2 ?: listOf()) else null
             }
 
             bitmap = if (bitmap2 != null && bitmap != null) mergeBitmap(bitmap, bitmap2,) else bitmap

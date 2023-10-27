@@ -63,7 +63,8 @@ class MangaChapterAdapter(
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
                 val ep = arr[position]
-                binding.itemEpisodeNumber.text = ep.number
+                val parsedNumber = MangaNameAdapter.findChapterNumber(ep.number)?.toInt()
+                binding.itemEpisodeNumber.text = parsedNumber?.toString() ?: ep.number
                 if (media.userProgress != null) {
                     if ((MangaNameAdapter.findChapterNumber(ep.number) ?: 9999f) <= media.userProgress!!.toFloat())
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE

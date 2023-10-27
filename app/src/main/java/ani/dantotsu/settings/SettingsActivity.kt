@@ -105,6 +105,12 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             restartApp()
         }
 
+        binding.settingsUseOLED.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_oled", false)
+        binding.settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_oled", isChecked).apply()
+            restartApp()
+        }
+
         val themeString  = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getString("theme", "PURPLE")!!
         binding.themeSwitcher.setText(themeString.substring(0, 1) + themeString.substring(1).lowercase())
 
@@ -408,7 +414,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             }
         }
 
-        var curTime = loadData<Int>("subscriptions_time_r") ?: defaultTime
+        var curTime = loadData<Int>("subscriptions_time_s") ?: defaultTime
         val timeNames = timeMinutes.map {
             val mins = it % 60
             val hours = it / 60
@@ -421,7 +427,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             speedDialog.setSingleChoiceItems(timeNames, curTime) { dialog, i ->
                 curTime = i
                 binding.settingsSubscriptionsTime.text = getString(R.string.subscriptions_checking_time_s, timeNames[i])
-                saveData("subscriptions_time_r", curTime)
+                saveData("subscriptions_time_s", curTime)
                 dialog.dismiss()
                 startSubscription(true)
             }.show()

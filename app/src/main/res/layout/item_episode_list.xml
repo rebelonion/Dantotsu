@@ -8,7 +8,7 @@
     android:layout_margin="8dp"
     android:backgroundTintMode="src_atop"
     android:longClickable="true"
-    app:cardBackgroundColor="?attr/colorSurface"
+    android:background="@drawable/card_outline"
     app:cardCornerRadius="16dp">
 
     <View

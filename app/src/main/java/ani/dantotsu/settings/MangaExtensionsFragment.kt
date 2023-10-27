@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
@@ -25,6 +26,7 @@ import ani.dantotsu.settings.paging.MangaExtensionAdapter
 import ani.dantotsu.settings.paging.MangaExtensionsViewModel
 import ani.dantotsu.settings.paging.MangaExtensionsViewModelFactory
 import ani.dantotsu.settings.paging.OnMangaInstallClickListener
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collectLatest
 
 class MangaExtensionsFragment : Fragment(),
@@ -50,16 +52,18 @@ class MangaExtensionsFragment : Fragment(),
     ): View {
         _binding = FragmentMangaExtensionsBinding.inflate(inflater, container, false)
 
-        binding.allMangaExtensionsRecyclerView.isNestedScrollingEnabled = true
+        binding.allMangaExtensionsRecyclerView.isNestedScrollingEnabled = false
         binding.allMangaExtensionsRecyclerView.adapter = adapter
         binding.allMangaExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        (binding.allMangaExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = false
+        (binding.allMangaExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = true
 
         lifecycleScope.launch {
-            viewModel.pagerFlow.collectLatest {
-                adapter.submitData(it)
+            viewModel.pagerFlow.collectLatest { pagingData ->
+                adapter.submitData(pagingData)
             }
         }
+
+        viewModel.invalidatePager() // Force a refresh of the pager
 
         return binding.root
     }

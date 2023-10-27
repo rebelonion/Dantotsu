@@ -3,8 +3,10 @@ package ani.dantotsu.settings
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +28,12 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val window = dialog?.window
+        window?.statusBarColor = Color.CYAN
+        val typedValue = TypedValue()
+        val theme = requireContext().theme
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
+        window?.navigationBarColor = typedValue.data
 
         if (Anilist.token != null) {
             binding.settingsLogin.setText(R.string.logout)

@@ -53,7 +53,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
 
         val textInputLayout = holder.itemView.findViewById<TextInputLayout>(R.id.mangaSearchBar)
         val currentColor = textInputLayout.boxBackgroundColor
-        val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0x80000000.toInt()
+        val semiTransparentColor= (currentColor and 0x00FFFFFF) or 0xA8000000.toInt()
         textInputLayout.boxBackgroundColor = semiTransparentColor
         val materialCardView = holder.itemView.findViewById<MaterialCardView>(R.id.mangaUserAvatarContainer)
         materialCardView.setCardBackgroundColor(semiTransparentColor)

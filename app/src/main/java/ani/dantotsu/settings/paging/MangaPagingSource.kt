@@ -117,12 +117,10 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MangaExtension.Available>() {
             override fun areItemsTheSame(oldItem: MangaExtension.Available, newItem: MangaExtension.Available): Boolean {
-                // Your logic here
                 return oldItem.pkgName == newItem.pkgName
             }
 
             override fun areContentsTheSame(oldItem: MangaExtension.Available, newItem: MangaExtension.Available): Boolean {
-                // Your logic here
                 return oldItem == newItem
             }
         }
