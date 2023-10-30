@@ -79,6 +79,7 @@ import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.Slider
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.lagradost.nicehttp.ignoreAllSSLErrors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -1614,7 +1615,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             }
 
             else
-            -> toast("Player Error ${error.errorCode} (${error.errorCodeName}) : ${error.message}")
+            -> {
+                toast("Player Error ${error.errorCode} (${error.errorCodeName}) : ${error.message}")
+                FirebaseCrashlytics.getInstance().recordException(error)
+            }
         }
     }
 
