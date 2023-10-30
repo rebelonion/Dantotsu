@@ -618,7 +618,7 @@
     <string name="discord_logout_success">Successfully Logged Out</string>
     <string name="discord_try_again">Try logging-in again</string>
     <string name="error_loading_discord_user_data">Error loading Discord User Data</string>
-    <string name="discord_warning"><![CDATA[By logging in, your discord will now show what you are watching & reading on SaDantotsuikou\n\nIf you are on invisible mode, logging in will make you online, when you open Dantotsu.\n\nThis does break the Discord TOS. \nAlthough Discord has never banned anyone for using Custom Rich Presence(what Dantotsu uses), You have still been warned.\n\nDantotsu is not responsible for anything that happens to your account.]]></string>
+    <string name="discord_warning"><![CDATA[By logging in, your discord will now show what you are watching & reading on Dantotsu\n\nIf you are on invisible mode, logging in will make you online, when you open Dantotsu.\n\nThis does break the Discord TOS. \nAlthough Discord has never banned anyone for using Custom Rich Presence(what Dantotsu uses), You have still been warned.\n\nDantotsu is not responsible for anything that happens to your account.]]></string>
     <string name="warning">Warning</string>
     <string name="view_anime">View Anime</string>
     <string name="view_manga">View Manga</string>
