@@ -293,4 +293,12 @@
             tools:ignore="ContentDescription,ImageContrastCheck"
             tools:srcCompat="@tools:sample/backgrounds/scenic[2]" />
     </androidx.cardview.widget.CardView>
+    <FrameLayout
+        android:id="@+id/fragmentExtensionsContainer"
+        android:paddingTop="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+    </FrameLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

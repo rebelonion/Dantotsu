@@ -1,11 +1,15 @@
 package ani.dantotsu.media.manga
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.core.math.MathUtils.clamp
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
@@ -13,20 +17,30 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
+import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Group.MANGA_GROUP
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import ani.dantotsu.subcriptions.SubscriptionHelper
 import ani.dantotsu.subcriptions.SubscriptionHelper.Companion.saveSubscription
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.navigationrail.NavigationRailView
+import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
+import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
+import eu.kanade.tachiyomi.source.ConfigurableSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.ceil
@@ -185,8 +199,16 @@ open class MangaReadFragment : Fragment() {
         return model.mangaReadSources?.get(i)!!
     }
 
-    fun loadChapters(i: Int) {
-        lifecycleScope.launch(Dispatchers.IO) { model.loadMangaChapters(media, i) }
+    fun onLangChange(i: Int) {
+        val selected = model.loadSelected(media)
+        selected.langIndex = i
+        model.saveSelected(media.id, selected, requireActivity())
+        media.selected = selected
+    }
+
+
+    fun loadChapters(i: Int, invalidate: Boolean) {
+        lifecycleScope.launch(Dispatchers.IO) { model.loadMangaChapters(media, i, invalidate) }
     }
 
     fun onIconPressed(viewType: Int, rev: Boolean) {
@@ -223,6 +245,75 @@ open class MangaReadFragment : Fragment() {
             if (subscribed) getString(R.string.subscribed_notification, source)
             else getString(R.string.unsubscribed_notification)
         )
+    }
+
+    fun openSettings(pkg: MangaExtension.Installed){
+        val changeUIVisibility: (Boolean) -> Unit = { show ->
+            val activity = requireActivity() as MediaDetailsActivity
+            val visibility = if (show) View.VISIBLE else View.GONE
+            activity.findViewById<AppBarLayout>(R.id.mediaAppBar).visibility = visibility
+            activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
+            activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
+            activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
+            try{
+                activity.findViewById<CustomBottomNavBar>(R.id.mediaTab).visibility = visibility
+            }catch (e: ClassCastException){
+                activity.findViewById<NavigationRailView>(R.id.mediaTab).visibility = visibility
+            }
+            activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
+                if (show) View.GONE else View.VISIBLE
+        }
+        val allSettings = pkg.sources.filterIsInstance<ConfigurableSource>()
+        if (allSettings.isNotEmpty()) {
+            var selectedSetting = allSettings[0]
+            if (allSettings.size > 1) {
+                val names = allSettings.map { it.lang }.toTypedArray()
+                var selectedIndex = 0
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Select a Source")
+                    .setSingleChoiceItems(names, selectedIndex) { _, which ->
+                        selectedIndex = which
+                    }
+                    .setPositiveButton("OK") { dialog, _ ->
+                        selectedSetting = allSettings[selectedIndex]
+                        dialog.dismiss()
+
+                        // Move the fragment transaction here
+                        val fragment =
+                            MangaSourcePreferencesFragment().getInstance(selectedSetting.id){
+                                changeUIVisibility(true)
+                                loadChapters(media.selected!!.sourceIndex, true)
+                            }
+                        parentFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                            .replace(R.id.fragmentExtensionsContainer, fragment)
+                            .addToBackStack(null)
+                            .commit()
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.cancel()
+                        changeUIVisibility(true)
+                        return@setNegativeButton
+                    }
+                    .show()
+            } else {
+                // If there's only one setting, proceed with the fragment transaction
+                val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id){
+                    changeUIVisibility(true)
+                    loadChapters(media.selected!!.sourceIndex, true)
+                }
+                parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                    .replace(R.id.fragmentExtensionsContainer, fragment)
+                    .addToBackStack(null)
+                    .commit()
+            }
+
+            changeUIVisibility(false)
+        } else {
+            Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 
     fun onMangaChapterClick(i: String) {

@@ -9,6 +9,7 @@ data class Selected(
     var chip: Int = 0,
     //var source: String = "",
     var sourceIndex: Int = 0,
+    var langIndex: Int = 0,
     var preferDub: Boolean = false,
     var server: String? = null,
     var video: Int = 0,

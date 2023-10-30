@@ -1,6 +1,8 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.util.TypedValue
@@ -8,23 +10,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
+import ani.dantotsu.parsers.AnimeSources
+import ani.dantotsu.parsers.DynamicAnimeParser
 import ani.dantotsu.parsers.WatchSources
+import ani.dantotsu.settings.ExtensionsActivity
+import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.textfield.TextInputLayout
+import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
+import java.lang.IndexOutOfBoundsException
 
 class AnimeWatchAdapter(
     private val media: Media,
@@ -70,7 +87,8 @@ class AnimeWatchAdapter(
         }
 
         //Source Selection
-        val source = media.selected!!.sourceIndex.let { if (it >= watchSources.names.size) 0 else it }
+        var source = media.selected!!.sourceIndex.let { if (it >= watchSources.names.size) 0 else it }
+        setLanguageList(media.selected!!.langIndex,source)
         if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
             binding.animeSource.setText(watchSources.names[source])
             watchSources[source].apply {
@@ -92,10 +110,40 @@ class AnimeWatchAdapter(
                 binding.animeSourceDubbed.isChecked = selectDub
                 changing = false
                 binding.animeSourceDubbedCont.visibility = if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                source = i
+                setLanguageList(0,i)
             }
             subscribeButton(false)
-            fragment.loadEpisodes(i)
+            fragment.loadEpisodes(i, false)
         }
+
+        binding.animeSourceLanguage.setOnItemClickListener { _, _, i, _ ->
+            // Check if 'extension' and 'selected' properties exist and are accessible
+            (watchSources[source] as? DynamicAnimeParser)?.let { ext ->
+                ext.sourceLanguage = i
+                fragment.onLangChange(i)
+                fragment.onSourceChange(media.selected!!.sourceIndex).apply {
+                    binding.animeSourceTitle.text = showUserText
+                    showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
+                    changing = true
+                    binding.animeSourceDubbed.isChecked = selectDub
+                    changing = false
+                    binding.animeSourceDubbedCont.visibility = if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                    setLanguageList(i, source)
+                }
+                subscribeButton(false)
+                fragment.loadEpisodes(media.selected!!.sourceIndex, true)
+            } ?: run {
+            }
+        }
+
+        //settings
+        binding.animeSourceSettings.setOnClickListener {
+            (watchSources[source] as? DynamicAnimeParser)?.let { ext ->
+                fragment.openSettings(ext.extension)
+            }
+        }
+
 
         //Subscription
         subscribe =  MediaDetailsActivity.PopImageButton(
@@ -259,6 +307,25 @@ class AnimeWatchAdapter(
                 binding.animeSourceNotFound.visibility = View.GONE
                 clearChips()
                 binding.animeSourceProgressBar.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    fun setLanguageList(lang: Int, source: Int) {
+        val binding = _binding
+        if (watchSources is AnimeSources) {
+            val parser = watchSources[source] as? DynamicAnimeParser
+            if (parser != null) {
+                (watchSources[source] as? DynamicAnimeParser)?.let { ext ->
+                    ext.sourceLanguage = lang
+                }
+                try {
+                    binding?.animeSourceLanguage?.setText(parser.extension.sources[lang].lang)
+                }catch (e: IndexOutOfBoundsException) {
+                    binding?.animeSourceLanguage?.setText(parser.extension.sources.firstOrNull()?.lang ?: "Unknown")
+                }
+                binding?.animeSourceLanguage?.setAdapter(ArrayAdapter(fragment.requireContext(), R.layout.item_dropdown, parser.extension.sources.map { it.lang }))
+
             }
         }
     }

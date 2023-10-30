@@ -85,14 +85,20 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            val bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
-            val backgroundDrawable = bottomBar.background as GradientDrawable
+
+            val backgroundDrawable = _bottomBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
             val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xE8000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
-            bottomBar.background = backgroundDrawable
+            _bottomBar.background = backgroundDrawable
+        }
+        val colorOverflow = this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            .getBoolean("colorOverflow", false)
+        if (!colorOverflow) {
+            _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+
         }
 
 

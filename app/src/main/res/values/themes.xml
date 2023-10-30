@@ -18,6 +18,7 @@
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
         <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/anim_splash</item>
         <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">@color/bg_black</item>
     </style>
 
     <style name="Theme.Dantotsu" parent="Theme.Base">

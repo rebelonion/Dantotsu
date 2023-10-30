@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:padding="16dp">
 
@@ -20,6 +21,17 @@
         android:layout_gravity="center_vertical"
         android:textSize="18sp"
         android:text="Extension Name" />
+
+    <ImageView
+        android:id="@+id/settingsImageView"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:src="@drawable/ic_round_settings_24"
+        app:tint="?attr/colorOnBackground"
+        android:layout_gravity="center_vertical"
+        android:layout_weight="0"
+        android:layout_marginEnd="16dp"
+        android:contentDescription="Settings"/>
 
     <TextView
         android:id="@+id/closeTextView"

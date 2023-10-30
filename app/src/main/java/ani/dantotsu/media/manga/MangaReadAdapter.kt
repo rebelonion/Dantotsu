@@ -17,12 +17,17 @@ import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
+import ani.dantotsu.parsers.AnimeSources
+import ani.dantotsu.parsers.DynamicAnimeParser
+import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
+import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.lang.IndexOutOfBoundsException
 
 class MangaReadAdapter(
     private val media: Media,
@@ -50,10 +55,10 @@ class MangaReadAdapter(
         }
 
         //Source Selection
-        val source = media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
+        var source = media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
+        setLanguageList(media.selected!!.langIndex,source)
         if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
             binding.animeSource.setText(mangaReadSources.names[source])
-
             mangaReadSources[source].apply {
                 binding.animeSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
@@ -65,9 +70,34 @@ class MangaReadAdapter(
             fragment.onSourceChange(i).apply {
                 binding.animeSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
+                source = i
+                setLanguageList(0,i)
             }
             subscribeButton(false)
-            fragment.loadChapters(i)
+            fragment.loadChapters(i, false)
+        }
+
+        binding.animeSourceLanguage.setOnItemClickListener { _, _, i, _ ->
+            // Check if 'extension' and 'selected' properties exist and are accessible
+            (mangaReadSources[source] as? DynamicMangaParser)?.let { ext ->
+                ext.sourceLanguage = i
+                fragment.onLangChange(i)
+                fragment.onSourceChange(media.selected!!.sourceIndex).apply {
+                    binding.animeSourceTitle.text = showUserText
+                    showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
+                    setLanguageList(i, source)
+                }
+                subscribeButton(false)
+                fragment.loadChapters(media.selected!!.sourceIndex, true)
+            } ?: run {
+            }
+        }
+
+        //settings
+        binding.animeSourceSettings.setOnClickListener {
+            (mangaReadSources[source] as? DynamicMangaParser)?.let { ext ->
+                fragment.openSettings(ext.extension)
+            }
         }
 
         //Subscription
@@ -220,6 +250,25 @@ class MangaReadAdapter(
                 binding.animeSourceNotFound.visibility = View.GONE
                 clearChips()
                 binding.animeSourceProgressBar.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    fun setLanguageList(lang: Int, source: Int) {
+        val binding = _binding
+        if (mangaReadSources is MangaSources) {
+            val parser = mangaReadSources[source] as? DynamicMangaParser
+            if (parser != null) {
+                (mangaReadSources[source] as? DynamicMangaParser)?.let { ext ->
+                    ext.sourceLanguage = lang
+                }
+                try {
+                    binding?.animeSourceLanguage?.setText(parser.extension.sources[lang].lang)
+                }catch (e: IndexOutOfBoundsException) {
+                    binding?.animeSourceLanguage?.setText(parser.extension.sources.firstOrNull()?.lang ?: "Unknown")
+                }
+                binding?.animeSourceLanguage?.setAdapter(ArrayAdapter(fragment.requireContext(), R.layout.item_dropdown, parser.extension.sources.map { it.lang }))
+
             }
         }
     }

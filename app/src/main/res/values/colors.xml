@@ -22,6 +22,8 @@
     <color name="grey_60">#999999</color>
     <color name="darkest_Black">#030201</color>
 
+    <color name="grey_nav">#E8EDEDED</color>
+
     <!-- theme 1 -->
     <color name="seed_1">#00658e</color>
     <color name="md_theme_light_1_primary">#00658E</color>

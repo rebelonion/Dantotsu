@@ -39,4 +39,6 @@
         android:paddingBottom="128dp"
         tools:itemCount="1"
         tools:listitem="@layout/item_anime_watch" />
+
+
 </FrameLayout>

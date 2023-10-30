@@ -5,13 +5,13 @@
     android:viewportHeight="768">
   <group>
     <clip-path
-        android:pathData="M128,384a256,255.96 0,1 0,512 0a256,255.96 0,1 0,-512 0z"/>
+        android:pathData="M125.71,125.71h516.58v516.58h-516.58z"/>
     <path
-        android:pathData="M128,128h512v511.96h-512z"
+        android:pathData="M123.53,128.02h512v511.96h-512z"
         android:strokeWidth="0"
         android:fillColor="#ff00f4"/>
     <path
-        android:pathData="m128,128v335.26c23.32,3.7 47.23,5.63 71.58,5.63 211.59,0 389.34,-144.9 439.43,-340.89H128Z"
+        android:pathData="m117.58,129.49v335.26c23.32,3.7 47.23,5.63 71.58,5.63 211.59,0 389.34,-144.9 439.43,-340.89H117.58Z"
         android:strokeWidth="0"
         android:fillColor="#7000b8"/>
     <path

@@ -1,8 +1,10 @@
 package ani.dantotsu.home
 
+import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +21,7 @@ import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.MediaPageTransformer
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemMangaPageBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
@@ -53,10 +56,20 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
 
         val textInputLayout = holder.itemView.findViewById<TextInputLayout>(R.id.mangaSearchBar)
         val currentColor = textInputLayout.boxBackgroundColor
-        val semiTransparentColor= (currentColor and 0x00FFFFFF) or 0xA8000000.toInt()
+        val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xA8000000.toInt()
         textInputLayout.boxBackgroundColor = semiTransparentColor
         val materialCardView = holder.itemView.findViewById<MaterialCardView>(R.id.mangaUserAvatarContainer)
         materialCardView.setCardBackgroundColor(semiTransparentColor)
+        val typedValue = TypedValue()
+        currContext()?.theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
+        val color = typedValue.data
+
+
+        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean("colorOverflow", false) ?: false
+        if (!colorOverflow) {
+            textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
+            materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
+        }
 
         binding.mangaTitleContainer.updatePadding(top = statusBarHeight)
 

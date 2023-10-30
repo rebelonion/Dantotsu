@@ -82,18 +82,69 @@
                     android:textAllCaps="true"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="14sp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
                     tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
             <ImageView
                 android:id="@+id/animeSourceSubscribe"
-                android:layout_width="wrap_content"
+                android:layout_width="48dp"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
+                android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/ic_round_notifications_none_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:hint="Language"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:hintAnimationEnabled="true"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:startIconDrawable="@drawable/ic_round_source_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/animeSourceLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:text="LANG"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/animeSourceSettings"
+                android:layout_width="48dp"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:layout_gravity="center_vertical"
+                app:srcCompat="@drawable/ic_round_settings_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+        </LinearLayout>
+
 
         <FrameLayout
             android:layout_width="match_parent"

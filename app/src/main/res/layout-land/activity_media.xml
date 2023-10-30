@@ -10,16 +10,16 @@
         android:id="@+id/mediaTab"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:background="?attr/colorPrimaryContainer"
+        android:background="?attr/colorSurface"
         android:translationZ="0dp"
         app:itemPaddingTop="32dp"
         app:menuGravity="center"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
-        app:itemRippleColor="?attr/colorSecondary"
+        app:itemRippleColor="?attr/colorPrimary"
         app:itemTextAppearanceActive="@style/NavBarText"
         app:itemTextAppearanceInactive="@style/NavBarText"
-        app:itemTextColor="@color/tab_layout_text" />
+        app:itemTextColor="@color/tab_layout_icon" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -139,6 +139,7 @@
                             android:text="@string/add"
                             android:textAllCaps="true"
                             android:textColor="?attr/colorPrimary"
+                            app:strokeColor="?attr/colorPrimary"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             app:cornerRadius="16dp"
@@ -172,7 +173,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        android:background="?attr/colorOnBackground"
+                        app:contentScrim="?android:colorBackground"
                         android:ellipsize="marquee"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
@@ -293,6 +294,13 @@
                 android:src="@drawable/ic_round_close_24"
                 tools:ignore="ContentDescription" />
         </androidx.cardview.widget.CardView>
+        <FrameLayout
+            android:id="@+id/fragmentExtensionsContainer"
+            android:paddingTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone">
+        </FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

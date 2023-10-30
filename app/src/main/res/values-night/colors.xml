@@ -10,4 +10,6 @@
     <color name="status">#54000000</color>
     <color name="nav_status">#80000000</color>
     <color name="filler">#29FF6B08</color>
+
+    <color name="grey_nav">#E8222222</color>
 </resources>

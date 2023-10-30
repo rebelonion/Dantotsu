@@ -1,8 +1,11 @@
 package ani.dantotsu.home
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Handler
 import android.os.Looper
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +22,7 @@ import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.MediaPageTransformer
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemAnimePageBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
@@ -58,6 +62,16 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         textInputLayout.boxBackgroundColor = semiTransparentColor
         val materialCardView = holder.itemView.findViewById<MaterialCardView>(R.id.animeUserAvatarContainer)
         materialCardView.setCardBackgroundColor(semiTransparentColor)
+        val typedValue = TypedValue()
+        currContext()?.theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
+        val color = typedValue.data
+
+
+        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean("colorOverflow", false) ?: false
+        if (!colorOverflow) {
+            textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
+            materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
+        }
 
         binding.animeTitleContainer.updatePadding(top = statusBarHeight)
 

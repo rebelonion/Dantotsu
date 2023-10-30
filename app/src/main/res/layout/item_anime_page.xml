@@ -34,7 +34,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:hint="@string/anime"
-                android:textColorHint="?attr/colorOnPrimaryContainer"
+                android:textColorHint="?attr/colorPrimary"
                 android:transitionName="@string/search"
                 app:boxBackgroundColor="?attr/colorPrimaryContainer"
                 app:boxCornerRadiusBottomEnd="28dp"
@@ -42,7 +42,7 @@
                 app:boxCornerRadiusTopEnd="28dp"
                 app:boxCornerRadiusTopStart="28dp"
                 app:endIconDrawable="@drawable/ic_round_search_24"
-                app:endIconTint="?attr/colorOnPrimaryContainer"
+                app:endIconTint="?attr/colorPrimary"
                 app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:hintAnimationEnabled="true">
 
@@ -64,7 +64,7 @@
                 android:layout_width="52dp"
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
-                android:backgroundTint="?attr/colorPrimaryContainer"
+                app:cardBackgroundColor="?attr/colorPrimaryContainer"
                 app:strokeColor="@color/text_input_layout_stroke_color"
                 app:cardCornerRadius="26dp">
 
@@ -73,7 +73,7 @@
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     android:scaleType="center"
-                    android:tint="?attr/colorOnPrimaryContainer"
+                    android:tint="?attr/colorPrimary"
                     app:srcCompat="@drawable/ic_round_settings_24"
                     tools:ignore="ContentDescription,ImageContrastCheck" />
 
