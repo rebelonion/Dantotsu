@@ -55,7 +55,7 @@ Dantotsu is crafted from the ashes of Saikou and is based on simplistic yet stat
 
 All contributions are welcome, from code to documentation to graphics to design suggestions to bug reports. Please use GitHub to its fullest; contribute Pull Requests, contribute tutorials or other content - whatever you have to offer, we can use!
 
-You can come hang out with our awesome community, request new features, and report any bugs or issues at our [Discord server](https://discord.gg/4HPZ5nAWwM) too. 📣
+You can come hang out with our awesome community, request new features, and report any bugs or issues at our Discord server too. 📣
 
 ### OFFICIAL DISCORD SERVER 🚀
 
