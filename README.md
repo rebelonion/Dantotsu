@@ -82,7 +82,9 @@ add your own extensions in the settings menu (Dantotsu has no affiliation with a
 ### OFFICIAL DISCORD SERVER 
  
 <p align="center">
-  <a href="https://discord.gg/4HPZ5nAWwM"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
+   <a href="https://discord.gg/4HPZ5nAWwM">
+      <img src="https://invidget.switchblade.xyz/4HPZ5nAWwM">
+   </a>
 </p>
 
 
