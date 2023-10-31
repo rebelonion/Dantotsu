@@ -2,6 +2,7 @@
    <img src="https://pbxt.replicate.delivery/2PX94viD6lJSDVayQrGyDH7CGu7IjQ6e8HEtOGDeelefXRdOC/out.png" alt="Dantotsu Banner" width=90% >
 </p>
 <p align="center">
+   <img src="https://img.shields.io/badge/platforms-android-blueviolet?style=for-the-badge"/>
    <a href="https://discord.gg/4HPZ5nAWwM"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
    <a href="https://github.com/rebelonion/Dantotsu/releases"><img src="https://img.shields.io/github/downloads/rebelonion/Dantotsu/total?color=%233DDC84&logo=android&logoColor=%23fff&style=for-the-badge"></a>
 </p>
@@ -14,7 +15,7 @@ Dantotsu is crafted from the ashes of Saikou and is based on simplistic yet stat
 
 <a href="https://www.buymeacoffee.com/rebelonion"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=rebelonion&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" /></a>
 
-### 🚀 STAR THIS REPOSITORY TO SUPPORT THE DEVELOPER AND ENCOURAGE THE DEVELOPMENT OF THE APPLICATION!
+### 🌟STAR THIS REPOSITORY TO SUPPORT THE DEVELOPER AND ENCOURAGE THE DEVELOPMENT OF THE APPLICATION!
 
 > **WARNING ⚠️**
 > 
@@ -38,9 +39,9 @@ Dantotsu is crafted from the ashes of Saikou and is based on simplistic yet stat
 - View extensive details about anime shows, movies, and manga titles. Also, countdown to the next episode of airing anime. (Powered by AniList & MyAnimeList)
 - Get notified when new episodes/chapters are released! 📢
 
-**AVAILABLE ANIME SOURCES:** None built-in! Add your own extensions in the settings menu. (Dantotsu has no affiliation with any of the extensions)
-
-**AVAILABLE MANGA SOURCES:** None built-in! Add your own extensions in the settings menu. (Dantotsu has no affiliation with any of the extensions)
+- **AVAILABLE ANIME SOURCES:** None built-in! Add your own extensions in the settings menu. (Dantotsu has no affiliation with any of the extensions)
+   
+- **AVAILABLE MANGA SOURCES:** None built-in! Add your own extensions in the settings menu. (Dantotsu has no affiliation with any of the extensions)
 
 ## PLANNED STUFF 📝
 
