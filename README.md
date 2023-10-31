@@ -15,11 +15,11 @@ Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-o
 
 ### 🌟STAR THIS REPOSITORY TO SUPPORT THE DEVELOPER AND ENCOURAGE THE DEVELOPMENT OF THE APPLICATION!
 
-> **Warning**
+> **WARNING**
 > 
 > Please do not attempt to upload Dantotsu or any of it's forks on Playstore or any other Android appstores on the internet. Doing so, may infringe their terms and conditions. This may result to legal action or immediate take-down of the app.
 
-## Extension Status
+## EXTENSION STATUS
 
 | Type             | Status  |
 | ---------------- | ------- |
@@ -46,16 +46,16 @@ Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-o
 - Get notified when new episodes/chapters are released!
 
 
-* **Available Anime sources:-**
+* **AVAILABLE ANIME SOURCES:-**
 NONE BUILT IN!
 add your own extensions in the settings menu (Dantotsu has no affiliation with any of the extensions)
 
 
-* **Available Manga sources:-**
+* **AVAILABLE MANGA SOURCES:-**
 NONE BUILT IN!
 add your own extensions in the settings menu (Dantotsu has no affiliation with any of the extensions)
 
-## Planned Stuff
+## PLANNED STUFF
 
 - TV Support
 
@@ -64,7 +64,7 @@ add your own extensions in the settings menu (Dantotsu has no affiliation with a
 - Offline Viewing
  
 
-## Rejected Stuff (still rejected)
+## REJECTED STUFF (still rejected)
 
 - Official support of any language except English
 
@@ -79,7 +79,7 @@ add your own extensions in the settings menu (Dantotsu has no affiliation with a
 
 - You can come hang out with our awesome community and request new features and report any bugs or issue at our discord server too.
 
-### Official Discord Server
+### OFFICIAL DISCORD SERVER 
  
 <p align="center">
   <a href="https://discord.gg/4HPZ5nAWwM"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
@@ -104,6 +104,6 @@ no website yet :(
 
 * If the internet infringement issues are involved, please contact the source website. The developer does not assume any legal responsibility.
 
-## License
+## LICENSE 
 
 Dantotsu is licensed under the [GNU General Public License v3.0](LICENSE.md)
