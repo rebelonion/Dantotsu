@@ -43,6 +43,20 @@ Dantotsu is crafted from the ashes of Saikou and is based on simplistic yet stat
    
 - **AVAILABLE MANGA SOURCES:** None built-in! Add your own extensions in the settings menu. (Dantotsu has no affiliation with any of the extensions)
 
+## Screenshots 📸
+
+Here are some screenshots of Dantotsu:
+
+<p align="center">
+   <img src="https://imgur.com/rztfl6c.png" alt="Screenshot 1" width="400">
+   <img src="https://imgur.com/H31HkeV.png" alt="Screenshot 2" width="400">
+</p>
+
+<p align="center">
+   <img src="https://imgur.com/fCmB9ca.png" alt="Screenshot 3" width="400">
+   <img src="https://imgur.com/hfdqkvo.png" alt "Screenshot 4" width="400">
+</p>
+
 ## PLANNED STUFF 📝
 
 - TV Support 📺
