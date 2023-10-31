@@ -84,8 +84,27 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             try {
                 val res = source.getEpisodeList(sAnime)
 
-                // Sort episodes by episode_number
-                val sortedEpisodes = res.sortedBy { it.episode_number }
+                val sortedEpisodes = if (res[0].episode_number == -1f) {
+                    // Find the number in the string and sort by that number
+                    val sortedByStringNumber = res.sortedBy {
+                        val matchResult = "\\d+".toRegex().find(it.name)
+                        val number = matchResult?.value?.toFloat() ?: Float.MAX_VALUE
+                        it.episode_number = number  // Store the found number in episode_number
+                        number
+                    }
+
+                    // If there is no number, reverse the order and give them an incrementing number
+                    var incrementingNumber = 1f
+                    sortedByStringNumber.map {
+                        if (it.episode_number == Float.MAX_VALUE) {
+                            it.episode_number = incrementingNumber++  // Update episode_number with the incrementing number
+                        }
+                        it
+                    }
+                } else {
+                    // Sort by the episode_number field
+                    res.sortedBy { it.episode_number }
+                }
 
                 // Transform SEpisode objects to Episode objects
 
@@ -167,7 +186,11 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                 sEpisode.episode_number
             }
         return Episode(
-            episodeNumberInt.toString(),
+            if(episodeNumberInt.toInt() != -1){
+                episodeNumberInt.toString()
+            }else{
+                sEpisode.name
+            },
             sEpisode.url,
             sEpisode.name,
             null,
@@ -530,7 +553,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
             fileName.endsWith(".mp4", ignoreCase = true) || fileName.endsWith(".mkv", ignoreCase = true) -> VideoType.CONTAINER
             fileName.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
             fileName.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
-            else -> null
+            else -> VideoType.CONTAINER
         }
     }
 

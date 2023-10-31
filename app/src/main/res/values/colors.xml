@@ -20,7 +20,7 @@
     <color name="warning">#FF0000</color>
     <color name="grey_20">#444444</color>
     <color name="grey_60">#999999</color>
-    <color name="darkest_Black">#030201</color>
+    <color name="darkest_Black">#000000</color>
 
     <color name="grey_nav">#E8EDEDED</color>
 

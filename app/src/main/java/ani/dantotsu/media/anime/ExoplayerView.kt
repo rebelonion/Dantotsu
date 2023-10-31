@@ -17,6 +17,7 @@ import android.graphics.drawable.Animatable
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.AudioManager.*
+import android.media.PlaybackParams
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -807,16 +808,15 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             }
 
             fun fastForward() {
-                val newSpeed = playbackParameters.speed * 2f
-                exoPlayer.playbackParameters = playbackParameters.withSpeed(newSpeed)
                 isFastForwarding = true
-                snackString("Playing at ${newSpeed}x speed")
+                exoPlayer.setPlaybackSpeed(2f)
+                snackString("Playing at 2x speed")
             }
 
             fun stopFastForward() {
                 if (isFastForwarding) {
-                    exoPlayer.playbackParameters = playbackParameters
                     isFastForwarding = false
+                    exoPlayer.setPlaybackSpeed(1f)
                     snackString("Playing at normal speed")
                 }
             }
