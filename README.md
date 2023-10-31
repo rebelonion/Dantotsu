@@ -1,5 +1,5 @@
 <p align="center">
-   <img src="https://pbxt.replicate.delivery/2PX94viD6lJSDVayQrGyDH7CGu7IjQ6e8HEtOGDeelefXRdOC/out.png" alt="Dantotsu Banner" width=80% >
+   <img src="https://pbxt.replicate.delivery/2PX94viD6lJSDVayQrGyDH7CGu7IjQ6e8HEtOGDeelefXRdOC/out.png" alt="Dantotsu Banner" width=90% >
 </p>
 <p align="center">
    <a href="https://discord.gg/4HPZ5nAWwM"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
