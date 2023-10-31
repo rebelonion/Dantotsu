@@ -17,7 +17,7 @@ Dantotsu is crafted from the ashes of Saikou and is based on simplistic yet stat
 
 ### 🌟STAR THIS REPOSITORY TO SUPPORT THE DEVELOPER AND ENCOURAGE THE DEVELOPMENT OF THE APPLICATION!
 
-> **WARNING ⚠️**
+> **WARNING**
 > 
 > Please do not attempt to upload Dantotsu or any of its forks on Playstore or any other Android app stores on the internet. Doing so may infringe their terms and conditions and result in legal action or immediate take-down of the app.
 
@@ -71,7 +71,7 @@ You can come hang out with our awesome community, request new features, and repo
 
 ### VISIT FOR MORE INFORMATION 🌐
 
-No website yet 😔
+No website yet (WIP)😔
 
 ## DISCLAIMER 🚫
 
