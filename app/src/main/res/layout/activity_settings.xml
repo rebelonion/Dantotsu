@@ -228,6 +228,7 @@
                         android:textColor="?android:attr/textColorSecondary"
                         android:textSize="14sp"
                         tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+
                 </com.google.android.material.textfield.TextInputLayout>
             </ani.dantotsu.others.Xpandable>
 
@@ -354,6 +355,40 @@
                             android:text="@string/username"
                             android:textSize="16sp" />
 
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center_vertical"
+                            android:minHeight="64dp"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/settingsDiscordUsername"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="-4dp"
+                                android:fontFamily="@font/poppins_bold"
+                                android:gravity="center"
+                                android:maxLines="1"
+                                android:text="@string/username"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/settingsDiscordLogin"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="-16dp"
+                                android:layout_marginTop="-16dp"
+                                android:layout_marginBottom="-16dp"
+                                android:fontFamily="@font/poppins_bold"
+                                android:padding="16dp"
+                                android:text="@string/logout"
+                                android:textColor="?attr/colorSecondary"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
                         <TextView
                             android:id="@+id/settingsMALLogin"
                             android:layout_width="wrap_content"
@@ -402,40 +437,6 @@
                         android:src="@drawable/ic_discord"
                         app:tint="?attr/colorOnBackground"
                         tools:ignore="ContentDescription" />
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical"
-                        android:minHeight="64dp"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:id="@+id/settingsDiscordUsername"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="-4dp"
-                            android:fontFamily="@font/poppins_bold"
-                            android:gravity="center"
-                            android:maxLines="1"
-                            android:text="@string/username"
-                            android:textSize="16sp" />
-
-                        <TextView
-                            android:id="@+id/settingsDiscordLogin"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="-16dp"
-                            android:layout_marginTop="-16dp"
-                            android:layout_marginBottom="-16dp"
-                            android:fontFamily="@font/poppins_bold"
-                            android:padding="16dp"
-                            android:text="@string/logout"
-                            android:textColor="?attr/colorSecondary"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/settingsDiscordAvatarContainer"
@@ -519,7 +520,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:drawableStart="@drawable/ic_round_new_releases_24"
+                    android:drawableStart="@drawable/ic_round_no_image"
                     android:drawablePadding="16dp"
                     android:elegantTextHeight="true"
                     android:fontFamily="@font/poppins_bold"

@@ -54,7 +54,7 @@ Here are some screenshots of Dantotsu:
 
 <p align="center">
    <img src="https://imgur.com/fCmB9ca.png" alt="Screenshot 3" width="400">
-   <img src="https://imgur.com/hfdqkvo.png" alt "Screenshot 4" width="400">
+   <img src="https://imgur.com/hfdqkvo.png" alt="Screenshot 4" width="400">
 </p>
 
 ## PLANNED STUFF 📝
