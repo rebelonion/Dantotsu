@@ -28,6 +28,9 @@ import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoType
+import eu.kanade.tachiyomi.network.NetworkHelper
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.IOException
 import java.util.concurrent.*
@@ -118,6 +121,9 @@ object Helper {
             val database = StandaloneDatabaseProvider(context)
             val downloadDirectory = File(getDownloadDirectory(context), DOWNLOAD_CONTENT_DIRECTORY)
             val dataSourceFactory = DataSource.Factory {
+                //val dataSource: HttpDataSource = OkHttpDataSource.Factory(okHttpClient).createDataSource()
+                val networkHelper = Injekt.get<NetworkHelper>()
+                val okHttpClient = networkHelper.client
                 val dataSource: HttpDataSource = OkHttpDataSource.Factory(okHttpClient).createDataSource()
                 defaultHeaders.forEach {
                     dataSource.setRequestProperty(it.key, it.value)

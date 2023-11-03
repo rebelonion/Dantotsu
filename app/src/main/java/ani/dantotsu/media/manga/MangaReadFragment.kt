@@ -2,6 +2,11 @@ package ani.dantotsu.media.manga
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.app.DownloadManager
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -10,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils.clamp
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
@@ -20,10 +26,15 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
+import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.manga.MangaDownloaderService
+import ani.dantotsu.download.manga.ServiceDataSingleton
 import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
@@ -41,8 +52,12 @@ import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -61,6 +76,8 @@ open class MangaReadFragment : Fragment() {
 
     private lateinit var headerAdapter: MangaReadAdapter
     private lateinit var chapterAdapter: MangaChapterAdapter
+
+    val downloadManager = Injekt.get<DownloadsManager>()
 
     var screenWidth = 0f
     private var progress = View.VISIBLE
@@ -81,6 +98,11 @@ open class MangaReadFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val intentFilter = IntentFilter().apply {
+            addAction(ACTION_DOWNLOAD_STARTED)
+            addAction(ACTION_DOWNLOAD_FINISHED)
+        }
+        requireContext().registerReceiver(downloadStatusReceiver, intentFilter)
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
 
@@ -131,6 +153,10 @@ open class MangaReadFragment : Fragment() {
 
                         headerAdapter = MangaReadAdapter(it, this, model.mangaReadSources!!)
                         chapterAdapter = MangaChapterAdapter(style ?: uiSettings.mangaDefaultView, media, this)
+
+                        for (download in downloadManager.mangaDownloads){
+                            chapterAdapter.stopDownload(download.chapter)
+                        }
 
                         binding.animeSourceRecycler.adapter = ConcatAdapter(headerAdapter, chapterAdapter)
 
@@ -325,6 +351,57 @@ open class MangaReadFragment : Fragment() {
         }
     }
 
+    fun onMangaChapterDownloadClick(i: String) {
+        model.continueMedia = false
+        media.manga?.chapters?.get(i)?.let { chapter ->
+            val parser = model.mangaReadSources?.get(media.selected!!.sourceIndex) as? DynamicMangaParser
+            parser?.let {
+                CoroutineScope(Dispatchers.IO).launch {
+                    // Fetch the image list and set it in the singleton
+                    ServiceDataSingleton.imageData = parser.imageList("", chapter.sChapter)
+
+                    // Now that imageData is set, start the service
+                    ServiceDataSingleton.sourceMedia = media
+                    val intent = Intent(context, MangaDownloaderService::class.java).apply {
+                        putExtra("title", media.nameMAL)
+                        putExtra("chapter", chapter.title)
+                    }
+                    withContext(Dispatchers.Main) {
+                        chapterAdapter.startDownload(i)
+                        ContextCompat.startForegroundService(requireContext(), intent)
+                    }
+                }
+            }
+        }
+    }
+
+
+    fun onMangaChapterRemoveDownloadClick(i: String){
+        downloadManager.removeDownload(Download(media.nameMAL!!, i, Download.Type.MANGA))
+        chapterAdapter.deleteDownload(i)
+    }
+    fun onMangaChapterStopDownloadClick(i: String) {
+        val intent = Intent(requireContext(), MangaDownloaderService::class.java)
+        requireContext().stopService(intent)
+        downloadManager.removeDownload(Download(media.nameMAL!!, i, Download.Type.MANGA))
+        chapterAdapter.deleteDownload(i)
+    }
+    private val downloadStatusReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            when (intent.action) {
+                ACTION_DOWNLOAD_STARTED -> {
+                    val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
+                    chapterNumber?.let { chapterAdapter.startDownload(it) }
+                }
+                ACTION_DOWNLOAD_FINISHED -> {
+                    val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
+                    chapterNumber?.let { chapterAdapter.stopDownload(it) }
+                }
+            }
+        }
+    }
+
+
     @SuppressLint("NotifyDataSetChanged")
     private fun reload() {
         val selected = model.loadSelected(media)
@@ -353,6 +430,7 @@ open class MangaReadFragment : Fragment() {
     override fun onDestroy() {
         model.mangaReadSources?.flushText()
         super.onDestroy()
+        requireContext().unregisterReceiver(downloadStatusReceiver)
     }
 
     private var state: Parcelable? = null
@@ -365,5 +443,11 @@ open class MangaReadFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         state = binding.animeSourceRecycler.layoutManager?.onSaveInstanceState()
+    }
+
+    companion object {
+        const val ACTION_DOWNLOAD_STARTED = "ani.dantotsu.ACTION_DOWNLOAD_STARTED"
+        const val ACTION_DOWNLOAD_FINISHED = "ani.dantotsu.ACTION_DOWNLOAD_FINISHED"
+        const val EXTRA_CHAPTER_NUMBER = "extra_chapter_number"
     }
 }

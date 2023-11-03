@@ -10,6 +10,9 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.LruCache
+import android.widget.Toast
+import ani.dantotsu.logger
+import ani.dantotsu.snackString
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.Dispatchers
@@ -26,22 +29,23 @@ data class ImageData(
             try {
                 // Fetch the image
                 val response = httpSource.getImage(page)
-                println("Response: ${response.code}")
-                println("Response: ${response.message}")
+                logger("Response: ${response.code}")
+                logger("Response: ${response.message}")
 
                 // Convert the Response to an InputStream
-                val inputStream = response.body?.byteStream()
+                val inputStream = response.body.byteStream()
 
                 // Convert InputStream to Bitmap
                 val bitmap = BitmapFactory.decodeStream(inputStream)
 
-                inputStream?.close()
-                saveImage(bitmap, context.contentResolver, page.imageUrl!!, Bitmap.CompressFormat.JPEG, 100)
+                inputStream.close()
+                //saveImage(bitmap, context.contentResolver, page.imageUrl!!, Bitmap.CompressFormat.JPEG, 100)
 
                 return@withContext bitmap
             } catch (e: Exception) {
                 // Handle any exceptions
-                println("An error occurred: ${e.message}")
+                logger("An error occurred: ${e.message}")
+                snackString("An error occurred: ${e.message}")
                 return@withContext null
             }
         }
@@ -57,7 +61,7 @@ fun saveImage(bitmap: Bitmap, contentResolver: ContentResolver, filename: String
                 put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Manga")
             }
 
-            val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+            val uri: Uri? = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
 
             uri?.let {
                 contentResolver.openOutputStream(it)?.use { os ->
@@ -65,7 +69,7 @@ fun saveImage(bitmap: Bitmap, contentResolver: ContentResolver, filename: String
                 }
             }
         } else {
-            val directory = File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Anime")
+            val directory = File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Manga")
             if (!directory.exists()) {
                 directory.mkdirs()
             }

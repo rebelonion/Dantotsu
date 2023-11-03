@@ -311,7 +311,7 @@ class MangaReaderActivity : AppCompatActivity() {
             }
         }
 
-        scope.launch(Dispatchers.IO) { model.loadMangaChapterImages(chapter, media.selected!!) }
+        scope.launch(Dispatchers.IO) { model.loadMangaChapterImages(chapter, media.selected!!, media.nameMAL!!) }
     }
 
     private val snapHelper = PagerSnapHelper()
@@ -700,6 +700,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 model.loadMangaChapterImages(
                     chapters[chaptersArr.getOrNull(currentChapterIndex + 1) ?: return@launch]!!,
                     media.selected!!,
+                    media.nameMAL!!,
                     false
                 )
                 loading = false

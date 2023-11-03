@@ -47,7 +47,7 @@ class ChapterLoaderDialog : BottomSheetDialogFragment() {
                 loaded = true
                 binding.selectorAutoText.text = chp.title
                 lifecycleScope.launch(Dispatchers.IO) {
-                    if(model.loadMangaChapterImages(chp, m.selected!!)) {
+                    if(model.loadMangaChapterImages(chp, m.selected!!, m.nameMAL!!)) {
                         val activity = currActivity()
                         activity?.runOnUiThread {
                             tryWith { dismiss() }
