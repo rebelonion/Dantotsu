@@ -46,7 +46,7 @@ class ThemeManager(private val context: Context) {
             RED("RED"),
             LAVENDER("LAVENDER"),
             MONOCHROME("MONOCHROME (BETA)"),
-            MONOCHROME("SAIKOU (BETA)");
+            SAIKOU("SAIKOU (BETA)");
 
             companion object {
                 fun fromString(value: String): Theme {
