@@ -83,9 +83,10 @@ You can come hang out with our awesome community, request new features, and repo
    </a>
 </p>
 
-### VISIT FOR MORE INFORMATION 🌐
+### VISIT OUR WEBSITE FOR MORE INFORMATION 🌐
 
-No website yet (WIP)😔
+[![Click to Visit](https://img.shields.io/badge/Click%20to%20Visit-%23A800D9?style=for-the-badge&logo=github)](https://dantotsu.app/)
+
 
 ## DISCLAIMER 🚫
 
