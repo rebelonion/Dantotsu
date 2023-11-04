@@ -71,228 +71,249 @@ import java.io.Serializable
 
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-    private val scope = lifecycleScope
-    private var load = false
 
-    private var uiSettings = UserInterfaceSettings()
-    private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
-    private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+  // Private variables
+  private lateinit var binding: ActivityMainBinding
+  private val scope = lifecycleScope
+  private var load = false
 
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+  // User interface settings
+  private var uiSettings = UserInterfaceSettings()
 
-        val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+  // Extension managers
+  private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
+  private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
 
-            val backgroundDrawable = _bottomBar.background as GradientDrawable
-            val currentColor = backgroundDrawable.color?.defaultColor ?: 0
-            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xE8000000.toInt()
-            backgroundDrawable.setColor(semiTransparentColor)
-            _bottomBar.background = backgroundDrawable
-        }
-        val colorOverflow = this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("colorOverflow", false)
-        if (!colorOverflow) {
-            _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+  // onCreate() method
+  override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
 
-        }
+    // Apply the user's theme
+    ThemeManager(this).applyTheme()
 
+    // Inflate the layout and set the content view
+    binding = ActivityMainBinding.inflate(layoutInflater)
+    setContentView(binding.root)
 
-        val animeScope = CoroutineScope(Dispatchers.Default)
-        animeScope.launch {
-            animeExtensionManager.findAvailableExtensions()
-            logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
-            AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
-        }
-        val mangaScope = CoroutineScope(Dispatchers.Default)
-        mangaScope.launch {
-            mangaExtensionManager.findAvailableExtensions()
-            logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
-            MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
-        }
+    // Get the bottom bar
+    val bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
 
-        var doubleBackToExitPressedOnce = false
-        onBackPressedDispatcher.addCallback(this) {
-            if (doubleBackToExitPressedOnce) {
-                finish()
-            }
-            doubleBackToExitPressedOnce = true
-            snackString(this@MainActivity.getString(R.string.back_to_exit))
-            Handler(Looper.getMainLooper()).postDelayed(
-                { doubleBackToExitPressedOnce = false },
-                2000
-            )
-        }
-
-        binding.root.isMotionEventSplittingEnabled = false
-
-        lifecycleScope.launch {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                val splash = SplashScreenBinding.inflate(layoutInflater)
-                binding.root.addView(splash.root)
-                (splash.splashImage.drawable as Animatable).start()
-
-                delay(1200)
-
-                ObjectAnimator.ofFloat(
-                    splash.root,
-                    View.TRANSLATION_Y,
-                    0f,
-                    -splash.root.height.toFloat()
-                ).apply {
-                    interpolator = AnticipateInterpolator()
-                    duration = 200L
-                    doOnEnd { binding.root.removeView(splash.root) }
-                    start()
-                }
-            }
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            splashScreen.setOnExitAnimationListener { splashScreenView ->
-                ObjectAnimator.ofFloat(
-                    splashScreenView,
-                    View.TRANSLATION_Y,
-                    0f,
-                    -splashScreenView.height.toFloat()
-                ).apply {
-                    interpolator = AnticipateInterpolator()
-                    duration = 200L
-                    doOnEnd { splashScreenView.remove() }
-                    start()
-                }
-            }
-        }
-
-
-        binding.root.doOnAttach {
-            initActivity(this)
-            uiSettings = loadData("ui_settings") ?: uiSettings
-            selectedOption = uiSettings.defaultStartUpTab
-            binding.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = navBarHeight
-            }
-        }
-
-        if (!isOnline(this)) {
-            snackString(this@MainActivity.getString(R.string.no_internet_connection))
-            startActivity(Intent(this, NoInternet::class.java))
-        } else {
-            val model: AnilistHomeViewModel by viewModels()
-            model.genres.observe(this) {
-                if (it != null) {
-                    if (it) {
-                        val navbar = binding.navbar
-                        bottomBar = navbar
-                        navbar.visibility = View.VISIBLE
-                        binding.mainProgressBar.visibility = View.GONE
-                        val mainViewPager = binding.viewpager
-                        mainViewPager.isUserInputEnabled = false
-                        mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
-                        mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
-                        navbar.setOnTabSelectListener(object :
-                            AnimatedBottomBar.OnTabSelectListener {
-                            override fun onTabSelected(
-                                lastIndex: Int,
-                                lastTab: AnimatedBottomBar.Tab?,
-                                newIndex: Int,
-                                newTab: AnimatedBottomBar.Tab
-                            ) {
-                                navbar.animate().translationZ(12f).setDuration(200).start()
-                                selectedOption = newIndex
-                                mainViewPager.setCurrentItem(newIndex, false)
-                            }
-                        })
-                        navbar.selectTabAt(selectedOption)
-                        mainViewPager.post { mainViewPager.setCurrentItem(selectedOption, false) }
-                    } else {
-                        binding.mainProgressBar.visibility = View.GONE
-                    }
-                }
-            }
-            //Load Data
-            if (!load) {
-                scope.launch(Dispatchers.IO) {
-                    model.loadMain(this@MainActivity)
-                    val id = intent.extras?.getInt("mediaId", 0)
-                    val isMAL = intent.extras?.getBoolean("mal") ?: false
-                    val cont = intent.extras?.getBoolean("continue") ?: false
-                    if (id != null && id != 0) {
-                        val media = withContext(Dispatchers.IO) {
-                            Anilist.query.getMedia(id, isMAL)
-                        }
-                        if (media != null) {
-                            media.cameFromContinue = cont
-                            startActivity(
-                                Intent(this@MainActivity, MediaDetailsActivity::class.java)
-                                    .putExtra("media", media as Serializable)
-                            )
-                        } else {
-                            snackString(this@MainActivity.getString(R.string.anilist_not_found))
-                        }
-                    }
-                    delay(500)
-                    startSubscription()
-                }
-                load = true
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (loadData<Boolean>("allow_opening_links", this) != true) {
-                    CustomBottomDialog.newInstance().apply {
-                        title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
-                        val md = "Open settings & click +Add Links & select Anilist & Mal urls"
-                        addView(TextView(this@MainActivity).apply {
-                            val markWon =
-                                Markwon.builder(this@MainActivity)
-                                    .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
-                            markWon.setMarkdown(this, md)
-                        })
-
-                        setNegativeButton(this@MainActivity.getString(R.string.no)) {
-                            saveData("allow_opening_links", true, this@MainActivity)
-                            dismiss()
-                        }
-
-                        setPositiveButton(this@MainActivity.getString(R.string.yes)) {
-                            saveData("allow_opening_links", true, this@MainActivity)
-                            tryWith(true) {
-                                startActivity(
-                                    Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
-                                        .setData(Uri.parse("package:$packageName"))
-                                )
-                            }
-                        }
-                    }.show(supportFragmentManager, "dialog")
-                }
-            }
-        }
-
+    // Change the background color of the bottom bar to be semi-transparent
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      val backgroundDrawable = bottomBar.background as GradientDrawable
+      val currentColor = backgroundDrawable.color?.defaultColor ?: 0
+      val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xE8000000.toInt()
+      backgroundDrawable.setColor(semiTransparentColor)
+      bottomBar.background = backgroundDrawable
     }
 
-    override fun onResume() {
-        super.onResume()
+    // Check if the user has enabled color overflow in the settings
+    val colorOverflow = this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+      .getBoolean("colorOverflow", false)
+    if (!colorOverflow) {
+      bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
     }
 
+    // Launch a coroutine to load the anime and manga extensions
+    val animeScope = CoroutineScope(Dispatchers.Default)
+    animeScope.launch {
+      animeExtensionManager.findAvailableExtensions()
+      logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
+      AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
+    }
 
-    //ViewPager
-    private class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
-        FragmentStateAdapter(fragmentManager, lifecycle) {
+    val mangaScope = CoroutineScope(Dispatchers.Default)
+    mangaScope.launch {
+      mangaExtensionManager.findAvailableExtensions()
+      logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
+      MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
+    }
 
-        override fun getItemCount(): Int = 3
+    // Handle double back press to exit
+    var doubleBackToExitPressedOnce = false
+    onBackPressedDispatcher.addCallback(this) {
+      if (doubleBackToExitPressedOnce) {
+        finish()
+      }
+      doubleBackToExitPressedOnce = true
+      snackString(this@MainActivity.getString(R.string.back_to_exit))
+      Handler(Looper.getMainLooper()).postDelayed(
+        { doubleBackToExitPressedOnce = false },
+        2000
+      )
+    }
 
-        override fun createFragment(position: Int): Fragment {
-            when (position) {
-                0 -> return AnimeFragment()
-                1 -> return if (Anilist.token != null) HomeFragment() else LoginFragment()
-                2 -> return MangaFragment()
-            }
-            return LoginFragment()
+    // Disable motion splitting for the root view
+    binding.root.isMotionEventSplittingEnabled = false
+
+    // Launch a coroutine to display the splash screen
+    lifecycleScope.launch {
+      if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+        val splash = SplashScreenBinding.inflate(layoutInflater)
+        binding.root.addView(splash.root)
+        (splash.splashImage.drawable as Animatable).start()
+
+        delay(1200)
+
+        // Animate the splash screen out of view
+        ObjectAnimator.ofFloat(
+          splash.root,
+          View.TRANSLATION_Y,
+          0f,
+          -splash.root.height.toFloat()
+        ).apply {
+          interpolator = AnticipateInterpolator()
+          duration = 200L
+          doOnEnd { binding.root.removeView(splash.root) }
+          start()
         }
+      }
     }
 
+    // Set the exit animation for the splash screen
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+      splashScreen.setOnExitAnimationListener { splashScreenView ->
+        ObjectAnimator.ofFloat(
+          splashScreenView,
+          View.TRANSLATION_Y,
+          0f,
+          -splashScreenView.height.toFloat()
+        ).apply {
+          interpolator = AnticipateInterpolator()
+          duration = 200L
+          doOnEnd { splashScreenView.remove() }
+          start()
+        }
+      }
+    }
+
+    // Attach a listener to the root view for initialization
+    binding.root.doOnAttach {
+      initActivity(this)
+      uiSettings = loadData("ui_settings") ?: uiSettings
+      selectedOption = uiSettings.defaultStartUpTab
+      binding.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        bottomMargin = navBarHeight
+      }
+    }
+
+    // Check if the device is online
+    if (!isOnline(this)) {
+      snackString(this@MainActivity.getString(R.string.no_internet_connection))
+      // Start the NoInternet activity
+      startActivity(Intent(this, NoInternet::class.java))
+    } else {
+      val model: AnilistHomeViewModel by viewModels()
+      model.genres.observe(this) {
+        if (it != null) {
+          if (it) {
+            val navbar = binding.navbar
+            bottomBar = navbar
+            navbar.visibility = View.VISIBLE
+            binding.mainProgressBar.visibility = View.GONE
+            val mainViewPager = binding.viewpager
+            mainViewPager.isUserInputEnabled = false
+            mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+            mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
+            navbar.setOnTabSelectListener(object :
+                AnimatedBottomBar.OnTabSelectListener {
+              override fun onTabSelected(
+                lastIndex: Int,
+                lastTab: AnimatedBottomBar.Tab?,
+                newIndex: Int,
+                newTab: AnimatedBottomBar.Tab
+              ) {
+                navbar.animate().translationZ(12f).setDuration(200).start()
+                selectedOption = newIndex
+                mainViewPager.setCurrentItem(newIndex, false)
+              }
+            })
+            navbar.selectTabAt(selectedOption)
+            mainViewPager.post { mainViewPager.setCurrentItem(selectedOption, false) }
+          } else {
+            binding.mainProgressBar.visibility = View.GONE
+          }
+        }
+      }
+
+      // Load data and handle various intent extras
+      if (!load) {
+        scope.launch(Dispatchers.IO) {
+          model.loadMain(this@MainActivity)
+          val id = intent.extras?.getInt("mediaId", 0)
+          val isMAL = intent.extras?.getBoolean("mal") ?: false
+          val cont = intent.extras?.getBoolean("continue") ?: false
+          if (id != null && id != 0) {
+            val media = withContext(Dispatchers.IO) {
+              Anilist.query.getMedia(id, isMAL)
+            }
+            if (media != null) {
+              media.cameFromContinue = cont
+              startActivity(
+                Intent(this@MainActivity, MediaDetailsActivity::class.java)
+                  .putExtra("media", media as Serializable)
+              )
+            } else {
+              snackString(this@MainActivity.getString(R.string.anilist_not_found))
+            }
+          }
+          delay(500)
+          startSubscription()
+        }
+        load = true
+      }
+
+      // Prompt the user to allow Dantotsu to automatically open Anilist & MAL links
+      if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        if (loadData<Boolean>("allow_opening_links", this) != true) {
+          CustomBottomDialog.newInstance().apply {
+            title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
+            val md = "Open settings & click +Add Links & select Anilist & Mal urls"
+            addView(TextView(this@MainActivity).apply {
+              val markWon =
+                Markwon.builder(this@MainActivity)
+                  .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
+              markWon.setMarkdown(this, md)
+            })
+
+            setNegativeButton(this@MainActivity.getString(R.string.no)) {
+              saveData("allow_opening_links", true, this@MainActivity)
+              dismiss()
+            }
+
+            setPositiveButton(this@MainActivity.getString(R.string.yes)) {
+              saveData("allow_opening_links", true, this@MainActivity)
+              tryWith(true) {
+                startActivity(
+                  Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
+                    .setData(Uri.parse("package:$packageName"))
+                )
+              }
+            }
+          }.show(supportFragmentManager, "dialog")
+        }
+      }
+    }
+  }
+
+  // onResume() method
+  override fun onResume() {
+    super.onResume()
+  }
+
+  // ViewPager adapter
+  private class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
+    FragmentStateAdapter(fragmentManager, lifecycle) {
+
+    override fun getItemCount(): Int = 3
+
+    override fun createFragment(position: Int): Fragment {
+      when (position) {
+        0 -> return AnimeFragment()
+        1 -> return if (Anilist.token != null) HomeFragment() else LoginFragment()
+        2 -> return MangaFragment()
+      }
+      return LoginFragment()
+    }
+  }
 }
