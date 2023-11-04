@@ -357,18 +357,32 @@ open class MangaReadFragment : Fragment() {
             val parser = model.mangaReadSources?.get(media.selected!!.sourceIndex) as? DynamicMangaParser
             parser?.let {
                 CoroutineScope(Dispatchers.IO).launch {
-                    // Fetch the image list and set it in the singleton
-                    ServiceDataSingleton.imageData = parser.imageList("", chapter.sChapter)
+                    val images = parser.imageList("", chapter.sChapter)
 
-                    // Now that imageData is set, start the service
-                    ServiceDataSingleton.sourceMedia = media
-                    val intent = Intent(context, MangaDownloaderService::class.java).apply {
-                        putExtra("title", media.nameMAL)
-                        putExtra("chapter", chapter.title)
+                    // Create a download task
+                    val downloadTask = MangaDownloaderService.DownloadTask(
+                        title = media.nameMAL ?: "",
+                        chapter = chapter.title!!,
+                        imageData = images,
+                        sourceMedia = media,
+                        retries = 2,
+                        simultaneousDownloads = 2
+                    )
+
+                    ServiceDataSingleton.downloadQueue.offer(downloadTask)
+
+                    // If the service is not already running, start it
+                    if (!ServiceDataSingleton.isServiceRunning) {
+                        val intent = Intent(context, MangaDownloaderService::class.java)
+                        withContext(Dispatchers.Main) {
+                            ContextCompat.startForegroundService(requireContext(), intent)
+                        }
+                        ServiceDataSingleton.isServiceRunning = true
                     }
+
+                    // Inform the adapter that the download has started
                     withContext(Dispatchers.Main) {
                         chapterAdapter.startDownload(i)
-                        ContextCompat.startForegroundService(requireContext(), intent)
                     }
                 }
             }
@@ -376,15 +390,21 @@ open class MangaReadFragment : Fragment() {
     }
 
 
+
     fun onMangaChapterRemoveDownloadClick(i: String){
         downloadManager.removeDownload(Download(media.nameMAL!!, i, Download.Type.MANGA))
         chapterAdapter.deleteDownload(i)
     }
     fun onMangaChapterStopDownloadClick(i: String) {
-        val intent = Intent(requireContext(), MangaDownloaderService::class.java)
-        requireContext().stopService(intent)
+        val cancelIntent = Intent().apply {
+            action = MangaDownloaderService.ACTION_CANCEL_DOWNLOAD
+            putExtra(MangaDownloaderService.EXTRA_CHAPTER, i)
+        }
+        requireContext().sendBroadcast(cancelIntent)
+
+        // Remove the download from the manager and update the UI
         downloadManager.removeDownload(Download(media.nameMAL!!, i, Download.Type.MANGA))
-        chapterAdapter.deleteDownload(i)
+        chapterAdapter.stopDownload(i)
     }
     private val downloadStatusReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
