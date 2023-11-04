@@ -104,7 +104,8 @@ object AppUpdater {
                         0    -> s.toDouble() * 100
                         1    -> s.toDouble() * 10
                         2    -> s.toDouble()
-                        else -> s.toDoubleOrNull()?: 0.0
+                        // this might encounter problems where it 1.0.0.1b == 1.0.0.1
+                        else -> s.filter { it.isDigit() }.toDoubleOrNull() ?: 0.0
                     }
                 }.sum()
             }
