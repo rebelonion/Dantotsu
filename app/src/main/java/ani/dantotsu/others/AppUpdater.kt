@@ -95,8 +95,9 @@ object AppUpdater {
 
     private fun compareVersion(version: String): Boolean {
 
-        if(BuildConfig.DEBUG)
+        if(BuildConfig.DEBUG) {
             return BuildConfig.VERSION_NAME != version
+        }
         else {
             fun toDouble(list: List<String>): Double {
                 return list.mapIndexed { i: Int, s: String ->

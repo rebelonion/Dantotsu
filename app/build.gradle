@@ -21,15 +21,14 @@ android {
         minSdk 23
         targetSdk 34
         versionCode ((System.currentTimeMillis() / 60000).toInteger())
-        versionName "1.0.0.1b"
+        versionName "1.0.0-beta02"
         signingConfig signingConfigs.debug
     }
 
     buildTypes {
         debug {
-            //applicationIdSuffix ".beta"
+            applicationIdSuffix ".beta"
             debuggable true
-            versionNameSuffix "." + gitCommitHash
         }
         release {
             debuggable false
