@@ -145,7 +145,7 @@
         <item name="colorOnSurface">@color/bg_white</item>
         <item name="colorSurfaceVariant">@color/bg_black</item>
         <item name="colorOnSurfaceVariant">@color/bg_white</item>
-        <item name="colorOutline">@color/bg_black</item>
+        <item name="colorOutline">@color/bg_white</item>
         <item name="colorOnSurfaceInverse">@color/bg_white</item>
         <item name="colorSurfaceInverse">@color/bg_black</item>
         <item name="colorPrimaryInverse">@color/bg_black</item>
