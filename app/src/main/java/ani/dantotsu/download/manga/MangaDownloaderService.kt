@@ -33,6 +33,7 @@ import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_DOWNLOADER_PR
 import java.net.HttpURLConnection
 import java.net.URL
 import androidx.core.content.ContextCompat
+import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FAILED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FINISHED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_STARTED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.EXTRA_CHAPTER_NUMBER
@@ -169,6 +170,7 @@ class MangaDownloaderService : Service() {
                     "Please grant notification permission",
                     Toast.LENGTH_SHORT
                 ).show()
+                broadcastDownloadFailed(task.chapter)
                 return@withContext
             }
 
@@ -223,14 +225,14 @@ class MangaDownloaderService : Service() {
 
             saveMediaInfo(task)
             downloadsManager.addDownload(Download(task.title, task.chapter, Download.Type.MANGA))
-            downloadsManager.exportDownloads(Download(task.title, task.chapter, Download.Type.MANGA))
+            //downloadsManager.exportDownloads(Download(task.title, task.chapter, Download.Type.MANGA))
             broadcastDownloadFinished(task.chapter)
             snackString("${task.title} - ${task.chapter} Download finished")
         }
     }
 
 
-    fun saveToDisk(fileName: String, bitmap: Bitmap, title: String, chapter: String) {
+    private fun saveToDisk(fileName: String, bitmap: Bitmap, title: String, chapter: String) {
         try {
             // Define the directory within the private external storage space
             val directory = File(
@@ -262,7 +264,7 @@ class MangaDownloaderService : Service() {
         GlobalScope.launch(Dispatchers.IO) {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Manga/${task.title}/${task.chapter}"
+                "Dantotsu/Manga/${task.title}"
             )
             if (!directory.exists()) directory.mkdirs()
 
@@ -272,7 +274,7 @@ class MangaDownloaderService : Service() {
                     SChapterImpl() // Provide an instance of SChapterImpl
                 })
                 .create()
-            val mediaJson = gson.toJson(task.sourceMedia)  // Assuming sourceMedia is part of DownloadTask
+            val mediaJson = gson.toJson(task.sourceMedia)
             val media = gson.fromJson(mediaJson, Media::class.java)
             if (media != null) {
                 media.cover = media.cover?.let { downloadImage(it, directory, "cover.jpg") }
@@ -324,6 +326,13 @@ class MangaDownloaderService : Service() {
 
     private fun broadcastDownloadFinished(chapterNumber: String) {
         val intent = Intent(ACTION_DOWNLOAD_FINISHED).apply {
+            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+        }
+        sendBroadcast(intent)
+    }
+
+    private fun broadcastDownloadFailed(chapterNumber: String) {
+        val intent = Intent(ACTION_DOWNLOAD_FAILED).apply {
             putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
         }
         sendBroadcast(intent)

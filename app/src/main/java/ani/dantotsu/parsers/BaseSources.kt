@@ -7,6 +7,7 @@ import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.tryWithSuspend
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.source.model.SManga
 
 abstract class WatchSources : BaseSources() {
 
@@ -23,14 +24,28 @@ abstract class WatchSources : BaseSources() {
         } ?: mutableMapOf()
     }
 
-    suspend fun loadEpisodes(i: Int, showLink: String, extra: Map<String, String>?, sAnime: SAnime?): MutableMap<String, Episode> {
+    suspend fun loadEpisodes(
+        i: Int,
+        showLink: String,
+        extra: Map<String, String>?,
+        sAnime: SAnime?
+    ): MutableMap<String, Episode> {
         println("finder333 $showLink")
         val map = mutableMapOf<String, Episode>()
         val parser = get(i)
         tryWithSuspend(true) {
             if (sAnime != null) {
-                parser.loadEpisodes(showLink,extra, sAnime).forEach {
-                    map[it.number] = Episode(it.number, it.link, it.title, it.description, it.thumbnail, it.isFiller, extra = it.extra, sEpisode = it.sEpisode)
+                parser.loadEpisodes(showLink, extra, sAnime).forEach {
+                    map[it.number] = Episode(
+                        it.number,
+                        it.link,
+                        it.title,
+                        it.description,
+                        it.thumbnail,
+                        it.isFiller,
+                        extra = it.extra,
+                        sEpisode = it.sEpisode
+                    )
                 }
             }
         }
@@ -42,7 +57,7 @@ abstract class WatchSources : BaseSources() {
 abstract class MangaReadSources : BaseSources() {
 
     override operator fun get(i: Int): MangaParser {
-        return (list.getOrNull(i)?:list.firstOrNull())?.get?.value as? MangaParser
+        return (list.getOrNull(i) ?: list.firstOrNull())?.get?.value as? MangaParser
             ?: EmptyMangaParser()
     }
 
@@ -56,6 +71,7 @@ abstract class MangaReadSources : BaseSources() {
     suspend fun loadChapters(i: Int, show: ShowResponse): MutableMap<String, MangaChapter> {
         val map = mutableMapOf<String, MangaChapter>()
         val parser = get(i)
+
         show.sManga?.let { sManga ->
             tryWithSuspend(true) {
                 parser.loadChapters(show.link, show.extra, sManga).forEach {
@@ -63,15 +79,28 @@ abstract class MangaReadSources : BaseSources() {
                 }
             }
         }
-        if(show.sManga == null) {
+        //must be downloaded
+        if (show.sManga == null) {
             logger("sManga is null")
         }
+        if (parser is OfflineMangaParser && show.sManga == null) {
+            tryWithSuspend(true) {
+                // Since we've checked, we can safely cast parser to OfflineMangaParser and call its methods
+                parser.loadChapters(show.link, show.extra, SManga.create()).forEach {
+                    map[it.number] = MangaChapter(it)
+                }
+            }
+        } else {
+            logger("Parser is not an instance of OfflineMangaParser")
+        }
+
+
         logger("map size ${map.size}")
         return map
     }
 }
 
-abstract class NovelReadSources : BaseSources(){
+abstract class NovelReadSources : BaseSources() {
     override operator fun get(i: Int): NovelParser? {
         return if (list.isNotEmpty()) {
             (list.getOrNull(i) ?: list[0]).get.value as NovelParser
@@ -87,7 +116,7 @@ class EmptyNovelParser : NovelParser() {
     override val volumeRegex: Regex = Regex("")
 
     override suspend fun loadBook(link: String, extra: Map<String, String>?): Book {
-        return Book("","", null, emptyList())  // Return an empty Book object or some default value
+        return Book("", "", null, emptyList())  // Return an empty Book object or some default value
     }
 
     override suspend fun search(query: String): List<ShowResponse> {
