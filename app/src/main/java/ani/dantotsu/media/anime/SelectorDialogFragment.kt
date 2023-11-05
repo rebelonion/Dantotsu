@@ -244,7 +244,8 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             if (video.format == VideoType.CONTAINER) {
                 binding.urlSize.visibility = if (video.size != null) View.VISIBLE else View.GONE
                 binding.urlSize.text =
-                    (if (video.extraNote != null) " : " else "") + DecimalFormat("#.##").format(video.size ?: 0).toString() + " MB"
+                    // if video size is null or 0, show "Unknown Size" else show the size in MB
+                    (if (video.extraNote != null) " : " else "") + (if (video.size == 0) "Unknown Size" else (DecimalFormat("#.##").format(video.size ?: 0).toString()+ " MB")) 
             }
             else {
                 binding.urlQuality.text = "Multi Quality"
