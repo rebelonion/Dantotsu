@@ -220,7 +220,7 @@
                             android:padding="8dp"
                             android:tintMode="src_atop"
                             app:srcCompat="@drawable/ic_round_favorite_border_24"
-                            app:tint="bg_opp"
+                            app:tint="@color/bg_opp"
                             tools:ignore="ContentDescription,ImageContrastCheck" />
 
                         <ImageView
@@ -230,7 +230,7 @@
                             android:layout_marginStart="-8dp"
                             android:padding="8dp"
                             app:srcCompat="@drawable/ic_round_share_24"
-                            app:tint="bg_opp"
+                            app:tint="@color/bg_opp"
                             app:tintMode="src_atop"
                             tools:ignore="ContentDescription,ImageContrastCheck" />
 
