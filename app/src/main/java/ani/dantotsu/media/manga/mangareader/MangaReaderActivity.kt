@@ -215,6 +215,10 @@ class MangaReaderActivity : AppCompatActivity() {
                 logError(e)
             }
         }
+        //check that index is not out of bounds (crash fix)
+        if (media.selected!!.sourceIndex >= model.mangaReadSources!!.names.size) {
+            media.selected!!.sourceIndex = 0
+        }
         binding.mangaReaderSource.text = model.mangaReadSources!!.names[media.selected!!.sourceIndex]
 
         binding.mangaReaderTitle.text = media.userPreferredName

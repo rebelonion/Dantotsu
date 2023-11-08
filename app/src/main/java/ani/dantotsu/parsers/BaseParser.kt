@@ -50,7 +50,7 @@ abstract class BaseParser {
      * Isn't necessary to override, but recommended, if you want to improve auto search results
      * **/
     open suspend fun autoSearch(mediaObj: Media): ShowResponse? {
-        var response = loadSavedShowResponse(mediaObj.id)
+        var response: ShowResponse? = null//loadSavedShowResponse(mediaObj.id)
         if (response != null) {
             saveShowResponse(mediaObj.id, response, true)
         } else {

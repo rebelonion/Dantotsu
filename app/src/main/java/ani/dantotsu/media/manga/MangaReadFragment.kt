@@ -417,6 +417,12 @@ open class MangaReadFragment : Fragment() {
                     val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
                     chapterNumber?.let { chapterAdapter.stopDownload(it) }
                 }
+                ACTION_DOWNLOAD_FAILED -> {
+                    val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
+                    chapterNumber?.let {
+                        chapterAdapter.removeDownload(it)
+                    }
+                }
             }
         }
     }
@@ -468,6 +474,7 @@ open class MangaReadFragment : Fragment() {
     companion object {
         const val ACTION_DOWNLOAD_STARTED = "ani.dantotsu.ACTION_DOWNLOAD_STARTED"
         const val ACTION_DOWNLOAD_FINISHED = "ani.dantotsu.ACTION_DOWNLOAD_FINISHED"
+        const val ACTION_DOWNLOAD_FAILED = "ani.dantotsu.ACTION_DOWNLOAD_FAILED"
         const val EXTRA_CHAPTER_NUMBER = "extra_chapter_number"
     }
 }

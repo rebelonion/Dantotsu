@@ -80,6 +80,16 @@ class MangaChapterAdapter(
         }
     }
 
+    fun removeDownload(chapterNumber: String) {
+        activeDownloads.remove(chapterNumber)
+        downloadedChapters.remove(chapterNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == chapterNumber }
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
+    }
+
     inner class ChapterListViewHolder(val binding: ItemChapterListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(chapterNumber: String) {
             if (activeDownloads.contains(chapterNumber)) {
