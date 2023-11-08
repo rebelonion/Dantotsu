@@ -16,7 +16,7 @@
         app:menuGravity="center"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
-        app:itemRippleColor="?attr/colorPrimary"
+        app:itemRippleColor="?attr/colorSecondary"
         app:itemTextAppearanceActive="@style/NavBarText"
         app:itemTextAppearanceInactive="@style/NavBarText"
         app:itemTextColor="@color/tab_layout_icon" />
