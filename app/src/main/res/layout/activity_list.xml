@@ -18,7 +18,7 @@
         android:id="@+id/listAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimaryContainer"
+        android:background="?attr/colorSurface"
         android:theme="@style/Theme.Dantotsu.AppBarOverlay">
 
         <LinearLayout
@@ -36,7 +36,7 @@
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                 android:textSize="16sp"
-                android:textColor="?attr/colorOnPrimaryContainer"
+                android:textColor="?attr/colorOnBackground"
                 tools:text="@string/app_name" />
 
             <Space
@@ -61,7 +61,7 @@
             android:id="@+id/listTabLayout"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="?attr/colorPrimaryContainer"
+            android:background="?attr/colorSurface"
             app:tabContentStart="32dp"
             app:tabMode="scrollable"
             app:tabPaddingEnd="16dp"
