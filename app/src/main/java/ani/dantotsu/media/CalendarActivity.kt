@@ -49,6 +49,9 @@ class CalendarActivity : AppCompatActivity() {
 
         window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor
+        binding.listTabLayout.setBackgroundColor(primaryColor)
+        binding.listAppBar.setBackgroundColor(primaryColor)
+        binding.listTitle.setTextColor(primaryTextColor)
         binding.listTabLayout.setTabTextColors(primaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
         val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
