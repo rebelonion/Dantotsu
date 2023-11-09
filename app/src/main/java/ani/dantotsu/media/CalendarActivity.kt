@@ -38,20 +38,20 @@ class CalendarActivity : AppCompatActivity() {
 
 
         val typedValue = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue, true)
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
         val primaryColor = typedValue.data
         val typedValue2 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue2, true)
-        val primaryTextColor = typedValue2.data
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue2, true)
+        val titleTextColor = typedValue2.data
         val typedValue3 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSecondary, typedValue3, true)
-        val secondaryColor = typedValue3.data
+        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
+        val primaryTextColor = typedValue3.data
 
         window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor
         binding.listTabLayout.setBackgroundColor(primaryColor)
         binding.listAppBar.setBackgroundColor(primaryColor)
-        binding.listTitle.setTextColor(primaryTextColor)
+        binding.listTitle.setTextColor(titleTextColor)
         binding.listTabLayout.setTabTextColors(primaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
         val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
