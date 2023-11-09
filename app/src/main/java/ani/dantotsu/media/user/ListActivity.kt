@@ -44,13 +44,16 @@ class ListActivity : AppCompatActivity() {
         val typedValue3 = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
         val primaryTextColor = typedValue3.data
+        val typedValue4 = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValue4, true)
+        val secondaryTextColor = typedValue4.data
 
         window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor
         binding.listTabLayout.setBackgroundColor(primaryColor)
         binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(titleTextColor)
-        binding.listTabLayout.setTabTextColors(primaryTextColor, primaryTextColor)
+        binding.listTabLayout.setTabTextColors(secondaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
         val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
         if (!uiSettings.immersiveMode) {
