@@ -3,12 +3,14 @@ package ani.dantotsu.media
 import android.app.Activity
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ani.dantotsu.FileUrl
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.anime.SelectorDialogFragment
@@ -30,6 +32,8 @@ import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
 import ani.dantotsu.currContext
 import ani.dantotsu.R
+import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.AniyomiAdapter
 import ani.dantotsu.parsers.DynamicMangaParser
@@ -44,6 +48,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 
 class MediaDetailsViewModel : ViewModel() {
     val scrolledToTop = MutableLiveData(true)
@@ -258,7 +263,28 @@ class MediaDetailsViewModel : ViewModel() {
 
     private val mangaChapter = MutableLiveData<MangaChapter?>(null)
     fun getMangaChapter(): LiveData<MangaChapter?> = mangaChapter
-    suspend fun loadMangaChapterImages(chapter: MangaChapter, selected: Selected, post: Boolean = true): Boolean {
+    suspend fun loadMangaChapterImages(chapter: MangaChapter, selected: Selected, series: String, post: Boolean = true): Boolean {
+        //check if the chapter has been downloaded already
+        val downloadsManager = Injekt.get<DownloadsManager>()
+        if(downloadsManager.mangaDownloads.contains(Download(series, chapter.title!!, Download.Type.MANGA))) {
+            val download = downloadsManager.mangaDownloads.find { it.title == series && it.chapter == chapter.title!! } ?: return false
+            //look in the downloads folder for the chapter and add all the numerically named images to the chapter
+            val directory = File(
+                currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                "Dantotsu/Manga/$series/${chapter.title!!}"
+            )
+            val images = mutableListOf<MangaImage>()
+            directory.listFiles()?.forEach {
+                if (it.nameWithoutExtension.toIntOrNull() != null) {
+                    images.add(MangaImage(FileUrl(it.absolutePath), false))
+                }
+            }
+            //sort the images by name
+            images.sortBy { it.url.url }
+            chapter.addImages(images)
+            if (post) mangaChapter.postValue(chapter)
+            return true
+        }
         return tryWithSuspend(true) {
             chapter.addImages(
                 mangaReadSources?.get(selected.sourceIndex)?.loadImages(chapter.link, chapter.sChapter) ?: return@tryWithSuspend false

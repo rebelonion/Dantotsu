@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -29,6 +30,7 @@ import kotlinx.coroutines.withContext
 import ani.dantotsu.media.manga.MangaCache
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 
 abstract class BaseImageAdapter(
     val activity: MangaReaderActivity,
@@ -151,8 +153,9 @@ abstract class BaseImageAdapter(
                     Glide.with(this@loadBitmap)
                         .asBitmap()
                         .let {
-                            if (link.url.startsWith("file://")) {
-                                it.load(link.url)
+                            val fileUri = Uri.fromFile(File(link.url)).toString()
+                            if (fileUri.startsWith("file://")) {
+                                it.load(fileUri)
                                     .skipMemoryCache(true)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                             } else {

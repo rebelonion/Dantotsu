@@ -11,7 +11,7 @@ data class MangaChapter(
     var link: String,
     var title: String? = null,
     var description: String? = null,
-    var sChapter: SChapter
+    var sChapter: SChapter,
 ) : Serializable {
     constructor(chapter: MangaChapter) : this(chapter.number, chapter.link, chapter.title, chapter.description, chapter.sChapter)
 

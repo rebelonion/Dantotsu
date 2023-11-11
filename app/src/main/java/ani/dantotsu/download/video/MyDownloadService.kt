@@ -24,7 +24,7 @@ class MyDownloadService : DownloadService(1, 1, "download_service", R.string.dow
     override fun getForegroundNotification(downloads: MutableList<Download>, notMetRequirements: Int): Notification =
         DownloadNotificationHelper(this, "download_service").buildProgressNotification(
             this,
-            R.drawable.monochrome,
+            R.drawable.mono,
             null,
             null,
             downloads,

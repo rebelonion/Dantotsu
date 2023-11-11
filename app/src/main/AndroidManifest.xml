@@ -267,6 +267,8 @@
 
         <service android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallService"
             android:exported="false" />
+
+        <service android:name=".download.manga.MangaDownloaderService" />
     </application>
 
 </manifest>

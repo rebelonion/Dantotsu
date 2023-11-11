@@ -3,6 +3,7 @@ package ani.dantotsu.parsers
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -10,11 +11,14 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import ani.dantotsu.FileUrl
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.network.interceptor.CloudflareBypassException
 import ani.dantotsu.currContext
+import ani.dantotsu.download.manga.MangaDownloaderService
+import ani.dantotsu.download.manga.ServiceDataSingleton
 import ani.dantotsu.logger
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
@@ -65,18 +69,24 @@ class AniyomiAdapter {
 class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     val extension: AnimeExtension.Installed
     var sourceLanguage = 0
+
     init {
         this.extension = extension
     }
+
     override val name = extension.name
     override val saveName = extension.name
     override val hostUrl = extension.sources.first().name
     override val isDubAvailableSeparately = false
     override val isNSFW = extension.isNsfw
-    override suspend fun loadEpisodes(animeLink: String, extra: Map<String, String>?, sAnime: SAnime): List<Episode> {
-        val source = try{
+    override suspend fun loadEpisodes(
+        animeLink: String,
+        extra: Map<String, String>?,
+        sAnime: SAnime
+    ): List<Episode> {
+        val source = try {
             extension.sources[sourceLanguage]
-        }catch (e: Exception){
+        } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         }
@@ -97,7 +107,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     var incrementingNumber = 1f
                     sortedByStringNumber.map {
                         if (it.episode_number == Float.MAX_VALUE) {
-                            it.episode_number = incrementingNumber++  // Update episode_number with the incrementing number
+                            it.episode_number =
+                                incrementingNumber++  // Update episode_number with the incrementing number
                         }
                         it
                     }
@@ -117,10 +128,14 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         return emptyList()  // Return an empty list if source is not an AnimeCatalogueSource
     }
 
-    override suspend fun loadVideoServers(episodeLink: String, extra: Map<String, String>?, sEpisode: SEpisode): List<VideoServer> {
-        val source = try{
+    override suspend fun loadVideoServers(
+        episodeLink: String,
+        extra: Map<String, String>?,
+        sEpisode: SEpisode
+    ): List<VideoServer> {
+        val source = try {
             extension.sources[sourceLanguage]
-        }catch (e: Exception){
+        } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         } as? AnimeCatalogueSource ?: return emptyList()
@@ -140,9 +155,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     }
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val source = try{
+        val source = try {
             extension.sources[sourceLanguage]
-        }catch (e: Exception){
+        } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         } as? AnimeCatalogueSource ?: return emptyList()
@@ -152,7 +167,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } catch (e: CloudflareBypassException) {
             logger("Exception in search: $e")
             withContext(Dispatchers.Main) {
-                Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT).show()
+                Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT)
+                    .show()
             }
             emptyList()
         } catch (e: Exception) {
@@ -186,9 +202,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                 sEpisode.episode_number
             }
         return Episode(
-            if(episodeNumberInt.toInt() != -1){
+            if (episodeNumberInt.toInt() != -1) {
                 episodeNumberInt.toString()
-            }else{
+            } else {
                 sEpisode.name
             },
             sEpisode.url,
@@ -215,18 +231,24 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
     val mangaCache = Injekt.get<MangaCache>()
     val extension: MangaExtension.Installed
     var sourceLanguage = 0
+
     init {
         this.extension = extension
     }
+
     override val name = extension.name
     override val saveName = extension.name
     override val hostUrl = extension.sources.first().name
     override val isNSFW = extension.isNsfw
 
-    override suspend fun loadChapters(mangaLink: String, extra: Map<String, String>?, sManga: SManga): List<MangaChapter> {
-        val source = try{
+    override suspend fun loadChapters(
+        mangaLink: String,
+        extra: Map<String, String>?,
+        sManga: SManga
+    ): List<MangaChapter> {
+        val source = try {
             extension.sources[sourceLanguage]
-        }catch (e: Exception){
+        } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         } as? HttpSource ?: return emptyList()
@@ -247,37 +269,79 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
 
     override suspend fun loadImages(chapterLink: String, sChapter: SChapter): List<MangaImage> {
-        val source = try{
+        val source = try {
             extension.sources[sourceLanguage]
-        }catch (e: Exception){
+        } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         } as? HttpSource ?: return emptyList()
-
-        return coroutineScope {
+        var imageDataList: List<ImageData> = listOf()
+        val ret = coroutineScope {
             try {
-            println("source.name " + source.name)
+                println("source.name " + source.name)
                 val res = source.getPageList(sChapter)
-                val reIndexedPages = res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
+                val reIndexedPages =
+                    res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
 
                 val deferreds = reIndexedPages.map { page ->
                     async(Dispatchers.IO) {
                         mangaCache.put(page.imageUrl ?: "", ImageData(page, source))
+                        imageDataList += ImageData(page, source)
                         logger("put page: ${page.imageUrl}")
                         pageToMangaImage(page)
                     }
                 }
 
                 deferreds.awaitAll()
+
             } catch (e: Exception) {
                 logger("loadImages Exception: $e")
-                Toast.makeText(currContext(), "Failed to load images: $e", Toast.LENGTH_SHORT).show()
+                Toast.makeText(currContext(), "Failed to load images: $e", Toast.LENGTH_SHORT)
+                    .show()
                 emptyList()
             }
         }
+        return ret
     }
 
-    suspend fun fetchAndProcessImage(page: Page, httpSource: HttpSource, context: Context): Bitmap? {
+    suspend fun imageList(chapterLink: String, sChapter: SChapter): List<ImageData>{
+        val source = try {
+            extension.sources[sourceLanguage]
+        } catch (e: Exception) {
+            sourceLanguage = 0
+            extension.sources[sourceLanguage]
+        } as? HttpSource ?: return emptyList()
+        var imageDataList: List<ImageData> = listOf()
+        coroutineScope {
+            try {
+                println("source.name " + source.name)
+                val res = source.getPageList(sChapter)
+                val reIndexedPages =
+                    res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
+
+                val deferreds = reIndexedPages.map { page ->
+                    async(Dispatchers.IO) {
+                        imageDataList += ImageData(page, source)
+                    }
+                }
+
+                deferreds.awaitAll()
+
+            } catch (e: Exception) {
+                logger("loadImages Exception: $e")
+                Toast.makeText(currContext(), "Failed to load images: $e", Toast.LENGTH_SHORT)
+                    .show()
+                emptyList()
+            }
+        }
+        return imageDataList
+    }
+
+    suspend fun fetchAndProcessImage(
+        page: Page,
+        httpSource: HttpSource,
+        context: Context
+    ): Bitmap? {
         return withContext(Dispatchers.IO) {
             try {
                 // Fetch the image
@@ -310,7 +374,6 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
     }
 
 
-
     fun fetchAndSaveImage(page: Page, httpSource: HttpSource, contentResolver: ContentResolver) {
         CoroutineScope(Dispatchers.IO).launch {
             try {
@@ -325,7 +388,13 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
                 withContext(Dispatchers.IO) {
                     // Save the Bitmap using MediaStore API
-                    saveImage(bitmap, contentResolver, "image_${System.currentTimeMillis()}.jpg", Bitmap.CompressFormat.JPEG, 100)
+                    saveImage(
+                        bitmap,
+                        contentResolver,
+                        "image_${System.currentTimeMillis()}.jpg",
+                        Bitmap.CompressFormat.JPEG,
+                        100
+                    )
                 }
 
                 inputStream?.close()
@@ -336,16 +405,28 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         }
     }
 
-    fun saveImage(bitmap: Bitmap, contentResolver: ContentResolver, filename: String, format: Bitmap.CompressFormat, quality: Int) {
+    fun saveImage(
+        bitmap: Bitmap,
+        contentResolver: ContentResolver,
+        filename: String,
+        format: Bitmap.CompressFormat,
+        quality: Int
+    ) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 val contentValues = ContentValues().apply {
                     put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
                     put(MediaStore.MediaColumns.MIME_TYPE, "image/${format.name.lowercase()}")
-                    put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Anime")
+                    put(
+                        MediaStore.MediaColumns.RELATIVE_PATH,
+                        "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Anime"
+                    )
                 }
 
-                val uri: Uri? = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+                val uri: Uri? = contentResolver.insert(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    contentValues
+                )
 
                 uri?.let {
                     contentResolver.openOutputStream(it)?.use { os ->
@@ -353,7 +434,8 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                     }
                 }
             } else {
-                val directory = File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Anime")
+                val directory =
+                    File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Anime")
                 if (!directory.exists()) {
                     directory.mkdirs()
                 }
@@ -370,11 +452,10 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
     }
 
 
-
     override suspend fun search(query: String): List<ShowResponse> {
-        val source = try{
+        val source = try {
             extension.sources[sourceLanguage]
-        }catch (e: Exception){
+        } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         } as? HttpSource ?: return emptyList()
@@ -386,7 +467,8 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         } catch (e: CloudflareBypassException) {
             logger("Exception in search: $e")
             withContext(Dispatchers.Main) {
-                Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT).show()
+                Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT)
+                    .show()
             }
             emptyList()
         } catch (e: Exception) {
@@ -460,7 +542,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             //if (parsedChapterTitle.first != null || parsedChapterTitle.second != null) {
             //    parsedChapterTitle.third
             //} else {
-                sChapter.name,
+            sChapter.name,
             //},
             null,
             sChapter
@@ -468,8 +550,10 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
     }
 
     fun parseChapterTitle(title: String): Triple<String?, String?, String> {
-        val volumePattern = Pattern.compile("(?:vol\\.?|v|volume\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
-        val chapterPattern = Pattern.compile("(?:ch\\.?|chapter\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
+        val volumePattern =
+            Pattern.compile("(?:vol\\.?|v|volume\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
+        val chapterPattern =
+            Pattern.compile("(?:ch\\.?|chapter\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
 
         val volumeMatcher = volumePattern.matcher(title)
         val chapterMatcher = chapterPattern.matcher(title)
@@ -479,10 +563,12 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
         var remainingTitle = title
         if (volumeNumber != null) {
-            remainingTitle = volumeMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
+            remainingTitle =
+                volumeMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
         }
         if (chapterNumber != null) {
-            remainingTitle = chapterMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
+            remainingTitle =
+                chapterMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
         }
 
         return Triple(volumeNumber, chapterNumber, remainingTitle.trim())
@@ -505,7 +591,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         }
     }
 
-    private fun AniVideoToSaiVideo(aniVideo: eu.kanade.tachiyomi.animesource.model.Video) : ani.dantotsu.parsers.Video {
+    private fun AniVideoToSaiVideo(aniVideo: eu.kanade.tachiyomi.animesource.model.Video): ani.dantotsu.parsers.Video {
         // Find the number value from the .quality string
         val number = Regex("""\d+""").find(aniVideo.quality)?.value?.toInt() ?: 0
 
@@ -537,7 +623,8 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
             logger("Unknown video format: $videoUrl")
             throw Exception("Unknown video format")
         }
-        val headersMap: Map<String, String> = aniVideo.headers?.toMultimap()?.mapValues { it.value.joinToString() } ?: mapOf()
+        val headersMap: Map<String, String> =
+            aniVideo.headers?.toMultimap()?.mapValues { it.value.joinToString() } ?: mapOf()
 
 
         return ani.dantotsu.parsers.Video(
@@ -550,7 +637,11 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
     private fun getVideoType(fileName: String): VideoType? {
         return when {
-            fileName.endsWith(".mp4", ignoreCase = true) || fileName.endsWith(".mkv", ignoreCase = true) -> VideoType.CONTAINER
+            fileName.endsWith(".mp4", ignoreCase = true) || fileName.endsWith(
+                ".mkv",
+                ignoreCase = true
+            ) -> VideoType.CONTAINER
+
             fileName.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
             fileName.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
             else -> VideoType.CONTAINER
@@ -563,7 +654,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         runBlocking {
             type = findSubtitleType(track.url)
         }
-        return Subtitle(track.lang, track.url, type?: SubtitleType.SRT)
+        return Subtitle(track.lang, track.url, type ?: SubtitleType.SRT)
     }
 
     private fun findSubtitleType(url: String): SubtitleType? {

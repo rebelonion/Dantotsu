@@ -23,10 +23,13 @@ import uy.kohesive.injekt.api.InjektRegistrar
 import uy.kohesive.injekt.api.addSingleton
 import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
+import ani.dantotsu.download.DownloadsManager
 
 class AppModule(val app: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(app)
+
+        addSingletonFactory { DownloadsManager(app) }
 
         addSingletonFactory { NetworkHelper(app, get()) }
 

@@ -21,6 +21,7 @@ const val PREF_DOH_MULLVAD = 9
 const val PREF_DOH_CONTROLD = 10
 const val PREF_DOH_NJALLA = 11
 const val PREF_DOH_SHECAN = 12
+const val PREF_DOH_LIBREDNS = 13
 
 fun OkHttpClient.Builder.dohCloudflare() = dns(
     DnsOverHttps.Builder().client(build())
@@ -183,4 +184,14 @@ fun OkHttpClient.Builder.dohShecan() = dns(
             InetAddress.getByName("185.51.200.2"),
         )
         .build(),
+)
+
+fun OkHttpClient.Builder.dohLibreDNS() = dns(
+    DnsOverHttps.Builder().client(build())
+        .url("https://doh.libredns.gr/dns-query".toHttpUrl())
+        .bootstrapDnsHosts(
+            InetAddress.getByName("116.202.176.26"),  // IPv4 address for LibreDNS
+            InetAddress.getByName("192.71.166.92")   // Fallback IPv4 address
+        )
+        .build()
 )

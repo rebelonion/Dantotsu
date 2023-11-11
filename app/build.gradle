@@ -21,15 +21,14 @@ android {
         minSdk 23
         targetSdk 34
         versionCode ((System.currentTimeMillis() / 60000).toInteger())
-        versionName "1.0.0.1bs"
+        versionName "1.0.0-beta02"
         signingConfig signingConfigs.debug
     }
 
     buildTypes {
         debug {
-            //applicationIdSuffix ".beta"
+            applicationIdSuffix ".beta"
             debuggable true
-            versionNameSuffix "." + gitCommitHash
         }
         release {
             debuggable false
@@ -62,7 +61,7 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:2.8.1"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
+    implementation 'com.google.code.gson:gson:2.8.9'
     implementation 'com.github.Blatzar:NiceHttp:0.4.3'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0'
     implementation 'androidx.preference:preference:1.2.1'

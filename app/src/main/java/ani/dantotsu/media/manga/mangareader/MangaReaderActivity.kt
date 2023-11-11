@@ -215,6 +215,10 @@ class MangaReaderActivity : AppCompatActivity() {
                 logError(e)
             }
         }
+        //check that index is not out of bounds (crash fix)
+        if (media.selected!!.sourceIndex >= model.mangaReadSources!!.names.size) {
+            media.selected!!.sourceIndex = 0
+        }
         binding.mangaReaderSource.text = model.mangaReadSources!!.names[media.selected!!.sourceIndex]
 
         binding.mangaReaderTitle.text = media.userPreferredName
@@ -311,7 +315,7 @@ class MangaReaderActivity : AppCompatActivity() {
             }
         }
 
-        scope.launch(Dispatchers.IO) { model.loadMangaChapterImages(chapter, media.selected!!) }
+        scope.launch(Dispatchers.IO) { model.loadMangaChapterImages(chapter, media.selected!!, media.nameMAL!!) }
     }
 
     private val snapHelper = PagerSnapHelper()
@@ -700,6 +704,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 model.loadMangaChapterImages(
                     chapters[chaptersArr.getOrNull(currentChapterIndex + 1) ?: return@launch]!!,
                     media.selected!!,
+                    media.nameMAL!!,
                     false
                 )
                 loading = false

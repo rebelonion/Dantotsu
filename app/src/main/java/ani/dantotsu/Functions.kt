@@ -207,23 +207,21 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
 fun isOnline(context: Context): Boolean {
     val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return tryWith {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val cap = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            return@tryWith if (cap != null) {
-                when {
-                    cap.hasTransport(TRANSPORT_BLUETOOTH) ||
-                            cap.hasTransport(TRANSPORT_CELLULAR) ||
-                            cap.hasTransport(TRANSPORT_ETHERNET) ||
-                            cap.hasTransport(TRANSPORT_LOWPAN) ||
-                            cap.hasTransport(TRANSPORT_USB) ||
-                            cap.hasTransport(TRANSPORT_VPN) ||
-                            cap.hasTransport(TRANSPORT_WIFI) ||
-                            cap.hasTransport(TRANSPORT_WIFI_AWARE) -> true
+        val cap = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        return@tryWith if (cap != null) {
+            when {
+                cap.hasTransport(TRANSPORT_BLUETOOTH) ||
+                        cap.hasTransport(TRANSPORT_CELLULAR) ||
+                        cap.hasTransport(TRANSPORT_ETHERNET) ||
+                        cap.hasTransport(TRANSPORT_LOWPAN) ||
+                        cap.hasTransport(TRANSPORT_USB) ||
+                        cap.hasTransport(TRANSPORT_VPN) ||
+                        cap.hasTransport(TRANSPORT_WIFI) ||
+                        cap.hasTransport(TRANSPORT_WIFI_AWARE) -> true
 
-                    else                                           -> false
-                }
-            } else false
-        } else true
+                else                                           -> false
+            }
+        } else false
     } ?: false
 }
 
@@ -732,7 +730,7 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
     if (s != null) {
         (activity ?: currActivity())?.apply {
             runOnUiThread {
-                val snackBar = Snackbar.make(window.decorView.findViewById(android.R.id.content), s, Snackbar.LENGTH_LONG)
+                val snackBar = Snackbar.make(window.decorView.findViewById(android.R.id.content), s, Snackbar.LENGTH_SHORT)
                 snackBar.view.apply {
                     updateLayoutParams<FrameLayout.LayoutParams> {
                         gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)

@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemChapterListBinding
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
@@ -48,12 +49,81 @@ class MangaChapterAdapter(
         }
     }
 
+    private val activeDownloads = mutableSetOf<String>()
+    private val downloadedChapters = mutableSetOf<String>()
+
+    fun startDownload(chapterNumber: String) {
+        activeDownloads.add(chapterNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == chapterNumber }
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
+    }
+
+    fun stopDownload(chapterNumber: String) {
+        activeDownloads.remove(chapterNumber)
+        downloadedChapters.add(chapterNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == chapterNumber }
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
+    }
+
+    fun deleteDownload(chapterNumber: String) {
+        downloadedChapters.remove(chapterNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == chapterNumber }
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
+    }
+
+    fun removeDownload(chapterNumber: String) {
+        activeDownloads.remove(chapterNumber)
+        downloadedChapters.remove(chapterNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == chapterNumber }
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
+    }
+
     inner class ChapterListViewHolder(val binding: ItemChapterListBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(chapterNumber: String) {
+            if (activeDownloads.contains(chapterNumber)) {
+                // Show spinner
+                binding.itemDownload.setImageResource(R.drawable.spinner_icon_manga)
+            } else if(downloadedChapters.contains(chapterNumber)) {
+                // Show checkmark
+                binding.itemDownload.setImageResource(R.drawable.ic_check)
+            } else {
+                // Show download icon
+                binding.itemDownload.setImageResource(R.drawable.ic_round_download_24)
+            }
+        }
         init {
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
                     fragment.onMangaChapterClick(arr[bindingAdapterPosition].number)
             }
+            binding.itemDownload.setOnClickListener {
+                if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size) {
+                    val chapterNumber = arr[bindingAdapterPosition].number
+                    if(activeDownloads.contains(chapterNumber)) {
+                        fragment.onMangaChapterStopDownloadClick(chapterNumber)
+                        return@setOnClickListener
+                    }else if(downloadedChapters.contains(chapterNumber)) {
+                        fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
+                        return@setOnClickListener
+                    }else {
+                        fragment.onMangaChapterDownloadClick(chapterNumber)
+                        startDownload(chapterNumber)
+                    }
+                }
+            }
+
         }
     }
 
@@ -80,6 +150,7 @@ class MangaChapterAdapter(
             is ChapterListViewHolder    -> {
                 val binding = holder.binding
                 val ep = arr[position]
+                holder.bind(ep.number)
                 setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
                 binding.itemChapterNumber.text = ep.number
                 if (!ep.title.isNullOrEmpty()) {

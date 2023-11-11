@@ -174,7 +174,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             true
         }
 
-        val exDns = listOf("None", "Cloudflare", "Google", "AdGuard", "Quad9", "AliDNS", "DNSPod", "360", "Quad101", "Mullvad", "Controld", "Njalla", "Shecan")
+        val exDns = listOf("None", "Cloudflare", "Google", "AdGuard", "Quad9", "AliDNS", "DNSPod", "360", "Quad101", "Mullvad", "Controld", "Njalla", "Shecan", "Libre")
         binding.settingsExtensionDns.setText(exDns[networkPreferences.dohProvider().get()], false)
         binding.settingsExtensionDns.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, exDns))
         binding.settingsExtensionDns.setOnItemClickListener { _, _, i, _ ->

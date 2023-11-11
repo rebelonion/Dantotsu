@@ -20,6 +20,7 @@
             android:gravity="center"
             android:orientation="vertical">
 
+
             <TextView
                 android:id="@+id/noInternetSad"
                 android:layout_width="wrap_content"
@@ -49,7 +50,7 @@
             android:layout_width="150dp"
             android:layout_height="64dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_margin="32dp"
+            android:layout_margin="128dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/refresh"
             app:cornerRadius="16dp"

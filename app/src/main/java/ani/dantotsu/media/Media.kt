@@ -22,7 +22,7 @@ data class Media(
     val userPreferredName: String,
 
     var cover: String? = null,
-    val banner: String? = null,
+    var banner: String? = null,
     var relation: String? = null,
     var popularity: Int? = null,
 
