@@ -14,7 +14,7 @@ class DevelopersDialogFragment : BottomSheetDialogFragment() {
 
     private val developers = arrayOf(
         Developer("rebelonion","https://avatars.githubusercontent.com/u/87634197?v=4","Owner and Maintainer","https://github.com/rebelonion"),
-        Developer("Wai What", "https://cdn.discordapp.com/avatars/928202695611908126/aeac4c867acbb8c3783356497055a426.webp?size=80", "Icon Designer", ""),
+        Developer("Wai What", "https://avatars.githubusercontent.com/u/149729762?v=4", "Icon Designer", "https://github.com/WaiWhat"),
     )
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {

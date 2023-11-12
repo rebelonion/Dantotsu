@@ -34,7 +34,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:hint="@string/anime"
-                android:textColorHint="?attr/colorPrimary"
+                android:textColorHint="@color/bg_opp"
                 android:transitionName="@string/search"
                 app:boxBackgroundColor="?attr/colorPrimaryContainer"
                 app:boxCornerRadiusBottomEnd="28dp"
@@ -42,7 +42,7 @@
                 app:boxCornerRadiusTopEnd="28dp"
                 app:boxCornerRadiusTopStart="28dp"
                 app:endIconDrawable="@drawable/ic_round_search_24"
-                app:endIconTint="?attr/colorPrimary"
+                app:endIconTint="@color/bg_opp"
                 app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:hintAnimationEnabled="true">
 
@@ -73,7 +73,7 @@
                     android:layout_width="52dp"
                     android:layout_height="52dp"
                     android:scaleType="center"
-                    android:tint="?attr/colorPrimary"
+                    android:tint="@color/bg_opp"
                     app:srcCompat="@drawable/ic_round_settings_24"
                     tools:ignore="ContentDescription,ImageContrastCheck" />
 

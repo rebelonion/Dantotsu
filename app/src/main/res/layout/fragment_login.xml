@@ -64,7 +64,7 @@
                 android:layout_weight="1"
                 android:padding="6dp"
                 android:src="@drawable/ic_discord"
-                app:tint="?attr/colorSecondary"
+                app:tint="?attr/colorOutline"
                 tools:ignore="ContentDescription" />
 
             <ImageView
@@ -74,7 +74,7 @@
                 android:layout_margin="8dp"
                 android:padding="6dp"
                 android:src="@drawable/ic_github"
-                app:tint="?attr/colorSecondary"
+                app:tint="?attr/colorOutline"
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>

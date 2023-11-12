@@ -176,7 +176,8 @@
                     app:labelStyle="@style/fontTooltip"
                     app:thumbRadius="8dp"
                     app:tickColor="#0000"
-                    app:trackColorInactive="@color/bg_white"
+                    app:trackColorInactive="@color/grey_60"
+                    app:trackColorActive="?attr/colorPrimary"
                     app:trackHeight="2dp" />
 
             </FrameLayout>
