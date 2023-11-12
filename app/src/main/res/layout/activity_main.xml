@@ -45,7 +45,7 @@
             app:abb_indicatorLocation="bottom"
             app:abb_indicatorMargin="28dp"
             app:abb_selectedTabType="text"
-            app:abb_tabColor="?attr/colorSecondary"
+            app:abb_tabColor="?attr/colorOutline"
             app:abb_tabColorDisabled="?attr/colorPrimaryContainer"
             app:abb_tabColorSelected="?attr/colorPrimary"
             app:abb_tabs="@menu/bottom_navbar_menu"

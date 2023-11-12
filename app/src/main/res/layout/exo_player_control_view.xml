@@ -530,7 +530,7 @@
                 app:ad_marker_color="#A9FFFFFF"
                 app:bar_height="2dp"
                 app:played_color="?attr/colorPrimary"
-                app:scrubber_color="?attr/colorPrimaryContainer"
+                app:scrubber_color="?attr/colorPrimary"
                 tools:ignore="SpeakableTextPresentCheck" />
 
         </LinearLayout>

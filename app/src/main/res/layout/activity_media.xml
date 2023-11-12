@@ -122,8 +122,8 @@
                     android:singleLine="true"
                     android:text="@string/add"
                     android:textAllCaps="true"
-                    android:textColor="?attr/colorPrimary"
-                    app:strokeColor="?attr/colorPrimary"
+                    android:textColor="?attr/colorSecondary"
+                    app:strokeColor="@color/bg_opp"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:cornerRadius="16dp"
@@ -202,7 +202,7 @@
                         android:padding="8dp"
                         android:tintMode="src_atop"
                         app:srcCompat="@drawable/ic_round_favorite_border_24"
-                        app:tint="?attr/colorSecondary"
+                        app:tint="@color/bg_opp"
                         tools:ignore="ContentDescription,ImageContrastCheck" />
 
                     <ImageView
@@ -212,7 +212,7 @@
                         android:layout_marginStart="-8dp"
                         android:padding="8dp"
                         app:srcCompat="@drawable/ic_round_share_24"
-                        app:tint="?attr/colorSecondary"
+                        app:tint="@color/bg_opp"
                         app:tintMode="src_atop"
                         tools:ignore="ContentDescription,ImageContrastCheck" />
 
