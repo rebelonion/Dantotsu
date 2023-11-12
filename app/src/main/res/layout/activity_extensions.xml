@@ -15,8 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/extension_color">
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,7 +64,6 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="@color/extension_color"
             app:tabContentStart="32dp"
             app:tabMode="scrollable"
             app:tabPaddingEnd="16dp"
