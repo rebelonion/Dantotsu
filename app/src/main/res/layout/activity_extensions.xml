@@ -15,12 +15,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/extension_color">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="0dp"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
                 <androidx.cardview.widget.CardView
@@ -31,29 +31,23 @@
                     app:cardElevation="0dp"
                     >
 
-                    <ImageButton
-                        android:id="@+id/settingsBack"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:background="@color/nav_bg_inv"
-                        android:padding="16dp"
-                        app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
-                        app:tint="?attr/colorOnBackground"
-                        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
                 </androidx.cardview.widget.CardView>
 
                 <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textAlignment="center"
-                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center"
                     android:text="@string/extensions"
-                    android:textSize="28sp" />
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="16sp" />
 
                 <Space
-                    android:layout_width="80dp"
-                    android:layout_height="80dp" />
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"  />
 
             </LinearLayout>
 
@@ -65,49 +59,18 @@
                 tools:ignore="UseCompoundDrawables">
             </LinearLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/searchView"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="8dp"
-                android:transitionName="@string/search"
-                app:boxBackgroundColor="@color/bg"
-                app:boxBackgroundMode="outline"
-                app:boxCornerRadiusBottomEnd="28dp"
-                app:boxCornerRadiusBottomStart="28dp"
-                app:boxCornerRadiusTopEnd="28dp"
-                app:boxCornerRadiusTopStart="28dp"
-                app:endIconDrawable="@drawable/ic_round_search_24"
-                app:hintAnimationEnabled="true">
-
-                <AutoCompleteTextView
-                    android:id="@+id/searchViewText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/poppins_bold"
-                    android:imeOptions="actionSearch"
-                    android:inputType="textPersonName"
-                    android:selectAllOnFocus="true"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
-                    tools:ignore="LabelFor,TextContrastCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabTextColor="?attr/colorOnBackground"
-            selectedTabIndicatorColor="?attr/colorPrimary"
-            app:tabIndicatorColor="?attr/colorPrimary"
+            android:layout_height="48dp"
+            android:background="@color/extension_color"
+            app:tabContentStart="32dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="16dp"
+            app:tabPaddingStart="16dp"
+            app:tabTextAppearance="@style/NavBarText"
             app:tabGravity="fill">
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
@@ -124,8 +87,42 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Available Manga"/>
+                android:text="Available Manga"
+                tools:ignore="HardcodedText" />
         </com.google.android.material.tabs.TabLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchView"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:transitionName="@string/search"
+            app:boxBackgroundColor="@color/bg"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="28dp"
+            app:boxCornerRadiusBottomStart="28dp"
+            app:boxCornerRadiusTopEnd="28dp"
+            app:boxCornerRadiusTopStart="28dp"
+            app:endIconDrawable="@drawable/ic_round_search_24"
+            app:hintAnimationEnabled="true">
+
+            <AutoCompleteTextView
+                android:id="@+id/searchViewText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_bold"
+                android:imeOptions="actionSearch"
+                android:inputType="textPersonName"
+                android:padding="8dp"
+                android:selectAllOnFocus="true"
+                android:textSize="14sp"
+
+                tools:ignore="LabelFor,TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"

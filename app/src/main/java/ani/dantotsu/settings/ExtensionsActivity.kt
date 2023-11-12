@@ -92,13 +92,6 @@ class ExtensionsActivity : AppCompatActivity()  {
             bottomMargin = navBarHeight
         }
 
-        onBackPressedDispatcher.addCallback(this, restartMainActivity)
-
-        binding.settingsBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-
-
     }
 
 }
