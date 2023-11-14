@@ -4,24 +4,49 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
-    android:paddingTop="16dp"
-    android:paddingBottom="16dp">
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <ImageView
         android:id="@+id/extensionIconImageView"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="16dp"/>
+        android:layout_marginEnd="3dp" />
 
-    <TextView
-        android:id="@+id/extensionNameTextView"
+    <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_gravity="center_vertical"
-        android:textSize="18sp"
-        android:text="Extension Name" />
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/extensionNameTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Extension Name"
+            android:textSize="15sp"
+            android:fontFamily="@font/poppins_semi_bold"/>
+
+        <TextView
+            android:id="@+id/extensionVersionTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1"
+            android:textSize="11sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/closeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="16dp"
+        android:textStyle="bold"
+        android:text="Uninstall"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="14sp"/>
 
     <ImageView
         android:id="@+id/settingsImageView"
@@ -31,16 +56,6 @@
         app:tint="?attr/colorOnBackground"
         android:layout_gravity="center_vertical"
         android:layout_weight="0"
-        android:layout_marginEnd="16dp"
         android:contentDescription="Settings"/>
 
-    <TextView
-        android:id="@+id/closeTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:textStyle="bold"
-        android:text="Uninstall"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="14sp"/>
 </LinearLayout>
