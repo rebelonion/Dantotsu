@@ -106,10 +106,13 @@ open class MangaReadFragment : Fragment() {
             addAction(ACTION_DOWNLOAD_FINISHED)
         }
 
+<<<<<<< Updated upstream
         requireContext().registerReceiver(downloadStatusReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
+=======
+        ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
+>>>>>>> Stashed changes
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
-
 
         var maxGridSize = (screenWidth / 100f).roundToInt()
         maxGridSize = max(4, maxGridSize - (maxGridSize % 2))
