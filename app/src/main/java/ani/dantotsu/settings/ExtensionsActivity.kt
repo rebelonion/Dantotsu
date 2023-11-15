@@ -6,12 +6,14 @@ import android.os.Build.VERSION.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
 import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -21,6 +23,9 @@ import ani.dantotsu.databinding.ActivityExtensionsBinding
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ExtensionsActivity : AppCompatActivity()  {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
@@ -86,6 +91,12 @@ class ExtensionsActivity : AppCompatActivity()  {
         initActivity(this)
 
 
+        binding.languageselect.setOnClickListener {
+            val popup = PopupMenu(this, it)
+
+            popup.inflate(R.menu.launguage_selector_menu)
+            popup.show()
+        }
 
         binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
