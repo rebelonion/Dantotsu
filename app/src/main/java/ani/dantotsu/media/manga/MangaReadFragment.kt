@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils.clamp
@@ -96,13 +98,15 @@ open class MangaReadFragment : Fragment() {
         return _binding?.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val intentFilter = IntentFilter().apply {
             addAction(ACTION_DOWNLOAD_STARTED)
             addAction(ACTION_DOWNLOAD_FINISHED)
         }
-        requireContext().registerReceiver(downloadStatusReceiver, intentFilter)
+
+        requireContext().registerReceiver(downloadStatusReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
 
