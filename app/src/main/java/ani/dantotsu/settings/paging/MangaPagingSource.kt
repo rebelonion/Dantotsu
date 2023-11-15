@@ -154,7 +154,13 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
         }
         val extensionIconImageView: ImageView = binding.extensionIconImageView
         fun bind(extension: MangaExtension.Available) {
+            val nsfw = if (extension.isNsfw) {
+                "(18+)"
+            } else {
+                ""
+            }
             binding.extensionNameTextView.text = extension.name
+            binding.extensionVersionTextView.text = "${extension.versionName} $nsfw"
         }
     }
 }

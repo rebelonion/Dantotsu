@@ -151,8 +151,14 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
             }
         }
         val extensionIconImageView: ImageView = binding.extensionIconImageView
-        fun bind(extension: AnimeExtension.Available) {
+            fun bind(extension: AnimeExtension.Available) {
+            val nsfw = if (extension.isNsfw) {
+                "(18+)"
+            } else {
+                ""
+            }
             binding.extensionNameTextView.text = extension.name
+            binding.extensionVersionTextView.text = "${extension.versionName} $nsfw"
         }
     }
 }

@@ -209,8 +209,15 @@ class InstalledAnimeExtensionsFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val extension = getItem(position)  // Use getItem() from ListAdapter
+            val extension = getItem(position) // Use getItem() from ListAdapter
+            val nsfw = if (extension.isNsfw) {
+                "(18+)"
+            } else {
+                ""
+            }
+
             holder.extensionNameTextView.text = extension.name
+            holder.extensionVersionTextView.text = "${extension.versionName} $nsfw"
             if (!skipIcons) {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }
@@ -235,6 +242,7 @@ class InstalledAnimeExtensionsFragment : Fragment() {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val extensionNameTextView: TextView = view.findViewById(R.id.extensionNameTextView)
+            val extensionVersionTextView: TextView = view.findViewById(R.id.extensionVersionTextView)
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: TextView = view.findViewById(R.id.closeTextView)
