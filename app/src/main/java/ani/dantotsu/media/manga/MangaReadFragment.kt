@@ -98,7 +98,6 @@ open class MangaReadFragment : Fragment() {
         return _binding?.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val intentFilter = IntentFilter().apply {
@@ -106,11 +105,8 @@ open class MangaReadFragment : Fragment() {
             addAction(ACTION_DOWNLOAD_FINISHED)
         }
 
-<<<<<<< Updated upstream
-        requireContext().registerReceiver(downloadStatusReceiver, intentFilter, Context.RECEIVER_NOT_EXPORTED)
-=======
         ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
->>>>>>> Stashed changes
+        
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
 
