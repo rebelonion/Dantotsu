@@ -15,7 +15,7 @@ import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.loadData
 import com.bumptech.glide.Glide
@@ -83,7 +83,7 @@ class AnimeExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = if(Anilist.adult) {
+        val filternfsw = if(SettingsActivity.isNsfwEnabled) {
             filteredExtensions
         } else {
             filteredExtensions.filterNot { it.isNsfw }

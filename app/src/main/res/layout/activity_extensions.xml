@@ -57,7 +57,7 @@
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/sort_by"
                     app:tint="?attr/colorOnBackground"
-                    app:srcCompat="@drawable/ic_round_translate" />
+                    app:srcCompat="@drawable/ic_round_translate_24" />
             </LinearLayout>
 
             <LinearLayout

@@ -154,7 +154,7 @@
     <string name="sequel">Sequel</string>
 
     <string name="anilist_settings">Anilist Settings</string>
-    <string name="extension_settings">Extension Settings</string>
+    <string name="extension_settings">Extension</string>
     <string name="downloads">Downloads</string>
     <string name="settings">Settings</string>
     <string name="extensions">Extensions</string>
@@ -625,6 +625,7 @@
     <string name="view_manga">View Manga</string>
     <string name="force_legacy_installer">Force Legacy Installer</string>
     <string name="extensions_settings">Extensions</string>
+    <string name="NSFWExtention">NSFW Extensions</string>
     <string name="skip_loading_extension_icons">Skip loading extension icons</string>
     <string name="use_material_you">Use Material You</string>
     <string name="extension_specific_dns">Extension-specific DNS</string>
