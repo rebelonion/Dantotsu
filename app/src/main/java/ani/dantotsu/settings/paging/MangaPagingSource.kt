@@ -87,7 +87,7 @@ class MangaExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = if(SettingsActivity.isNsfwEnabled) {
+        val filternfsw = if(SettingsActivity.isNsfwEnabled) {//TODO
             filteredExtensions
         } else {
             filteredExtensions.filterNot { it.isNsfw }
