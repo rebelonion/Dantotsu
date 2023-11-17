@@ -215,15 +215,9 @@ class InstalledMangaExtensionsFragment : Fragment() {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }
             if (extension.hasUpdate) {
-                holder.closeTextView.text = "Update"
-                holder.closeTextView.setTextColor(
-                    ContextCompat.getColor(
-                        holder.itemView.context,
-                        R.color.warning
-                    )
-                )
+                holder.closeTextView.setImageResource(R.drawable.ic_round_sync_24)
             } else {
-                holder.closeTextView.text = "Uninstall"
+                holder.closeTextView.setImageResource(R.drawable.ic_round_delete_24)
             }
             holder.closeTextView.setOnClickListener {
                 onUninstallClicked(extension)
@@ -238,7 +232,7 @@ class InstalledMangaExtensionsFragment : Fragment() {
             val extensionVersionTextView: TextView = view.findViewById(R.id.extensionVersionTextView)
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
-            val closeTextView: TextView = view.findViewById(R.id.closeTextView)
+            val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
         }
 
         companion object {
