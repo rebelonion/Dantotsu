@@ -15,7 +15,7 @@
         android:layout_marginEnd="3dp" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="245dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
@@ -25,37 +25,37 @@
             android:id="@+id/extensionNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semi_bold"
             android:text="Extension Name"
-            android:textSize="15sp"
-            android:fontFamily="@font/poppins_semi_bold"/>
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/extensionVersionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:text="version"
             android:textSize="11sp" />
     </LinearLayout>
 
-    <TextView
+    <ImageView
+        android:id="@+id/settingsImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginEnd="10dp"
+        android:layout_weight="0"
+        android:contentDescription="Settings"
+        android:src="@drawable/ic_round_dots_vertical_24"
+        app:tint="?attr/colorOnBackground" />
+
+    <ImageView
         android:id="@+id/closeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="16dp"
-        android:textStyle="bold"
-        android:text="Uninstall"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="14sp"/>
-
-    <ImageView
-        android:id="@+id/settingsImageView"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:src="@drawable/ic_round_settings_24"
-        app:tint="?attr/colorOnBackground"
-        android:layout_gravity="center_vertical"
         android:layout_weight="0"
-        android:contentDescription="Settings"/>
+        android:contentDescription="uninstall"
+        android:src="@drawable/ic_round_delete_24"
+        app:tint="?attr/colorOnBackground" />
 
 </LinearLayout>

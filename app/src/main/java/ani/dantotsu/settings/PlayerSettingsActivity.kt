@@ -183,7 +183,11 @@ class PlayerSettingsActivity : AppCompatActivity() {
             settings.doubleTap = isChecked
             saveData(player, settings)
         }
-
+        binding.playerSettingsFastForward.isChecked = settings.fastforward
+        binding.playerSettingsFastForward.setOnCheckedChangeListener { _, isChecked ->
+            settings.fastforward = isChecked
+            saveData(player, settings)
+        }
         binding.playerSettingsSeekTime.value = settings.seekTime.toFloat()
         binding.playerSettingsSeekTime.addOnChangeListener { _, value, _ ->
             settings.seekTime = value.toInt()

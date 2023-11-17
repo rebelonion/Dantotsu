@@ -36,13 +36,13 @@
             android:textSize="11sp" />
     </LinearLayout>
 
-    <TextView
+    <ImageView
         android:id="@+id/closeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:textStyle="bold"
-        android:text="Install"
+        android:src="@drawable/ic_round_download_24"
         android:textColor="?attr/colorPrimary"
         android:textSize="14sp"/>
 </LinearLayout>

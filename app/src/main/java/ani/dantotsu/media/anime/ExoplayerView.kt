@@ -823,7 +823,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
             //FastRewind (Left Panel)
             val fastRewindDetector = GestureDetector(this, object : GesturesListener() {
-                override fun onLongClick(event: MotionEvent) = fastForward()
+                override fun onLongClick(event: MotionEvent) {
+                    if (settings.fastforward) fastForward()
+                }
 
                 override fun onDoubleClick(event: MotionEvent) {
                     doubleTap(false, event)
@@ -853,8 +855,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
             //FastForward (Right Panel)
             val fastForwardDetector = GestureDetector(this, object : GesturesListener() {
-                override fun onLongClick(event: MotionEvent) = fastForward()
-
+                override fun onLongClick(event: MotionEvent) {
+                    if (settings.fastforward) fastForward()
+                }
                 override fun onDoubleClick(event: MotionEvent) {
                     doubleTap(true, event)
                 }

@@ -15,6 +15,7 @@ import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.loadData
 import com.bumptech.glide.Glide
@@ -82,16 +83,20 @@ class AnimeExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-
+        val filternfsw = if(SettingsActivity.isNsfwEnabled) {//TODO
+            filteredExtensions
+        } else {
+            filteredExtensions.filterNot { it.isNsfw }
+        }
         return try {
-            val sublist = filteredExtensions.subList(
+            val sublist = filternfsw.subList(
                 fromIndex = position,
-                toIndex = (position + params.loadSize).coerceAtMost(filteredExtensions.size)
+                toIndex = (position + params.loadSize).coerceAtMost(filternfsw.size)
             )
             LoadResult.Page(
                 data = sublist,
                 prevKey = if (position == 0) null else position - params.loadSize,
-                nextKey = if (position + params.loadSize >= filteredExtensions.size) null else position + params.loadSize
+                nextKey = if (position + params.loadSize >= filternfsw.size) null else position + params.loadSize
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

@@ -40,6 +40,7 @@ data class PlayerSettings(
     var focusPause: Boolean = true,
     var gestures: Boolean = true,
     var doubleTap: Boolean = true,
+    var fastforward: Boolean = true,
     var seekTime: Int = 10,
     var skipTime: Int = 85,
 
