@@ -50,11 +50,6 @@ class SettingsActivity : AppCompatActivity() {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@SettingsActivity)
     }
-
-    companion object {
-        @Volatile
-        var isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: false
-    }
     lateinit var binding: ActivitySettingsBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private val networkPreferences = Injekt.get<NetworkPreferences>()
@@ -174,7 +169,6 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
         binding.NSFWExtension.isChecked = loadData("NFSWExtension") ?: false
         binding.NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
-            isNsfwEnabled = isChecked
             saveData("NFSWExtension", isChecked)
 
         }
