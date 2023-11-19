@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
@@ -32,7 +33,8 @@
             android:id="@+id/extensionVersionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="version"
             android:textSize="11sp" />
     </LinearLayout>
 
@@ -41,8 +43,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:textStyle="bold"
         android:src="@drawable/ic_round_download_24"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="14sp"/>
+        android:contentDescription="install"
+        android:textSize="14sp"
+        app:tint="?attr/colorOnBackground"/>
 </LinearLayout>

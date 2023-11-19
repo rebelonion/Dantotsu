@@ -33,6 +33,7 @@
             android:id="@+id/extensionVersionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semi_bold"
             android:text="version"
             android:textSize="11sp" />
     </LinearLayout>
