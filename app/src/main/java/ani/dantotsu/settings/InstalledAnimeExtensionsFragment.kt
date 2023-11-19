@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -24,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
 import ani.dantotsu.loadData
+import ani.dantotsu.saveData
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
@@ -215,9 +215,33 @@ class InstalledAnimeExtensionsFragment : Fragment() {
             } else {
                 ""
             }
+            val lang = when (extension.lang) {
+                "all" -> "Multi"
+                "ar" -> "Arabic"
+                "de" -> "German"
+                "en" -> "English"
+                "es" -> "Spanish"
+                "fr" -> "French"
+                "id" -> "Indonesian"
+                "it" -> "Italian"
+                "ja" -> "Japanese"
+                "ko" -> "Korean"
+                "pl" -> "Polish"
+                "pt-BR" -> "Portuguese (Brazil)"
+                "ru" -> "Russian"
+                "th" -> "Thai"
+                "tr" -> "Turkish"
+                "uk" -> "Ukrainian"
+                "vi" -> "Vietnamese"
+                "zh" -> "Chinese"
+                "zh-Hans" -> "Chinese (Simplified)"
 
+                else -> ""
+            }
+
+            saveData("language", lang)
             holder.extensionNameTextView.text = extension.name
-            holder.extensionVersionTextView.text = "${extension.versionName} $nsfw"
+            holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
             if (!skipIcons) {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }

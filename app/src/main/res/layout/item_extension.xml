@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semi_bold"
             android:text="version"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
     <ImageView
@@ -45,7 +45,6 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="10dp"
         android:layout_weight="0"
-        android:contentDescription="Settings"
         android:src="@drawable/ic_round_dots_vertical_24"
         app:tint="?attr/colorOnBackground" />
 
@@ -55,7 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="0"
-        android:contentDescription="uninstall"
         android:src="@drawable/ic_round_delete_24"
         app:tint="?attr/colorOnBackground" />
 

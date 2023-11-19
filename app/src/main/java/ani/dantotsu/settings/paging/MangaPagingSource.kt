@@ -1,6 +1,6 @@
 package ani.dantotsu.settings.paging
 
-import android.util.Log
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -16,7 +16,6 @@ import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.loadData
 import com.bumptech.glide.Glide
@@ -28,7 +27,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
-import java.lang.Math.min
 
 class MangaExtensionsViewModelFactory(
     private val mangaExtensionManager: MangaExtensionManager
@@ -82,7 +80,7 @@ class MangaExtensionPagingSource(
         val installedExtensions = installedExtensionsFlow.first().map { it.pkgName }.toSet()
         val availableExtensions = availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
         val query = searchQuery.first()
-        var isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: false
+        val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: false
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
@@ -165,8 +163,31 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
             } else {
                 ""
             }
+            val lang = when (extension.lang) {
+                "all" -> "Multi"
+                "ar" -> "Arabic"
+                "de" -> "German"
+                "en" -> "English"
+                "es" -> "Spanish"
+                "fr" -> "French"
+                "id" -> "Indonesian"
+                "it" -> "Italian"
+                "ja" -> "Japanese"
+                "ko" -> "Korean"
+                "pl" -> "Polish"
+                "pt-BR" -> "Portuguese (Brazil)"
+                "ru" -> "Russian"
+                "th" -> "Thai"
+                "tr" -> "Turkish"
+                "uk" -> "Ukrainian"
+                "vi" -> "Vietnamese"
+                "zh" -> "Chinese"
+                "zh-Hans" -> "Chinese (Simplified)"
+
+                else -> ""
+            }
             binding.extensionNameTextView.text = extension.name
-            binding.extensionVersionTextView.text = "${extension.versionName} $nsfw"
+            binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }
     }
 }

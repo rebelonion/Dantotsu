@@ -12,7 +12,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:layout_marginEnd="3dp"/>
+        android:layout_marginEnd="3dp" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semi_bold"
             android:text="version"
-            android:textSize="11sp" />
+            android:textSize="10sp" />
     </LinearLayout>
 
     <ImageView
@@ -44,7 +44,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_round_download_24"
-        android:contentDescription="install"
         android:textSize="14sp"
         app:tint="?attr/colorOnBackground"/>
 </LinearLayout>
