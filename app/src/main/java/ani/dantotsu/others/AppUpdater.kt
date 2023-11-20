@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.net.Uri
 import android.os.Environment
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
@@ -142,7 +143,8 @@ object AppUpdater {
             -1
         }
         if (id == -1L) return true
-        registerReceiver(
+        ContextCompat.registerReceiver(
+            this,
             object : BroadcastReceiver() {
                 @SuppressLint("Range")
                 override fun onReceive(context: Context?, intent: Intent?) {
@@ -171,7 +173,8 @@ object AppUpdater {
                         logError(e)
                     }
                 }
-            }, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE)
+            }, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE),
+            ContextCompat.RECEIVER_NOT_EXPORTED
         )
         return true
     }

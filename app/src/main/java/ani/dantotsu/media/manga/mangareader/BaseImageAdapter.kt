@@ -118,7 +118,7 @@ abstract class BaseImageAdapter(
     abstract suspend fun loadImage(position: Int, parent: View): Boolean
 
     companion object {
-        suspend fun Context.loadBitmap_old(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? {
+        suspend fun Context.loadBitmap_old(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? { //still used in some places
             return tryWithSuspend {
                 withContext(Dispatchers.IO) {
                     Glide.with(this@loadBitmap_old)
@@ -154,8 +154,9 @@ abstract class BaseImageAdapter(
                         .asBitmap()
                         .let {
                             val fileUri = Uri.fromFile(File(link.url)).toString()
-                            if (fileUri.startsWith("file://")) {
-                                it.load(fileUri)
+                            val localFile = File(link.url)
+                            if (localFile.exists()) {
+                                it.load(localFile.absoluteFile)
                                     .skipMemoryCache(true)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                             } else {

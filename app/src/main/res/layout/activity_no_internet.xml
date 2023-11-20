@@ -9,52 +9,20 @@
         android:layout_height="match_parent"
         tools:ignore="ContentDescription" />
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <include
+        android:id="@+id/included_navbar"
+        layout="@layout/item_navbar" />
+
     <FrameLayout
-        android:id="@+id/refreshContainer"
+        android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:orientation="vertical">
-
-
-            <TextView
-                android:id="@+id/noInternetSad"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_thin"
-                android:text="@string/sad"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="64sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:text="@string/no_internet"
-                android:textAlignment="center"
-                android:textColor="?attr/colorOnBackground"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/noInternetSad" />
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/refreshButton"
-            android:layout_width="150dp"
-            android:layout_height="64dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_margin="128dp"
-            android:fontFamily="@font/poppins_bold"
-            android:text="@string/refresh"
-            app:cornerRadius="16dp"
-            app:icon="@drawable/ic_round_refresh_24" />
     </FrameLayout>
+
 </FrameLayout>
 

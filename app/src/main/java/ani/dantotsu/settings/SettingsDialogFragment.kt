@@ -10,14 +10,17 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Switch
 import androidx.core.content.ContextCompat
 import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
+import ani.dantotsu.download.DownloadContainerActivity
+import ani.dantotsu.download.manga.OfflineMangaFragment
 
 
-class SettingsDialogFragment : BottomSheetDialogFragment() {
+class SettingsDialogFragment(val pageType: PageType) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!
 
@@ -70,18 +73,42 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             dismiss()
         }
         binding.settingsDownloads.setSafeOnClickListener {
-            try {
-                val arrayOfFiles = ContextCompat.getExternalFilesDirs(requireContext(), null)
-                startActivity(
-                    if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
-                        val parentDirectory = arrayOfFiles[1].toString()
-                        val intent = Intent(Intent.ACTION_VIEW)
-                        intent.setDataAndType(Uri.parse(parentDirectory), "resource/folder")
-                    } else Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
-                )
-            } catch (e: ActivityNotFoundException) {
-                toast(getString(R.string.file_manager_not_found))
+            when(pageType) {
+                PageType.MANGA -> {
+                    val intent = Intent(activity, DownloadContainerActivity::class.java)
+                    intent.putExtra("FRAGMENT_CLASS_NAME", OfflineMangaFragment::class.java.name)
+                    startActivity(intent)
+                }
+                PageType.ANIME -> {
+                    try {
+                        val arrayOfFiles = ContextCompat.getExternalFilesDirs(requireContext(), null)
+                        startActivity(
+                            if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
+                                val parentDirectory = arrayOfFiles[1].toString()
+                                val intent = Intent(Intent.ACTION_VIEW)
+                                intent.setDataAndType(Uri.parse(parentDirectory), "resource/folder")
+                            } else Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
+                        )
+                    } catch (e: ActivityNotFoundException) {
+                        toast(getString(R.string.file_manager_not_found))
+                    }
+                }
+                PageType.HOME -> {
+                    try {
+                        val arrayOfFiles = ContextCompat.getExternalFilesDirs(requireContext(), null)
+                        startActivity(
+                            if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
+                                val parentDirectory = arrayOfFiles[1].toString()
+                                val intent = Intent(Intent.ACTION_VIEW)
+                                intent.setDataAndType(Uri.parse(parentDirectory), "resource/folder")
+                            } else Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
+                        )
+                    } catch (e: ActivityNotFoundException) {
+                        toast(getString(R.string.file_manager_not_found))
+                    }
+                }
             }
+
             dismiss()
         }
     }
@@ -89,5 +116,11 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object{
+        enum class PageType{
+            MANGA, ANIME, HOME
+        }
     }
 }

@@ -107,7 +107,7 @@ class HomeFragment : Fragment() {
         }
 
         binding.homeUserAvatarContainer.setSafeOnClickListener {
-            SettingsDialogFragment().show(parentFragmentManager, "dialog")
+            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.HOME).show(parentFragmentManager, "dialog")
         }
 
         binding.homeContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {

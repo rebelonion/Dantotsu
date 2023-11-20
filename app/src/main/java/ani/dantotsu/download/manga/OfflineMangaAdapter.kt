@@ -17,7 +17,7 @@ class OfflineMangaAdapter(private val context: Context, private val items: List<
         return items.size
     }
 
-    override fun getItem(position: Int): Any? {
+    override fun getItem(position: Int): Any {
         return items[position]
     }
 

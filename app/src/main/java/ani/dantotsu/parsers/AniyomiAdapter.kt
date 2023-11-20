@@ -150,7 +150,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     }
 
 
-    override suspend fun getVideoExtractor(server: VideoServer): VideoExtractor? {
+    override suspend fun getVideoExtractor(server: VideoServer): VideoExtractor {
         return VideoServerPassthrough(server)
     }
 

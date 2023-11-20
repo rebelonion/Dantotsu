@@ -51,7 +51,7 @@ abstract class BaseParser {
      * **/
     open suspend fun autoSearch(mediaObj: Media): ShowResponse? {
         var response: ShowResponse? = null//loadSavedShowResponse(mediaObj.id)
-        if (response != null) {
+        if (response != null && this !is OfflineMangaParser) {
             saveShowResponse(mediaObj.id, response, true)
         } else {
             setUserText("Searching : ${mediaObj.mainName()}")

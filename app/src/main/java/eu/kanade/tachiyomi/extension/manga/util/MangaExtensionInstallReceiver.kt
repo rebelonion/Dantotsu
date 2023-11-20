@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import androidx.core.content.ContextCompat
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
 import kotlinx.coroutines.CoroutineStart
@@ -27,7 +28,7 @@ internal class MangaExtensionInstallReceiver(private val listener: Listener) :
      * Registers this broadcast receiver
      */
     fun register(context: Context) {
-        context.registerReceiver(this, filter)
+        ContextCompat.registerReceiver(context, this, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     /**

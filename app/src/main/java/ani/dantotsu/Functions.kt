@@ -420,7 +420,13 @@ fun String.findBetween(a: String, b: String): String? {
 
 fun ImageView.loadImage(url: String?, size: Int = 0) {
     if (!url.isNullOrEmpty()) {
-        loadImage(FileUrl(url), size)
+        val localFile = File(url)
+        if (localFile.exists()) {
+            loadLocalImage(localFile, size)
+        }
+        else {
+            loadImage(FileUrl(url), size)
+        }
     }
 }
 
@@ -429,6 +435,14 @@ fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
         tryWith {
             val glideUrl = GlideUrl(file.url) { file.headers }
             Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size).into(this)
+        }
+    }
+}
+
+fun ImageView.loadLocalImage(file: File?, size: Int = 0) {
+    if (file?.exists() == true) {
+        tryWith {
+            Glide.with(this.context).load(file).transition(withCrossFade()).override(size).into(this)
         }
     }
 }
