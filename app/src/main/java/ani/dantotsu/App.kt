@@ -11,16 +11,27 @@ import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import eu.kanade.tachiyomi.data.notification.Notifications
 import tachiyomi.core.util.system.logcat
 import ani.dantotsu.others.DisabledReports
+import ani.dantotsu.parsers.AnimeSources
+import ani.dantotsu.parsers.MangaSources
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
 import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 @SuppressLint("StaticFieldLeak")
 class App : MultiDexApplication() {
+    private lateinit var animeExtensionManager: AnimeExtensionManager
+    private lateinit var mangaExtensionManager: MangaExtensionManager
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -50,6 +61,22 @@ class App : MultiDexApplication() {
         setupNotificationChannels()
         if (!LogcatLogger.isInstalled) {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
+        }
+
+        animeExtensionManager = Injekt.get()
+        mangaExtensionManager = Injekt.get()
+
+        val animeScope = CoroutineScope(Dispatchers.Default)
+        animeScope.launch {
+            animeExtensionManager.findAvailableExtensions()
+            logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
+            AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
+        }
+        val mangaScope = CoroutineScope(Dispatchers.Default)
+        mangaScope.launch {
+            mangaExtensionManager.findAvailableExtensions()
+            logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
+            MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
 
     }

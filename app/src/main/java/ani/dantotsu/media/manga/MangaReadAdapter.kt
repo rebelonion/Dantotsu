@@ -74,7 +74,9 @@ class MangaReadAdapter(
                 setLanguageList(0,i)
             }
             subscribeButton(false)
-            fragment.loadChapters(i, false)
+            //invalidate if it's the last source
+            val invalidate = i == mangaReadSources.names.size - 1
+            fragment.loadChapters(i, invalidate)
         }
 
         binding.animeSourceLanguage.setOnItemClickListener { _, _, i, _ ->

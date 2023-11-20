@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navbar_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom">
+
+    <nl.joery.animatedbottombar.AnimatedBottomBar
+        android:id="@+id/navbar"
+        android:layout_width="240dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/bottom_nav"
+        android:elevation="4dp"
+        android:padding="8dp"
+        android:translationZ="12dp"
+        android:visibility="gone"
+        app:abb_animationDuration="300"
+        app:abb_animationInterpolator="@anim/over_shoot"
+        app:abb_badgeBackgroundColor="#F44336"
+        app:abb_indicatorColor="?attr/colorTertiary"
+        app:abb_indicatorLocation="bottom"
+        app:abb_indicatorMargin="28dp"
+        app:abb_selectedTabType="text"
+        app:abb_tabColor="?attr/colorOutline"
+        app:abb_tabColorDisabled="?attr/colorPrimaryContainer"
+        app:abb_tabColorSelected="?attr/colorPrimary"
+        app:abb_tabs="@menu/bottom_navbar_menu"
+        app:abb_textAppearance="@style/NavBarText"
+        tools:visibility="visible" />
+</FrameLayout>

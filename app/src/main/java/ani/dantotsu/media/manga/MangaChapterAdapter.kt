@@ -94,7 +94,7 @@ class MangaChapterAdapter(
         fun bind(chapterNumber: String) {
             if (activeDownloads.contains(chapterNumber)) {
                 // Show spinner
-                binding.itemDownload.setImageResource(R.drawable.spinner_icon_manga)
+                binding.itemDownload.setImageResource(R.drawable.ic_round_refresh_24)
             } else if(downloadedChapters.contains(chapterNumber)) {
                 // Show checkmark
                 binding.itemDownload.setImageResource(R.drawable.ic_check)

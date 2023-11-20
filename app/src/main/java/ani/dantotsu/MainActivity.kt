@@ -21,6 +21,7 @@ import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
+import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
@@ -40,6 +41,7 @@ import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
+import ani.dantotsu.databinding.ItemNavbarBinding
 import ani.dantotsu.databinding.SplashScreenBinding
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.home.AnimeFragment
@@ -77,8 +79,7 @@ class MainActivity : AppCompatActivity() {
     private var load = false
 
     private var uiSettings = UserInterfaceSettings()
-    private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
-    private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -102,19 +103,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-
-        val animeScope = CoroutineScope(Dispatchers.Default)
-        animeScope.launch {
-            animeExtensionManager.findAvailableExtensions()
-            logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
-            AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
-        }
-        val mangaScope = CoroutineScope(Dispatchers.Default)
-        mangaScope.launch {
-            mangaExtensionManager.findAvailableExtensions()
-            logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
-            MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
-        }
 
         var doubleBackToExitPressedOnce = false
         onBackPressedDispatcher.addCallback(this) {
@@ -174,7 +162,7 @@ class MainActivity : AppCompatActivity() {
             initActivity(this)
             uiSettings = loadData("ui_settings") ?: uiSettings
             selectedOption = uiSettings.defaultStartUpTab
-            binding.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
             }
         }
@@ -187,7 +175,7 @@ class MainActivity : AppCompatActivity() {
             model.genres.observe(this) {
                 if (it != null) {
                     if (it) {
-                        val navbar = binding.navbar
+                        val navbar = binding.includedNavbar.navbar
                         bottomBar = navbar
                         navbar.visibility = View.VISIBLE
                         binding.mainProgressBar.visibility = View.GONE

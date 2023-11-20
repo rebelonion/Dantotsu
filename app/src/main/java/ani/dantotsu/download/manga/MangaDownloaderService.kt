@@ -60,7 +60,7 @@ class MangaDownloaderService : Service() {
 
     private val downloadJobs = mutableMapOf<String, Job>()
     private val mutex = Mutex()
-    var isCurrentlyProcessing = false
+    private var isCurrentlyProcessing = false
 
     override fun onBind(intent: Intent?): IBinder? {
         // This is only required for bound services.
@@ -78,7 +78,7 @@ class MangaDownloaderService : Service() {
             setProgress(0, 0, false)
         }
         startForeground(NOTIFICATION_ID, builder.build())
-        registerReceiver(cancelReceiver, IntentFilter(ACTION_CANCEL_DOWNLOAD))
+        ContextCompat.registerReceiver(this, cancelReceiver, IntentFilter(ACTION_CANCEL_DOWNLOAD), ContextCompat.RECEIVER_NOT_EXPORTED)
     }
 
     override fun onDestroy() {

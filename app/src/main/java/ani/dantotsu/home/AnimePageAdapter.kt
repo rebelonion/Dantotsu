@@ -95,7 +95,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         }
 
         binding.animeUserAvatar.setSafeOnClickListener {
-            SettingsDialogFragment().show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
+            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.ANIME).show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
 
         listOf(
