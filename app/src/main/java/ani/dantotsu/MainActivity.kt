@@ -77,8 +77,7 @@ class MainActivity : AppCompatActivity() {
     private var load = false
 
     private var uiSettings = UserInterfaceSettings()
-    private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
-    private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -102,19 +101,6 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-
-        val animeScope = CoroutineScope(Dispatchers.Default)
-        animeScope.launch {
-            animeExtensionManager.findAvailableExtensions()
-            logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
-            AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
-        }
-        val mangaScope = CoroutineScope(Dispatchers.Default)
-        mangaScope.launch {
-            mangaExtensionManager.findAvailableExtensions()
-            logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
-            MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
-        }
 
         var doubleBackToExitPressedOnce = false
         onBackPressedDispatcher.addCallback(this) {

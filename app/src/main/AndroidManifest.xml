@@ -263,12 +263,16 @@
             </intent-filter>
         </service>
         <service android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallService"
+            android:foregroundServiceType="dataSync"
             android:exported="false" />
 
         <service android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallService"
+            android:foregroundServiceType="dataSync"
             android:exported="false" />
 
-        <service android:name=".download.manga.MangaDownloaderService" />
+        <service android:name=".download.manga.MangaDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>
