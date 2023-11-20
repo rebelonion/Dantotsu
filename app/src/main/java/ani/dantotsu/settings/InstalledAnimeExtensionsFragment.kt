@@ -23,6 +23,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
 import ani.dantotsu.loadData
+import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.saveData
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import com.google.android.material.tabs.TabLayout
@@ -210,36 +211,8 @@ class InstalledAnimeExtensionsFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position) // Use getItem() from ListAdapter
-            val nsfw = if (extension.isNsfw) {
-                "(18+)"
-            } else {
-                ""
-            }
-            val lang = when (extension.lang) {
-                "all" -> "Multi"
-                "ar" -> "Arabic"
-                "de" -> "German"
-                "en" -> "English"
-                "es" -> "Spanish"
-                "fr" -> "French"
-                "id" -> "Indonesian"
-                "it" -> "Italian"
-                "ja" -> "Japanese"
-                "ko" -> "Korean"
-                "pl" -> "Polish"
-                "pt-BR" -> "Portuguese (Brazil)"
-                "ru" -> "Russian"
-                "th" -> "Thai"
-                "tr" -> "Turkish"
-                "uk" -> "Ukrainian"
-                "vi" -> "Vietnamese"
-                "zh" -> "Chinese"
-                "zh-Hans" -> "Chinese (Simplified)"
-
-                else -> ""
-            }
-
-            saveData("language", lang)
+            val nsfw = if (extension.isNsfw) "(18+)" else ""
+            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
             holder.extensionNameTextView.text = extension.name
             holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
             if (!skipIcons) {

@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.loadData
+import ani.dantotsu.others.LanguageMapper
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -158,34 +159,8 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
         }
         val extensionIconImageView: ImageView = binding.extensionIconImageView
         fun bind(extension: MangaExtension.Available) {
-            val nsfw = if (extension.isNsfw) {
-                "(18+)"
-            } else {
-                ""
-            }
-            val lang = when (extension.lang) {
-                "all" -> "Multi"
-                "ar" -> "Arabic"
-                "de" -> "German"
-                "en" -> "English"
-                "es" -> "Spanish"
-                "fr" -> "French"
-                "id" -> "Indonesian"
-                "it" -> "Italian"
-                "ja" -> "Japanese"
-                "ko" -> "Korean"
-                "pl" -> "Polish"
-                "pt-BR" -> "Portuguese (Brazil)"
-                "ru" -> "Russian"
-                "th" -> "Thai"
-                "tr" -> "Turkish"
-                "uk" -> "Ukrainian"
-                "vi" -> "Vietnamese"
-                "zh" -> "Chinese"
-                "zh-Hans" -> "Chinese (Simplified)"
-
-                else -> ""
-            }
+            val nsfw = if (extension.isNsfw) "(18+)" else ""
+            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
             binding.extensionNameTextView.text = extension.name
             binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }
