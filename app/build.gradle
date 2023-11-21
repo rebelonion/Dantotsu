@@ -29,16 +29,11 @@ android {
         debug {
             applicationIdSuffix ".beta"
             debuggable true
-            preBuild.dependsOn 'uwuifier'
         }
         release {
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            preBuild.dependsOn 'uwuifier'
         }
-    }
-    tasks.register('uwuifier', Exec) {
-        commandLine 'scripts/uwuifier.exe'
     }
     buildFeatures {
         viewBinding true

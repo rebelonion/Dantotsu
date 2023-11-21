@@ -28,3 +28,6 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+#other
+scripts/
