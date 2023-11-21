@@ -29,7 +29,15 @@ class MangaChapterAdapter(
                     false
                 )
             )
-            0 -> ChapterListViewHolder(ItemChapterListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+
+            0 -> ChapterListViewHolder(
+                ItemChapterListBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
             else -> throw IllegalArgumentException()
         }
     }
@@ -40,7 +48,8 @@ class MangaChapterAdapter(
 
     override fun getItemCount(): Int = arr.size
 
-    inner class ChapterCompactViewHolder(val binding: ItemEpisodeCompactBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ChapterCompactViewHolder(val binding: ItemEpisodeCompactBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
@@ -90,19 +99,39 @@ class MangaChapterAdapter(
         }
     }
 
-    inner class ChapterListViewHolder(val binding: ItemChapterListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(chapterNumber: String) {
+    fun updateDownloadProgress(chapterNumber: String, progress: Int) {
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == chapterNumber }
+        if (position != -1) {
+            arr[position].progress = "Downloading: ${progress}%"
+
+            notifyItemChanged(position)
+        }
+    }
+
+    inner class ChapterListViewHolder(val binding: ItemChapterListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(chapterNumber: String, progress: String?) {
+            if (progress != null) {
+                binding.itemChapterTitle.visibility = View.VISIBLE
+                binding.itemChapterTitle.text = "$progress"
+            }else{
+                binding.itemChapterTitle.visibility = View.GONE
+                binding.itemChapterTitle.text = ""
+            }
             if (activeDownloads.contains(chapterNumber)) {
                 // Show spinner
                 binding.itemDownload.setImageResource(R.drawable.ic_round_refresh_24)
-            } else if(downloadedChapters.contains(chapterNumber)) {
+            } else if (downloadedChapters.contains(chapterNumber)) {
                 // Show checkmark
                 binding.itemDownload.setImageResource(R.drawable.ic_check)
             } else {
                 // Show download icon
                 binding.itemDownload.setImageResource(R.drawable.ic_round_download_24)
             }
+
         }
+
         init {
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
@@ -111,13 +140,13 @@ class MangaChapterAdapter(
             binding.itemDownload.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size) {
                     val chapterNumber = arr[bindingAdapterPosition].number
-                    if(activeDownloads.contains(chapterNumber)) {
+                    if (activeDownloads.contains(chapterNumber)) {
                         fragment.onMangaChapterStopDownloadClick(chapterNumber)
                         return@setOnClickListener
-                    }else if(downloadedChapters.contains(chapterNumber)) {
+                    } else if (downloadedChapters.contains(chapterNumber)) {
                         fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
                         return@setOnClickListener
-                    }else {
+                    } else {
                         fragment.onMangaChapterDownloadClick(chapterNumber)
                         startDownload(chapterNumber)
                     }
@@ -136,25 +165,31 @@ class MangaChapterAdapter(
                 val parsedNumber = MangaNameAdapter.findChapterNumber(ep.number)?.toInt()
                 binding.itemEpisodeNumber.text = parsedNumber?.toString() ?: ep.number
                 if (media.userProgress != null) {
-                    if ((MangaNameAdapter.findChapterNumber(ep.number) ?: 9999f) <= media.userProgress!!.toFloat())
+                    if ((MangaNameAdapter.findChapterNumber(ep.number)
+                            ?: 9999f) <= media.userProgress!!.toFloat()
+                    )
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
                     else {
                         binding.itemEpisodeViewedCover.visibility = View.GONE
                         binding.itemEpisodeCont.setOnLongClickListener {
-                            updateProgress(media, MangaNameAdapter.findChapterNumber(ep.number).toString())
+                            updateProgress(
+                                media,
+                                MangaNameAdapter.findChapterNumber(ep.number).toString()
+                            )
                             true
                         }
                     }
                 }
             }
-            is ChapterListViewHolder    -> {
+
+            is ChapterListViewHolder -> {
                 val binding = holder.binding
                 val ep = arr[position]
-                holder.bind(ep.number)
+                holder.bind(ep.number, ep.progress)
                 setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
                 binding.itemChapterNumber.text = ep.number
-                if (!ep.title.isNullOrEmpty()) {
-                    binding.itemChapterTitle.text = ep.title
+                /*if (!ep.progress.isNullOrEmpty()) {
+                    binding.itemChapterTitle.text = ep.progress
                     binding.itemChapterTitle.setOnLongClickListener {
                         binding.itemChapterTitle.maxLines.apply {
                             binding.itemChapterTitle.maxLines = if (this == 1) 3 else 1
@@ -162,17 +197,22 @@ class MangaChapterAdapter(
                         true
                     }
                     binding.itemChapterTitle.visibility = View.VISIBLE
-                } else binding.itemChapterTitle.visibility = View.GONE
+                } else*/ binding.itemChapterTitle.visibility = View.VISIBLE
 
                 if (media.userProgress != null) {
-                    if ((MangaNameAdapter.findChapterNumber(ep.number) ?: 9999f) <= media.userProgress!!.toFloat()) {
+                    if ((MangaNameAdapter.findChapterNumber(ep.number)
+                            ?: 9999f) <= media.userProgress!!.toFloat()
+                    ) {
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
                         binding.itemEpisodeViewed.visibility = View.VISIBLE
                     } else {
                         binding.itemEpisodeViewedCover.visibility = View.GONE
                         binding.itemEpisodeViewed.visibility = View.GONE
                         binding.root.setOnLongClickListener {
-                            updateProgress(media, MangaNameAdapter.findChapterNumber(ep.number).toString())
+                            updateProgress(
+                                media,
+                                MangaNameAdapter.findChapterNumber(ep.number).toString()
+                            )
                             true
                         }
                     }

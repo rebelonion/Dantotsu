@@ -57,6 +57,7 @@ class OfflineMangaFragment: Fragment() {
             startActivity(
                 Intent(requireContext(), MediaDetailsActivity::class.java)
                     .putExtra("media", getMedia(media))
+                    .putExtra("download", true)
             )
         }
 

@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcelable
@@ -63,6 +64,8 @@ import uy.kohesive.injekt.api.get
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.roundToInt
+import android.Manifest
+import androidx.core.app.ActivityCompat
 
 open class MangaReadFragment : Fragment() {
     private var _binding: FragmentAnimeWatchBinding? = null
@@ -103,10 +106,12 @@ open class MangaReadFragment : Fragment() {
         val intentFilter = IntentFilter().apply {
             addAction(ACTION_DOWNLOAD_STARTED)
             addAction(ACTION_DOWNLOAD_FINISHED)
+            addAction(ACTION_DOWNLOAD_FAILED)
+            addAction(ACTION_DOWNLOAD_PROGRESS)
         }
 
         ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
-        
+
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
 
@@ -355,6 +360,16 @@ open class MangaReadFragment : Fragment() {
     }
 
     fun onMangaChapterDownloadClick(i: String) {
+        if (!isNotificationPermissionGranted()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ActivityCompat.requestPermissions(
+                    requireActivity(),
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    1
+                )
+            }
+        }
+
         model.continueMedia = false
         media.manga?.chapters?.get(i)?.let { chapter ->
             val parser = model.mangaReadSources?.get(media.selected!!.sourceIndex) as? DynamicMangaParser
@@ -392,6 +407,15 @@ open class MangaReadFragment : Fragment() {
         }
     }
 
+    private fun isNotificationPermissionGranted(): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+        return true
+    }
 
 
     fun onMangaChapterRemoveDownloadClick(i: String){
@@ -425,6 +449,11 @@ open class MangaReadFragment : Fragment() {
                     chapterNumber?.let {
                         chapterAdapter.removeDownload(it)
                     }
+                }
+                ACTION_DOWNLOAD_PROGRESS -> {
+                    val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
+                    val progress = intent.getIntExtra("progress", 0)
+                    chapterNumber?.let { chapterAdapter.updateDownloadProgress(it, progress) }
                 }
             }
         }
@@ -478,6 +507,7 @@ open class MangaReadFragment : Fragment() {
         const val ACTION_DOWNLOAD_STARTED = "ani.dantotsu.ACTION_DOWNLOAD_STARTED"
         const val ACTION_DOWNLOAD_FINISHED = "ani.dantotsu.ACTION_DOWNLOAD_FINISHED"
         const val ACTION_DOWNLOAD_FAILED = "ani.dantotsu.ACTION_DOWNLOAD_FAILED"
+        const val ACTION_DOWNLOAD_PROGRESS = "ani.dantotsu.ACTION_DOWNLOAD_PROGRESS"
         const val EXTRA_CHAPTER_NUMBER = "extra_chapter_number"
     }
 }

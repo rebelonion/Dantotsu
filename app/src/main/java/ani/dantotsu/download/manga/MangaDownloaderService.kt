@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.os.IBinder
 import android.widget.Toast
@@ -35,6 +36,7 @@ import java.net.URL
 import androidx.core.content.ContextCompat
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FAILED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FINISHED
+import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_PROGRESS
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_STARTED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.EXTRA_CHAPTER_NUMBER
 import ani.dantotsu.snackString
@@ -160,23 +162,20 @@ class MangaDownloaderService : Service() {
 
     suspend fun download(task: DownloadTask) {
         withContext(Dispatchers.Main) {
-            if (ContextCompat.checkSelfPermission(
+            val notifi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ContextCompat.checkSelfPermission(
                     this@MangaDownloaderService,
                     Manifest.permission.POST_NOTIFICATIONS
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                Toast.makeText(
-                    this@MangaDownloaderService,
-                    "Please grant notification permission",
-                    Toast.LENGTH_SHORT
-                ).show()
-                broadcastDownloadFailed(task.chapter)
-                return@withContext
+                ) == PackageManager.PERMISSION_GRANTED
+            } else {
+                true
             }
 
             val deferredList = mutableListOf<Deferred<Bitmap?>>()
             builder.setContentText("Downloading ${task.title} - ${task.chapter}")
-            notificationManager.notify(NOTIFICATION_ID, builder.build())
+            if (notifi) {
+                notificationManager.notify(NOTIFICATION_ID, builder.build())
+            }
 
             // Loop through each ImageData object from the task
             var farthest = 0
@@ -208,7 +207,10 @@ class MangaDownloaderService : Service() {
                     }
                     farthest++
                     builder.setProgress(task.imageData.size, farthest, false)
-                    notificationManager.notify(NOTIFICATION_ID, builder.build())
+                    broadcastDownloadProgress(task.chapter, farthest * 100 / task.imageData.size)
+                    if (notifi) {
+                        notificationManager.notify(NOTIFICATION_ID, builder.build())
+                    }
 
                     bitmap
                 }
@@ -225,7 +227,6 @@ class MangaDownloaderService : Service() {
 
             saveMediaInfo(task)
             downloadsManager.addDownload(Download(task.title, task.chapter, Download.Type.MANGA))
-            //downloadsManager.exportDownloads(Download(task.title, task.chapter, Download.Type.MANGA))
             broadcastDownloadFinished(task.chapter)
             snackString("${task.title} - ${task.chapter} Download finished")
         }
@@ -260,7 +261,7 @@ class MangaDownloaderService : Service() {
         }
     }
 
-    fun saveMediaInfo(task: DownloadTask) {
+    private fun saveMediaInfo(task: DownloadTask) {
         GlobalScope.launch(Dispatchers.IO) {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
@@ -289,7 +290,7 @@ class MangaDownloaderService : Service() {
     }
 
 
-    suspend fun downloadImage(url: String, directory: File, name: String): String? = withContext(Dispatchers.IO) {
+    private suspend fun downloadImage(url: String, directory: File, name: String): String? = withContext(Dispatchers.IO) {
         var connection: HttpURLConnection? = null
         println("Downloading url $url")
         try {
@@ -334,6 +335,14 @@ class MangaDownloaderService : Service() {
     private fun broadcastDownloadFailed(chapterNumber: String) {
         val intent = Intent(ACTION_DOWNLOAD_FAILED).apply {
             putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+        }
+        sendBroadcast(intent)
+    }
+
+    private fun broadcastDownloadProgress(chapterNumber: String, progress: Int) {
+        val intent = Intent(ACTION_DOWNLOAD_PROGRESS).apply {
+            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+            putExtra("progress", progress)
         }
         sendBroadcast(intent)
     }
