@@ -58,16 +58,22 @@ class MediaDetailsViewModel : ViewModel() {
     }
 
 
-    fun loadSelected(media: Media): Selected {
+    fun loadSelected(media: Media, isDownload: Boolean = false): Selected {
         val sharedPreferences = Injekt.get<SharedPreferences>()
         val data = loadData<Selected>("${media.id}-select") ?: Selected().let {
             it.sourceIndex = if (media.isAdult) 0 else when (media.anime != null) {
-                true -> sharedPreferences.getInt("settings_def_anime_source_s_r", 0)
-                else -> sharedPreferences.getInt(("settings_def_manga_source_s_r"), 0)
+                true ->sharedPreferences.getInt("settings_def_anime_source_s_r", 0)
+                else ->sharedPreferences.getInt(("settings_def_manga_source_s_r"), 0)
             }
             it.preferDub = loadData("settings_prefer_dub") ?: false
             saveSelected(media.id, it)
             it
+        }
+        if (isDownload) {
+            data.sourceIndex = when (media.anime != null) {
+                true -> AnimeSources.list.size - 1
+                else -> MangaSources.list.size - 1
+            }
         }
         return data
     }

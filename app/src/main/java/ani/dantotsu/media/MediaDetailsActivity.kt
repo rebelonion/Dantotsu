@@ -120,7 +120,8 @@ ThemeManager(this).applyTheme()
         viewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
 
         var media: Media = intent.getSerialized("media") ?: return
-        media.selected = model.loadSelected(media)
+        val isDownload = intent.getBooleanExtra("download", false)
+        media.selected = model.loadSelected(media, isDownload)
 
         binding.mediaCoverImage.loadImage(media.cover)
         binding.mediaCoverImage.setOnLongClickListener {
@@ -326,7 +327,7 @@ ThemeManager(this).applyTheme()
         tabLayout.setOnItemSelectedListener { item ->
             selectFromID(item.itemId)
             viewPager.setCurrentItem(selected, false)
-            val sel = model.loadSelected(media)
+            val sel = model.loadSelected(media, isDownload)
             sel.window = selected
             model.saveSelected(media.id, sel, this)
             true
