@@ -46,6 +46,7 @@ import ani.dantotsu.settings.CurrentReaderSettings.Layouts.*
 import ani.dantotsu.settings.ReaderSettings
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -126,7 +127,8 @@ class MangaReaderActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         binding = ActivityMangaReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

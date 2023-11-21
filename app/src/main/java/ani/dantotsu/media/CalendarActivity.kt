@@ -18,6 +18,7 @@ import ani.dantotsu.loadData
 import ani.dantotsu.media.user.ListViewPagerAdapter
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +34,8 @@ class CalendarActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
 
 

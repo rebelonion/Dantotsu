@@ -18,6 +18,7 @@ import ani.dantotsu.databinding.ActivityListBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,8 @@ class ListActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
 
         val typedValue = TypedValue()

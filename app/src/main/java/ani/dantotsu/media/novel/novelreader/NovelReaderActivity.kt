@@ -35,6 +35,7 @@ import ani.dantotsu.settings.NovelReaderSettings
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.tryWith
 import com.google.android.material.slider.Slider
 import com.vipulog.ebookreader.Book
@@ -136,7 +137,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         binding = ActivityNovelReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

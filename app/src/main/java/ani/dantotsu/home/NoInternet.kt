@@ -29,6 +29,7 @@ import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class NoInternet : AppCompatActivity() {
@@ -37,7 +38,8 @@ class NoInternet : AppCompatActivity() {
     private var uiSettings = UserInterfaceSettings()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
 
         binding = ActivityNoInternetBinding.inflate(layoutInflater)
         setContentView(binding.root)

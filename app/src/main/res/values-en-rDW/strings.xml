@@ -1,0 +1,637 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+
+    <string name="repo">webewonyion/Dantotsu</string>
+    <string name="preference_file_key" translatable="false">dantotsupwefs</string>
+
+    <string name="app_name">Dantotsu</string>
+    <string name="slogan">The N-N-N-NYEW Best \&gt;w\&lt; Anyime &amp; Manga app (U ﹏ U) fow ~(˘▾˘~) Andwoid.</string>
+
+    <string name="login">Wogin</string>
+    <string name="logout">Wogout</string>
+
+    <string name="discord">https://discord.gg/4HPZ5nAWwM Uwu ***huggles tightly***</string>
+    <string name="github">https://github.com/rebelonion/Dantotsu (⑅˘꒳˘)</string>
+
+    <string name="home">H-h-h-home</string>
+    <string name="anime">Anyime</string>
+    <string name="browse_anime">Bwowse Anyime</string>
+    <string name="manga">Manga (⑅˘꒳˘)</string>
+    <string name="browse_manga">Bwowse Manga ( ˘ᴗ˘ )</string>
+    <string name="info">Info</string>
+    <string name="watch">Watch</string>
+    <string name="read">Wead</string>
+
+    <string name="anime_list">Anyime Wist</string>
+    <string name="manga_list">Manga W-w-w-wist</string>
+
+    <string name="sad">X( (˘³˘)</string>
+    <string name="oh">:o</string>
+    <string name="colon">" : " ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
+
+    <string name="no_internet">Nyo Intewnyet Connyection ***looks at you***</string>
+    <string name="refresh">Wefwesh (。U ω U。)</string>
+
+    <string name="search">Seawch ♥(。U ω U。)</string>
+    <string name="search_results">Seawch ~(˘▾˘~) Wesuwts (uwu)</string>
+    <string name="sort_by">Sowt (uwu) By</string>
+    <string name="genre">G-g-genwe</string>
+    <string name="top_score">Top Scowe</string>
+    <string name="updated">Wecentwy Updated ***walks away***</string>
+    <string name="trending_anime">Twending Anyime</string>
+    <string name="popular_anime">Popuwaw Anyime</string>
+    <string name="trending_manga">Twending Manga</string>
+    <string name="trending_novel">Twending ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** Nyuvw (◡ ω ◡)</string>
+    <string name="popular_manga">Popuwaw Manga</string>
+
+    <string name="username">Usewnyame</string>
+    <string name="chapters_read">"Chaptews Wead " (˘ᵕ˘)</string>
+    <string name="episodes_watched">"Episodes Watched "</string>
+    <string name="continue_reading">Continyue *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* Weading (◡ ꒳ ◡)</string>
+    <string name="continue_watching">Continyue Watching</string>
+    <string name="recommended">Wecommended ღ(U꒳Uღ)</string>
+
+    <string name="get_recommendations">Watch/Wead some Anyime ow Manga to get \&gt;w\&lt; Wecommendations</string>
+    <string name="empty">Aww caught up, when Nyew!!1!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="add">Add to Wist</string>
+    <string name="list_editor">Wist Editow</string>
+    <string name="add_fav">A-a-a-add to Favouwites</string>
+    <string name="notifications">Nyotifications</string>
+    <string-array name="keys">
+        <item>Reading</item>
+        <item>Watching</item>
+        <item>Completed</item>
+        <item>Paused</item>
+        <item>Dropped</item>
+        <item>Planning</item>
+        <item>Favourites</item>
+        <item>Rewatching</item>
+        <item>Rereading</item>
+        <item>All</item>
+    </string-array>
+
+    <string name="status">STATUS</string>
+    <string-array name="status" translatable="false">
+        <item>PLANNING</item>
+        <item>CURRENT</item>
+        <item>COMPLETED</item>
+        <item>REPEATING</item>
+        <item>PAUSED</item>
+        <item>DROPPED</item>
+    </string-array>
+    <string-array name="status_anime">
+        <item>PLANNING</item>
+        <item>WATCHING</item>
+        <item>COMPLETED</item>
+        <item>RE-WATCHING</item>
+        <item>PAUSED</item>
+        <item>DROPPED</item>
+    </string-array>
+    <string-array name="status_manga">
+        <item>PLANNING</item>
+        <item>READING</item>
+        <item>COMPLETED</item>
+        <item>RE-READING</item>
+        <item>PAUSED</item>
+        <item>DROPPED</item>
+    </string-array>
+    <string name="progress">PWOGWESS (˘³˘)</string>
+    <string name="score">SCOWE (。U ω U。)</string>
+    <string name="score_suffix">" / ^-^ 10" ( ͡o ꒳ ͡o )</string>
+    <string name="started_at">STAWTED AT</string>
+    <string name="completed_at">COMPWETED AT</string>
+    <string name="save">Save</string>
+    <string name="delete">Dewete</string>
+    <string name="remove">Wemuv</string>
+
+    <string name="name">Nyame</string>
+    <string name="name_romaji">Nyame ( ᴜ ω ᴜ ) Womaji – ̗̀ (ᵕ꒳ᵕ) ̖́- ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
+    <string name="mean_score">Mean Scowe („ᵕᴗᵕ„)</string>
+    <string name="format">Fowmat</string>
+    <string name="status_title">Status x3</string>
+    <string name="total_eps">Totaw Episodes</string>
+    <string name="total_chaps">Totaw \&gt;w\&lt; Chaptews</string>
+    <string name="ep_duration">Avewage Duwation</string>
+    <string name="min">" min"</string>
+    <string name="season">Season</string>
+    <string name="start_date">Stawt D-d-date</string>
+    <string name="end_date">End ***cries*** Date UwU</string>
+    <string name="source">Souwce uwU</string>
+    <string name="main_studio">Studio</string>
+    <string name="genres">Genwes ***boops your nose***</string>
+    <string name="description">Synyopsis</string>
+    <string name="characters">Chawactews</string>
+    <string name="relations">Wewations ღ(U꒳Uღ)</string>
+
+    <string name="roles">Wowes</string>
+    <string name="details">Detaiws</string>
+
+    <string name="play_yt">Pway UwU ***looks at you*** on (˘³˘) Y-y-youtube ***screeches***</string>
+    <string name="eps">E-e-e-episodes</string>
+    <string name="ep">Episode (⑅˘꒳˘)</string>
+    <string name="chaps">Chaptews</string>
+    <string name="chap">Chaptew</string>
+    <string name="wrong"><u>Wrong Title?</u></string>
+    <string name="source_not_found">
+ (ᴜ‿ᴜ✿)        Couwdn\'t find anything X( \n
+ ♥(。U ω U。)        Twy anyothew souwce.
+    </string>
+    <string name="not_supported">%1$s is nyot ***glomps and huggles*** suppowted!!1! (˘˘˘)</string>
+    <string name="server_selector">Sewect Sewvew</string>
+    <string name="auto_select_server">Auto ( ͡o ꒳ ͡o ) S-s-sewecting Sewvew ***nuzzles your necky wecky***</string>
+    <string name="make_default">Make Defauwt</string>
+    <string name="filler">Fiwwew ( ˘ᴗ˘ ) ***runs away***</string>
+    <string name="adult">Aduwt ÚwÚ</string>
+    <string name="list_only">Wist O-o-o-onwy</string>
+    <string name="tag">Tag (ᵘﻌᵘ)</string>
+    <string name="tags">Tags</string>
+    <string name="synonyms">Synyonyms</string>
+    <string name="trailer">Twaiwew (⑅˘꒳˘)</string>
+    <string name="opening">Openying (˘ᵕ˘)</string>
+    <string name="ending">Ending (◡ w ◡) ***screeches***</string>
+    <string name="prequel">Pwequew</string>
+    <string name="sequel">S-s-s-sequew (ᴜ‿ᴜ✿) ***screams***</string>
+
+    <string name="anilist_settings">Anyiwist Settings</string>
+    <string name="extension_settings">E-e-extension (◡ w ◡)</string>
+    <string name="downloads">Downwoads</string>
+    <string name="settings">Settings</string>
+    <string name="extensions">Extensions</string>
+    <string name="player_settings">Pwayew Settings – ̗̀ (ᵕ꒳ᵕ) ̖́-</string>
+    <string name="recentlyListOnly">Onwy show My Shows in x3 Wecentwy *˚*(ꈍ ω ꈍ).₊̣̇. Updated</string>
+    <string name="download_manager_select">Downwoad Manyagew ***runs away***</string>
+    <string name="downloadInSd">Downwoad *˚*(ꈍ ω ꈍ).₊̣̇. in SD cawd (｡ᴜ‿‿ᴜ｡)</string>
+    <string name="noSdFound">Nyo (◡ ꒳ ◡) SD Uwu cawd (˘³˘) was Found. ( ͡o ᵕ ͡o )</string>
+    <string name="reader_settings">Weadew Settings</string>
+    <string name="default_source">Defauwt Souwce ( ͡o ᵕ ͡o )</string>
+    <string name="show_yt">Show Youtube Wink</string>
+    <string name="default_ep_view">Defauwt Episode Wayout ***nuzzles your necky wecky***</string>
+    <string name="default_chp_view">Defauwt Chaptew Wayout</string>
+    <string name="ui">Usew ***smirks smuggly*** Intewface</string>
+    <string name="common">Common</string>
+    <string name="theme">Theme</string>
+    <string name="ui_settings">UI Settings</string>
+    <string name="about">About ( ˊ.ᴗˋ ) ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
+    <string name="desc">"-"-"    Dantotsu is ღ(U꒳Uღ) ***boops your nose*** c-c-c-cwafted x3 fwom the (˘ε˘) ashes ÚwÚ of :3 Saikou ( ｡ᵘ ᵕ ᵘ ｡) and based o-o-o-on ***sweats*** simpwistic yet state-of-the-awt ewegance. It is an Anyiwist onwy cwient, ( ｡ᵘ ᵕ ᵘ ｡) ***runs away*** which awso wets ;;w;; you stweam-downwoad (ᴜ‿ᴜ✿) Anyime thwough (˘ሠ˘) extensions &amp; Manga.\nDantotsu witewawwy means ~(˘▾˘~) the \"best of the ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** b-b-best\" in japanyese. \&gt;w\&lt; Weww, ღ(U꒳Uღ) we wouwd wike ^w^ to ***wags my tail*** say this (uwu) is the b-b-b-best ÚwÚ open souwce app fow anyime (◡ w ◡) and uwU manga o-o-on Andwoid, (。U ω U。) what wouwd you say?"</string>
+    <string name="devs">Devewopews ***blushes***</string>
+    <string name="disclaimer">Discwaimew</string>
+    <string name="full_disclaimer">
+ ♥(。U ω U。)         ------- Dantotsu by itsewf onwy p-p-p-pwovides (˘ε˘) an \&gt;w\&lt; anyime and manga ^w^ twackew and does ♥(。U ω U。) nyot ღ(U꒳Uღ) pwovide any anyime ow m-m-m-manga OwO ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** stweaming ow ***huggles tightly*** downwoading ღ(U꒳Uღ) ***licks lips*** capabiwities.
+ ***whispers to self***        \n\n - Dantotsu ow any of ( ͡U ω ͡U ) i-i-i-its devewopew/staff ***glomps and huggles*** don\'t host any *˚*(ꈍ ω ꈍ).₊̣̇. o-o-o-of t-t-t-the (ᵘʷᵘ) content found (◦ᵕ ˘ ᵕ◦) inside Dantotsu. ^w^ Any :3 and aww ( ˊ.ᴗˋ ) images and ( ˘ᴗ˘ ) ***screeches*** anyime/manga ***nuzzles your necky wecky*** infowmation (ᵕᴗ ᵕ⁎) found in uwU the app awe t-t-taken ( ˘ᴗ˘ ) fwom ( ͡o ꒳ ͡o ) vawious pubwic ***nuzzles your necky wecky*** APIs (-(-(-(AnyiWist, MyAnyimeWist, Kitsu).
+        \n\n ***cries*** - ♥(。U ω U。) Fuwthewmowe, ( ˘ᴗ˘ ) aww of the (˘ᵕ˘) anyime/manga ***licks lips*** winks found in ;;w;; Dantotsu ( ᴜ ω ᴜ ) awe (˘ሠ˘) taken fwom vawious 3wd pawty (◡ ሠ ◡) pwugins and have nyo affiwiation with Dantotsu ow its staff.
+ (◡ w ◡)        \n\n ***nuzzles your necky wecky*** - Dantotsu ow it\'s ownyews awen\'t wiabwe fow any misuse of any of ( ͡U ω ͡U ) t-t-the (˘³˘) contents found inside ( ˘ᴗ˘ ) ow (｡ᴜ‿‿ᴜ｡) outside of ~(˘▾˘~) the app and cannyot (ᴜ‿ᴜ✿) b-b-b-be hewd accountabwe ***smirks smuggly*** fow ***huggles tightly*** the ( ͡o ꒳ ͡o ) distwibution (˘ᵕ˘) o-o-of any (˘ε˘) of the contents ( ᵘ ꒳ ᵘ ✼) found inside (・\`ω\´・) the ~(˘▾˘~) app.
+        \n\n - ***licks lips*** By ( ｡ᵘ ᵕ ᵘ ｡) ***whispers to self*** using Dantotsu, you compwy to (˘³˘) the fact owo that the („ᵕᴗᵕ„) devewopew ღ(U꒳Uღ) of the app is nyot (。U ω U。) wesponsibwe fow any of the (。U ω U。) contents (U ﹏ U) f-f-f-found in ( ͡U ω ͡U ) t-t-the app. You awso ( ͡o ꒳ ͡o ) ***whispers to self*** agwee t-t-t-to the (˘ሠ˘) fact (˘ω˘) that OwO you may ***whispers to self*** n-n-n-nyot use Dantotsu (U ﹏ U) to downwoad ow stweam any copywighted (˘ω˘) ***blushes*** content.
+ (｡ᴜ‿‿ᴜ｡)        \n\n - (⑅˘꒳˘) If the intewnyet infwingement issues awe invowved, pwease (ᵕᴗ ᵕ⁎) ***glomps and huggles*** c-c-contact (˘³˘) the (˘³˘) ***nuzzles your necky wecky*** souwce website. The devewopew (｡ᴜ‿‿ᴜ｡) does nyot assume ~(˘▾˘~) any ( ᴜ ω ᴜ ) wegaw wesponsibiwity.
+    </string>
+    <string name="version_current">Vewsion %1$s ***smirks smuggly***</string>
+    <string-array name="tips">
+        <item>You can Long Click an episode/chapter to Mark it as Read.</item>
+        <item>Long Clicking Shows can directly open List Editor.</item>
+        <item>There are few more easter eggs hidden in the App.</item>
+        <item>Challenge: Go to the very bottom of the Popular Anime &amp; Manga</item>
+        <item>Try Long Clicking the Show\'s Title.</item>
+        <item>Damn, why are you wasting your Time?</item>
+        <item>You can Long Click to copy this Message.</item>
+        <item>OMG LOOK! YOU FOUND AN EASTER EGG!?</item>
+        <item>You know who else likes this Animation?</item>
+        <item>MAL support? bruh.</item>
+        <item>Novels? more like NO vels.</item>
+        <item>Long Click the logo to check for App Update</item>
+    </string-array>
+
+    <string-array name="themes">
+        <item>Default</item>
+        <item>Theme 1</item>
+        <item>Theme 2</item>
+        <item>Theme 3</item>
+        <item> Theme 4</item>
+    </string-array>
+
+    <string name="video">Video</string>
+    <string name="video_info">Show ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** Video Info</string>
+    <string name="source_info">Show Souwce Nyame ~(˘▾˘~)</string>
+    <string name="video_info_info">Shows w-w-what the Wesowution o-o-o-of :3 the c-c-c-cuwwent v-v-video pwaying, usefuw fow <b>\"Multi Quality\"</b> servers.</string>
+    <string name="default_quality">Auto Quawity Sewection</string>
+    <string name="height">Height</string>
+    <string name="width">Width</string>
+    <string name="default_quality_info">A-a-automaticawwy uses the ***licks lips*** cwosest quawity pwovided (・\`ω\´・) ***cries*** by (◡ ꒳ ◡) defauwt, ONWY appwied fow (。U ω U。) \"Muwti (ᵘﻌᵘ) ***screeches*** Quawity\" ***boops your nose*** Sewvews. Auto changes *˚*(ꈍ ω ꈍ).₊̣̇. upon pwaying ***boops your nose*** a (˘˘˘) video.</string>
+    <string name="default_playback_speed">Defauwt P-p-pwayback Speed : %1$s</string>
+    <string name="cursed_speeds">C-c-c-cuwsed ***whispers to self*** Speeds</string>
+    <string name="resize_mode_button">Defauwt Wesize ***whispers to self*** Mode</string>
+    <string name="subtitles">Subtitwes ( ˘ᴗ˘ )</string>
+    <string name="subtitle_toggle">Subtitwes ^-^</string>
+    <string name="primary_sub_color_select">Subtitwe Cowow – ̗̀ (ᵕ꒳ᵕ) ̖́-</string>
+    <string name="secondary_sub_color_select">Subtitwe (・\`ω\´・) Outwinye Cowow (˘ω˘) ***pounces on you***</string>
+    <string name="secondary_sub_outline_type_select">Subtitwe Outwinye (ᴜ‿ᴜ✿) Type *˚*(ꈍ ω ꈍ).₊̣̇. ***screeches***</string>
+    <string name="sub_background_color_select">Subtitwe Backgwound Cowow</string>
+    <string name="sub_window_color_select">Subtitwe (˘ሠ˘) W-w-window ***blushes*** Cowow ( ͡o ᵕ ͡o )</string>
+    <string name="sub_window_color_info">"The (˘˘˘) ***walks away*** subtitwe window is (◡ ሠ ◡) the ^w^ pawt weft :3 ***whispers to self*** and ( ͡o ꒳ ͡o ) ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** wight fwom them. (。U ω U。) (whewe t-t-the ღ(U꒳Uღ) backgwound isn\'t)" (˘ω˘)</string>
+    <string name="sub_color_info"><b>Note:</b> Changing Subtitle formatting only works with Soft-Subbed Sources such as Zoro!</string>
+    <string name="sub_font_select">Subtitwe Font ^-^</string>
+    <string name="subtitle_font_size">Subtitwe Size ÚwÚ</string>
+
+    <string name="auto">Auto</string>
+    <string name="auto_play_next_episode">Autopway Nyext E-e-episode</string>
+    <string name="auto_play_next_episode_info">Automaticawwy ;;w;; disabwes if (ᴜ‿ᴜ✿) thewe is n-n-n-nyo (ᵘʷᵘ) intewaction \&gt;w\&lt; with pwayew aftew 1 ÚwÚ ***screeches*** houw.</string>
+    <string name="auto_skip_fillers">Auto Skip ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** Fiwwews</string>
+    <string name="auto_skip_fillers_info">Skips ^w^ fiwwew (ᵕᴗ ᵕ⁎) episodes (ᵘﻌᵘ) when (・\`ω\´・) ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** going to nyext (ᵘﻌᵘ) episode. *˚*(ꈍ ω ꈍ).₊̣̇.</string>
+
+    <string name="update_progress">U-u-u-update Pwogwess</string>
+    <string name="ask_update_progress_anime">Ask fow each ***walks away*** Anyime ( ͡o ᵕ ͡o ) \"Individuawwy\"</string>
+    <string name="ask_update_progress_manga">Ask ***glomps*** fow („ᵕᴗᵕ„) e-e-e-each (ᵘʷᵘ) Manga \"Individuawwy\" (uwu) ***looks at you***</string>
+    <string name="ask_update_progress_info_ep">T-t-tuwnying ***looks at you*** off ( ᴜ ω ᴜ ) wiww awways automaticawwy update (◦ᵕ ˘ ᵕ◦) pwogwess x3 when the \&gt;w\&lt; episode ***nuzzles your necky wecky*** is (˘˘˘) w-w-w-watched.</string>
+    <string name="ask_update_progress_info_chap">T-t-tuwnying off wiww ***runs away*** awways a-a-a-automaticawwy update pwogwess (⑅˘꒳˘) when the chaptew is wead. UwU</string>
+    <string name="ask_update_progress_hentai">Update Pwogwess ***licks lips*** fow Hentai</string>
+    <string name="ask_update_progress_doujin">Update Pwogwess fow Doujins ***screeches***</string>
+    <string name="very_bold">vewy bowd of you (◦ᵕ ˘ ᵕ◦) saw</string>
+    <string name="watch_complete_percentage">Watch Update Pewcentage</string>
+    <string name="watch_complete_percentage_info">T-t-the pewcentage (⑅˘꒳˘) at ***glomps*** which youw Anyiwist pwogwess shouwd be updated („ᵕᴗᵕ„) aftew watching an episode. \nThis awso (uwu) sets ***nuzzles your necky wecky*** t-t-t-the \% fow when to x3 pwewoad ***wags my tail*** winks fow the nyext ( ᵘ ꒳ ᵘ ✼) episode.</string>
+
+    <string name="behaviour">Behaviouw \&gt;w\&lt;</string>
+    <string name="always_continue">Awways (◡ w ◡) Continyue (ᵘﻌᵘ) f-f-fwom ***wags my tail*** whewe you weft Uwu off (｡ᴜ‿‿ᴜ｡)</string>
+    <string name="pause_video_focus">Pause ***walks away*** when nyot in F-f-focus</string>
+    <string name="gestures">Vowume \&gt;w\&lt; &amp; ^w^ Bwightnyess Gestuwes</string>
+    <string name="double_tap">Doubwe tap ღ(U꒳Uღ) to (◡ w ◡) Seek</string>
+    <string name="fast_forward">Fast *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* Fowwawd</string>
+    <string name="double_tap_info">Tuwnying off w-w-w-wiww show fast fowwawd (˘ε˘) &amp; w-w-wewind buttons ♥(。U ω U。)</string>
+    <string name="seek_time">Seek T-t-t-time</string>
+    <string name="seek_time_info">Amount ( ᴜ ω ᴜ ) of ( ˊ.ᴗˋ ) time in seconds fow fast ^w^ ***smirks smuggly*** fowwawd ***pounces on you*** &amp; (｡ᴜ‿‿ᴜ｡) wewind.</string>
+    <string name="skip_time">Skip Time</string>
+    <string name="skip_time_info">Setting to 0, OwO hides the Skip Button.</string>
+    <string name="show_cast_button">Show Cast Button ***glomps***</string>
+    <string name="show_cast_button_info">Wequiwes ***blushes*** \-\-\"Web Video Castew\" app to cast. ღ(U꒳Uღ)</string>
+    <string name="picture_in_picture">Pictuwe in Pictuwe (ᵕᴗ ᵕ⁎)</string>
+    <string name="always_minimize">A-a-a-awways Minyimize</string>
+    <string name="always_minimize_info">Wequiwes PiP to be enyabwed, ^w^ makes the x3 pwayew b-b-behave OwO wike (｡ᴜ‿‿ᴜ｡) Youtube Pwayew but bettew.\nAwso (◦ᵕ ˘ ᵕ◦) hides the PiP button. (uwu)</string>
+
+    <string name="app">App (◡ w ◡)</string>
+    <string name="immersive_mode">H-h-hide (ᵘʷᵘ) S-s-status (ᵘﻌᵘ) Baw (˘ሠ˘)</string>
+    <string name="immersive_mode_info">Wequiwes (˘ω˘) App westawt (˘³˘) t-t-t-to fuwwy appwy.</string>
+    <string name="home_layout_show">Show/Hide Uwu Wayouts o-o-on (ᵘʷᵘ) Home</string>
+    <string-array name="home_layouts">
+        <item>Continue Watching</item>
+        <item>Favourite Anime</item>
+        <item>Planned Anime</item>
+        <item>Continue Reading</item>
+        <item>Favourite Manga</item>
+        <item>Planned Manga</item>
+        <item>Recommended</item>
+    </string-array>
+
+    <string name="startUpTab">Defauwt Stawt Up *˚*(ꈍ ω ꈍ).₊̣̇. Tab *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:*</string>
+    <string name="small_view">S-s-s-smaww ***screeches*** View x3 in Twending ~(˘▾˘~) ***looks around suspiciously*** S-s-shows *˚*(ꈍ ω ꈍ).₊̣̇.</string>
+    <string name="animations">Anyimations</string>
+    <string name="banner_animations">Bannyew Anyimations</string>
+    <string name="layout_animations">Wayout Anyimations (ᵘʷᵘ)</string>
+    <string name="animation_speed">Ovewaww uwU Speed (U ᵕ U❁) ***licks lips***</string>
+    <string name="empty_fav">Wooks wike you don\'t (◡ w ◡) wike anything,\nTwy (。U ω U。) ***runs away*** wiking ***huggles tightly*** a show to keep it ~(˘▾˘~) hewe.</string>
+    <string name="fav_anime">Favouwite (ᵕᴗ ᵕ⁎) Anyime</string>
+    <string name="fav_manga">Favouwite M-m-m-manga ***wags my tail***</string>
+    <string name="restart_app">Westawt t-t-the app!? ♥(。U ω U。)</string>
+    <string name="next">Nyext (◡ ሠ ◡)</string>
+    <string name="previous">Pwevious ( ˘ᴗ˘ )</string>
+    <string name="current_page">Cuwwent Page</string>
+    <string name="dubbed">Dubbed ~(˘▾˘~) ***glomps***</string>
+    <string name="subbed">Subbed (◦ᵕ ˘ ᵕ◦)</string>
+    <string name="prefer_dub">Pwefew Dubbed (˘˘˘) Anyime</string>
+    <string name="none">Nyonye</string>
+    <string name="selected_dns">Sewected DNS</string>
+    <string name="dns_info">Change if youw (ᵘʷᵘ) ISP bwocks any souwce ***looks around suspiciously***</string>
+    <string name="keep_screen_on">Keep (◡ ሠ ◡) Scween On</string>
+    <string name="layout">Wayout</string>
+    <string name="spaced_pages">Spaced Pages</string>
+    <string name="direction">Diwection (ᵘﻌᵘ)</string>
+
+    <string name="general">Genyewaw ***looks at you***</string>
+    <string name="show_system_bars">Show ***wags my tail*** Status &amp; (˘ᵕ˘) Nyavigation Baws</string>
+    <string name="auto_detect_webtoon">Auto (⑅˘꒳˘) Detect x3 Webtoon</string>
+    <string name="auto_detect_webtoon_info">If the ;;w;; Manga ***blushes*** is n-n-n-nyot fwom Japan, the w-w-w-weadew w-w-w-wiww ^w^ defauwt to (。U ω U。) Webtoon Weadew Settings</string>
+    <string name="default_settings">Defauwt Settings ***pounces on you***</string>
+    <string name="horizontal_scroll_bar">Howizontaw (ᵘﻌᵘ) Scwoww (ᵕᴗ ᵕ⁎) Baw</string>
+    <string name="dual_page">Duaw Uwu Page ( ᵘ ꒳ ᵘ ✼)</string>
+    <string name="dual_page_info">Shows 2-2-2-2 ^-^ Images in 1 *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* p-p-p-page, wiww wook (˘ε˘) w-w-w-weiwd (◡ ሠ ◡) ***boops your nose*** i-i-if the ( ͡o ᵕ ͡o ) images owo ***looks around suspiciously*** awen\'t the (˘ሠ˘) same size</string>
+    <string name="true_colors">T-t-t-twue Cowows</string>
+    <string name="true_colors_info">(32-bit c-c-cowow Mode) Weduces Banding on the images, may affect ;;w;; pewfowmance.</string>
+    <string name="image_rotation">I-i-i-image (◡ ω ◡) Wotation</string>
+    <string name="hide_page_numbers">H-h-hide Page Nyumbews</string>
+    <string name="sort_by_title">Sowt by ***huggles tightly*** T-t-t-titwe ღ(U꒳Uღ)</string>
+    <string name="sort_by_last_updated">Sowt by Wast Updated (◡ ሠ ◡)</string>
+    <string name="sort_by_score">S-s-s-sowt by Scowe ♥(。U ω U。)</string>
+    <string name="over_scroll">Ovew S-s-scwoww t-t-t-to ( ᴜ ω ᴜ ) Nyext/Pwevious Chaptew ( ᵘ ꒳ ᵘ ✼)</string>
+    <string name="volume_buttons">Change (◡ ꒳ ◡) ***screams*** pages with ***blushes*** V-v-v-vowume ~(˘▾˘~) Buttons</string>
+    <string name="list_private">Pwivate</string>
+    <string name="wrap_images">Wwap Images (⑅˘꒳˘)</string>
+    <string name="wrap_images_info">Mostwy usefuw fow wawgew ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** devices, ( ͡o ꒳ ͡o ) ***looks at you*** w-w-wemuvs space between images, if ღ(U꒳Uღ) they exist.</string>
+    <string name="reload">Wewoad OwO</string>
+    <string name="share">S-s-shawe (ㅅꈍ ˘ ꈍ)</string>
+    <string name="skip">Skip</string>
+    <string name="show_skip_time_stamp_button">Show (◡ ꒳ ◡) ***cries*** Skip (ᵕᴗ ᵕ⁎) Time (◡ w ◡) Stamp Button</string>
+    <string name="always_load_time_stamps">Awways Woad Time (◡ ω ◡) Stamps (◡ ꒳ ◡)</string>
+    <string name="timestamps">Time Stamps</string>
+    <string name="other">Othew</string>
+    <string name="auto_skip_op_ed">Auto (˘ሠ˘) Skip ( ｡ᵘ ᵕ ᵘ ｡) OP / (・\`ω\´・) ED</string>
+    <string name="requires_time_stamps_to_be_enabled">Wequiwes Time (ᵘﻌᵘ) Stamps to ( ͡U ω ͡U ) be ♥(。U ω U。) Enyabwed :3</string>
+    <string name="total_repeats">TOTAW WEPEATS</string>
+    <string name="custom_lists">Custom ( ｡ᵘ ᵕ ᵘ ｡) ***glomps and huggles*** Wists</string>
+    <string name="donate_desc">Want to suppowt Dantotsu\'s ( ᵘ ꒳ ᵘ ✼) Maintainyew?\nConsidew ~(˘▾˘~) Donyating (U ᵕ U❁)</string>
+    <string name="donate_goal">Nyo donyation ***wags my tail*** goaw ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** atm</string>
+    <string name="filter">Fiwtew</string>
+    <string name="year">Yeaw (⑅˘꒳˘)</string>
+    <string name="apply">Appwy ***walks away***</string>
+    <string name="cancel">Cancew owo</string>
+    <string name="this_season">This S-s-season (ᵘﻌᵘ) ***screeches***</string>
+    <string name="next_season">Nyext Season (◡ ω ◡) ***cries***</string>
+    <string name="previous_season">Pwevious Season UwU</string>
+    <string name="include_media_in_list">I-i-i-incwude Wist ~(˘▾˘~) ***whispers to self***</string>
+    <string name="release_calendar">Cawendaw</string>
+    <string name="planned_anime">Pwannyed A-a-a-anyime ( ͡o ꒳ ͡o )</string>
+    <string name="planned_manga">Pwannyed (ᴜ‿ᴜ✿) ***screeches*** Manga</string>
+    <string name="image_long_clicking">Open (˘ε˘) image by Wong (ᵕᴗ ᵕ⁎) Cwicking</string>
+    <string name="always_continue_shows">Awways continyue Shows</string>
+    <string name="timestamp_proxy_desc">Usefuw if you awe g-g-g-getting (⑅˘꒳˘) Handshake (˘ᵕ˘) Faiws OwO</string>
+    <string name="timestamp_proxy">Use Pwoxy ***looks around suspiciously*** fow Timestamps</string>
+    <string name="check_app_updates">Awways ~(˘▾˘~) check ( ˊ.ᴗˋ ) fow (ᵕᴗ ᵕ⁎) ***whispers to self*** A-a-a-app Updates (◡ w ◡)</string>
+    <string name="author">Authow</string>
+    <string name="forks">Vewsions</string>
+    <string name="faq">FAQ</string>
+    <string name="accounts">Accounts</string>
+    <string name="myanimelist">MyAnyimeWist</string>
+    <string name="login_with_anilist">Wogin ***blushes*** with Anyiwist!? ( ˘ᴗ˘ )</string>
+    <string name="anilist">Anyiwist</string>
+    <string name="account_help">How (◡ w ◡) ***glomps and huggles*** does ( ｡ᵘ ᵕ ᵘ ｡) this (｡ᴜ‿‿ᴜ｡) wowk\?!?! ***licks lips***</string>
+    <string name="full_account_help">
+-
+-
+        Dantotsu i-i-i-is (ㅅꈍ ˘ ꈍ) a-a-an Anyiwist Based ***huggles tightly*** App, ***huggles tightly*** so fow ( ˘ᴗ˘ ) s-s-syncing with (uwu) youw ;;w;; MAW Account, ***wags my tail*** It ( ͡U ω ͡U ) nyeeds (◡ ꒳ ◡) an Anyiwist account to be wogged ( ˊ.ᴗˋ ) ***blushes*** in.
+ („ᵕᴗᵕ„)        \nOnce (・\`ω\´・) wogged in with both Anyiwist ( ͡o ꒳ ͡o ) and MAW (˘ε˘) accounts, the app w-w-w-wiww automaticawwy u-u-u-update youw ***looks around suspiciously*** MAW a-a-a-account whenyevew:
+        \n- Add a nyew M-m-media
+ (ᵘﻌᵘ)        \n- Edit a ღ(U꒳Uღ) Media
+        \n- (◡ w ◡) Dewete (｡ᴜ‿‿ᴜ｡) a Media
+
+ (◡ w ◡) ***huggles tightly***        \n\nNyote: The a-a-a-app (◡ w ◡) wiww nyot sync owd Media\'s (◡ w ◡) fwom Anyiwist (ᴜ‿ᴜ✿) to M-M-M-MAW, x3 It\'s w-w-w-wecommended ( ͡U ω ͡U ) to sync ( ˊ.ᴗˋ ) ***sweats*** them.
+ (˘ε˘)        \n- Check __FAQs__ ^w^ fow _Easy Method_
+
+        \n\nAnd fow (ᵘﻌᵘ) _Intewmediates_ :
+        \n- [How t-t-to (uwu) sync – ̗̀ (ᵕ꒳ᵕ) ̖́- Anyiwist ღ(U꒳Uღ) d-d-d-data with MAL](https://anilist.co/forum/thread/2654)
+        \n- owo [How ^-^ to sync MAW data with (ᵕᴗ ᵕ⁎) ***cries*** Anilist](https://anilist.co/forum/thread/3393)
+
+        \n\n_It ***licks lips*** is nyot wequiwed to sync both M-M-M-MAW and Anyiwist a-a-accounts._
+ (◡ w ◡)    </string>
+    <string name="notification_for_checking_subscriptions">Show nyotification fow ***screams*** Checking Subscwiptions</string>
+    <string name="checking_subscriptions">Nyotification fow Checking Subscwiptions</string>
+    <string name="subscriptions_checking_time_s">Subscwiptions Update Fwequency : %1$s</string>
+    <string name="subscriptions_checking_time">Subscwiptions ( ͡U ω ͡U ) Update Fwequency</string>
+    <string name="subscriptions_info">Amount of time fow Dantotsu to pewiodicawwy check fow ;;w;; nyew UwU Episodes/Chaptews\n(Wess time – ̗̀ (ᵕ꒳ᵕ) ̖́- wiww cause („ᵕᴗᵕ„) mowe battewy \&gt;w\&lt; consumption) (◡ ω ◡)</string>
+    <string name="do_not_update">Don\'t Update ( ｡ᵘ ᵕ ᵘ ｡)</string>
+    <string name="loading_next_chap">W-w-w-woading Nyext (◡ ω ◡) Chaptew</string>
+    <string name="grid">Gwid (˘ε˘)</string>
+    <string name="sort_by_release_date">Sowt ***wags my tail*** by Wewease UwU Date</string>
+    <string name="crop_borders">Cwop (˘ε˘) Bowdews</string>
+    <string name="note">NYOTE</string>
+
+
+    <string name="jobless_message">DAMN!!1! YOU TWUWY (◡ ꒳ ◡) ***screams*** AWE ***blushes*** JOBWESS\nYOU WEACHED THE END x3</string>
+    <string name="file_manager_not_found">Couwdn\'t find (◡ ꒳ ◡) any Fiwe Manyagew to open ;;w;; SD ♥(。U ω U。) cawd</string>
+    <string name="error_loading_data">Ewwow woading ^-^ data %1$s (˘ᵕ˘)</string>
+    <string name="long_click_to_check_update">You (・\`ω\´・) Wong C-c-c-cwick (ᵘʷᵘ) the button to check fow Uwu App Update</string>
+    <string name="saved_to_path">Saved to:\n%s („ᵕᴗᵕ„)</string>
+    <string name="setting_progress">Setting ***blushes*** p-p-pwogwess (ᵘﻌᵘ) to ***sweats*** %-%-%1$d</string>
+    <string name="login_anilist_account">Pwease ( ͡U ω ͡U ) Wogin (⑅˘꒳˘) into anyiwist ***screeches*** account!?</string>
+    <string name="congrats_vro">Congwats \&gt;w\&lt; Vwo</string>
+    <string name="please_reload">P-p-pwease Wewoad. (。U ω U。)</string>
+    <string name="copied_text">Copied "%1$s" ( ˊ.ᴗˋ )</string>
+    <string name="back_to_exit">Pwease (。U ω U。) pewfowm BACK again to Exit</string>
+    <string name="no_internet_connection">Nyo ÚwÚ Intewnyet ***sweats*** Connyection (◡ ሠ ◡)</string>
+    <string name="anilist_not_found">Seems (⑅˘꒳˘) wike that wasn\'t found on x3 Anyiwist.</string>
+    <string name="disabled_auto_skip">Disabwed *˚*(ꈍ ω ꈍ).₊̣̇. A-a-auto Skipping ( ͡o ꒳ ͡o ) OP ^w^ &amp; E-E-ED</string>
+    <string name="auto_skip">Auto Skipping OP ***smirks smuggly*** &amp; ED ***screams***</string>
+    <string name="copied_to_clipboard">Copied to ^-^ Cwipboawd</string>
+    <string name="first_episode">This ÚwÚ is the (uwu) 1st Episode?!?!</string>
+    <string name="reset_auto_update">You can wong cwick ( ᵘ ꒳ ᵘ ✼) Wist Editow ÚwÚ button t-t-t-to Weset Auto Update</string>
+    <string name="autoplay_cancelled">Autopway (◡ ꒳ ◡) cancewwed, (U ᵕ U❁) nyo ( ᵘ ꒳ ᵘ ✼) I-i-intewaction UwU ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** fow mowe („ᵕᴗᵕ„) than 1 Houw.</string>
+    <string name="auto_select_server_error">Couwdn\'t (。U ω U。) auto ***huggles tightly*** sewect (ᵘʷᵘ) the *˚*(ꈍ ω ꈍ).₊̣̇. sewvew, Pwease twy again!?</string>
+    <string name="logging_in_mal">Wogging in MAW</string>
+    <string name="getting_user_data">Getting U-u-usew \&gt;w\&lt; Data ***cries***</string>
+    <string name="no_next_episode">Nyo (ㅅꈍ ˘ ꈍ) nyext E-e-e-episode Found?!! ( ˊ.ᴗˋ )</string>
+    <string name="enable_banner_animations">Twy ***walks away*** Enyabwing (U ﹏ U) Bannyew Anyimations ***runs away*** fwom Settings</string>
+    <string name="please_login_anilist">Pwease ***pounces on you*** Wogin with Anyiwist!? ***nuzzles your necky wecky***</string>
+    <string name="auto_update_reset">Auto Update Pwogwess h-h-has nyow been (｡ᴜ‿‿ᴜ｡) Weset-ed ( ͡o ᵕ ͡o )</string>
+    <string name="cant_wait">Can\'t Wait, huh?!?! ***glomps*** finye (˘ε˘) X(</string>
+    <string name="downloading">Downwoading… UwU</string>
+    <string name="next_chapter_not_found">Nyext Chaptew Nyot Found</string>
+    <string name="first_chapter">This is ***looks at you*** the 1-1-1st Chaptew!!1! ;;w;; ***wags my tail***</string>
+    <string name="adult_stuff">Aduwt (⑅˘꒳˘) Stuff?( ͡° ͜ʖ ^w^ ͡° )</string>
+    <string name="what_did_you_open">W-w-what d-d-did (｡ᴜ‿‿ᴜ｡) you even ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** open?!! – ̗̀ (ᵕ꒳ᵕ) ̖́-</string>
+    <string name="error_getting_data">Ewwow ***sweats*** getting OwO Data fwom Anyiwist. (˘ሠ˘)</string>
+    <string name="empty_response">Empty Wesponse, Does ***cries*** youw (ᵘʷᵘ) intewnyet pewhaps suck?!! ***wags my tail***</string>
+    <string name="error_loading_mal_user_data">Ewwow woading MAW Usew Data</string>
+    <string name="error_loading_mal_data">Faiwed (ㅅꈍ ˘ ꈍ) to woad data (uwu) fwom ÚwÚ MAW (◡ w ◡)</string>
+    <string name="error_loading_anilist_user_data">Ewwow woading Anyiwist Usew (◦ᵕ ˘ ᵕ◦) ***boops your nose*** Data</string>
+    <string name="episode_not_found">Couwdn\'t find e-e-e-episode : %1$s</string>
+    <string name="list_updated">Wist (ㅅꈍ ˘ ꈍ) Updated</string>
+    <string name="deleted_from_list">Deweted fwom ***screams*** Wist</string>
+    <string name="no_list_id">Nyo Wist ID found, wewoading… ^-^ ***screams***</string>
+    <string name="checking_for_update">Checking (ㅅꈍ ˘ ꈍ) fow ***huggles tightly*** Update</string>
+    <string name="dont_show_again">Don\'t ^-^ show a-a-again ~(˘▾˘~) ***cries*** fow vewsion ( ᴜ ω ᴜ ) %1$s</string>
+    <string name="no_update_found">Nyo ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** U-u-u-update Found</string>
+    <string name="downloading_update">Downwoading Update (◡ ꒳ ◡) %1$s ( ᴜ ω ᴜ )</string>
+    <string name="permission_required">Pwease give (◡ ሠ ◡) p-p-pewmission to (◡ w ◡) access Fiwes &amp; ***screeches*** Fowdews fwom Settings, &amp; Twy again. (U ﹏ U)</string>
+    <string name="started_downloading">S-s-s-stawted (◡ ꒳ ◡) Downwoading\n%1$s</string>
+    <string name="install_1dm">Pwease ( ｡ᵘ ᵕ ᵘ ｡) instaww ***glomps*** 1-1-1-1DM ***looks around suspiciously***</string>
+    <string name="install_adm">Pwease instaww OwO ADM (ㅅꈍ ˘ ꈍ)</string>
+    <string name="error_getting_image_data">Ewwow getting Image Data</string>
+    <string name="loading_image_failed">Woading Image Faiwed (ᵘﻌᵘ)</string>
+    <string name="copied_device_info">Copied device info</string>
+    <string name="anilist_down">Seems wike Anyiwist is (◡ ω ◡) down, m-m-maybe twy using *˚*(ꈍ ω ꈍ).₊̣̇. a VPN ***screeches*** ow you c-c-can wait UwU fow ♥(。U ω U。) it to come ***blushes*** back.</string>
+    <string name="failed_to_load_data">Faiwed to w-w-w-woad („ᵕᴗᵕ„) saved (ᴜ‿ᴜ✿) data of %1$d</string>
+    <string name="access_not_available">Wasn\'t abwe uwU to x3 get (◡ ω ◡) a-a-access</string>
+    <string name="mal_login_uri_not_found">Maw ( ᴜ ω ᴜ ) Wogin : U-u-u-uwi nyot Found</string>
+    <string name="mal_login_code_challenge_not_found">Maw (ㅅꈍ ˘ ꈍ) Wogin : codeChawwenge n-n-nyot found</string>
+    <string name="mal_login_code_not_present">Maw Wogin : Code nyot pwesent ( ｡ᵘ ᵕ ᵘ ｡) in (ᵘʷᵘ) Wediwected UWI</string>
+    <string name="refresh_token_load_failed">W-w-wefwesh Token : Faiwed to woad Saved (⑅˘꒳˘) Token</string>
+    <string name="refreshing_token_failed">Wefweshing Token ***cries*** Faiwed</string>
+    <string name="episode_release_countdown">Episode (ㅅꈍ ˘ ꈍ) %-%-%1$d wiww ( ͡o ꒳ ͡o ) b-b-be (˘ᵕ˘) ***runs away*** w-w-w-weweased in</string>
+    <string name="time_format">%1$d d-d-days %2$d hws ( ｡ᵘ ᵕ ᵘ ｡) %3$d ^-^ mins %4$d OwO secs</string>
+    <string-array name="sort_by">
+        <item>Score</item>
+        <item>Popular</item>
+        <item>Trending</item>
+        <item>A-Z</item>
+        <item>Z-A</item>
+        <item>What?</item>
+    </string-array>
+    <string name="main_role">MAIN ( ｡ᵘ ᵕ ᵘ ｡)</string>
+    <string name="supporting_role">SUPPOWTING uwU</string>
+
+    <string name="status_finished">FINYISHED ***boops your nose***</string>
+    <string name="status_releasing">WEWEASING</string>
+    <string name="status_not_yet_released">NYOT (˘ε˘) YET WEWEASED ***whispers to self***</string>
+    <string name="status_cancelled">CANCEWWED</string>
+    <string name="status_hiatus">HIATUS</string>
+
+    <string name="type_adaptation">ADAPTATION</string>
+    <string name="type_parent">P-P-P-PAWENT ^-^</string>
+    <string name="type_character">CHAWACTEW</string>
+    <string name="type_summary">S-S-S-SUMMAWY</string>
+    <string name="type_alternative">AWTEWNYATIVE ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
+    <string name="type_other">OTHEW</string>
+    <string name="type_source">SOUWCE (uwu)</string>
+    <string name="type_contains">CONTAINS ( ͡o ꒳ ͡o )</string>
+
+    <string name="read_on_dantotsu">W-w-wead on Dantotsu :3</string>
+    <string name="watch_on_dantotsu">Watch ***wags my tail*** on Dantotsu ***wags my tail***</string>
+    <string name="continue_episode">"Continyue ^-^ : Episode (◡ ꒳ ◡) "</string>
+    <string name="continue_chapter">"Continyue : "</string>
+    <string name="episode">"Episode " OwO</string>
+    <string name="episode_num">"Episode (˘ω˘) %1$s"</string>
+    <string name="chapter">"Chaptew (◡ ꒳ ◡) "-"-" Uwu</string>
+    <string name="chapter_num">"Chaptew uwU %1$s"</string>
+    <string name="just_released">- just got w-w-weweased?!?!</string>
+    <string name="checking_subscriptions_title">Checking ( ᵘ ꒳ ᵘ ✼) Subscwiptions</string>
+
+    <string name="speed">Speed</string>
+    <string name="auto_update">Auto Update pwogwess ***glomps and huggles*** fow („ᵕᴗᵕ„) %1$s?!?1</string>
+    <string name="continue_from">Continyue ***wags my tail*** fwom uwU ***looks at you*** %1$s!!11 ***screams***</string>
+    <string name="title_update_progress">U-u-update pwogwess \&gt;w\&lt; on a-a-a-anyiwist?!?!</string>
+    <string name="dont_ask_again">"Don\'t ***smirks smuggly*** ask (˘ω˘) again ^w^ fow ^-^ %1$s" uwU</string>
+    <string name="default_speed">Defauwt Speed (˘˘˘)</string>
+    <string name="default_resize_mode">Defauwt (ᴜ‿ᴜ✿) Wesize Mode</string>
+    <string name="primary_sub_color">Pwimawy Sub C-c-cowow ( ᵘ ꒳ ᵘ ✼)</string>
+    <string name="outline_sub_color">Outwinye Sub Cowow (˘ሠ˘)</string>
+    <string name="outline_type">Outwinye Type – ̗̀ (ᵕ꒳ᵕ) ̖́-</string>
+    <string name="subtitle_font">Subtitwe Font (˘³˘)</string>
+
+
+    <string name="yes">Yes</string>
+    <string name="no">Nyo</string>
+    <string name="close">Cwose</string>
+    <string name="no_chapter">Nyo Chaptew ***wags my tail***</string>
+    <string name="content_18">Tuwn OwO on (ᴜ‿ᴜ✿) 18+ Content ( ˘ᴗ˘ ) f-f-f-fwom youw Anyiwist S-s-settings</string>
+    <string name="available">A-a-a-avaiwabwe</string>
+    <string name="lets_go">Wet\'s Go</string>
+    <string name="cope">Cope</string>
+
+    <string name="watched_num">"Watched UwU ***screeches*** "</string>
+    <string name="read_num">"Wead (˘ᵕ˘) " (˘˘˘)</string>
+    <string name="episodes_out_of">" ***runs away*** out of " ( ͡o ᵕ ͡o )</string>
+    <string name="chapters_out_of">" out of "</string>
+    <string name="episodes_total_of">"Totaw of ( ͡U ω ͡U ) " ( ͡o ᵕ ͡o ) ***blushes***</string>
+    <string name="chapters_total_of">"Totaw of "</string>
+    <string name="no_description_available">"Nyo (｡ᴜ‿‿ᴜ｡) ***sweats*** Descwiption (˘˘˘) A-a-avaiwabwe"</string>
+
+    <string-array name="manga_directions">
+        <item>Top to Bottom</item>
+        <item>Right to Left</item>
+        <item>Bottom to Top</item>
+        <item>Left to Right</item>
+    </string-array>
+
+    <string-array name="manga_layouts">
+        <item>Paged</item>
+        <item>Continuous Paged</item>
+        <item>Continuous</item>
+    </string-array>
+
+    <string name="selected">Sewected (⑅˘꒳˘)</string>
+    <string name="found">Found</string>
+
+    <string name="age">"__Age:__ (˘ሠ˘) "</string>
+    <string name="birthday">\n"__Biwthday:__ "</string>
+    <string name="gender">\n"__Gendew:__ (ᵕᴗ ᵕ⁎) "</string>"
+
+    <string name="male">Mawe</string>
+    <string name="female">Femawe</string>
+
+    <string name="question_1">W-w-w-what is („ᵕᴗᵕ„) Dantotsu?\n Why shouwd you use Dantotsu?!?1</string>
+    <string name="answer_1">Dantotsu is cwafted fwom ( ｡ᵘ ᵕ ᵘ ｡) the ashes (˘ሠ˘) of Saikou and (ᵘﻌᵘ) based ( ͡U ω ͡U ) on simpwistic yet ^w^ state-of-the-awt – ̗̀ (ᵕ꒳ᵕ) ̖́- ewegance. It *˚*(ꈍ ω ꈍ).₊̣̇. ***cries*** is an Anyiwist onwy cwient, which („ᵕᴗᵕ„) awso wets you stweam ***huggles tightly*** &amp; downwoad Anyime uwU / Manga thwough ***smirks smuggly*** extensions. ***huggles tightly*** \n&gt;Dantotsu ^w^ (断トツ; (uwu) ***walks away*** Dan-totsu) ***glomps*** witewawwy means the ( ˘ᴗ˘ ) best of the best ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** in ( ˘ᴗ˘ ) J-j-japanyese. Weww, ***nuzzles your necky wecky*** we wouwd wike to say (⑅˘꒳˘) this i-i-i-is the (。U ω U。) best open *˚*(ꈍ ω ꈍ).₊̣̇. souwce app fow anyime (˘³˘) a-a-and manga on Andwoid, but hey, Twy it (・\`ω\´・) out youwsewf (˘ሠ˘) &amp; (◡ ω ◡) judge!!1! ***looks at you***</string>
+
+    <string name="question_2">What awe ( ᴜ ω ᴜ ) some featuwes of (｡ᴜ‿‿ᴜ｡) Dantotsu!!11 (˘˘˘)</string>
+    <string name="answer_2">Some (U ᵕ U❁) ***screeches*** mentionyabwe featuwes *˚*(ꈍ ω ꈍ).₊̣̇. of (⑅˘꒳˘) D-d-dantotsu awe\n\n- Easy and x3 functionyaw way to both, ღ(U꒳Uღ) w-w-w-watch Uwu anyime and w-w-w-wead manga ( ᴜ ω ᴜ ) and („ᵕᴗᵕ„) wight nyuvws, ***sweats*** Ad Fwee.\n- ( ͡U ω ͡U ) A-a-a-a compwetewy open souwce app ÚwÚ with (ㅅꈍ ˘ ꈍ) a (˘ሠ˘) n-n-nyice ( ᴜ ω ᴜ ) UI &amp;-&amp;-&amp; ~(˘▾˘~) Anyimations\n- ^-^ ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** 3wd pawty pwugin suppowt (◡ ሠ ◡) \n- (˘³˘) Synchwonyize anyime and manga weaw-time with AnyiWist. (U ﹏ U) Easiwy categowize (◡ ω ◡) anyime (ᵘʷᵘ) and manga ^-^ based on (。U ω U。) youw cuwwent ***whispers to self*** status. (˘˘˘) (Powewed by A-a-anyiWist)\n- Find aww shows u-u-u-using (。U ω U。) thowoughwy ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** and fwequentwy (・\`ω\´・) ***screams*** updated OwO wist of (U ᵕ U❁) aww twending, popuwaw and (◡ w ◡) ongoing a-a-a-anyime based uwU on s-s-s-scowes.\n- View extensive ( ͡o ᵕ ͡o ) detaiws about anyime (◡ ω ◡) shows, movies and (ᵕᴗ ᵕ⁎) manga ( ᵘ ꒳ ᵘ ✼) titwes. It a-a-awso ***blushes*** featuwes abiwity to countdown (˘ω˘) to the nyext episode of (◡ ሠ ◡) aiwing ( ˘ᴗ˘ ) anyime. (Powewed b-b-b-by ***screeches*** A-a-a-anyiWist (ᴜ‿ᴜ✿) &amp; M-m-myAnyimeWist)</string>
+
+    <string name="question_3">W-w-w-what (◡ ω ◡) awe Awtifacts!!1! (U ᵕ U❁)</string>
+    <string name="answer_3">Whenyevew ***cries*** a devewopew commits o-o-ow (U ﹏ U) ***walks away*** puww (⑅˘꒳˘) wequests a (ᵘʷᵘ) featuwe ***pounces on you*** ow ( ͡U ω ͡U ) fix, GitHub ( ｡ᵘ ᵕ ᵘ ｡) automaticawwy makes UwU an ***looks at you*** APK ( ｡ᵘ ᵕ ᵘ ｡) fiwe fow *˚*(ꈍ ω ꈍ).₊̣̇. you to use. This (˘ω˘) APK (˘˘˘) is cawwed an Awtifact. (˘ω˘) Awtifacts (◦ᵕ ˘ ᵕ◦) thwough puww wequests ~(˘▾˘~) may ow may ÚwÚ nyot be added to (◡ ω ◡) the main (ᵘﻌᵘ) wewease (˘ᵕ˘) ***pounces on you*** o-o-o-of the app. Awtifacts have a highew c-c-c-chance of having b-b-bugs ♥(。U ω U。) and (◡ ω ◡) gwitches. To (⑅˘꒳˘) knyow if ***wags my tail*** nyew (⑅˘꒳˘) awtifacts (˘ᵕ˘) ***wags my tail*** awe avaiwabwe, Uwu staw (uwu) the Dantotsu wepositowy and (ᵕᴗ ᵕ⁎) tuwn on nyotifications\n\nTo ***nuzzles your necky wecky*** d-d-downwoad ÚwÚ an (˘ሠ˘) Awtifact:\n1) Sign (U ﹏ U) ***screeches*** In/Up (U ᵕ U❁) ***glomps and huggles*** in GitHub\n2) Go t-t-t-to (◦ᵕ ˘ ᵕ◦) Dantotsu\n3) :3 ***walks away*** Go (ᵘﻌᵘ) to (˘ε˘) actions\n4) (˘ሠ˘) Pwess o-o-o-on the wowkfwow wun you ***glomps and huggles*** want (・\`ω\´・) to (U ᵕ U❁) downwoad the awtifact o-o-o-of.\n5) Pwess on awtifact\n6) ***whispers to self*** Extwact ღ(U꒳Uღ) the fiwe using a zip extwactow\n7) UwU Instaww ( ᴜ ω ᴜ ) and enjoy.</string>
+
+    <string name="question_4">Is D-d-dantotsu ♥(。U ω U。) avaiwabwe (˘³˘) ***boops your nose*** fow (uwu) PC?!?1 (˘ሠ˘)</string>
+    <string name="answer_4">Cuwwentwy ***glomps and huggles*** nyo (◡ ꒳ ◡) ***wags my tail*** (fow (U ᵕ U❁) b-b-b-both Windows ***wags my tail*** and (ᴜ‿ᴜ✿) ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** Winyux). Thewe ( ͡o ᵕ ͡o ) isn\'t (◡ ꒳ ◡) any e-e-e-estimation ( ˘ᴗ˘ ) when it ( ᵘ ꒳ ᵘ ✼) wiww be avaiwabwe. But you can owo downwoad ***boops your nose*** any Andwoid ( ᴜ ω ᴜ ) emuwatow and wun Dantotsu (˘ε˘) on it. Fow Windows ÚwÚ 11 usews, they can use the (U ﹏ U) Windows *˚*(ꈍ ω ꈍ).₊̣̇. ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** Subsystem fow Andwoid (WSA) owo to ***cries*** wun Dantotsu in ( ᵘ ꒳ ᵘ ✼) Windows.</string>
+
+    <string name="question_5">Is (⑅˘꒳˘) ***blushes*** Dantotsu avaiwabwe ***wags my tail*** fow iOS!!11</string>
+    <string name="answer_5">Nyo, and cuwwentwy n-n-nyo (◡ ꒳ ◡) pwans to (˘ω˘) ***walks away*** suppowt iOS</string>
+
+    <string name="question_6">Why awe my ( ͡o ꒳ ͡o ) stats *˚*(ꈍ ω ꈍ).₊̣̇. nyot updating?!?!</string>
+    <string name="answer_6">This :3 ***blushes*** is because i-i-i-it updates evewy 48 houws (◦ᵕ ˘ ᵕ◦) automaticawwy (by (ᴜ‿ᴜ✿) Anyiwist). UwU If (⑅˘꒳˘) you weawwy OwO nyeed ***glomps*** to ***nuzzles your necky wecky*** update youw stats, (◡ ꒳ ◡) you can fowce update youw s-s-stats aftew (⑅˘꒳˘) going to ÚwÚ this (⑅˘꒳˘) [link](https://anilist.co/settings/lists).</string>
+
+    <string name="question_7">How to (˘³˘) ***blushes*** downwoad Episodes!!1! (｡ᴜ‿‿ᴜ｡) ***glomps***</string>
+    <string name="answer_7">1-1-1. (˘ᵕ˘) Downwoad 1DM o-o-o-ow ADM f-f-f-fwom Googwe (˘³˘) ***blushes*** Pway (｡ᴜ‿‿ᴜ｡) Stowe.
+        \n2. ***boops your nose*** Entew x3 the a-a-a-app, give ***blushes*** stowage access (◡ ꒳ ◡) and \&gt;w\&lt; ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** s-s-s-set y-y-y-youw (˘³˘) pwefewences (downwoading speed, downwoading path ( ᴜ ω ᴜ ) etc(optionyaw))
+        \n3. (ᴜ‿ᴜ✿) Nyow go to Dantotsu ;;w;; &gt; Settings &gt; C-c-c-common (U ﹏ U) &gt;-&gt;-&gt; ***cries*** Downwoad M-m-manyagews owo and (˘˘˘) choose the d-d-downwoad (ᵘﻌᵘ) manyagew you ÚwÚ just s-s-s-set up.
+        \n4. (◡ ሠ ◡) Go to youw desiwed episode and pwess on (˘³˘) the downwoad icon ***huggles tightly*** o-o-o-of any s-s-s-sewvew. ^w^ Thewe (⑅˘꒳˘) may be a ***screeches*** popup to set youw ***sweats*** pwefewences again, just pwess – ̗̀ (ᵕ꒳ᵕ) ̖́- on "Downwoad" (ᴜ‿ᴜ✿) and it wiww (uwu) b-b-be saved in the diwected path.
+
+        \n\nNyote: ( ͡o ꒳ ͡o ) D-d-d-diwect downwoads awe awso possibwe without a ***nuzzles your necky wecky*** m-m-manyagew – ̗̀ (ᵕ꒳ᵕ) ̖́- but it\'s (⑅˘꒳˘) nyot wecommended.</string>
+
+    <string name="question_8">How to downwoad M-m-manga Chaptews?!?1 ( ᴜ ω ᴜ ) ***looks at you***</string>
+    <string name="answer_8">It is yet ( ˘ᴗ˘ ) nyot ( ᴜ ω ᴜ ) possibwe to d-d-d-downwoad chaptews in Dantotsu but this featuwe Uwu wiww be ***wags my tail*** impwemented soon.</string>
+
+    <string name="question_9">How to ***boops your nose*** enyabwe NSFW content?!?1</string>
+    <string name="answer_9">You ***glomps and huggles*** can enyabwe (◡ ꒳ ◡) nsfw c-c-c-content b-b-b-by (˘ሠ˘) enyabwing 18+ (˘˘˘) contents fwom this [link](https://anilist.co/settings/media). (◡ ሠ ◡)</string>
+
+    <string name="question_10">How to impowt (・\`ω\´・) my MAW/Kitsu uwU ***screeches*** wist ***boops your nose*** to Anyiwist?!?!</string>
+    <string name="answer_10">Hewe is how ♥(。U ω U。) ***boops your nose*** you do it,\n\nExpowt:\n\n1. Go to this ( ͡U ω ͡U ) [-[-[-[link](https://malscraper.azurewebsites.net).\n2. ♥(。U ω U。) Give youw K-k-k-kitsu/MAW (ᵘʷᵘ) usewnyame and ***cries*** downwoad both anyime ***blushes*** and manga uwU ***screeches*** wist. (They ***huggles tightly*** wiww be in XMW fowmat)\nNyote: (ᵘʷᵘ) ***nuzzles your necky wecky*** You have t-t-t-to („ᵕᴗᵕ„) wwite the usewnyame of ***huggles tightly*** the twackew you sewected\n\nImpowt:\n\n1. Aftew expowting ~(˘▾˘~) ***pounces on you*** youw ***smirks smuggly*** anyime ღ(U꒳Uღ) a-a-and manga wist fwom Kitsu/MAW, ***sweats*** nyow ***walks away*** go [here](https://anilist.co/settings/import) (｡ᴜ‿‿ᴜ｡) \n2. Sewect/dwop ÚwÚ the anyime X-X-XMW fiwe o-o-on (˘³˘) the box (・\`ω\´・) abuv.\n|→Sewect/dwop the ღ(U꒳Uღ) manga XMW fiwe ***boops your nose*** on t-t-the b-b-box bewow. \&gt;w\&lt;</string>
+
+    <string name="question_11">How ***huggles tightly*** to i-i-i-impowt my Anyiwist/Kitsu wist (◡ w ◡) to MAW!? \&gt;w\&lt;</string>
+    <string name="answer_11">Hewe is *˚*(ꈍ ω ꈍ).₊̣̇. how y-y-y-you do Uwu i-i-i-it,\n\nExpowt:\n\n1. Go to (◡ w ◡) t-t-this [link](https://malscraper.azurewebsites.net/). x3 \n2. Give ***screams*** youw ღ(U꒳Uღ) Anyiwist usewnyame/Kitsu ID in the (◡ w ◡) \'Usewnyame/Kitsu Usew ID\' ***smirks smuggly*** b-b-b-box. \n3. Sewect ***smirks smuggly*** wist t-t-type and enyabwe \'update_on_impowt\'. \n4. Downwoad the fiwe; it w-w-w-wiww – ̗̀ (ᵕ꒳ᵕ) ̖́- be in (⑅˘꒳˘) .-.-.-.xmw fowmat. B-b-b-be suwe t-t-t-to downwoad both Anyime (｡ᴜ‿‿ᴜ｡) and Manga wists.\n\nImpowt:\n1. To impowt it in youw MAW account, go (。U ω U。) to this ;;w;; [link](https://myanimelist.net/import.php) ***sweats*** and choose (uwu) \'MyAnyimeWist Impowt\' as (U ﹏ U) impowt type. \n2. (◦ᵕ ˘ ᵕ◦) P-p-pwess on \'Choose Fiwe\'and sewect the ***screams*** downwoaded anyime/manga (ᵕᴗ ᵕ⁎) wist XMW f-f-fiwe. \-\-\n3. Pwess on \'Impowt ***whispers to self*** Data\'. \nCongwatuwations, you just impowted the sewected wist to youw MAW account.</string>
+
+    <string name="question_12">Why can\'t I find a specific ***wags my tail*** anyime/manga owo titwe?!!</string>
+    <string name="answer_12">Wet\'s say you ***sweats*** awe (◡ w ◡) wooking \&gt;w\&lt; fow ***runs away*** Castwevanyia (ᴜ‿ᴜ✿) in (ㅅꈍ ˘ ꈍ) Dantotsu. But (ᵕᴗ ᵕ⁎) ***looks around suspiciously*** Anyiwist (˘ε˘) ***boops your nose*** doesn\'t ***glomps and huggles*** have it, so Dantotsu doesn\'t e-e-eithew.\nA sowution to ( ˊ.ᴗˋ ) ***smirks smuggly*** the abuv pwobwem is as ♥(。U ω U。) fowwows:\n1) Go to any anyime that\'s (ᵕᴗ ᵕ⁎) nyot in youw wist.\n2) ***cries*** Go to t-t-the ( ｡ᵘ ᵕ ᵘ ｡) watch section.\n3) (˘˘˘) Sewect any (˘˘˘) souwce and ( ᵘ ꒳ ᵘ ✼) pwess o-o-on the \'Wwong T-t-titwe?\'.\n4) Nyow s-s-seawch fow Castwevanyia (˘ᵕ˘) (The anyime you :3 w-w-w-wewe ( ᴜ ω ᴜ ) wooking f-f-fow) ***glomps*** and sewect it.\n5) (˘ᵕ˘) ENJOY!\n\nIf (⑅˘꒳˘) you (⑅˘꒳˘) can\'t find ♥(。U ω U。) t-t-t-the anyime even ( ᴜ ω ᴜ ) thwough these steps, then t-t-t-that\'s bad wuck fow y-y-you, ( ˊ.ᴗˋ ) bud. ^-^ Even (uwu) that s-s-s-souwce doesn\'t have (˘ω˘) it. Twy a diffewent UwU ***cries*** souwce.</string>
+
+    <string name="question_13">How to fix souwces – ̗̀ (ᵕ꒳ᵕ) ̖́- sewecting a compwetewy wwong \&gt;w\&lt; t-t-titwe?!?!</string>
+    <string name="answer_13">Dantotsu ***looks around suspiciously*** itsewf doesn\'t host (ᵕᴗ ᵕ⁎) anything but wewies on (◡ w ◡) othew souwces. When (˘ε˘) showing the *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* episodes, it chooses the 1st wesuwt given by (uwu) the ***screeches*** souwce aftew seawching fow („ᵕᴗᵕ„) the titwe. Dantotsu ^-^ has nyo way of *˚*(ꈍ ω ꈍ).₊̣̇. detecting i-i-i-if that\'s (˘ω˘) wegit ow nyot. So, uwU f-f-fow ( ˘ᴗ˘ ) this, ( ᵘ ꒳ ᵘ ✼) we ღ(U꒳Uღ) h-h-have the \-\-\-\'Wwong Titwe?\' j-j-just bewow the souwce ***glomps*** nyame(abuv ( ͡U ω ͡U ) wayouts). Y-y-y-you ***wags my tail*** can choose the c-c-c-cowwect ( ˊ.ᴗˋ ) w-w-wesuwt/titwe by pwessing ( ᴜ ω ᴜ ) on it (◡ ω ◡) and (ᵘﻌᵘ) enjoy its episodes.</string>
+
+    <string name="question_14">How t-t-t-to (｡ᴜ‿‿ᴜ｡) wead c-c-cowouwed ***glomps*** mangas?!! (ㅅꈍ ˘ ꈍ)</string>
+    <string name="answer_14">Awe (ᵕᴗ ᵕ⁎) you in seawch ღ(U꒳Uღ) ***looks at you*** of \&gt;w\&lt; cowouwed manga?!?1 Sowwy to ♥(。U ω U。) ***huggles tightly*** bweak ***glomps*** i-i-it to you ^-^ b-b-b-but :3 an owo extwemewy ♥(。U ω U。) smaww amount o-o-o-of owo mangas (。U ω U。) have – ̗̀ (ᵕ꒳ᵕ) ̖́- cowouwed vewsion. ღ(U꒳Uღ) Those (ᴜ‿ᴜ✿) which (。U ω U。) has a cowouwed (ᵕᴗ ᵕ⁎) vewsion is ( ᵘ ꒳ ᵘ ✼) awso a-a-a-avaiwabwe in (ᵘﻌᵘ) D-d-dantotsu. :3 Wet\'s say \&gt;w\&lt; you want to wead the cowouwed (。U ω U。) vewsion of chainsaw man. Then fowwow the bewow steps ↓\n\n1) ღ(U꒳Uღ) Go to Chainsaw x3 Man\n2) Pwess on \'Wead\'\n3) Sewect any w-w-w-wowking (˘ε˘) s-s-souwce\n4) Pwess (ᵘﻌᵘ) on OwO \-\-\-\'Wwong ( ͡o ᵕ ͡o ) Titwe\'\n5) S-s-s-sewect the cowowed vewsion chainsaw man\n6) Enjoy\n\nNyote: Many (˘ε˘) s-s-souwces (˘³˘) don\'t ***cries*** have (◡ ω ◡) the uwU cowouwed vewsion ***looks at you*** avaiwabwe even (U ᵕ U❁) if it\'s avaiwabwe (◡ w ◡) somewhewe on the intewnyet. So ***licks lips*** twy a diffewent souwce. If ♥(。U ω U。) nyonye ( ͡U ω ͡U ) of the souwces have ÚwÚ ***looks around suspiciously*** it, then (⑅˘꒳˘) a ( ˘ᴗ˘ ) c-c-cowouwed ***walks away*** vewsion o-o-of uwU youw („ᵕᴗᵕ„) desiwed manga simpwy – ̗̀ (ᵕ꒳ᵕ) ̖́- d-d-d-doesn\'t exist. ( ᵘ ꒳ ᵘ ✼) If ***wags my tail*** you (U ﹏ U) can find ÚwÚ it OwO on ( ᴜ ω ᴜ ) any manga site on ;;w;; t-t-the intewnyet, you ( ˘ᴗ˘ ) can suggest that site (U ﹏ U) thwough ^w^ the ^w^ Discowd s-s-sewvew. UwU</string>
+
+    <string name="question_15">Handshake faiws?!?! ***looks around suspiciously*** Why uwU ***licks lips*** awe UwU ***looks around suspiciously*** nyo timestamps nyot w-w-w-woading?!?!</string>
+    <string name="answer_15">Y-y-you can x3 fix this ( ｡ᵘ ᵕ ᵘ ｡) issue b-b-by enyabwing \'Pwoxy\' fwom \n\`Settings ***walks away*** &gt; (˘ε˘) Anyime &gt;-&gt;-&gt; Pwayew Settings (˘ᵕ˘) &gt; Timestamps &gt; P-p-pwoxy\`.\nIf the t-t-timestamps awe ( ｡ᵘ ᵕ ᵘ ｡) stiww nyot woading but the ;;w;; handshake faiwed (ᵘʷᵘ) popup is (ᵘʷᵘ) fixed, then ***cries*** the ***looks around suspiciously*** episode you (ᵕᴗ ᵕ⁎) awe watching (ᵘʷᵘ) just doesn\'t ***walks away*** have ***whispers to self*** timestamps ***cries*** yet fow it.</string>
+
+    <string name="question_16">Having (˘˘˘) ***screams*** twoubwe with a ***boops your nose*** souwce?!?1</string>
+    <string name="answer_16">Some basic (ᵘﻌᵘ) fixes ***smirks smuggly*** wouwd b-b-be :\n\n• Westawt \&gt;w\&lt; the ( ͡U ω ͡U ) app. \n• ♥(。U ω U。) Use (˘ω˘) a diffewent DNS f-f-fwom youw (˘ሠ˘) settings, pwefewabwy, CwoudFwawe. \n• OwO VPN ***pounces on you*** might wowk Uwu as weww. \n\nIf ( ᵘ ꒳ ᵘ ✼) you *˚*(ꈍ ω ꈍ).₊̣̇. w-w-wefuse to ***glomps*** twy the ( ͡U ω ͡U ) abuv ^-^ ***pounces on you*** steps ( ͡o ᵕ ͡o ) then just ***sweats*** use a-a-a-a (ᵘʷᵘ) ***looks at you*** diffewent (˘³˘) souwce.\n\nNyote: ( ᵘ ꒳ ᵘ ✼) ***screeches*** Awwanyime OwO fixes itsewf ;;w;; most of (◡ ω ◡) the time.</string>
+
+    <string name="question_17">Some (˘ᵕ˘) usefuw tips and (˘ε˘) twicks ÚwÚ</string>
+    <string name="answer_17">The fowwowing pwesents some (uwu) tips a-a-a-and t-t-twicks y-y-y-you may ow may nyot knyow a-a-a-about - (◡ w ◡) \n \n (ᵕᴗ ᵕ⁎) ***smirks smuggly*** \n - By howd pwessing the Dantotsu wogo in settings, Uwu y-y-y-you can c-c-c-check if x3 thewe awe any x3 nyew ღ(U꒳Uღ) updates manyuawwy. \n ( ˊ.ᴗˋ ) \n - (˘³˘) Howd pwessing an UwU ewwow message/tag/synyonym o-o-o-ow titwe wiww c-c-copy (◦ᵕ ˘ ᵕ◦) it. \n \n - ÚwÚ You can ( ͡o ᵕ ͡o ) open an e-e-e-episode with othew apps by howd pwessing any sewvew fow ***screams*** that episode. This hewps ***boops your nose*** in ***screeches*** stweaming the e-e-e-episode using ღ(U꒳Uღ) othew (˘ᵕ˘) video ( ᵘ ꒳ ᵘ ✼) pwayews ow downwoad the ***screams*** episode ♥(。U ω U。) using downwoad manyagews. \-\-\-\n (◡ ꒳ ◡) \n - Y-y-you can set up custom ***sweats*** wists *˚*(ꈍ ω ꈍ).₊̣̇. u-u-using (⑅˘꒳˘) this [link](https://anilist.co/settings/lists). (you (◡ w ◡) nyeed to be (ᵕᴗ ᵕ⁎) signyed in) \n \n - (｡ᴜ‿‿ᴜ｡) If (・\`ω\´・) youw e-e-episode/chaptew ***nuzzles your necky wecky*** i-i-is nyot being (˘ሠ˘) pwogwessed x3 automaticawwy (◡ w ◡) aftew ***cries*** you *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* finyish (。U ω U。) w-w-watching/weading ÚwÚ it, :3 then howd pwess the status (◦ᵕ ˘ ᵕ◦) baw(pwannying/wepeating/watching button) ***huggles tightly*** of that a-a-anyime/manga. The nyext (˘ᵕ˘) time y-y-you stawt a chaptew/finyish an episode, you w-w-w-wiww UwU stumbwe ( ｡ᵘ ᵕ ᵘ ｡) upon ( ˊ.ᴗˋ ) a popup. P-p-pwess yes thewe. </string>
+    
+
+    <string name="subscribed_notification">Subscwibed?!?! Uwu Weceiving nyotifications, when nyew (ᵘﻌᵘ) episodes awe w-w-w-weweased on %1$s.</string>
+
+    <string name="unsubscribed_notification">Unsubscwibed, ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** you wiww nyot ***screams*** weceive any nyotifications.</string>
+    <string name="episode_plural">Episodes</string>
+    <string name="episode_singular">Episode (ᵕᴗ ᵕ⁎)</string>
+    <string name="chapter_singular">Chaptew</string>
+    <string name="chapter_plural">Chaptews</string>
+
+    <string name="filter_format">"Fowmat (｡ᴜ‿‿ᴜ｡) : %1$s"</string>
+    <string name="filter_sort">"-"-"Sowt : %-%-%1$s" (U ﹏ U)</string>
+    <string name="filter_exclude">"-"-"-"Nyot %1$s" (U ﹏ U)</string>
+    <string name="search_by_image">Seawch by (・\`ω\´・) I-i-i-image</string>
+    <string name="upload_image">Upwoad ***smirks smuggly*** Image (uwu)</string>
+    <string name="similarity_text">Simiwawity: %1$s %% :3</string>
+    <string name="time_range">Fwom %1$s t-t-t-to (◡ w ◡) %2$s</string>
+    <string name="invalid_url">I-i-invawid UWW</string>
+    <string name="no_anilist_id_found">N-n-n-nyo A-a-anyiwist ID found</string>
+    <string name="error_loading_image">Ewwow woading image</string>
+    <string name="discord_logout_success">Successfuwwy Wogged ÚwÚ Out</string>
+    <string name="discord_try_again">Twy (˘ሠ˘) wogging-in again</string>
+    <string name="error_loading_discord_user_data">Ewwow woading (◡ ꒳ ◡) Discowd Usew Data ~(˘▾˘~)</string>
+    <string name="discord_warning">By (。U ω U。) wogging (uwu) ***nuzzles your necky wecky*** i-i-in, youw discowd wiww nyow (U ﹏ U) show ÚwÚ what you awe Uwu watching &amp; weading (ᵘﻌᵘ) ***huggles tightly*** on Dantotsu\n\nIf (ᴜ‿ᴜ✿) you a-a-a-awe ***cries*** on invisibwe mode, (˘ω˘) wogging in wiww m-m-m-make you (｡ᴜ‿‿ᴜ｡) onwinye, when you open (U ﹏ U) D-d-d-dantotsu.\n\nThis does bweak the Discowd TOS. \nAwthough Discowd ( ˘ᴗ˘ ) has nyevew OwO bannyed anyonye fow u-u-u-using Custom Wich *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* Pwesence(what Dantotsu uses), (ᵘﻌᵘ) You have ( ͡U ω ͡U ) stiww been wawnyed.\n\nDantotsu is nyot wesponsibwe f-f-f-fow anything (˘³˘) that happens to youw account.</string>
+    <string name="warning">Wawnying</string>
+    <string name="view_anime">View Anyime</string>
+    <string name="view_manga">View Manga ( ͡U ω ͡U )</string>
+    <string name="force_legacy_installer">Fowce Wegacy uwU Instawwew (｡ᴜ‿‿ᴜ｡)</string>
+    <string name="extensions_settings">Extensions</string>
+    <string name="NSFWExtention">NSFW („ᵕᴗᵕ„) Extensions</string>
+    <string name="skip_loading_extension_icons">Skip ^w^ woading extension icons (⑅˘꒳˘)</string>
+    <string name="use_material_you">Use Matewiaw You</string>
+    <string name="extension_specific_dns">Extension-specific DNS</string>
+    <string name="theme_">Theme:</string>
+
+</resources>

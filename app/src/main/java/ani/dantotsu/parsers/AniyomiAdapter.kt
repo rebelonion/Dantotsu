@@ -22,6 +22,7 @@ import ani.dantotsu.download.manga.ServiceDataSingleton
 import ani.dantotsu.logger
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimeFilter
 import eu.kanade.tachiyomi.animesource.model.SEpisode
@@ -621,7 +622,8 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         // If the format is still undetermined, log an error or handle it appropriately
         if (format == null) {
             logger("Unknown video format: $videoUrl")
-            throw Exception("Unknown video format")
+            FirebaseCrashlytics.getInstance().recordException(Exception("Unknown video format: $videoUrl"))
+            format = VideoType.CONTAINER
         }
         val headersMap: Map<String, String> =
             aniVideo.headers?.toMultimap()?.mapValues { it.value.joinToString() } ?: mapOf()
@@ -644,7 +646,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
             fileName.endsWith(".m3u8", ignoreCase = true) -> VideoType.M3U8
             fileName.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
-            else -> VideoType.CONTAINER
+            else -> null
         }
     }
 
@@ -659,7 +661,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
     private fun findSubtitleType(url: String): SubtitleType? {
         // First, try to determine the type based on the URL file extension
-        var type: SubtitleType? = when {
+        val type: SubtitleType? = when {
             url.endsWith(".vtt", true) -> SubtitleType.VTT
             url.endsWith(".ass", true) -> SubtitleType.ASS
             url.endsWith(".srt", true) -> SubtitleType.SRT

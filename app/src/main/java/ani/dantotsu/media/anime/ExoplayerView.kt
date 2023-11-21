@@ -78,6 +78,7 @@ import ani.dantotsu.settings.PlayerSettings
 import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.Slider
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -319,7 +320,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         binding = ActivityExoplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

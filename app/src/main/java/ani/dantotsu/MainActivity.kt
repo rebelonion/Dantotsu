@@ -57,6 +57,8 @@ import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
@@ -82,6 +84,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        LangSet.setLocale(this)
         ThemeManager(this).applyTheme()
 
         binding = ActivityMainBinding.inflate(layoutInflater)

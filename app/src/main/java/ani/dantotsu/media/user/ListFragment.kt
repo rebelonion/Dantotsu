@@ -12,6 +12,7 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.OtherDetailsViewModel
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
