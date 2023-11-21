@@ -1,16 +1,19 @@
 package ani.dantotsu.media.manga
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
+import ani.dantotsu.App.Companion.context
 import ani.dantotsu.media.anime.handleProgress
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
@@ -37,6 +40,9 @@ class MangaReadAdapter(
 
     var subscribe: MediaDetailsActivity.PopImageButton? = null
     private var _binding: ItemAnimeWatchBinding? = null
+    val hiddenScanlators = mutableListOf<String>()
+    var scanlatorSelectionListener: ScanlatorSelectionListener? = null
+    var options = listOf<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val bind = ItemAnimeWatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -131,6 +137,46 @@ class MangaReadAdapter(
             binding.animeSourceTop.rotation = if (reversed) -90f else 90f
             fragment.onIconPressed(style, reversed)
         }
+
+        binding.animeScanlatorTop.setOnClickListener {
+            val dialogView = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+            val checkboxContainer = dialogView.findViewById<LinearLayout>(R.id.checkboxContainer)
+
+            // Dynamically add checkboxes
+
+            options.forEach { option ->
+                val checkBox = CheckBox(currContext()).apply {
+                    text = option
+                }
+                //set checked if it's already selected
+                if(media.selected!!.scanlators != null){
+                    checkBox.isChecked = media.selected!!.scanlators?.contains(option) != true
+                    scanlatorSelectionListener?.onScanlatorsSelected()
+                }else{
+                    checkBox.isChecked = true
+                }
+                checkboxContainer.addView(checkBox)
+            }
+
+            // Create AlertDialog
+            AlertDialog.Builder(currContext())
+                .setView(dialogView)
+                .setPositiveButton("OK") { dialog, which ->
+                    //add unchecked to hidden
+                    hiddenScanlators.clear()
+                    for (i in 0 until checkboxContainer.childCount) {
+                        val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                        if (!checkBox.isChecked) {
+                            hiddenScanlators.add(checkBox.text.toString())
+                        }
+                    }
+                    media.selected!!.scanlators = hiddenScanlators
+                    scanlatorSelectionListener?.onScanlatorsSelected()
+                }
+                .setNegativeButton("Cancel", null)
+                .show()
+        }
+
         var selected = when (style) {
             0    -> binding.animeSourceList
             1    -> binding.animeSourceCompact
@@ -201,6 +247,7 @@ class MangaReadAdapter(
 
     @SuppressLint("SetTextI18n")
     fun handleChapters() {
+
         val binding = _binding
         if (binding != null) {
             if (media.manga?.chapters != null) {
@@ -208,7 +255,11 @@ class MangaReadAdapter(
                 val anilistEp = (media.userProgress ?: 0).plus(1)
                 val appEp = loadData<String>("${media.id}_current_chp")?.toIntOrNull() ?: 1
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
-                val formattedChapters = chapters.map { MangaNameAdapter.findChapterNumber(it)?.toInt()?.toString() }
+                val filteredChapters = chapters.filter { chapterKey ->
+                    val chapter = media.manga.chapters!![chapterKey]!!
+                    chapter.scanlator !in hiddenScanlators
+                }
+                val formattedChapters = filteredChapters.map { MangaNameAdapter.findChapterNumber(it)?.toInt()?.toString() }
                 if (formattedChapters.contains(continueEp)) {
                     continueEp = chapters[formattedChapters.indexOf(continueEp)]
                     binding.animeSourceContinue.visibility = View.VISIBLE
@@ -278,4 +329,8 @@ class MangaReadAdapter(
     override fun getItemCount(): Int = 1
 
     inner class ViewHolder(val binding: ItemAnimeWatchBinding) : RecyclerView.ViewHolder(binding.root)
+}
+
+interface ScanlatorSelectionListener {
+    fun onScanlatorsSelected()
 }

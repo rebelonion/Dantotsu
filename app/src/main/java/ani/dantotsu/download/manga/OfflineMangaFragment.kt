@@ -1,16 +1,19 @@
 package ani.dantotsu.download.manga
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import android.widget.GridView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.Fragment
@@ -24,9 +27,15 @@ import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.media.manga.MangaNameAdapter
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
+import ani.dantotsu.setSafeOnClickListener
+import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.statusBarHeight
+import com.google.android.material.card.MaterialCardView
+import com.google.android.material.imageview.ShapeableImageView
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -46,6 +55,28 @@ class OfflineMangaFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_manga_offline, container, false)
+
+        val textInputLayout = view.findViewById<TextInputLayout>(R.id.offlineMangaSearchBar)
+        val currentColor = textInputLayout.boxBackgroundColor
+        val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xA8000000.toInt()
+        textInputLayout.boxBackgroundColor = semiTransparentColor
+        val materialCardView = view.findViewById<MaterialCardView>(R.id.offlineMangaAvatarContainer)
+        materialCardView.setCardBackgroundColor(semiTransparentColor)
+        val typedValue = TypedValue()
+        requireContext().theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
+        val color = typedValue.data
+
+        val animeUserAvatar= view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
+        animeUserAvatar.setSafeOnClickListener {
+            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.HOME).show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
+        }
+
+        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean("colorOverflow", false) ?: false
+        if (!colorOverflow) {
+            textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
+            materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
+        }
+
         gridView = view.findViewById(R.id.gridView)
         getDownloads()
         adapter = OfflineMangaAdapter(requireContext(), downloads)
@@ -81,13 +112,6 @@ class OfflineMangaFragment: Fragment() {
                 }
             }
         }
-        val refreshLayout = view.findViewById<SwipeRefreshLayout>(R.id.mangaRefresh)
-        refreshLayout.setSlingshotDistance(height + 128)
-        refreshLayout.setProgressViewEndTarget(false, height + 128)
-        refreshLayout.setOnRefreshListener {
-            Refresh.activity[this.hashCode()]!!.postValue(true)
-        }
-
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
         var visible = false
         fun animate() {

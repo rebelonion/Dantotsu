@@ -3,6 +3,7 @@ package ani.dantotsu.parsers
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.media.manga.MangaNameAdapter
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -30,10 +31,11 @@ class OfflineMangaParser: MangaParser() {
         if (directory.exists()) {
             directory.listFiles()?.forEach {
                 if (it.isDirectory) {
-                    val chapter = MangaChapter(it.name, "$mangaLink/${it.name}", it.name, null, SChapter.create())
+                    val chapter = MangaChapter(it.name, "$mangaLink/${it.name}", it.name, null, null, SChapter.create())
                     chapters.add(chapter)
                 }
             }
+            chapters.sortBy { MangaNameAdapter.findChapterNumber(it.number) }
             return chapters
         }
         return emptyList()

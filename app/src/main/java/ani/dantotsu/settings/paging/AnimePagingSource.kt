@@ -78,7 +78,7 @@ class AnimeExtensionPagingSource(
         val installedExtensions = installedExtensionsFlow.first().map { it.pkgName }.toSet()
         val availableExtensions = availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
         val query = searchQuery.first()
-        var isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: false
+        var isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
