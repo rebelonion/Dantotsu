@@ -76,6 +76,7 @@ class MangaChapterAdapter(
         // Find the position of the chapter and notify only that item
         val position = arr.indexOfFirst { it.number == chapterNumber }
         if (position != -1) {
+            arr[position].progress = "Downloaded"
             notifyItemChanged(position)
         }
     }
@@ -188,16 +189,9 @@ class MangaChapterAdapter(
                 holder.bind(ep.number, ep.progress)
                 setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
                 binding.itemChapterNumber.text = ep.number
-                /*if (!ep.progress.isNullOrEmpty()) {
-                    binding.itemChapterTitle.text = ep.progress
-                    binding.itemChapterTitle.setOnLongClickListener {
-                        binding.itemChapterTitle.maxLines.apply {
-                            binding.itemChapterTitle.maxLines = if (this == 1) 3 else 1
-                        }
-                        true
-                    }
-                    binding.itemChapterTitle.visibility = View.VISIBLE
-                } else*/ binding.itemChapterTitle.visibility = View.VISIBLE
+                if (ep.progress.isNullOrEmpty()) {
+                    binding.itemChapterTitle.visibility = View.GONE
+                } else binding.itemChapterTitle.visibility = View.VISIBLE
 
                 if (media.userProgress != null) {
                     if ((MangaNameAdapter.findChapterNumber(ep.number)

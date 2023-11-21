@@ -170,7 +170,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         binding.skipExtensionIcons.setOnCheckedChangeListener { _, isChecked ->
             saveData("skip_extension_icons", isChecked)
         }
-        binding.NSFWExtension.isChecked = loadData("NFSWExtension") ?: false
+        binding.NSFWExtension.isChecked = loadData("NFSWExtension") ?: true
         binding.NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
             saveData("NFSWExtension", isChecked)
 

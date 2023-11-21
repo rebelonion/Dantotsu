@@ -67,7 +67,7 @@ import kotlin.math.roundToInt
 import android.Manifest
 import androidx.core.app.ActivityCompat
 
-open class MangaReadFragment : Fragment() {
+open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
     private var _binding: FragmentAnimeWatchBinding? = null
     private val binding get() = _binding!!
     private val model: MediaDetailsViewModel by activityViewModels()
@@ -160,6 +160,7 @@ open class MangaReadFragment : Fragment() {
                         model.mangaReadSources = if (media.isAdult) HMangaSources else MangaSources
 
                         headerAdapter = MangaReadAdapter(it, this, model.mangaReadSources!!)
+                        headerAdapter.scanlatorSelectionListener = this
                         chapterAdapter = MangaChapterAdapter(style ?: uiSettings.mangaDefaultView, media, this)
 
                         for (download in downloadManager.mangaDownloads){
@@ -182,43 +183,68 @@ open class MangaReadFragment : Fragment() {
             }
         }
 
-        model.getMangaChapters().observe(viewLifecycleOwner) { loadedChapters ->
-            if (loadedChapters != null) {
-                val chapters = loadedChapters[media.selected!!.sourceIndex]
-                if (chapters != null) {
-                    media.manga?.chapters = chapters
+        model.getMangaChapters().observe(viewLifecycleOwner) { _ ->
+            updateChapters()
+        }
+    }
 
-                    //CHIP GROUP
-                    val total = chapters.size
-                    val divisions = total.toDouble() / 10
-                    start = 0
-                    end = null
-                    val limit = when {
-                        (divisions < 25) -> 25
-                        (divisions < 50) -> 50
-                        else             -> 100
-                    }
-                    headerAdapter.clearChips()
-                    if (total > limit) {
-                        val arr = chapters.keys.toTypedArray()
-                        val stored = ceil((total).toDouble() / limit).toInt()
-                        val position = clamp(media.selected!!.chip, 0, stored - 1)
-                        val last = if (position + 1 == stored) total else (limit * (position + 1))
-                        start = limit * (position)
-                        end = last - 1
-                        headerAdapter.updateChips(
-                            limit,
-                            arr,
-                            (1..stored).toList().toTypedArray(),
-                            position
-                        )
-                    }
+    override fun onScanlatorsSelected() {
+        updateChapters()
+    }
 
-                    headerAdapter.subscribeButton(true)
-                    reload()
+    private fun updateChapters() {
+        val loadedChapters = model.getMangaChapters().value
+        if (loadedChapters != null) {
+            val chapters = loadedChapters[media.selected!!.sourceIndex]
+            if (chapters != null) {
+                headerAdapter.options = getScanlators(chapters)
+                val filteredChapters = chapters.filterNot { (_, chapter) ->
+                    chapter.scanlator in headerAdapter.hiddenScanlators
                 }
+
+                media.manga?.chapters = filteredChapters.toMutableMap()
+
+                //CHIP GROUP
+                val total = filteredChapters.size
+                val divisions = total.toDouble() / 10
+                start = 0
+                end = null
+                val limit = when {
+                    (divisions < 25) -> 25
+                    (divisions < 50) -> 50
+                    else             -> 100
+                }
+                headerAdapter.clearChips()
+                if (total > limit) {
+                    val arr = filteredChapters.keys.toTypedArray()
+                    val stored = ceil((total).toDouble() / limit).toInt()
+                    val position = clamp(media.selected!!.chip, 0, stored - 1)
+                    val last = if (position + 1 == stored) total else (limit * (position + 1))
+                    start = limit * (position)
+                    end = last - 1
+                    headerAdapter.updateChips(
+                        limit,
+                        arr,
+                        (1..stored).toList().toTypedArray(),
+                        position
+                    )
+                }
+
+                headerAdapter.subscribeButton(true)
+                reload()
             }
         }
+    }
+
+    fun getScanlators(chap: MutableMap<String, MangaChapter>?): List<String> {
+        val scanlators = mutableListOf<String>()
+        if (chap != null) {
+            val chapters = chap.values
+            for (chapter in chapters) {
+                scanlators.add(chapter.scanlator ?: "Unknown")
+            }
+        }
+        return scanlators.distinct()
     }
 
     fun onSourceChange(i: Int): MangaParser {

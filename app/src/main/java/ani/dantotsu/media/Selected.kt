@@ -14,4 +14,5 @@ data class Selected(
     var server: String? = null,
     var video: Int = 0,
     var latest: Float = 0f,
+    var scanlators: List<String>? = null,
 ) : Serializable
