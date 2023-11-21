@@ -96,32 +96,7 @@ ThemeManager(this).applyTheme()
         fun bind(extension: AnimeExtension.Available) {
             binding.languageselect.setOnClickListener {
                 val popup = PopupMenu(this, it)
-                popup.setOnMenuItemClickListener { item ->
-                    val selectedLanguage = when (item.itemId) { //INCOMPLETE REBEL WILL DO IT
-                        R.id.all -> "all"
-                        R.id.multi -> "multi"
-                        R.id.arabic -> "arabic"
-                        R.id.german -> "german"
-                        R.id.english -> "english"
-                        R.id.spanish -> "spanish"
-                        R.id.french -> "french"
-                        R.id.indonesian -> "indonesian"
-                        R.id.italian -> "italian"
-                        R.id.japanese -> "japanese"
-                        R.id.korean -> "korean"
-                        R.id.polish -> "polish"
-                        R.id.portuguese_brazil -> "portuguese_brazil"
-                        R.id.russian -> "russian"
-                        R.id.thai -> "thai"
-                        R.id.turkish -> "turkish"
-                        R.id.ukrainian -> "ukrainian"
-                        R.id.vietnamese -> "vietnamese"
-                        R.id.chinese -> "chinese"
-                        R.id.chinese_simplified -> "chinese_simplified"
-                        else -> null
-                    }
-                    true
-                }
+
                 popup.inflate(R.menu.launguage_selector_menu)
                 popup.show()
             }
