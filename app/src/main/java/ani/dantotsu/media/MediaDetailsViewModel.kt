@@ -62,8 +62,8 @@ class MediaDetailsViewModel : ViewModel() {
         val sharedPreferences = Injekt.get<SharedPreferences>()
         val data = loadData<Selected>("${media.id}-select") ?: Selected().let {
             it.sourceIndex = if (media.isAdult) 0 else when (media.anime != null) {
-                true -> sharedPreferences.getInt("settings_def_anime_source_s_r", 0)
-                else -> sharedPreferences.getInt(("settings_def_manga_source_s_r"), 0)
+                true ->sharedPreferences.getInt("settings_def_anime_source_s_r", 0)
+                else ->sharedPreferences.getInt(("settings_def_manga_source_s_r"), 0)
             }
             it.preferDub = loadData("settings_prefer_dub") ?: false
             saveSelected(media.id, it)

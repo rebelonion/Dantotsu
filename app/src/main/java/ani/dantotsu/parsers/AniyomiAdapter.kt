@@ -529,22 +529,10 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
 
     private fun SChapterToMangaChapter(sChapter: SChapter): MangaChapter {
-        /*val parsedChapterTitle = parseChapterTitle(sChapter.name)
-        val number = if (sChapter.chapter_number.toInt() != -1){
-            sChapter.chapter_number.toString()
-        } else if(parsedChapterTitle.first != null || parsedChapterTitle.second != null){
-            (parsedChapterTitle.first ?: "") + "." + (parsedChapterTitle.second ?: "")
-        }else{
-            sChapter.name
-        }*/
         return MangaChapter(
             sChapter.name,
             sChapter.url,
-            //if (parsedChapterTitle.first != null || parsedChapterTitle.second != null) {
-            //    parsedChapterTitle.third
-            //} else {
-            sChapter.name,
-            //},
+            "",
             null,
             sChapter.scanlator,
             sChapter
