@@ -532,7 +532,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         return MangaChapter(
             sChapter.name,
             sChapter.url,
-            "",
+            sChapter.name,
             null,
             sChapter.scanlator,
             sChapter
