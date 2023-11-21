@@ -8,11 +8,13 @@ import ani.dantotsu.logError
 import ani.dantotsu.logger
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         val data: Uri? = intent?.data
         logger(data.toString())
         try {

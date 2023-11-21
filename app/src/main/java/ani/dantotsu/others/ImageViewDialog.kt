@@ -20,6 +20,7 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.shareImage
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.toast
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.ImageSource

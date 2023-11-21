@@ -48,6 +48,7 @@ import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationBarView
@@ -72,7 +73,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         binding = ActivityMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
@@ -118,7 +120,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         viewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
 
         var media: Media = intent.getSerialized("media") ?: return
-        media.selected = model.loadSelected(media)
+        val isDownload = intent.getBooleanExtra("download", false)
+        media.selected = model.loadSelected(media, isDownload)
 
         binding.mediaCoverImage.loadImage(media.cover)
         binding.mediaCoverImage.setOnLongClickListener {
@@ -324,7 +327,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         tabLayout.setOnItemSelectedListener { item ->
             selectFromID(item.itemId)
             viewPager.setCurrentItem(selected, false)
-            val sel = model.loadSelected(media)
+            val sel = model.loadSelected(media, isDownload)
             sel.window = selected
             model.saveSelected(media.id, sel, this)
             true

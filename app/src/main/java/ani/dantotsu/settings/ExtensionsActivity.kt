@@ -21,6 +21,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityExtensionsBinding
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -38,7 +39,8 @@ class ExtensionsActivity : AppCompatActivity()  {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         binding = ActivityExtensionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

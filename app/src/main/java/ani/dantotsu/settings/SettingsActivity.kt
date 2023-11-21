@@ -33,6 +33,7 @@ import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import com.google.android.material.snackbar.Snackbar
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
@@ -53,11 +54,13 @@ class SettingsActivity : AppCompatActivity() {
     lateinit var binding: ActivitySettingsBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private val networkPreferences = Injekt.get<NetworkPreferences>()
+    private var cursedCounter = 0
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+ThemeManager(this).applyTheme()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -167,7 +170,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         binding.skipExtensionIcons.setOnCheckedChangeListener { _, isChecked ->
             saveData("skip_extension_icons", isChecked)
         }
-        binding.NSFWExtension.isChecked = loadData("NFSWExtension") ?: false
+        binding.NSFWExtension.isChecked = loadData("NFSWExtension") ?: true
         binding.NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
             saveData("NFSWExtension", isChecked)
 
@@ -394,8 +397,16 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         val array = resources.getStringArray(R.array.tips)
 
         binding.settingsLogo.setSafeOnClickListener {
+            cursedCounter++
             (binding.settingsLogo.drawable as Animatable).start()
-            snackString(array[(Math.random() * array.size).toInt()], this)
+            if (cursedCounter % 7 == 0){
+                snackString("youwu have been cuwsed :pwayge:")
+                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_cursed_lang",
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_cursed_lang", false).not()).apply()
+            } else{
+                snackString(array[(Math.random() * array.size).toInt()], this)
+            }
+
         }
 
         binding.settingsDev.setOnClickListener {

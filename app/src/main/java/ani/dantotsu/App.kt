@@ -27,6 +27,7 @@ import logcat.LogPriority
 import logcat.LogcatLogger
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Locale
 
 @SuppressLint("StaticFieldLeak")
 class App : MultiDexApplication() {

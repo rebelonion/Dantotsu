@@ -26,6 +26,7 @@ import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.others.LangSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

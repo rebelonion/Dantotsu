@@ -6,8 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".home.MangaFragment">
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/mangaRefresh"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
@@ -19,17 +18,67 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/mangaOfflineTitle"
+            <LinearLayout
+                android:id="@+id/animeTitleContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="16dp"
-                android:text="Offline Manga"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:fontFamily="@font/poppins"
-                android:gravity="center_horizontal" />
+                android:layout_margin="32dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/offlineMangaSearchBar"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:hint="@string/manga"
+                    android:textColorHint="@color/bg_opp"
+                    android:transitionName="@string/search"
+                    app:boxBackgroundColor="?attr/colorPrimaryContainer"
+                    app:boxCornerRadiusBottomEnd="28dp"
+                    app:boxCornerRadiusBottomStart="28dp"
+                    app:boxCornerRadiusTopEnd="28dp"
+                    app:boxCornerRadiusTopStart="28dp"
+                    app:endIconDrawable="@drawable/ic_round_search_24"
+                    app:endIconTint="@color/bg_opp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                    app:hintAnimationEnabled="true">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/animeSearchBarText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:focusable="false"
+                        android:fontFamily="@font/poppins_bold"
+                        android:inputType="none"
+                        android:padding="8dp"
+                        android:textSize="14sp"
+                        tools:ignore="LabelFor,TextContrastCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/offlineMangaAvatarContainer"
+                    android:layout_width="52dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="4dp"
+                    app:cardBackgroundColor="?attr/colorPrimaryContainer"
+                    app:strokeColor="@color/text_input_layout_stroke_color"
+                    app:cardCornerRadius="26dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/offlineMangaUserAvatar"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:scaleType="center"
+                        android:tint="@color/bg_opp"
+                        app:srcCompat="@drawable/ic_round_settings_24"
+                        tools:ignore="ContentDescription,ImageContrastCheck" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
 
             <!-- This TextView might overlap with GridView if GridView has items -->
             <TextView
@@ -54,7 +103,7 @@
                 android:padding="10dp"
                 android:gravity="center" />
         </LinearLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </FrameLayout>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/mangaPageScrollTop"

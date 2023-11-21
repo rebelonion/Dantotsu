@@ -1,4 +1,5 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:locale="en-rUS">
 
     <string name="repo">rebelonion/Dantotsu</string>
     <string name="preference_file_key" translatable="false">dantotsuprefs</string>

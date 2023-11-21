@@ -246,6 +246,16 @@
                 tools:ignore="ContentDescription,ImageContrastCheck" />
 
             <ImageView
+                android:id="@+id/animeScanlatorTop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="1"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_round_edit_note_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            <ImageView
                 android:id="@+id/animeSourceTop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
