@@ -461,20 +461,25 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                     val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
                     chapterNumber?.let { chapterAdapter.startDownload(it) }
                 }
+
                 ACTION_DOWNLOAD_FINISHED -> {
                     val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
                     chapterNumber?.let { chapterAdapter.stopDownload(it) }
                 }
+
                 ACTION_DOWNLOAD_FAILED -> {
                     val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
                     chapterNumber?.let {
                         chapterAdapter.purgeDownload(it)
                     }
                 }
+
                 ACTION_DOWNLOAD_PROGRESS -> {
                     val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
                     val progress = intent.getIntExtra("progress", 0)
-                    chapterNumber?.let { chapterAdapter.updateDownloadProgress(it, progress) 
+                    chapterNumber?.let {
+                        chapterAdapter.updateDownloadProgress(it, progress)
+                    }
                 }
             }
         }

@@ -401,7 +401,8 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             (binding.settingsLogo.drawable as Animatable).start()
             if (cursedCounter % 7 == 0){
                 snackString("youwu have been cuwsed :pwayge:")
-                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_cursed_lang", true).apply()
+                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_cursed_lang",
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_cursed_lang", false).not()).apply()
             } else{
                 snackString(array[(Math.random() * array.size).toInt()], this)
             }

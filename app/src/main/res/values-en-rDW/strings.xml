@@ -1,5 +1,5 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:locale="en-rDW">
 
     <string name="repo">webewonyion/Dantotsu</string>
     <string name="preference_file_key" translatable="false">d-d-d-dantotsupwefs</string>
@@ -597,7 +597,7 @@
 
     <string name="question_17">S-s-s-some usefuw tips and twicks</string>
     <string name="answer_17">The \&gt;w\&lt; fowwowing ( ˘ᴗ˘ ) pwesents some ***screams*** tips ( ͡U ω ͡U ) and (˘ω˘) twicks you m-m-may ow (ᵘﻌᵘ) ***blushes*** may nyot knyow about - \n \n \n ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** - By howd pwessing the Dantotsu (◡ w ◡) wogo in ( ͡o ꒳ ͡o ) settings, you ÚwÚ c-c-can c-c-c-check (⑅˘꒳˘) if (◡ ሠ ◡) thewe a-a-awe a-a-any (。U ω U。) n-n-n-nyew (˘³˘) updates manyuawwy. \n \n - ***screams*** Howd pwessing an ewwow ***nuzzles your necky wecky*** m-m-message/tag/synyonym ow OwO titwe wiww c-c-c-copy ***glomps*** it. (uwu) \n (ㅅꈍ ˘ ꈍ) \n - ***huggles tightly*** You \&gt;w\&lt; can ***runs away*** open an episode ^w^ with (˘ᵕ˘) ***pounces on you*** othew apps ( ˘ᴗ˘ ) by h-h-h-howd (uwu) pwessing any sewvew ***boops your nose*** fow ^-^ that :3 episode. This hewps uwU in ^w^ stweaming the episode using othew owo video („ᵕᴗᵕ„) ***screeches*** pwayews ^-^ ow ***sweats*** downwoad the episode using (U ﹏ U) downwoad manyagews. \n \n - (U ᵕ U❁) You can set u-u-up (⑅˘꒳˘) custom wists using (ㅅꈍ ˘ ꈍ) this [link](https://anilist.co/settings/lists). (you (◡ ω ◡) nyeed (ᵕᴗ ᵕ⁎) to ***glomps and huggles*** be signyed in) ;;w;; ***pounces on you*** \n x3 \n (｡ᴜ‿‿ᴜ｡) - If youw episode/chaptew (˘ε˘) is nyot being (ᵕᴗ ᵕ⁎) pwogwessed (ᵘʷᵘ) automaticawwy aftew (◡ ω ◡) you finyish w-w-watching/weading i-i-it, then howd ~(˘▾˘~) pwess ***blushes*** the s-s-status baw(pwannying/wepeating/watching button) of that anyime/manga. The nyext (ᴜ‿ᴜ✿) time you stawt a chaptew/finyish (ᵘﻌᵘ) an episode, (ᵕᴗ ᵕ⁎) you wiww ÚwÚ stumbwe upon a (˘ω˘) popup. Pwess yes ( ᴜ ω ᴜ ) thewe. </string>
-    
+
 
     <string name="subscribed_notification">Subscwibed!? :3 Weceiving („ᵕᴗᵕ„) ***licks lips*** nyotifications, w-w-when (ᵕᴗ ᵕ⁎) n-n-nyew episodes awe weweased on %1$s.</string>
 
