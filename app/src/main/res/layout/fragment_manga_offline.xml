@@ -97,6 +97,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:numColumns="auto_fit"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
                 android:columnWidth="108dp"
                 android:verticalSpacing="10dp"
                 android:horizontalSpacing="10dp"

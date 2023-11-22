@@ -1,8 +1,12 @@
 package ani.dantotsu.media.manga
 
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemChapterListBinding
@@ -10,8 +14,9 @@ import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.setAnimation
 import ani.dantotsu.connections.updateProgress
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import ani.dantotsu.currContext
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MangaChapterAdapter(
     private var type: Int,
@@ -90,7 +95,7 @@ class MangaChapterAdapter(
         }
     }
 
-    fun removeDownload(chapterNumber: String) {
+    fun purgeDownload(chapterNumber: String) {
         activeDownloads.remove(chapterNumber)
         downloadedChapters.remove(chapterNumber)
         // Find the position of the chapter and notify only that item
@@ -112,6 +117,9 @@ class MangaChapterAdapter(
 
     inner class ChapterListViewHolder(val binding: ItemChapterListBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private val activeCoroutines = mutableSetOf<String>()
+        val typedValue1 = TypedValue()
+        val typedValue2 = TypedValue()
         fun bind(chapterNumber: String, progress: String?) {
             if (progress != null) {
                 binding.itemChapterTitle.visibility = View.VISIBLE
@@ -122,18 +130,49 @@ class MangaChapterAdapter(
             }
             if (activeDownloads.contains(chapterNumber)) {
                 // Show spinner
-                binding.itemDownload.setImageResource(R.drawable.ic_round_refresh_24)
+                binding.itemDownload.setImageResource(R.drawable.ic_sync)
+                startOrContinueRotation(chapterNumber)
             } else if (downloadedChapters.contains(chapterNumber)) {
                 // Show checkmark
-                binding.itemDownload.setImageResource(R.drawable.ic_check)
+                binding.itemDownload.setImageResource(R.drawable.ic_circle_check)
+                binding.itemDownload.setColorFilter(typedValue2.data)
+                binding.itemDownload.postDelayed({
+                    binding.itemDownload.setImageResource(R.drawable.ic_circle_cancel)
+                    binding.itemDownload.setColorFilter(typedValue2.data)
+                }, 5000)
             } else {
                 // Show download icon
-                binding.itemDownload.setImageResource(R.drawable.ic_round_download_24)
+                binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
             }
 
         }
 
+        private fun startOrContinueRotation(chapterNumber: String) {
+            if (!isRotationCoroutineRunningFor(chapterNumber)) {
+                val scope = fragment.lifecycle.coroutineScope
+                scope.launch {
+                    // Add chapter number to active coroutines set
+                    activeCoroutines.add(chapterNumber)
+                    while (activeDownloads.contains(chapterNumber)) {
+                        binding.itemDownload.animate().rotationBy(360f).setDuration(1000).setInterpolator(
+                            LinearInterpolator()
+                        ).start()
+                        delay(1000)
+                    }
+                    // Remove chapter number from active coroutines set
+                    activeCoroutines.remove(chapterNumber)
+                }
+            }
+        }
+
+        private fun isRotationCoroutineRunningFor(chapterNumber: String): Boolean {
+            return chapterNumber in activeCoroutines
+        }
+
         init {
+            val theme = currContext()?.theme
+            theme?.resolveAttribute(com.google.android.material.R.attr.colorError, typedValue1, true)
+            theme?.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue2, true)
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
                     fragment.onMangaChapterClick(arr[bindingAdapterPosition].number)
