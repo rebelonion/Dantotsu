@@ -35,6 +35,7 @@ import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
@@ -176,11 +177,27 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
 
         }
 
-        binding.userAgent.setText(networkPreferences.defaultUserAgent().get())
-        binding.userAgent.setOnEditorActionListener { _, _, _ ->
-            networkPreferences.defaultUserAgent().set(binding.userAgent.text.toString())
-            true
+       // binding.userAgent.setText(networkPreferences.defaultUserAgent().get())
+        binding.userAgent.setOnClickListener{
+            val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
+            val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+            editText.setText(networkPreferences.defaultUserAgent().get())
+            val alertDialog = AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setPositiveButton("OK") { dialog, _ ->
+                    networkPreferences.defaultUserAgent().set(editText.text.toString())
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Reset") { dialog, _ ->
+                    networkPreferences.defaultUserAgent().set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0") // Reset to default or empty
+                    editText.setText("")
+                    dialog.dismiss()
+                }
+                .create()
+
+            alertDialog.show()
         }
+
 
         val exDns = listOf("None", "Cloudflare", "Google", "AdGuard", "Quad9", "AliDNS", "DNSPod", "360", "Quad101", "Mullvad", "Controld", "Njalla", "Shecan", "Libre")
         binding.settingsExtensionDns.setText(exDns[networkPreferences.dohProvider().get()], false)
