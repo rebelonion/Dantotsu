@@ -321,16 +321,18 @@ class AnimeWatchFragment : Fragment() {
                         dialog.dismiss()
 
                         // Move the fragment transaction here
-                        val fragment =
-                            AnimeSourcePreferencesFragment().getInstance(selectedSetting.id){
-                                changeUIVisibility(true)
-                                loadEpisodes(media.selected!!.sourceIndex, true)
-                            }
-                        parentFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                            .replace(R.id.fragmentExtensionsContainer, fragment)
-                            .addToBackStack(null)
-                            .commit()
+                        requireActivity().runOnUiThread {
+                            val fragment =
+                                AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                                    changeUIVisibility(true)
+                                    loadEpisodes(media.selected!!.sourceIndex, true)
+                                }
+                            parentFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                                .replace(R.id.fragmentExtensionsContainer, fragment)
+                                .addToBackStack(null)
+                                .commit()
+                        }
                     }
                     .setNegativeButton("Cancel") { dialog, _ ->
                         dialog.cancel()
@@ -340,15 +342,18 @@ class AnimeWatchFragment : Fragment() {
                     .show()
             } else {
                 // If there's only one setting, proceed with the fragment transaction
-                val fragment = AnimeSourcePreferencesFragment().getInstance(selectedSetting.id){
-                    changeUIVisibility(true)
-                    loadEpisodes(media.selected!!.sourceIndex, true)
+                requireActivity().runOnUiThread {
+                    val fragment =
+                        AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                            changeUIVisibility(true)
+                            loadEpisodes(media.selected!!.sourceIndex, true)
+                        }
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                        .replace(R.id.fragmentExtensionsContainer, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                    .replace(R.id.fragmentExtensionsContainer, fragment)
-                    .addToBackStack(null)
-                    .commit()
             }
 
             changeUIVisibility(false)

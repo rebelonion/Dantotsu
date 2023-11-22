@@ -3,6 +3,7 @@ package ani.dantotsu.parsers
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.logger
 import ani.dantotsu.media.manga.MangaNameAdapter
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
@@ -47,12 +48,20 @@ class OfflineMangaParser: MangaParser() {
             "Dantotsu/Manga/$chapterLink"
         )
         val images = mutableListOf<MangaImage>()
+        val imageNumberRegex = Regex("""(\d+)\.jpg$""")
         if (directory.exists()) {
             directory.listFiles()?.forEach {
                 if (it.isFile) {
                     val image = MangaImage(it.absolutePath, false, null)
                     images.add(image)
                 }
+            }
+            images.sortBy { image ->
+                val matchResult = imageNumberRegex.find(image.url.url)
+                matchResult?.groups?.get(1)?.value?.toIntOrNull() ?: Int.MAX_VALUE
+            }
+            for (image in images) {
+                logger("imageNumber: ${image.url.url}")
             }
             return images
         }

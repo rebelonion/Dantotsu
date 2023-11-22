@@ -139,7 +139,7 @@ class MangaChapterAdapter(
                 binding.itemDownload.postDelayed({
                     binding.itemDownload.setImageResource(R.drawable.ic_circle_cancel)
                     binding.itemDownload.setColorFilter(typedValue2.data)
-                }, 5000)
+                }, 1000)
             } else {
                 // Show download icon
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_add)

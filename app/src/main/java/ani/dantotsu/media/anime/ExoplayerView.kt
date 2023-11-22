@@ -323,7 +323,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityExoplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -1450,6 +1450,7 @@ ThemeManager(this).applyTheme()
 
     override fun onResume() {
         super.onResume()
+        LangSet.setLocale(this)
         orientationListener?.enable()
         hideSystemBars()
         if (isInitialized) {

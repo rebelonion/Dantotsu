@@ -270,27 +270,7 @@ class MediaDetailsViewModel : ViewModel() {
     private val mangaChapter = MutableLiveData<MangaChapter?>(null)
     fun getMangaChapter(): LiveData<MangaChapter?> = mangaChapter
     suspend fun loadMangaChapterImages(chapter: MangaChapter, selected: Selected, series: String, post: Boolean = true): Boolean {
-        //check if the chapter has been downloaded already
-        val downloadsManager = Injekt.get<DownloadsManager>()
-        if(downloadsManager.mangaDownloads.contains(Download(series, chapter.title!!, Download.Type.MANGA))) {
-            val download = downloadsManager.mangaDownloads.find { it.title == series && it.chapter == chapter.title!! } ?: return false
-            //look in the downloads folder for the chapter and add all the numerically named images to the chapter
-            val directory = File(
-                currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Manga/$series/${chapter.title!!}"
-            )
-            val images = mutableListOf<MangaImage>()
-            directory.listFiles()?.forEach {
-                if (it.nameWithoutExtension.toIntOrNull() != null) {
-                    images.add(MangaImage(FileUrl(it.absolutePath), false))
-                }
-            }
-            //sort the images by name
-            images.sortBy { it.url.url }
-            chapter.addImages(images)
-            if (post) mangaChapter.postValue(chapter)
-            return true
-        }
+        
         return tryWithSuspend(true) {
             chapter.addImages(
                 mangaReadSources?.get(selected.sourceIndex)?.loadImages(chapter.link, chapter.sChapter) ?: return@tryWithSuspend false

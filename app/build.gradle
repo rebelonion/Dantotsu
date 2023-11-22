@@ -28,9 +28,11 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".beta"
+            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta"]
             debuggable true
         }
         release {
+            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher"]
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -76,11 +78,11 @@ dependencies {
 
 //    FireBase
     implementation platform('com.google.firebase:firebase-bom:32.2.3')
-    implementation 'com.google.firebase:firebase-analytics-ktx:21.3.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.4.3'
+    implementation 'com.google.firebase:firebase-analytics-ktx:21.5.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.0'
 
 //    Exoplayer
-    ext.exo_version = '1.1.1'
+    ext.exo_version = '1.2.0'
     implementation "androidx.media3:media3-exoplayer:$exo_version"
     implementation "androidx.media3:media3-ui:$exo_version"
     implementation "androidx.media3:media3-exoplayer-hls:$exo_version"
