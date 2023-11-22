@@ -378,7 +378,7 @@ ThemeManager(this).applyTheme()
                 dialog.dismiss()
             }.show()
         }
-        val fonts = arrayOf("Poppins Semi Bold", "Poppins Bold", "Poppins", "Poppins Thin")
+        val fonts = arrayOf("Poppins Semi Bold", "Poppins Bold", "Poppins", "Poppins Thin","Century Gothic","Century Gothic Bold")
         val fontDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.subtitle_font))
         binding.videoSubFont.setOnClickListener {
             fontDialog.setSingleChoiceItems(fonts, settings.font) { dialog, count ->

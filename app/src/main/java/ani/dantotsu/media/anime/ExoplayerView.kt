@@ -304,6 +304,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
             2 -> ResourcesCompat.getFont(this, R.font.poppins)
             3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+            4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
+            5 -> ResourcesCompat.getFont(this, R.font.century_gothic_bold)
             else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
         }
         playerView.subtitleView?.setStyle(
