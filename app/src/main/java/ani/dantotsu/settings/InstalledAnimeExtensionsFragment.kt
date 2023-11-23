@@ -13,7 +13,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -24,6 +23,8 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
 import ani.dantotsu.loadData
+import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.saveData
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
@@ -62,19 +63,26 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                         dialog.dismiss()
 
                         // Move the fragment transaction here
-                        val fragment = AnimeSourcePreferencesFragment().getInstance(selectedSetting.id){
-                            val activity = requireActivity() as ExtensionsActivity
-                            activity.findViewById<ViewPager2>(R.id.viewPager).visibility = View.VISIBLE
-                            activity.findViewById<TabLayout>(R.id.tabLayout).visibility = View.VISIBLE
-                            activity.findViewById<TextInputLayout>(R.id.searchView).visibility = View.VISIBLE
-                            activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                                View.GONE
+                        val eActivity = requireActivity() as ExtensionsActivity
+                        eActivity.runOnUiThread {
+                            val fragment =
+                                AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+
+                                    eActivity.findViewById<ViewPager2>(R.id.viewPager).visibility =
+                                        View.VISIBLE
+                                    eActivity.findViewById<TabLayout>(R.id.tabLayout).visibility =
+                                        View.VISIBLE
+                                    eActivity.findViewById<TextInputLayout>(R.id.searchView).visibility =
+                                        View.VISIBLE
+                                    eActivity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
+                                        View.GONE
+                                }
+                            parentFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                                .replace(R.id.fragmentExtensionsContainer, fragment)
+                                .addToBackStack(null)
+                                .commit()
                         }
-                        parentFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                            .replace(R.id.fragmentExtensionsContainer, fragment)
-                            .addToBackStack(null)
-                            .commit()
                     }
                     .setNegativeButton("Cancel") { dialog, _ ->
                         dialog.cancel()
@@ -83,19 +91,26 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                     .show()
             } else {
                 // If there's only one setting, proceed with the fragment transaction
-                val fragment = AnimeSourcePreferencesFragment().getInstance(selectedSetting.id){
-                    val activity = requireActivity() as ExtensionsActivity
-                    activity.findViewById<ViewPager2>(R.id.viewPager).visibility = View.VISIBLE
-                    activity.findViewById<TabLayout>(R.id.tabLayout).visibility = View.VISIBLE
-                    activity.findViewById<TextInputLayout>(R.id.searchView).visibility = View.VISIBLE
-                    activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                        View.GONE
+                val eActivity = requireActivity() as ExtensionsActivity
+                eActivity.runOnUiThread {
+                    val fragment =
+                        AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+
+                            eActivity.findViewById<ViewPager2>(R.id.viewPager).visibility =
+                                View.VISIBLE
+                            eActivity.findViewById<TabLayout>(R.id.tabLayout).visibility =
+                                View.VISIBLE
+                            eActivity.findViewById<TextInputLayout>(R.id.searchView).visibility =
+                                View.VISIBLE
+                            eActivity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
+                                View.GONE
+                        }
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                        .replace(R.id.fragmentExtensionsContainer, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                    .replace(R.id.fragmentExtensionsContainer, fragment)
-                    .addToBackStack(null)
-                    .commit()
             }
 
             // Hide ViewPager2 and TabLayout
@@ -148,7 +163,7 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_PROGRESS
                                 )
-                                    .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
+                                    .setSmallIcon(R.drawable.ic_circle_check)
                                     .setContentTitle("Update complete")
                                     .setContentText("The extension has been successfully updated.")
                                     .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -191,12 +206,10 @@ class InstalledAnimeExtensionsFragment : Fragment() {
     private class AnimeExtensionsAdapter(
         private val onSettingsClicked: (AnimeExtension.Installed) -> Unit,
         private val onUninstallClicked: (AnimeExtension.Installed) -> Unit,
-        skipIcons: Boolean
+        val skipIcons: Boolean
     ) : ListAdapter<AnimeExtension.Installed, AnimeExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
     ) {
-
-        val skipIcons = skipIcons
 
         fun updateData(newExtensions: List<AnimeExtension.Installed>) {
             submitList(newExtensions)  // Use submitList instead of manual list handling
@@ -210,14 +223,10 @@ class InstalledAnimeExtensionsFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position) // Use getItem() from ListAdapter
-            val nsfw = if (extension.isNsfw) {
-                "(18+)"
-            } else {
-                ""
-            }
-
+            val nsfw = if (extension.isNsfw) "(18+)" else ""
+            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
             holder.extensionNameTextView.text = extension.name
-            holder.extensionVersionTextView.text = "${extension.versionName} $nsfw"
+            holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
             if (!skipIcons) {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }

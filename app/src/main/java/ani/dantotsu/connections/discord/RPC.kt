@@ -3,10 +3,12 @@ package ani.dantotsu.connections.discord
 import ani.dantotsu.connections.discord.serializers.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -154,17 +156,15 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
         webSocket.close(4000, "Interrupt")
     }
 
-    //I hate this, but couldn't find any better way to solve it
-    suspend fun getUserData(): User {
-        var user : User? = null
+    //I kinda hate this
+    suspend fun getUserData(): User = suspendCancellableCoroutine { continuation ->
         whenStarted = {
-            user = it
+            continuation.resume(it, onCancellation = null)
             whenStarted = null
         }
-        while (user == null) {
-            delay(100)
+        continuation.invokeOnCancellation {
+            whenStarted = null
         }
-        return user!!
     }
 
     var onReceiveUserData: ((User) -> Deferred<Unit>)? = null
@@ -185,7 +185,7 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
-            println("Message : $text")
+            println("Discord Message : $text")
 
             val map = json.decodeFromString<Res>(text)
             seq = map.s

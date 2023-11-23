@@ -24,6 +24,7 @@ import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -92,14 +93,14 @@ ThemeManager(this).applyTheme()
 
         initActivity(this)
 
+        fun bind(extension: AnimeExtension.Available) {
+            binding.languageselect.setOnClickListener {
+                val popup = PopupMenu(this, it)
 
-        binding.languageselect.setOnClickListener {
-            val popup = PopupMenu(this, it)
-
-            popup.inflate(R.menu.launguage_selector_menu)
-            popup.show()
+                popup.inflate(R.menu.launguage_selector_menu)
+                popup.show()
+            }
         }
-
         binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
             bottomMargin = navBarHeight

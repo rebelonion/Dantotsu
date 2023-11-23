@@ -83,9 +83,9 @@ class MainActivity : AppCompatActivity() {
     private var uiSettings = UserInterfaceSettings()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
         ThemeManager(this).applyTheme()
+        LangSet.setLocale(this)
+        super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -155,7 +155,7 @@
     <string name="sequel">Sequel</string>
 
     <string name="anilist_settings">Anilist Settings</string>
-    <string name="extension_settings">Extension</string>
+    <string name="extension_settings">Extensions</string>
     <string name="downloads">Downloads</string>
     <string name="settings">Settings</string>
     <string name="extensions">Extensions</string>
@@ -631,5 +631,6 @@
     <string name="use_material_you">Use Material You</string>
     <string name="extension_specific_dns">Extension-specific DNS</string>
     <string name="theme_">Theme:</string>
+    <string name="user_agent">User Agent</string>
 
 </resources>

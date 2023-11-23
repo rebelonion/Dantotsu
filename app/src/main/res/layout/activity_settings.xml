@@ -550,24 +550,46 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
 
-                <com.google.android.material.textfield.TextInputLayout
+
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp">
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/userAgent"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:hint="user agent"
-                        app:boxCornerRadiusBottomEnd="8dp"
-                        app:boxCornerRadiusBottomStart="8dp"
-                        app:boxCornerRadiusTopEnd="8dp"
-                        app:boxCornerRadiusTopStart="8dp"
-                        app:hintAnimationEnabled="true" />
+                <Button
+                    android:id="@+id/userAgent"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-32dp"
+                    android:layout_marginEnd="-32dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="@string/user_agent"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_video_settings_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
 
-                </com.google.android.material.textfield.TextInputLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="?android:attr/listDivider" />
 
                 <TextView
                     android:layout_width="match_parent"

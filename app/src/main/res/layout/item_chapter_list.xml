@@ -9,7 +9,7 @@
     app:cardCornerRadius="12dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="312dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
@@ -49,17 +49,18 @@
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_bold"
+                android:maxWidth="250dp"
+                android:paddingEnd="8dp"
                 android:singleLine="true"
                 android:textSize="14dp"
                 tools:ignore="SpUsage"
-                android:paddingEnd="8dp"
                 tools:text="1" />
 
         </LinearLayout>
 
         <TextView
             android:id="@+id/itemChapterTitle"
-            android:layout_width="match_parent"
+            android:layout_width="312dp"
             android:layout_height="wrap_content"
             android:alpha="0.66"
             android:ellipsize="end"
@@ -92,9 +93,8 @@
         android:id="@+id/itemEpisodeViewed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_margin="8dp"
-        android:visibility="gone"
+        android:layout_gravity="end|center_vertical"
+        android:layout_marginEnd="40dp"
         app:srcCompat="@drawable/ic_round_remove_red_eye_24"
         tools:ignore="ContentDescription" />
 

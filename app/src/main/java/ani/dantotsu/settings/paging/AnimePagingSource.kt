@@ -1,5 +1,6 @@
 package ani.dantotsu.settings.paging
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -15,9 +16,9 @@ import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.loadData
+import ani.dantotsu.others.LanguageMapper
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -78,7 +79,8 @@ class AnimeExtensionPagingSource(
         val installedExtensions = installedExtensionsFlow.first().map { it.pkgName }.toSet()
         val availableExtensions = availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
         val query = searchQuery.first()
-        var isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
+        val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: false
+
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
@@ -157,14 +159,12 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
             }
         }
         val extensionIconImageView: ImageView = binding.extensionIconImageView
+
             fun bind(extension: AnimeExtension.Available) {
-            val nsfw = if (extension.isNsfw) {
-                "(18+)"
-            } else {
-                ""
-            }
+            val nsfw = if (extension.isNsfw) "(18+)" else ""
+            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
             binding.extensionNameTextView.text = extension.name
-            binding.extensionVersionTextView.text = "${extension.versionName} $nsfw"
+            binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }
     }
 }

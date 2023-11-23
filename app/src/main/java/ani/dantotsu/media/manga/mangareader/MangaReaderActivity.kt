@@ -317,7 +317,7 @@ ThemeManager(this).applyTheme()
             }
         }
 
-        scope.launch(Dispatchers.IO) { model.loadMangaChapterImages(chapter, media.selected!!, media.nameMAL!!) }
+        scope.launch(Dispatchers.IO) { model.loadMangaChapterImages(chapter, media.selected!!, media.nameMAL?:media.nameRomaji) }
     }
 
     private val snapHelper = PagerSnapHelper()
@@ -706,7 +706,7 @@ ThemeManager(this).applyTheme()
                 model.loadMangaChapterImages(
                     chapters[chaptersArr.getOrNull(currentChapterIndex + 1) ?: return@launch]!!,
                     media.selected!!,
-                    media.nameMAL!!,
+                    media.nameMAL?:media.nameRomaji,
                     false
                 )
                 loading = false

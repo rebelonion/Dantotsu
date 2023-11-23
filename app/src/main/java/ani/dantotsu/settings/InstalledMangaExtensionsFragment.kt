@@ -14,7 +14,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -26,6 +25,7 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
+import ani.dantotsu.others.LanguageMapper
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -204,13 +204,10 @@ class InstalledMangaExtensionsFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)  // Use getItem() from ListAdapter
-            val nsfw = if (extension.isNsfw) {
-                "(18+)"
-            } else {
-                ""
-            }
+            val nsfw = if (extension.isNsfw) "(18+)" else ""
+            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
             holder.extensionNameTextView.text = extension.name
-            holder.extensionVersionTextView.text = "${extension.versionName} $nsfw"
+            holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
             if (!skipIcons) {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }

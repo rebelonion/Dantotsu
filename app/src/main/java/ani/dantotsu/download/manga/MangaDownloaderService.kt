@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -43,6 +44,7 @@ import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
+import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
@@ -79,8 +81,12 @@ class MangaDownloaderService : Service() {
             setOnlyAlertOnce(true)
             setProgress(0, 0, false)
         }
-        startForeground(NOTIFICATION_ID, builder.build())
-        ContextCompat.registerReceiver(this, cancelReceiver, IntentFilter(ACTION_CANCEL_DOWNLOAD), ContextCompat.RECEIVER_NOT_EXPORTED)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(NOTIFICATION_ID, builder.build(),  ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        }else{
+            startForeground(NOTIFICATION_ID, builder.build())
+        }
+        ContextCompat.registerReceiver(this, cancelReceiver, IntentFilter(ACTION_CANCEL_DOWNLOAD), ContextCompat.RECEIVER_EXPORTED)
     }
 
     override fun onDestroy() {

@@ -2,7 +2,6 @@ package ani.dantotsu.media.manga
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.DownloadManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -16,7 +15,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils.clamp
@@ -42,7 +40,6 @@ import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.UserInterfaceSettings
-import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Group.MANGA_GROUP
@@ -51,8 +48,6 @@ import ani.dantotsu.subcriptions.SubscriptionHelper
 import ani.dantotsu.subcriptions.SubscriptionHelper.Companion.saveSubscription
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigationrail.NavigationRailView
-import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
-import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import kotlinx.coroutines.CoroutineScope
@@ -110,7 +105,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
             addAction(ACTION_DOWNLOAD_PROGRESS)
         }
 
-        ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
+        ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter, ContextCompat.RECEIVER_EXPORTED)
 
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
@@ -405,7 +400,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
 
                     // Create a download task
                     val downloadTask = MangaDownloaderService.DownloadTask(
-                        title = media.nameMAL ?: "",
+                        title = media.nameMAL ?: media.nameRomaji,
                         chapter = chapter.title!!,
                         imageData = images,
                         sourceMedia = media,
@@ -445,7 +440,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
 
 
     fun onMangaChapterRemoveDownloadClick(i: String){
-        downloadManager.removeDownload(Download(media.nameMAL!!, i, Download.Type.MANGA))
+        downloadManager.removeDownload(Download(media.nameMAL?:media.nameRomaji, i, Download.Type.MANGA))
         chapterAdapter.deleteDownload(i)
     }
     fun onMangaChapterStopDownloadClick(i: String) {
@@ -456,8 +451,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
         requireContext().sendBroadcast(cancelIntent)
 
         // Remove the download from the manager and update the UI
-        downloadManager.removeDownload(Download(media.nameMAL!!, i, Download.Type.MANGA))
-        chapterAdapter.stopDownload(i)
+        downloadManager.removeDownload(Download(media.nameMAL?:media.nameRomaji, i, Download.Type.MANGA))
+        chapterAdapter.purgeDownload(i)
     }
     private val downloadStatusReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
@@ -475,7 +470,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                 ACTION_DOWNLOAD_FAILED -> {
                     val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
                     chapterNumber?.let {
-                        chapterAdapter.removeDownload(it)
+                        chapterAdapter.purgeDownload(it)
                     }
                 }
 

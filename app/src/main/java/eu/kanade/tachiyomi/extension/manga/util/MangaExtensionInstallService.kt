@@ -3,7 +3,11 @@ package eu.kanade.tachiyomi.extension.manga.util
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ServiceInfo
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.net.Uri
+import android.os.Build
 import android.os.IBinder
 import ani.dantotsu.R
 import eu.kanade.domain.base.BasePreferences
@@ -29,7 +33,11 @@ class MangaExtensionInstallService : Service() {
             setContentTitle("Installing manga extension...")
             setProgress(100, 100, true)
         }.build()
-        startForeground(Notifications.ID_EXTENSION_INSTALLER, notification)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(Notifications.ID_EXTENSION_INSTALLER, notification,  ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        }else{
+            startForeground(Notifications.ID_EXTENSION_INSTALLER, notification)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

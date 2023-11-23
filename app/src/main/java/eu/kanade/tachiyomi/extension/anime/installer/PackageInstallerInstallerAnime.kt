@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageInstaller
 import android.os.Build
 import androidx.core.content.ContextCompat
+import ani.dantotsu.snackString
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.util.lang.use
 import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
@@ -72,12 +73,18 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                     service,
                     activeSession!!.second,
                     Intent(INSTALL_ACTION),
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) PendingIntent.FLAG_MUTABLE else 0,
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                        PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_ALLOW_UNSAFE_IMPLICIT_INTENT
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        PendingIntent.FLAG_MUTABLE
+                    } else 0
                 ).intentSender
                 session.commit(intentSender)
             }
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e) { "Failed to install extension ${entry.downloadId} ${entry.uri}" }
+            logcat(LogPriority.ERROR) { "Exception: $e" }
+            snackString("Failed to install extension ${entry.downloadId} ${entry.uri}")
             activeSession?.let { (_, sessionId) ->
                 packageInstaller.abandonSession(sessionId)
             }
@@ -101,7 +108,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
     }
 
     init {
-        ContextCompat.registerReceiver(service, packageActionReceiver, IntentFilter(INSTALL_ACTION), ContextCompat.RECEIVER_NOT_EXPORTED)
+        ContextCompat.registerReceiver(service, packageActionReceiver, IntentFilter(INSTALL_ACTION), ContextCompat.RECEIVER_EXPORTED)
     }
 }
 

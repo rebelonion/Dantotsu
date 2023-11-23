@@ -304,6 +304,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             1 -> ResourcesCompat.getFont(this, R.font.poppins_bold)
             2 -> ResourcesCompat.getFont(this, R.font.poppins)
             3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
+            4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
+            5 -> ResourcesCompat.getFont(this, R.font.century_gothic_bold)
             else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
         }
         playerView.subtitleView?.setStyle(
@@ -321,7 +323,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityExoplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -1448,6 +1450,7 @@ ThemeManager(this).applyTheme()
 
     override fun onResume() {
         super.onResume()
+        LangSet.setLocale(this)
         orientationListener?.enable()
         hideSystemBars()
         if (isInitialized) {

@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.Dantotsu" parent="Theme.Base">
         <item name="android:statusBarColor">@color/status</item>
         <item name="colorOnPrimary">@color/bg_black</item>

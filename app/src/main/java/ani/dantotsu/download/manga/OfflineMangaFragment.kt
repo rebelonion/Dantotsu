@@ -32,6 +32,7 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
+import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
@@ -84,12 +85,16 @@ class OfflineMangaFragment: Fragment() {
         gridView.setOnItemClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
-            val media = downloadManager.mangaDownloads.filter { it.title == item.title }.first()
-            startActivity(
-                Intent(requireContext(), MediaDetailsActivity::class.java)
-                    .putExtra("media", getMedia(media))
-                    .putExtra("download", true)
-            )
+            val media = downloadManager.mangaDownloads.filter { it.title == item.title }.firstOrNull()
+            media?.let {
+                startActivity(
+                    Intent(requireContext(), MediaDetailsActivity::class.java)
+                        .putExtra("media", getMedia(it))
+                        .putExtra("download", true)
+                )
+            } ?: run {
+                snackString("no media found")
+            }
         }
 
         return view
