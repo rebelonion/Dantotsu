@@ -28,7 +28,7 @@ internal class MangaExtensionInstallReceiver(private val listener: Listener) :
      * Registers this broadcast receiver
      */
     fun register(context: Context) {
-        ContextCompat.registerReceiver(context, this, filter, ContextCompat.RECEIVER_NOT_EXPORTED)
+        ContextCompat.registerReceiver(context, this, filter, ContextCompat.RECEIVER_EXPORTED)
     }
 
     /**

@@ -631,5 +631,6 @@
     <string name="use_material_you">Use Material You</string>
     <string name="extension_specific_dns">Extension-specific DNS</string>
     <string name="theme_">Theme:</string>
+    <string name="user_agent">User Agent</string>
 
 </resources>

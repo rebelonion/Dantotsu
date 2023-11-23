@@ -3,7 +3,9 @@ package eu.kanade.tachiyomi.extension.anime.util
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.net.Uri
+import android.os.Build
 import android.os.IBinder
 import eu.kanade.domain.base.BasePreferences
 import ani.dantotsu.R
@@ -29,7 +31,11 @@ class AnimeExtensionInstallService : Service() {
             setContentTitle("Installing Anime Extension...")
             setProgress(100, 100, true)
         }.build()
-        startForeground(Notifications.ID_EXTENSION_INSTALLER, notification)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            startForeground(Notifications.ID_EXTENSION_INSTALLER, notification,  ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+        }else{
+            startForeground(Notifications.ID_EXTENSION_INSTALLER, notification)
+        }
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

@@ -103,7 +103,7 @@ object Discord {
                 applicationId = "1163925779692912771"
                 smallImage = RPC.Link(
                     "Dantotsu",
-                    "mp:attachments/1163940221063278672/1163940262423298141/bitmap1024.png"
+                    "mp:attachments/1167176318266380288/1176997397797277856/logo-best_of_both.png"
                 )
                 buttons.add(RPC.Link("Stream on Dantotsu", "https://github.com/rebelonion/Dantotsu/"))
             }

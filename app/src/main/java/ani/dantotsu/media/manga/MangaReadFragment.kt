@@ -105,7 +105,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
             addAction(ACTION_DOWNLOAD_PROGRESS)
         }
 
-        ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter, ContextCompat.RECEIVER_NOT_EXPORTED)
+        ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter, ContextCompat.RECEIVER_EXPORTED)
 
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
