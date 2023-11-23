@@ -30,7 +30,6 @@ abstract class WatchSources : BaseSources() {
         extra: Map<String, String>?,
         sAnime: SAnime?
     ): MutableMap<String, Episode> {
-        println("finder333 $showLink")
         val map = mutableMapOf<String, Episode>()
         val parser = get(i)
         tryWithSuspend(true) {

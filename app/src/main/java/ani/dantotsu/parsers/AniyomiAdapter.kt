@@ -39,6 +39,7 @@ import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.util.lang.awaitSingle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -163,7 +164,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             extension.sources[sourceLanguage]
         } as? AnimeCatalogueSource ?: return emptyList()
         return try {
-            val res = source.fetchSearchAnime(1, query, AnimeFilterList()).toBlocking().first()
+            val res = source.fetchSearchAnime(0, query, source.getFilterList()).awaitSingle()
             convertAnimesPageToShowResponse(res)
         } catch (e: CloudflareBypassException) {
             logger("Exception in search: $e")
@@ -462,7 +463,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         } as? HttpSource ?: return emptyList()
 
         return try {
-            val res = source.fetchSearchManga(1, query, FilterList()).toBlocking().first()
+            val res = source.fetchSearchManga(1, query, source.getFilterList()).awaitSingle()
             logger("res observable: $res")
             convertMangasPageToShowResponse(res)
         } catch (e: CloudflareBypassException) {

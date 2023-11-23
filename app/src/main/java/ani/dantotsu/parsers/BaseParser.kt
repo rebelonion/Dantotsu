@@ -55,7 +55,12 @@ abstract class BaseParser {
             saveShowResponse(mediaObj.id, response, true)
         } else {
             setUserText("Searching : ${mediaObj.mainName()}")
+            logger("Searching : ${mediaObj.mainName()}")
             val results = search(mediaObj.mainName())
+            //log all results
+            results.forEach {
+                logger("Result: ${it.name}")
+            }
             val sortedResults = if (results.isNotEmpty()) {
                 results.sortedByDescending { FuzzySearch.ratio(it.name.lowercase(), mediaObj.mainName().lowercase()) }
             } else {
@@ -65,6 +70,7 @@ abstract class BaseParser {
 
             if (response == null || FuzzySearch.ratio(response.name.lowercase(), mediaObj.mainName().lowercase()) < 100) {
                 setUserText("Searching : ${mediaObj.nameRomaji}")
+                logger("Searching : ${mediaObj.nameRomaji}")
                 val romajiResults = search(mediaObj.nameRomaji)
                 val sortedRomajiResults = if (romajiResults.isNotEmpty()) {
                     romajiResults.sortedByDescending { FuzzySearch.ratio(it.name.lowercase(), mediaObj.nameRomaji.lowercase()) }
