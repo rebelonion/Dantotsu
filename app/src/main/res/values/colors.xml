@@ -305,7 +305,7 @@
     <color name="md_theme_light_5_outlineVariant">#00FF00</color>
     <color name="md_theme_light_5_scrim">#00FF00</color>
     <color name="md_theme_dark_5_primary">#FF5DAE</color>               <!-- good -->
-    <color name="md_theme_dark_5_onPrimary">#EEEEEE</color>             <!-- good but shared with anime and manga list headers -->
+    <color name="md_theme_dark_5_onPrimary">#610046</color>              <!-- good but shared with anime and manga list headers -->
     <color name="md_theme_dark_5_primaryContainer">#EEEEEE</color>      <!-- good-ish, it's shared with slider colors so I've had to set it to "#EEEEEE" instead of "#928F98" -->
     <color name="md_theme_dark_5_onPrimaryContainer">#FF5DAE</color>    <!-- good (login button text, "#000000" also works) -->
     <color name="md_theme_dark_5_secondary">#91A6FF</color>             <!-- good -->
@@ -320,7 +320,7 @@
     <color name="md_theme_dark_5_errorContainer">#00FF00</color>
     <color name="md_theme_dark_5_onError">#00FF00</color>
     <color name="md_theme_dark_5_onErrorContainer">#00FF00</color>
-    <color name="md_theme_dark_5_background">#000000</color>            <!-- good -->
+    <color name="md_theme_dark_5_background">#191C1E</color>            <!-- good -->
     <color name="md_theme_dark_5_onBackground">#EEEEEE</color>          <!-- good -->
     <color name="md_theme_dark_5_surface">#1C1B20</color>               <!-- good -->
     <color name="md_theme_dark_5_onSurface">#EEEEEE</color>             <!-- good -->

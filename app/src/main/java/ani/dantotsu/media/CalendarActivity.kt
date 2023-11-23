@@ -56,7 +56,7 @@ ThemeManager(this).applyTheme()
         window.navigationBarColor = primaryColor
         binding.listTabLayout.setBackgroundColor(primaryColor)
         binding.listAppBar.setBackgroundColor(primaryColor)
-        binding.listTitle.setTextColor(titleTextColor)
+        binding.listTitle.setTextColor(primaryTextColor)
         binding.listTabLayout.setTabTextColors(secondaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
         val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
