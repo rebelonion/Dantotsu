@@ -33,6 +33,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <TextView
+                    android:id="@+id/extensions"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginStart="32dp"

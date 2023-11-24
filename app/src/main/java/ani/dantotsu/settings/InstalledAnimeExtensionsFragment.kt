@@ -53,7 +53,7 @@ class InstalledAnimeExtensionsFragment : Fragment() {
             if (allSettings.size > 1) {
                 val names = allSettings.map { it.lang }.toTypedArray()
                 var selectedIndex = 0
-                AlertDialog.Builder(requireContext())
+                AlertDialog.Builder(requireContext(), R.style.MyPopup)
                     .setTitle("Select a Source")
                     .setSingleChoiceItems(names, selectedIndex) { _, which ->
                         selectedIndex = which

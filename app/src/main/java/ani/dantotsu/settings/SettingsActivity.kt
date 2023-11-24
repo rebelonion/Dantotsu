@@ -182,15 +182,19 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
             val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
             editText.setText(networkPreferences.defaultUserAgent().get())
-            val alertDialog = AlertDialog.Builder(this)
+            val alertDialog = AlertDialog.Builder(this ,R.style.MyPopup)
+                .setTitle("User Agent")
                 .setView(dialogView)
                 .setPositiveButton("OK") { dialog, _ ->
                     networkPreferences.defaultUserAgent().set(editText.text.toString())
                     dialog.dismiss()
                 }
-                .setNegativeButton("Reset") { dialog, _ ->
+                .setNeutralButton("Reset") { dialog, _ ->
                     networkPreferences.defaultUserAgent().set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0") // Reset to default or empty
                     editText.setText("")
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()
