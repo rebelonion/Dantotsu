@@ -10,6 +10,7 @@ import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import eu.kanade.tachiyomi.data.notification.Notifications
 import tachiyomi.core.util.system.logcat
+import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
 import com.google.android.material.color.DynamicColors
@@ -52,7 +53,7 @@ class App : MultiDexApplication() {
         }
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
-        Firebase.crashlytics.setCrashlyticsCollectionEnabled(false)
+        Firebase.crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)
         initializeNetwork(baseContext)
 
         Injekt.importModule(AppModule(this))
