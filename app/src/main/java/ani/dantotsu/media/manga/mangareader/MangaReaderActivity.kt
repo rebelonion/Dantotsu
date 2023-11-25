@@ -237,7 +237,7 @@ ThemeManager(this).applyTheme()
         showProgressDialog = if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog") != true else false
         progressDialog =
             if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
-                AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.title_update_progress)).apply {
+                AlertDialog.Builder(this, R.style.MyPopup).setTitle(getString(R.string.title_update_progress)).apply {
                     setMultiChoiceItems(
                         arrayOf(getString(R.string.dont_ask_again, media.userPreferredName)),
                         booleanArrayOf(false)
