@@ -61,16 +61,6 @@ object Discord {
     }
 
     private var rpc : RPC? = null
-    /*suspend fun getUserData() = tryWithSuspend(true) {
-        if(rpc==null) {
-            val rpc = RPC(token!!, Dispatchers.IO).also { rpc = it }
-            val user: User = rpc.getUserData()
-            userid = user.username
-            avatar = user.userAvatar()
-            rpc.close()
-            true
-        } else true
-    } ?: false*/
 
 
     fun warning(context: Context) = CustomBottomDialog().apply {
