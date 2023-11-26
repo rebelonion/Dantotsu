@@ -17,7 +17,6 @@ class ThemeManager(private val context: Context) {
                 val options = DynamicColorsOptions.Builder()
                     .setThemeOverlay(R.style.AppTheme_Amoled)
                     .build()
-                //need activity from context
                 val activity = context as Activity
                 DynamicColors.applyToActivityIfAvailable(activity, options)
             } else {

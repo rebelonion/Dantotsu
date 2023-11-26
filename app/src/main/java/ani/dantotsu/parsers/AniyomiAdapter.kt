@@ -20,6 +20,7 @@ import ani.dantotsu.currContext
 import ani.dantotsu.download.manga.MangaDownloaderService
 import ani.dantotsu.download.manga.ServiceDataSingleton
 import ani.dantotsu.logger
+import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -115,12 +116,18 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                         it
                     }
                 } else {
-                    // Sort by the episode_number field
-                    res.sortedBy { it.episode_number }
+                    var episodeCounter = 1f
+                    // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
+                    val seasonGroups = res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
+                    seasonGroups.keys.sorted().flatMap { season ->
+                        seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
+                            if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
+                                episode.episode_number = episodeCounter++
+                            }
+                            episode
+                        } ?: emptyList()
+                    }
                 }
-
-                // Transform SEpisode objects to Episode objects
-
                 return sortedEpisodes.map { SEpisodeToEpisode(it) }
             } catch (e: Exception) {
                 println("Exception: $e")
