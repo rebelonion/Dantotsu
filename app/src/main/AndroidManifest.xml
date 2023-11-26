@@ -276,6 +276,10 @@
         <service android:name=".download.manga.MangaDownloaderService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+
+        <service android:name=".connections.discord.DiscordService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
     </application>
 
 </manifest>

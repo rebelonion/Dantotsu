@@ -21,7 +21,7 @@ object Discord {
     var userid: String? = null
     var avatar: String? = null
 
-    private const val TOKEN = "discord_token"
+    const val TOKEN = "discord_token"
 
     fun getSavedToken(context: Context): Boolean {
         val sharedPref = context.getSharedPreferences(
@@ -61,7 +61,7 @@ object Discord {
     }
 
     private var rpc : RPC? = null
-    suspend fun getUserData() = tryWithSuspend(true) {
+    /*suspend fun getUserData() = tryWithSuspend(true) {
         if(rpc==null) {
             val rpc = RPC(token!!, Dispatchers.IO).also { rpc = it }
             val user: User = rpc.getUserData()
@@ -70,7 +70,7 @@ object Discord {
             rpc.close()
             true
         } else true
-    } ?: false
+    } ?: false*/
 
 
     fun warning(context: Context) = CustomBottomDialog().apply {
@@ -97,16 +97,20 @@ object Discord {
         context.startActivity(intent)
     }
 
-    fun defaultRPC(): RPC? {
+    const val application_Id = "1163925779692912771"
+    const val small_Image: String = "mp:attachments/1167176318266380288/1176997397797277856/logo-best_of_both.png"
+    /*fun defaultRPC(): RPC? {
         return token?.let {
             RPC(it, Dispatchers.IO).apply {
-                applicationId = "1163925779692912771"
+                applicationId = application_Id
                 smallImage = RPC.Link(
                     "Dantotsu",
-                    "mp:attachments/1167176318266380288/1176997397797277856/logo-best_of_both.png"
+                    small_Image
                 )
                 buttons.add(RPC.Link("Stream on Dantotsu", "https://github.com/rebelonion/Dantotsu/"))
             }
         }
-    }
+    }*/
+
+
 }

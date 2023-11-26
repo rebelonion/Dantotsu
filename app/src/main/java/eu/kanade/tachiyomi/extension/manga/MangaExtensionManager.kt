@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.extension.manga
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import ani.dantotsu.snackString
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
@@ -116,7 +117,7 @@ class MangaExtensionManager(
             api.findExtensions()
         } catch (e: Exception) {
             logcat(LogPriority.ERROR, e)
-            withUIContext { context.toast("Failed to get manga extensions") }
+            withUIContext { snackString("Failed to get manga extensions") }
             emptyList()
         }
 

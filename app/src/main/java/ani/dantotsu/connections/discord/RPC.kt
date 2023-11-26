@@ -1,6 +1,10 @@
 package ani.dantotsu.connections.discord
 
+import android.widget.Toast
 import ani.dantotsu.connections.discord.serializers.*
+import ani.dantotsu.currContext
+import ani.dantotsu.logger
+import ani.dantotsu.snackString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Job
@@ -32,7 +36,12 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
         allowStructuredMapKeys = true
         ignoreUnknownKeys = true
     }
+    enum class Type {
+        PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
+    }
 
+    data class Link(val label: String, val url: String)
+/*
     private val client = OkHttpClient.Builder()
         .connectTimeout(10, SECONDS)
         .readTimeout(10, SECONDS)
@@ -56,16 +65,11 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
     var startTimestamp: Long? = null
     var stopTimestamp: Long? = null
 
-    enum class Type {
-        PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
-    }
-
     var buttons = mutableListOf<Link>()
 
-    data class Link(val label: String, val url: String)
 
     private suspend fun createPresence(): String {
-        return json.encodeToString(Presence.Response(
+        val j =  json.encodeToString(Presence.Response(
             3,
             Presence(
                 activities = listOf(
@@ -95,16 +99,12 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
                 status = status
             )
         ))
+        logger("Presence: $j")
+        return j
     }
 
-    @Serializable
-    data class KizzyApi(val id: String)
-    val api = "https://kizzy-api.vercel.app/image?url="
-    private suspend fun String.discordUrl(): String? {
-        if (startsWith("mp:")) return this
-        val json = app.get("$api$this").parsedSafe<KizzyApi>()
-        return json?.id
-    }
+
+
 
     private fun sendIdentify() {
         val response = Identity.Response(
@@ -138,6 +138,7 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
             }
         }
         if (!started) whenStarted = {
+            snackString("Discord message sent")
             send.invoke()
             whenStarted = null
         }
@@ -185,21 +186,21 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
         }
 
         override fun onMessage(webSocket: WebSocket, text: String) {
-            println("Discord Message : $text")
 
             val map = json.decodeFromString<Res>(text)
             seq = map.s
-
             when (map.op) {
                 10 -> {
                     map.d as JsonObject
                     heartbeatInterval = map.d["heartbeat_interval"]!!.jsonPrimitive.long
                     sendHeartBeat()
                     sendIdentify()
+                    snackString(map.t)
                 }
 
                 0  -> if (map.t == "READY") {
                     val user = json.decodeFromString<User.Response>(text).d.user
+                    snackString(map.t)
                     started = true
                     whenStarted?.invoke(user)
                 }
@@ -207,6 +208,7 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
                 1  -> {
                     if (scope.isActive) scope.cancel()
                     webSocket.send("{\"op\":1, \"d\":$seq}")
+                    snackString(map.t)
                 }
 
                 11 -> sendHeartBeat()
@@ -214,6 +216,7 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
                 9  -> {
                     sendHeartBeat()
                     sendIdentify()
+                    snackString(map.t)
                 }
             }
         }
@@ -230,6 +233,68 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
             if (t.message != "Interrupt") {
                 this@RPC.webSocket = client.newWebSocket(request, Listener())
             }
+        }
+    }
+*/
+
+    companion object {
+        data class RPCData(
+            val applicationId: String? = null,
+            val type: Type? = null,
+            val activityName: String? = null,
+            val details: String? = null,
+            val state: String? = null,
+            val largeImage: Link? = null,
+            val smallImage: Link? = null,
+            val status: String? = null,
+            val startTimestamp: Long? = null,
+            val stopTimestamp: Long? = null,
+            val buttons: MutableList<Link> = mutableListOf()
+        )
+        @Serializable
+        data class KizzyApi(val id: String)
+        val api = "https://kizzy-api.vercel.app/image?url="
+        private suspend fun String.discordUrl(): String? {
+            if (startsWith("mp:")) return this
+            val json = app.get("$api$this").parsedSafe<KizzyApi>()
+            return json?.id
+        }
+        suspend fun createPresence(data: RPCData): String {
+            val json = Json {
+                encodeDefaults = true
+                allowStructuredMapKeys = true
+                ignoreUnknownKeys = true
+            }
+            return json.encodeToString(Presence.Response(
+                3,
+                Presence(
+                    activities = listOf(
+                        Activity(
+                            name = data.activityName,
+                            state = data.state,
+                            details = data.details,
+                            type = data.type?.ordinal,
+                            timestamps = if (data.startTimestamp != null)
+                                Activity.Timestamps(data.startTimestamp, data.stopTimestamp)
+                            else null,
+                            assets = Activity.Assets(
+                                largeImage = data.largeImage?.url?.discordUrl(),
+                                largeText = data.largeImage?.label,
+                                smallImage = data.smallImage?.url?.discordUrl(),
+                                smallText = data.smallImage?.label
+                            ),
+                            buttons = data.buttons.map { it.label },
+                            metadata = Activity.Metadata(
+                                buttonUrls = data.buttons.map { it.url }
+                            ),
+                            applicationId = data.applicationId,
+                        )
+                    ),
+                    afk = true,
+                    since = data.startTimestamp,
+                    status = data.status
+                )
+            ))
         }
     }
 

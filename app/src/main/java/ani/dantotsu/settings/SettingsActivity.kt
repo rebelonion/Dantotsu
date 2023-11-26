@@ -578,11 +578,14 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             }
 
             if (Discord.token != null) {
-                if (Discord.avatar != null) {
-                    binding.settingsDiscordAvatar.loadImage(Discord.avatar)
+                val id = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getString("discord_id", null)
+                val avatar = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getString("discord_avatar", null)
+                val username = getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE).getString("discord_username", null)
+                if (id != null && avatar != null) {
+                    binding.settingsDiscordAvatar.loadImage("https://cdn.discordapp.com/avatars/$id/$avatar.png")
                 }
                 binding.settingsDiscordUsername.visibility = View.VISIBLE
-                binding.settingsDiscordUsername.text = Discord.userid ?: Discord.token?.replace(Regex("."),"*")
+                binding.settingsDiscordUsername.text = username ?: Discord.token?.replace(Regex("."),"*")
                 binding.settingsDiscordLogin.setText(R.string.logout)
                 binding.settingsDiscordLogin.setOnClickListener {
                     Discord.removeSavedToken(this)

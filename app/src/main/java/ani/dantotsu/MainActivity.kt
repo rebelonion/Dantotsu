@@ -43,6 +43,7 @@ import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
 import ani.dantotsu.databinding.ItemNavbarBinding
 import ani.dantotsu.databinding.SplashScreenBinding
+import ani.dantotsu.download.manga.MangaDownloaderService
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment

@@ -3,6 +3,7 @@ package ani.dantotsu.media.manga.mangareader
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
 import android.os.Build
@@ -25,12 +26,15 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
+import ani.dantotsu.connections.discord.DiscordService
+import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityMangaReaderBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaSingleton
+import ani.dantotsu.media.anime.ExoplayerView
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.media.manga.MangaNameAdapter
@@ -121,7 +125,11 @@ class MangaReaderActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         mangaCache.clear()
-        rpc?.close()
+        val stopIntent = Intent(this, DiscordService::class.java).apply {
+            putExtra(DiscordService.ACTION_STOP_SERVICE, true)
+        }
+        DiscordServiceRunningSingleton.running = false
+        startService(stopIntent)
         super.onDestroy()
     }
 
@@ -300,19 +308,36 @@ ThemeManager(this).applyTheme()
                 binding.mangaReaderNextChap.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
                 binding.mangaReaderPrevChap.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 applySettings()
-                rpc?.close()
-                rpc = Discord.defaultRPC()
-                rpc?.send {
-                    type = RPC.Type.WATCHING
-                    activityName = media.userPreferredName
-                    details =  chap.title?.takeIf { it.isNotEmpty() } ?: getString(R.string.chapter_num, chap.number)
-                    state = "${chap.number}/${media.manga?.totalChapters ?: "??"}"
-                    media.cover?.let { cover ->
-                        largeImage = RPC.Link(media.userPreferredName, cover)
+                val context = this
+                lifecycleScope.launch {
+                    val presence = RPC.createPresence(RPC.Companion.RPCData(
+                        applicationId = Discord.application_Id,
+                        type = RPC.Type.WATCHING,
+                        activityName = media.userPreferredName,
+                        details = chap.title?.takeIf { it.isNotEmpty() } ?: getString(R.string.chapter_num, chap.number),
+                        state = "${chap.number}/${media.manga?.totalChapters ?: "??"}",
+                        largeImage = media.cover?.let { cover ->
+                            RPC.Link(media.userPreferredName, cover)
+                        },
+                        smallImage = RPC.Link(
+                            "Dantotsu",
+                            Discord.small_Image
+                        ),
+                        buttons = mutableListOf(
+                            RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
+                            RPC.Link(
+                                "Stream on Dantotsu",
+                                "https://github.com/rebelonion/Dantotsu/"
+                            )
+                        )
+                    )
+                    )
+
+                    val intent = Intent(context, DiscordService::class.java).apply {
+                        putExtra("presence", presence)
                     }
-                    media.shareLink?.let { link ->
-                        buttons.add(0, RPC.Link(getString(R.string.view_manga), link))
-                    }
+                    DiscordServiceRunningSingleton.running = true
+                    startService(intent)
                 }
             }
         }

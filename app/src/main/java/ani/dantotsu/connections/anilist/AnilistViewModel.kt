@@ -19,9 +19,16 @@ import kotlinx.coroutines.launch
 
 suspend fun getUserId(context: Context, block: () -> Unit) {
     CoroutineScope(Dispatchers.IO).launch {
-        if (Discord.userid == null && Discord.token != null) {
-            if (!Discord.getUserData())
-                snackString(context.getString(R.string.error_loading_discord_user_data))
+        val sharedPref = context.getSharedPreferences(
+            context.getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        )
+        val token = sharedPref.getString("discord_token", null)
+        val userid = sharedPref.getString("discord_id", null)
+        if (userid == null && token != null) {
+            /*if (!Discord.getUserData())
+                snackString(context.getString(R.string.error_loading_discord_user_data))*/
+            //TODO: Discord.getUserData()
         }
     }
 

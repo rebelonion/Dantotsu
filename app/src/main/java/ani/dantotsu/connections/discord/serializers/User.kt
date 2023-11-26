@@ -5,56 +5,57 @@ import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
 
+
 @Serializable
 data class User (
-    val verified: Boolean,
+    val verified: Boolean? = null,
     val username: String,
 
     @SerialName("purchased_flags")
-    val purchasedFlags: Long,
+    val purchasedFlags: Long? = null,
 
     @SerialName("public_flags")
-    val publicFlags: Long,
+    val publicFlags: Long? = null,
 
-    val pronouns: String,
+    val pronouns: String? = null,
 
     @SerialName("premium_type")
-    val premiumType: Long,
+    val premiumType: Long? = null,
 
-    val premium: Boolean,
-    val phone: String,
+    val premium: Boolean? = null,
+    val phone: String? = null,
 
     @SerialName("nsfw_allowed")
-    val nsfwAllowed: Boolean,
+    val nsfwAllowed: Boolean? = null,
 
-    val mobile: Boolean,
+    val mobile: Boolean? = null,
 
     @SerialName("mfa_enabled")
-    val mfaEnabled: Boolean,
+    val mfaEnabled: Boolean? = null,
 
     val id: String,
 
     @SerialName("global_name")
-    val globalName: String,
+    val globalName: String? = null,
 
-    val flags: Long,
-    val email: String,
-    val discriminator: String,
-    val desktop: Boolean,
-    val bio: String,
+    val flags: Long? = null,
+    val email: String? = null,
+    val discriminator: String? = null,
+    val desktop: Boolean? = null,
+    val bio: String? = null,
 
     @SerialName("banner_color")
-    val bannerColor: String,
+    val bannerColor: String? = null,
 
     val banner: JsonElement? = null,
 
     @SerialName("avatar_decoration")
     val avatarDecoration: JsonElement? = null,
 
-    val avatar: String,
+    val avatar: String? = null,
 
     @SerialName("accent_color")
-    val accentColor: Long
+    val accentColor: Long? = null
 ) {
     @Serializable
     data class Response(

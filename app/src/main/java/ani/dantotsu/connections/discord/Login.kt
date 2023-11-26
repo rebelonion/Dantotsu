@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import ani.dantotsu.R
@@ -67,11 +68,11 @@ class Login : AppCompatActivity() {
 
     private fun login(token: String) {
         if (token.isEmpty() || token == "null"){
-            snackString("Failed to retrieve token")
+            Toast.makeText(this, "Failed to retrieve token", Toast.LENGTH_SHORT).show()
             finish()
             return
         }
-        snackString("Logged in successfully")
+        Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
         finish()
         saveToken(this, token)
         startMainActivity(this@Login)
