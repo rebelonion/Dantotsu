@@ -1,13 +1,29 @@
 package ani.dantotsu.themes
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import ani.dantotsu.R
+import ani.dantotsu.logger
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
+
 
 class ThemeManager(private val context: Context) {
     fun applyTheme() {
         val useOLED = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_oled", false) && isDarkThemeActive(context)
         if(context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_material_you", false)){
+            if (useOLED) {
+                val options = DynamicColorsOptions.Builder()
+                    .setThemeOverlay(R.style.AppTheme_Amoled)
+                    .build()
+                //need activity from context
+                val activity = context as Activity
+                DynamicColors.applyToActivityIfAvailable(activity, options)
+            } else {
+                val activity = context as Activity
+                DynamicColors.applyToActivityIfAvailable(activity)
+            }
             return
         }
         val theme = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getString("theme", "PURPLE")!!

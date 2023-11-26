@@ -7,6 +7,14 @@
         <item name="android:padding">2sp</item>
     </style>
 
+    <style name="AppTheme.Amoled" parent="">
+        <item name="android:colorBackground">@color/darkest_Black</item>
+        <!-- set colorSurface to black -->
+        <item name="colorSurface">@color/darkest_Black</item>
+    </style>
+
+
+
     <style name="Suffix">
         <item name="android:height">54dp</item>
         <item name="android:fontFamily">@font/poppins_bold</item>

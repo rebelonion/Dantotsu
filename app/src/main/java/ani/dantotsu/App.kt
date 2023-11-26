@@ -1,21 +1,29 @@
 package ani.dantotsu
 
+import android.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.LongSparseArray
+import android.util.TypedValue
+import androidx.annotation.ColorInt
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
-import eu.kanade.tachiyomi.data.notification.Notifications
-import tachiyomi.core.util.system.logcat
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
 import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.HarmonizedColorAttributes
+import com.google.android.material.color.HarmonizedColors
+import com.google.android.material.color.HarmonizedColorsOptions
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.coroutines.CoroutineScope
@@ -25,9 +33,11 @@ import kotlinx.coroutines.launch
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Locale
+import java.lang.reflect.Field
+
 
 @SuppressLint("StaticFieldLeak")
 class App : MultiDexApplication() {
@@ -50,6 +60,7 @@ class App : MultiDexApplication() {
         val useMaterialYou = sharedPreferences.getBoolean("use_material_you", false)
         if(useMaterialYou) {
             DynamicColors.applyToActivitiesIfAvailable(this)
+            //TODO: HarmonizedColors
         }
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
@@ -81,6 +92,7 @@ class App : MultiDexApplication() {
         }
 
     }
+
 
     private fun setupNotificationChannels() {
         try {
