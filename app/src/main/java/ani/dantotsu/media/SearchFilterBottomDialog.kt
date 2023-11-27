@@ -99,7 +99,7 @@ class SearchFilterBottomDialog() : BottomSheetDialogFragment() {
                 ArrayAdapter(
                     binding.root.context,
                     R.layout.item_dropdown,
-                    (1970 until 2024).map { it.toString() }.reversed().toTypedArray()
+                    (1970 until  2025).map { it.toString() }.reversed().toTypedArray()
                 )
             )
         }
