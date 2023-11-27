@@ -1151,7 +1151,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                 ?: true else false
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
-            AlertDialog.Builder(this, R.style.DialogTheme)
+            AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
                 .apply {
                     setOnCancelListener { hideSystemBars() }
