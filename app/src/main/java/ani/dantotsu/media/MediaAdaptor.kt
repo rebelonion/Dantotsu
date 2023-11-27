@@ -4,10 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.drawable.BitmapDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
@@ -248,14 +252,14 @@ class MediaAdaptor(
     inner class MediaViewHolder(val binding: ItemMediaCompactBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
             if (matchParent) itemView.updateLayoutParams { width = -1 }
-            itemView.setSafeOnClickListener { clicked(bindingAdapterPosition) }
+            itemView.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
             itemView.setOnLongClickListener { longClicked(bindingAdapterPosition) }
         }
     }
 
     inner class MediaLargeViewHolder(val binding: ItemMediaLargeBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setSafeOnClickListener { clicked(bindingAdapterPosition) }
+            itemView.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
             itemView.setOnLongClickListener { longClicked(bindingAdapterPosition) }
         }
     }
@@ -263,7 +267,7 @@ class MediaAdaptor(
     @SuppressLint("ClickableViewAccessibility")
     inner class MediaPageViewHolder(val binding: ItemMediaPageBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.itemCompactImage.setSafeOnClickListener { clicked(bindingAdapterPosition) }
+            binding.itemCompactImage.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
             itemView.setOnTouchListener { _, _ -> true }
             binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition) }
         }
@@ -272,16 +276,17 @@ class MediaAdaptor(
     @SuppressLint("ClickableViewAccessibility")
     inner class MediaPageSmallViewHolder(val binding: ItemMediaPageSmallBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.itemCompactImage.setSafeOnClickListener { clicked(bindingAdapterPosition) }
-            binding.itemCompactTitleContainer.setSafeOnClickListener { clicked(bindingAdapterPosition) }
+            binding.itemCompactImage.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
+            binding.itemCompactTitleContainer.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
             itemView.setOnTouchListener { _, _ -> true }
             binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition) }
         }
     }
 
-    fun clicked(position: Int) {
+    fun clicked(position: Int, bitmap: Bitmap? = null) {
         if ((mediaList?.size ?: 0) > position && position != -1) {
             val media = mediaList?.get(position)
+            if (bitmap != null) MediaSingleton.bitmap = bitmap
             ContextCompat.startActivity(
                 activity,
                 Intent(activity, MediaDetailsActivity::class.java).putExtra(
@@ -302,4 +307,44 @@ class MediaAdaptor(
         }
         return false
     }
+
+    fun getBitmapFromImageView(imageView: ImageView): Bitmap? {
+        val drawable = imageView.drawable ?: return null
+
+        // If the drawable is a BitmapDrawable, then just get the bitmap
+        if (drawable is BitmapDrawable) {
+            return drawable.bitmap
+        }
+
+        // Create a bitmap with the same dimensions as the drawable
+        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth,
+            drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888)
+
+        // Draw the drawable onto the bitmap
+        val canvas = Canvas(bitmap)
+        drawable.setBounds(0, 0, canvas.width, canvas.height)
+        drawable.draw(canvas)
+
+        return bitmap
+    }
+
+    fun resizeBitmap(source: Bitmap?, maxDimension: Int): Bitmap? {
+        if (source == null) return null
+        val width = source.width
+        val height = source.height
+        val newWidth: Int
+        val newHeight: Int
+
+        if (width > height) {
+            newWidth = maxDimension
+            newHeight = (height * (maxDimension.toFloat() / width)).toInt()
+        } else {
+            newHeight = maxDimension
+            newWidth = (width * (maxDimension.toFloat() / height)).toInt()
+        }
+
+        return Bitmap.createScaledBitmap(source, newWidth, newHeight, true)
+    }
+
 }

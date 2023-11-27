@@ -28,11 +28,11 @@ android {
     buildTypes {
         debug {
             applicationIdSuffix ".beta"
-            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta"]
-            debuggable true
+            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta", icon_placeholder_round: "@mipmap/ic_launcher_beta_round"]
+            debuggable false
         }
         release {
-            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher"]
+            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher", icon_placeholder_round: "@mipmap/ic_launcher_round"]
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -99,6 +99,7 @@ dependencies {
     implementation 'com.alexvasilkov:gesture-views:2.8.3'
     implementation 'com.github.VipulOG:ebook-reader:0.1.6'
     implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
+    implementation "com.github.skydoves:colorpickerview:2.3.0"
 
 //    string matching
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'

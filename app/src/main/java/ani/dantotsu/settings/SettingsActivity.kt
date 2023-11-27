@@ -5,12 +5,14 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
+import android.os.Build
 import android.os.Build.*
 import android.os.Build.VERSION.*
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -36,6 +38,7 @@ import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.skydoves.colorpickerview.listeners.ColorListener
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
@@ -61,7 +64,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -82,10 +85,10 @@ ThemeManager(this).applyTheme()
             }
 
             val info = """
-dantotsu Version: ${BuildConfig.VERSION_NAME}
-Device: $BRAND $DEVICE
-Architecture: ${getArch()}
-OS Version: $CODENAME $RELEASE ($SDK_INT)
+                dantotsu Version: ${BuildConfig.VERSION_NAME}
+                Device: $BRAND $DEVICE
+                Architecture: ${getArch()}
+                OS Version: $CODENAME $RELEASE ($SDK_INT)
             """.trimIndent()
             copyToClipboard(info, false)
             toast(getString(R.string.copied_device_info))
@@ -106,12 +109,30 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         binding.settingsUseMaterialYou.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_material_you", false)
         binding.settingsUseMaterialYou.setOnCheckedChangeListener { _, isChecked ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_material_you", isChecked).apply()
+            if(isChecked) binding.settingsUseCustomTheme.isChecked = false
             restartApp()
+        }
+
+        binding.settingsUseCustomTheme.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_custom_theme", false)
+        binding.settingsUseCustomTheme.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_custom_theme", isChecked).apply()
+            if(isChecked) {
+                binding.settingsUseOLED.isChecked = false
+                binding.settingsUseMaterialYou.isChecked = false
+            }
+
+            restartApp()
+        }
+
+        binding.settingsUseSourceTheme.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_source_theme", false)
+        binding.settingsUseSourceTheme.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_source_theme", isChecked).apply()
         }
 
         binding.settingsUseOLED.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_oled", false)
         binding.settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_oled", isChecked).apply()
+            if(isChecked) binding.settingsUseCustomTheme.isChecked = false
             restartApp()
         }
 
@@ -121,11 +142,38 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         binding.themeSwitcher.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, ThemeManager.Companion.Theme.values().map { it.theme.substring(0, 1) + it.theme.substring(1).lowercase() }))
 
         binding.themeSwitcher.setOnItemClickListener { _, _, i, _ ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putString("theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putString("custom_theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
             //ActivityHelper.shouldRefreshMainActivity = true
             binding.themeSwitcher.clearFocus()
             restartApp()
 
+        }
+
+
+        binding.customTheme.setOnClickListener{
+            var passedColor: Int = 0
+            val dialogView = layoutInflater.inflate(R.layout.dialog_color_picker, null)
+            val alertDialog = AlertDialog.Builder(this ,R.style.MyPopup)
+                .setTitle("Custom Theme")
+                .setView(dialogView)
+                .setPositiveButton("OK") { dialog, _ ->
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("custom_theme", passedColor).apply()
+                    logger("Custom Theme: $passedColor")
+                    dialog.dismiss()
+                    restartApp()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            val colorPickerView = dialogView.findViewById<com.skydoves.colorpickerview.ColorPickerView>(R.id.colorPickerView)
+            colorPickerView.setColorListener(ColorListener { color, fromUser ->
+                val linearLayout = dialogView.findViewById<LinearLayout>(R.id.linear)
+                passedColor = color
+                linearLayout.setBackgroundColor(color)
+            })
+
+            alertDialog.show()
         }
 
         //val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
@@ -177,7 +225,6 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
 
         }
 
-       // binding.userAgent.setText(networkPreferences.defaultUserAgent().get())
         binding.userAgent.setOnClickListener{
             val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
             val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
@@ -295,6 +342,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
 
         binding.settingsUiLight.setOnClickListener {
+            binding.settingsUseOLED.isChecked = false
             uiTheme(false, it)
         }
 

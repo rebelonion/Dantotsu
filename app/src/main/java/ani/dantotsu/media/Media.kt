@@ -1,5 +1,6 @@
 package ani.dantotsu.media
 
+import android.graphics.Bitmap
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.MediaEdge
 import ani.dantotsu.connections.anilist.api.MediaList
@@ -119,4 +120,5 @@ data class Media(
 
 object MediaSingleton {
     var media: Media? = null
+    var bitmap: Bitmap? = null
 }
