@@ -142,7 +142,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.themeSwitcher.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, ThemeManager.Companion.Theme.values().map { it.theme.substring(0, 1) + it.theme.substring(1).lowercase() }))
 
         binding.themeSwitcher.setOnItemClickListener { _, _, i, _ ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putString("custom_theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putString("theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
             //ActivityHelper.shouldRefreshMainActivity = true
             binding.themeSwitcher.clearFocus()
             restartApp()
@@ -157,7 +157,7 @@ class SettingsActivity : AppCompatActivity() {
                 .setTitle("Custom Theme")
                 .setView(dialogView)
                 .setPositiveButton("OK") { dialog, _ ->
-                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("custom_theme", passedColor).apply()
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("custom_theme_int", passedColor).apply()
                     logger("Custom Theme: $passedColor")
                     dialog.dismiss()
                     restartApp()
