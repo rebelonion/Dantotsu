@@ -117,7 +117,6 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsUseCustomTheme.setOnCheckedChangeListener { _, isChecked ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_custom_theme", isChecked).apply()
             if(isChecked) {
-                binding.settingsUseOLED.isChecked = false
                 binding.settingsUseMaterialYou.isChecked = false
             }
 
@@ -132,7 +131,6 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsUseOLED.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_oled", false)
         binding.settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_oled", isChecked).apply()
-            if(isChecked) binding.settingsUseCustomTheme.isChecked = false
             restartApp()
         }
 

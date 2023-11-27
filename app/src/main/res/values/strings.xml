@@ -634,7 +634,7 @@
     <string name="user_agent">User Agent</string>
     <string name="custom_theme">Custom Theme</string>
     <string name="use_custom_theme">Custom theme</string>
-    <string name="use_unique_theme_for_each_item">Unique theme for each item</string>
+    <string name="use_unique_theme_for_each_item">Use cover as theme for each entry</string>
     <string name="oled_theme_variant">OLED theme variant</string>
 
 </resources>
