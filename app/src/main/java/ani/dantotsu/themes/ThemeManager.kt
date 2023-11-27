@@ -29,11 +29,11 @@ class ThemeManager(private val context: Context) {
         val useSource = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_source_theme", false)
         val useMaterial = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_material_you", false)
         if(useSource){
-            applyDynamicColors(useMaterial, context, useOLED, fromImage, useCustom = if(useCustomTheme) customTheme else null)
-            return
+            val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, fromImage, useCustom = if(useCustomTheme) customTheme else null)
+            if(!returnedEarly) return
         } else if (useCustomTheme) {
-            applyDynamicColors(useMaterial, context, useOLED, useCustom = customTheme)
-            return
+            val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = customTheme)
+            if(!returnedEarly) return
         } else {
             val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = null)
             if(!returnedEarly) return
@@ -71,7 +71,6 @@ class ThemeManager(private val context: Context) {
         // Set the theme overlay based on conditions
         if (useOLED) {
             builder.setThemeOverlay(R.style.AppTheme_Amoled)
-            needMaterial = false
         }
         if(needMaterial && !useMaterialYou) return true
 
