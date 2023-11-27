@@ -320,7 +320,7 @@
     <color name="md_theme_dark_5_errorContainer">#00FF00</color>
     <color name="md_theme_dark_5_onError">#00FF00</color>
     <color name="md_theme_dark_5_onErrorContainer">#00FF00</color>
-    <color name="md_theme_dark_5_background">#1C1B20</color>            <!-- good; Note from Wai What: Aayush2622 I noticed you changed this to "#191C1E" but as the background is dependent on something else now I changed it back to "#000000", if there's a reason for your change let me know so it can be reverted -->
+    <color name="md_theme_dark_5_background">#1C1B20</color>
     <color name="md_theme_dark_5_onBackground">#EEEEEE</color>
     <color name="md_theme_dark_5_surface">#1C1B20</color>
     <color name="md_theme_dark_5_onSurface">#EEEEEE</color>
