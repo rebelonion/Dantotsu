@@ -24,6 +24,7 @@ import uy.kohesive.injekt.api.addSingleton
 import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.parsers.novel.NovelExtensionManager
 
 class AppModule(val app: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
@@ -35,6 +36,7 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { AnimeExtensionManager(app) }
         addSingletonFactory { MangaExtensionManager(app) }
+        addSingletonFactory { NovelExtensionManager(app) }
 
         addSingletonFactory<AnimeSourceManager> { AndroidAnimeSourceManager(app, get()) }
         addSingletonFactory<MangaSourceManager> { AndroidMangaSourceManager(app, get()) }

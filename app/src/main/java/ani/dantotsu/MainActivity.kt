@@ -35,6 +35,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider.NewInstanceFactory.Companion.instance
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -59,7 +60,9 @@ import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.parsers.NovelInterface
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import dalvik.system.PathClassLoader
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
@@ -73,7 +76,11 @@ import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.io.Serializable
+import java.nio.channels.FileChannel
 
 
 class MainActivity : AppCompatActivity() {
@@ -82,6 +89,8 @@ class MainActivity : AppCompatActivity() {
     private var load = false
 
     private var uiSettings = UserInterfaceSettings()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()

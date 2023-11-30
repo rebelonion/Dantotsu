@@ -21,109 +21,34 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
-import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
+import ani.dantotsu.currContext
+import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
+import ani.dantotsu.databinding.FragmentNovelExtensionsBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
-import ani.dantotsu.saveData
-import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
+import ani.dantotsu.parsers.novel.NovelExtension
+import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
-import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class InstalledAnimeExtensionsFragment : Fragment() {
-
-
-    private var _binding: FragmentAnimeExtensionsBinding? = null
+class InstalledNovelExtensionsFragment : Fragment() {
+    private var _binding: FragmentNovelExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
     val skipIcons = loadData("skip_extension_icons") ?: false
-    private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
-    private val extensionsAdapter = AnimeExtensionsAdapter({ pkg ->
-        val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>()
-        if (allSettings.isNotEmpty()) {
-            var selectedSetting = allSettings[0]
-            if (allSettings.size > 1) {
-                val names = allSettings.map { it.lang }.toTypedArray()
-                var selectedIndex = 0
-                AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                    .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, selectedIndex) { _, which ->
-                        selectedIndex = which
-                    }
-                    .setPositiveButton("OK") { dialog, _ ->
-                        selectedSetting = allSettings[selectedIndex]
-                        dialog.dismiss()
-
-                        // Move the fragment transaction here
-                        val eActivity = requireActivity() as ExtensionsActivity
-                        eActivity.runOnUiThread {
-                            val fragment =
-                                AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
-
-                                    eActivity.findViewById<ViewPager2>(R.id.viewPager).visibility =
-                                        View.VISIBLE
-                                    eActivity.findViewById<TabLayout>(R.id.tabLayout).visibility =
-                                        View.VISIBLE
-                                    eActivity.findViewById<TextInputLayout>(R.id.searchView).visibility =
-                                        View.VISIBLE
-                                    eActivity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                                        View.GONE
-                                }
-                            parentFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                                .replace(R.id.fragmentExtensionsContainer, fragment)
-                                .addToBackStack(null)
-                                .commit()
-                        }
-                    }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.cancel()
-                        return@setNegativeButton
-                    }
-                    .show()
-            } else {
-                // If there's only one setting, proceed with the fragment transaction
-                val eActivity = requireActivity() as ExtensionsActivity
-                eActivity.runOnUiThread {
-                    val fragment =
-                        AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
-
-                            eActivity.findViewById<ViewPager2>(R.id.viewPager).visibility =
-                                View.VISIBLE
-                            eActivity.findViewById<TabLayout>(R.id.tabLayout).visibility =
-                                View.VISIBLE
-                            eActivity.findViewById<TextInputLayout>(R.id.searchView).visibility =
-                                View.VISIBLE
-                            eActivity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                                View.GONE
-                        }
-                    parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                        .replace(R.id.fragmentExtensionsContainer, fragment)
-                        .addToBackStack(null)
-                        .commit()
-                }
-            }
-
-            // Hide ViewPager2 and TabLayout
-            val activity = requireActivity() as ExtensionsActivity
-            activity.findViewById<ViewPager2>(R.id.viewPager).visibility = View.GONE
-            activity.findViewById<TabLayout>(R.id.tabLayout).visibility = View.GONE
-            activity.findViewById<TextInputLayout>(R.id.searchView).visibility = View.GONE
-            activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility = View.VISIBLE
-        } else {
+    private val novelExtensionManager: NovelExtensionManager = Injekt.get()
+    private val extensionsAdapter = NovelExtensionsAdapter({ pkg ->
             Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
                 .show()
-        }
     },
         { pkg ->
             if (isAdded) {  // Check if the fragment is currently added to its activity
@@ -132,7 +57,7 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
 
                 if (pkg.hasUpdate) {
-                    animeExtensionManager.updateExtension(pkg)
+                    novelExtensionManager.updateExtension(pkg)
                         .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
                         .subscribe(
                             { installStep ->
@@ -148,7 +73,7 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                             },
                             { error ->
                                 FirebaseCrashlytics.getInstance().recordException(error)
-                                Log.e("AnimeExtensionsAdapter", "Error: ", error)  // Log the error
+                                Log.e("NovelExtensionsAdapter", "Error: ", error)  // Log the error
                                 val builder = NotificationCompat.Builder(
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_ERROR
@@ -165,7 +90,7 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_PROGRESS
                                 )
-                                    .setSmallIcon(R.drawable.ic_circle_check)
+                                    .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
                                     .setContentTitle("Update complete")
                                     .setContentText("The extension has been successfully updated.")
                                     .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -174,32 +99,35 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                             }
                         )
                 } else {
-                    animeExtensionManager.uninstallExtension(pkg.pkgName)
+                    novelExtensionManager.uninstallExtension(pkg.pkgName, currContext()?:context)
                     snackString("Extension uninstalled")
                 }
             }
-        }, skipIcons
-    )
+        }, skipIcons)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAnimeExtensionsBinding.inflate(inflater, container, false)
+        _binding = FragmentNovelExtensionsBinding.inflate(inflater, container, false)
 
-        extensionsRecyclerView = binding.allAnimeExtensionsRecyclerView
+        extensionsRecyclerView = binding.allNovelExtensionsRecyclerView
         extensionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         extensionsRecyclerView.adapter = extensionsAdapter
 
 
         lifecycleScope.launch {
-            animeExtensionManager.installedExtensionsFlow.collect { extensions ->
+            novelExtensionManager.installedExtensionsFlow.collect { extensions ->
                 extensionsAdapter.updateData(extensions)
             }
         }
-        val extensionsRecyclerView: RecyclerView = binding.allAnimeExtensionsRecyclerView
+        val extensionsRecyclerView: RecyclerView = binding.allNovelExtensionsRecyclerView
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
     }
 
     override fun onDestroyView() {
@@ -207,28 +135,32 @@ class InstalledAnimeExtensionsFragment : Fragment() {
     }
 
 
-    private class AnimeExtensionsAdapter(
-        private val onSettingsClicked: (AnimeExtension.Installed) -> Unit,
-        private val onUninstallClicked: (AnimeExtension.Installed) -> Unit,
-        val skipIcons: Boolean
-    ) : ListAdapter<AnimeExtension.Installed, AnimeExtensionsAdapter.ViewHolder>(
+    private class NovelExtensionsAdapter(
+        private val onSettingsClicked: (NovelExtension.Installed) -> Unit,
+        private val onUninstallClicked: (NovelExtension.Installed) -> Unit,
+        skipIcons: Boolean
+    ) : ListAdapter<NovelExtension.Installed, NovelExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
     ) {
 
-        fun updateData(newExtensions: List<AnimeExtension.Installed>) {
+        val skipIcons = skipIcons
+
+        fun updateData(newExtensions: List<NovelExtension.Installed>) {
+            Log.d("NovelExtensionsAdapter", "updateData: $newExtensions")
             submitList(newExtensions)  // Use submitList instead of manual list handling
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_extension, parent, false)
+            Log.d("NovelExtensionsAdapter", "onCreateViewHolder: $view")
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val extension = getItem(position) // Use getItem() from ListAdapter
-            val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val extension = getItem(position)  // Use getItem() from ListAdapter
+            val nsfw =  ""
+            val lang = LanguageMapper.mapLanguageCodeToName("all")
             holder.extensionNameTextView.text = extension.name
             holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
             if (!skipIcons) {
@@ -252,27 +184,28 @@ class InstalledAnimeExtensionsFragment : Fragment() {
             val extensionVersionTextView: TextView = view.findViewById(R.id.extensionVersionTextView)
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
-            val closeTextView: ImageView  = view.findViewById(R.id.closeTextView)
+            val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
         }
 
         companion object {
             val DIFF_CALLBACK_INSTALLED =
-                object : DiffUtil.ItemCallback<AnimeExtension.Installed>() {
+                object : DiffUtil.ItemCallback<NovelExtension.Installed>() {
                     override fun areItemsTheSame(
-                        oldItem: AnimeExtension.Installed,
-                        newItem: AnimeExtension.Installed
+                        oldItem: NovelExtension.Installed,
+                        newItem: NovelExtension.Installed
                     ): Boolean {
                         return oldItem.pkgName == newItem.pkgName
                     }
 
                     override fun areContentsTheSame(
-                        oldItem: AnimeExtension.Installed,
-                        newItem: AnimeExtension.Installed
+                        oldItem: NovelExtension.Installed,
+                        newItem: NovelExtension.Installed
                     ): Boolean {
                         return oldItem == newItem
                     }
                 }
         }
     }
+
 
 }

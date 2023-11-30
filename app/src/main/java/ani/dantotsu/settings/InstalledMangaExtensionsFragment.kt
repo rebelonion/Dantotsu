@@ -26,6 +26,7 @@ import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -137,6 +138,7 @@ class InstalledMangaExtensionsFragment : Fragment() {
                                 .setContentText("Error: ${error.message}")
                                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                             notificationManager.notify(1, builder.build())
+                            snackString("Update failed: ${error.message}")
                         },
                         {
                             val builder = NotificationCompat.Builder(
@@ -148,10 +150,12 @@ class InstalledMangaExtensionsFragment : Fragment() {
                                 .setContentText("The extension has been successfully updated.")
                                 .setPriority(NotificationCompat.PRIORITY_LOW)
                             notificationManager.notify(1, builder.build())
+                            snackString("Extension updated")
                         }
                     )
             } else {
                 mangaExtensionManager.uninstallExtension(pkg.pkgName)
+                snackString("Extension uninstalled")
             }
         }
     }, skipIcons)

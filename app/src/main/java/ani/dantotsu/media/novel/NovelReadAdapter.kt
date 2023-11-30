@@ -64,7 +64,7 @@ class NovelReadAdapter(
         binding.searchBar.setEndIconOnClickListener { search() }
     }
 
-    override fun getItemCount(): Int = 0
+    override fun getItemCount(): Int = 1
 
     inner class ViewHolder(val binding: ItemNovelHeaderBinding) : RecyclerView.ViewHolder(binding.root)
 }

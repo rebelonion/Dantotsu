@@ -9,12 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.FileUrl
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ItemUrlBinding
-import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.Book
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.tryWith
 
-class UrlAdapter(private val urls: List<FileUrl>, val book: Book, val novel: String) :
+class UrlAdapter(private val urls: List<FileUrl>, val book: Book, val novel: String, val callback: BookDialog.Callback?) :
     RecyclerView.Adapter<UrlAdapter.UrlViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UrlViewHolder {
@@ -26,6 +25,7 @@ class UrlAdapter(private val urls: List<FileUrl>, val book: Book, val novel: Str
         val binding = holder.binding
         val url = urls[position]
         binding.urlQuality.text = url.url
+        binding.urlQuality.maxLines = 4
         binding.urlDownload.visibility = View.VISIBLE
     }
 
@@ -36,12 +36,14 @@ class UrlAdapter(private val urls: List<FileUrl>, val book: Book, val novel: Str
             itemView.setSafeOnClickListener {
                 tryWith(true) {
                     binding.urlDownload.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                    download(
+                    callback?.onDownloadTriggered(book.links[bindingAdapterPosition].url)
+                    /*download(
                         itemView.context,
                         book,
                         bindingAdapterPosition,
                         novel
-                    )
+                    )*/
+
                 }
             }
             itemView.setOnLongClickListener {

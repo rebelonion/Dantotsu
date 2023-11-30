@@ -17,6 +17,7 @@ import ani.dantotsu.settings.paging.AnimeExtensionAdapter
 import ani.dantotsu.settings.paging.AnimeExtensionsViewModel
 import ani.dantotsu.settings.paging.AnimeExtensionsViewModelFactory
 import ani.dantotsu.settings.paging.OnAnimeInstallClickListener
+import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -101,6 +102,7 @@ class AnimeExtensionsFragment : Fragment(),
                             .setContentText("Error: ${error.message}")
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                         notificationManager.notify(1, builder.build())
+                        snackString("Installation failed: ${error.message}")
                     },
                     {
                         val builder = NotificationCompat.Builder(
@@ -113,6 +115,7 @@ class AnimeExtensionsFragment : Fragment(),
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                         notificationManager.notify(1, builder.build())
                         viewModel.invalidatePager()
+                        snackString("Extension installed")
                     }
                 )
         }

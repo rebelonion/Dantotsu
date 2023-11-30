@@ -167,7 +167,7 @@ data class ShowResponse(
     val total: Int? = null,
 
     //In case you want to sent some extra data
-    val extra : Map<String,String>?=null,
+    val extra : MutableMap<String,String>?=null,
 
     //SAnime object from Aniyomi
     val sAnime: SAnime? = null,
@@ -175,7 +175,7 @@ data class ShowResponse(
     //SManga object from Aniyomi
     val sManga: SManga? = null
 ) : Serializable {
-    constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf(), total: Int? = null, extra: Map<String, String>?=null)
+    constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf(), total: Int? = null, extra: MutableMap<String, String>?=null)
             : this(name, link, FileUrl(coverUrl), otherNames, total, extra)
 
     constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf(), total: Int? = null)

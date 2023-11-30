@@ -30,7 +30,7 @@ import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.Download
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.manga.MangaDownloaderService
-import ani.dantotsu.download.manga.ServiceDataSingleton
+import ani.dantotsu.download.manga.MangaServiceDataSingleton
 import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
@@ -408,15 +408,15 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                         simultaneousDownloads = 2
                     )
 
-                    ServiceDataSingleton.downloadQueue.offer(downloadTask)
+                    MangaServiceDataSingleton.downloadQueue.offer(downloadTask)
 
                     // If the service is not already running, start it
-                    if (!ServiceDataSingleton.isServiceRunning) {
+                    if (!MangaServiceDataSingleton.isServiceRunning) {
                         val intent = Intent(context, MangaDownloaderService::class.java)
                         withContext(Dispatchers.Main) {
                             ContextCompat.startForegroundService(requireContext(), intent)
                         }
-                        ServiceDataSingleton.isServiceRunning = true
+                        MangaServiceDataSingleton.isServiceRunning = true
                     }
 
                     // Inform the adapter that the download has started
@@ -456,6 +456,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
     }
     private val downloadStatusReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            if(!this@MangaReadFragment::chapterAdapter.isInitialized) return
             when (intent.action) {
                 ACTION_DOWNLOAD_STARTED -> {
                     val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)

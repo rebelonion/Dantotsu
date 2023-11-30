@@ -1,11 +1,10 @@
 package eu.kanade.tachiyomi.network
 
 import android.content.Context
-import eu.kanade.tachiyomi.network.AndroidCookieJar
-import eu.kanade.tachiyomi.network.PREF_DOH_CLOUDFLARE
-import eu.kanade.tachiyomi.network.PREF_DOH_GOOGLE
-import eu.kanade.tachiyomi.network.dohCloudflare
-import eu.kanade.tachiyomi.network.dohGoogle
+import android.os.Build
+import ani.dantotsu.Mapper
+import ani.dantotsu.defaultHeaders
+import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.interceptor.CloudflareInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UncaughtExceptionInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UserAgentInterceptor
@@ -32,13 +31,13 @@ class NetworkHelper(
         CloudflareInterceptor(context, cookieJar, ::defaultUserAgentProvider)
     }
 
-    private val baseClientBuilder: OkHttpClient.Builder
-        get() {
+    private fun baseClientBuilder(callTimout: Int = 2): OkHttpClient.Builder
+         {
             val builder = OkHttpClient.Builder()
                 .cookieJar(cookieJar)
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
-                .callTimeout(2, TimeUnit.MINUTES)
+                .callTimeout(callTimout.toLong(), TimeUnit.MINUTES)
                 .addInterceptor(UncaughtExceptionInterceptor())
                 .addInterceptor(userAgentInterceptor)
 
@@ -68,7 +67,10 @@ class NetworkHelper(
             return builder
         }
 
-    val client by lazy { baseClientBuilder.cache(Cache(cacheDir, cacheSize)).build() }
+
+
+    val client by lazy { baseClientBuilder().cache(Cache(cacheDir, cacheSize)).build() }
+    val downloadClient by lazy { baseClientBuilder(20).build() }
 
     @Suppress("UNUSED")
     val cloudflareClient by lazy {
@@ -76,6 +78,18 @@ class NetworkHelper(
             .addInterceptor(cloudflareInterceptor)
             .build()
     }
+
+    val requestClient = Requests(
+    client,
+    mapOf(
+        "User-Agent" to
+            defaultUserAgentProvider()
+                .format(Build.VERSION.RELEASE, Build.MODEL)
+    ),
+    defaultCacheTime = 6,
+    defaultCacheTimeUnit = TimeUnit.HOURS,
+    responseParser = Mapper
+    )
 
     fun defaultUserAgentProvider() = preferences.defaultUserAgent().get().trim()
 }

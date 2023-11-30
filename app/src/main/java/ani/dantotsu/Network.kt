@@ -8,6 +8,7 @@ import ani.dantotsu.others.webview.WebViewBottomDialog
 import com.lagradost.nicehttp.Requests
 import com.lagradost.nicehttp.ResponseParser
 import com.lagradost.nicehttp.addGenericDns
+import eu.kanade.tachiyomi.network.NetworkHelper
 import kotlinx.coroutines.*
 import kotlinx.coroutines.CancellationException
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -17,6 +18,8 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
 import okhttp3.Cache
 import okhttp3.OkHttpClient
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.PrintWriter
 import java.io.Serializable
@@ -25,41 +28,30 @@ import java.util.concurrent.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 
-val defaultHeaders = mapOf(
-    "User-Agent" to
-            "Mozilla/5.0 (Linux; Android %s; %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
-                .format(Build.VERSION.RELEASE, Build.MODEL)
-)
-lateinit var cache: Cache
+lateinit var defaultHeaders: Map<String, String>
 
 lateinit var okHttpClient: OkHttpClient
 lateinit var client: Requests
 
 fun initializeNetwork(context: Context) {
-    val dns = loadData<Int>("settings_dns")
-    cache = Cache(
-        File(context.cacheDir, "http_cache"),
-        5 * 1024L * 1024L // 5 MiB
+
+    val networkHelper = Injekt.get<NetworkHelper>()
+
+    defaultHeaders = mapOf(
+        "User-Agent" to
+                Injekt.get<NetworkHelper>().defaultUserAgentProvider()
+                    .format(Build.VERSION.RELEASE, Build.MODEL)
     )
-    okHttpClient = OkHttpClient.Builder()
-        .followRedirects(true)
-        .followSslRedirects(true)
-        .cache(cache)
-        .apply {
-            when (dns) {
-                1 -> addGoogleDns()
-                2 -> addCloudFlareDns()
-                3 -> addAdGuardDns()
-            }
-        }
-        .build()
+
+    okHttpClient = networkHelper.client
     client = Requests(
-        okHttpClient,
+        networkHelper.client,
         defaultHeaders,
         defaultCacheTime = 6,
         defaultCacheTimeUnit = TimeUnit.HOURS,
         responseParser = Mapper
     )
+
 }
 
 object Mapper : ResponseParser {

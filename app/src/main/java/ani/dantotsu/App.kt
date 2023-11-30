@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.os.Bundle
+import android.util.Log
 import android.util.LongSparseArray
 import android.util.TypedValue
 import androidx.annotation.ColorInt
@@ -14,9 +15,13 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
+import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.parsers.NovelSources
+import ani.dantotsu.parsers.novel.NovelExtensionManager
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.HarmonizedColorAttributes
 import com.google.android.material.color.HarmonizedColors
@@ -36,6 +41,7 @@ import logcat.LogcatLogger
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 import java.lang.reflect.Field
 
 
@@ -43,6 +49,7 @@ import java.lang.reflect.Field
 class App : MultiDexApplication() {
     private lateinit var animeExtensionManager: AnimeExtensionManager
     private lateinit var mangaExtensionManager: MangaExtensionManager
+    private lateinit var novelExtensionManager: NovelExtensionManager
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -65,10 +72,11 @@ class App : MultiDexApplication() {
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
         Firebase.crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)
-        initializeNetwork(baseContext)
 
         Injekt.importModule(AppModule(this))
         Injekt.importModule(PreferenceModule(this))
+
+        initializeNetwork(baseContext)
 
         setupNotificationChannels()
         if (!LogcatLogger.isInstalled) {
@@ -77,6 +85,7 @@ class App : MultiDexApplication() {
 
         animeExtensionManager = Injekt.get()
         mangaExtensionManager = Injekt.get()
+        novelExtensionManager = Injekt.get()
 
         val animeScope = CoroutineScope(Dispatchers.Default)
         animeScope.launch {
@@ -89,6 +98,12 @@ class App : MultiDexApplication() {
             mangaExtensionManager.findAvailableExtensions()
             logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
             MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
+        }
+        val novelScope = CoroutineScope(Dispatchers.Default)
+        novelScope.launch {
+            novelExtensionManager.findAvailableExtensions()
+            logger("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
+            NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }
 
     }

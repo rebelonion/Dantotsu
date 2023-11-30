@@ -29,6 +29,14 @@ class BookDialog : BottomSheetDialogFragment() {
     private lateinit var novel: ShowResponse
     private var source:Int = 0
 
+    interface Callback {
+        fun onDownloadTriggered(link: String)
+    }
+    private var callback: Callback? = null
+    fun setCallback(callback: Callback) {
+        this.callback = callback
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         arguments?.let {
             novelName = it.getString("novelName")!!
@@ -51,7 +59,7 @@ class BookDialog : BottomSheetDialogFragment() {
                 binding.itemBookTitle.text = it.name
                 binding.itemBookDesc.text = it.description
                 binding.itemBookImage.loadImage(it.img)
-                binding.bookRecyclerView.adapter = UrlAdapter(it.links, it, novelName)
+                binding.bookRecyclerView.adapter = UrlAdapter(it.links, it, novelName, callback)
             }
         }
         lifecycleScope.launch(Dispatchers.IO) {

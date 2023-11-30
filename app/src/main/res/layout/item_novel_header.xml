@@ -33,7 +33,7 @@
             android:freezesText="false"
             android:inputType="none"
             android:padding="8dp"
-            android:text="@string/watch"
+            android:text="@string/read"
             android:textAllCaps="true"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="14sp"

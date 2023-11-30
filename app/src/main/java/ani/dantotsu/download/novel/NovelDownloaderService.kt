@@ -1,4 +1,4 @@
-package ani.dantotsu.download.manga
+package ani.dantotsu.download.novel
 
 import android.Manifest
 import android.app.Service
@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
@@ -17,46 +16,48 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import ani.dantotsu.R
 import ani.dantotsu.download.Download
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.logger
 import ani.dantotsu.media.Media
-import ani.dantotsu.media.manga.ImageData
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
-import com.google.gson.Gson
-import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_DOWNLOADER_PROGRESS
-import java.net.HttpURLConnection
-import java.net.URL
-import androidx.core.content.ContextCompat
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FAILED
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FINISHED
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_PROGRESS
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_STARTED
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.EXTRA_CHAPTER_NUMBER
+import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import okhttp3.Request
+import okio.buffer
+import okio.sink
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
+import java.io.BufferedInputStream
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Queue
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class MangaDownloaderService : Service() {
+class NovelDownloaderService : Service() {
 
     private lateinit var notificationManager: NotificationManagerCompat
     private lateinit var builder: NotificationCompat.Builder
@@ -66,6 +67,8 @@ class MangaDownloaderService : Service() {
     private val mutex = Mutex()
     private var isCurrentlyProcessing = false
 
+    val networkHelper = Injekt.get<NetworkHelper>()
+
     override fun onBind(intent: Intent?): IBinder? {
         // This is only required for bound services.
         return null
@@ -74,8 +77,8 @@ class MangaDownloaderService : Service() {
     override fun onCreate() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
-        builder = NotificationCompat.Builder(this, CHANNEL_DOWNLOADER_PROGRESS).apply {
-            setContentTitle("Manga Download Progress")
+        builder = NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
+            setContentTitle("Novel Download Progress")
             setSmallIcon(R.drawable.ic_round_download_24)
             priority = NotificationCompat.PRIORITY_DEFAULT
             setOnlyAlertOnce(true)
@@ -91,9 +94,9 @@ class MangaDownloaderService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        MangaServiceDataSingleton.downloadQueue.clear()
+        NovelServiceDataSingleton.downloadQueue.clear()
         downloadJobs.clear()
-        MangaServiceDataSingleton.isServiceRunning = false
+        NovelServiceDataSingleton.isServiceRunning = false
         unregisterReceiver(cancelReceiver)
     }
 
@@ -109,13 +112,13 @@ class MangaDownloaderService : Service() {
                 }
             }
         }
-        return START_NOT_STICKY
+        return Service.START_NOT_STICKY
     }
 
     private fun processQueue() {
         CoroutineScope(Dispatchers.Default).launch {
-            while (MangaServiceDataSingleton.downloadQueue.isNotEmpty()) {
-                val task = MangaServiceDataSingleton.downloadQueue.poll()
+            while (NovelServiceDataSingleton.downloadQueue.isNotEmpty()) {
+                val task = NovelServiceDataSingleton.downloadQueue.poll()
                 if (task != null) {
                     val job = launch { download(task) }
                     mutex.withLock {
@@ -127,7 +130,7 @@ class MangaDownloaderService : Service() {
                     }
                     updateNotification() // Update the notification after each task is completed
                 }
-                if (MangaServiceDataSingleton.downloadQueue.isEmpty()) {
+                if (NovelServiceDataSingleton.downloadQueue.isEmpty()) {
                     withContext(Dispatchers.Main) {
                         stopSelf() // Stop the service when the queue is empty
                     }
@@ -141,7 +144,7 @@ class MangaDownloaderService : Service() {
             mutex.withLock {
                 downloadJobs[chapter]?.cancel()
                 downloadJobs.remove(chapter)
-                MangaServiceDataSingleton.downloadQueue.removeAll { it.chapter == chapter }
+                NovelServiceDataSingleton.downloadQueue.removeAll { it.chapter == chapter }
                 updateNotification() // Update the notification after cancellation
             }
         }
@@ -149,7 +152,7 @@ class MangaDownloaderService : Service() {
 
     private fun updateNotification() {
         // Update the notification to reflect the current state of the queue
-        val pendingDownloads = MangaServiceDataSingleton.downloadQueue.size
+        val pendingDownloads = NovelServiceDataSingleton.downloadQueue.size
         val text = if (pendingDownloads > 0) {
             "Pending downloads: $pendingDownloads"
         } else {
@@ -166,112 +169,152 @@ class MangaDownloaderService : Service() {
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
+    suspend fun isEpubFile(urlString: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            try {
+                val request = Request.Builder()
+                    .url(urlString)
+                    .head()
+                    .build()
+
+                networkHelper.client.newCall(request).execute().use { response ->
+                    val contentType = response.header("Content-Type")
+                    val contentDisposition = response.header("Content-Disposition")
+
+                    logger("Content-Type: $contentType")
+                    logger("Content-Disposition: $contentDisposition")
+
+                    // Return true if the Content-Type or Content-Disposition indicates an EPUB file
+                    contentType == "application/epub+zip" ||
+                            (contentDisposition?.contains(".epub") == true)
+                }
+            } catch (e: Exception) {
+                logger("Error checking file type: ${e.message}")
+                false
+            }
+        }
+    }
+
     suspend fun download(task: DownloadTask) {
         withContext(Dispatchers.Main) {
             val notifi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 ContextCompat.checkSelfPermission(
-                    this@MangaDownloaderService,
+                    this@NovelDownloaderService,
                     Manifest.permission.POST_NOTIFICATIONS
                 ) == PackageManager.PERMISSION_GRANTED
             } else {
                 true
             }
 
-            val deferredList = mutableListOf<Deferred<Bitmap?>>()
-            builder.setContentText("Downloading ${task.title} - ${task.chapter}")
+            broadcastDownloadStarted(task.originalLink)
+
+            if (notifi) {
+                builder.setContentText("Downloading ${task.title} - ${task.chapter}")
+                notificationManager.notify(NOTIFICATION_ID, builder.build())
+            }
+
+            if (!isEpubFile(task.downloadLink)) {
+                logger("Download link is not an .epub file")
+                broadcastDownloadFailed(task.originalLink)
+                snackString("Download link is not an .epub file")
+                return@withContext
+            }
+
+            // Start the download
+            withContext(Dispatchers.IO) {
+                try {
+                    val request = Request.Builder()
+                        .url(task.downloadLink)
+                        .build()
+
+                    networkHelper.downloadClient.newCall(request).execute().use { response ->
+                        // Ensure the response is successful and has a body
+                        if (!response.isSuccessful || response.body == null) {
+                            throw IOException("Failed to download file: ${response.message}")
+                        }
+
+                        val file = File(
+                            this@NovelDownloaderService.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                            "Dantotsu/Novel/${task.title}/${task.chapter}/0.epub"
+                        )
+
+                        // Create directories if they don't exist
+                        file.parentFile?.takeIf { !it.exists() }?.mkdirs()
+
+                        // Overwrite existing file
+                        if (file.exists()) file.delete()
+
+                        //download cover
+                        task.coverUrl?.let {
+                            file.parentFile?.let { it1 -> downloadImage(it, it1, "cover.jpg") }
+                        }
+
+                        val sink = file.sink().buffer()
+                        val responseBody = response.body
+                        val totalBytes = responseBody.contentLength()
+                        var downloadedBytes = 0L
+
+                        val notificationUpdateInterval = 1024 * 1024 // 1 MB
+                        val broadcastUpdateInterval = 1024 * 256 // 256 KB
+                        var lastNotificationUpdate = 0L
+                        var lastBroadcastUpdate = 0L
+
+                        responseBody.source().use { source ->
+                            while (true) {
+                                val read = source.read(sink.buffer, 8192)
+                                if (read == -1L) break
+                                downloadedBytes += read
+                                sink.emit()
+
+                                // Update progress at intervals
+                                if (downloadedBytes - lastNotificationUpdate >= notificationUpdateInterval) {
+                                    withContext(Dispatchers.Main) {
+                                        val progress = (downloadedBytes * 100 / totalBytes).toInt()
+                                        builder.setProgress(100, progress, false)
+                                        if (notifi) {
+                                            notificationManager.notify(NOTIFICATION_ID, builder.build())
+                                        }
+                                    }
+                                    lastNotificationUpdate = downloadedBytes
+                                }
+                                if (downloadedBytes - lastBroadcastUpdate >= broadcastUpdateInterval) {
+                                    withContext(Dispatchers.Main) {
+                                        val progress = (downloadedBytes * 100 / totalBytes).toInt()
+                                        logger("Download progress: $progress")
+                                        broadcastDownloadProgress(task.originalLink, progress)
+                                    }
+                                    lastBroadcastUpdate = downloadedBytes
+                                }
+                            }
+                        }
+
+                        sink.close()
+                    }
+                } catch (e: Exception) {
+                    logger("Exception while downloading .epub: ${e.message}")
+                    snackString("Exception while downloading .epub: ${e.message}")
+                    FirebaseCrashlytics.getInstance().recordException(e)
+                }
+            }
+
+            // Update notification for download completion
+            builder.setContentText("${task.title} - ${task.chapter} Download complete")
+                .setProgress(0, 0, false)
             if (notifi) {
                 notificationManager.notify(NOTIFICATION_ID, builder.build())
             }
 
-            // Loop through each ImageData object from the task
-            var farthest = 0
-            for ((index, image) in task.imageData.withIndex()) {
-                // Limit the number of simultaneous downloads from the task
-                if (deferredList.size >= task.simultaneousDownloads) {
-                    // Wait for all deferred to complete and clear the list
-                    deferredList.awaitAll()
-                    deferredList.clear()
-                }
-
-                // Download the image and add to deferred list
-                val deferred = async(Dispatchers.IO) {
-                    var bitmap: Bitmap? = null
-                    var retryCount = 0
-
-                    while (bitmap == null && retryCount < task.retries) {
-                        bitmap = image.fetchAndProcessImage(
-                            image.page,
-                            image.source,
-                            this@MangaDownloaderService
-                        )
-                        retryCount++
-                    }
-
-                    // Cache the image if successful
-                    if (bitmap != null) {
-                        saveToDisk("$index.jpg", bitmap, task.title, task.chapter)
-                    }
-                    farthest++
-                    builder.setProgress(task.imageData.size, farthest, false)
-                    broadcastDownloadProgress(task.chapter, farthest * 100 / task.imageData.size)
-                    if (notifi) {
-                        notificationManager.notify(NOTIFICATION_ID, builder.build())
-                    }
-
-                    bitmap
-                }
-
-                deferredList.add(deferred)
-            }
-
-            // Wait for any remaining deferred to complete
-            deferredList.awaitAll()
-
-            builder.setContentText("${task.title} - ${task.chapter} Download complete")
-                .setProgress(0, 0, false)
-            notificationManager.notify(NOTIFICATION_ID, builder.build())
-
             saveMediaInfo(task)
-            downloadsManager.addDownload(Download(task.title, task.chapter, Download.Type.MANGA))
-            broadcastDownloadFinished(task.chapter)
+            downloadsManager.addDownload(Download(task.title, task.chapter, Download.Type.NOVEL))
+            broadcastDownloadFinished(task.originalLink)
             snackString("${task.title} - ${task.chapter} Download finished")
         }
     }
-
-
-    private fun saveToDisk(fileName: String, bitmap: Bitmap, title: String, chapter: String) {
-        try {
-            // Define the directory within the private external storage space
-            val directory = File(
-                this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Manga/$title/$chapter"
-            )
-
-            if (!directory.exists()) {
-                directory.mkdirs()
-            }
-
-            // Create a file reference within that directory for your image
-            val file = File(directory, fileName)
-
-            // Use a FileOutputStream to write the bitmap to the file
-            FileOutputStream(file).use { outputStream ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            }
-
-
-        } catch (e: Exception) {
-            println("Exception while saving image: ${e.message}")
-            snackString("Exception while saving image: ${e.message}")
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-    }
-
     private fun saveMediaInfo(task: DownloadTask) {
         GlobalScope.launch(Dispatchers.IO) {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Manga/${task.title}"
+                "Dantotsu/Novel/${task.title}"
             )
             if (!directory.exists()) directory.mkdirs()
 
@@ -296,7 +339,8 @@ class MangaDownloaderService : Service() {
     }
 
 
-    private suspend fun downloadImage(url: String, directory: File, name: String): String? = withContext(Dispatchers.IO) {
+    private suspend fun downloadImage(url: String, directory: File, name: String): String? = withContext(
+        Dispatchers.IO) {
         var connection: HttpURLConnection? = null
         println("Downloading url $url")
         try {
@@ -316,7 +360,7 @@ class MangaDownloaderService : Service() {
         } catch (e: Exception) {
             e.printStackTrace()
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@MangaDownloaderService, "Exception while saving ${name}: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@NovelDownloaderService, "Exception while saving ${name}: ${e.message}", Toast.LENGTH_LONG).show()
             }
             null
         } finally {
@@ -324,30 +368,30 @@ class MangaDownloaderService : Service() {
         }
     }
 
-    private fun broadcastDownloadStarted(chapterNumber: String) {
-        val intent = Intent(ACTION_DOWNLOAD_STARTED).apply {
-            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+    private fun broadcastDownloadStarted(link: String) {
+        val intent = Intent(NovelReadFragment.ACTION_DOWNLOAD_STARTED).apply {
+            putExtra(NovelReadFragment.EXTRA_NOVEL_LINK, link)
         }
         sendBroadcast(intent)
     }
 
-    private fun broadcastDownloadFinished(chapterNumber: String) {
-        val intent = Intent(ACTION_DOWNLOAD_FINISHED).apply {
-            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+    private fun broadcastDownloadFinished(link: String) {
+        val intent = Intent(NovelReadFragment.ACTION_DOWNLOAD_FINISHED).apply {
+            putExtra(NovelReadFragment.EXTRA_NOVEL_LINK, link)
         }
         sendBroadcast(intent)
     }
 
-    private fun broadcastDownloadFailed(chapterNumber: String) {
-        val intent = Intent(ACTION_DOWNLOAD_FAILED).apply {
-            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+    private fun broadcastDownloadFailed(link: String) {
+        val intent = Intent(NovelReadFragment.ACTION_DOWNLOAD_FAILED).apply {
+            putExtra(NovelReadFragment.EXTRA_NOVEL_LINK, link)
         }
         sendBroadcast(intent)
     }
 
-    private fun broadcastDownloadProgress(chapterNumber: String, progress: Int) {
-        val intent = Intent(ACTION_DOWNLOAD_PROGRESS).apply {
-            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+    private fun broadcastDownloadProgress(link: String, progress: Int) {
+        val intent = Intent(NovelReadFragment.ACTION_DOWNLOAD_PROGRESS).apply {
+            putExtra(NovelReadFragment.EXTRA_NOVEL_LINK, link)
             putExtra("progress", progress)
         }
         sendBroadcast(intent)
@@ -368,10 +412,11 @@ class MangaDownloaderService : Service() {
     data class DownloadTask(
         val title: String,
         val chapter: String,
-        val imageData: List<ImageData>,
+        val downloadLink: String,
+        val originalLink: String,
         val sourceMedia: Media? = null,
+        val coverUrl: String? = null,
         val retries: Int = 2,
-        val simultaneousDownloads: Int = 2,
     )
 
     companion object {
@@ -381,10 +426,9 @@ class MangaDownloaderService : Service() {
     }
 }
 
-object MangaServiceDataSingleton {
-    var imageData: List<ImageData> = listOf()
+object NovelServiceDataSingleton {
     var sourceMedia: Media? = null
-    var downloadQueue: Queue<MangaDownloaderService.DownloadTask> = ConcurrentLinkedQueue()
+    var downloadQueue: Queue<NovelDownloaderService.DownloadTask> = ConcurrentLinkedQueue()
     @Volatile
     var isServiceRunning: Boolean = false
 }

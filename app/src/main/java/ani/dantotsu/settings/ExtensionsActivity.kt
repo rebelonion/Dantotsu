@@ -40,7 +40,7 @@ class ExtensionsActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityExtensionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -49,7 +49,7 @@ ThemeManager(this).applyTheme()
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
 
         viewPager.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 4
+            override fun getItemCount(): Int = 6
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
@@ -57,10 +57,31 @@ ThemeManager(this).applyTheme()
                     1 -> AnimeExtensionsFragment()
                     2 -> InstalledMangaExtensionsFragment()
                     3 -> MangaExtensionsFragment()
+                    4 -> InstalledNovelExtensionsFragment()
+                    5 -> NovelExtensionsFragment()
                     else -> AnimeExtensionsFragment()
                 }
             }
+
         }
+
+        val searchView: AutoCompleteTextView = findViewById(R.id.searchViewText)
+
+        tabLayout.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    searchView.setText("")
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                    // Do nothing
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                    // Do nothing
+                }
+            }
+        )
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
@@ -68,12 +89,12 @@ ThemeManager(this).applyTheme()
                 1 -> "Available Anime"
                 2 -> "Installed Manga"
                 3 -> "Available Manga"
+                4 -> "Installed Novels"
+                5 -> "Available Novels"
                 else -> null
             }
         }.attach()
 
-
-        val searchView: AutoCompleteTextView = findViewById(R.id.searchViewText)
 
         searchView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {

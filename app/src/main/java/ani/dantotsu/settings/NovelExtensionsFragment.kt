@@ -10,53 +10,56 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
-import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
+import ani.dantotsu.databinding.FragmentNovelExtensionsBinding
+import ani.dantotsu.logger
+import ani.dantotsu.parsers.novel.FileObserver.fileObserver
+import ani.dantotsu.parsers.novel.NovelExtension
+import ani.dantotsu.parsers.novel.NovelExtensionManager
+import ani.dantotsu.settings.paging.NovelExtensionAdapter
+import ani.dantotsu.settings.paging.NovelExtensionsViewModel
+import ani.dantotsu.settings.paging.NovelExtensionsViewModelFactory
+import ani.dantotsu.settings.paging.OnNovelInstallClickListener
+import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
-import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.observeOn
+import kotlinx.coroutines.flow.subscribe
 import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import ani.dantotsu.settings.paging.MangaExtensionAdapter
-import ani.dantotsu.settings.paging.MangaExtensionsViewModel
-import ani.dantotsu.settings.paging.MangaExtensionsViewModelFactory
-import ani.dantotsu.settings.paging.OnMangaInstallClickListener
-import ani.dantotsu.snackString
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
 
-class MangaExtensionsFragment : Fragment(),
-    SearchQueryHandler, OnMangaInstallClickListener {
-    private var _binding: FragmentMangaExtensionsBinding? = null
+class NovelExtensionsFragment : Fragment(),
+    SearchQueryHandler, OnNovelInstallClickListener {
+    private var _binding: FragmentNovelExtensionsBinding? = null
     private val binding get() = _binding!!
 
-    private val viewModel: MangaExtensionsViewModel by viewModels {
-        MangaExtensionsViewModelFactory(mangaExtensionManager)
+    private val viewModel: NovelExtensionsViewModel by viewModels {
+        NovelExtensionsViewModelFactory(novelExtensionManager)
     }
 
     private val adapter by lazy {
-        MangaExtensionAdapter(this)
+        NovelExtensionAdapter(this)
     }
 
-    private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
-
+    private val novelExtensionManager: NovelExtensionManager = Injekt.get()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMangaExtensionsBinding.inflate(inflater, container, false)
+        _binding = FragmentNovelExtensionsBinding.inflate(inflater, container, false)
 
-        binding.allMangaExtensionsRecyclerView.isNestedScrollingEnabled = false
-        binding.allMangaExtensionsRecyclerView.adapter = adapter
-        binding.allMangaExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        (binding.allMangaExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = true
+        binding.allNovelExtensionsRecyclerView.isNestedScrollingEnabled = false
+        binding.allNovelExtensionsRecyclerView.adapter = adapter
+        binding.allNovelExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
+        (binding.allNovelExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = true
 
         lifecycleScope.launch {
             viewModel.pagerFlow.collectLatest { pagingData ->
@@ -64,8 +67,8 @@ class MangaExtensionsFragment : Fragment(),
             }
         }
 
-        viewModel.invalidatePager() // Force a refresh of the pager
 
+        viewModel.invalidatePager() // Force a refresh of the pager
         return binding.root
     }
 
@@ -73,14 +76,14 @@ class MangaExtensionsFragment : Fragment(),
         viewModel.setSearchQuery(query ?: "")
     }
 
-    override fun onInstallClick(pkg: MangaExtension.Available) {
+    override fun onInstallClick(pkg: NovelExtension.Available) {
         if (isAdded) {  // Check if the fragment is currently added to its activity
             val context = requireContext()
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
             // Start the installation process
-            mangaExtensionManager.installExtension(pkg)
+            novelExtensionManager.installExtension(pkg)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { installStep ->
