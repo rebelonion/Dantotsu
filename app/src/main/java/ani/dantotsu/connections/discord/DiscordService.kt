@@ -26,6 +26,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.discord.serializers.Activity
 import ani.dantotsu.connections.discord.serializers.Presence
 import ani.dantotsu.connections.discord.serializers.User
+import ani.dantotsu.isOnline
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -112,6 +113,7 @@ class DiscordService : Service() {
             }else{
                 log("Service onStartCommand() no presence")
                 DiscordServiceRunningSingleton.running = false
+                client.dispatcher.executorService.shutdown()
                 stopSelf()
             }
             if (intent.hasExtra(ACTION_STOP_SERVICE)) {
@@ -123,8 +125,6 @@ class DiscordService : Service() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-
         log("Service Destroyed")
         if (DiscordServiceRunningSingleton.running){
             log("Accidental Service Destruction, restarting service")
@@ -135,6 +135,7 @@ class DiscordService : Service() {
                 baseContext.startService(intent)
             }
         } else {
+            if(this::webSocket.isInitialized)
             setPresence(json.encodeToString(
                 Presence.Response(
                     3,
@@ -145,6 +146,7 @@ class DiscordService : Service() {
         }
         SERVICE_RUNNING = false
         if(this::webSocket.isInitialized) webSocket.close(1000, "Closed by user")
+        super.onDestroy()
         //saveLogToFile()
     }
 
@@ -167,6 +169,9 @@ class DiscordService : Service() {
     override fun onBind(p0: Intent?): IBinder? = null
 
     inner class DiscordWebSocketListener : WebSocketListener() {
+
+        var retryAttempts = 0
+        val maxRetryAttempts = 10
         override fun onOpen(webSocket: WebSocket, response: Response) {
             super.onOpen(webSocket, response)
             this@DiscordService.webSocket = webSocket
@@ -256,6 +261,18 @@ class DiscordService : Service() {
         }
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             super.onFailure(webSocket, t, response)
+            if(!isOnline(baseContext)) {
+                log("WebSocket: Error, onFailure() reason: No Internet")
+                errorNotification("Could not set the presence", "No Internet")
+                return
+            } else{
+                retryAttempts++
+                if(retryAttempts >= maxRetryAttempts) {
+                    log("WebSocket: Error, onFailure() reason: Max Retry Attempts")
+                    errorNotification("Could not set the presence", "Max Retry Attempts")
+                    return
+                }
+            }
             t.message?.let { Log.d("WebSocket", "onFailure() $it") }
             log("WebSocket: Error, onFailure() reason: ${t.message}")
             client = OkHttpClient()
@@ -264,13 +281,13 @@ class DiscordService : Service() {
                 DiscordWebSocketListener()
             )
             client.dispatcher.executorService.shutdown()
-            if(!heartbeatThread.isInterrupted) { heartbeatThread.interrupt() }
+            if(::heartbeatThread.isInitialized && !heartbeatThread.isInterrupted) { heartbeatThread.interrupt() }
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosing(webSocket, code, reason)
             Log.d("WebSocket", "onClosing() $code $reason")
-            if(!heartbeatThread.isInterrupted) { heartbeatThread.interrupt() }
+            if(::heartbeatThread.isInitialized && !heartbeatThread.isInterrupted) { heartbeatThread.interrupt() }
         }
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {

@@ -231,6 +231,15 @@ internal class NovelExtensionInstaller(private val context: Context) {
         val destination = File(destinationPath)
         destination.setWritable(true)
 
+        //delete the file if it already exists
+        if (destination.exists()) {
+            if (destination.delete()) {
+                Log.i("File Copy", "File deleted successfully.")
+            } else {
+                Log.e("File Copy", "Failed to delete file.")
+            }
+        }
+
         var inputChannel: FileChannel? = null
         var outputChannel: FileChannel? = null
         try {

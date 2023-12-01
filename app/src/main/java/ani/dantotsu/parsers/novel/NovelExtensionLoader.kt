@@ -2,9 +2,13 @@ package ani.dantotsu.parsers.novel
 
 import android.content.Context
 import android.content.pm.PackageInfo
+import android.content.pm.PackageManager.GET_SIGNATURES
+import android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES
+import android.os.Build
 import android.util.Log
 import ani.dantotsu.logger
 import ani.dantotsu.parsers.NovelInterface
+import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dalvik.system.PathClassLoader
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
@@ -60,9 +64,15 @@ internal object NovelExtensionLoader {
         return loadExtension(context, File(path))
     }
 
+    @Suppress("DEPRECATION")
     fun loadExtension(context: Context, file: File): NovelLoadResult {
-        val packageInfo = context.packageManager.getPackageArchiveInfo(file.absolutePath, 0)
-            ?: return NovelLoadResult.Error(Exception("Failed to load extension"))
+        val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            context.packageManager.getPackageArchiveInfo(file.absolutePath, GET_SIGNING_CERTIFICATES)
+                ?: return NovelLoadResult.Error(Exception("Failed to load extension"))
+        } else {
+            context.packageManager.getPackageArchiveInfo(file.absolutePath, GET_SIGNATURES)
+                ?: return NovelLoadResult.Error(Exception("Failed to load extension"))
+        }
         val appInfo = packageInfo.applicationInfo
             ?: return NovelLoadResult.Error(Exception("Failed to load Extension Info"))
         appInfo.sourceDir = file.absolutePath;
@@ -70,10 +80,11 @@ internal object NovelExtensionLoader {
 
         val signatureHash = getSignatureHash(packageInfo)
 
-        if (signatureHash == null || signatureHash != officialSignature) {
+        if ((signatureHash == null) || !signatureHash.contains(officialSignature)) {
             logger("Package ${packageInfo.packageName} isn't signed")
             logger("signatureHash: $signatureHash")
-            //return NovelLoadResult.Error(Exception("Extension not signed"))
+            snackString("Package ${packageInfo.packageName} isn't signed")
+            return NovelLoadResult.Error(Exception("Extension not signed"))
         }
 
         val extension = NovelExtension.Installed(
@@ -92,10 +103,15 @@ internal object NovelExtensionLoader {
         return NovelLoadResult.Success(extension)
     }
 
-    private fun getSignatureHash(pkgInfo: PackageInfo): String? {
-        val signatures = pkgInfo.signatures
+    @Suppress("DEPRECATION")
+    private fun getSignatureHash(pkgInfo: PackageInfo): List<String>? {
+        val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            pkgInfo.signingInfo.apkContentsSigners
+        } else {
+            pkgInfo.signatures
+        }
         return if (signatures != null && signatures.isNotEmpty()) {
-            Hash.sha256(signatures.first().toByteArray())
+            signatures.map { Hash.sha256(it.toByteArray()) }
         } else {
             null
         }

@@ -206,7 +206,7 @@ class NovelExtensionManager(private val context: Context) {
         override fun onExtensionFileCreated(file: File) {
             NovelExtensionLoader.loadExtension(context, file).let {
                 if (it is NovelLoadResult.Success) {
-                    registerNewExtension(it.extension)
+                    registerNewExtension(it.extension.withUpdateCheck())
                 }
             }
         }
@@ -217,7 +217,7 @@ class NovelExtensionManager(private val context: Context) {
         override fun onExtensionFileModified(file: File) {
             NovelExtensionLoader.loadExtension(context, file).let {
                 if (it is NovelLoadResult.Success) {
-                    registerUpdatedExtension(it.extension)
+                    registerUpdatedExtension(it.extension.withUpdateCheck())
                 }
             }
         }

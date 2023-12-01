@@ -98,14 +98,17 @@ class MangaReaderActivity : AppCompatActivity() {
     var sliding = false
     var isAnimating = false
 
-    private var rpc : RPC? = null
+    private var rpc: RPC? = null
 
     override fun onAttachedToWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !settings.showSystemBars) {
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
             if (displayCutout != null) {
                 if (displayCutout.boundingRects.size > 0) {
-                    notchHeight = min(displayCutout.boundingRects[0].width(), displayCutout.boundingRects[0].height())
+                    notchHeight = min(
+                        displayCutout.boundingRects[0].width(),
+                        displayCutout.boundingRects[0].height()
+                    )
                     checkNotch()
                 }
             }
@@ -128,15 +131,17 @@ class MangaReaderActivity : AppCompatActivity() {
         val stopIntent = Intent(this, DiscordService::class.java).apply {
             putExtra(DiscordService.ACTION_STOP_SERVICE, true)
         }
-        DiscordServiceRunningSingleton.running = false
-        startService(stopIntent)
+        if (!isOnline(this)) {  //TODO:
+            DiscordServiceRunningSingleton.running = false
+            startService(stopIntent)
+        }
         super.onDestroy()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityMangaReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -148,8 +153,14 @@ ThemeManager(this).applyTheme()
             progress { finish() }
         }
 
-        settings = loadData("reader_settings", this) ?: ReaderSettings().apply { saveData("reader_settings", this) }
-        uiSettings = loadData("ui_settings", this) ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
+        settings = loadData("reader_settings", this)
+            ?: ReaderSettings().apply { saveData("reader_settings", this) }
+        uiSettings = loadData("ui_settings", this) ?: UserInterfaceSettings().apply {
+            saveData(
+                "ui_settings",
+                this
+            )
+        }
         controllerDuration = (uiSettings.animationSpeed * 200).toLong()
 
         hideBars()
@@ -174,9 +185,11 @@ ThemeManager(this).applyTheme()
             if (fromUser) {
                 sliding = true
                 if (settings.default.layout != PAGED)
-                    binding.mangaReaderRecycler.scrollToPosition((value.toInt() - 1) / (dualPage { 2 } ?: 1))
+                    binding.mangaReaderRecycler.scrollToPosition((value.toInt() - 1) / (dualPage { 2 }
+                        ?: 1))
                 else
-                    binding.mangaReaderPager.currentItem = (value.toInt() - 1) / (dualPage { 2 } ?: 1)
+                    binding.mangaReaderPager.currentItem =
+                        (value.toInt() - 1) / (dualPage { 2 } ?: 1)
                 pageSliderHide()
             }
         }
@@ -202,25 +215,25 @@ ThemeManager(this).applyTheme()
 
         model.mangaReadSources = if (media.isAdult) HMangaSources else MangaSources
         binding.mangaReaderSource.visibility = if (settings.showSource) View.VISIBLE else View.GONE
-        if(model.mangaReadSources!!.names.isEmpty()){
+        if (model.mangaReadSources!!.names.isEmpty()) {
             //try to reload sources
             try {
-            if (media.isAdult) {
-                val mangaSources = MangaSources
-                val scope = lifecycleScope
-                scope.launch(Dispatchers.IO) {
-                    mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
+                if (media.isAdult) {
+                    val mangaSources = MangaSources
+                    val scope = lifecycleScope
+                    scope.launch(Dispatchers.IO) {
+                        mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
+                    }
+                    model.mangaReadSources = mangaSources
+                } else {
+                    val mangaSources = HMangaSources
+                    val scope = lifecycleScope
+                    scope.launch(Dispatchers.IO) {
+                        mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
+                    }
+                    model.mangaReadSources = mangaSources
                 }
-                model.mangaReadSources = mangaSources
-            }else{
-                val mangaSources = HMangaSources
-                val scope = lifecycleScope
-                scope.launch(Dispatchers.IO) {
-                    mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
-                }
-                model.mangaReadSources = mangaSources
-            }
-            }catch (e: Exception){
+            } catch (e: Exception) {
                 Firebase.crashlytics.recordException(e)
                 logError(e)
             }
@@ -229,7 +242,8 @@ ThemeManager(this).applyTheme()
         if (media.selected!!.sourceIndex >= model.mangaReadSources!!.names.size) {
             media.selected!!.sourceIndex = 0
         }
-        binding.mangaReaderSource.text = model.mangaReadSources!!.names[media.selected!!.sourceIndex]
+        binding.mangaReaderSource.text =
+            model.mangaReadSources!!.names[media.selected!!.sourceIndex]
 
         binding.mangaReaderTitle.text = media.userPreferredName
 
@@ -242,10 +256,12 @@ ThemeManager(this).applyTheme()
             chaptersTitleArr.add("${if (!chapter.title.isNullOrEmpty() && chapter.title != "null") "" else "Chapter "}${chapter.number}${if (!chapter.title.isNullOrEmpty() && chapter.title != "null") " : " + chapter.title else ""}")
         }
 
-        showProgressDialog = if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog") != true else false
+        showProgressDialog =
+            if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog") != true else false
         progressDialog =
             if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
-                AlertDialog.Builder(this, R.style.MyPopup).setTitle(getString(R.string.title_update_progress)).apply {
+                AlertDialog.Builder(this, R.style.MyPopup)
+                    .setTitle(getString(R.string.title_update_progress)).apply {
                     setMultiChoiceItems(
                         arrayOf(getString(R.string.dont_ask_again, media.userPreferredName)),
                         booleanArrayOf(false)
@@ -262,19 +278,27 @@ ThemeManager(this).applyTheme()
         fun change(index: Int) {
             mangaCache.clear()
             saveData("${media.id}_${chaptersArr[currentChapterIndex]}", currentChapterPage, this)
-            ChapterLoaderDialog.newInstance(chapters[chaptersArr[index]]!!).show(supportFragmentManager, "dialog")
+            ChapterLoaderDialog.newInstance(chapters[chaptersArr[index]]!!)
+                .show(supportFragmentManager, "dialog")
         }
 
         //ChapterSelector
-        binding.mangaReaderChapterSelect.adapter = NoPaddingArrayAdapter(this, R.layout.item_dropdown, chaptersTitleArr)
+        binding.mangaReaderChapterSelect.adapter =
+            NoPaddingArrayAdapter(this, R.layout.item_dropdown, chaptersTitleArr)
         binding.mangaReaderChapterSelect.setSelection(currentChapterIndex)
-        binding.mangaReaderChapterSelect.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                if (position != currentChapterIndex) change(position)
-            }
+        binding.mangaReaderChapterSelect.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    p0: AdapterView<*>?,
+                    p1: View?,
+                    position: Int,
+                    p3: Long
+                ) {
+                    if (position != currentChapterIndex) change(position)
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>) {}
-        }
+                override fun onNothingSelected(parent: AdapterView<*>) {}
+            }
 
         binding.mangaReaderSettings.setSafeOnClickListener {
             ReaderSettingsDialogFragment.newInstance().show(supportFragmentManager, "settings")
@@ -305,57 +329,69 @@ ThemeManager(this).applyTheme()
                 saveData("${media.id}_current_chp", chap.number, this)
                 currentChapterIndex = chaptersArr.indexOf(chap.number)
                 binding.mangaReaderChapterSelect.setSelection(currentChapterIndex)
-                binding.mangaReaderNextChap.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
-                binding.mangaReaderPrevChap.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
+                binding.mangaReaderNextChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
+                binding.mangaReaderPrevChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 applySettings()
                 val context = this
-                lifecycleScope.launch {
-                    val presence = RPC.createPresence(RPC.Companion.RPCData(
-                        applicationId = Discord.application_Id,
-                        type = RPC.Type.WATCHING,
-                        activityName = media.userPreferredName,
-                        details = chap.title?.takeIf { it.isNotEmpty() } ?: getString(R.string.chapter_num, chap.number),
-                        state = "${chap.number}/${media.manga?.totalChapters ?: "??"}",
-                        largeImage = media.cover?.let { cover ->
-                            RPC.Link(media.userPreferredName, cover)
-                        },
-                        smallImage = RPC.Link(
-                            "Dantotsu",
-                            Discord.small_Image
-                        ),
-                        buttons = mutableListOf(
-                            RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
-                            RPC.Link(
-                                "Stream on Dantotsu",
-                                "https://github.com/rebelonion/Dantotsu/"
+                if (isOnline(context)) {
+                    lifecycleScope.launch {
+                        val presence = RPC.createPresence(
+                            RPC.Companion.RPCData(
+                                applicationId = Discord.application_Id,
+                                type = RPC.Type.WATCHING,
+                                activityName = media.userPreferredName,
+                                details = chap.title?.takeIf { it.isNotEmpty() }
+                                    ?: getString(R.string.chapter_num, chap.number),
+                                state = "${chap.number}/${media.manga?.totalChapters ?: "??"}",
+                                largeImage = media.cover?.let { cover ->
+                                    RPC.Link(media.userPreferredName, cover)
+                                },
+                                smallImage = RPC.Link(
+                                    "Dantotsu",
+                                    Discord.small_Image
+                                ),
+                                buttons = mutableListOf(
+                                    RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
+                                    RPC.Link(
+                                        "Stream on Dantotsu",
+                                        "https://github.com/rebelonion/Dantotsu/"
+                                    )
+                                )
                             )
                         )
-                    )
-                    )
-
-                    val intent = Intent(context, DiscordService::class.java).apply {
-                        putExtra("presence", presence)
+                        val intent = Intent(context, DiscordService::class.java).apply {
+                            putExtra("presence", presence)
+                        }
+                        DiscordServiceRunningSingleton.running = true
+                        startService(intent)
                     }
-                    DiscordServiceRunningSingleton.running = true
-                    startService(intent)
                 }
             }
         }
 
-        scope.launch(Dispatchers.IO) { model.loadMangaChapterImages(chapter, media.selected!!, media.nameMAL?:media.nameRomaji) }
+        scope.launch(Dispatchers.IO) {
+            model.loadMangaChapterImages(
+                chapter,
+                media.selected!!,
+                media.nameMAL ?: media.nameRomaji
+            )
+        }
     }
 
     private val snapHelper = PagerSnapHelper()
 
     fun <T> dualPage(callback: () -> T): T? {
         return when (settings.default.dualPageMode) {
-            No        -> null
+            No -> null
             Automatic -> {
                 val orientation = resources.configuration.orientation
                 if (orientation == Configuration.ORIENTATION_LANDSCAPE) callback.invoke()
                 else null
             }
-            Force     -> callback.invoke()
+
+            Force -> callback.invoke()
         }
     }
 
@@ -386,7 +422,8 @@ ThemeManager(this).applyTheme()
             maxChapterPage = chapImages.size.toLong()
             saveData("${media.id}_${chapter.number}_max", maxChapterPage)
 
-            imageAdapter = dualPage { DualPageAdapter(this, chapter) } ?: ImageAdapter(this, chapter)
+            imageAdapter =
+                dualPage { DualPageAdapter(this, chapter) } ?: ImageAdapter(this, chapter)
 
             if (chapImages.size > 1) {
                 binding.mangaReaderSlider.apply {
@@ -407,8 +444,10 @@ ThemeManager(this).applyTheme()
         if ((settings.default.direction == TOP_TO_BOTTOM || settings.default.direction == BOTTOM_TO_TOP)) {
             binding.mangaReaderSwipy.vertical = true
             if (settings.default.direction == TOP_TO_BOTTOM) {
-                binding.BottomSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: getString(R.string.no_chapter)
-                binding.TopSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: getString(R.string.no_chapter)
+                binding.BottomSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
+                    ?: getString(R.string.no_chapter)
+                binding.TopSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
+                    ?: getString(R.string.no_chapter)
                 binding.mangaReaderSwipy.onTopSwiped = {
                     binding.mangaReaderPreviousChapter.performClick()
                 }
@@ -416,8 +455,10 @@ ThemeManager(this).applyTheme()
                     binding.mangaReaderNextChapter.performClick()
                 }
             } else {
-                binding.BottomSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: getString(R.string.no_chapter)
-                binding.TopSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: getString(R.string.no_chapter)
+                binding.BottomSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
+                    ?: getString(R.string.no_chapter)
+                binding.TopSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
+                    ?: getString(R.string.no_chapter)
                 binding.mangaReaderSwipy.onTopSwiped = {
                     binding.mangaReaderNextChapter.performClick()
                 }
@@ -440,8 +481,10 @@ ThemeManager(this).applyTheme()
         } else {
             binding.mangaReaderSwipy.vertical = false
             if (settings.default.direction == RIGHT_TO_LEFT) {
-                binding.LeftSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: getString(R.string.no_chapter)
-                binding.RightSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: getString(R.string.no_chapter)
+                binding.LeftSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
+                    ?: getString(R.string.no_chapter)
+                binding.RightSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
+                    ?: getString(R.string.no_chapter)
                 binding.mangaReaderSwipy.onLeftSwiped = {
                     binding.mangaReaderNextChapter.performClick()
                 }
@@ -449,8 +492,10 @@ ThemeManager(this).applyTheme()
                     binding.mangaReaderPreviousChapter.performClick()
                 }
             } else {
-                binding.LeftSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: getString(R.string.no_chapter)
-                binding.RightSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: getString(R.string.no_chapter)
+                binding.LeftSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
+                    ?: getString(R.string.no_chapter)
+                binding.RightSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
+                    ?: getString(R.string.no_chapter)
                 binding.mangaReaderSwipy.onLeftSwiped = {
                     binding.mangaReaderPreviousChapter.performClick()
                 }
@@ -475,7 +520,8 @@ ThemeManager(this).applyTheme()
         if (settings.default.layout != PAGED) {
 
             binding.mangaReaderRecyclerContainer.visibility = View.VISIBLE
-            binding.mangaReaderRecyclerContainer.controller.settings.isRotationEnabled = settings.default.rotation
+            binding.mangaReaderRecyclerContainer.controller.settings.isRotationEnabled =
+                settings.default.rotation
 
             val detector = GestureDetectorCompat(this, object : GesturesListener() {
                 override fun onLongPress(e: MotionEvent) {
@@ -483,18 +529,31 @@ ThemeManager(this).applyTheme()
                             child ?: return@let false
                             val pos = binding.mangaReaderRecycler.getChildAdapterPosition(child)
                             val callback: (ImageViewDialog) -> Unit = { dialog ->
-                                lifecycleScope.launch { imageAdapter?.loadImage(pos, child as GestureFrameLayout) }
-                                binding.mangaReaderRecycler.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                                lifecycleScope.launch {
+                                    imageAdapter?.loadImage(
+                                        pos,
+                                        child as GestureFrameLayout
+                                    )
+                                }
+                                binding.mangaReaderRecycler.performHapticFeedback(
+                                    HapticFeedbackConstants.LONG_PRESS
+                                )
                                 dialog.dismiss()
                             }
                             dualPage {
-                                val page = chapter.dualPages().getOrNull(pos) ?: return@dualPage false
+                                val page =
+                                    chapter.dualPages().getOrNull(pos) ?: return@dualPage false
                                 val nextPage = page.second
                                 if (settings.default.direction != LEFT_TO_RIGHT && nextPage != null)
                                     onImageLongClicked(pos * 2, nextPage, page.first, callback)
                                 else
                                     onImageLongClicked(pos * 2, page.first, nextPage, callback)
-                            } ?: onImageLongClicked(pos, chapImages.getOrNull(pos) ?: return@let false, null, callback)
+                            } ?: onImageLongClicked(
+                                pos,
+                                chapImages.getOrNull(pos) ?: return@let false,
+                                null,
+                                callback
+                            )
                         }
                     ) binding.mangaReaderRecycler.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                     super.onLongPress(e)
@@ -536,12 +595,16 @@ ThemeManager(this).applyTheme()
                                         && (!v.canScrollVertically(-1) || !v.canScrollVertically(1)))
                                 ||
                                 ((direction == LEFT_TO_RIGHT || direction == RIGHT_TO_LEFT)
-                                        && (!v.canScrollHorizontally(-1) || !v.canScrollHorizontally(1)))
+                                        && (!v.canScrollHorizontally(-1) || !v.canScrollHorizontally(
+                                    1
+                                )))
                             ) {
                                 handleController(true)
                             } else handleController(false)
                         }
-                        updatePageNumber(manager.findLastVisibleItemPosition().toLong() * (dualPage { 2 } ?: 1) + 1)
+                        updatePageNumber(
+                            manager.findLastVisibleItemPosition().toLong() * (dualPage { 2 }
+                                ?: 1) + 1)
                         super.onScrolled(v, dx, dy)
                     }
                 })
@@ -603,7 +666,7 @@ ThemeManager(this).applyTheme()
     private var onVolumeDown: (() -> Unit)? = null
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         return when (event.keyCode) {
-            KEYCODE_VOLUME_UP, KEYCODE_DPAD_UP, KEYCODE_PAGE_UP       -> {
+            KEYCODE_VOLUME_UP, KEYCODE_DPAD_UP, KEYCODE_PAGE_UP -> {
                 if (event.keyCode == KEYCODE_VOLUME_UP)
                     if (!settings.default.volumeButtons)
                         return false
@@ -612,6 +675,7 @@ ThemeManager(this).applyTheme()
                     true
                 } else false
             }
+
             KEYCODE_VOLUME_DOWN, KEYCODE_DPAD_DOWN, KEYCODE_PAGE_DOWN -> {
                 if (event.keyCode == KEYCODE_VOLUME_DOWN)
                     if (!settings.default.volumeButtons)
@@ -621,7 +685,8 @@ ThemeManager(this).applyTheme()
                     true
                 } else false
             }
-            else                                                      -> {
+
+            else -> {
                 super.dispatchKeyEvent(event)
             }
         }
@@ -695,8 +760,14 @@ ThemeManager(this).applyTheme()
                 isContVisible = false
                 if (!isAnimating) {
                     isAnimating = true
-                    ObjectAnimator.ofFloat(binding.mangaReaderCont, "alpha", 1f, 0f).setDuration(controllerDuration).start()
-                    ObjectAnimator.ofFloat(binding.mangaReaderBottomLayout, "translationY", 0f, 128f)
+                    ObjectAnimator.ofFloat(binding.mangaReaderCont, "alpha", 1f, 0f)
+                        .setDuration(controllerDuration).start()
+                    ObjectAnimator.ofFloat(
+                        binding.mangaReaderBottomLayout,
+                        "translationY",
+                        0f,
+                        128f
+                    )
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
                     ObjectAnimator.ofFloat(binding.mangaReaderTopLayout, "translationY", 0f, -128f)
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
@@ -705,7 +776,8 @@ ThemeManager(this).applyTheme()
             } else {
                 isContVisible = true
                 binding.mangaReaderCont.visibility = View.VISIBLE
-                ObjectAnimator.ofFloat(binding.mangaReaderCont, "alpha", 0f, 1f).setDuration(controllerDuration).start()
+                ObjectAnimator.ofFloat(binding.mangaReaderCont, "alpha", 0f, 1f)
+                    .setDuration(controllerDuration).start()
                 ObjectAnimator.ofFloat(binding.mangaReaderTopLayout, "translationY", -128f, 0f)
                     .apply { interpolator = overshoot;duration = controllerDuration;start() }
                 ObjectAnimator.ofFloat(binding.mangaReaderBottomLayout, "translationY", 128f, 0f)
@@ -731,7 +803,7 @@ ThemeManager(this).applyTheme()
                 model.loadMangaChapterImages(
                     chapters[chaptersArr.getOrNull(currentChapterIndex + 1) ?: return@launch]!!,
                     media.selected!!,
-                    media.nameMAL?:media.nameRomaji,
+                    media.nameMAL ?: media.nameRomaji,
                     false
                 )
                 loading = false
@@ -744,7 +816,11 @@ ThemeManager(this).applyTheme()
                 progressDialog?.setCancelable(false)
                     ?.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                         saveData("${media.id}_save_progress", true)
-                        updateProgress(media, MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!).toString())
+                        updateProgress(
+                            media,
+                            MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
+                                .toString()
+                        )
                         dialog.dismiss()
                         runnable.run()
                     }
@@ -756,7 +832,11 @@ ThemeManager(this).applyTheme()
                 progressDialog?.show()
             } else {
                 if (loadData<Boolean>("${media.id}_save_progress") != false && if (media.isAdult) settings.updateForH else true)
-                    updateProgress(media, MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!).toString())
+                    updateProgress(
+                        media,
+                        MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
+                            .toString()
+                    )
                 runnable.run()
             }
         } else {
