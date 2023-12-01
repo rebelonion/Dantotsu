@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
@@ -17,24 +16,12 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import ani.dantotsu.R
 import ani.dantotsu.download.Download
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.manga.ImageData
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
-import com.google.gson.Gson
-import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_DOWNLOADER_PROGRESS
-import java.net.HttpURLConnection
-import java.net.URL
-import androidx.core.content.ContextCompat
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FAILED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FINISHED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_PROGRESS
@@ -44,15 +31,27 @@ import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
-import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_DOWNLOADER_PROGRESS
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
+import java.io.File
+import java.io.FileOutputStream
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.Queue
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -82,11 +81,20 @@ class MangaDownloaderService : Service() {
             setProgress(0, 0, false)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(NOTIFICATION_ID, builder.build(),  ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
-        }else{
+            startForeground(
+                NOTIFICATION_ID,
+                builder.build(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
             startForeground(NOTIFICATION_ID, builder.build())
         }
-        ContextCompat.registerReceiver(this, cancelReceiver, IntentFilter(ACTION_CANCEL_DOWNLOAD), ContextCompat.RECEIVER_EXPORTED)
+        ContextCompat.registerReceiver(
+            this,
+            cancelReceiver,
+            IntentFilter(ACTION_CANCEL_DOWNLOAD),
+            ContextCompat.RECEIVER_EXPORTED
+        )
     }
 
     override fun onDestroy() {
@@ -296,33 +304,38 @@ class MangaDownloaderService : Service() {
     }
 
 
-    private suspend fun downloadImage(url: String, directory: File, name: String): String? = withContext(Dispatchers.IO) {
-        var connection: HttpURLConnection? = null
-        println("Downloading url $url")
-        try {
-            connection = URL(url).openConnection() as HttpURLConnection
-            connection.connect()
-            if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                throw Exception("Server returned HTTP ${connection.responseCode} ${connection.responseMessage}")
-            }
-
-            val file = File(directory, name)
-            FileOutputStream(file).use { output ->
-                connection.inputStream.use { input ->
-                    input.copyTo(output)
+    private suspend fun downloadImage(url: String, directory: File, name: String): String? =
+        withContext(Dispatchers.IO) {
+            var connection: HttpURLConnection? = null
+            println("Downloading url $url")
+            try {
+                connection = URL(url).openConnection() as HttpURLConnection
+                connection.connect()
+                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                    throw Exception("Server returned HTTP ${connection.responseCode} ${connection.responseMessage}")
                 }
+
+                val file = File(directory, name)
+                FileOutputStream(file).use { output ->
+                    connection.inputStream.use { input ->
+                        input.copyTo(output)
+                    }
+                }
+                return@withContext file.absolutePath
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@MangaDownloaderService,
+                        "Exception while saving ${name}: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                null
+            } finally {
+                connection?.disconnect()
             }
-            return@withContext file.absolutePath
-        } catch (e: Exception) {
-            e.printStackTrace()
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@MangaDownloaderService, "Exception while saving ${name}: ${e.message}", Toast.LENGTH_LONG).show()
-            }
-            null
-        } finally {
-            connection?.disconnect()
         }
-    }
 
     private fun broadcastDownloadStarted(chapterNumber: String) {
         val intent = Intent(ACTION_DOWNLOAD_STARTED).apply {
@@ -385,6 +398,7 @@ object MangaServiceDataSingleton {
     var imageData: List<ImageData> = listOf()
     var sourceMedia: Media? = null
     var downloadQueue: Queue<MangaDownloaderService.DownloadTask> = ConcurrentLinkedQueue()
+
     @Volatile
     var isServiceRunning: Boolean = false
 }

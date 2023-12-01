@@ -15,11 +15,17 @@ object MangaSources : MangaReadSources() {
     suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()
-        list = createParsersFromExtensions(initialExtensions) + Lazier({ OfflineMangaParser() }, "Downloaded")
+        list = createParsersFromExtensions(initialExtensions) + Lazier(
+            { OfflineMangaParser() },
+            "Downloaded"
+        )
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->
-            list = createParsersFromExtensions(extensions) + Lazier({ OfflineMangaParser() }, "Downloaded")
+            list = createParsersFromExtensions(extensions) + Lazier(
+                { OfflineMangaParser() },
+                "Downloaded"
+            )
         }
     }
 
@@ -34,7 +40,8 @@ object MangaSources : MangaReadSources() {
 object HMangaSources : MangaReadSources() {
     val aList: List<Lazier<BaseParser>> = lazyList()
     suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
-         //todo
+        //todo
     }
-    override val list = listOf(aList,MangaSources.list).flatten()
+
+    override val list = listOf(aList, MangaSources.list).flatten()
 }

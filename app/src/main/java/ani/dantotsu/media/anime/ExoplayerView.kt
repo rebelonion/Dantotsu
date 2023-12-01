@@ -17,7 +17,6 @@ import android.graphics.drawable.Animatable
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.AudioManager.*
-import android.media.PlaybackParams
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -74,6 +73,7 @@ import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
 import ani.dantotsu.others.Download.download
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.ResettableTimer
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.*
@@ -81,7 +81,6 @@ import ani.dantotsu.settings.PlayerSettings
 import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.Slider
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -1325,7 +1324,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 .setAllowMultipleAdaptiveSelections(true)
                 .setPreferredTextLanguage(subtitle?.language ?: "en")
                 .setPreferredTextRoleFlags(C.ROLE_FLAG_SUBTITLE)
-                .setRendererDisabled(C.TRACK_TYPE_VIDEO, false)
+                .setRendererDisabled(TRACK_TYPE_VIDEO, false)
                 .setRendererDisabled(C.TRACK_TYPE_AUDIO, false)
                 .setRendererDisabled(C.TRACK_TYPE_TEXT, false)
                 .setMinVideoSize(

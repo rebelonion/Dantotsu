@@ -5,16 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
+import ani.dantotsu.connections.updateProgress
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemChapterListBinding
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.setAnimation
-import ani.dantotsu.connections.updateProgress
-import ani.dantotsu.currContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -124,7 +123,7 @@ class MangaChapterAdapter(
             if (progress != null) {
                 binding.itemChapterTitle.visibility = View.VISIBLE
                 binding.itemChapterTitle.text = "$progress"
-            }else{
+            } else {
                 binding.itemChapterTitle.visibility = View.GONE
                 binding.itemChapterTitle.text = ""
             }
@@ -154,9 +153,10 @@ class MangaChapterAdapter(
                     // Add chapter number to active coroutines set
                     activeCoroutines.add(chapterNumber)
                     while (activeDownloads.contains(chapterNumber)) {
-                        binding.itemDownload.animate().rotationBy(360f).setDuration(1000).setInterpolator(
-                            LinearInterpolator()
-                        ).start()
+                        binding.itemDownload.animate().rotationBy(360f).setDuration(1000)
+                            .setInterpolator(
+                                LinearInterpolator()
+                            ).start()
                         delay(1000)
                     }
                     // Remove chapter number from active coroutines set
@@ -171,8 +171,16 @@ class MangaChapterAdapter(
 
         init {
             val theme = currContext()?.theme
-            theme?.resolveAttribute(com.google.android.material.R.attr.colorError, typedValue1, true)
-            theme?.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue2, true)
+            theme?.resolveAttribute(
+                com.google.android.material.R.attr.colorError,
+                typedValue1,
+                true
+            )
+            theme?.resolveAttribute(
+                com.google.android.material.R.attr.colorPrimary,
+                typedValue2,
+                true
+            )
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
                     fragment.onMangaChapterClick(arr[bindingAdapterPosition].number)

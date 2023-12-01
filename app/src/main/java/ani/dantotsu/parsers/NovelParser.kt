@@ -9,7 +9,7 @@ abstract class NovelParser : BaseParser() {
 
     abstract suspend fun loadBook(link: String, extra: Map<String, String>?): Book
 
-    fun List<ShowResponse>.sortByVolume(query:String) : List<ShowResponse> {
+    fun List<ShowResponse>.sortByVolume(query: String): List<ShowResponse> {
         val sorted = groupBy { res ->
             val match = volumeRegex.find(res.name)?.groupValues
                 ?.firstOrNull { it.isNotEmpty() }
@@ -42,7 +42,12 @@ data class Book(
     val description: String? = null,
     val links: List<FileUrl>
 ) {
-    constructor (name: String, img: String, description: String? = null, links: List<String>) : this(
+    constructor (
+        name: String,
+        img: String,
+        description: String? = null,
+        links: List<String>
+    ) : this(
         name,
         FileUrl(img),
         description,

@@ -1,31 +1,19 @@
 package ani.dantotsu
 
-import android.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.content.res.ColorStateList
-import android.content.res.Resources
 import android.os.Bundle
-import android.util.Log
-import android.util.LongSparseArray
-import android.util.TypedValue
-import androidx.annotation.ColorInt
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
-import ani.dantotsu.download.Download
-import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.parsers.NovelSources
 import ani.dantotsu.parsers.novel.NovelExtensionManager
 import com.google.android.material.color.DynamicColors
-import com.google.android.material.color.HarmonizedColorAttributes
-import com.google.android.material.color.HarmonizedColors
-import com.google.android.material.color.HarmonizedColorsOptions
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -41,8 +29,6 @@ import logcat.LogcatLogger
 import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.lang.reflect.Field
 
 
 @SuppressLint("StaticFieldLeak")
@@ -65,7 +51,7 @@ class App : MultiDexApplication() {
         super.onCreate()
         val sharedPreferences = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
         val useMaterialYou = sharedPreferences.getBoolean("use_material_you", false)
-        if(useMaterialYou) {
+        if (useMaterialYou) {
             DynamicColors.applyToActivitiesIfAvailable(this)
             //TODO: HarmonizedColors
         }
@@ -136,7 +122,7 @@ class App : MultiDexApplication() {
 
     companion object {
         private var instance: App? = null
-        var context : Context? = null
+        var context: Context? = null
         fun currentContext(): Context? {
             return instance?.mFTActivityLifecycleCallbacks?.currentActivity ?: context
         }

@@ -1,6 +1,5 @@
 package ani.dantotsu.settings.paging
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -47,9 +46,11 @@ class AnimeExtensionsViewModel(
     fun setSearchQuery(query: String) {
         searchQuery.value = query
     }
+
     fun invalidatePager() {
         currentPagingSource?.invalidate()
     }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val pagerFlow: Flow<PagingData<AnimeExtension.Available>> = searchQuery.flatMapLatest { query ->
         Pager(
@@ -77,7 +78,8 @@ class AnimeExtensionPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeExtension.Available> {
         val position = params.key ?: 0
         val installedExtensions = installedExtensionsFlow.first().map { it.pkgName }.toSet()
-        val availableExtensions = availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
+        val availableExtensions =
+            availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
         val query = searchQuery.first()
         val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
 
@@ -86,7 +88,7 @@ class AnimeExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = if(isNsfwEnabled) {
+        val filternfsw = if (isNsfwEnabled) {
             filteredExtensions
         } else {
             filteredExtensions.filterNot { it.isNsfw }
@@ -120,12 +122,18 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<AnimeExtension.Available>() {
-            override fun areItemsTheSame(oldItem: AnimeExtension.Available, newItem: AnimeExtension.Available): Boolean {
+            override fun areItemsTheSame(
+                oldItem: AnimeExtension.Available,
+                newItem: AnimeExtension.Available
+            ): Boolean {
                 // Your logic here
                 return oldItem.pkgName == newItem.pkgName
             }
 
-            override fun areContentsTheSame(oldItem: AnimeExtension.Available, newItem: AnimeExtension.Available): Boolean {
+            override fun areContentsTheSame(
+                oldItem: AnimeExtension.Available,
+                newItem: AnimeExtension.Available
+            ): Boolean {
                 // Your logic here
                 return oldItem == newItem
             }
@@ -133,7 +141,8 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeExtensionViewHolder {
-        val binding = ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AnimeExtensionViewHolder(binding)
     }
 
@@ -149,7 +158,8 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
         }
     }
 
-    inner class AnimeExtensionViewHolder(private val binding: ItemExtensionAllBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class AnimeExtensionViewHolder(private val binding: ItemExtensionAllBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.closeTextView.setOnClickListener {
                 val extension = getItem(bindingAdapterPosition)
@@ -158,11 +168,12 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
                 }
             }
         }
+
         val extensionIconImageView: ImageView = binding.extensionIconImageView
 
-            fun bind(extension: AnimeExtension.Available) {
+        fun bind(extension: AnimeExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
             binding.extensionNameTextView.text = extension.name
             binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }

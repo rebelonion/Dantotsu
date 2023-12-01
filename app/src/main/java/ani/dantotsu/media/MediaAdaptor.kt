@@ -41,20 +41,43 @@ class MediaAdaptor(
     private val viewPager: ViewPager2? = null,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
+    private val uiSettings =
+        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (type) {
-            0    -> MediaViewHolder(ItemMediaCompactBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            1    -> MediaLargeViewHolder(ItemMediaLargeBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            2    -> MediaPageViewHolder(ItemMediaPageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            3    -> MediaPageSmallViewHolder(
+            0 -> MediaViewHolder(
+                ItemMediaCompactBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            1 -> MediaLargeViewHolder(
+                ItemMediaLargeBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            2 -> MediaPageViewHolder(
+                ItemMediaPageBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            3 -> MediaPageSmallViewHolder(
                 ItemMediaPageSmallBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
             )
+
             else -> throw IllegalArgumentException()
         }
 
@@ -69,10 +92,12 @@ class MediaAdaptor(
                 val media = mediaList?.getOrNull(position)
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
-                    b.itemCompactOngoing.visibility = if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.visibility =
+                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
-                        ((if (media.userScore == 0) (media.meanScore ?: 0) else media.userScore) / 10.0).toString()
+                        ((if (media.userScore == 0) (media.meanScore
+                            ?: 0) else media.userScore) / 10.0).toString()
                     b.itemCompactScoreBG.background = ContextCompat.getDrawable(
                         b.root.context,
                         (if (media.userScore != 0) R.drawable.item_user_score else R.drawable.item_score)
@@ -104,6 +129,7 @@ class MediaAdaptor(
                     }
                 }
             }
+
             1 -> {
                 val b = (holder as MediaLargeViewHolder).binding
                 setAnimation(activity, b.root, uiSettings)
@@ -111,22 +137,29 @@ class MediaAdaptor(
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
                     b.itemCompactBanner.loadImage(media.banner ?: media.cover, 400)
-                    b.itemCompactOngoing.visibility = if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.visibility =
+                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
-                        ((if (media.userScore == 0) (media.meanScore ?: 0) else media.userScore) / 10.0).toString()
+                        ((if (media.userScore == 0) (media.meanScore
+                            ?: 0) else media.userScore) / 10.0).toString()
                     b.itemCompactScoreBG.background = ContextCompat.getDrawable(
                         b.root.context,
                         (if (media.userScore != 0) R.drawable.item_user_score else R.drawable.item_score)
                     )
                     if (media.anime != null) {
-                        b.itemTotal.text = " " + if ((media.anime.totalEpisodes ?: 0) != 1) currActivity()!!.getString(R.string.episode_plural)
-                                else currActivity()!!.getString(R.string.episode_singular)
+                        b.itemTotal.text = " " + if ((media.anime.totalEpisodes
+                                ?: 0) != 1
+                        ) currActivity()!!.getString(R.string.episode_plural)
+                        else currActivity()!!.getString(R.string.episode_singular)
                         b.itemCompactTotal.text =
                             if (media.anime.nextAiringEpisode != null) (media.anime.nextAiringEpisode.toString() + " / " + (media.anime.totalEpisodes
-                                ?: "??").toString()) else (media.anime.totalEpisodes ?: "??").toString()
+                                ?: "??").toString()) else (media.anime.totalEpisodes
+                                ?: "??").toString()
                     } else if (media.manga != null) {
-                        b.itemTotal.text = " " + if ((media.manga.totalChapters ?: 0) != 1) currActivity()!!.getString(R.string.chapter_plural)
+                        b.itemTotal.text = " " + if ((media.manga.totalChapters
+                                ?: 0) != 1
+                        ) currActivity()!!.getString(R.string.chapter_plural)
                         else currActivity()!!.getString(R.string.chapter_singular)
                         b.itemCompactTotal.text = "${media.manga.totalChapters ?: "??"}"
                     }
@@ -137,6 +170,7 @@ class MediaAdaptor(
                     }
                 }
             }
+
             2 -> {
                 val b = (holder as MediaPageViewHolder).binding
                 val media = mediaList?.get(position)
@@ -149,7 +183,8 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    val banner = if (uiSettings.bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
+                    val banner =
+                        if (uiSettings.bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
                     val context = b.itemCompactBanner.context
                     if (!(context as Activity).isDestroyed)
                         Glide.with(context as Context)
@@ -157,22 +192,29 @@ class MediaAdaptor(
                             .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
                             .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 3)))
                             .into(banner)
-                    b.itemCompactOngoing.visibility = if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.visibility =
+                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
-                        ((if (media.userScore == 0) (media.meanScore ?: 0) else media.userScore) / 10.0).toString()
+                        ((if (media.userScore == 0) (media.meanScore
+                            ?: 0) else media.userScore) / 10.0).toString()
                     b.itemCompactScoreBG.background = ContextCompat.getDrawable(
                         b.root.context,
                         (if (media.userScore != 0) R.drawable.item_user_score else R.drawable.item_score)
                     )
                     if (media.anime != null) {
-                        b.itemTotal.text = " " + if ((media.anime.totalEpisodes ?: 0) != 1) currActivity()!!.getString(R.string.episode_plural)
+                        b.itemTotal.text = " " + if ((media.anime.totalEpisodes
+                                ?: 0) != 1
+                        ) currActivity()!!.getString(R.string.episode_plural)
                         else currActivity()!!.getString(R.string.episode_singular)
                         b.itemCompactTotal.text =
                             if (media.anime.nextAiringEpisode != null) (media.anime.nextAiringEpisode.toString() + " / " + (media.anime.totalEpisodes
-                                ?: "??").toString()) else (media.anime.totalEpisodes ?: "??").toString()
+                                ?: "??").toString()) else (media.anime.totalEpisodes
+                                ?: "??").toString()
                     } else if (media.manga != null) {
-                        b.itemTotal.text =" " + if ((media.manga.totalChapters ?: 0) != 1) currActivity()!!.getString(R.string.chapter_plural)
+                        b.itemTotal.text = " " + if ((media.manga.totalChapters
+                                ?: 0) != 1
+                        ) currActivity()!!.getString(R.string.chapter_plural)
                         else currActivity()!!.getString(R.string.chapter_singular)
                         b.itemCompactTotal.text = "${media.manga.totalChapters ?: "??"}"
                     }
@@ -184,6 +226,7 @@ class MediaAdaptor(
                     }
                 }
             }
+
             3 -> {
                 val b = (holder as MediaPageSmallViewHolder).binding
                 val media = mediaList?.get(position)
@@ -196,7 +239,8 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    val banner = if (uiSettings.bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
+                    val banner =
+                        if (uiSettings.bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
                     val context = b.itemCompactBanner.context
                     if (!(context as Activity).isDestroyed)
                         Glide.with(context as Context)
@@ -204,10 +248,12 @@ class MediaAdaptor(
                             .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
                             .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 3)))
                             .into(banner)
-                    b.itemCompactOngoing.visibility = if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.visibility =
+                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
-                        ((if (media.userScore == 0) (media.meanScore ?: 0) else media.userScore) / 10.0).toString()
+                        ((if (media.userScore == 0) (media.meanScore
+                            ?: 0) else media.userScore) / 10.0).toString()
                     b.itemCompactScoreBG.background = ContextCompat.getDrawable(
                         b.root.context,
                         (if (media.userScore != 0) R.drawable.item_user_score else R.drawable.item_score)
@@ -222,13 +268,18 @@ class MediaAdaptor(
                     }
                     b.itemCompactStatus.text = media.status ?: ""
                     if (media.anime != null) {
-                        b.itemTotal.text = " " + if ((media.anime.totalEpisodes ?: 0) != 1) currActivity()!!.getString(R.string.episode_plural)
+                        b.itemTotal.text = " " + if ((media.anime.totalEpisodes
+                                ?: 0) != 1
+                        ) currActivity()!!.getString(R.string.episode_plural)
                         else currActivity()!!.getString(R.string.episode_singular)
                         b.itemCompactTotal.text =
                             if (media.anime.nextAiringEpisode != null) (media.anime.nextAiringEpisode.toString() + " / " + (media.anime.totalEpisodes
-                                ?: "??").toString()) else (media.anime.totalEpisodes ?: "??").toString()
+                                ?: "??").toString()) else (media.anime.totalEpisodes
+                                ?: "??").toString()
                     } else if (media.manga != null) {
-                        b.itemTotal.text = " " + if ((media.manga.totalChapters ?: 0) != 1) currActivity()!!.getString(R.string.chapter_plural)
+                        b.itemTotal.text = " " + if ((media.manga.totalChapters
+                                ?: 0) != 1
+                        ) currActivity()!!.getString(R.string.chapter_plural)
                         else currActivity()!!.getString(R.string.chapter_singular)
                         b.itemCompactTotal.text = "${media.manga.totalChapters ?: "??"}"
                     }
@@ -249,35 +300,64 @@ class MediaAdaptor(
         return type
     }
 
-    inner class MediaViewHolder(val binding: ItemMediaCompactBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MediaViewHolder(val binding: ItemMediaCompactBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             if (matchParent) itemView.updateLayoutParams { width = -1 }
-            itemView.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
+            itemView.setSafeOnClickListener {
+                clicked(
+                    bindingAdapterPosition,
+                    resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
+                )
+            }
             itemView.setOnLongClickListener { longClicked(bindingAdapterPosition) }
         }
     }
 
-    inner class MediaLargeViewHolder(val binding: ItemMediaLargeBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MediaLargeViewHolder(val binding: ItemMediaLargeBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
-            itemView.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
+            itemView.setSafeOnClickListener {
+                clicked(
+                    bindingAdapterPosition,
+                    resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
+                )
+            }
             itemView.setOnLongClickListener { longClicked(bindingAdapterPosition) }
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    inner class MediaPageViewHolder(val binding: ItemMediaPageBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MediaPageViewHolder(val binding: ItemMediaPageBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.itemCompactImage.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
+            binding.itemCompactImage.setSafeOnClickListener {
+                clicked(
+                    bindingAdapterPosition,
+                    resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
+                )
+            }
             itemView.setOnTouchListener { _, _ -> true }
             binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition) }
         }
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    inner class MediaPageSmallViewHolder(val binding: ItemMediaPageSmallBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MediaPageSmallViewHolder(val binding: ItemMediaPageSmallBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.itemCompactImage.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
-            binding.itemCompactTitleContainer.setSafeOnClickListener { clicked(bindingAdapterPosition, resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)) }
+            binding.itemCompactImage.setSafeOnClickListener {
+                clicked(
+                    bindingAdapterPosition,
+                    resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
+                )
+            }
+            binding.itemCompactTitleContainer.setSafeOnClickListener {
+                clicked(
+                    bindingAdapterPosition,
+                    resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
+                )
+            }
             itemView.setOnTouchListener { _, _ -> true }
             binding.itemCompactImage.setOnLongClickListener { longClicked(bindingAdapterPosition) }
         }
@@ -301,7 +381,8 @@ class MediaAdaptor(
         if ((mediaList?.size ?: 0) > position && position != -1) {
             val media = mediaList?.get(position) ?: return false
             if (activity.supportFragmentManager.findFragmentByTag("list") == null) {
-                MediaListDialogSmallFragment.newInstance(media).show(activity.supportFragmentManager, "list")
+                MediaListDialogSmallFragment.newInstance(media)
+                    .show(activity.supportFragmentManager, "list")
                 return true
             }
         }
@@ -317,9 +398,11 @@ class MediaAdaptor(
         }
 
         // Create a bitmap with the same dimensions as the drawable
-        val bitmap = Bitmap.createBitmap(drawable.intrinsicWidth,
+        val bitmap = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
             drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888)
+            Bitmap.Config.ARGB_8888
+        )
 
         // Draw the drawable onto the bitmap
         val canvas = Canvas(bitmap)

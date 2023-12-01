@@ -7,7 +7,6 @@ import ani.dantotsu.logger
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
-import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -27,7 +26,9 @@ class NovelExtensionGithubApi {
     private val novelExtensionManager: NovelExtensionManager by injectLazy()
     private val json: Json by injectLazy()
 
-    private val lastExtCheck: Long = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getLong("last_ext_check", 0)?:0
+    private val lastExtCheck: Long =
+        currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getLong("last_ext_check", 0) ?: 0
 
     private var requiresFallbackSource = false
 
@@ -72,7 +73,10 @@ class NovelExtensionGithubApi {
         }
     }
 
-    suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<AnimeExtension.Installed>? {
+    suspend fun checkForUpdates(
+        context: Context,
+        fromAvailableExtensionList: Boolean = false
+    ): List<AnimeExtension.Installed>? {
         // Limit checks to once a day at most
         if (fromAvailableExtensionList && Date().time < lastExtCheck + 1.days.inWholeMilliseconds) {
             return null
@@ -81,7 +85,10 @@ class NovelExtensionGithubApi {
         val extensions = if (fromAvailableExtensionList) {
             novelExtensionManager.availableExtensionsFlow.value
         } else {
-            findExtensions().also { context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()?.putLong("last_ext_check", Date().time)?.apply() }
+            findExtensions().also {
+                context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                    ?.putLong("last_ext_check", Date().time)?.apply()
+            }
         }
 
         val installedExtensions = NovelExtensionLoader.loadExtensions(context)
@@ -143,6 +150,7 @@ class NovelExtensionGithubApi {
     fun getApkUrl(extension: NovelExtension.Available): String {
         return "${getUrlPrefix()}apk/${extension.pkgName}.apk"
     }
+
     private fun getUrlPrefix(): String {
         return if (requiresFallbackSource) {
             FALLBACK_REPO_URL_PREFIX
@@ -152,8 +160,11 @@ class NovelExtensionGithubApi {
     }
 }
 
-private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/dannovels/novel-extensions/main/"
-private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/dannovels/novel-extensions@latest/"
+private const val REPO_URL_PREFIX =
+    "https://raw.githubusercontent.com/dannovels/novel-extensions/main/"
+private const val FALLBACK_REPO_URL_PREFIX =
+    "https://gcore.jsdelivr.net/gh/dannovels/novel-extensions@latest/"
+
 @Serializable
 private data class NovelExtensionJsonObject(
     val name: String,

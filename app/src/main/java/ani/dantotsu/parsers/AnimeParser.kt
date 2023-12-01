@@ -1,9 +1,8 @@
 package ani.dantotsu.parsers
 
 import android.net.Uri
-import ani.dantotsu.R
 import ani.dantotsu.FileUrl
-import eu.kanade.tachiyomi.animesource.model.SEpisode
+import ani.dantotsu.R
 import ani.dantotsu.asyncMap
 import ani.dantotsu.currContext
 import ani.dantotsu.loadData
@@ -11,6 +10,7 @@ import ani.dantotsu.others.MalSyncBackup
 import ani.dantotsu.saveData
 import ani.dantotsu.tryWithSuspend
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.SEpisode
 import kotlin.properties.Delegates
 
 /**
@@ -23,7 +23,11 @@ abstract class AnimeParser : BaseParser() {
     /**
      * Takes ShowResponse.link & ShowResponse.extra (if you added any) as arguments & gives a list of total episodes present on the site.
      * **/
-    abstract suspend fun loadEpisodes(animeLink: String, extra: Map<String, String>?, sAnime: SAnime): List<Episode>
+    abstract suspend fun loadEpisodes(
+        animeLink: String,
+        extra: Map<String, String>?,
+        sAnime: SAnime
+    ): List<Episode>
 
     /**
      * Takes ShowResponse.link, ShowResponse.extra & the Last Largest Episode Number known by app as arguments
@@ -31,10 +35,15 @@ abstract class AnimeParser : BaseParser() {
      * Returns the latest episode (If overriding, Make sure the episode is actually the latest episode)
      * Returns null, if no latest episode is found.
      * **/
-    open suspend fun getLatestEpisode(animeLink: String, extra: Map<String, String>?, sAnime: SAnime, latest: Float): Episode?{
+    open suspend fun getLatestEpisode(
+        animeLink: String,
+        extra: Map<String, String>?,
+        sAnime: SAnime,
+        latest: Float
+    ): Episode? {
         val episodes = loadEpisodes(animeLink, extra, sAnime)
         val max = episodes
-            .maxByOrNull { it.number.toFloatOrNull()?:0f }
+            .maxByOrNull { it.number.toFloatOrNull() ?: 0f }
         return max
             ?.takeIf { latest < (it.number.toFloatOrNull() ?: 0.001f) }
     }
@@ -44,7 +53,11 @@ abstract class AnimeParser : BaseParser() {
      *
      * This returns a Map of "Video Server's Name" & "Link/Data" of all the Video Servers present on the site, which can be further used by loadVideoServers() & loadSingleVideoServer()
      * **/
-    abstract suspend fun loadVideoServers(episodeLink: String, extra: Map<String,String>?, sEpisode: SEpisode): List<VideoServer>
+    abstract suspend fun loadVideoServers(
+        episodeLink: String,
+        extra: Map<String, String>?,
+        sEpisode: SEpisode
+    ): List<VideoServer>
 
 
     /**
@@ -75,10 +88,12 @@ abstract class AnimeParser : BaseParser() {
      * **/
     open suspend fun getVideoExtractor(server: VideoServer): VideoExtractor? {
         var domain = Uri.parse(server.embed.url).host ?: return null
-        if (domain.startsWith("www.")) {domain = domain.substring(4)}
+        if (domain.startsWith("www.")) {
+            domain = domain.substring(4)
+        }
 
         val extractor: VideoExtractor? = when (domain) {
-            else                          -> {
+            else -> {
                 println("$name : No extractor found for: $domain | ${server.embed.url}")
                 null
             }
@@ -98,7 +113,12 @@ abstract class AnimeParser : BaseParser() {
      *
      * Doesn't need to be overridden, if the parser is following the norm.
      * **/
-    open suspend fun loadByVideoServers(episodeUrl: String, extra: Map<String,String>?, sEpisode: SEpisode, callback: (VideoExtractor) -> Unit) {
+    open suspend fun loadByVideoServers(
+        episodeUrl: String,
+        extra: Map<String, String>?,
+        sEpisode: SEpisode,
+        callback: (VideoExtractor) -> Unit
+    ) {
         tryWithSuspend(true) {
             loadVideoServers(episodeUrl, extra, sEpisode).asyncMap {
                 getVideoExtractor(it)?.apply {
@@ -116,7 +136,13 @@ abstract class AnimeParser : BaseParser() {
      *
      * Doesn't need to be overridden, if the parser is following the norm.
      * **/
-    open suspend fun loadSingleVideoServer(serverName: String, episodeUrl: String, extra: Map<String,String>?, sEpisode: SEpisode, post: Boolean): VideoExtractor? {
+    open suspend fun loadSingleVideoServer(
+        serverName: String,
+        episodeUrl: String,
+        extra: Map<String, String>?,
+        sEpisode: SEpisode,
+        post: Boolean
+    ): VideoExtractor? {
         return tryWithSuspend(post) {
             loadVideoServers(episodeUrl, extra, sEpisode).apply {
                 find { it.name == serverName }?.also {
@@ -159,27 +185,43 @@ abstract class AnimeParser : BaseParser() {
         val dub = if (isDubAvailableSeparately) "_${if (selectDub) "dub" else "sub"}" else ""
         var loaded = loadData<ShowResponse>("${saveName}${dub}_$mediaId")
         if (loaded == null && malSyncBackupName.isNotEmpty())
-            loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)?.also { saveShowResponse(mediaId, it, true) }
+            loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)
+                ?.also { saveShowResponse(mediaId, it, true) }
         return loaded
     }
 
     override fun saveShowResponse(mediaId: Int, response: ShowResponse?, selected: Boolean) {
         if (response != null) {
             checkIfVariablesAreEmpty()
-            setUserText("${if (selected) currContext()!!.getString(R.string.selected) else currContext()!!.getString(R.string.found)} : ${response.name}")
+            setUserText(
+                "${
+                    if (selected) currContext()!!.getString(R.string.selected) else currContext()!!.getString(
+                        R.string.found
+                    )
+                } : ${response.name}"
+            )
             val dub = if (isDubAvailableSeparately) "_${if (selectDub) "dub" else "sub"}" else ""
             saveData("${saveName}${dub}_$mediaId", response)
         }
     }
 }
 
-class EmptyAnimeParser: AnimeParser() {
+class EmptyAnimeParser : AnimeParser() {
     override val name: String = "None"
     override val saveName: String = "None"
 
     override val isDubAvailableSeparately: Boolean = false
-    override suspend fun loadEpisodes(animeLink: String, extra: Map<String, String>?, sAnime: SAnime): List<Episode> = emptyList()
-    override suspend fun loadVideoServers(episodeLink: String, extra: Map<String, String>?, sEpisode: SEpisode): List<VideoServer> = emptyList()
+    override suspend fun loadEpisodes(
+        animeLink: String,
+        extra: Map<String, String>?,
+        sAnime: SAnime
+    ): List<Episode> = emptyList()
+
+    override suspend fun loadVideoServers(
+        episodeLink: String,
+        extra: Map<String, String>?,
+        sEpisode: SEpisode
+    ): List<VideoServer> = emptyList()
 
     override suspend fun search(query: String): List<ShowResponse> = emptyList()
 }
@@ -209,7 +251,7 @@ data class Episode(
     /**
      * In case, you want to pass extra data
      * **/
-    val extra: Map<String,String>? = null,
+    val extra: Map<String, String>? = null,
 
     //SEpisode from Aniyomi
     val sEpisode: SEpisode? = null
@@ -221,7 +263,7 @@ data class Episode(
         thumbnail: String,
         description: String? = null,
         isFiller: Boolean = false,
-        extra: Map<String,String>? = null
+        extra: Map<String, String>? = null
     ) : this(number, link, title, FileUrl(thumbnail), description, isFiller, extra)
 
     constructor(
@@ -231,7 +273,7 @@ data class Episode(
         thumbnail: String,
         description: String? = null,
         isFiller: Boolean = false,
-        extra: Map<String,String>? = null,
+        extra: Map<String, String>? = null,
         sEpisode: SEpisode? = null
     ) : this(number, link, title, FileUrl(thumbnail), description, isFiller, extra, sEpisode)
 }

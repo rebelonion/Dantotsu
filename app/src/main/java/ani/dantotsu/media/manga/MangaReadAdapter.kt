@@ -13,15 +13,12 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
-import ani.dantotsu.App.Companion.context
-import ani.dantotsu.media.anime.handleProgress
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
-import ani.dantotsu.parsers.AnimeSources
-import ani.dantotsu.parsers.DynamicAnimeParser
+import ani.dantotsu.media.anime.handleProgress
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
@@ -30,7 +27,6 @@ import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import java.lang.IndexOutOfBoundsException
 
 class MangaReadAdapter(
     private val media: Media,
@@ -57,12 +53,16 @@ class MangaReadAdapter(
 
         //Wrong Title
         binding.animeSourceSearch.setOnClickListener {
-            SourceSearchDialogFragment().show(fragment.requireActivity().supportFragmentManager, null)
+            SourceSearchDialogFragment().show(
+                fragment.requireActivity().supportFragmentManager,
+                null
+            )
         }
 
         //Source Selection
-        var source = media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
-        setLanguageList(media.selected!!.langIndex,source)
+        var source =
+            media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
+        setLanguageList(media.selected!!.langIndex, source)
         if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
             binding.animeSource.setText(mangaReadSources.names[source])
             mangaReadSources[source].apply {
@@ -70,14 +70,20 @@ class MangaReadAdapter(
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
             }
         }
-        binding.animeSource.setAdapter(ArrayAdapter(fragment.requireContext(), R.layout.item_dropdown, mangaReadSources.names))
+        binding.animeSource.setAdapter(
+            ArrayAdapter(
+                fragment.requireContext(),
+                R.layout.item_dropdown,
+                mangaReadSources.names
+            )
+        )
         binding.animeSourceTitle.isSelected = true
         binding.animeSource.setOnItemClickListener { _, _, i, _ ->
             fragment.onSourceChange(i).apply {
                 binding.animeSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
                 source = i
-                setLanguageList(0,i)
+                setLanguageList(0, i)
             }
             subscribeButton(false)
             //invalidate if it's the last source
@@ -92,7 +98,8 @@ class MangaReadAdapter(
                 fragment.onLangChange(i)
                 fragment.onSourceChange(media.selected!!.sourceIndex).apply {
                     binding.animeSourceTitle.text = showUserText
-                    showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
+                    showUserTextListener =
+                        { MainScope().launch { binding.animeSourceTitle.text = it } }
                     setLanguageList(i, source)
                 }
                 subscribeButton(false)
@@ -139,7 +146,8 @@ class MangaReadAdapter(
         }
 
         binding.animeScanlatorTop.setOnClickListener {
-            val dialogView = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+            val dialogView =
+                LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
             val checkboxContainer = dialogView.findViewById<LinearLayout>(R.id.checkboxContainer)
 
             // Dynamically add checkboxes
@@ -149,10 +157,10 @@ class MangaReadAdapter(
                     text = option
                 }
                 //set checked if it's already selected
-                if(media.selected!!.scanlators != null){
+                if (media.selected!!.scanlators != null) {
                     checkBox.isChecked = media.selected!!.scanlators?.contains(option) != true
                     scanlatorSelectionListener?.onScanlatorsSelected()
-                }else{
+                } else {
                     checkBox.isChecked = true
                 }
                 checkboxContainer.addView(checkBox)
@@ -178,8 +186,8 @@ class MangaReadAdapter(
         }
 
         var selected = when (style) {
-            0    -> binding.animeSourceList
-            1    -> binding.animeSourceCompact
+            0 -> binding.animeSourceList
+            1 -> binding.animeSourceCompact
             else -> binding.animeSourceList
         }
         selected.alpha = 1f
@@ -217,14 +225,26 @@ class MangaReadAdapter(
             for (position in arr.indices) {
                 val last = if (position + 1 == arr.size) names.size else (limit * (position + 1))
                 val chip =
-                    ItemChipBinding.inflate(LayoutInflater.from(fragment.context), binding.animeSourceChipGroup, false).root
+                    ItemChipBinding.inflate(
+                        LayoutInflater.from(fragment.context),
+                        binding.animeSourceChipGroup,
+                        false
+                    ).root
                 chip.isCheckable = true
                 fun selected() {
                     chip.isChecked = true
-                    binding.animeWatchChipScroll.smoothScrollTo((chip.left - screenWidth / 2) + (chip.width / 2), 0)
+                    binding.animeWatchChipScroll.smoothScrollTo(
+                        (chip.left - screenWidth / 2) + (chip.width / 2),
+                        0
+                    )
                 }
                 chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
-                chip.setTextColor(ContextCompat.getColorStateList(fragment.requireContext(), R.color.chip_text_color))
+                chip.setTextColor(
+                    ContextCompat.getColorStateList(
+                        fragment.requireContext(),
+                        R.color.chip_text_color
+                    )
+                )
 
                 chip.setOnClickListener {
                     selected()
@@ -237,7 +257,14 @@ class MangaReadAdapter(
                 }
             }
             if (select != null)
-                binding.animeWatchChipScroll.apply { post { scrollTo((select.left - screenWidth / 2) + (select.width / 2), 0) } }
+                binding.animeWatchChipScroll.apply {
+                    post {
+                        scrollTo(
+                            (select.left - screenWidth / 2) + (select.width / 2),
+                            0
+                        )
+                    }
+                }
         }
     }
 
@@ -259,7 +286,9 @@ class MangaReadAdapter(
                     val chapter = media.manga.chapters!![chapterKey]!!
                     chapter.scanlator !in hiddenScanlators
                 }
-                val formattedChapters = filteredChapters.map { MangaNameAdapter.findChapterNumber(it)?.toInt()?.toString() }
+                val formattedChapters = filteredChapters.map {
+                    MangaNameAdapter.findChapterNumber(it)?.toInt()?.toString()
+                }
                 if (formattedChapters.contains(continueEp)) {
                     continueEp = chapters[formattedChapters.indexOf(continueEp)]
                     binding.animeSourceContinue.visibility = View.VISIBLE
@@ -317,10 +346,17 @@ class MangaReadAdapter(
                 }
                 try {
                     binding?.animeSourceLanguage?.setText(parser.extension.sources[lang].lang)
-                }catch (e: IndexOutOfBoundsException) {
-                    binding?.animeSourceLanguage?.setText(parser.extension.sources.firstOrNull()?.lang ?: "Unknown")
+                } catch (e: IndexOutOfBoundsException) {
+                    binding?.animeSourceLanguage?.setText(
+                        parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
+                    )
                 }
-                binding?.animeSourceLanguage?.setAdapter(ArrayAdapter(fragment.requireContext(), R.layout.item_dropdown, parser.extension.sources.map { it.lang }))
+                binding?.animeSourceLanguage?.setAdapter(
+                    ArrayAdapter(
+                        fragment.requireContext(),
+                        R.layout.item_dropdown,
+                        parser.extension.sources.map { it.lang })
+                )
 
             }
         }
@@ -328,7 +364,8 @@ class MangaReadAdapter(
 
     override fun getItemCount(): Int = 1
 
-    inner class ViewHolder(val binding: ItemAnimeWatchBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemAnimeWatchBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }
 
 interface ScanlatorSelectionListener {

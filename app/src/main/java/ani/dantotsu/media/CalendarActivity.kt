@@ -16,9 +16,9 @@ import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.media.user.ListViewPagerAdapter
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
@@ -35,7 +35,7 @@ class CalendarActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
 
 
@@ -43,7 +43,11 @@ ThemeManager(this).applyTheme()
         theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
         val primaryColor = typedValue.data
         val typedValue2 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue2, true)
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOnBackground,
+            typedValue2,
+            true
+        )
         val titleTextColor = typedValue2.data
         val typedValue3 = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
@@ -65,10 +69,13 @@ ThemeManager(this).applyTheme()
                 ContextCompat.getColor(this, R.color.nav_bg_inv)
             binding.root.fitsSystemWindows = true
 
-        }else{
+        } else {
             binding.root.fitsSystemWindows = false
             requestWindowFeature(Window.FEATURE_NO_TITLE)
-            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
         }
         setContentView(binding.root)
 
@@ -79,14 +86,15 @@ ThemeManager(this).applyTheme()
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@CalendarActivity.selectedTabIdx = tab?.position ?: 1
             }
-            override fun onTabUnselected(tab: TabLayout.Tab?) { }
-            override fun onTabReselected(tab: TabLayout.Tab?) { }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
         model.getCalendar().observe(this) {
             if (it != null) {
                 binding.listProgressBar.visibility = View.GONE
-                binding.listViewPager.adapter = ListViewPagerAdapter(it.size, true,this)
+                binding.listViewPager.adapter = ListViewPagerAdapter(it.size, true, this)
                 val keys = it.keys.toList()
                 val values = it.values.toList()
                 val savedTab = this.selectedTabIdx

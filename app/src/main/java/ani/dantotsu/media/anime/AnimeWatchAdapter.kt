@@ -1,23 +1,17 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
@@ -27,21 +21,11 @@ import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.DynamicAnimeParser
 import ani.dantotsu.parsers.WatchSources
-import ani.dantotsu.settings.ExtensionsActivity
-import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.textfield.TextInputLayout
-import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
-import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
-import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
-import java.lang.IndexOutOfBoundsException
 
 class AnimeWatchAdapter(
     private val media: Media,
@@ -72,23 +56,33 @@ class AnimeWatchAdapter(
         }
 
         binding.animeSourceDubbed.isChecked = media.selected!!.preferDub
-        binding.animeSourceDubbedText.text = if (media.selected!!.preferDub) currActivity()!!.getString(R.string.dubbed) else currActivity()!!.getString(R.string.subbed)
+        binding.animeSourceDubbedText.text =
+            if (media.selected!!.preferDub) currActivity()!!.getString(R.string.dubbed) else currActivity()!!.getString(
+                R.string.subbed
+            )
 
         //PreferDub
         var changing = false
         binding.animeSourceDubbed.setOnCheckedChangeListener { _, isChecked ->
-            binding.animeSourceDubbedText.text = if (isChecked) currActivity()!!.getString(R.string.dubbed) else currActivity()!!.getString(R.string.subbed)
+            binding.animeSourceDubbedText.text =
+                if (isChecked) currActivity()!!.getString(R.string.dubbed) else currActivity()!!.getString(
+                    R.string.subbed
+                )
             if (!changing) fragment.onDubClicked(isChecked)
         }
 
         //Wrong Title
         binding.animeSourceSearch.setOnClickListener {
-            SourceSearchDialogFragment().show(fragment.requireActivity().supportFragmentManager, null)
+            SourceSearchDialogFragment().show(
+                fragment.requireActivity().supportFragmentManager,
+                null
+            )
         }
 
         //Source Selection
-        var source = media.selected!!.sourceIndex.let { if (it >= watchSources.names.size) 0 else it }
-        setLanguageList(media.selected!!.langIndex,source)
+        var source =
+            media.selected!!.sourceIndex.let { if (it >= watchSources.names.size) 0 else it }
+        setLanguageList(media.selected!!.langIndex, source)
         if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
             binding.animeSource.setText(watchSources.names[source])
             watchSources[source].apply {
@@ -100,7 +94,13 @@ class AnimeWatchAdapter(
             }
         }
 
-        binding.animeSource.setAdapter(ArrayAdapter(fragment.requireContext(), R.layout.item_dropdown, watchSources.names))
+        binding.animeSource.setAdapter(
+            ArrayAdapter(
+                fragment.requireContext(),
+                R.layout.item_dropdown,
+                watchSources.names
+            )
+        )
         binding.animeSourceTitle.isSelected = true
         binding.animeSource.setOnItemClickListener { _, _, i, _ ->
             fragment.onSourceChange(i).apply {
@@ -109,9 +109,10 @@ class AnimeWatchAdapter(
                 changing = true
                 binding.animeSourceDubbed.isChecked = selectDub
                 changing = false
-                binding.animeSourceDubbedCont.visibility = if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                binding.animeSourceDubbedCont.visibility =
+                    if (isDubAvailableSeparately) View.VISIBLE else View.GONE
                 source = i
-                setLanguageList(0,i)
+                setLanguageList(0, i)
             }
             subscribeButton(false)
             fragment.loadEpisodes(i, false)
@@ -124,11 +125,13 @@ class AnimeWatchAdapter(
                 fragment.onLangChange(i)
                 fragment.onSourceChange(media.selected!!.sourceIndex).apply {
                     binding.animeSourceTitle.text = showUserText
-                    showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
+                    showUserTextListener =
+                        { MainScope().launch { binding.animeSourceTitle.text = it } }
                     changing = true
                     binding.animeSourceDubbed.isChecked = selectDub
                     changing = false
-                    binding.animeSourceDubbedCont.visibility = if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                    binding.animeSourceDubbedCont.visibility =
+                        if (isDubAvailableSeparately) View.VISIBLE else View.GONE
                     setLanguageList(i, source)
                 }
                 subscribeButton(false)
@@ -146,7 +149,7 @@ class AnimeWatchAdapter(
 
 
         //Subscription
-        subscribe =  MediaDetailsActivity.PopImageButton(
+        subscribe = MediaDetailsActivity.PopImageButton(
             fragment.lifecycleScope,
             binding.animeSourceSubscribe,
             R.drawable.ic_round_notifications_active_24,
@@ -161,7 +164,7 @@ class AnimeWatchAdapter(
         subscribeButton(false)
 
         binding.animeSourceSubscribe.setOnLongClickListener {
-            openSettings(fragment.requireContext(),getChannelId(true,media.id))
+            openSettings(fragment.requireContext(), getChannelId(true, media.id))
         }
 
         //Icons
@@ -200,12 +203,12 @@ class AnimeWatchAdapter(
             style = 2
             fragment.onIconPressed(style, reversed)
         }
-        binding.animeScanlatorTop.visibility= View.GONE
+        binding.animeScanlatorTop.visibility = View.GONE
         //Episode Handling
         handleEpisodes()
     }
 
-    fun subscribeButton(enabled : Boolean) {
+    fun subscribeButton(enabled: Boolean) {
         subscribe?.enabled(enabled)
     }
 
@@ -219,14 +222,26 @@ class AnimeWatchAdapter(
             for (position in arr.indices) {
                 val last = if (position + 1 == arr.size) names.size else (limit * (position + 1))
                 val chip =
-                    ItemChipBinding.inflate(LayoutInflater.from(fragment.context), binding.animeSourceChipGroup, false).root
+                    ItemChipBinding.inflate(
+                        LayoutInflater.from(fragment.context),
+                        binding.animeSourceChipGroup,
+                        false
+                    ).root
                 chip.isCheckable = true
                 fun selected() {
                     chip.isChecked = true
-                    binding.animeWatchChipScroll.smoothScrollTo((chip.left - screenWidth / 2) + (chip.width / 2), 0)
+                    binding.animeWatchChipScroll.smoothScrollTo(
+                        (chip.left - screenWidth / 2) + (chip.width / 2),
+                        0
+                    )
                 }
                 chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
-                chip.setTextColor(ContextCompat.getColorStateList(fragment.requireContext(), R.color.chip_text_color))
+                chip.setTextColor(
+                    ContextCompat.getColorStateList(
+                        fragment.requireContext(),
+                        R.color.chip_text_color
+                    )
+                )
 
                 chip.setOnClickListener {
                     selected()
@@ -239,7 +254,14 @@ class AnimeWatchAdapter(
                 }
             }
             if (select != null)
-                binding.animeWatchChipScroll.apply { post { scrollTo((select.left - screenWidth / 2) + (select.width / 2), 0) } }
+                binding.animeWatchChipScroll.apply {
+                    post {
+                        scrollTo(
+                            (select.left - screenWidth / 2) + (select.width / 2),
+                            0
+                        )
+                    }
+                }
         }
     }
 
@@ -281,7 +303,9 @@ class AnimeWatchAdapter(
                         }
                     }
                     val ep = media.anime.episodes!![continueEp]!!
-                    binding.itemEpisodeImage.loadImage(ep.thumb ?: FileUrl[media.banner ?: media.cover], 0)
+                    binding.itemEpisodeImage.loadImage(
+                        ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
+                    )
                     if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
                     binding.animeSourceContinueText.text =
                         currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${if (ep.title != null) "\n${ep.title}" else ""}"
@@ -321,10 +345,17 @@ class AnimeWatchAdapter(
                 }
                 try {
                     binding?.animeSourceLanguage?.setText(parser.extension.sources[lang].lang)
-                }catch (e: IndexOutOfBoundsException) {
-                    binding?.animeSourceLanguage?.setText(parser.extension.sources.firstOrNull()?.lang ?: "Unknown")
+                } catch (e: IndexOutOfBoundsException) {
+                    binding?.animeSourceLanguage?.setText(
+                        parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
+                    )
                 }
-                binding?.animeSourceLanguage?.setAdapter(ArrayAdapter(fragment.requireContext(), R.layout.item_dropdown, parser.extension.sources.map { it.lang }))
+                binding?.animeSourceLanguage?.setAdapter(
+                    ArrayAdapter(
+                        fragment.requireContext(),
+                        R.layout.item_dropdown,
+                        parser.extension.sources.map { it.lang })
+                )
 
             }
         }
@@ -332,7 +363,8 @@ class AnimeWatchAdapter(
 
     override fun getItemCount(): Int = 1
 
-    inner class ViewHolder(val binding: ItemAnimeWatchBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: ItemAnimeWatchBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             //Timer
             countDown(media, binding.animeSourceContainer)

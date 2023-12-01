@@ -9,7 +9,7 @@ data class Staff(
     @SerialName("id") var id: Int,
 
     // The names of the staff member
-     @SerialName("name") var name: StaffName?,
+    @SerialName("name") var name: StaffName?,
 
     // The primary language of the staff member. Current values: Japanese, English, Korean, Italian, Spanish, Portuguese, French, German, Hebrew, Hungarian, Chinese, Arabic, Filipino, Catalan, Finnish, Turkish, Dutch, Swedish, Thai, Tagalog, Malaysian, Indonesian, Vietnamese, Nepali, Hindi, Urdu
     @SerialName("languageV2") var languageV2: String?,
@@ -80,8 +80,8 @@ data class Staff(
 )
 
 @Serializable
-data class StaffName (
-    var userPreferred:String?
+data class StaffName(
+    var userPreferred: String?
 )
 
 @Serializable
@@ -96,6 +96,6 @@ data class StaffConnection(
 
 @Serializable
 data class StaffEdge(
-    var role:String?,
+    var role: String?,
     var node: Staff?
 )

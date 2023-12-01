@@ -13,8 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentNovelExtensionsBinding
-import ani.dantotsu.logger
-import ani.dantotsu.parsers.novel.FileObserver.fileObserver
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.paging.NovelExtensionAdapter
@@ -24,11 +22,7 @@ import ani.dantotsu.settings.paging.OnNovelInstallClickListener
 import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.observeOn
-import kotlinx.coroutines.flow.subscribe
 import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
@@ -59,7 +53,8 @@ class NovelExtensionsFragment : Fragment(),
         binding.allNovelExtensionsRecyclerView.isNestedScrollingEnabled = false
         binding.allNovelExtensionsRecyclerView.adapter = adapter
         binding.allNovelExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        (binding.allNovelExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = true
+        (binding.allNovelExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =
+            true
 
         lifecycleScope.launch {
             viewModel.pagerFlow.collectLatest { pagingData ->
@@ -130,7 +125,6 @@ class NovelExtensionsFragment : Fragment(),
     override fun onDestroyView() {
         super.onDestroyView();_binding = null
     }
-
 
 
 }

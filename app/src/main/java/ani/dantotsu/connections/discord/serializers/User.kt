@@ -1,13 +1,12 @@
 package ani.dantotsu.connections.discord.serializers
 
-import kotlinx.serialization.*
-import kotlinx.serialization.descriptors.*
-import kotlinx.serialization.encoding.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonElement
 
 
 @Serializable
-data class User (
+data class User(
     val verified: Boolean? = null,
     val username: String,
 
@@ -71,7 +70,7 @@ data class User (
         )
     }
 
-    fun userAvatar():String{
+    fun userAvatar(): String {
         return "https://cdn.discordapp.com/avatars/$id/$avatar.png"
     }
 }

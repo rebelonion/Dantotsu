@@ -58,15 +58,28 @@ class Notifications {
             )
         }
 
-        fun createChannel(context: Context, group: Group?, id: String, name: String, silent: Boolean = false) {
+        fun createChannel(
+            context: Context,
+            group: Group?,
+            id: String,
+            name: String,
+            silent: Boolean = false
+        ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val importance = if (!silent) NotificationManager.IMPORTANCE_HIGH else NotificationManager.IMPORTANCE_LOW
+                val importance =
+                    if (!silent) NotificationManager.IMPORTANCE_HIGH else NotificationManager.IMPORTANCE_LOW
                 val mChannel = NotificationChannel(id, name, importance)
 
-                val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                val notificationManager =
+                    context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
                 if (group != null) {
-                    notificationManager.createNotificationChannelGroup(NotificationChannelGroup(group.name, group.title))
+                    notificationManager.createNotificationChannelGroup(
+                        NotificationChannelGroup(
+                            group.name,
+                            group.title
+                        )
+                    )
                     mChannel.group = group.name
                 }
 
@@ -76,7 +89,8 @@ class Notifications {
 
         fun deleteChannel(context: Context, id: String) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+                val notificationManager =
+                    context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
                 notificationManager.deleteNotificationChannel(id)
             }
         }
@@ -117,20 +131,21 @@ class Notifications {
                         .submit()
                         .get()
                 }
+
                 @Suppress("BlockingMethodInNonBlockingContext")
                 val largeBitmap = if (largeImg != null) Glide.with(context)
-                        .asBitmap()
-                        .load(GlideUrl(largeImg.url) { largeImg.headers })
-                        .submit()
-                        .get()
+                    .asBitmap()
+                    .load(GlideUrl(largeImg.url) { largeImg.headers })
+                    .submit()
+                    .get()
                 else null
 
-                if(largeBitmap!=null) builder.setStyle(
-                        NotificationCompat
-                            .BigPictureStyle()
-                            .bigPicture(largeBitmap)
-                            .bigLargeIcon(bitmap)
-                    )
+                if (largeBitmap != null) builder.setStyle(
+                    NotificationCompat
+                        .BigPictureStyle()
+                        .bigPicture(largeBitmap)
+                        .bigLargeIcon(bitmap)
+                )
 
                 builder.setLargeIcon(bitmap)
             } else builder

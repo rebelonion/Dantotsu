@@ -16,9 +16,9 @@ import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
 import ani.dantotsu.loadData
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
@@ -34,14 +34,18 @@ class ListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
 
         val typedValue = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
         val primaryColor = typedValue.data
         val typedValue2 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue2, true)
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOnBackground,
+            typedValue2,
+            true
+        )
         val titleTextColor = typedValue2.data
         val typedValue3 = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
@@ -63,33 +67,50 @@ ThemeManager(this).applyTheme()
                 ContextCompat.getColor(this, R.color.nav_bg_inv)
             binding.root.fitsSystemWindows = true
 
-        }else{
+        } else {
             binding.root.fitsSystemWindows = false
             requestWindowFeature(Window.FEATURE_NO_TITLE)
-            window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
         }
         setContentView(binding.root)
 
         val anime = intent.getBooleanExtra("anime", true)
-        binding.listTitle.text = intent.getStringExtra("username") + "'s " + (if (anime) "Anime" else "Manga") + " List"
+        binding.listTitle.text =
+            intent.getStringExtra("username") + "'s " + (if (anime) "Anime" else "Manga") + " List"
 
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@ListActivity.selectedTabIdx = tab?.position ?: 0
             }
-            override fun onTabUnselected(tab: TabLayout.Tab?) { }
-            override fun onTabReselected(tab: TabLayout.Tab?) { }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
         val model: ListViewModel by viewModels()
         model.getLists().observe(this) {
-            val defaultKeys = listOf("Reading", "Watching", "Completed", "Paused", "Dropped", "Planning", "Favourites", "Rewatching", "Rereading", "All")
-            val userKeys : Array<String> = resources.getStringArray(R.array.keys)
+            val defaultKeys = listOf(
+                "Reading",
+                "Watching",
+                "Completed",
+                "Paused",
+                "Dropped",
+                "Planning",
+                "Favourites",
+                "Rewatching",
+                "Rereading",
+                "All"
+            )
+            val userKeys: Array<String> = resources.getStringArray(R.array.keys)
 
             if (it != null) {
                 binding.listProgressBar.visibility = View.GONE
-                binding.listViewPager.adapter = ListViewPagerAdapter(it.size, false,this)
-                val keys = it.keys.toList().map { key -> userKeys.getOrNull(defaultKeys.indexOf(key))?: key }
+                binding.listViewPager.adapter = ListViewPagerAdapter(it.size, false, this)
+                val keys = it.keys.toList()
+                    .map { key -> userKeys.getOrNull(defaultKeys.indexOf(key)) ?: key }
                 val values = it.values.toList()
                 val savedTab = this.selectedTabIdx
                 TabLayoutMediator(binding.listTabLayout, binding.listViewPager) { tab, position ->
@@ -103,32 +124,43 @@ ThemeManager(this).applyTheme()
         live.observe(this) {
             if (it) {
                 scope.launch {
-                    withContext(Dispatchers.IO) { model.loadLists(anime, intent.getIntExtra("userId", 0)) }
+                    withContext(Dispatchers.IO) {
+                        model.loadLists(
+                            anime,
+                            intent.getIntExtra("userId", 0)
+                        )
+                    }
                     live.postValue(false)
                 }
             }
         }
 
-       binding.listSort.setOnClickListener {
-           val popup = PopupMenu(this, it)
-           popup.setOnMenuItemClickListener { item ->
-               val sort = when (item.itemId) {
-                   R.id.score -> "score"
-                   R.id.title -> "title"
-                   R.id.updated -> "updatedAt"
-                   R.id.release -> "release"
-                   else -> null
-               }
+        binding.listSort.setOnClickListener {
+            val popup = PopupMenu(this, it)
+            popup.setOnMenuItemClickListener { item ->
+                val sort = when (item.itemId) {
+                    R.id.score -> "score"
+                    R.id.title -> "title"
+                    R.id.updated -> "updatedAt"
+                    R.id.release -> "release"
+                    else -> null
+                }
 
-               binding.listProgressBar.visibility = View.VISIBLE
-               binding.listViewPager.adapter = null
-               scope.launch {
-                   withContext(Dispatchers.IO) { model.loadLists(anime, intent.getIntExtra("userId", 0), sort) }
-               }
-               true
-           }
-           popup.inflate(R.menu.list_sort_menu)
-           popup.show()
-       }
+                binding.listProgressBar.visibility = View.VISIBLE
+                binding.listViewPager.adapter = null
+                scope.launch {
+                    withContext(Dispatchers.IO) {
+                        model.loadLists(
+                            anime,
+                            intent.getIntExtra("userId", 0),
+                            sort
+                        )
+                    }
+                }
+                true
+            }
+            popup.inflate(R.menu.list_sort_menu)
+            popup.show()
+        }
     }
 }

@@ -15,21 +15,14 @@ import android.view.animation.OvershootInterpolator
 import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.Fragment
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import ani.dantotsu.R
-import ani.dantotsu.Refresh
 import ani.dantotsu.currContext
-import ani.dantotsu.databinding.FragmentMangaBinding
 import ani.dantotsu.download.Download
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
-import ani.dantotsu.media.manga.MangaNameAdapter
-import ani.dantotsu.navBarHeight
-import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.snackString
@@ -38,23 +31,27 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
-import java.io.File
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
+import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
-class OfflineMangaFragment: Fragment() {
+class OfflineMangaFragment : Fragment() {
     private val downloadManager = Injekt.get<DownloadsManager>()
     private var downloads: List<OfflineMangaModel> = listOf()
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineMangaAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.fragment_manga_offline, container, false)
 
         val textInputLayout = view.findViewById<TextInputLayout>(R.id.offlineMangaSearchBar)
@@ -67,12 +64,16 @@ class OfflineMangaFragment: Fragment() {
         requireContext().theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         val color = typedValue.data
 
-        val animeUserAvatar= view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
+        val animeUserAvatar = view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
         animeUserAvatar.setSafeOnClickListener {
-            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.HOME).show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
+            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.HOME).show(
+                (it.context as AppCompatActivity).supportFragmentManager,
+                "dialog"
+            )
         }
 
-        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean("colorOverflow", false) ?: false
+        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getBoolean("colorOverflow", false) ?: false
         if (!colorOverflow) {
             textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
             materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
@@ -85,7 +86,8 @@ class OfflineMangaFragment: Fragment() {
         gridView.setOnItemClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
-            val media = downloadManager.mangaDownloads.filter { it.title == item.title }.firstOrNull()
+            val media =
+                downloadManager.mangaDownloads.filter { it.title == item.title }.firstOrNull()
             media?.let {
                 startActivity(
                     Intent(requireContext(), MediaDetailsActivity::class.java)
@@ -139,9 +141,7 @@ class OfflineMangaFragment: Fragment() {
         }
 
     }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+
     override fun onResume() {
         super.onResume()
         getDownloads()
@@ -162,6 +162,7 @@ class OfflineMangaFragment: Fragment() {
         super.onStop()
         downloads = listOf()
     }
+
     private fun getDownloads() {
         val titles = downloadManager.mangaDownloads.map { it.title }.distinct()
         val newDownloads = mutableListOf<OfflineMangaModel>()
@@ -189,8 +190,7 @@ class OfflineMangaFragment: Fragment() {
             val media = File(directory, "media.json")
             val mediaJson = media.readText()
             return gson.fromJson(mediaJson, Media::class.java)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
             FirebaseCrashlytics.getInstance().recordException(e)
@@ -198,7 +198,7 @@ class OfflineMangaFragment: Fragment() {
         }
     }
 
-    private fun loadOfflineMangaModel(download: Download): OfflineMangaModel{
+    private fun loadOfflineMangaModel(download: Download): OfflineMangaModel {
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             "Dantotsu/Manga/${download.title}"
@@ -214,14 +214,13 @@ class OfflineMangaFragment: Fragment() {
             } else {
                 null
             }
-            val title = mediaModel.nameMAL?:"unknown"
+            val title = mediaModel.nameMAL ?: "unknown"
             val score = if (mediaModel.userScore != 0) mediaModel.userScore.toString() else
                 if (mediaModel.meanScore == null) "?" else mediaModel.meanScore.toString()
             val isOngoing = false
             val isUserScored = mediaModel.userScore != 0
             return OfflineMangaModel(title, score, isOngoing, isUserScored, coverUri)
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
             FirebaseCrashlytics.getInstance().recordException(e)

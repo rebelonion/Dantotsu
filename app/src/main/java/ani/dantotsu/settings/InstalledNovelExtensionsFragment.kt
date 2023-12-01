@@ -1,6 +1,5 @@
 package ani.dantotsu.settings
 
-import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
@@ -8,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -19,23 +17,17 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.currContext
-import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
 import ani.dantotsu.databinding.FragmentNovelExtensionsBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.snackString
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -47,8 +39,8 @@ class InstalledNovelExtensionsFragment : Fragment() {
     val skipIcons = loadData("skip_extension_icons") ?: false
     private val novelExtensionManager: NovelExtensionManager = Injekt.get()
     private val extensionsAdapter = NovelExtensionsAdapter({ pkg ->
-            Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
-                .show()
+        Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
+            .show()
     },
         { pkg ->
             if (isAdded) {  // Check if the fragment is currently added to its activity
@@ -99,11 +91,12 @@ class InstalledNovelExtensionsFragment : Fragment() {
                             }
                         )
                 } else {
-                    novelExtensionManager.uninstallExtension(pkg.pkgName, currContext()?:context)
+                    novelExtensionManager.uninstallExtension(pkg.pkgName, currContext() ?: context)
                     snackString("Extension uninstalled")
                 }
             }
-        }, skipIcons)
+        }, skipIcons
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -124,10 +117,6 @@ class InstalledNovelExtensionsFragment : Fragment() {
         }
         val extensionsRecyclerView: RecyclerView = binding.allNovelExtensionsRecyclerView
         return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
     override fun onDestroyView() {
@@ -159,7 +148,7 @@ class InstalledNovelExtensionsFragment : Fragment() {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)  // Use getItem() from ListAdapter
-            val nsfw =  ""
+            val nsfw = ""
             val lang = LanguageMapper.mapLanguageCodeToName("all")
             holder.extensionNameTextView.text = extension.name
             holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
@@ -181,7 +170,8 @@ class InstalledNovelExtensionsFragment : Fragment() {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val extensionNameTextView: TextView = view.findViewById(R.id.extensionNameTextView)
-            val extensionVersionTextView: TextView = view.findViewById(R.id.extensionVersionTextView)
+            val extensionVersionTextView: TextView =
+                view.findViewById(R.id.extensionVersionTextView)
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)

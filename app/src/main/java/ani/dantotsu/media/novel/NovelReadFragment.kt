@@ -61,7 +61,8 @@ class NovelReadFragment : Fragment(),
     private var continueEp: Boolean = false
     var loaded = false
 
-    val uiSettings = loadData("ui_settings", toast = false) ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
+    val uiSettings = loadData("ui_settings", toast = false)
+        ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
 
     override fun downloadTrigger(novelDownloadPackage: NovelDownloadPackage) {
         Log.e("downloadTrigger", novelDownloadPackage.link)
@@ -90,10 +91,24 @@ class NovelReadFragment : Fragment(),
 
     override fun downloadedCheckWithStart(novel: ShowResponse): Boolean {
         val downloadsManager = Injekt.get<DownloadsManager>()
-        if(downloadsManager.queryDownload(Download(media.nameMAL ?: media.nameRomaji, novel.name, Download.Type.NOVEL))) {
-            val file = File(context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "${DownloadsManager.novelLocation}/${media.nameMAL ?: media.nameRomaji}/${novel.name}/0.epub")
+        if (downloadsManager.queryDownload(
+                Download(
+                    media.nameMAL ?: media.nameRomaji,
+                    novel.name,
+                    Download.Type.NOVEL
+                )
+            )
+        ) {
+            val file = File(
+                context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                "${DownloadsManager.novelLocation}/${media.nameMAL ?: media.nameRomaji}/${novel.name}/0.epub"
+            )
             if (!file.exists()) return false
-            val fileUri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.provider", file)
+            val fileUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.provider",
+                file
+            )
             val intent = Intent(context, NovelReaderActivity::class.java).apply {
                 action = Intent.ACTION_VIEW
                 setDataAndType(fileUri, "application/epub+zip")
@@ -108,12 +123,24 @@ class NovelReadFragment : Fragment(),
 
     override fun downloadedCheck(novel: ShowResponse): Boolean {
         val downloadsManager = Injekt.get<DownloadsManager>()
-        return downloadsManager.queryDownload(Download(media.nameMAL ?: media.nameRomaji, novel.name, Download.Type.NOVEL))
+        return downloadsManager.queryDownload(
+            Download(
+                media.nameMAL ?: media.nameRomaji,
+                novel.name,
+                Download.Type.NOVEL
+            )
+        )
     }
 
     override fun deleteDownload(novel: ShowResponse) {
         val downloadsManager = Injekt.get<DownloadsManager>()
-        downloadsManager.removeDownload(Download(media.nameMAL ?: media.nameRomaji, novel.name, Download.Type.NOVEL))
+        downloadsManager.removeDownload(
+            Download(
+                media.nameMAL ?: media.nameRomaji,
+                novel.name,
+                Download.Type.NOVEL
+            )
+        )
     }
 
     private val downloadStatusReceiver = object : BroadcastReceiver() {
@@ -126,18 +153,21 @@ class NovelReadFragment : Fragment(),
                         novelResponseAdapter.startDownload(it)
                     }
                 }
+
                 ACTION_DOWNLOAD_FINISHED -> {
                     val link = intent.getStringExtra(EXTRA_NOVEL_LINK)
                     link?.let {
                         novelResponseAdapter.stopDownload(it)
                     }
                 }
+
                 ACTION_DOWNLOAD_FAILED -> {
                     val link = intent.getStringExtra(EXTRA_NOVEL_LINK)
                     link?.let {
                         novelResponseAdapter.purgeDownload(it)
                     }
                 }
+
                 ACTION_DOWNLOAD_PROGRESS -> {
                     val link = intent.getStringExtra(EXTRA_NOVEL_LINK)
                     val progress = intent.getIntExtra("progress", 0)
@@ -159,7 +189,12 @@ class NovelReadFragment : Fragment(),
             addAction(ACTION_DOWNLOAD_PROGRESS)
         }
 
-        ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter ,ContextCompat.RECEIVER_EXPORTED)
+        ContextCompat.registerReceiver(
+            requireContext(),
+            downloadStatusReceiver,
+            intentFilter,
+            ContextCompat.RECEIVER_EXPORTED
+        )
 
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
 
@@ -179,8 +214,13 @@ class NovelReadFragment : Fragment(),
                     val sel = media.selected
                     searchQuery = sel?.server ?: media.name ?: media.nameRomaji
                     headerAdapter = NovelReadAdapter(media, this, model.novelSources)
-                    novelResponseAdapter = NovelResponseAdapter(this, this, this)  // probably a better way to do this but it works
-                    binding.animeSourceRecycler.adapter = ConcatAdapter(headerAdapter, novelResponseAdapter)
+                    novelResponseAdapter = NovelResponseAdapter(
+                        this,
+                        this,
+                        this
+                    )  // probably a better way to do this but it works
+                    binding.animeSourceRecycler.adapter =
+                        ConcatAdapter(headerAdapter, novelResponseAdapter)
                     loaded = true
                     Handler(Looper.getMainLooper()).postDelayed({
                         search(searchQuery, sel?.sourceIndex ?: 0, auto = sel?.server == null)
@@ -206,7 +246,7 @@ class NovelReadFragment : Fragment(),
             searchQuery = query
             headerAdapter.progress?.visibility = View.VISIBLE
             lifecycleScope.launch(Dispatchers.IO) {
-                if (auto || query=="") model.autoSearchNovels(media)
+                if (auto || query == "") model.autoSearchNovels(media)
                 else model.searchNovels(query, source)
             }
             searching = true

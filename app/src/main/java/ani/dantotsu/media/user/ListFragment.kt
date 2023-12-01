@@ -11,8 +11,6 @@ import ani.dantotsu.databinding.FragmentListBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.OtherDetailsViewModel
-import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 
 class ListFragment : Fragment() {
     private var _binding: FragmentListBinding? = null
@@ -29,7 +27,11 @@ class ListFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -42,7 +44,10 @@ class ListFragment : Fragment() {
             if (grid != null && list != null) {
                 val adapter = MediaAdaptor(if (grid!!) 0 else 1, list!!, requireActivity(), true)
                 binding.listRecyclerView.layoutManager =
-                    GridLayoutManager(requireContext(), if (grid!!) (screenWidth / 124f).toInt() else 1)
+                    GridLayoutManager(
+                        requireContext(),
+                        if (grid!!) (screenWidth / 124f).toInt() else 1
+                    )
                 binding.listRecyclerView.adapter = adapter
             }
         }

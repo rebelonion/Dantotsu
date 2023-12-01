@@ -80,7 +80,8 @@ class NovelExtensionPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NovelExtension.Available> {
         val position = params.key ?: 0
         val installedExtensions = installedExtensionsFlow.first().map { it.pkgName }.toSet()
-        val availableExtensions = availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
+        val availableExtensions =
+            availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
         val query = searchQuery.first()
         val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
         val filteredExtensions = if (query.isEmpty()) {
@@ -123,18 +124,25 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NovelExtension.Available>() {
-            override fun areItemsTheSame(oldItem: NovelExtension.Available, newItem: NovelExtension.Available): Boolean {
+            override fun areItemsTheSame(
+                oldItem: NovelExtension.Available,
+                newItem: NovelExtension.Available
+            ): Boolean {
                 return oldItem.pkgName == newItem.pkgName
             }
 
-            override fun areContentsTheSame(oldItem: NovelExtension.Available, newItem: NovelExtension.Available): Boolean {
+            override fun areContentsTheSame(
+                oldItem: NovelExtension.Available,
+                newItem: NovelExtension.Available
+            ): Boolean {
                 return oldItem == newItem
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NovelExtensionViewHolder {
-        val binding = ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return NovelExtensionViewHolder(binding)
     }
 
@@ -150,7 +158,8 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
         }
     }
 
-    inner class NovelExtensionViewHolder(private val binding: ItemExtensionAllBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class NovelExtensionViewHolder(private val binding: ItemExtensionAllBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.closeTextView.setOnClickListener {
                 val extension = getItem(bindingAdapterPosition)
@@ -159,10 +168,11 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
                 }
             }
         }
+
         val extensionIconImageView: ImageView = binding.extensionIconImageView
         fun bind(extension: NovelExtension.Available) {
             val nsfw = ""
-            val lang= LanguageMapper.mapLanguageCodeToName("all")
+            val lang = LanguageMapper.mapLanguageCodeToName("all")
             binding.extensionNameTextView.text = extension.name
             binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }

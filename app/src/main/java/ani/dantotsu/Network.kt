@@ -9,22 +9,23 @@ import com.lagradost.nicehttp.Requests
 import com.lagradost.nicehttp.ResponseParser
 import com.lagradost.nicehttp.addGenericDns
 import eu.kanade.tachiyomi.network.NetworkHelper
-import kotlinx.coroutines.*
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import okhttp3.Cache
 import okhttp3.OkHttpClient
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 import java.io.PrintWriter
 import java.io.Serializable
 import java.io.StringWriter
-import java.util.concurrent.*
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 
@@ -114,7 +115,11 @@ fun <T> tryWith(post: Boolean = false, snackbar: Boolean = true, call: () -> T):
     }
 }
 
-suspend fun <T> tryWithSuspend(post: Boolean = false, snackbar: Boolean = true, call: suspend () -> T): T? {
+suspend fun <T> tryWithSuspend(
+    post: Boolean = false,
+    snackbar: Boolean = true,
+    call: suspend () -> T
+): T? {
     return try {
         call.invoke()
     } catch (e: Throwable) {
@@ -194,28 +199,29 @@ fun OkHttpClient.Builder.addAdGuardDns() = (
 
 @Suppress("BlockingMethodInNonBlockingContext")
 suspend fun webViewInterface(webViewDialog: WebViewBottomDialog): Map<String, String>? {
-    var map : Map<String,String>? = null
+    var map: Map<String, String>? = null
 
     val latch = CountDownLatch(1)
     webViewDialog.callback = {
         map = it
         latch.countDown()
     }
-    val fragmentManager = (currContext() as FragmentActivity?)?.supportFragmentManager ?: return null
+    val fragmentManager =
+        (currContext() as FragmentActivity?)?.supportFragmentManager ?: return null
     webViewDialog.show(fragmentManager, "web-view")
     delay(0)
-    latch.await(2,TimeUnit.MINUTES)
+    latch.await(2, TimeUnit.MINUTES)
     return map
 }
 
 suspend fun webViewInterface(type: String, url: FileUrl): Map<String, String>? {
     val webViewDialog: WebViewBottomDialog = when (type) {
         "Cloudflare" -> CloudFlare.newInstance(url)
-        else         -> return null
+        else -> return null
     }
     return webViewInterface(webViewDialog)
 }
 
 suspend fun webViewInterface(type: String, url: String): Map<String, String>? {
-    return webViewInterface(type,FileUrl(url))
+    return webViewInterface(type, FileUrl(url))
 }

@@ -2,8 +2,6 @@ package ani.dantotsu.settings.extensionprefs
 
 import android.content.Context
 import android.os.Bundle
-import android.view.View
-import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.DialogPreference
@@ -11,11 +9,6 @@ import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.forEach
 import androidx.preference.getOnBindEditTextListener
-import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.R
-import ani.dantotsu.settings.ExtensionsActivity
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.textfield.TextInputLayout
 import eu.kanade.tachiyomi.PreferenceScreen
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
 import eu.kanade.tachiyomi.source.ConfigurableSource
@@ -29,6 +22,7 @@ class MangaSourcePreferencesFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         preferenceScreen = populateMangaPreferenceScreen()
     }
+
     private var onCloseAction: (() -> Unit)? = null
 
     override fun onDestroyView() {
@@ -41,7 +35,8 @@ class MangaSourcePreferencesFragment : PreferenceFragmentCompat() {
         val sourceId = requireArguments().getLong(SOURCE_ID)
         val source = Injekt.get<MangaSourceManager>().get(sourceId)!!
         check(source is ConfigurableSource)
-        val sharedPreferences = requireContext().getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
         val dataStore = SharedPreferencesDataStore(sharedPreferences)
         preferenceManager.preferenceDataStore = dataStore
         val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())
@@ -65,7 +60,11 @@ class MangaSourcePreferencesFragment : PreferenceFragmentCompat() {
 
         return sourceScreen
     }
-    fun getInstance(sourceId: Long, onCloseAction: (() -> Unit)? = null): MangaSourcePreferencesFragment {
+
+    fun getInstance(
+        sourceId: Long,
+        onCloseAction: (() -> Unit)? = null
+    ): MangaSourcePreferencesFragment {
         val fragment = MangaSourcePreferencesFragment()
         fragment.arguments = bundleOf(SOURCE_ID to sourceId)
         fragment.onCloseAction = onCloseAction

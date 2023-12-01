@@ -1,30 +1,10 @@
 package ani.dantotsu.connections.discord
 
-import android.widget.Toast
-import ani.dantotsu.connections.discord.serializers.*
-import ani.dantotsu.currContext
-import ani.dantotsu.logger
-import ani.dantotsu.snackString
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.suspendCancellableCoroutine
+import ani.dantotsu.connections.discord.serializers.Activity
+import ani.dantotsu.connections.discord.serializers.Presence
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonObject
-import kotlinx.serialization.json.jsonPrimitive
-import kotlinx.serialization.json.long
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.WebSocket
-import okhttp3.WebSocketListener
-import java.util.concurrent.TimeUnit.*
 import kotlin.coroutines.CoroutineContext
 import ani.dantotsu.client as app
 
@@ -36,6 +16,7 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
         allowStructuredMapKeys = true
         ignoreUnknownKeys = true
     }
+
     enum class Type {
         PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
     }
@@ -56,14 +37,17 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
             val stopTimestamp: Long? = null,
             val buttons: MutableList<Link> = mutableListOf()
         )
+
         @Serializable
         data class KizzyApi(val id: String)
+
         val api = "https://kizzy-api.vercel.app/image?url="
         private suspend fun String.discordUrl(): String? {
             if (startsWith("mp:")) return this
             val json = app.get("$api$this").parsedSafe<KizzyApi>()
             return json?.id
         }
+
         suspend fun createPresence(data: RPCData): String {
             val json = Json {
                 encodeDefaults = true

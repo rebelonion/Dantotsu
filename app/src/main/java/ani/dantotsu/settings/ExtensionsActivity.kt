@@ -6,11 +6,8 @@ import android.os.Build.VERSION.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
-import android.widget.LinearLayout
-import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -20,16 +17,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityExtensionsBinding
-import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class ExtensionsActivity : AppCompatActivity()  {
+class ExtensionsActivity : AppCompatActivity() {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@ExtensionsActivity)
     }
@@ -104,7 +98,8 @@ class ExtensionsActivity : AppCompatActivity()  {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val currentFragment = supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
+                val currentFragment =
+                    supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
                 if (currentFragment is SearchQueryHandler) {
                     currentFragment.updateContentBasedOnQuery(s?.toString()?.trim())
                 }

@@ -16,14 +16,11 @@ import android.os.IBinder
 import android.os.PowerManager
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Button
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
-import ani.dantotsu.connections.discord.serializers.Activity
 import ani.dantotsu.connections.discord.serializers.Presence
 import ani.dantotsu.connections.discord.serializers.User
 import ani.dantotsu.isOnline
@@ -39,18 +36,16 @@ import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import java.io.File
 import java.io.OutputStreamWriter
-import java.text.SimpleDateFormat
-import java.util.Calendar
 
 class DiscordService : Service() {
-    private var heartbeat : Int = 0
-    private var sequence : Int? = null
-    private var sessionId : String = ""
+    private var heartbeat: Int = 0
+    private var sequence: Int? = null
+    private var sessionId: String = ""
     private var resume = false
-    private lateinit var logFile : File
+    private lateinit var logFile: File
     private lateinit var webSocket: WebSocket
-    private lateinit var heartbeatThread : Thread
-    private lateinit var client : OkHttpClient
+    private lateinit var heartbeatThread: Thread
+    private lateinit var client: OkHttpClient
     private lateinit var wakeLock: PowerManager.WakeLock
     var presenceStore = ""
     val json = Json {
@@ -66,7 +61,10 @@ class DiscordService : Service() {
 
         log("Service onCreate()")
         val powerManager = baseContext.getSystemService(Context.POWER_SERVICE) as PowerManager
-        wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "discordRPC:backgroundPresence")
+        wakeLock = powerManager.newWakeLock(
+            PowerManager.PARTIAL_WAKE_LOCK,
+            "discordRPC:backgroundPresence"
+        )
         wakeLock.acquire()
         log("WakeLock Acquired")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -104,13 +102,13 @@ class DiscordService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         log("Service onStartCommand()")
-        if(intent != null) {
+        if (intent != null) {
             if (intent.hasExtra("presence")) {
                 log("Service onStartCommand() setPresence")
                 var lPresence = intent.getStringExtra("presence")
                 if (this::webSocket.isInitialized) webSocket.send(lPresence!!)
                 presenceStore = lPresence!!
-            }else{
+            } else {
                 log("Service onStartCommand() no presence")
                 DiscordServiceRunningSingleton.running = false
                 client.dispatcher.executorService.shutdown()
@@ -126,7 +124,7 @@ class DiscordService : Service() {
 
     override fun onDestroy() {
         log("Service Destroyed")
-        if (DiscordServiceRunningSingleton.running){
+        if (DiscordServiceRunningSingleton.running) {
             log("Accidental Service Destruction, restarting service")
             val intent = Intent(baseContext, DiscordService::class.java)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -135,17 +133,19 @@ class DiscordService : Service() {
                 baseContext.startService(intent)
             }
         } else {
-            if(this::webSocket.isInitialized)
-            setPresence(json.encodeToString(
-                Presence.Response(
-                    3,
-                    Presence(status = "offline")
+            if (this::webSocket.isInitialized)
+                setPresence(
+                    json.encodeToString(
+                        Presence.Response(
+                            3,
+                            Presence(status = "offline")
+                        )
+                    )
                 )
-            ))
             wakeLock.release()
         }
         SERVICE_RUNNING = false
-        if(this::webSocket.isInitialized) webSocket.close(1000, "Closed by user")
+        if (this::webSocket.isInitialized) webSocket.close(1000, "Closed by user")
         super.onDestroy()
         //saveLogToFile()
     }
@@ -184,7 +184,7 @@ class DiscordService : Service() {
             log("WebSocket: Received op code ${json.get("op")}")
             when (json.get("op").asInt) {
                 0 -> {
-                    if(json.has("s")) {
+                    if (json.has("s")) {
                         log("WebSocket: Sequence ${json.get("s")} Received")
                         sequence = json.get("s").asInt
                     }
@@ -193,9 +193,10 @@ class DiscordService : Service() {
                     log(text)
                     sessionId = json.get("d").asJsonObject.get("session_id").asString
                     log("WebSocket: SessionID ${json.get("d").asJsonObject.get("session_id")} Received")
-                    if(presenceStore.isNotEmpty()) setPresence(presenceStore)
+                    if (presenceStore.isNotEmpty()) setPresence(presenceStore)
                     sendBroadcast(Intent("ServiceToConnectButton"))
                 }
+
                 1 -> {
                     log("WebSocket: Received Heartbeat request, sending heartbeat")
                     heartbeatThread.interrupt()
@@ -203,33 +204,38 @@ class DiscordService : Service() {
                     heartbeatThread = Thread(HeartbeatRunnable())
                     heartbeatThread.start()
                 }
+
                 7 -> {
                     resume = true
                     log("WebSocket: Requested to Restart, restarting")
                     webSocket.close(1000, "Requested to Restart by the server")
                     client = OkHttpClient()
                     client.newWebSocket(
-                        Request.Builder().url("wss://gateway.discord.gg/?v=10&encoding=json").build(),
+                        Request.Builder().url("wss://gateway.discord.gg/?v=10&encoding=json")
+                            .build(),
                         DiscordWebSocketListener()
                     )
                     client.dispatcher.executorService.shutdown()
                 }
+
                 9 -> {
                     log("WebSocket: Invalid Session, restarting")
                     webSocket.close(1000, "Invalid Session")
                     Thread.sleep(5000)
                     client = OkHttpClient()
                     client.newWebSocket(
-                        Request.Builder().url("wss://gateway.discord.gg/?v=10&encoding=json").build(),
+                        Request.Builder().url("wss://gateway.discord.gg/?v=10&encoding=json")
+                            .build(),
                         DiscordWebSocketListener()
                     )
                     client.dispatcher.executorService.shutdown()
                 }
+
                 10 -> {
                     heartbeat = json.get("d").asJsonObject.get("heartbeat_interval").asInt
                     heartbeatThread = Thread(HeartbeatRunnable())
                     heartbeatThread.start()
-                    if(resume) {
+                    if (resume) {
                         log("WebSocket: Resuming because server requested")
                         resume()
                         resume = false
@@ -238,6 +244,7 @@ class DiscordService : Service() {
                         log("WebSocket: Identified")
                     }
                 }
+
                 11 -> {
                     log("WebSocket: Heartbeat ACKed")
                     heartbeatThread = Thread(HeartbeatRunnable())
@@ -245,29 +252,31 @@ class DiscordService : Service() {
                 }
             }
         }
+
         fun identify(webSocket: WebSocket, context: Context) {
             val properties = JsonObject()
-            properties.addProperty("os","linux")
-            properties.addProperty("browser","unknown")
-            properties.addProperty("device","unknown")
+            properties.addProperty("os", "linux")
+            properties.addProperty("browser", "unknown")
+            properties.addProperty("device", "unknown")
             val d = JsonObject()
             d.addProperty("token", getToken(context))
             d.addProperty("intents", 0)
             d.add("properties", properties)
             val payload = JsonObject()
-            payload.addProperty("op",2)
+            payload.addProperty("op", 2)
             payload.add("d", d)
             webSocket.send(payload.toString())
         }
+
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
             super.onFailure(webSocket, t, response)
-            if(!isOnline(baseContext)) {
+            if (!isOnline(baseContext)) {
                 log("WebSocket: Error, onFailure() reason: No Internet")
                 errorNotification("Could not set the presence", "No Internet")
                 return
-            } else{
+            } else {
                 retryAttempts++
-                if(retryAttempts >= maxRetryAttempts) {
+                if (retryAttempts >= maxRetryAttempts) {
                     log("WebSocket: Error, onFailure() reason: Max Retry Attempts")
                     errorNotification("Could not set the presence", "Max Retry Attempts")
                     return
@@ -281,19 +290,23 @@ class DiscordService : Service() {
                 DiscordWebSocketListener()
             )
             client.dispatcher.executorService.shutdown()
-            if(::heartbeatThread.isInitialized && !heartbeatThread.isInterrupted) { heartbeatThread.interrupt() }
+            if (::heartbeatThread.isInitialized && !heartbeatThread.isInterrupted) {
+                heartbeatThread.interrupt()
+            }
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosing(webSocket, code, reason)
             Log.d("WebSocket", "onClosing() $code $reason")
-            if(::heartbeatThread.isInitialized && !heartbeatThread.isInterrupted) { heartbeatThread.interrupt() }
+            if (::heartbeatThread.isInitialized && !heartbeatThread.isInterrupted) {
+                heartbeatThread.interrupt()
+            }
         }
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosed(webSocket, code, reason)
             Log.d("WebSocket", "onClosed() $code $reason")
-            if(code >= 4000) {
+            if (code >= 4000) {
                 log("WebSocket: Error, code: $code reason: $reason")
                 client = OkHttpClient()
                 client.newWebSocket(
@@ -311,23 +324,24 @@ class DiscordService : Service() {
             context.getString(R.string.preference_file_key),
             Context.MODE_PRIVATE
         )
-        val token =  sharedPref.getString(Discord.TOKEN, null)
-        if(token == null) {
+        val token = sharedPref.getString(Discord.TOKEN, null)
+        if (token == null) {
             log("WebSocket: Token not found")
             errorNotification("Could not set the presence", "token not found")
             return ""
-        }
-        else{
+        } else {
             return token
         }
     }
-    fun heartbeatSend( webSocket: WebSocket, seq: Int? ) {
+
+    fun heartbeatSend(webSocket: WebSocket, seq: Int?) {
         val json = JsonObject()
-        json.addProperty("op",1)
+        json.addProperty("op", 1)
         json.addProperty("d", seq)
         webSocket.send(json.toString())
     }
-    private fun errorNotification(title : String, text: String) {
+
+    private fun errorNotification(title: String, text: String) {
         val intent = Intent(this@DiscordService, MainActivity::class.java).apply {
             action = Intent.ACTION_MAIN
             addCategory(Intent.CATEGORY_LAUNCHER)
@@ -401,7 +415,8 @@ class DiscordService : Service() {
         val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
         } else {
-            val directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+            val directory =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
             val file = File(directory, fileName)
 
             // Make sure the Downloads directory exists
@@ -410,7 +425,8 @@ class DiscordService : Service() {
             }
 
             // Use FileProvider to get the URI for the file
-            val authority = "${baseContext.packageName}.provider" // Adjust with your app's package name
+            val authority =
+                "${baseContext.packageName}.provider" // Adjust with your app's package name
             Uri.fromFile(file)
         }
 
@@ -445,7 +461,8 @@ class DiscordService : Service() {
                 Thread.sleep(heartbeat.toLong())
                 heartbeatSend(webSocket, sequence)
                 log("WebSocket: Heartbeat Sent")
-            } catch (e:InterruptedException) {}
+            } catch (e: InterruptedException) {
+            }
         }
     }
 

@@ -31,13 +31,13 @@ import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
-import ani.dantotsu.settings.SettingsDialogFragment
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
+import ani.dantotsu.settings.SettingsDialogFragment
+import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +52,11 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -96,10 +100,12 @@ class HomeFragment : Fragment() {
 
                 binding.homeUserAvatarContainer.startAnimation(setSlideUp(uiSettings))
                 binding.homeUserDataContainer.visibility = View.VISIBLE
-                binding.homeUserDataContainer.layoutAnimation = LayoutAnimationController(setSlideUp(uiSettings), 0.25f)
+                binding.homeUserDataContainer.layoutAnimation =
+                    LayoutAnimationController(setSlideUp(uiSettings), 0.25f)
                 binding.homeAnimeList.visibility = View.VISIBLE
                 binding.homeMangaList.visibility = View.VISIBLE
-                binding.homeListContainer.layoutAnimation = LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+                binding.homeListContainer.layoutAnimation =
+                    LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
             }
             else {
                 snackString(currContext()?.getString(R.string.please_reload))
@@ -107,7 +113,10 @@ class HomeFragment : Fragment() {
         }
 
         binding.homeUserAvatarContainer.setSafeOnClickListener {
-            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.HOME).show(parentFragmentManager, "dialog")
+            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.HOME).show(
+                parentFragmentManager,
+                "dialog"
+            )
         }
 
         binding.homeContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -123,11 +132,13 @@ class HomeFragment : Fragment() {
                 if (!binding.homeScroll.canScrollVertically(1)) {
                     reached = true
                     bottomBar.animate().translationZ(0f).setDuration(duration).start()
-                    ObjectAnimator.ofFloat(bottomBar, "elevation", 4f, 0f).setDuration(duration).start()
+                    ObjectAnimator.ofFloat(bottomBar, "elevation", 4f, 0f).setDuration(duration)
+                        .start()
                 } else {
                     if (reached) {
                         bottomBar.animate().translationZ(12f).setDuration(duration).start()
-                        ObjectAnimator.ofFloat(bottomBar, "elevation", 0f, 4f).setDuration(duration).start()
+                        ObjectAnimator.ofFloat(bottomBar, "elevation", 0f, 4f).setDuration(duration)
+                            .start()
                     }
                 }
             }
@@ -138,7 +149,13 @@ class HomeFragment : Fragment() {
             if (displayCutout != null) {
                 if (displayCutout.boundingRects.size > 0) {
                     height =
-                        max(statusBarHeight, min(displayCutout.boundingRects[0].width(), displayCutout.boundingRects[0].height()))
+                        max(
+                            statusBarHeight,
+                            min(
+                                displayCutout.boundingRects[0].width(),
+                                displayCutout.boundingRects[0].height()
+                            )
+                        )
                 }
             }
         }
@@ -189,7 +206,8 @@ class HomeFragment : Fragment() {
                             false
                         )
                         recyclerView.visibility = View.VISIBLE
-                        recyclerView.layoutAnimation = LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+                        recyclerView.layoutAnimation =
+                            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
 
                     } else {
                         empty.visibility = View.VISIBLE
@@ -313,7 +331,8 @@ class HomeFragment : Fragment() {
         live.observe(viewLifecycleOwner) {
             if (it) {
                 scope.launch {
-                    uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
+                    uiSettings =
+                        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
                     withContext(Dispatchers.IO) {
                         //Get userData First
                         getUserId(requireContext()) {

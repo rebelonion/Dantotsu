@@ -1,6 +1,5 @@
 package ani.dantotsu.settings.paging
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -79,7 +78,8 @@ class MangaExtensionPagingSource(
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, MangaExtension.Available> {
         val position = params.key ?: 0
         val installedExtensions = installedExtensionsFlow.first().map { it.pkgName }.toSet()
-        val availableExtensions = availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
+        val availableExtensions =
+            availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
         val query = searchQuery.first()
         val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
         val filteredExtensions = if (query.isEmpty()) {
@@ -87,7 +87,7 @@ class MangaExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = if(isNsfwEnabled) {
+        val filternfsw = if (isNsfwEnabled) {
             filteredExtensions
         } else {
             filteredExtensions.filterNot { it.isNsfw }
@@ -121,18 +121,25 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MangaExtension.Available>() {
-            override fun areItemsTheSame(oldItem: MangaExtension.Available, newItem: MangaExtension.Available): Boolean {
+            override fun areItemsTheSame(
+                oldItem: MangaExtension.Available,
+                newItem: MangaExtension.Available
+            ): Boolean {
                 return oldItem.pkgName == newItem.pkgName
             }
 
-            override fun areContentsTheSame(oldItem: MangaExtension.Available, newItem: MangaExtension.Available): Boolean {
+            override fun areContentsTheSame(
+                oldItem: MangaExtension.Available,
+                newItem: MangaExtension.Available
+            ): Boolean {
                 return oldItem == newItem
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaExtensionViewHolder {
-        val binding = ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MangaExtensionViewHolder(binding)
     }
 
@@ -148,7 +155,8 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
         }
     }
 
-    inner class MangaExtensionViewHolder(private val binding: ItemExtensionAllBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MangaExtensionViewHolder(private val binding: ItemExtensionAllBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.closeTextView.setOnClickListener {
                 val extension = getItem(bindingAdapterPosition)
@@ -157,10 +165,11 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
                 }
             }
         }
+
         val extensionIconImageView: ImageView = binding.extensionIconImageView
         fun bind(extension: MangaExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
             binding.extensionNameTextView.text = extension.name
             binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }

@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
@@ -32,13 +31,10 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -48,7 +44,6 @@ import okio.buffer
 import okio.sink
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.BufferedInputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -77,19 +72,29 @@ class NovelDownloaderService : Service() {
     override fun onCreate() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
-        builder = NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
-            setContentTitle("Novel Download Progress")
-            setSmallIcon(R.drawable.ic_round_download_24)
-            priority = NotificationCompat.PRIORITY_DEFAULT
-            setOnlyAlertOnce(true)
-            setProgress(0, 0, false)
-        }
+        builder =
+            NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
+                setContentTitle("Novel Download Progress")
+                setSmallIcon(R.drawable.ic_round_download_24)
+                priority = NotificationCompat.PRIORITY_DEFAULT
+                setOnlyAlertOnce(true)
+                setProgress(0, 0, false)
+            }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(NOTIFICATION_ID, builder.build(),  ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
-        }else{
+            startForeground(
+                NOTIFICATION_ID,
+                builder.build(),
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
             startForeground(NOTIFICATION_ID, builder.build())
         }
-        ContextCompat.registerReceiver(this, cancelReceiver, IntentFilter(ACTION_CANCEL_DOWNLOAD), ContextCompat.RECEIVER_EXPORTED)
+        ContextCompat.registerReceiver(
+            this,
+            cancelReceiver,
+            IntentFilter(ACTION_CANCEL_DOWNLOAD),
+            ContextCompat.RECEIVER_EXPORTED
+        )
     }
 
     override fun onDestroy() {
@@ -112,7 +117,7 @@ class NovelDownloaderService : Service() {
                 }
             }
         }
-        return Service.START_NOT_STICKY
+        return START_NOT_STICKY
     }
 
     private fun processQueue() {
@@ -272,7 +277,10 @@ class NovelDownloaderService : Service() {
                                         val progress = (downloadedBytes * 100 / totalBytes).toInt()
                                         builder.setProgress(100, progress, false)
                                         if (notifi) {
-                                            notificationManager.notify(NOTIFICATION_ID, builder.build())
+                                            notificationManager.notify(
+                                                NOTIFICATION_ID,
+                                                builder.build()
+                                            )
                                         }
                                     }
                                     lastNotificationUpdate = downloadedBytes
@@ -310,6 +318,7 @@ class NovelDownloaderService : Service() {
             snackString("${task.title} - ${task.chapter} Download finished")
         }
     }
+
     private fun saveMediaInfo(task: DownloadTask) {
         GlobalScope.launch(Dispatchers.IO) {
             val directory = File(
@@ -339,34 +348,40 @@ class NovelDownloaderService : Service() {
     }
 
 
-    private suspend fun downloadImage(url: String, directory: File, name: String): String? = withContext(
-        Dispatchers.IO) {
-        var connection: HttpURLConnection? = null
-        println("Downloading url $url")
-        try {
-            connection = URL(url).openConnection() as HttpURLConnection
-            connection.connect()
-            if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                throw Exception("Server returned HTTP ${connection.responseCode} ${connection.responseMessage}")
-            }
-
-            val file = File(directory, name)
-            FileOutputStream(file).use { output ->
-                connection.inputStream.use { input ->
-                    input.copyTo(output)
+    private suspend fun downloadImage(url: String, directory: File, name: String): String? =
+        withContext(
+            Dispatchers.IO
+        ) {
+            var connection: HttpURLConnection? = null
+            println("Downloading url $url")
+            try {
+                connection = URL(url).openConnection() as HttpURLConnection
+                connection.connect()
+                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
+                    throw Exception("Server returned HTTP ${connection.responseCode} ${connection.responseMessage}")
                 }
+
+                val file = File(directory, name)
+                FileOutputStream(file).use { output ->
+                    connection.inputStream.use { input ->
+                        input.copyTo(output)
+                    }
+                }
+                return@withContext file.absolutePath
+            } catch (e: Exception) {
+                e.printStackTrace()
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@NovelDownloaderService,
+                        "Exception while saving ${name}: ${e.message}",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+                null
+            } finally {
+                connection?.disconnect()
             }
-            return@withContext file.absolutePath
-        } catch (e: Exception) {
-            e.printStackTrace()
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@NovelDownloaderService, "Exception while saving ${name}: ${e.message}", Toast.LENGTH_LONG).show()
-            }
-            null
-        } finally {
-            connection?.disconnect()
         }
-    }
 
     private fun broadcastDownloadStarted(link: String) {
         val intent = Intent(NovelReadFragment.ACTION_DOWNLOAD_STARTED).apply {
@@ -429,6 +444,7 @@ class NovelDownloaderService : Service() {
 object NovelServiceDataSingleton {
     var sourceMedia: Media? = null
     var downloadQueue: Queue<NovelDownloaderService.DownloadTask> = ConcurrentLinkedQueue()
+
     @Volatile
     var isServiceRunning: Boolean = false
 }

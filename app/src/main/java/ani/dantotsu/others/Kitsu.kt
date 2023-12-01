@@ -18,7 +18,13 @@ object Kitsu {
             "DNT" to "1",
             "Origin" to "https://kitsu.io"
         )
-        val json = tryWithSuspend { client.post("https://kitsu.io/api/graphql", headers, data = mapOf("query" to query)) }
+        val json = tryWithSuspend {
+            client.post(
+                "https://kitsu.io/api/graphql",
+                headers,
+                data = mapOf("query" to query)
+            )
+        }
         return json?.parsed()
     }
 
@@ -54,8 +60,8 @@ query {
         val result = getKitsuData(query) ?: return null
         logger("Kitsu : result=$result", print)
         media.idKitsu = result.data?.lookupMapping?.id
-        return (result.data?.lookupMapping?.episodes?.nodes?:return null).mapNotNull { ep ->
-            val num = ep?.num?.toString()?:return@mapNotNull null
+        return (result.data?.lookupMapping?.episodes?.nodes ?: return null).mapNotNull { ep ->
+            val num = ep?.num?.toString() ?: return@mapNotNull null
             num to Episode(
                 number = num,
                 title = ep.titles?.canonical,
@@ -70,39 +76,46 @@ query {
         @SerialName("data") val data: Data? = null
     ) {
         @Serializable
-        data class Data (
+        data class Data(
             @SerialName("lookupMapping") val lookupMapping: LookupMapping? = null
         )
+
         @Serializable
-        data class LookupMapping (
+        data class LookupMapping(
             @SerialName("id") val id: String? = null,
             @SerialName("episodes") val episodes: Episodes? = null
         )
+
         @Serializable
-        data class Episodes (
+        data class Episodes(
             @SerialName("nodes") val nodes: List<Node?>? = null
         )
+
         @Serializable
-        data class Node (
+        data class Node(
             @SerialName("number") val num: Long? = null,
             @SerialName("titles") val titles: Titles? = null,
             @SerialName("description") val description: Description? = null,
             @SerialName("thumbnail") val thumbnail: Thumbnail? = null
         )
+
         @Serializable
-        data class Description (
+        data class Description(
             @SerialName("en") val en: String? = null
         )
+
         @Serializable
-        data class Thumbnail (
+        data class Thumbnail(
             @SerialName("original") val original: Original? = null
         )
+
         @Serializable
-        data class Original (
+        data class Original(
             @SerialName("url") val url: String? = null
         )
+
         @Serializable
-        data class Titles (
+        data class Titles(
             @SerialName("canonical") val canonical: String? = null
         )
 

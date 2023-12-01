@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.TextView
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.utils.ColorUtils
-import java.util.regex.*
+import java.util.regex.Pattern
 
 class SpoilerPlugin : AbstractMarkwonPlugin() {
     override fun beforeSetText(textView: TextView, markdown: Spanned) {

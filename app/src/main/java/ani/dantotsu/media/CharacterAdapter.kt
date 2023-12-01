@@ -21,11 +21,13 @@ class CharacterAdapter(
     private val characterList: ArrayList<Character>
 ) : RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
-        val binding = ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CharacterViewHolder(binding)
     }
 
-    private val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
+    private val uiSettings =
+        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
@@ -38,16 +40,23 @@ class CharacterAdapter(
     }
 
     override fun getItemCount(): Int = characterList.size
-    inner class CharacterViewHolder(val binding: ItemCharacterBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class CharacterViewHolder(val binding: ItemCharacterBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
                 val char = characterList[bindingAdapterPosition]
                 ContextCompat.startActivity(
                     itemView.context,
-                    Intent(itemView.context, CharacterDetailsActivity::class.java).putExtra("character", char as Serializable),
+                    Intent(
+                        itemView.context,
+                        CharacterDetailsActivity::class.java
+                    ).putExtra("character", char as Serializable),
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         itemView.context as Activity,
-                        Pair.create(binding.itemCompactImage, ViewCompat.getTransitionName(binding.itemCompactImage)!!),
+                        Pair.create(
+                            binding.itemCompactImage,
+                            ViewCompat.getTransitionName(binding.itemCompactImage)!!
+                        ),
                     ).toBundle()
                 )
             }

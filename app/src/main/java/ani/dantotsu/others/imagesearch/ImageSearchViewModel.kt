@@ -30,7 +30,7 @@ class ImageSearchViewModel : ViewModel() {
         searchResultLiveData.postValue(res)
     }
 
-    fun clearResults(){
+    fun clearResults() {
         searchResultLiveData.postValue(SearchResult())
     }
 

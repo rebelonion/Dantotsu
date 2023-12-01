@@ -44,11 +44,16 @@ class MangaFragment : Fragment() {
     private var _binding: FragmentMangaBinding? = null
     private val binding get() = _binding!!
 
-    private var uiSettings: UserInterfaceSettings = loadData("ui_settings") ?: UserInterfaceSettings()
+    private var uiSettings: UserInterfaceSettings =
+        loadData("ui_settings") ?: UserInterfaceSettings()
 
     val model: AnilistMangaViewModel by activityViewModels()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = FragmentMangaBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -100,7 +105,8 @@ class MangaFragment : Fragment() {
         }
         val popularAdaptor = MediaAdaptor(1, model.searchResults.results, requireActivity())
         val progressAdaptor = ProgressAdapter(searched = model.searched)
-        binding.mangaPageRecyclerView.adapter = ConcatAdapter(mangaPageAdapter, popularAdaptor, progressAdaptor)
+        binding.mangaPageRecyclerView.adapter =
+            ConcatAdapter(mangaPageAdapter, popularAdaptor, progressAdaptor)
         val layout = LinearLayoutManager(requireContext())
         binding.mangaPageRecyclerView.layoutManager = layout
 
@@ -177,7 +183,8 @@ class MangaFragment : Fragment() {
                         }
                     }
                 }
-                binding.mangaPageScrollTop.translationY = -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
+                binding.mangaPageScrollTop.translationY =
+                    -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
 
             }
         }

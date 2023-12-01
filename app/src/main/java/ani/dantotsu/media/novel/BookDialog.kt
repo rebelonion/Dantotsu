@@ -13,8 +13,6 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.ShowResponse
-import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -25,13 +23,14 @@ class BookDialog : BottomSheetDialogFragment() {
 
     private val viewModel by activityViewModels<MediaDetailsViewModel>()
 
-    private lateinit var novelName:String
+    private lateinit var novelName: String
     private lateinit var novel: ShowResponse
-    private var source:Int = 0
+    private var source: Int = 0
 
     interface Callback {
         fun onDownloadTriggered(link: String)
     }
+
     private var callback: Callback? = null
     fun setCallback(callback: Callback) {
         this.callback = callback
@@ -46,7 +45,11 @@ class BookDialog : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetBookBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -55,7 +58,7 @@ class BookDialog : BottomSheetDialogFragment() {
         binding.bookRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         viewModel.book.observe(viewLifecycleOwner) {
-            if(it!=null){
+            if (it != null) {
                 binding.itemBookTitle.text = it.name
                 binding.itemBookDesc.text = it.description
                 binding.itemBookImage.loadImage(it.img)
@@ -73,7 +76,7 @@ class BookDialog : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(novelName:String, novel:ShowResponse, source: Int) : BookDialog{
+        fun newInstance(novelName: String, novel: ShowResponse, source: Int): BookDialog {
             val bundle = Bundle().apply {
                 putString("novelName", novelName)
                 putInt("source", source)

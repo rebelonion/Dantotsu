@@ -10,7 +10,8 @@ import java.io.File
 import java.io.Serializable
 
 class DownloadsManager(private val context: Context) {
-    private val prefs: SharedPreferences = context.getSharedPreferences("downloads_pref", Context.MODE_PRIVATE)
+    private val prefs: SharedPreferences =
+        context.getSharedPreferences("downloads_pref", Context.MODE_PRIVATE)
     private val gson = Gson()
     private val downloadsList = loadDownloads().toMutableList()
 
@@ -52,12 +53,21 @@ class DownloadsManager(private val context: Context) {
     }
 
     private fun removeDirectory(download: Download) {
-        val directory = if (download.type == Download.Type.MANGA){
-            File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Manga/${download.title}/${download.chapter}")
+        val directory = if (download.type == Download.Type.MANGA) {
+            File(
+                context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                "Dantotsu/Manga/${download.title}/${download.chapter}"
+            )
         } else if (download.type == Download.Type.ANIME) {
-            File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Anime/${download.title}/${download.chapter}")
+            File(
+                context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                "Dantotsu/Anime/${download.title}/${download.chapter}"
+            )
         } else {
-            File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Novel/${download.title}/${download.chapter}")
+            File(
+                context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                "Dantotsu/Novel/${download.title}/${download.chapter}"
+            )
         }
 
         // Check if the directory exists and delete it recursively
@@ -74,14 +84,26 @@ class DownloadsManager(private val context: Context) {
     }
 
     fun exportDownloads(download: Download) { //copies to the downloads folder available to the user
-        val directory = if (download.type == Download.Type.MANGA){
-            File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Manga/${download.title}/${download.chapter}")
+        val directory = if (download.type == Download.Type.MANGA) {
+            File(
+                context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                "Dantotsu/Manga/${download.title}/${download.chapter}"
+            )
         } else if (download.type == Download.Type.ANIME) {
-            File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Anime/${download.title}/${download.chapter}")
+            File(
+                context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                "Dantotsu/Anime/${download.title}/${download.chapter}"
+            )
         } else {
-            File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Novel/${download.title}/${download.chapter}")
+            File(
+                context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                "Dantotsu/Novel/${download.title}/${download.chapter}"
+            )
         }
-        val destination = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/${download.title}/${download.chapter}")
+        val destination = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "Dantotsu/${download.title}/${download.chapter}"
+        )
         if (directory.exists()) {
             val copied = directory.copyRecursively(destination, true)
             if (copied) {
@@ -94,8 +116,8 @@ class DownloadsManager(private val context: Context) {
         }
     }
 
-    fun purgeDownloads(type: Download.Type){
-        val directory = if (type == Download.Type.MANGA){
+    fun purgeDownloads(type: Download.Type) {
+        val directory = if (type == Download.Type.MANGA) {
             File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Manga")
         } else if (type == Download.Type.ANIME) {
             File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Anime")

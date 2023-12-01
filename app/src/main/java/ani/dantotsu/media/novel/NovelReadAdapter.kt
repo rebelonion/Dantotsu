@@ -22,12 +22,14 @@ class NovelReadAdapter(
     var progress: View? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NovelReadAdapter.ViewHolder {
-        val binding = ItemNovelHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemNovelHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         progress = binding.progress.root
         return ViewHolder(binding)
     }
 
-    private val imm = fragment.requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private val imm = fragment.requireContext()
+        .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
@@ -35,7 +37,8 @@ class NovelReadAdapter(
 
         fun search(): Boolean {
             val query = binding.searchBarText.text.toString()
-            val source = media.selected!!.sourceIndex.let { if (it >= novelReadSources.names.size) 0 else it }
+            val source =
+                media.selected!!.sourceIndex.let { if (it >= novelReadSources.names.size) 0 else it }
             fragment.source = source
 
             binding.searchBarText.clearFocus()
@@ -44,11 +47,18 @@ class NovelReadAdapter(
             return true
         }
 
-        val source = media.selected!!.sourceIndex.let { if (it >= novelReadSources.names.size) 0 else it }
+        val source =
+            media.selected!!.sourceIndex.let { if (it >= novelReadSources.names.size) 0 else it }
         if (novelReadSources.names.isNotEmpty() && source in 0 until novelReadSources.names.size) {
             binding.animeSource.setText(novelReadSources.names[source], false)
         }
-        binding.animeSource.setAdapter(ArrayAdapter(fragment.requireContext(), R.layout.item_dropdown, novelReadSources.names))
+        binding.animeSource.setAdapter(
+            ArrayAdapter(
+                fragment.requireContext(),
+                R.layout.item_dropdown,
+                novelReadSources.names
+            )
+        )
         binding.animeSource.setOnItemClickListener { _, _, i, _ ->
             fragment.onSourceChange(i)
             search()
@@ -58,7 +68,7 @@ class NovelReadAdapter(
         binding.searchBarText.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener when (actionId) {
                 IME_ACTION_SEARCH -> search()
-                else              -> false
+                else -> false
             }
         }
         binding.searchBar.setEndIconOnClickListener { search() }
@@ -66,5 +76,6 @@ class NovelReadAdapter(
 
     override fun getItemCount(): Int = 1
 
-    inner class ViewHolder(val binding: ItemNovelHeaderBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemNovelHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

@@ -91,8 +91,12 @@ internal class NovelExtensionInstaller(private val context: Context) {
         val downloadUri = url.toUri()
         val request = DownloadManager.Request(downloadUri)
             .setTitle(extension.name)
-            .setMimeType(NovelExtensionInstaller.APK_MIME)
-            .setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, downloadUri.lastPathSegment)
+            .setMimeType(APK_MIME)
+            .setDestinationInExternalFilesDir(
+                context,
+                Environment.DIRECTORY_DOWNLOADS,
+                downloadUri.lastPathSegment
+            )
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         val id = downloadManager.enqueue(request)
         activeDownloads[pkgName] = id
@@ -144,11 +148,14 @@ internal class NovelExtensionInstaller(private val context: Context) {
             }
     }
 
-    fun installApk(downloadId: Long, uri: Uri, context: Context, pkgName: String) : InstallStep {
-        val sourcePath = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/" + uri.lastPathSegment
-        val destinationPath = context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/$pkgName.apk"
+    fun installApk(downloadId: Long, uri: Uri, context: Context, pkgName: String): InstallStep {
+        val sourcePath =
+            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/" + uri.lastPathSegment
+        val destinationPath =
+            context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/$pkgName.apk"
 
-        val destinationPathDirectory = context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/"
+        val destinationPathDirectory =
+            context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/"
         val destinationPathDirectoryFile = File(destinationPathDirectory)
 
 
@@ -164,7 +171,7 @@ internal class NovelExtensionInstaller(private val context: Context) {
         if (destinationDir?.exists() == false) {
             destinationDir.mkdirs()
         }
-        if(destinationDir?.setWritable(true) == false) {
+        if (destinationDir?.setWritable(true) == false) {
             Log.e("Install APK", "Failed to set destinationDir to writable.")
             downloadsRelay.call(downloadId to InstallStep.Error)
             return InstallStep.Error
@@ -186,7 +193,8 @@ internal class NovelExtensionInstaller(private val context: Context) {
     }
 
     fun uninstallApk(pkgName: String, context: Context) {
-        val apkPath = context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/$pkgName.apk"
+        val apkPath =
+            context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/$pkgName.apk"
         val fileToDelete = File(apkPath)
         //give write permission to the file
         if (fileToDelete.exists() && !fileToDelete.canWrite()) {

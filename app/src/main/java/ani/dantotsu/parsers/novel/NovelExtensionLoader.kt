@@ -11,9 +11,7 @@ import ani.dantotsu.parsers.NovelInterface
 import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dalvik.system.PathClassLoader
-import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.util.lang.Hash
-import tachiyomi.core.util.system.logcat
 import java.io.File
 import java.util.Locale
 
@@ -27,7 +25,10 @@ internal object NovelExtensionLoader {
         val results = mutableListOf<NovelLoadResult>()
         //the number of files
         Log.e("NovelExtensionLoader", "Loading extensions from $installDir")
-        Log.e("NovelExtensionLoader", "Loading extensions from ${File(installDir).listFiles()?.size}")
+        Log.e(
+            "NovelExtensionLoader",
+            "Loading extensions from ${File(installDir).listFiles()?.size}"
+        )
         File(installDir).setWritable(false)
         File(installDir).listFiles()?.forEach {
             //set the file to read only
@@ -48,7 +49,8 @@ internal object NovelExtensionLoader {
      * contains the required feature flag before trying to load it.
      */
     fun loadExtensionFromPkgName(context: Context, pkgName: String): NovelLoadResult {
-        val path = context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/$pkgName.apk"
+        val path =
+            context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/$pkgName.apk"
         //make /extensions/novel read only
         context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/".let {
             File(it).setWritable(false)
@@ -67,7 +69,10 @@ internal object NovelExtensionLoader {
     @Suppress("DEPRECATION")
     fun loadExtension(context: Context, file: File): NovelLoadResult {
         val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            context.packageManager.getPackageArchiveInfo(file.absolutePath, GET_SIGNING_CERTIFICATES)
+            context.packageManager.getPackageArchiveInfo(
+                file.absolutePath,
+                GET_SIGNING_CERTIFICATES
+            )
                 ?: return NovelLoadResult.Error(Exception("Failed to load extension"))
         } else {
             context.packageManager.getPackageArchiveInfo(file.absolutePath, GET_SIGNATURES)
@@ -75,8 +80,8 @@ internal object NovelExtensionLoader {
         }
         val appInfo = packageInfo.applicationInfo
             ?: return NovelLoadResult.Error(Exception("Failed to load Extension Info"))
-        appInfo.sourceDir = file.absolutePath;
-        appInfo.publicSourceDir = file.absolutePath;
+        appInfo.sourceDir = file.absolutePath
+        appInfo.publicSourceDir = file.absolutePath
 
         val signatureHash = getSignatureHash(packageInfo)
 
@@ -88,13 +93,14 @@ internal object NovelExtensionLoader {
         }
 
         val extension = NovelExtension.Installed(
-            packageInfo.applicationInfo?.loadLabel(context.packageManager)?.toString() ?:
-                return NovelLoadResult.Error(Exception("Failed to load Extension Info")),
+            packageInfo.applicationInfo?.loadLabel(context.packageManager)?.toString()
+                ?: return NovelLoadResult.Error(Exception("Failed to load Extension Info")),
             packageInfo.packageName
                 ?: return NovelLoadResult.Error(Exception("Failed to load Extension Info")),
             packageInfo.versionName ?: "",
-            packageInfo.versionCode.toLong() ?: 0,
-            loadSources(context, file,
+            packageInfo.versionCode.toLong(),
+            loadSources(
+                context, file,
                 packageInfo.applicationInfo?.loadLabel(context.packageManager)?.toString()!!
             ),
             packageInfo.applicationInfo?.loadIcon(context.packageManager)
@@ -126,7 +132,8 @@ internal object NovelExtensionLoader {
             }
             Log.e("NovelExtensionLoader", "isFileWritable: ${file.canWrite()}")
             val classLoader = PathClassLoader(file.absolutePath, null, context.classLoader)
-            val className = "some.random.novelextensions.${className.lowercase(Locale.getDefault())}.$className"
+            val className =
+                "some.random.novelextensions.${className.lowercase(Locale.getDefault())}.$className"
             val loadedClass = classLoader.loadClass(className)
             val instance = loadedClass.newInstance()
             val novelInterfaceInstance = instance as? NovelInterface

@@ -13,11 +13,22 @@ import ani.dantotsu.parsers.Book
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.tryWith
 
-class UrlAdapter(private val urls: List<FileUrl>, val book: Book, val novel: String, val callback: BookDialog.Callback?) :
+class UrlAdapter(
+    private val urls: List<FileUrl>,
+    val book: Book,
+    val novel: String,
+    val callback: BookDialog.Callback?
+) :
     RecyclerView.Adapter<UrlAdapter.UrlViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): UrlViewHolder {
-        return UrlViewHolder(ItemUrlBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return UrlViewHolder(
+            ItemUrlBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     @SuppressLint("SetTextI18n")

@@ -2,7 +2,6 @@ package ani.dantotsu.parsers.novel
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.os.Build
 import ani.dantotsu.logger
 import ani.dantotsu.snackString
 import eu.kanade.tachiyomi.extension.InstallStep
@@ -51,7 +50,7 @@ class NovelExtensionManager(private val context: Context) {
     init {
         initNovelExtensions()
         val path = context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/"
-        NovelExtensionFileObserver(NovelInstallationListener(),path).register()
+        NovelExtensionFileObserver(NovelInstallationListener(), path).register()
     }
 
     private fun initNovelExtensions() {
@@ -129,8 +128,9 @@ class NovelExtensionManager(private val context: Context) {
      * @param extension The anime extension to be updated.
      */
     fun updateExtension(extension: NovelExtension.Installed): Observable<InstallStep> {
-        val availableExt = _availableNovelExtensionsFlow.value.find { it.pkgName == extension.pkgName }
-            ?: return Observable.empty()
+        val availableExt =
+            _availableNovelExtensionsFlow.value.find { it.pkgName == extension.pkgName }
+                ?: return Observable.empty()
         return installExtension(availableExt)
     }
 
@@ -192,7 +192,8 @@ class NovelExtensionManager(private val context: Context) {
      * @param pkgName The package name of the uninstalled application.
      */
     private fun unregisterNovelExtension(pkgName: String) {
-        val installedNovelExtension = _installedNovelExtensionsFlow.value.find { it.pkgName == pkgName }
+        val installedNovelExtension =
+            _installedNovelExtensionsFlow.value.find { it.pkgName == pkgName }
         if (installedNovelExtension != null) {
             _installedNovelExtensionsFlow.value -= installedNovelExtension
         }
@@ -210,10 +211,12 @@ class NovelExtensionManager(private val context: Context) {
                 }
             }
         }
+
         override fun onExtensionFileDeleted(file: File) {
             val pkgName = file.nameWithoutExtension
             unregisterNovelExtension(pkgName)
         }
+
         override fun onExtensionFileModified(file: File) {
             NovelExtensionLoader.loadExtension(context, file).let {
                 if (it is NovelLoadResult.Success) {
@@ -235,7 +238,8 @@ class NovelExtensionManager(private val context: Context) {
     }
 
     private fun NovelExtension.Installed.updateExists(availableNovelExtension: NovelExtension.Available? = null): Boolean {
-        val availableExt = availableNovelExtension ?: _availableNovelExtensionsFlow.value.find { it.pkgName == pkgName }
+        val availableExt = availableNovelExtension
+            ?: _availableNovelExtensionsFlow.value.find { it.pkgName == pkgName }
         if (isUnofficial || availableExt == null) return false
 
         return (availableExt.versionCode > versionCode)

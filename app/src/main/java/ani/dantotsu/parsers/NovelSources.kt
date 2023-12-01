@@ -2,10 +2,10 @@ package ani.dantotsu.parsers
 
 import android.util.Log
 import ani.dantotsu.Lazier
+import ani.dantotsu.parsers.novel.DynamicNovelParser
 import ani.dantotsu.parsers.novel.NovelExtension
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import ani.dantotsu.parsers.novel.DynamicNovelParser
 
 object NovelSources : NovelReadSources() {
     override var list: List<Lazier<BaseParser>> = emptyList()

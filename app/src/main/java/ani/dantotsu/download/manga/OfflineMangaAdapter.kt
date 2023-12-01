@@ -11,8 +11,13 @@ import androidx.cardview.widget.CardView
 import ani.dantotsu.R
 
 
-class OfflineMangaAdapter(private val context: Context, private val items: List<OfflineMangaModel>) : BaseAdapter() {
-    private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+class OfflineMangaAdapter(
+    private val context: Context,
+    private val items: List<OfflineMangaModel>
+) : BaseAdapter() {
+    private val inflater: LayoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
     override fun getCount(): Int {
         return items.size
     }

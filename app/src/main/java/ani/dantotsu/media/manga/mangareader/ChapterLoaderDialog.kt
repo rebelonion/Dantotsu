@@ -14,9 +14,9 @@ import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.R
 import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
-import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaSingleton
+import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.tryWith
 import kotlinx.coroutines.Dispatchers
@@ -29,8 +29,8 @@ class ChapterLoaderDialog : BottomSheetDialogFragment() {
 
     val model: MediaDetailsViewModel by activityViewModels()
 
-    private val launch : Boolean by lazy { arguments?.getBoolean("launch", false) ?: false }
-    private val chp : MangaChapter by lazy { arguments?.getSerialized("next")!! }
+    private val launch: Boolean by lazy { arguments?.getBoolean("launch", false) ?: false }
+    private val chp: MangaChapter by lazy { arguments?.getSerialized("next")!! }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         var loaded = false
@@ -47,13 +47,21 @@ class ChapterLoaderDialog : BottomSheetDialogFragment() {
                 loaded = true
                 binding.selectorAutoText.text = chp.title
                 lifecycleScope.launch(Dispatchers.IO) {
-                    if(model.loadMangaChapterImages(chp, m.selected!!, m.nameMAL?:m.nameRomaji)) {
+                    if (model.loadMangaChapterImages(
+                            chp,
+                            m.selected!!,
+                            m.nameMAL ?: m.nameRomaji
+                        )
+                    ) {
                         val activity = currActivity()
                         activity?.runOnUiThread {
                             tryWith { dismiss() }
-                            if(launch) {
+                            if (launch) {
                                 MediaSingleton.media = m
-                                val intent = Intent(activity, MangaReaderActivity::class.java)//.apply { putExtra("media", m) }
+                                val intent = Intent(
+                                    activity,
+                                    MangaReaderActivity::class.java
+                                )//.apply { putExtra("media", m) }
                                 activity.startActivity(intent)
                             }
                         }
@@ -63,7 +71,11 @@ class ChapterLoaderDialog : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetSelectorBinding.inflate(inflater, container, false)
         val window = dialog?.window
         window?.statusBarColor = Color.TRANSPARENT

@@ -24,8 +24,8 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
 import ani.dantotsu.loadData
-import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
@@ -71,9 +71,10 @@ class InstalledMangaExtensionsFragment : Fragment() {
                         dialog.dismiss()
 
                         // Move the fragment transaction here
-                        val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id){
-                            changeUIVisibility(true)
-                        }
+                        val fragment =
+                            MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                                changeUIVisibility(true)
+                            }
                         parentFragmentManager.beginTransaction()
                             .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
                             .replace(R.id.fragmentExtensionsContainer, fragment)
@@ -88,7 +89,7 @@ class InstalledMangaExtensionsFragment : Fragment() {
                     .show()
             } else {
                 // If there's only one setting, proceed with the fragment transaction
-                val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id){
+                val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
                     changeUIVisibility(true)
                 }
                 parentFragmentManager.beginTransaction()
@@ -106,59 +107,60 @@ class InstalledMangaExtensionsFragment : Fragment() {
         }
     },
         { pkg ->
-        if (isAdded) {  // Check if the fragment is currently added to its activity
-            val context = requireContext()  // Store context in a variable
-            val notificationManager =
-                context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
+            if (isAdded) {  // Check if the fragment is currently added to its activity
+                val context = requireContext()  // Store context in a variable
+                val notificationManager =
+                    context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
 
-            if (pkg.hasUpdate) {
-                mangaExtensionManager.updateExtension(pkg)
-                    .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
-                    .subscribe(
-                        { installStep ->
-                            val builder = NotificationCompat.Builder(
-                                context,
-                                Notifications.CHANNEL_DOWNLOADER_PROGRESS
-                            )
-                                .setSmallIcon(R.drawable.ic_round_sync_24)
-                                .setContentTitle("Updating extension")
-                                .setContentText("Step: $installStep")
-                                .setPriority(NotificationCompat.PRIORITY_LOW)
-                            notificationManager.notify(1, builder.build())
-                        },
-                        { error ->
-                            FirebaseCrashlytics.getInstance().recordException(error)
-                            Log.e("MangaExtensionsAdapter", "Error: ", error)  // Log the error
-                            val builder = NotificationCompat.Builder(
-                                context,
-                                Notifications.CHANNEL_DOWNLOADER_ERROR
-                            )
-                                .setSmallIcon(R.drawable.ic_round_info_24)
-                                .setContentTitle("Update failed: ${error.message}")
-                                .setContentText("Error: ${error.message}")
-                                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                            notificationManager.notify(1, builder.build())
-                            snackString("Update failed: ${error.message}")
-                        },
-                        {
-                            val builder = NotificationCompat.Builder(
-                                context,
-                                Notifications.CHANNEL_DOWNLOADER_PROGRESS
-                            )
-                                .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
-                                .setContentTitle("Update complete")
-                                .setContentText("The extension has been successfully updated.")
-                                .setPriority(NotificationCompat.PRIORITY_LOW)
-                            notificationManager.notify(1, builder.build())
-                            snackString("Extension updated")
-                        }
-                    )
-            } else {
-                mangaExtensionManager.uninstallExtension(pkg.pkgName)
-                snackString("Extension uninstalled")
+                if (pkg.hasUpdate) {
+                    mangaExtensionManager.updateExtension(pkg)
+                        .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
+                        .subscribe(
+                            { installStep ->
+                                val builder = NotificationCompat.Builder(
+                                    context,
+                                    Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                                )
+                                    .setSmallIcon(R.drawable.ic_round_sync_24)
+                                    .setContentTitle("Updating extension")
+                                    .setContentText("Step: $installStep")
+                                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                                notificationManager.notify(1, builder.build())
+                            },
+                            { error ->
+                                FirebaseCrashlytics.getInstance().recordException(error)
+                                Log.e("MangaExtensionsAdapter", "Error: ", error)  // Log the error
+                                val builder = NotificationCompat.Builder(
+                                    context,
+                                    Notifications.CHANNEL_DOWNLOADER_ERROR
+                                )
+                                    .setSmallIcon(R.drawable.ic_round_info_24)
+                                    .setContentTitle("Update failed: ${error.message}")
+                                    .setContentText("Error: ${error.message}")
+                                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                                notificationManager.notify(1, builder.build())
+                                snackString("Update failed: ${error.message}")
+                            },
+                            {
+                                val builder = NotificationCompat.Builder(
+                                    context,
+                                    Notifications.CHANNEL_DOWNLOADER_PROGRESS
+                                )
+                                    .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
+                                    .setContentTitle("Update complete")
+                                    .setContentText("The extension has been successfully updated.")
+                                    .setPriority(NotificationCompat.PRIORITY_LOW)
+                                notificationManager.notify(1, builder.build())
+                                snackString("Extension updated")
+                            }
+                        )
+                } else {
+                    mangaExtensionManager.uninstallExtension(pkg.pkgName)
+                    snackString("Extension uninstalled")
+                }
             }
-        }
-    }, skipIcons)
+        }, skipIcons
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -230,7 +232,8 @@ class InstalledMangaExtensionsFragment : Fragment() {
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val extensionNameTextView: TextView = view.findViewById(R.id.extensionNameTextView)
-            val extensionVersionTextView: TextView = view.findViewById(R.id.extensionVersionTextView)
+            val extensionVersionTextView: TextView =
+                view.findViewById(R.id.extensionVersionTextView)
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)

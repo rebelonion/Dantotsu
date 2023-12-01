@@ -1,6 +1,5 @@
 package ani.dantotsu.parsers.novel
 
-import ani.dantotsu.FileUrl
 import ani.dantotsu.parsers.Book
 import ani.dantotsu.parsers.NovelInterface
 import ani.dantotsu.parsers.NovelParser
@@ -9,13 +8,14 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class NovelAdapter {
-}
+class NovelAdapter
 
 class DynamicNovelParser(extension: NovelExtension.Installed) : NovelParser() {
-    override val volumeRegex = Regex("vol\\.? (\\d+(\\.\\d+)?)|volume (\\d+(\\.\\d+)?)", RegexOption.IGNORE_CASE)
+    override val volumeRegex =
+        Regex("vol\\.? (\\d+(\\.\\d+)?)|volume (\\d+(\\.\\d+)?)", RegexOption.IGNORE_CASE)
     var extension: NovelExtension.Installed
     val client = Injekt.get<NetworkHelper>().requestClient
+
     init {
         this.extension = extension
     }

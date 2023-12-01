@@ -3,7 +3,6 @@ package ani.dantotsu.parsers
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -12,21 +11,21 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.widget.Toast
 import ani.dantotsu.FileUrl
-import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
-import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
-import eu.kanade.tachiyomi.network.interceptor.CloudflareBypassException
 import ani.dantotsu.currContext
 import ani.dantotsu.logger
 import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import eu.kanade.tachiyomi.animesource.model.SEpisode
+import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
+import eu.kanade.tachiyomi.network.interceptor.CloudflareBypassException
 import eu.kanade.tachiyomi.source.model.MangasPage
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
@@ -41,13 +40,13 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.FileOutputStream
+import java.io.UnsupportedEncodingException
 import java.net.URL
 import java.net.URLDecoder
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.*
-import java.io.UnsupportedEncodingException
 import java.util.regex.Pattern
 
 class AniyomiAdapter {
@@ -107,7 +106,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                 } else {
                     var episodeCounter = 1f
                     // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
-                    val seasonGroups = res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
+                    val seasonGroups =
+                        res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
                     seasonGroups.keys.sorted().flatMap { season ->
                         seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
                             if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
@@ -302,7 +302,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         return ret
     }
 
-    suspend fun imageList(chapterLink: String, sChapter: SChapter): List<ImageData>{
+    suspend fun imageList(chapterLink: String, sChapter: SChapter): List<ImageData> {
         val source = try {
             extension.sources[sourceLanguage]
         } catch (e: Exception) {
@@ -348,7 +348,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 println("Response: ${response.message}")
 
                 // Convert the Response to an InputStream
-                val inputStream = response.body?.byteStream()
+                val inputStream = response.body.byteStream()
 
                 // Convert InputStream to Bitmap
                 val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -379,7 +379,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 val response = httpSource.getImage(page)
 
                 // Convert the Response to an InputStream
-                val inputStream = response.body?.byteStream()
+                val inputStream = response.body.byteStream()
 
                 // Convert InputStream to Bitmap
                 val bitmap = BitmapFactory.decodeStream(inputStream)
@@ -578,7 +578,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         }
     }
 
-    private fun AniVideoToSaiVideo(aniVideo: eu.kanade.tachiyomi.animesource.model.Video): ani.dantotsu.parsers.Video {
+    private fun AniVideoToSaiVideo(aniVideo: Video): ani.dantotsu.parsers.Video {
         // Find the number value from the .quality string
         val number = Regex("""\d+""").find(aniVideo.quality)?.value?.toInt() ?: 0
 
@@ -608,14 +608,15 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         // If the format is still undetermined, log an error or handle it appropriately
         if (format == null) {
             logger("Unknown video format: $videoUrl")
-            FirebaseCrashlytics.getInstance().recordException(Exception("Unknown video format: $videoUrl"))
+            FirebaseCrashlytics.getInstance()
+                .recordException(Exception("Unknown video format: $videoUrl"))
             format = VideoType.CONTAINER
         }
         val headersMap: Map<String, String> =
             aniVideo.headers?.toMultimap()?.mapValues { it.value.joinToString() } ?: mapOf()
 
 
-        return ani.dantotsu.parsers.Video(
+        return Video(
             number,
             format,
             FileUrl(videoUrl, headersMap),
@@ -647,7 +648,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
     private fun findSubtitleType(url: String): SubtitleType? {
         // First, try to determine the type based on the URL file extension
-        val type: SubtitleType? = when {
+        val type: SubtitleType = when {
             url.endsWith(".vtt", true) -> SubtitleType.VTT
             url.endsWith(".ass", true) -> SubtitleType.ASS
             url.endsWith(".srt", true) -> SubtitleType.SRT

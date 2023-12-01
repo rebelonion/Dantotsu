@@ -116,7 +116,7 @@ data class Media(
     @SerialName("characters") var characters: CharacterConnection?,
 
     // The staff who produced the media
-     @SerialName("staffPreview") var staff: StaffConnection?,
+    @SerialName("staffPreview") var staff: StaffConnection?,
 
     // The companies who produced the media
     @SerialName("studios") var studios: StudioConnection?,
@@ -292,7 +292,7 @@ data class MediaList(
     @SerialName("hiddenFromStatusLists") var hiddenFromStatusLists: Boolean?,
 
     // Map of booleans for which custom lists the entry are in
-     @SerialName("customLists") var customLists: Map<String,Boolean>?,
+    @SerialName("customLists") var customLists: Map<String, Boolean>?,
 
     // Map of advanced scores with name keys
     // @SerialName("advancedScores") var advancedScores: Json?,
@@ -355,7 +355,7 @@ data class MediaTrailer(
 
 @Serializable
 data class MediaTagCollection(
-    @SerialName("tags") var tags : List<MediaTag>?
+    @SerialName("tags") var tags: List<MediaTag>?
 )
 
 @Serializable

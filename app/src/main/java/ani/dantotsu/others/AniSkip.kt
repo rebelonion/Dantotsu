@@ -8,12 +8,21 @@ import java.net.URLEncoder
 object AniSkip {
 
     @Suppress("BlockingMethodInNonBlockingContext")
-    suspend fun getResult(malId: Int, episodeNumber: Int, episodeLength: Long, useProxyForTimeStamps: Boolean): List<Stamp>? {
+    suspend fun getResult(
+        malId: Int,
+        episodeNumber: Int,
+        episodeLength: Long,
+        useProxyForTimeStamps: Boolean
+    ): List<Stamp>? {
         val url =
             "https://api.aniskip.com/v2/skip-times/$malId/$episodeNumber?types[]=ed&types[]=mixed-ed&types[]=mixed-op&types[]=op&types[]=recap&episodeLength=$episodeLength"
         return tryWithSuspend {
-            val a = if(useProxyForTimeStamps)
-                client.get("https://corsproxy.io/?${URLEncoder.encode(url, "utf-8").replace("+", "%20")}")
+            val a = if (useProxyForTimeStamps)
+                client.get(
+                    "https://corsproxy.io/?${
+                        URLEncoder.encode(url, "utf-8").replace("+", "%20")
+                    }"
+                )
             else
                 client.get(url)
             val res = a.parsed<AniSkipResponse>()
@@ -40,8 +49,8 @@ object AniSkip {
 
     fun String.getType(): String {
         return when (this) {
-            "op"    -> "Opening"
-            "ed"    -> "Ending"
+            "op" -> "Opening"
+            "ed" -> "Ending"
             "recap" -> "Recap"
             "mixed-ed" -> "Mixed Ending"
             "mixed-op" -> "Mixed Opening"

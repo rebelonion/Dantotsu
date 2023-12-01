@@ -12,14 +12,25 @@ import ani.dantotsu.setAnimation
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 
-class FAQAdapter(private val questions: List<Triple<Int, String, String>>, private val manager: FragmentManager) :
+class FAQAdapter(
+    private val questions: List<Triple<Int, String, String>>,
+    private val manager: FragmentManager
+) :
     RecyclerView.Adapter<FAQAdapter.FAQViewHolder>() {
-    private val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
+    private val uiSettings =
+        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
 
-    inner class FAQViewHolder(val binding: ItemQuestionBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class FAQViewHolder(val binding: ItemQuestionBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FAQViewHolder {
-        return FAQViewHolder(ItemQuestionBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return FAQViewHolder(
+            ItemQuestionBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        )
     }
 
     override fun onBindViewHolder(holder: FAQViewHolder, position: Int) {
@@ -33,7 +44,8 @@ class FAQAdapter(private val questions: List<Triple<Int, String, String>>, priva
                 setTitleText(faq.second)
                 addView(
                     TextView(b.context).apply {
-                        val markWon = Markwon.builder(b.context).usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
+                        val markWon = Markwon.builder(b.context)
+                            .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
                         markWon.setMarkdown(this, faq.third)
                     }
                 )

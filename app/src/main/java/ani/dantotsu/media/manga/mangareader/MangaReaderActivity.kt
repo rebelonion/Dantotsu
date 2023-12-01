@@ -34,12 +34,11 @@ import ani.dantotsu.databinding.ActivityMangaReaderBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaSingleton
-import ani.dantotsu.media.anime.ExoplayerView
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.media.manga.MangaNameAdapter
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.others.getSerialized
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaImage
 import ani.dantotsu.parsers.MangaSources
@@ -50,7 +49,6 @@ import ani.dantotsu.settings.CurrentReaderSettings.Layouts.*
 import ani.dantotsu.settings.ReaderSettings
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -58,8 +56,6 @@ import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -262,16 +258,16 @@ class MangaReaderActivity : AppCompatActivity() {
             if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
                 AlertDialog.Builder(this, R.style.MyPopup)
                     .setTitle(getString(R.string.title_update_progress)).apply {
-                    setMultiChoiceItems(
-                        arrayOf(getString(R.string.dont_ask_again, media.userPreferredName)),
-                        booleanArrayOf(false)
-                    ) { _, _, isChecked ->
-                        if (isChecked) progressDialog = null
-                        saveData("${media.id}_progressDialog", isChecked)
-                        showProgressDialog = isChecked
+                        setMultiChoiceItems(
+                            arrayOf(getString(R.string.dont_ask_again, media.userPreferredName)),
+                            booleanArrayOf(false)
+                        ) { _, _, isChecked ->
+                            if (isChecked) progressDialog = null
+                            saveData("${media.id}_progressDialog", isChecked)
+                            showProgressDialog = isChecked
+                        }
+                        setOnCancelListener { hideBars() }
                     }
-                    setOnCancelListener { hideBars() }
-                }
             else null
 
         //Chapter Change

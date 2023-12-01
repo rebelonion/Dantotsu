@@ -5,14 +5,11 @@ import android.content.Intent
 import android.widget.TextView
 import androidx.core.content.edit
 import ani.dantotsu.R
-import ani.dantotsu.connections.discord.serializers.User
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.toast
 import ani.dantotsu.tryWith
-import ani.dantotsu.tryWithSuspend
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
-import kotlinx.coroutines.Dispatchers
 import java.io.File
 
 object Discord {
@@ -60,7 +57,7 @@ object Discord {
         }
     }
 
-    private var rpc : RPC? = null
+    private var rpc: RPC? = null
 
 
     fun warning(context: Context) = CustomBottomDialog().apply {
@@ -88,7 +85,8 @@ object Discord {
     }
 
     const val application_Id = "1163925779692912771"
-    const val small_Image: String = "mp:attachments/1167176318266380288/1176997397797277856/logo-best_of_both.png"
+    const val small_Image: String =
+        "mp:attachments/1167176318266380288/1176997397797277856/logo-best_of_both.png"
     /*fun defaultRPC(): RPC? {
         return token?.let {
             RPC(it, Dispatchers.IO).apply {

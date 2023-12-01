@@ -80,10 +80,10 @@ data class UserOptions(
     @SerialName("displayAdultContent") var displayAdultContent: Boolean?,
 
     // Whether the user receives notifications when a show they are watching aires
-        @SerialName("airingNotifications") var airingNotifications: Boolean?,
+    @SerialName("airingNotifications") var airingNotifications: Boolean?,
     //
-        // Profile highlight color (blue, purple, pink, orange, red, green, gray)
-        @SerialName("profileColor") var profileColor: String?,
+    // Profile highlight color (blue, purple, pink, orange, red, green, gray)
+    @SerialName("profileColor") var profileColor: String?,
     //
     //    // Notification options
     //    // @SerialName("notificationOptions") var notificationOptions: List<NotificationOption>?,

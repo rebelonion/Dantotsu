@@ -1,7 +1,7 @@
 package ani.dantotsu.others
 
 import ani.dantotsu.logger
-import java.util.regex.*
+import java.util.regex.Pattern
 import kotlin.math.pow
 
 // https://github.com/cylonu87/JsUnpacker
@@ -31,7 +31,10 @@ class JsUnpacker(packedJS: String?) {
         val js = packedJS ?: return null
         try {
             var p =
-                Pattern.compile("""\}\s*\('(.*)',\s*(.*?),\s*(\d+),\s*'(.*?)'\.split\('\|'\)""", Pattern.DOTALL)
+                Pattern.compile(
+                    """\}\s*\('(.*)',\s*(.*?),\s*(\d+),\s*'(.*?)'\.split\('\|'\)""",
+                    Pattern.DOTALL
+                )
             var m = p.matcher(js)
             if (m.find() && m.groupCount() == 4) {
                 val payload = m.group(1)?.replace("\\'", "'") ?: return null
@@ -79,7 +82,10 @@ class JsUnpacker(packedJS: String?) {
             } else {
                 val tmp = StringBuilder(str).reverse().toString()
                 for (i in tmp.indices) {
-                    ret += (radix.toDouble().pow(i.toDouble()) * dictionary!![tmp.substring(i, i + 1)]!!).toInt()
+                    ret += (radix.toDouble().pow(i.toDouble()) * dictionary!![tmp.substring(
+                        i,
+                        i + 1
+                    )]!!).toInt()
                 }
             }
             return ret
@@ -91,12 +97,15 @@ class JsUnpacker(packedJS: String?) {
                     radix < 62 -> {
                         alphabet = a62.substring(0, radix)
                     }
+
                     radix in 63..94 -> {
                         alphabet = a95.substring(0, radix)
                     }
+
                     radix == 62 -> {
                         alphabet = a62
                     }
+
                     radix == 95 -> {
                         alphabet = a95
                     }

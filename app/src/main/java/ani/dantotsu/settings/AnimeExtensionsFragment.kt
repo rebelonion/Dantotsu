@@ -53,7 +53,8 @@ class AnimeExtensionsFragment : Fragment(),
         binding.allAnimeExtensionsRecyclerView.isNestedScrollingEnabled = false
         binding.allAnimeExtensionsRecyclerView.adapter = adapter
         binding.allAnimeExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        (binding.allAnimeExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = true
+        (binding.allAnimeExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =
+            true
 
         lifecycleScope.launch {
             viewModel.pagerFlow.collectLatest {

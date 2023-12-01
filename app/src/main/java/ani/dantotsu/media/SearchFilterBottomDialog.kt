@@ -18,13 +18,17 @@ import ani.dantotsu.databinding.BottomSheetSearchFilterBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import com.google.android.material.chip.Chip
 
-class SearchFilterBottomDialog() : BottomSheetDialogFragment() {
+class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSearchFilterBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var activity: SearchActivity
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetSearchFilterBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -99,7 +103,7 @@ class SearchFilterBottomDialog() : BottomSheetDialogFragment() {
                 ArrayAdapter(
                     binding.root.context,
                     R.layout.item_dropdown,
-                    (1970 until  2025).map { it.toString() }.reversed().toTypedArray()
+                    (1970 until 2025).map { it.toString() }.reversed().toTypedArray()
                 )
             )
         }
@@ -129,24 +133,25 @@ class SearchFilterBottomDialog() : BottomSheetDialogFragment() {
         }
         binding.searchGenresGrid.isChecked = false
 
-        binding.searchFilterTags.adapter = FilterChipAdapter(Anilist.tags?.get(activity.result.isAdult) ?: listOf()) { chip ->
-            val tag = chip.text.toString()
-            chip.isChecked = selectedTags.contains(tag)
-            chip.isCloseIconVisible = exTags.contains(tag)
-            chip.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    chip.isCloseIconVisible = false
-                    exTags.remove(tag)
-                    selectedTags.add(tag)
-                } else
-                    selectedTags.remove(tag)
+        binding.searchFilterTags.adapter =
+            FilterChipAdapter(Anilist.tags?.get(activity.result.isAdult) ?: listOf()) { chip ->
+                val tag = chip.text.toString()
+                chip.isChecked = selectedTags.contains(tag)
+                chip.isCloseIconVisible = exTags.contains(tag)
+                chip.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        chip.isCloseIconVisible = false
+                        exTags.remove(tag)
+                        selectedTags.add(tag)
+                    } else
+                        selectedTags.remove(tag)
+                }
+                chip.setOnLongClickListener {
+                    chip.isChecked = false
+                    chip.isCloseIconVisible = true
+                    exTags.add(tag)
+                }
             }
-            chip.setOnLongClickListener {
-                chip.isChecked = false
-                chip.isCloseIconVisible = true
-                exTags.add(tag)
-            }
-        }
         binding.searchTagsGrid.setOnCheckedChangeListener { _, isChecked ->
             binding.searchFilterTags.layoutManager =
                 if (!isChecked) LinearLayoutManager(binding.root.context, HORIZONTAL, false)
@@ -158,10 +163,12 @@ class SearchFilterBottomDialog() : BottomSheetDialogFragment() {
 
     class FilterChipAdapter(val list: List<String>, private val perform: ((Chip) -> Unit)) :
         RecyclerView.Adapter<FilterChipAdapter.SearchChipViewHolder>() {
-        inner class SearchChipViewHolder(val binding: ItemChipBinding) : RecyclerView.ViewHolder(binding.root)
+        inner class SearchChipViewHolder(val binding: ItemChipBinding) :
+            RecyclerView.ViewHolder(binding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchChipViewHolder {
-            val binding = ItemChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding =
+                ItemChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return SearchChipViewHolder(binding)
         }
 

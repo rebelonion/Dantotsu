@@ -41,15 +41,30 @@ class EpisodeAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return (when (viewType) {
-            0    -> EpisodeListViewHolder(ItemEpisodeListBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            1    -> EpisodeGridViewHolder(ItemEpisodeGridBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            2    -> EpisodeCompactViewHolder(
+            0 -> EpisodeListViewHolder(
+                ItemEpisodeListBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            1 -> EpisodeGridViewHolder(
+                ItemEpisodeGridBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+
+            2 -> EpisodeCompactViewHolder(
                 ItemEpisodeCompactBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false
                 )
             )
+
             else -> throw IllegalArgumentException()
         })
     }
@@ -62,15 +77,21 @@ class EpisodeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val ep = arr[position]
         val title =
-            "${if (!ep.title.isNullOrEmpty() && ep.title != "null") "" else currContext()!!.getString(R.string.episode_singular)} ${if (!ep.title.isNullOrEmpty() && ep.title != "null") ep.title else ep.number}"
+            "${
+                if (!ep.title.isNullOrEmpty() && ep.title != "null") "" else currContext()!!.getString(
+                    R.string.episode_singular
+                )
+            } ${if (!ep.title.isNullOrEmpty() && ep.title != "null") ep.title else ep.number}"
 
         when (holder) {
-            is EpisodeListViewHolder    -> {
+            is EpisodeListViewHolder -> {
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
 
-                val thumb = ep.thumb?.let { if(it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
-                Glide.with(binding.itemEpisodeImage).load(thumb?:media.cover).override(400,0).into(binding.itemEpisodeImage)
+                val thumb =
+                    ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
+                Glide.with(binding.itemEpisodeImage).load(thumb ?: media.cover).override(400, 0)
+                    .into(binding.itemEpisodeImage)
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeTitle.text = title
 
@@ -81,7 +102,8 @@ class EpisodeAdapter(
                     binding.itemEpisodeFiller.visibility = View.GONE
                     binding.itemEpisodeFillerView.visibility = View.GONE
                 }
-                binding.itemEpisodeDesc.visibility = if (ep.desc != null && ep.desc?.trim(' ') != "") View.VISIBLE else View.GONE
+                binding.itemEpisodeDesc.visibility =
+                    if (ep.desc != null && ep.desc?.trim(' ') != "") View.VISIBLE else View.GONE
                 binding.itemEpisodeDesc.text = ep.desc ?: ""
 
                 if (media.userProgress != null) {
@@ -110,12 +132,14 @@ class EpisodeAdapter(
                 )
             }
 
-            is EpisodeGridViewHolder    -> {
+            is EpisodeGridViewHolder -> {
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
 
-                val thumb = ep.thumb?.let { if(it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
-                Glide.with(binding.itemEpisodeImage).load(thumb?:media.cover).override(400,0).into(binding.itemEpisodeImage)
+                val thumb =
+                    ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
+                Glide.with(binding.itemEpisodeImage).load(thumb ?: media.cover).override(400, 0)
+                    .into(binding.itemEpisodeImage)
 
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeTitle.text = title
@@ -155,7 +179,8 @@ class EpisodeAdapter(
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
                 binding.itemEpisodeNumber.text = ep.number
-                binding.itemEpisodeFillerView.visibility = if (ep.filler) View.VISIBLE else View.GONE
+                binding.itemEpisodeFillerView.visibility =
+                    if (ep.filler) View.VISIBLE else View.GONE
                 if (media.userProgress != null) {
                     if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat())
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
@@ -180,7 +205,8 @@ class EpisodeAdapter(
 
     override fun getItemCount(): Int = arr.size
 
-    inner class EpisodeCompactViewHolder(val binding: ItemEpisodeCompactBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class EpisodeCompactViewHolder(val binding: ItemEpisodeCompactBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
                 if (bindingAdapterPosition < arr.size && bindingAdapterPosition >= 0)
@@ -189,7 +215,8 @@ class EpisodeAdapter(
         }
     }
 
-    inner class EpisodeGridViewHolder(val binding: ItemEpisodeGridBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class EpisodeGridViewHolder(val binding: ItemEpisodeGridBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
                 if (bindingAdapterPosition < arr.size && bindingAdapterPosition >= 0)
@@ -198,7 +225,8 @@ class EpisodeAdapter(
         }
     }
 
-    inner class EpisodeListViewHolder(val binding: ItemEpisodeListBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class EpisodeListViewHolder(val binding: ItemEpisodeListBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
                 if (bindingAdapterPosition < arr.size && bindingAdapterPosition >= 0)
