@@ -2,8 +2,10 @@ package ani.dantotsu.media.novel.novelreader
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
@@ -14,12 +16,14 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import androidx.webkit.WebViewCompat
 import ani.dantotsu.GesturesListener
 import ani.dantotsu.NoPaddingArrayAdapter
 import ani.dantotsu.R
@@ -137,6 +141,20 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //check for supported webview
+        val webViewVersion = WebViewCompat.getCurrentWebViewPackage(this)?.versionName
+        val firstVersion = webViewVersion?.split(".")?.firstOrNull()?.toIntOrNull()
+        if (webViewVersion == null || firstVersion == null || firstVersion < 87) {
+            Toast.makeText(this, "Please update WebView from PlayStore", Toast.LENGTH_LONG).show()
+            //open playstore
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")
+            startActivity(intent)
+            //stop reader
+            finish()
+            return
+        }
+
         LangSet.setLocale(this)
         ThemeManager(this).applyTheme()
         binding = ActivityNovelReaderBinding.inflate(layoutInflater)
