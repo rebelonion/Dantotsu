@@ -124,7 +124,7 @@ class NovelExtensionGithubApi {
                     source.baseUrl,
                 )
             }
-            val iconUrl = "${REPO_URL_PREFIX}icons/${extension.pkg}.png"
+            val iconUrl = "${REPO_URL_PREFIX}icon/${extension.pkg}.png"
             NovelExtension.Available(
                 extension.name,
                 extension.pkg,
