@@ -41,6 +41,7 @@ class ExtensionsActivity : AppCompatActivity() {
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+        viewPager.offscreenPageLimit = 1
 
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun getItemCount(): Int = 6
@@ -65,13 +66,24 @@ class ExtensionsActivity : AppCompatActivity() {
             object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
                     searchView.setText("")
+                    searchView.clearFocus()
+                    tabLayout.clearFocus()
+                    viewPager.updateLayoutParams<ViewGroup.LayoutParams> {
+                        height = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
                 }
 
                 override fun onTabUnselected(tab: TabLayout.Tab) {
-                    // Do nothing
+                    viewPager.updateLayoutParams<ViewGroup.LayoutParams> {
+                        height = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
+                    tabLayout.clearFocus()
                 }
 
                 override fun onTabReselected(tab: TabLayout.Tab) {
+                    viewPager.updateLayoutParams<ViewGroup.LayoutParams> {
+                        height = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
                     // Do nothing
                 }
             }

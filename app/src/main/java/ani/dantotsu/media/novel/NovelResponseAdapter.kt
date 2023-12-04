@@ -1,10 +1,12 @@
 package ani.dantotsu.media.novel
 
 import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemNovelResponseBinding
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.setAnimation
@@ -39,6 +41,10 @@ class NovelResponseAdapter(
         Glide.with(binding.itemEpisodeImage).load(cover).override(400, 0)
             .into(binding.itemEpisodeImage)
 
+        val typedValue = TypedValue()
+        fragment.requireContext().theme?.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue, true)
+        val color = typedValue.data
+
         binding.itemEpisodeTitle.text = novel.name
         binding.itemEpisodeFiller.text =
             if (downloadedCheckCallback.downloadedCheck(novel)) {
@@ -55,9 +61,7 @@ class NovelResponseAdapter(
                 fragment.requireContext().getColor(android.R.color.holo_green_light)
             )
         } else {
-            binding.itemEpisodeFiller.setTextColor(
-                fragment.requireContext().getColor(android.R.color.white)
-            )
+            binding.itemEpisodeFiller.setTextColor(color)
         }
         binding.itemEpisodeDesc2.text = novel.extra?.get("1") ?: ""
         val desc = novel.extra?.get("2")
@@ -94,13 +98,21 @@ class NovelResponseAdapter(
         }
 
         binding.root.setOnLongClickListener {
-            downloadedCheckCallback.deleteDownload(novel)
-            deleteDownload(novel.link)
-            snackString("Deleted ${novel.name}")
-            if (binding.itemEpisodeFiller.text.toString().contains("Download", ignoreCase = true)) {
-                binding.itemEpisodeFiller.text = ""
+            val builder = androidx.appcompat.app.AlertDialog.Builder(fragment.requireContext(), R.style.DialogTheme)
+            builder.setTitle("Delete ${novel.name}?")
+            builder.setMessage("Are you sure you want to delete ${novel.name}?")
+            builder.setPositiveButton("Yes") { _, _ ->
+                downloadedCheckCallback.deleteDownload(novel)
+                deleteDownload(novel.link)
+                snackString("Deleted ${novel.name}")
+                if (binding.itemEpisodeFiller.text.toString().contains("Download", ignoreCase = true)) {
+                    binding.itemEpisodeFiller.text = ""
+                }
             }
-            notifyItemChanged(position)
+            builder.setNegativeButton("No") { _, _ ->
+                // Do nothing
+            }
+            builder.show()
             true
         }
     }
@@ -134,6 +146,8 @@ class NovelResponseAdapter(
         downloadedChapters.remove(link)
         val position = list.indexOfFirst { it.link == link }
         if (position != -1) {
+            list[position].extra?.remove("0")
+            list[position].extra?.set("0", "")
             notifyItemChanged(position)
         }
     }
@@ -143,6 +157,8 @@ class NovelResponseAdapter(
         downloadedChapters.remove(link)
         val position = list.indexOfFirst { it.link == link }
         if (position != -1) {
+            list[position].extra?.remove("0")
+            list[position].extra?.set("0", "Failed")
             notifyItemChanged(position)
         }
     }

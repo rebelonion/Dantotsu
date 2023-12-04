@@ -13,11 +13,17 @@ object NovelSources : NovelReadSources() {
     suspend fun init(fromExtensions: StateFlow<List<NovelExtension.Installed>>) {
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()
-        list = createParsersFromExtensions(initialExtensions)
+        list = createParsersFromExtensions(initialExtensions) + Lazier(
+            { OfflineNovelParser() },
+            "Downloaded"
+        )
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->
-            list = createParsersFromExtensions(extensions)
+            list = createParsersFromExtensions(extensions) + Lazier(
+                { OfflineNovelParser() },
+                "Downloaded"
+            )
         }
     }
 

@@ -48,6 +48,32 @@ class DownloadsManager(private val context: Context) {
         saveDownloads()
     }
 
+    fun removeMedia(title: String, type: Download.Type) {
+        val subDirectory = if (type == Download.Type.MANGA) {
+            "Manga"
+        } else if (type == Download.Type.ANIME) {
+            "Anime"
+        } else {
+            "Novel"
+        }
+        val directory = File(
+            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+            "Dantotsu/$subDirectory/$title"
+        )
+        if (directory.exists()) {
+            val deleted = directory.deleteRecursively()
+            if (deleted) {
+                Toast.makeText(context, "Successfully deleted", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Failed to delete directory", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(context, "Directory does not exist", Toast.LENGTH_SHORT).show()
+        }
+        downloadsList.removeAll { it.title == title }
+        saveDownloads()
+    }
+
     fun queryDownload(download: Download): Boolean {
         return downloadsList.contains(download)
     }

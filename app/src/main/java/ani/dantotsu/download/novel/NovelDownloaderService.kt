@@ -174,7 +174,7 @@ class NovelDownloaderService : Service() {
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
-    suspend fun isEpubFile(urlString: String): Boolean {
+    private suspend fun isEpubFile(urlString: String): Boolean {
         return withContext(Dispatchers.IO) {
             try {
                 val request = Request.Builder()
@@ -200,122 +200,150 @@ class NovelDownloaderService : Service() {
         }
     }
 
+    private fun isAlreadyDownloaded(urlString: String): Boolean {
+        return urlString.contains("file://")
+    }
+
     suspend fun download(task: DownloadTask) {
-        withContext(Dispatchers.Main) {
-            val notifi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                ContextCompat.checkSelfPermission(
-                    this@NovelDownloaderService,
-                    Manifest.permission.POST_NOTIFICATIONS
-                ) == PackageManager.PERMISSION_GRANTED
-            } else {
-                true
-            }
+        try {
+            withContext(Dispatchers.Main) {
+                val notifi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    ContextCompat.checkSelfPermission(
+                        this@NovelDownloaderService,
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) == PackageManager.PERMISSION_GRANTED
+                } else {
+                    true
+                }
 
-            broadcastDownloadStarted(task.originalLink)
+                broadcastDownloadStarted(task.originalLink)
 
-            if (notifi) {
-                builder.setContentText("Downloading ${task.title} - ${task.chapter}")
-                notificationManager.notify(NOTIFICATION_ID, builder.build())
-            }
+                if (notifi) {
+                    builder.setContentText("Downloading ${task.title} - ${task.chapter}")
+                    notificationManager.notify(NOTIFICATION_ID, builder.build())
+                }
 
-            if (!isEpubFile(task.downloadLink)) {
-                logger("Download link is not an .epub file")
-                broadcastDownloadFailed(task.originalLink)
-                snackString("Download link is not an .epub file")
-                return@withContext
-            }
+                if (!isEpubFile(task.downloadLink)) {
+                    if (isAlreadyDownloaded(task.originalLink)) {
+                        logger("Already downloaded")
+                        broadcastDownloadFinished(task.originalLink)
+                        snackString("Already downloaded")
+                        return@withContext
+                    }
+                    logger("Download link is not an .epub file")
+                    broadcastDownloadFailed(task.originalLink)
+                    snackString("Download link is not an .epub file")
+                    return@withContext
+                }
 
-            // Start the download
-            withContext(Dispatchers.IO) {
-                try {
-                    val request = Request.Builder()
-                        .url(task.downloadLink)
-                        .build()
+                // Start the download
+                withContext(Dispatchers.IO) {
+                    try {
+                        val request = Request.Builder()
+                            .url(task.downloadLink)
+                            .build()
 
-                    networkHelper.downloadClient.newCall(request).execute().use { response ->
-                        // Ensure the response is successful and has a body
-                        if (!response.isSuccessful || response.body == null) {
-                            throw IOException("Failed to download file: ${response.message}")
-                        }
+                        networkHelper.downloadClient.newCall(request).execute().use { response ->
+                            // Ensure the response is successful and has a body
+                            if (!response.isSuccessful || response.body == null) {
+                                throw IOException("Failed to download file: ${response.message}")
+                            }
 
-                        val file = File(
-                            this@NovelDownloaderService.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                            "Dantotsu/Novel/${task.title}/${task.chapter}/0.epub"
-                        )
+                            val file = File(
+                                this@NovelDownloaderService.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                                "Dantotsu/Novel/${task.title}/${task.chapter}/0.epub"
+                            )
 
-                        // Create directories if they don't exist
-                        file.parentFile?.takeIf { !it.exists() }?.mkdirs()
+                            // Create directories if they don't exist
+                            file.parentFile?.takeIf { !it.exists() }?.mkdirs()
 
-                        // Overwrite existing file
-                        if (file.exists()) file.delete()
+                            // Overwrite existing file
+                            if (file.exists()) file.delete()
 
-                        //download cover
-                        task.coverUrl?.let {
-                            file.parentFile?.let { it1 -> downloadImage(it, it1, "cover.jpg") }
-                        }
+                            //download cover
+                            task.coverUrl?.let {
+                                file.parentFile?.let { it1 -> downloadImage(it, it1, "cover.jpg") }
+                            }
 
-                        val sink = file.sink().buffer()
-                        val responseBody = response.body
-                        val totalBytes = responseBody.contentLength()
-                        var downloadedBytes = 0L
+                            val sink = file.sink().buffer()
+                            val responseBody = response.body
+                            val totalBytes = responseBody.contentLength()
+                            var downloadedBytes = 0L
 
-                        val notificationUpdateInterval = 1024 * 1024 // 1 MB
-                        val broadcastUpdateInterval = 1024 * 256 // 256 KB
-                        var lastNotificationUpdate = 0L
-                        var lastBroadcastUpdate = 0L
+                            val notificationUpdateInterval = 1024 * 1024 // 1 MB
+                            val broadcastUpdateInterval = 1024 * 256 // 256 KB
+                            var lastNotificationUpdate = 0L
+                            var lastBroadcastUpdate = 0L
 
-                        responseBody.source().use { source ->
-                            while (true) {
-                                val read = source.read(sink.buffer, 8192)
-                                if (read == -1L) break
-                                downloadedBytes += read
-                                sink.emit()
+                            responseBody.source().use { source ->
+                                while (true) {
+                                    val read = source.read(sink.buffer, 8192)
+                                    if (read == -1L) break
+                                    downloadedBytes += read
+                                    sink.emit()
 
-                                // Update progress at intervals
-                                if (downloadedBytes - lastNotificationUpdate >= notificationUpdateInterval) {
-                                    withContext(Dispatchers.Main) {
-                                        val progress = (downloadedBytes * 100 / totalBytes).toInt()
-                                        builder.setProgress(100, progress, false)
-                                        if (notifi) {
-                                            notificationManager.notify(
-                                                NOTIFICATION_ID,
-                                                builder.build()
-                                            )
+                                    // Update progress at intervals
+                                    if (downloadedBytes - lastNotificationUpdate >= notificationUpdateInterval) {
+                                        withContext(Dispatchers.Main) {
+                                            val progress =
+                                                (downloadedBytes * 100 / totalBytes).toInt()
+                                            builder.setProgress(100, progress, false)
+                                            if (notifi) {
+                                                notificationManager.notify(
+                                                    NOTIFICATION_ID,
+                                                    builder.build()
+                                                )
+                                            }
                                         }
+                                        lastNotificationUpdate = downloadedBytes
                                     }
-                                    lastNotificationUpdate = downloadedBytes
-                                }
-                                if (downloadedBytes - lastBroadcastUpdate >= broadcastUpdateInterval) {
-                                    withContext(Dispatchers.Main) {
-                                        val progress = (downloadedBytes * 100 / totalBytes).toInt()
-                                        logger("Download progress: $progress")
-                                        broadcastDownloadProgress(task.originalLink, progress)
+                                    if (downloadedBytes - lastBroadcastUpdate >= broadcastUpdateInterval) {
+                                        withContext(Dispatchers.Main) {
+                                            val progress =
+                                                (downloadedBytes * 100 / totalBytes).toInt()
+                                            logger("Download progress: $progress")
+                                            broadcastDownloadProgress(task.originalLink, progress)
+                                        }
+                                        lastBroadcastUpdate = downloadedBytes
                                     }
-                                    lastBroadcastUpdate = downloadedBytes
                                 }
                             }
+
+                            sink.close()
+                            //if the file is smaller than 95% of totalBytes, it means the download was interrupted
+                            if (file.length() < totalBytes * 0.95) {
+                                throw IOException("Failed to download file: ${response.message}")
+                            }
                         }
-
-                        sink.close()
+                    } catch (e: Exception) {
+                        logger("Exception while downloading .epub inside request: ${e.message}")
+                        throw e
                     }
-                } catch (e: Exception) {
-                    logger("Exception while downloading .epub: ${e.message}")
-                    snackString("Exception while downloading .epub: ${e.message}")
-                    FirebaseCrashlytics.getInstance().recordException(e)
                 }
-            }
 
-            // Update notification for download completion
-            builder.setContentText("${task.title} - ${task.chapter} Download complete")
-                .setProgress(0, 0, false)
-            if (notifi) {
-                notificationManager.notify(NOTIFICATION_ID, builder.build())
-            }
+                // Update notification for download completion
+                builder.setContentText("${task.title} - ${task.chapter} Download complete")
+                    .setProgress(0, 0, false)
+                if (notifi) {
+                    notificationManager.notify(NOTIFICATION_ID, builder.build())
+                }
 
-            saveMediaInfo(task)
-            downloadsManager.addDownload(Download(task.title, task.chapter, Download.Type.NOVEL))
-            broadcastDownloadFinished(task.originalLink)
-            snackString("${task.title} - ${task.chapter} Download finished")
+                saveMediaInfo(task)
+                downloadsManager.addDownload(
+                    Download(
+                        task.title,
+                        task.chapter,
+                        Download.Type.NOVEL
+                    )
+                )
+                broadcastDownloadFinished(task.originalLink)
+                snackString("${task.title} - ${task.chapter} Download finished")
+            }
+        } catch (e: Exception) {
+            logger("Exception while downloading .epub: ${e.message}")
+            snackString("Exception while downloading .epub: ${e.message}")
+            FirebaseCrashlytics.getInstance().recordException(e)
+            broadcastDownloadFailed(task.originalLink)
         }
     }
 

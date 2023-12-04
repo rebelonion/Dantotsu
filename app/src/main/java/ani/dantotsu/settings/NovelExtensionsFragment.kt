@@ -3,6 +3,7 @@ package ani.dantotsu.settings
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,7 @@ class NovelExtensionsFragment : Fragment(),
 
         lifecycleScope.launch {
             viewModel.pagerFlow.collectLatest { pagingData ->
+                Log.d("NovelExtensionsFragment", "collectLatest")
                 adapter.submitData(pagingData)
             }
         }

@@ -58,9 +58,12 @@ class MediaDetailsViewModel : ViewModel() {
             it
         }
         if (isDownload) {
-            data.sourceIndex = when (media.anime != null) {
-                true -> AnimeSources.list.size - 1
-                else -> MangaSources.list.size - 1
+            data.sourceIndex = if (media.anime != null) {
+                AnimeSources.list.size - 1
+            } else if (media.format == "MANGA" || media.format == "ONE_SHOT") {
+                MangaSources.list.size - 1
+            } else {
+                NovelSources.list.size - 1
             }
         }
         return data

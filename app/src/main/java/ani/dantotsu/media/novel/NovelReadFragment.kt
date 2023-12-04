@@ -247,7 +247,8 @@ class NovelReadFragment : Fragment(),
             headerAdapter.progress?.visibility = View.VISIBLE
             lifecycleScope.launch(Dispatchers.IO) {
                 if (auto || query == "") model.autoSearchNovels(media)
-                else model.searchNovels(query, source)
+                //else model.searchNovels(query, source)
+                else model.autoSearchNovels(media) //testing
             }
             searching = true
             if (save) {

@@ -7,11 +7,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.widget.AutoCompleteTextView
 import android.widget.GridView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
@@ -41,7 +44,7 @@ import java.io.File
 import kotlin.math.max
 import kotlin.math.min
 
-class OfflineMangaFragment : Fragment() {
+class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
     private val downloadManager = Injekt.get<DownloadsManager>()
     private var downloads: List<OfflineMangaModel> = listOf()
     private lateinit var gridView: GridView
@@ -79,15 +82,29 @@ class OfflineMangaFragment : Fragment() {
             materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
         }
 
+        val searchView = view.findViewById<AutoCompleteTextView>(R.id.animeSearchBarText)
+        searchView.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                onSearchQuery(s.toString())
+            }
+        })
+
         gridView = view.findViewById(R.id.gridView)
         getDownloads()
-        adapter = OfflineMangaAdapter(requireContext(), downloads)
+        adapter = OfflineMangaAdapter(requireContext(), downloads, this)
         gridView.adapter = adapter
         gridView.setOnItemClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
             val media =
-                downloadManager.mangaDownloads.filter { it.title == item.title }.firstOrNull()
+                downloadManager.mangaDownloads.firstOrNull { it.title == item.title }
+                    ?: downloadManager.novelDownloads.firstOrNull { it.title == item.title }
             media?.let {
                 startActivity(
                     Intent(requireContext(), MediaDetailsActivity::class.java)
@@ -99,7 +116,35 @@ class OfflineMangaFragment : Fragment() {
             }
         }
 
+        gridView.setOnItemLongClickListener { parent, view, position, id ->
+            // Get the OfflineMangaModel that was clicked
+            val item = adapter.getItem(position) as OfflineMangaModel
+            val type: Download.Type = if (downloadManager.mangaDownloads.any { it.title == item.title }) {
+                Download.Type.MANGA
+            } else {
+                Download.Type.NOVEL
+            }
+            // Alert dialog to confirm deletion
+            val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.DialogTheme)
+            builder.setTitle("Delete ${item.title}?")
+            builder.setMessage("Are you sure you want to delete ${item.title}?")
+            builder.setPositiveButton("Yes") { _, _ ->
+                downloadManager.removeMedia(item.title, type)
+                getDownloads()
+                adapter.setItems(downloads)
+            }
+            builder.setNegativeButton("No") { _, _ ->
+                // Do nothing
+            }
+            builder.show()
+            true
+        }
+
         return view
+    }
+
+    override fun onSearchQuery(query: String) {
+        adapter.onSearchQuery(query)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -164,24 +209,42 @@ class OfflineMangaFragment : Fragment() {
     }
 
     private fun getDownloads() {
-        val titles = downloadManager.mangaDownloads.map { it.title }.distinct()
-        val newDownloads = mutableListOf<OfflineMangaModel>()
-        for (title in titles) {
+        downloads = listOf()
+        val mangaTitles = downloadManager.mangaDownloads.map { it.title }.distinct()
+        val newMangaDownloads = mutableListOf<OfflineMangaModel>()
+        for (title in mangaTitles) {
             val _downloads = downloadManager.mangaDownloads.filter { it.title == title }
             val download = _downloads.first()
             val offlineMangaModel = loadOfflineMangaModel(download)
-            newDownloads += offlineMangaModel
+            newMangaDownloads += offlineMangaModel
         }
-        downloads = newDownloads
+        downloads = newMangaDownloads
+        val novelTitles = downloadManager.novelDownloads.map { it.title }.distinct()
+        val newNovelDownloads = mutableListOf<OfflineMangaModel>()
+        for (title in novelTitles) {
+            val _downloads = downloadManager.novelDownloads.filter { it.title == title }
+            val download = _downloads.first()
+            val offlineMangaModel = loadOfflineMangaModel(download)
+            newNovelDownloads += offlineMangaModel
+        }
+        downloads += newNovelDownloads
+
     }
 
     private fun getMedia(download: Download): Media? {
+        val type = if (download.type == Download.Type.MANGA) {
+            "Manga"
+        } else if (download.type == Download.Type.ANIME) {
+            "Anime"
+        } else {
+            "Novel"
+        }
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/Manga/${download.title}"
+            "Dantotsu/$type/${download.title}"
         )
         //load media.json and convert to media class with gson
-        try {
+        return try {
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
                     SChapterImpl() // Provide an instance of SChapterImpl
@@ -189,19 +252,26 @@ class OfflineMangaFragment : Fragment() {
                 .create()
             val media = File(directory, "media.json")
             val mediaJson = media.readText()
-            return gson.fromJson(mediaJson, Media::class.java)
+            gson.fromJson(mediaJson, Media::class.java)
         } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
             FirebaseCrashlytics.getInstance().recordException(e)
-            return null
+            null
         }
     }
 
     private fun loadOfflineMangaModel(download: Download): OfflineMangaModel {
+        val type = if (download.type == Download.Type.MANGA) {
+            "Manga"
+        } else if (download.type == Download.Type.ANIME) {
+            "Anime"
+        } else {
+            "Novel"
+        }
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/Manga/${download.title}"
+            "Dantotsu/$type/${download.title}"
         )
         //load media.json and convert to media class with gson
         try {
@@ -215,8 +285,8 @@ class OfflineMangaFragment : Fragment() {
                 null
             }
             val title = mediaModel.nameMAL ?: "unknown"
-            val score = if (mediaModel.userScore != 0) mediaModel.userScore.toString() else
-                if (mediaModel.meanScore == null) "?" else mediaModel.meanScore.toString()
+            val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore
+                ?: 0) else mediaModel.userScore) / 10.0).toString()
             val isOngoing = false
             val isUserScored = mediaModel.userScore != 0
             return OfflineMangaModel(title, score, isOngoing, isUserScored, coverUri)
@@ -227,4 +297,8 @@ class OfflineMangaFragment : Fragment() {
             return OfflineMangaModel("unknown", "0", false, false, null)
         }
     }
+}
+
+interface OfflineMangaSearchListener {
+    fun onSearchQuery(query: String)
 }

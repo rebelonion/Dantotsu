@@ -25,6 +25,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 
@@ -53,7 +54,13 @@ class NovelExtensionsViewModel(
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val pagerFlow: Flow<PagingData<NovelExtension.Available>> = searchQuery.flatMapLatest { query ->
+    val pagerFlow: Flow<PagingData<NovelExtension.Available>> = combine(
+        novelExtensionManager.availableExtensionsFlow,
+        novelExtensionManager.installedExtensionsFlow,
+        searchQuery
+    ) { available, installed, query ->
+        Triple(available, installed, query)
+    }.flatMapLatest { (available, installed, query) ->
         Pager(
             PagingConfig(
                 pageSize = 15,
@@ -61,28 +68,24 @@ class NovelExtensionsViewModel(
                 prefetchDistance = 15
             )
         ) {
-            NovelExtensionPagingSource(
-                novelExtensionManager.availableExtensionsFlow,
-                novelExtensionManager.installedExtensionsFlow,
-                searchQuery
-            ).also { currentPagingSource = it }
+            NovelExtensionPagingSource(available, installed, query)
         }.flow
     }.cachedIn(viewModelScope)
 }
 
 
 class NovelExtensionPagingSource(
-    private val availableExtensionsFlow: StateFlow<List<NovelExtension.Available>>,
-    private val installedExtensionsFlow: StateFlow<List<NovelExtension.Installed>>,
-    private val searchQuery: StateFlow<String>
+    private val availableExtensionsFlow: List<NovelExtension.Available>,
+    private val installedExtensionsFlow: List<NovelExtension.Installed>,
+    private val searchQuery: String
 ) : PagingSource<Int, NovelExtension.Available>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, NovelExtension.Available> {
         val position = params.key ?: 0
-        val installedExtensions = installedExtensionsFlow.first().map { it.pkgName }.toSet()
+        val installedExtensions = installedExtensionsFlow.map { it.pkgName }.toSet()
         val availableExtensions =
-            availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
-        val query = searchQuery.first()
+            availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
+        val query = searchQuery
         val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
