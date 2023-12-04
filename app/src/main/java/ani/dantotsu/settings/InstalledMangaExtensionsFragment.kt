@@ -38,8 +38,9 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Locale
 
-class InstalledMangaExtensionsFragment : Fragment() {
+class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentMangaExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
@@ -187,6 +188,9 @@ class InstalledMangaExtensionsFragment : Fragment() {
         super.onDestroyView();_binding = null
     }
 
+    override fun updateContentBasedOnQuery(query: String?) {
+        extensionsAdapter.filter(query ?: "", mangaExtensionManager.installedExtensionsFlow.value)
+    }
 
     private class MangaExtensionsAdapter(
         private val onSettingsClicked: (MangaExtension.Installed) -> Unit,
@@ -228,6 +232,16 @@ class InstalledMangaExtensionsFragment : Fragment() {
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
             }
+        }
+
+        fun filter(query: String, currentList: List<MangaExtension.Installed>) {
+            val filteredList = ArrayList<MangaExtension.Installed>()
+            for (extension in currentList) {
+                if (extension.name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
+                    filteredList.add(extension)
+                }
+            }
+            submitList(filteredList)
         }
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

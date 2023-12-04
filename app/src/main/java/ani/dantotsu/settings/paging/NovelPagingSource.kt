@@ -2,6 +2,7 @@ package ani.dantotsu.settings.paging
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,19 +16,25 @@ import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.parsers.novel.NovelExtensionManager
 import com.bumptech.glide.Glide
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class NovelExtensionsViewModelFactory(
@@ -163,11 +170,28 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
 
     inner class NovelExtensionViewHolder(private val binding: ItemExtensionAllBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        private val job = Job()
+        private val scope = CoroutineScope(Dispatchers.Main + job)
+
         init {
             binding.closeTextView.setOnClickListener {
                 val extension = getItem(bindingAdapterPosition)
                 if (extension != null) {
                     clickListener.onInstallClick(extension)
+                    binding.closeTextView.setImageResource(R.drawable.ic_sync)
+                    scope.launch {
+                        while (isActive) {
+                            withContext(Dispatchers.Main) {
+                                binding.closeTextView.animate()
+                                    .rotationBy(360f)
+                                    .setDuration(1000)
+                                    .setInterpolator(LinearInterpolator())
+                                    .start()
+                            }
+                            delay(1000)
+                        }
+                    }
                 }
             }
         }
@@ -179,6 +203,15 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
             binding.extensionNameTextView.text = extension.name
             binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }
+
+        fun clear() {
+            job.cancel() // Cancel the coroutine when the view is recycled
+        }
+    }
+
+    override fun onViewRecycled(holder: NovelExtensionViewHolder) {
+        super.onViewRecycled(holder)
+        holder.clear()
     }
 }
 

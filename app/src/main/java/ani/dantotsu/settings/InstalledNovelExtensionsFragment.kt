@@ -11,7 +11,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -32,8 +31,9 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Locale
 
-class InstalledNovelExtensionsFragment : Fragment() {
+class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentNovelExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
@@ -124,6 +124,9 @@ class InstalledNovelExtensionsFragment : Fragment() {
         super.onDestroyView();_binding = null
     }
 
+    override fun updateContentBasedOnQuery(query: String?) {
+        extensionsAdapter.filter(query ?: "", novelExtensionManager.installedExtensionsFlow.value)
+    }
 
     private class NovelExtensionsAdapter(
         private val onSettingsClicked: (NovelExtension.Installed) -> Unit,
@@ -167,6 +170,16 @@ class InstalledNovelExtensionsFragment : Fragment() {
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
             }
+        }
+
+        fun filter(query: String, currentList: List<NovelExtension.Installed>) {
+            val filteredList = ArrayList<NovelExtension.Installed>()
+            for (extension in currentList) {
+                if (extension.name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
+                    filteredList.add(extension)
+                }
+            }
+            submitList(filteredList)
         }
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
