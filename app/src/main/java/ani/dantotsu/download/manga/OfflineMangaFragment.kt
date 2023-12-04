@@ -125,7 +125,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 Download.Type.NOVEL
             }
             // Alert dialog to confirm deletion
-            val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.DialogTheme)
+            val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.MyPopup)
             builder.setTitle("Delete ${item.title}?")
             builder.setMessage("Are you sure you want to delete ${item.title}?")
             builder.setPositiveButton("Yes") { _, _ ->
