@@ -15,8 +15,8 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ActivityImageSearchBinding
 import ani.dantotsu.media.MediaDetailsActivity
-import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,7 +36,7 @@ class ImageSearchActivity : AppCompatActivity() {
                     }
                     val inputStream = contentResolver.openInputStream(imageUri)
 
-                    if(inputStream != null) viewModel.analyzeImage(inputStream)
+                    if (inputStream != null) viewModel.analyzeImage(inputStream)
                     else toast(getString(R.string.error_loading_image))
 
                     withContext(Dispatchers.Main) {
@@ -49,7 +49,7 @@ class ImageSearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityImageSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -76,7 +76,7 @@ ThemeManager(this).applyTheme()
             override fun onItemClick(searchResult: ImageSearchViewModel.ImageResult) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val id = searchResult.anilist?.id?.toInt()
-                    if (id==null){
+                    if (id == null) {
                         toast(getString(R.string.no_anilist_id_found))
                         return@launch
                     }

@@ -6,11 +6,8 @@ import android.os.Build.VERSION.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
-import android.widget.LinearLayout
-import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -20,16 +17,13 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityExtensionsBinding
-import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
-class ExtensionsActivity : AppCompatActivity()  {
+class ExtensionsActivity : AppCompatActivity() {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@ExtensionsActivity)
     }
@@ -40,16 +34,17 @@ class ExtensionsActivity : AppCompatActivity()  {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityExtensionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)
+        viewPager.offscreenPageLimit = 1
 
         viewPager.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = 4
+            override fun getItemCount(): Int = 6
 
             override fun createFragment(position: Int): Fragment {
                 return when (position) {
@@ -57,10 +52,42 @@ ThemeManager(this).applyTheme()
                     1 -> AnimeExtensionsFragment()
                     2 -> InstalledMangaExtensionsFragment()
                     3 -> MangaExtensionsFragment()
+                    4 -> InstalledNovelExtensionsFragment()
+                    5 -> NovelExtensionsFragment()
                     else -> AnimeExtensionsFragment()
                 }
             }
+
         }
+
+        val searchView: AutoCompleteTextView = findViewById(R.id.searchViewText)
+
+        tabLayout.addOnTabSelectedListener(
+            object : TabLayout.OnTabSelectedListener {
+                override fun onTabSelected(tab: TabLayout.Tab) {
+                    searchView.setText("")
+                    searchView.clearFocus()
+                    tabLayout.clearFocus()
+                    viewPager.updateLayoutParams<ViewGroup.LayoutParams> {
+                        height = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
+                }
+
+                override fun onTabUnselected(tab: TabLayout.Tab) {
+                    viewPager.updateLayoutParams<ViewGroup.LayoutParams> {
+                        height = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
+                    tabLayout.clearFocus()
+                }
+
+                override fun onTabReselected(tab: TabLayout.Tab) {
+                    viewPager.updateLayoutParams<ViewGroup.LayoutParams> {
+                        height = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
+                    // Do nothing
+                }
+            }
+        )
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = when (position) {
@@ -68,12 +95,12 @@ ThemeManager(this).applyTheme()
                 1 -> "Available Anime"
                 2 -> "Installed Manga"
                 3 -> "Available Manga"
+                4 -> "Installed Novels"
+                5 -> "Available Novels"
                 else -> null
             }
         }.attach()
 
-
-        val searchView: AutoCompleteTextView = findViewById(R.id.searchViewText)
 
         searchView.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) {
@@ -83,7 +110,8 @@ ThemeManager(this).applyTheme()
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val currentFragment = supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
+                val currentFragment =
+                    supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
                 if (currentFragment is SearchQueryHandler) {
                     currentFragment.updateContentBasedOnQuery(s?.toString()?.trim())
                 }

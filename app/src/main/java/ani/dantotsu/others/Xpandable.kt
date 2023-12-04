@@ -29,8 +29,8 @@ class Xpandable @JvmOverloads constructor(
             }, 300)
         }
 
-        if(!expanded) children.forEach {
-            if (it != getChildAt(0)){
+        if (!expanded) children.forEach {
+            if (it != getChildAt(0)) {
                 it.visibility = GONE
             }
         }
@@ -40,7 +40,7 @@ class Xpandable @JvmOverloads constructor(
 
     private fun hideAll() {
         children.forEach {
-            if (it != getChildAt(0)){
+            if (it != getChildAt(0)) {
                 ObjectAnimator.ofFloat(it, "scaleY", 1f, 0.5f).setDuration(200).start()
                 ObjectAnimator.ofFloat(it, "translationY", 0f, -32f).setDuration(200).start()
                 ObjectAnimator.ofFloat(it, "alpha", 1f, 0f).setDuration(200).start()
@@ -54,7 +54,7 @@ class Xpandable @JvmOverloads constructor(
 
     private fun showAll() {
         children.forEach {
-            if (it != getChildAt(0)){
+            if (it != getChildAt(0)) {
                 it.visibility = VISIBLE
                 ObjectAnimator.ofFloat(it, "scaleY", 0.5f, 1f).setDuration(200).start()
                 ObjectAnimator.ofFloat(it, "translationY", -32f, 0f).setDuration(200).start()

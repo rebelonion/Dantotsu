@@ -10,7 +10,6 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.LruCache
-import android.widget.Toast
 import ani.dantotsu.logger
 import ani.dantotsu.snackString
 import eu.kanade.tachiyomi.source.model.Page
@@ -23,8 +22,12 @@ import java.io.FileOutputStream
 data class ImageData(
     val page: Page,
     val source: HttpSource
-){
-    suspend fun fetchAndProcessImage(page: Page, httpSource: HttpSource, context: Context): Bitmap? {
+) {
+    suspend fun fetchAndProcessImage(
+        page: Page,
+        httpSource: HttpSource,
+        context: Context
+    ): Bitmap? {
         return withContext(Dispatchers.IO) {
             try {
                 // Fetch the image
@@ -52,16 +55,26 @@ data class ImageData(
     }
 }
 
-fun saveImage(bitmap: Bitmap, contentResolver: ContentResolver, filename: String, format: Bitmap.CompressFormat, quality: Int) {
+fun saveImage(
+    bitmap: Bitmap,
+    contentResolver: ContentResolver,
+    filename: String,
+    format: Bitmap.CompressFormat,
+    quality: Int
+) {
     try {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             val contentValues = ContentValues().apply {
                 put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
                 put(MediaStore.MediaColumns.MIME_TYPE, "image/${format.name.lowercase()}")
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Manga")
+                put(
+                    MediaStore.MediaColumns.RELATIVE_PATH,
+                    "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Manga"
+                )
             }
 
-            val uri: Uri? = contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
+            val uri: Uri? =
+                contentResolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, contentValues)
 
             uri?.let {
                 contentResolver.openOutputStream(it)?.use { os ->
@@ -69,7 +82,8 @@ fun saveImage(bitmap: Bitmap, contentResolver: ContentResolver, filename: String
                 }
             }
         } else {
-            val directory = File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Manga")
+            val directory =
+                File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Manga")
             if (!directory.exists()) {
                 directory.mkdirs()
             }
@@ -85,7 +99,7 @@ fun saveImage(bitmap: Bitmap, contentResolver: ContentResolver, filename: String
     }
 }
 
-class MangaCache() {
+class MangaCache {
     private val maxMemory = (Runtime.getRuntime().maxMemory() / 1024 / 2).toInt()
     private val cache = LruCache<String, ImageData>(maxMemory)
 

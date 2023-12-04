@@ -1,26 +1,41 @@
 package ani.dantotsu.subcriptions
 
 import android.content.Context
+import ani.dantotsu.R
 import ani.dantotsu.currContext
 import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.Selected
-import ani.dantotsu.parsers.*
+import ani.dantotsu.media.manga.MangaNameAdapter
+import ani.dantotsu.parsers.AnimeParser
+import ani.dantotsu.parsers.AnimeSources
+import ani.dantotsu.parsers.Episode
+import ani.dantotsu.parsers.HAnimeSources
+import ani.dantotsu.parsers.HMangaSources
+import ani.dantotsu.parsers.MangaChapter
+import ani.dantotsu.parsers.MangaParser
+import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.saveData
 import ani.dantotsu.tryWithSuspend
-import ani.dantotsu.R
-import ani.dantotsu.media.manga.MangaNameAdapter
 import kotlinx.coroutines.withTimeoutOrNull
 
 class SubscriptionHelper {
     companion object {
-        private fun loadSelected(context: Context, mediaId: Int, isAdult: Boolean, isAnime: Boolean): Selected {
+        private fun loadSelected(
+            context: Context,
+            mediaId: Int,
+            isAdult: Boolean,
+            isAnime: Boolean
+        ): Selected {
             val sharedPreferences = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             val data = loadData<Selected>("${mediaId}-select", context) ?: Selected().let {
                 it.sourceIndex =
                     if (isAdult) 0
-                    else if (isAnime) {sharedPreferences.getInt("settings_def_anime_source_s_r",0)}
-                    else {sharedPreferences.getInt("settings_def_manga_source_s_r",0)}
+                    else if (isAnime) {
+                        sharedPreferences.getInt("settings_def_anime_source_s_r", 0)
+                    } else {
+                        sharedPreferences.getInt("settings_def_manga_source_s_r", 0)
+                    }
                 it.preferDub = loadData("settings_prefer_dub", context) ?: false
                 it
             }
@@ -39,15 +54,27 @@ class SubscriptionHelper {
             return parser
         }
 
-        suspend fun getEpisode(context: Context, parser: AnimeParser, id: Int, isAdult: Boolean): Episode? {
+        suspend fun getEpisode(
+            context: Context,
+            parser: AnimeParser,
+            id: Int,
+            isAdult: Boolean
+        ): Episode? {
 
             val selected = loadSelected(context, id, isAdult, true)
             val ep = withTimeoutOrNull(10 * 1000) {
                 tryWithSuspend {
-                    val show = parser.loadSavedShowResponse(id) ?: throw Exception(currContext()?.getString(R.string.failed_to_load_data, id))
+                    val show = parser.loadSavedShowResponse(id) ?: throw Exception(
+                        currContext()?.getString(
+                            R.string.failed_to_load_data,
+                            id
+                        )
+                    )
                     show.sAnime?.let {
-                        parser.getLatestEpisode(show.link, show.extra,
-                            it, selected.latest)
+                        parser.getLatestEpisode(
+                            show.link, show.extra,
+                            it, selected.latest
+                        )
                     }
                 }
             }
@@ -64,14 +91,26 @@ class SubscriptionHelper {
             return sources[selected.sourceIndex]
         }
 
-        suspend fun getChapter(context: Context, parser: MangaParser, id: Int, isAdult: Boolean): MangaChapter? {
+        suspend fun getChapter(
+            context: Context,
+            parser: MangaParser,
+            id: Int,
+            isAdult: Boolean
+        ): MangaChapter? {
             val selected = loadSelected(context, id, isAdult, true)
             val chp = withTimeoutOrNull(10 * 1000) {
                 tryWithSuspend {
-                    val show = parser.loadSavedShowResponse(id) ?: throw Exception(currContext()?.getString(R.string.failed_to_load_data, id))
+                    val show = parser.loadSavedShowResponse(id) ?: throw Exception(
+                        currContext()?.getString(
+                            R.string.failed_to_load_data,
+                            id
+                        )
+                    )
                     show.sManga?.let {
-                        parser.getLatestChapter(show.link, show.extra,
-                            it, selected.latest)
+                        parser.getLatestChapter(
+                            show.link, show.extra,
+                            it, selected.latest
+                        )
                     }
                 }
             }
@@ -91,8 +130,9 @@ class SubscriptionHelper {
         ) : java.io.Serializable
 
         private const val subscriptions = "subscriptions"
-        fun getSubscriptions(context: Context): Map<Int, SubscribeMedia> = loadData(subscriptions, context)
-            ?: mapOf<Int, SubscribeMedia>().also { saveData(subscriptions, it, context) }
+        fun getSubscriptions(context: Context): Map<Int, SubscribeMedia> =
+            loadData(subscriptions, context)
+                ?: mapOf<Int, SubscribeMedia>().also { saveData(subscriptions, it, context) }
 
         fun saveSubscription(context: Context, media: Media, subscribed: Boolean) {
             val data = loadData<Map<Int, SubscribeMedia>>(subscriptions, context)!!.toMutableMap()

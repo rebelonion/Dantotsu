@@ -1,22 +1,32 @@
 package ani.dantotsu.media.novel
 
+import android.util.Log
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemNovelResponseBinding
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.setAnimation
+import ani.dantotsu.snackString
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 
-class NovelResponseAdapter(val fragment: NovelReadFragment) : RecyclerView.Adapter<NovelResponseAdapter.ViewHolder>() {
+class NovelResponseAdapter(
+    val fragment: NovelReadFragment,
+    val downloadTriggerCallback: DownloadTriggerCallback,
+    val downloadedCheckCallback: DownloadedCheckCallback
+) : RecyclerView.Adapter<NovelResponseAdapter.ViewHolder>() {
     val list: MutableList<ShowResponse> = mutableListOf()
 
-    inner class ViewHolder(val binding: ItemNovelResponseBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ViewHolder(val binding: ItemNovelResponseBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val bind = ItemNovelResponseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val bind =
+            ItemNovelResponseBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
 
@@ -27,19 +37,142 @@ class NovelResponseAdapter(val fragment: NovelReadFragment) : RecyclerView.Adapt
         val novel = list[position]
         setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
 
-        val cover = GlideUrl(novel.coverUrl.url){ novel.coverUrl.headers }
-        Glide.with(binding.itemEpisodeImage).load(cover).override(400,0).into(binding.itemEpisodeImage)
+        val cover = GlideUrl(novel.coverUrl.url) { novel.coverUrl.headers }
+        Glide.with(binding.itemEpisodeImage).load(cover).override(400, 0)
+            .into(binding.itemEpisodeImage)
+
+        val typedValue = TypedValue()
+        fragment.requireContext().theme?.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue, true)
+        val color = typedValue.data
 
         binding.itemEpisodeTitle.text = novel.name
-        binding.itemEpisodeFiller.text = novel.extra?.get("0") ?: ""
+        binding.itemEpisodeFiller.text =
+            if (downloadedCheckCallback.downloadedCheck(novel)) {
+                "Downloaded"
+            } else {
+                novel.extra?.get("0") ?: ""
+            }
+        if (binding.itemEpisodeFiller.text.contains("Downloading")) {
+            binding.itemEpisodeFiller.setTextColor(
+                fragment.requireContext().getColor(android.R.color.holo_blue_light)
+            )
+        } else if (binding.itemEpisodeFiller.text.contains("Downloaded")) {
+            binding.itemEpisodeFiller.setTextColor(
+                fragment.requireContext().getColor(android.R.color.holo_green_light)
+            )
+        } else {
+            binding.itemEpisodeFiller.setTextColor(color)
+        }
         binding.itemEpisodeDesc2.text = novel.extra?.get("1") ?: ""
         val desc = novel.extra?.get("2")
-        binding.itemEpisodeDesc.visibility = if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
+        binding.itemEpisodeDesc.visibility =
+            if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
         binding.itemEpisodeDesc.text = desc ?: ""
 
         binding.root.setOnClickListener {
-            BookDialog.newInstance(fragment.novelName, novel, fragment.source)
-                .show(fragment.parentFragmentManager, "dialog")
+            //make sure the file is not downloading
+            if (activeDownloads.contains(novel.link)) {
+                return@setOnClickListener
+            }
+            if (downloadedCheckCallback.downloadedCheckWithStart(novel)) {
+                return@setOnClickListener
+            }
+
+            val bookDialog = BookDialog.newInstance(fragment.novelName, novel, fragment.source)
+
+            bookDialog.setCallback(object : BookDialog.Callback {
+                override fun onDownloadTriggered(link: String) {
+                    downloadTriggerCallback.downloadTrigger(
+                        NovelDownloadPackage(
+                            link,
+                            novel.coverUrl.url,
+                            novel.name,
+                            novel.link
+                        )
+                    )
+                    bookDialog.dismiss()
+                }
+            })
+            bookDialog.show(fragment.parentFragmentManager, "dialog")
+
+        }
+
+        binding.root.setOnLongClickListener {
+            val builder = androidx.appcompat.app.AlertDialog.Builder(fragment.requireContext(), R.style.DialogTheme)
+            builder.setTitle("Delete ${novel.name}?")
+            builder.setMessage("Are you sure you want to delete ${novel.name}?")
+            builder.setPositiveButton("Yes") { _, _ ->
+                downloadedCheckCallback.deleteDownload(novel)
+                deleteDownload(novel.link)
+                snackString("Deleted ${novel.name}")
+                if (binding.itemEpisodeFiller.text.toString().contains("Download", ignoreCase = true)) {
+                    binding.itemEpisodeFiller.text = ""
+                }
+            }
+            builder.setNegativeButton("No") { _, _ ->
+                // Do nothing
+            }
+            builder.show()
+            true
+        }
+    }
+
+    private val activeDownloads = mutableSetOf<String>()
+    private val downloadedChapters = mutableSetOf<String>()
+
+    fun startDownload(link: String) {
+        activeDownloads.add(link)
+        val position = list.indexOfFirst { it.link == link }
+        if (position != -1) {
+            list[position].extra?.remove("0")
+            list[position].extra?.set("0", "Downloading: 0%")
+            notifyItemChanged(position)
+        }
+
+    }
+
+    fun stopDownload(link: String) {
+        activeDownloads.remove(link)
+        downloadedChapters.add(link)
+        val position = list.indexOfFirst { it.link == link }
+        if (position != -1) {
+            list[position].extra?.remove("0")
+            list[position].extra?.set("0", "Downloaded")
+            notifyItemChanged(position)
+        }
+    }
+
+    fun deleteDownload(link: String) { //TODO:
+        downloadedChapters.remove(link)
+        val position = list.indexOfFirst { it.link == link }
+        if (position != -1) {
+            list[position].extra?.remove("0")
+            list[position].extra?.set("0", "")
+            notifyItemChanged(position)
+        }
+    }
+
+    fun purgeDownload(link: String) {
+        activeDownloads.remove(link)
+        downloadedChapters.remove(link)
+        val position = list.indexOfFirst { it.link == link }
+        if (position != -1) {
+            list[position].extra?.remove("0")
+            list[position].extra?.set("0", "Failed")
+            notifyItemChanged(position)
+        }
+    }
+
+    fun updateDownloadProgress(link: String, progress: Int) {
+        if (!activeDownloads.contains(link)) {
+            activeDownloads.add(link)
+        }
+        val position = list.indexOfFirst { it.link == link }
+        if (position != -1) {
+            list[position].extra?.remove("0")
+            list[position].extra?.set("0", "Downloading: $progress%")
+            Log.d("NovelResponseAdapter", "updateDownloadProgress: $progress, position: $position")
+            notifyItemChanged(position)
         }
     }
 
@@ -55,3 +188,10 @@ class NovelResponseAdapter(val fragment: NovelReadFragment) : RecyclerView.Adapt
         notifyItemRangeRemoved(0, size)
     }
 }
+
+data class NovelDownloadPackage(
+    val link: String,
+    val coverUrl: String,
+    val novelName: String,
+    val originalLink: String
+)

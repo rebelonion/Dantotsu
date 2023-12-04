@@ -2,6 +2,7 @@ package ani.dantotsu.connections.anilist.api
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
 @Serializable
 data class Recommendation(
     // The id of the recommendation
@@ -22,6 +23,7 @@ data class Recommendation(
     // The user that first created the recommendation
     @SerialName("user") var user: User?,
 )
+
 @Serializable
 data class RecommendationConnection(
     //@SerialName("edges") var edges: List<RecommendationEdge>?,

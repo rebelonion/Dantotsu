@@ -8,5 +8,5 @@ data class Manga(
     var selectedChapter: String? = null,
     var chapters: MutableMap<String, MangaChapter>? = null,
     var slug: String? = null,
-    var author: Author?=null,
+    var author: Author? = null,
 ) : Serializable

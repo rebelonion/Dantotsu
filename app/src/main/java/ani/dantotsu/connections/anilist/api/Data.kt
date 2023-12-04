@@ -3,23 +3,24 @@ package ani.dantotsu.connections.anilist.api
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-class Query{
+class Query {
     @Serializable
     data class Viewer(
         @SerialName("data")
-        val data : Data?
-    ){
+        val data: Data?
+    ) {
         @Serializable
         data class Data(
             @SerialName("Viewer")
             val user: ani.dantotsu.connections.anilist.api.User?
         )
     }
+
     @Serializable
     data class Media(
         @SerialName("data")
-        val data :  Data?
-    ){
+        val data: Data?
+    ) {
         @Serializable
         data class Data(
             @SerialName("Media")
@@ -30,12 +31,12 @@ class Query{
     @Serializable
     data class Page(
         @SerialName("data")
-        val data : Data?
-    ){
+        val data: Data?
+    ) {
         @Serializable
         data class Data(
             @SerialName("Page")
-            val page : ani.dantotsu.connections.anilist.api.Page?
+            val page: ani.dantotsu.connections.anilist.api.Page?
         )
     }
 //    data class AiringSchedule(
@@ -49,8 +50,8 @@ class Query{
     @Serializable
     data class Character(
         @SerialName("data")
-        val data :  Data?
-    ){
+        val data: Data?
+    ) {
 
         @Serializable
         data class Data(
@@ -63,7 +64,7 @@ class Query{
     data class Studio(
         @SerialName("data")
         val data: Data?
-    ){
+    ) {
         @Serializable
         data class Data(
             @SerialName("Studio")
@@ -76,7 +77,7 @@ class Query{
     data class Author(
         @SerialName("data")
         val data: Data?
-    ){
+    ) {
         @Serializable
         data class Data(
             @SerialName("Staff")
@@ -95,8 +96,8 @@ class Query{
     @Serializable
     data class MediaListCollection(
         @SerialName("data")
-        val data : Data?
-    ){
+        val data: Data?
+    ) {
         @Serializable
         data class Data(
             @SerialName("MediaListCollection")
@@ -108,7 +109,7 @@ class Query{
     data class GenreCollection(
         @SerialName("data")
         val data: Data
-    ){
+    ) {
         @Serializable
         data class Data(
             @SerialName("GenreCollection")
@@ -120,7 +121,7 @@ class Query{
     data class MediaTagCollection(
         @SerialName("data")
         val data: Data
-    ){
+    ) {
         @Serializable
         data class Data(
             @SerialName("MediaTagCollection")
@@ -132,7 +133,7 @@ class Query{
     data class User(
         @SerialName("data")
         val data: Data
-    ){
+    ) {
         @Serializable
         data class Data(
             @SerialName("User")

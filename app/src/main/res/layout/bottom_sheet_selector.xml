@@ -55,7 +55,7 @@
             android:insetBottom="0dp"
             android:padding="8dp"
             android:text="@android:string/cancel"
-            android:textColor="?attr/colorOnPrimary"
+            android:textColor="?attr/colorPrimary"
             android:textSize="16sp"
             app:cornerRadius="16dp" />
 

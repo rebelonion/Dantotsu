@@ -1,12 +1,8 @@
 package ani.dantotsu.settings.extensionprefs
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
-import android.view.View
-import android.widget.FrameLayout
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.DialogPreference
@@ -14,11 +10,6 @@ import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.forEach
 import androidx.preference.getOnBindEditTextListener
-import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.R
-import ani.dantotsu.settings.ExtensionsActivity
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.textfield.TextInputLayout
 import eu.kanade.tachiyomi.PreferenceScreen
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
@@ -33,9 +24,14 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
         preferenceScreen = populateAnimePreferenceScreen()
         //set background color
         val color = TypedValue()
-        requireContext().theme.resolveAttribute(com.google.android.material.R.attr.backgroundColor, color, true)
+        requireContext().theme.resolveAttribute(
+            com.google.android.material.R.attr.backgroundColor,
+            color,
+            true
+        )
         view?.setBackgroundColor(color.data)
     }
+
     private var onCloseAction: (() -> Unit)? = null
 
 
@@ -48,7 +44,8 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
         val sourceId = requireArguments().getLong(SOURCE_ID)
         val source = Injekt.get<AnimeSourceManager>().get(sourceId)!!
         check(source is ConfigurableAnimeSource)
-        val sharedPreferences = requireContext().getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
+        val sharedPreferences =
+            requireContext().getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
         val dataStore = SharedPreferencesDataStore(sharedPreferences)
         preferenceManager.preferenceDataStore = dataStore
         val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())
@@ -57,7 +54,7 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
             pref.isIconSpaceReserved = false
             if (pref is DialogPreference) {
                 pref.dialogTitle = pref.title
-                //println("pref.dialogTitle: ${pref.dialogTitle}")
+                //println("pref.dialogTitle: ${pref.dialogTitle}")  //TODO: could be useful for dub/sub selection
             }
             /*for (entry in sharedPreferences.all.entries) {
                 Log.d("Preferences", "Key: ${entry.key}, Value: ${entry.value}")
@@ -75,7 +72,11 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
 
         return sourceScreen
     }
-    fun getInstance(sourceId: Long, onCloseAction: (() -> Unit)? = null): AnimeSourcePreferencesFragment {
+
+    fun getInstance(
+        sourceId: Long,
+        onCloseAction: (() -> Unit)? = null
+    ): AnimeSourcePreferencesFragment {
         val fragment = AnimeSourcePreferencesFragment()
         fragment.arguments = bundleOf(SOURCE_ID to sourceId)
         fragment.onCloseAction = onCloseAction

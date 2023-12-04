@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.math.MathUtils
@@ -28,8 +26,6 @@ import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
-import ani.dantotsu.settings.ExtensionsActivity
-import ani.dantotsu.settings.InstalledAnimeExtensionsFragment
 import ani.dantotsu.settings.PlayerSettings
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
@@ -40,17 +36,12 @@ import ani.dantotsu.subcriptions.SubscriptionHelper
 import ani.dantotsu.subcriptions.SubscriptionHelper.Companion.saveSubscription
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigationrail.NavigationRailView
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.textfield.TextInputLayout
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
-import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -96,8 +87,10 @@ class AnimeWatchFragment : Fragment() {
         maxGridSize = max(4, maxGridSize - (maxGridSize % 2))
 
         playerSettings =
-            loadData("player_settings", toast = false) ?: PlayerSettings().apply { saveData("player_settings", this) }
-        uiSettings = loadData("ui_settings", toast = false) ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
+            loadData("player_settings", toast = false)
+                ?: PlayerSettings().apply { saveData("player_settings", this) }
+        uiSettings = loadData("ui_settings", toast = false)
+            ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
 
         val gridLayoutManager = GridLayoutManager(requireContext(), maxGridSize)
 
@@ -106,11 +99,11 @@ class AnimeWatchFragment : Fragment() {
                 val style = episodeAdapter.getItemViewType(position)
 
                 return when (position) {
-                    0    -> maxGridSize
+                    0 -> maxGridSize
                     else -> when (style) {
-                        0    -> maxGridSize
-                        1    -> 2
-                        2    -> 1
+                        0 -> maxGridSize
+                        1 -> 2
+                        2 -> 1
                         else -> maxGridSize
                     }
                 }
@@ -129,7 +122,8 @@ class AnimeWatchFragment : Fragment() {
                 media = it
                 media.selected = model.loadSelected(media)
 
-                subscribed = SubscriptionHelper.getSubscriptions(requireContext()).containsKey(media.id)
+                subscribed =
+                    SubscriptionHelper.getSubscriptions(requireContext()).containsKey(media.id)
 
                 style = media.selected!!.recyclerStyle
                 reverse = media.selected!!.recyclerReversed
@@ -141,9 +135,11 @@ class AnimeWatchFragment : Fragment() {
                     model.watchSources = if (media.isAdult) HAnimeSources else AnimeSources
 
                     headerAdapter = AnimeWatchAdapter(it, this, model.watchSources!!)
-                    episodeAdapter = EpisodeAdapter(style ?: uiSettings.animeDefaultView, media, this)
+                    episodeAdapter =
+                        EpisodeAdapter(style ?: uiSettings.animeDefaultView, media, this)
 
-                    binding.animeSourceRecycler.adapter = ConcatAdapter(headerAdapter, episodeAdapter)
+                    binding.animeSourceRecycler.adapter =
+                        ConcatAdapter(headerAdapter, episodeAdapter)
 
                     lifecycleScope.launch(Dispatchers.IO) {
                         awaitAll(
@@ -165,15 +161,20 @@ class AnimeWatchFragment : Fragment() {
                     episodes.forEach { (i, episode) ->
                         if (media.anime?.fillerEpisodes != null) {
                             if (media.anime!!.fillerEpisodes!!.containsKey(i)) {
-                                episode.title = episode.title ?: media.anime!!.fillerEpisodes!![i]?.title
+                                episode.title =
+                                    episode.title ?: media.anime!!.fillerEpisodes!![i]?.title
                                 episode.filler = media.anime!!.fillerEpisodes!![i]?.filler ?: false
                             }
                         }
                         if (media.anime?.kitsuEpisodes != null) {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
-                                episode.desc = episode.desc ?: media.anime!!.kitsuEpisodes!![i]?.desc
-                                episode.title = episode.title ?: media.anime!!.kitsuEpisodes!![i]?.title
-                                episode.thumb = episode.thumb ?: media.anime!!.kitsuEpisodes!![i]?.thumb ?: FileUrl[media.cover]
+                                episode.desc =
+                                    episode.desc ?: media.anime!!.kitsuEpisodes!![i]?.desc
+                                episode.title =
+                                    episode.title ?: media.anime!!.kitsuEpisodes!![i]?.title
+                                episode.thumb =
+                                    episode.thumb ?: media.anime!!.kitsuEpisodes!![i]?.thumb
+                                            ?: FileUrl[media.cover]
                             }
                         }
                     }
@@ -187,7 +188,7 @@ class AnimeWatchFragment : Fragment() {
                     val limit = when {
                         (divisions < 25) -> 25
                         (divisions < 50) -> 50
-                        else             -> 100
+                        else -> 100
                     }
                     headerAdapter.clearChips()
                     if (total > limit) {
@@ -247,7 +248,12 @@ class AnimeWatchFragment : Fragment() {
         selected.preferDub = checked
         model.saveSelected(media.id, selected, requireActivity())
         media.selected = selected
-        lifecycleScope.launch(Dispatchers.IO) { model.forceLoadEpisode(media, selected.sourceIndex) }
+        lifecycleScope.launch(Dispatchers.IO) {
+            model.forceLoadEpisode(
+                media,
+                selected.sourceIndex
+            )
+        }
     }
 
     fun loadEpisodes(i: Int, invalidate: Boolean) {
@@ -289,7 +295,8 @@ class AnimeWatchFragment : Fragment() {
             else getString(R.string.unsubscribed_notification)
         )
     }
-    fun openSettings(pkg: AnimeExtension.Installed){
+
+    fun openSettings(pkg: AnimeExtension.Installed) {
         val changeUIVisibility: (Boolean) -> Unit = { show ->
             val activity = requireActivity() as MediaDetailsActivity
             val visibility = if (show) View.VISIBLE else View.GONE
@@ -297,9 +304,9 @@ class AnimeWatchFragment : Fragment() {
             activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
             activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
             activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-            try{
+            try {
                 activity.findViewById<CustomBottomNavBar>(R.id.mediaTab).visibility = visibility
-            }catch (e: ClassCastException){
+            } catch (e: ClassCastException) {
                 activity.findViewById<NavigationRailView>(R.id.mediaTab).visibility = visibility
             }
             activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
@@ -363,46 +370,46 @@ class AnimeWatchFragment : Fragment() {
         }
     }
 
-        fun onEpisodeClick(i: String) {
-            model.continueMedia = false
-            model.saveSelected(media.id, media.selected!!, requireActivity())
-            model.onEpisodeClick(media, i, requireActivity().supportFragmentManager)
+    fun onEpisodeClick(i: String) {
+        model.continueMedia = false
+        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.onEpisodeClick(media, i, requireActivity().supportFragmentManager)
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun reload() {
+        val selected = model.loadSelected(media)
+
+        //Find latest episode for subscription
+        selected.latest =
+            media.anime?.episodes?.values?.maxOfOrNull { it.number.toFloatOrNull() ?: 0f } ?: 0f
+        selected.latest =
+            media.userProgress?.toFloat()?.takeIf { selected.latest < it } ?: selected.latest
+
+        model.saveSelected(media.id, selected, requireActivity())
+        headerAdapter.handleEpisodes()
+        episodeAdapter.notifyItemRangeRemoved(0, episodeAdapter.arr.size)
+        var arr: ArrayList<Episode> = arrayListOf()
+        if (media.anime!!.episodes != null) {
+            val end = if (end != null && end!! < media.anime!!.episodes!!.size) end else null
+            arr.addAll(
+                media.anime!!.episodes!!.values.toList()
+                    .slice(start..(end ?: (media.anime!!.episodes!!.size - 1)))
+            )
+            if (reverse)
+                arr = (arr.reversed() as? ArrayList<Episode>) ?: arr
         }
+        episodeAdapter.arr = arr
+        episodeAdapter.updateType(style ?: uiSettings.animeDefaultView)
+        episodeAdapter.notifyItemRangeInserted(0, arr.size)
+    }
 
-        @SuppressLint("NotifyDataSetChanged")
-        private fun reload() {
-            val selected = model.loadSelected(media)
+    override fun onDestroy() {
+        model.watchSources?.flushText()
+        super.onDestroy()
+    }
 
-            //Find latest episode for subscription
-            selected.latest =
-                media.anime?.episodes?.values?.maxOfOrNull { it.number.toFloatOrNull() ?: 0f } ?: 0f
-            selected.latest =
-                media.userProgress?.toFloat()?.takeIf { selected.latest < it } ?: selected.latest
-
-            model.saveSelected(media.id, selected, requireActivity())
-            headerAdapter.handleEpisodes()
-            episodeAdapter.notifyItemRangeRemoved(0, episodeAdapter.arr.size)
-            var arr: ArrayList<Episode> = arrayListOf()
-            if (media.anime!!.episodes != null) {
-                val end = if (end != null && end!! < media.anime!!.episodes!!.size) end else null
-                arr.addAll(
-                    media.anime!!.episodes!!.values.toList()
-                        .slice(start..(end ?: (media.anime!!.episodes!!.size - 1)))
-                )
-                if (reverse)
-                    arr = (arr.reversed() as? ArrayList<Episode>) ?: arr
-            }
-            episodeAdapter.arr = arr
-            episodeAdapter.updateType(style ?: uiSettings.animeDefaultView)
-            episodeAdapter.notifyItemRangeInserted(0, arr.size)
-        }
-
-                override fun onDestroy() {
-            model.watchSources?.flushText()
-            super.onDestroy()
-        }
-
-        var state: Parcelable? = null
+    var state: Parcelable? = null
     override fun onResume() {
         super.onResume()
         binding.mediaInfoProgressBar.visibility = progress

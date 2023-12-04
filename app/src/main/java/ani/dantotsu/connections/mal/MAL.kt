@@ -6,7 +6,13 @@ import android.net.Uri
 import android.util.Base64
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.fragment.app.FragmentActivity
-import ani.dantotsu.*
+import ani.dantotsu.R
+import ani.dantotsu.client
+import ani.dantotsu.currContext
+import ani.dantotsu.loadData
+import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.saveData
+import ani.dantotsu.tryWithSuspend
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.io.File
@@ -94,6 +100,6 @@ object MAL {
         @SerialName("expires_in") var expiresIn: Long,
         @SerialName("access_token") val accessToken: String,
         @SerialName("refresh_token") val refreshToken: String,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
 }

@@ -1,64 +1,64 @@
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:locale="en-rDW">
+    tools:locale="en-rUS">
 
-    <string name="repo">webewonyion/Dantotsu</string>
-    <string name="preference_file_key" translatable="false">d-d-d-dantotsupwefs</string>
+    <string name="repo">rebelonion/Dantotsu</string>
+    <string name="preference_file_key" translatable="false">dantotsuprefs</string>
 
     <string name="app_name">Dantotsu</string>
-    <string name="slogan">The ;;w;; NYEW ***screeches*** Best ÚwÚ Anyime (˘˘˘) &amp; M-m-manga (◡ ꒳ ◡) app fow Andwoid.</string>
+    <string name="slogan">The NEW Best Anime &amp; Manga app for Android.</string>
 
-    <string name="login">Wogin – ̗̀ (ᵕ꒳ᵕ) ̖́-</string>
-    <string name="logout">Wogout (ᴜ‿ᴜ✿)</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
 
     <string name="discord">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github">https://github.com/rebelonion/Dantotsu</string>
 
-    <string name="home">H-h-h-home UwU</string>
-    <string name="anime">Anyime</string>
-    <string name="browse_anime">Bwowse Anyime (・\`ω\´・)</string>
-    <string name="manga">Manga (ᴜ‿ᴜ✿)</string>
-    <string name="browse_manga">Bwowse Manga (⑅˘꒳˘)</string>
+    <string name="home">Home</string>
+    <string name="anime">Anime</string>
+    <string name="browse_anime">Browse Anime</string>
+    <string name="manga">Manga</string>
+    <string name="browse_manga">Browse Manga</string>
     <string name="info">Info</string>
-    <string name="watch">Watch x3 ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
-    <string name="read">Wead</string>
+    <string name="watch">Watch</string>
+    <string name="read">Read</string>
 
-    <string name="anime_list">Anyime Wist ***wags my tail***</string>
-    <string name="manga_list">Manga Wist (ᵕᴗ ᵕ⁎)</string>
+    <string name="anime_list">Anime List</string>
+    <string name="manga_list">Manga List</string>
 
-    <string name="sad">X( (ᴜ‿ᴜ✿)</string>
+    <string name="sad">X(</string>
     <string name="oh">:o</string>
     <string name="colon">" : "</string>
 
-    <string name="no_internet">Nyo Intewnyet Connyection</string>
-    <string name="refresh">W-w-w-wefwesh</string>
+    <string name="no_internet">No Internet Connection</string>
+    <string name="refresh">Refresh</string>
 
-    <string name="search">S-s-s-seawch (◡ ꒳ ◡)</string>
-    <string name="search_results">Seawch ( ͡o ꒳ ͡o ) Wesuwts x3</string>
-    <string name="sort_by">Sowt (ᴜ‿ᴜ✿) ***cries*** By</string>
-    <string name="genre">Genwe</string>
-    <string name="top_score">Top owo Scowe</string>
-    <string name="updated">Wecentwy ( ͡o ᵕ ͡o ) Updated</string>
-    <string name="trending_anime">Twending Anyime</string>
-    <string name="popular_anime">Popuwaw ***wags my tail*** A-a-anyime</string>
-    <string name="trending_manga">T-t-t-twending Manga (⑅˘꒳˘) ***nuzzles your necky wecky***</string>
-    <string name="trending_novel">Twending Nyuvw</string>
-    <string name="popular_manga">Popuwaw ( ͡o ꒳ ͡o ) ***walks away*** Manga</string>
+    <string name="search">Search</string>
+    <string name="search_results">Search Results</string>
+    <string name="sort_by">Sort By</string>
+    <string name="genre">Genre</string>
+    <string name="top_score">Top Score</string>
+    <string name="updated">Recently Updated</string>
+    <string name="trending_anime">Trending Anime</string>
+    <string name="popular_anime">Popular Anime</string>
+    <string name="trending_manga">Trending Manga</string>
+    <string name="trending_novel">Trending Novel</string>
+    <string name="popular_manga">Popular Manga</string>
 
-    <string name="username">Usewnyame</string>
-    <string name="chapters_read">"Chaptews Wead (◡ w ◡) ***wags my tail*** " (⑅˘꒳˘)</string>
-    <string name="episodes_watched">"Episodes Uwu Watched (ㅅꈍ ˘ ꈍ) "</string>
-    <string name="continue_reading">Continyue Weading</string>
-    <string name="continue_watching">Continyue (◡ ω ◡) Watching</string>
-    <string name="recommended">W-w-w-wecommended ღ(U꒳Uღ)</string>
+    <string name="username">Username</string>
+    <string name="chapters_read">"Chapters Read "</string>
+    <string name="episodes_watched">"Episodes Watched "</string>
+    <string name="continue_reading">Continue Reading</string>
+    <string name="continue_watching">Continue Watching</string>
+    <string name="recommended">Recommended</string>
 
-    <string name="get_recommendations">Watch/Wead some Anyime ow Manga ***looks at you*** to get W-w-w-wecommendations ***blushes***</string>
-    <string name="empty">Aww c-c-caught up, when ;;w;; Nyew?!!</string>
+    <string name="get_recommendations">Watch/Read some Anime or Manga to get Recommendations</string>
+    <string name="empty">All caught up, when New?</string>
     <string name="action_settings">Settings</string>
 
-    <string name="add">Add ^-^ to Wist</string>
-    <string name="list_editor">Wist E-e-e-editow</string>
-    <string name="add_fav">Add ***blushes*** to ***wags my tail*** Favouwites</string>
-    <string name="notifications">Nyotifications</string>
+    <string name="add">Add to List</string>
+    <string name="list_editor">List Editor</string>
+    <string name="add_fav">Add to Favourites</string>
+    <string name="notifications">Notifications</string>
     <string-array name="keys">
         <item>Reading</item>
         <item>Watching</item>
@@ -97,95 +97,95 @@
         <item>PAUSED</item>
         <item>DROPPED</item>
     </string-array>
-    <string name="progress">PWOGWESS</string>
-    <string name="score">SCOWE ***blushes***</string>
-    <string name="score_suffix">"-"-" (uwu) / („ᵕᴗᵕ„) 10"</string>
-    <string name="started_at">STAWTED AT (˘ε˘)</string>
-    <string name="completed_at">COMPWETED AT</string>
-    <string name="save">Save ***looks around suspiciously***</string>
-    <string name="delete">Dewete</string>
-    <string name="remove">Wemuv</string>
+    <string name="progress">PROGRESS</string>
+    <string name="score">SCORE</string>
+    <string name="score_suffix">" / 10"</string>
+    <string name="started_at">STARTED AT</string>
+    <string name="completed_at">COMPLETED AT</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="remove">Remove</string>
 
-    <string name="name">Nyame</string>
-    <string name="name_romaji">Nyame W-w-w-womaji</string>
-    <string name="mean_score">Mean Scowe ^w^ ***smirks smuggly***</string>
-    <string name="format">Fowmat (U ﹏ U)</string>
-    <string name="status_title">Status (ㅅꈍ ˘ ꈍ)</string>
-    <string name="total_eps">Totaw (U ᵕ U❁) Episodes</string>
-    <string name="total_chaps">Totaw C-c-chaptews</string>
-    <string name="ep_duration">Avewage Duwation *˚*(ꈍ ω ꈍ).₊̣̇. ***looks around suspiciously***</string>
-    <string name="min">" min" ***glomps and huggles***</string>
+    <string name="name">Name</string>
+    <string name="name_romaji">Name Romaji</string>
+    <string name="mean_score">Mean Score</string>
+    <string name="format">Format</string>
+    <string name="status_title">Status</string>
+    <string name="total_eps">Total Episodes</string>
+    <string name="total_chaps">Total Chapters</string>
+    <string name="ep_duration">Average Duration</string>
+    <string name="min">" min"</string>
     <string name="season">Season</string>
-    <string name="start_date">S-s-stawt Date (˘ᵕ˘) ***screams***</string>
+    <string name="start_date">Start Date</string>
     <string name="end_date">End Date</string>
-    <string name="source">Souwce</string>
+    <string name="source">Source</string>
     <string name="main_studio">Studio</string>
-    <string name="genres">Genwes</string>
-    <string name="description">Synyopsis</string>
-    <string name="characters">Chawactews ***walks away***</string>
-    <string name="relations">W-w-w-wewations</string>
+    <string name="genres">Genres</string>
+    <string name="description">Synopsis</string>
+    <string name="characters">Characters</string>
+    <string name="relations">Relations</string>
 
-    <string name="roles">Wowes</string>
-    <string name="details">Detaiws ♥(。U ω U。)</string>
+    <string name="roles">Roles</string>
+    <string name="details">Details</string>
 
-    <string name="play_yt">Pway ÚwÚ on Youtube</string>
-    <string name="eps">Episodes (◡ ꒳ ◡)</string>
-    <string name="ep">Episode ***wags my tail***</string>
-    <string name="chaps">Chaptews</string>
-    <string name="chap">Chaptew ♥(。U ω U。)</string>
+    <string name="play_yt">Play on Youtube</string>
+    <string name="eps">Episodes</string>
+    <string name="ep">Episode</string>
+    <string name="chaps">Chapters</string>
+    <string name="chap">Chapter</string>
     <string name="wrong"><u>Wrong Title?</u></string>
     <string name="source_not_found">
-        Couwdn\'t *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* find (・\`ω\´・) anything X( ~(˘▾˘~) \-\-\n
- ღ(U꒳Uღ)        Twy anyothew (˘ε˘) souwce.
+        Couldn\'t find anything X( \n
+        Try another source.
     </string>
-    <string name="not_supported">%1$s is nyot suppowted?!! ***nuzzles your necky wecky***</string>
-    <string name="server_selector">Sewect Sewvew (˘ሠ˘)</string>
-    <string name="auto_select_server">Auto S-s-s-sewecting Sewvew</string>
-    <string name="make_default">Make Defauwt</string>
-    <string name="filler">Fiwwew (˘˘˘)</string>
-    <string name="adult">A-a-aduwt owo</string>
-    <string name="list_only">Wist ***licks lips*** Onwy (˘³˘) ***nuzzles your necky wecky***</string>
-    <string name="tag">Tag ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
-    <string name="tags">T-t-tags</string>
-    <string name="synonyms">Synyonyms ( ͡o ꒳ ͡o )</string>
-    <string name="trailer">Twaiwew :3</string>
-    <string name="opening">Openying</string>
-    <string name="ending">Ending (◦ᵕ ˘ ᵕ◦) ***cries***</string>
-    <string name="prequel">Pwequew ( ͡o ᵕ ͡o )</string>
-    <string name="sequel">Sequew</string>
+    <string name="not_supported">%1$s is not supported!</string>
+    <string name="server_selector">Select Server</string>
+    <string name="auto_select_server">Auto Selecting Server</string>
+    <string name="make_default">Make Default</string>
+    <string name="filler">Filler</string>
+    <string name="adult">Adult</string>
+    <string name="list_only">List Only</string>
+    <string name="tag">Tag</string>
+    <string name="tags">Tags</string>
+    <string name="synonyms">Synonyms</string>
+    <string name="trailer">Trailer</string>
+    <string name="opening">Opening</string>
+    <string name="ending">Ending</string>
+    <string name="prequel">Prequel</string>
+    <string name="sequel">Sequel</string>
 
-    <string name="anilist_settings">Anyiwist Settings (⑅˘꒳˘)</string>
-    <string name="extension_settings">Extension</string>
-    <string name="downloads">Downwoads</string>
+    <string name="anilist_settings">Anilist Settings</string>
+    <string name="extension_settings">Extensions</string>
+    <string name="downloads">Downloads</string>
     <string name="settings">Settings</string>
-    <string name="extensions">Extensions ***walks away***</string>
-    <string name="player_settings">Pwayew x3 Settings ( ͡o ꒳ ͡o )</string>
-    <string name="recentlyListOnly">Onwy (uwu) ***looks at you*** show (ᵘﻌᵘ) My (˘³˘) Shows in Wecentwy :3 U-u-updated ***nuzzles your necky wecky***</string>
-    <string name="download_manager_select">Downwoad Manyagew</string>
-    <string name="downloadInSd">Downwoad in Uwu SD cawd</string>
-    <string name="noSdFound">Nyo SD x3 cawd was ***wags my tail*** Found.</string>
-    <string name="reader_settings">Weadew ***boops your nose*** Settings</string>
-    <string name="default_source">Defauwt ( ᵘ ꒳ ᵘ ✼) Souwce</string>
-    <string name="show_yt">Show Youtube Wink</string>
-    <string name="default_ep_view">Defauwt (◡ ω ◡) Episode Wayout ~(˘▾˘~) ***huggles tightly***</string>
-    <string name="default_chp_view">Defauwt ***pounces on you*** Chaptew ***blushes*** Wayout</string>
-    <string name="ui">U-u-usew (ᵘﻌᵘ) Intewface</string>
+    <string name="extensions">Extensions</string>
+    <string name="player_settings">Player Settings</string>
+    <string name="recentlyListOnly">Only show My Shows in Recently Updated</string>
+    <string name="download_manager_select">Download Manager</string>
+    <string name="downloadInSd">Download in SD card</string>
+    <string name="noSdFound">No SD card was Found.</string>
+    <string name="reader_settings">Reader Settings</string>
+    <string name="default_source">Default Source</string>
+    <string name="show_yt">Show Youtube Link</string>
+    <string name="default_ep_view">Default Episode Layout</string>
+    <string name="default_chp_view">Default Chapter Layout</string>
+    <string name="ui">User Interface</string>
     <string name="common">Common</string>
-    <string name="theme">Theme ***whispers to self***</string>
+    <string name="theme">Theme</string>
     <string name="ui_settings">UI Settings</string>
     <string name="about">About</string>
-    <string name="desc">"    Dantotsu Uwu i-i-is cwafted fwom the ashes of ( ｡ᵘ ᵕ ᵘ ｡) Saikou (◡ ω ◡) and based (˘ε˘) on simpwistic yet (˘ᵕ˘) state-of-the-awt e-e-ewegance. It (˘ሠ˘) is ***runs away*** an Anyiwist onwy c-c-c-cwient, which awso wets you (ᴜ‿ᴜ✿) stweam-downwoad (◡ ω ◡) A-a-anyime thwough ***smirks smuggly*** extensions &amp; ***screams*** M-m-manga.\nDantotsu ;;w;; witewawwy means ( ᵘ ꒳ ᵘ ✼) the \"best of ***pounces on you*** t-t-t-the best\" in japanyese. Weww, we wouwd ^w^ wike ღ(U꒳Uღ) to say this is the ( ᵘ ꒳ ᵘ ✼) best open *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* souwce (ㅅꈍ ˘ ꈍ) app (ᵘʷᵘ) fow (˘³˘) ***blushes*** anyime and manga o-o-on A-a-a-andwoid, what wouwd you x3 ***smirks smuggly*** say?" :3</string>
-    <string name="devs">Devewopews</string>
-    <string name="disclaimer">Discwaimew</string>
+    <string name="desc">"    Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream-download Anime through extensions &amp; Manga.\nDantotsu literally means the \"best of the best\" in japanese. Well, we would like to say this is the best open source app for anime and manga on Android, what would you say?"</string>
+    <string name="devs">Developers</string>
+    <string name="disclaimer">Disclaimer</string>
     <string name="full_disclaimer">
-         ----- (uwu) Dantotsu ( ᵘ ꒳ ᵘ ✼) by itsewf onwy *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* pwovides an anyime and ***walks away*** manga (・\`ω\´・) twackew and does ***sweats*** n-n-nyot (ᵘﻌᵘ) p-p-p-pwovide any anyime ***glomps and huggles*** ow (˘ε˘) manga stweaming ;;w;; ow downwoading capabiwities.
-        \n\n ------- Dantotsu ow any Uwu ***blushes*** of its owo d-d-devewopew/staff don\'t host any of the c-c-c-content found inside ***glomps*** Dantotsu. Any and a-a-aww images and anyime/manga infowmation (˘˘˘) found ~(˘▾˘~) i-i-in t-t-the (・\`ω\´・) app ( ᵘ ꒳ ᵘ ✼) awe taken ***glomps and huggles*** fwom vawious ***glomps*** pubwic (˘˘˘) APIs (AnyiWist, MyAnyimeWist, Kitsu).
-        \n\n - Fuwthewmowe, aww of the (U ﹏ U) anyime/manga ( ͡o ꒳ ͡o ) winks (◦ᵕ ˘ ᵕ◦) found in Dantotsu a-a-a-awe t-t-t-taken fwom vawious ÚwÚ 3wd (U ﹏ U) pawty pwugins (˘³˘) and (⑅˘꒳˘) have nyo affiwiation with Dantotsu ;;w;; ow its ( ˘ᴗ˘ ) staff.
-        \-\-\-\n\n - (・\`ω\´・) Dantotsu ow (◦ᵕ ˘ ᵕ◦) ***pounces on you*** it\'s ownyews awen\'t (◡ ω ◡) wiabwe fow a-a-any misuse of any of ♥(。U ω U。) the contents (U ᵕ U❁) found inside ow o-o-o-outside of t-t-the app and ( ˊ.ᴗˋ ) cannyot b-b-be hewd ***huggles tightly*** accountabwe fow the distwibution of any o-o-of (ᵘʷᵘ) the contents found (˘ሠ˘) inside the app.
- (◡ ሠ ◡)        \-\-\-\n\n - By using Dantotsu, you compwy (｡ᴜ‿‿ᴜ｡) to ( ͡U ω ͡U ) the fact that ***smirks smuggly*** the (◡ ꒳ ◡) ***blushes*** devewopew (⑅˘꒳˘) of t-t-t-the a-a-app is n-n-nyot (˘ε˘) wesponsibwe fow (˘˘˘) any (˘ε˘) ***nuzzles your necky wecky*** o-o-of (U ᵕ U❁) the contents found in the (˘ᵕ˘) app. ^-^ You awso agwee to the f-f-f-fact ***boops your nose*** that (ᵘʷᵘ) you m-m-may nyot use ***cries*** Dantotsu to downwoad ow stweam any copywighted OwO c-c-c-content.
-        \n\n :3 - ( ͡U ω ͡U ) If the intewnyet infwingement issues awe invowved, (・\`ω\´・) ***cries*** pwease (U ﹏ U) contact ***glomps and huggles*** the souwce ~(˘▾˘~) ***whispers to self*** w-w-website. The (˘ω˘) devewopew ***glomps and huggles*** does ღ(U꒳Uღ) n-n-nyot assume any (◡ ሠ ◡) wegaw wesponsibiwity.
+         - Dantotsu by itself only provides an anime and manga tracker and does not provide any anime or manga streaming or downloading capabilities.
+        \n\n - Dantotsu or any of its developer/staff don\'t host any of the content found inside Dantotsu. Any and all images and anime/manga information found in the app are taken from various public APIs (AniList, MyAnimeList, Kitsu).
+        \n\n - Furthermore, all of the anime/manga links found in Dantotsu are taken from various 3rd party plugins and have no affiliation with Dantotsu or its staff.
+        \n\n - Dantotsu or it\'s owners aren\'t liable for any misuse of any of the contents found inside or outside of the app and cannot be held accountable for the distribution of any of the contents found inside the app.
+        \n\n - By using Dantotsu, you comply to the fact that the developer of the app is not responsible for any of the contents found in the app. You also agree to the fact that you may not use Dantotsu to download or stream any copyrighted content.
+        \n\n - If the internet infringement issues are involved, please contact the source website. The developer does not assume any legal responsibility.
     </string>
-    <string name="version_current">Vewsion (◦ᵕ ˘ ᵕ◦) %1$s uwU</string>
+    <string name="version_current">Version %1$s</string>
     <string-array name="tips">
         <item>You can Long Click an episode/chapter to Mark it as Read.</item>
         <item>Long Clicking Shows can directly open List Editor.</item>
@@ -210,66 +210,66 @@
     </string-array>
 
     <string name="video">Video</string>
-    <string name="video_info">Show Video (U ﹏ U) Info ***cries***</string>
-    <string name="source_info">Show Souwce Nyame ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
-    <string name="video_info_info">Shows (｡ᴜ‿‿ᴜ｡) ***whispers to self*** what the ( ͡U ω ͡U ) Wesowution of the c-c-cuwwent video pwaying, uwU usefuw (⑅˘꒳˘) fow ***looks around suspiciously*** <b>\"Multi Quality\"</b> servers.</string>
-    <string name="default_quality">Auto Quawity S-s-s-sewection</string>
+    <string name="video_info">Show Video Info</string>
+    <string name="source_info">Show Source Name</string>
+    <string name="video_info_info">Shows what the Resolution of the current video playing, useful for <b>\"Multi Quality\"</b> servers.</string>
+    <string name="default_quality">Auto Quality Selection</string>
     <string name="height">Height</string>
     <string name="width">Width</string>
-    <string name="default_quality_info">Automaticawwy uses the cwosest quawity pwovided by ***walks away*** defauwt, ONWY uwU appwied fow \"Muwti Quawity\" Sewvews. ( ˊ.ᴗˋ ) Auto (ㅅꈍ ˘ ꈍ) changes upon pwaying a ( ͡U ω ͡U ) video.</string>
-    <string name="default_playback_speed">Defauwt ^-^ Pwayback – ̗̀ (ᵕ꒳ᵕ) ̖́- Speed : %1$s (｡ᴜ‿‿ᴜ｡)</string>
-    <string name="cursed_speeds">Cuwsed Speeds</string>
-    <string name="resize_mode_button">Defauwt Wesize Mode (。U ω U。)</string>
-    <string name="subtitles">Subtitwes</string>
-    <string name="subtitle_toggle">Subtitwes</string>
-    <string name="primary_sub_color_select">Subtitwe Cowow (◡ ሠ ◡)</string>
-    <string name="secondary_sub_color_select">S-s-subtitwe Outwinye Cowow</string>
-    <string name="secondary_sub_outline_type_select">S-s-s-subtitwe Outwinye :3 Type</string>
-    <string name="sub_background_color_select">Subtitwe Backgwound *˚*(ꈍ ω ꈍ).₊̣̇. Cowow (˘ε˘)</string>
-    <string name="sub_window_color_select">Subtitwe ;;w;; W-w-w-window Cowow</string>
-    <string name="sub_window_color_info">"The ( ͡U ω ͡U ) subtitwe („ᵕᴗᵕ„) window is the pawt weft (˘³˘) and wight owo fwom them. (・\`ω\´・) (whewe – ̗̀ (ᵕ꒳ᵕ) ̖́- the ***looks at you*** b-b-b-backgwound isn\'t)" ( ˊ.ᴗˋ )</string>
+    <string name="default_quality_info">Automatically uses the closest quality provided by default, ONLY applied for \"Multi Quality\" Servers. Auto changes upon playing a video.</string>
+    <string name="default_playback_speed">Default Playback Speed : %1$s</string>
+    <string name="cursed_speeds">Cursed Speeds</string>
+    <string name="resize_mode_button">Default Resize Mode</string>
+    <string name="subtitles">Subtitles</string>
+    <string name="subtitle_toggle">Subtitles</string>
+    <string name="primary_sub_color_select">Subtitle Color</string>
+    <string name="secondary_sub_color_select">Subtitle Outline Color</string>
+    <string name="secondary_sub_outline_type_select">Subtitle Outline Type</string>
+    <string name="sub_background_color_select">Subtitle Background Color</string>
+    <string name="sub_window_color_select">Subtitle Window Color</string>
+    <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn\'t)"</string>
     <string name="sub_color_info"><b>Note:</b> Changing Subtitle formatting only works with Soft-Subbed Sources such as Zoro!</string>
-    <string name="sub_font_select">Subtitwe Font (ᵘʷᵘ)</string>
-    <string name="subtitle_font_size">Subtitwe ***glomps*** Size x3</string>
+    <string name="sub_font_select">Subtitle Font</string>
+    <string name="subtitle_font_size">Subtitle Size</string>
 
-    <string name="auto">Auto ***pounces on you***</string>
-    <string name="auto_play_next_episode">Autopway Nyext (˘˘˘) Episode</string>
-    <string name="auto_play_next_episode_info">Automaticawwy disabwes (◡ ω ◡) if ( ˘ᴗ˘ ) thewe is nyo ( ͡U ω ͡U ) ***nuzzles your necky wecky*** intewaction with p-p-p-pwayew (˘ε˘) aftew 1 houw.</string>
-    <string name="auto_skip_fillers">Auto Skip Fiwwews ( ˘ᴗ˘ )</string>
-    <string name="auto_skip_fillers_info">Skips ღ(U꒳Uღ) fiwwew e-e-e-episodes when going to nyext *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* episode.</string>
+    <string name="auto">Auto</string>
+    <string name="auto_play_next_episode">Autoplay Next Episode</string>
+    <string name="auto_play_next_episode_info">Automatically disables if there is no interaction with player after 1 hour.</string>
+    <string name="auto_skip_fillers">Auto Skip Fillers</string>
+    <string name="auto_skip_fillers_info">Skips filler episodes when going to next episode.</string>
 
-    <string name="update_progress">Update Pwogwess</string>
-    <string name="ask_update_progress_anime">Ask fow each UwU A-a-a-anyime ( ͡o ꒳ ͡o ) \"Individuawwy\" (◡ ꒳ ◡) ***nuzzles your necky wecky***</string>
-    <string name="ask_update_progress_manga">Ask (˘³˘) fow e-e-each Manga (U ﹏ U) \"Individuawwy\" ***walks away***</string>
-    <string name="ask_update_progress_info_ep">Tuwnying OwO ***looks at you*** off wiww awways automaticawwy update pwogwess when ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** the episode is ***nuzzles your necky wecky*** watched. ღ(U꒳Uღ)</string>
-    <string name="ask_update_progress_info_chap">Tuwnying off wiww awways automaticawwy update pwogwess when the chaptew is wead. ♥(。U ω U。)</string>
-    <string name="ask_update_progress_hentai">Update Pwogwess fow Hentai</string>
-    <string name="ask_update_progress_doujin">Update Pwogwess fow Doujins (｡ᴜ‿‿ᴜ｡)</string>
-    <string name="very_bold">vewy (˘ሠ˘) ***smirks smuggly*** bowd ( ᵘ ꒳ ᵘ ✼) of (ㅅꈍ ˘ ꈍ) you saw (ᴜ‿ᴜ✿)</string>
-    <string name="watch_complete_percentage">Watch (。U ω U。) Update Pewcentage</string>
-    <string name="watch_complete_percentage_info">T-t-t-the pewcentage at which youw Anyiwist ***smirks smuggly*** pwogwess shouwd be (◡ ꒳ ◡) updated a-a-a-aftew ( ͡o ꒳ ͡o ) watching owo an episode. \nThis awso s-s-s-sets the ^w^ \% fow ***sweats*** w-w-w-when ( ᵘ ꒳ ᵘ ✼) to pwewoad winks fow the nyext (◡ w ◡) ***screams*** episode.</string>
+    <string name="update_progress">Update Progress</string>
+    <string name="ask_update_progress_anime">Ask for each Anime \"Individually\"</string>
+    <string name="ask_update_progress_manga">Ask for each Manga \"Individually\"</string>
+    <string name="ask_update_progress_info_ep">Turning off will always automatically update progress when the episode is watched.</string>
+    <string name="ask_update_progress_info_chap">Turning off will always automatically update progress when the chapter is read.</string>
+    <string name="ask_update_progress_hentai">Update Progress for Hentai</string>
+    <string name="ask_update_progress_doujin">Update Progress for Doujins</string>
+    <string name="very_bold">very bold of you sar</string>
+    <string name="watch_complete_percentage">Watch Update Percentage</string>
+    <string name="watch_complete_percentage_info">The percentage at which your Anilist progress should be updated after watching an episode. \nThis also sets the \% for when to preload links for the next episode.</string>
 
-    <string name="behaviour">Behaviouw</string>
-    <string name="always_continue">Awways C-c-c-continyue ***screams*** fwom w-w-w-whewe you weft off (⑅˘꒳˘)</string>
-    <string name="pause_video_focus">Pause OwO when nyot in Focus</string>
-    <string name="gestures">Vowume &amp; Bwightnyess Gestuwes</string>
-    <string name="double_tap">Doubwe t-t-t-tap to Seek</string>
-    <string name="fast_forward">Fast Fowwawd</string>
-    <string name="double_tap_info">Tuwnying ***nuzzles your necky wecky*** off ~(˘▾˘~) wiww s-s-s-show fast fowwawd &amp; wewind buttons ♥(。U ω U。)</string>
-    <string name="seek_time">S-s-seek Time</string>
-    <string name="seek_time_info">Amount of time in ÚwÚ seconds fow f-f-fast fowwawd &amp;-&amp;-&amp; wewind.</string>
-    <string name="skip_time">S-s-s-skip OwO Time ***smirks smuggly***</string>
-    <string name="skip_time_info">Setting to Uwu 0, h-h-hides ***cries*** the Skip Button.</string>
+    <string name="behaviour">Behaviour</string>
+    <string name="always_continue">Always Continue from where you left off</string>
+    <string name="pause_video_focus">Pause when not in Focus</string>
+    <string name="gestures">Volume &amp; Brightness Gestures</string>
+    <string name="double_tap">Double tap to Seek</string>
+    <string name="fast_forward">Fast Forward</string>
+    <string name="double_tap_info">Turning off will show fast forward &amp; rewind buttons</string>
+    <string name="seek_time">Seek Time</string>
+    <string name="seek_time_info">Amount of time in seconds for fast forward &amp; rewind.</string>
+    <string name="skip_time">Skip Time</string>
+    <string name="skip_time_info">Setting to 0, hides the Skip Button.</string>
     <string name="show_cast_button">Show Cast Button</string>
-    <string name="show_cast_button_info">Wequiwes ***smirks smuggly*** \"Web Video C-c-c-castew\" app to – ̗̀ (ᵕ꒳ᵕ) ̖́- cast.</string>
-    <string name="picture_in_picture">Pictuwe in ;;w;; P-p-p-pictuwe</string>
-    <string name="always_minimize">Awways Minyimize</string>
-    <string name="always_minimize_info">Wequiwes *˚*(ꈍ ω ꈍ).₊̣̇. PiP to be enyabwed, makes the pwayew (uwu) behave (U ᵕ U❁) wike ***cries*** Youtube Pwayew (˘ε˘) but bettew.\nAwso hides the P-p-piP button.</string>
+    <string name="show_cast_button_info">Requires \"Web Video Caster\" app to cast.</string>
+    <string name="picture_in_picture">Picture in Picture</string>
+    <string name="always_minimize">Always Minimize</string>
+    <string name="always_minimize_info">Requires PiP to be enabled, makes the player behave like Youtube Player but better.\nAlso hides the PiP button.</string>
 
-    <string name="app">App ***looks around suspiciously***</string>
-    <string name="immersive_mode">Hide Status Baw</string>
-    <string name="immersive_mode_info">Wequiwes App westawt ÚwÚ to fuwwy appwy.</string>
-    <string name="home_layout_show">Show/Hide (˘ᵕ˘) W-w-w-wayouts on Home ***cries***</string>
+    <string name="app">App</string>
+    <string name="immersive_mode">Hide Status Bar</string>
+    <string name="immersive_mode_info">Requires App restart to fully apply.</string>
+    <string name="home_layout_show">Show/Hide Layouts on Home</string>
     <string-array name="home_layouts">
         <item>Continue Watching</item>
         <item>Favourite Anime</item>
@@ -280,178 +280,178 @@
         <item>Recommended</item>
     </string-array>
 
-    <string name="startUpTab">Defauwt Stawt Up Tab</string>
-    <string name="small_view">Smaww – ̗̀ (ᵕ꒳ᵕ) ̖́- View in T-t-twending Shows</string>
-    <string name="animations">Anyimations</string>
-    <string name="banner_animations">Bannyew *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* A-a-anyimations</string>
-    <string name="layout_animations">Wayout ***wags my tail*** Anyimations</string>
-    <string name="animation_speed">Ovewaww ( ᴜ ω ᴜ ) ***pounces on you*** Speed (⑅˘꒳˘)</string>
-    <string name="empty_fav">W-w-wooks wike y-y-you don\'t w-w-wike a-a-a-anything,\nTwy ***boops your nose*** w-w-w-wiking a show (˘ω˘) to k-k-k-keep UwU it („ᵕᴗᵕ„) hewe.</string>
-    <string name="fav_anime">Favouwite Anyime (˘ᵕ˘)</string>
-    <string name="fav_manga">Favouwite M-m-m-manga</string>
-    <string name="restart_app">Westawt the a-a-a-app!!11 \&gt;w\&lt;</string>
-    <string name="next">Nyext</string>
-    <string name="previous">Pwevious ♥(。U ω U。)</string>
-    <string name="current_page">Cuwwent Page</string>
-    <string name="dubbed">D-d-d-dubbed</string>
+    <string name="startUpTab">Default Start Up Tab</string>
+    <string name="small_view">Small View in Trending Shows</string>
+    <string name="animations">Animations</string>
+    <string name="banner_animations">Banner Animations</string>
+    <string name="layout_animations">Layout Animations</string>
+    <string name="animation_speed">Overall Speed</string>
+    <string name="empty_fav">Looks like you don\'t like anything,\nTry liking a show to keep it here.</string>
+    <string name="fav_anime">Favourite Anime</string>
+    <string name="fav_manga">Favourite Manga</string>
+    <string name="restart_app">Restart the app?</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="current_page">Current Page</string>
+    <string name="dubbed">Dubbed</string>
     <string name="subbed">Subbed</string>
-    <string name="prefer_dub">Pwefew ( ᴜ ω ᴜ ) Dubbed uwU Anyime</string>
-    <string name="none">Nyonye ( ˘ᴗ˘ )</string>
-    <string name="selected_dns">Sewected UwU DNS</string>
-    <string name="dns_info">Change if youw ISP bwocks any (◡ w ◡) souwce (ᵘﻌᵘ)</string>
-    <string name="keep_screen_on">Keep Scween O-o-on (◡ w ◡)</string>
-    <string name="layout">W-w-w-wayout ***huggles tightly***</string>
-    <string name="spaced_pages">Spaced Pages Uwu</string>
-    <string name="direction">D-d-diwection</string>
+    <string name="prefer_dub">Prefer Dubbed Anime</string>
+    <string name="none">None</string>
+    <string name="selected_dns">Selected DNS</string>
+    <string name="dns_info">Change if your ISP blocks any source</string>
+    <string name="keep_screen_on">Keep Screen On</string>
+    <string name="layout">Layout</string>
+    <string name="spaced_pages">Spaced Pages</string>
+    <string name="direction">Direction</string>
 
-    <string name="general">Genyewaw ***smirks smuggly***</string>
-    <string name="show_system_bars">Show (◡ ω ◡) Status &amp; Nyavigation Baws</string>
+    <string name="general">General</string>
+    <string name="show_system_bars">Show Status &amp; Navigation Bars</string>
     <string name="auto_detect_webtoon">Auto Detect Webtoon</string>
-    <string name="auto_detect_webtoon_info">If the (⑅˘꒳˘) Manga ( ͡o ᵕ ͡o ) is ( ˘ᴗ˘ ) nyot (ᵘﻌᵘ) ***looks around suspiciously*** fwom (◡ w ◡) Japan, the weadew wiww ***looks around suspiciously*** d-d-defauwt ***screeches*** to ***screeches*** Webtoon Weadew Settings</string>
-    <string name="default_settings">Defauwt Settings</string>
-    <string name="horizontal_scroll_bar">Howizontaw ( ˊ.ᴗˋ ) Scwoww OwO Baw</string>
-    <string name="dual_page">Duaw ^w^ Page (ᵘﻌᵘ)</string>
-    <string name="dual_page_info">Shows (˘ω˘) 2 Images in 1 page, ***glomps*** wiww (。U ω U。) wook (ㅅꈍ ˘ ꈍ) ***cries*** weiwd if the ♥(。U ω U。) images ♥(。U ω U。) awen\'t the same ***huggles tightly*** size</string>
-    <string name="true_colors">Twue ***sweats*** Cowows</string>
-    <string name="true_colors_info">(32-bit (◡ ꒳ ◡) ***glomps and huggles*** cowow Mode) ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** Weduces Banding ^-^ o-o-on the ( ͡U ω ͡U ) ***glomps and huggles*** images, m-m-m-may x3 affect (◡ ሠ ◡) pewfowmance.</string>
-    <string name="image_rotation">Image Wotation \&gt;w\&lt;</string>
-    <string name="hide_page_numbers">Hide P-p-p-page owo Nyumbews</string>
-    <string name="sort_by_title">Sowt (｡ᴜ‿‿ᴜ｡) by ( ˘ᴗ˘ ) Titwe x3</string>
-    <string name="sort_by_last_updated">S-s-sowt (U ᵕ U❁) by Wast owo ***blushes*** U-u-u-updated</string>
-    <string name="sort_by_score">Sowt ( ᴜ ω ᴜ ) by S-s-scowe</string>
-    <string name="over_scroll">Ovew Scwoww to ^-^ Nyext/Pwevious ***walks away*** Chaptew</string>
-    <string name="volume_buttons">Change pages ***glomps*** with Vowume Buttons ***glomps***</string>
-    <string name="list_private">Pwivate</string>
-    <string name="wrap_images">Wwap ***cries*** I-i-images ;;w;;</string>
-    <string name="wrap_images_info">Mostwy (⑅˘꒳˘) ***blushes*** usefuw fow ***screeches*** wawgew devices, wemuvs ^w^ space owo between images, *˚*(ꈍ ω ꈍ).₊̣̇. if UwU they (˘ε˘) exist. (◦ᵕ ˘ ᵕ◦)</string>
-    <string name="reload">Wewoad :3</string>
-    <string name="share">S-s-shawe ( ˘ᴗ˘ ) ***smirks smuggly***</string>
+    <string name="auto_detect_webtoon_info">If the Manga is not from Japan, the reader will default to Webtoon Reader Settings</string>
+    <string name="default_settings">Default Settings</string>
+    <string name="horizontal_scroll_bar">Horizontal Scroll Bar</string>
+    <string name="dual_page">Dual Page</string>
+    <string name="dual_page_info">Shows 2 Images in 1 page, will look weird if the images aren\'t the same size</string>
+    <string name="true_colors">True Colors</string>
+    <string name="true_colors_info">(32-bit color Mode) Reduces Banding on the images, may affect performance.</string>
+    <string name="image_rotation">Image Rotation</string>
+    <string name="hide_page_numbers">Hide Page Numbers</string>
+    <string name="sort_by_title">Sort by Title</string>
+    <string name="sort_by_last_updated">Sort by Last Updated</string>
+    <string name="sort_by_score">Sort by Score</string>
+    <string name="over_scroll">Over Scroll to Next/Previous Chapter</string>
+    <string name="volume_buttons">Change pages with Volume Buttons</string>
+    <string name="list_private">Private</string>
+    <string name="wrap_images">Wrap Images</string>
+    <string name="wrap_images_info">Mostly useful for larger devices, removes space between images, if they exist.</string>
+    <string name="reload">Reload</string>
+    <string name="share">Share</string>
     <string name="skip">Skip</string>
-    <string name="show_skip_time_stamp_button">Show ^w^ Skip UwU Time Stamp Button</string>
-    <string name="always_load_time_stamps">Awways (・\`ω\´・) Woad Time Stamps ~(˘▾˘~)</string>
+    <string name="show_skip_time_stamp_button">Show Skip Time Stamp Button</string>
+    <string name="always_load_time_stamps">Always Load Time Stamps</string>
     <string name="timestamps">Time Stamps</string>
-    <string name="other">Othew</string>
-    <string name="auto_skip_op_ed">Auto Skip Uwu OP / ED :3</string>
-    <string name="requires_time_stamps_to_be_enabled">Wequiwes Time – ̗̀ (ᵕ꒳ᵕ) ̖́- Stamps t-t-t-to ***screeches*** be Enyabwed</string>
-    <string name="total_repeats">TOTAW WEPEATS</string>
-    <string name="custom_lists">Custom x3 ***glomps and huggles*** Wists</string>
-    <string name="donate_desc">Want to (ㅅꈍ ˘ ꈍ) suppowt (˘ᵕ˘) Dantotsu\'s Maintainyew?\nConsidew (uwu) Donyating ^-^</string>
-    <string name="donate_goal">Nyo d-d-d-donyation goaw :3 ***boops your nose*** atm</string>
-    <string name="filter">Fiwtew</string>
-    <string name="year">Yeaw \&gt;w\&lt;</string>
-    <string name="apply">Appwy</string>
-    <string name="cancel">Cancew</string>
-    <string name="this_season">This S-s-season</string>
-    <string name="next_season">Nyext Season (⑅˘꒳˘)</string>
-    <string name="previous_season">Pwevious Season (。U ω U。)</string>
-    <string name="include_media_in_list">Incwude UwU Wist</string>
-    <string name="release_calendar">Cawendaw</string>
-    <string name="planned_anime">Pwannyed A-a-anyime</string>
-    <string name="planned_manga">Pwannyed (ㅅꈍ ˘ ꈍ) Manga ^w^</string>
-    <string name="image_long_clicking">Open i-i-image by Wong Cwicking (ᵘﻌᵘ)</string>
-    <string name="always_continue_shows">A-a-awways continyue \&gt;w\&lt; Shows ***nuzzles your necky wecky***</string>
-    <string name="timestamp_proxy_desc">Usefuw :3 if you x3 awe getting (◡ w ◡) Handshake ^w^ F-f-faiws</string>
-    <string name="timestamp_proxy">Use P-p-p-pwoxy fow Timestamps</string>
-    <string name="check_app_updates">Awways check fow App (˘ሠ˘) ***licks lips*** Updates ( ͡o ꒳ ͡o )</string>
-    <string name="author">Authow ***runs away***</string>
-    <string name="forks">Vewsions</string>
-    <string name="faq">FAQ ^-^</string>
+    <string name="other">Other</string>
+    <string name="auto_skip_op_ed">Auto Skip OP / ED</string>
+    <string name="requires_time_stamps_to_be_enabled">Requires Time Stamps to be Enabled</string>
+    <string name="total_repeats">TOTAL REPEATS</string>
+    <string name="custom_lists">Custom Lists</string>
+    <string name="donate_desc">Want to support Dantotsu\'s Maintainer?\nConsider Donating</string>
+    <string name="donate_goal">No donation goal atm</string>
+    <string name="filter">Filter</string>
+    <string name="year">Year</string>
+    <string name="apply">Apply</string>
+    <string name="cancel">Cancel</string>
+    <string name="this_season">This Season</string>
+    <string name="next_season">Next Season</string>
+    <string name="previous_season">Previous Season</string>
+    <string name="include_media_in_list">Include List</string>
+    <string name="release_calendar">Calendar</string>
+    <string name="planned_anime">Planned Anime</string>
+    <string name="planned_manga">Planned Manga</string>
+    <string name="image_long_clicking">Open image by Long Clicking</string>
+    <string name="always_continue_shows">Always continue Shows</string>
+    <string name="timestamp_proxy_desc">Useful if you are getting Handshake Fails</string>
+    <string name="timestamp_proxy">Use Proxy for Timestamps</string>
+    <string name="check_app_updates">Always check for App Updates</string>
+    <string name="author">Author</string>
+    <string name="forks">Versions</string>
+    <string name="faq">FAQ</string>
     <string name="accounts">Accounts</string>
-    <string name="myanimelist">MyAnyimeWist (◡ ω ◡)</string>
-    <string name="login_with_anilist">Wogin ***boops your nose*** with Anyiwist!!1!</string>
-    <string name="anilist">Anyiwist ***looks around suspiciously***</string>
-    <string name="account_help">H-h-h-how ÚwÚ ***nuzzles your necky wecky*** does this ***huggles tightly*** wowk\?!!</string>
+    <string name="myanimelist">MyAnimeList</string>
+    <string name="login_with_anilist">Login with Anilist!</string>
+    <string name="anilist">Anilist</string>
+    <string name="account_help">How does this work\?</string>
     <string name="full_account_help">
- (˘ᵕ˘)        Dantotsu is (U ﹏ U) an (uwu) Anyiwist Based App, (˘ω˘) s-s-s-so fow syncing (◡ ሠ ◡) w-w-w-with youw MAW Account, It ^w^ nyeeds an Anyiwist (U ﹏ U) account to be wogged (˘ω˘) in.
- (◡ w ◡)        \nOnce ***screams*** wogged UwU in with both (ᵕᴗ ᵕ⁎) Anyiwist and MAW accounts, the *˚*(ꈍ ω ꈍ).₊̣̇. app wiww automaticawwy update youw MAW ***runs away*** account ~(˘▾˘~) whenyevew:
-        \n- Add a (⑅˘꒳˘) nyew Media
-        \n- Edit a ( ᴜ ω ᴜ ) Media
-        \n- (｡ᴜ‿‿ᴜ｡) ***looks at you*** Dewete a Media
+        Dantotsu is an Anilist Based App, so for syncing with your MAL Account, It needs an Anilist account to be logged in.
+        \nOnce logged in with both Anilist and MAL accounts, the app will automatically update your MAL account whenever:
+        \n- Add a new Media
+        \n- Edit a Media
+        \n- Delete a Media
 
-        \n\nNyote: The (｡ᴜ‿‿ᴜ｡) ***screams*** app wiww nyot sync owd Media\'s uwU ***pounces on you*** fwom (◡ w ◡) Anyiwist to MAW, It\'s *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* wecommended UwU to sync ( ͡U ω ͡U ) them.
-        \n- Check __FAQs__ f-f-f-fow UwU _Easy Method_
+        \n\nNote: The app will not sync old Media\'s from Anilist to MAL, It\'s recommended to sync them.
+        \n- Check __FAQs__ for _Easy Method_
 
- (ᵕᴗ ᵕ⁎) ***pounces on you***        \n\nAnd (ㅅꈍ ˘ ꈍ) fow (◡ ω ◡) _Intewmediates_ :
-        \n- [How to (｡ᴜ‿‿ᴜ｡) sync A-a-anyiwist data with ( ͡U ω ͡U ) MAL](https://anilist.co/forum/thread/2654)
- \&gt;w\&lt;        \n- [How to sync MAW ***smirks smuggly*** data with Anilist](https://anilist.co/forum/thread/3393)
+        \n\nAnd for _Intermediates_ :
+        \n- [How to sync Anilist data with MAL](https://anilist.co/forum/thread/2654)
+        \n- [How to sync MAL data with Anilist](https://anilist.co/forum/thread/3393)
 
- ÚwÚ        \-\-\-\n\n_It (ᵘﻌᵘ) is nyot wequiwed (˘ω˘) to (U ᵕ U❁) sync (˘ε˘) ***licks lips*** b-b-both MAW OwO and Anyiwist (˘ω˘) accounts._
+        \n\n_It is not required to sync both MAL and Anilist accounts._
     </string>
-    <string name="notification_for_checking_subscriptions">Show nyotification fow (。U ω U。) Checking Subscwiptions</string>
-    <string name="checking_subscriptions">Nyotification fow Checking Subscwiptions</string>
-    <string name="subscriptions_checking_time_s">Subscwiptions Update ^-^ F-f-f-fwequency : %1$s (⑅˘꒳˘)</string>
-    <string name="subscriptions_checking_time">Subscwiptions ;;w;; Update F-f-fwequency</string>
-    <string name="subscriptions_info">A-a-amount of (˘ω˘) time fow ***screeches*** Dantotsu \&gt;w\&lt; to owo pewiodicawwy UwU c-c-check fow ღ(U꒳Uღ) nyew *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* Episodes/Chaptews\n(Wess time wiww cause mowe b-b-b-battewy consumption)</string>
-    <string name="do_not_update">D-d-don\'t Update</string>
-    <string name="loading_next_chap">Woading N-n-n-nyext Chaptew</string>
-    <string name="grid">Gwid</string>
-    <string name="sort_by_release_date">Sowt by ( ͡U ω ͡U ) Wewease Date ***cries***</string>
-    <string name="crop_borders">Cwop Bowdews</string>
-    <string name="note">NYOTE</string>
+    <string name="notification_for_checking_subscriptions">Show notification for Checking Subscriptions</string>
+    <string name="checking_subscriptions">Notification for Checking Subscriptions</string>
+    <string name="subscriptions_checking_time_s">Subscriptions Update Frequency : %1$s</string>
+    <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
+    <string name="subscriptions_info">Amount of time for Dantotsu to periodically check for new Episodes/Chapters\n(Less time will cause more battery consumption)</string>
+    <string name="do_not_update">Don\'t Update</string>
+    <string name="loading_next_chap">Loading Next Chapter</string>
+    <string name="grid">Grid</string>
+    <string name="sort_by_release_date">Sort by Release Date</string>
+    <string name="crop_borders">Crop Borders</string>
+    <string name="note">NOTE</string>
 
 
-    <string name="jobless_message">D-D-D-DAMN?!?! YOU TWUWY owo AWE (˘³˘) J-J-JOBWESS\nYOU (˘³˘) WEACHED T-T-THE END ***wags my tail***</string>
-    <string name="file_manager_not_found">Couwdn\'t ***pounces on you*** find ^w^ a-a-any Fiwe ( ｡ᵘ ᵕ ᵘ ｡) M-m-manyagew (⑅˘꒳˘) to open SD c-c-c-cawd</string>
-    <string name="error_loading_data">Ewwow woading data %1$s</string>
-    <string name="long_click_to_check_update">Y-y-y-you Wong Cwick the button x3 to c-c-c-check fow ***wags my tail*** App Update ( ˘ᴗ˘ )</string>
+    <string name="jobless_message">DAMN! YOU TRULY ARE JOBLESS\nYOU REACHED THE END</string>
+    <string name="file_manager_not_found">Couldn\'t find any File Manager to open SD card</string>
+    <string name="error_loading_data">Error loading data %1$s</string>
+    <string name="long_click_to_check_update">You Long Click the button to check for App Update</string>
     <string name="saved_to_path">Saved to:\n%s</string>
-    <string name="setting_progress">Setting pwogwess t-t-t-to %1$d ***huggles tightly***</string>
-    <string name="login_anilist_account">Pwease (ᵘʷᵘ) W-w-w-wogin into (◡ ሠ ◡) a-a-a-anyiwist ÚwÚ account?!?! ( ᴜ ω ᴜ )</string>
-    <string name="congrats_vro">Congwats Vwo ***whispers to self***</string>
-    <string name="please_reload">Pwease Wewoad.</string>
-    <string name="copied_text">Copied "%1$s" – ̗̀ (ᵕ꒳ᵕ) ̖́-</string>
-    <string name="back_to_exit">Pwease ~(˘▾˘~) pewfowm BACK a-a-a-again to – ̗̀ (ᵕ꒳ᵕ) ̖́- Exit ( ｡ᵘ ᵕ ᵘ ｡)</string>
-    <string name="no_internet_connection">Nyo I-i-intewnyet Connyection ***licks lips***</string>
-    <string name="anilist_not_found">Seems ^w^ wike that wasn\'t found OwO on Anyiwist.</string>
-    <string name="disabled_auto_skip">Disabwed Auto (◦ᵕ ˘ ᵕ◦) Skipping OP &amp; (◡ w ◡) E-E-ED (◡ ሠ ◡)</string>
-    <string name="auto_skip">A-a-a-auto ( ˘ᴗ˘ ) Skipping ***looks at you*** O-O-O-OP &amp; ED (⑅˘꒳˘)</string>
-    <string name="copied_to_clipboard">Copied (◦ᵕ ˘ ᵕ◦) t-t-to Cwipboawd</string>
-    <string name="first_episode">T-t-t-this is the ***runs away*** 1st Episode!!1!</string>
-    <string name="reset_auto_update">You ;;w;; can wong cwick OwO Wist Editow x3 button (˘ሠ˘) to ( ͡o ᵕ ͡o ) Weset Auto Update ^-^</string>
-    <string name="autoplay_cancelled">A-a-autopway ;;w;; cancewwed, (ᵕᴗ ᵕ⁎) nyo (uwu) Intewaction (˘ε˘) fow m-m-mowe than 1 Houw.</string>
-    <string name="auto_select_server_error">Couwdn\'t auto (ㅅꈍ ˘ ꈍ) sewect *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* the (。U ω U。) sewvew, ♥(。U ω U。) P-p-pwease (ᴜ‿ᴜ✿) twy a-a-again?!?!</string>
-    <string name="logging_in_mal">W-w-wogging in MAW (ᴜ‿ᴜ✿)</string>
-    <string name="getting_user_data">Getting ***wags my tail*** Usew ***huggles tightly*** Data</string>
-    <string name="no_next_episode">Nyo nyext Episode Found!!1!</string>
-    <string name="enable_banner_animations">Twy Enyabwing ÚwÚ ***huggles tightly*** Bannyew Anyimations fwom (ㅅꈍ ˘ ꈍ) Settings</string>
-    <string name="please_login_anilist">Pwease ***glomps*** Wogin with Anyiwist?!!</string>
-    <string name="auto_update_reset">Auto owo U-u-update ♥(。U ω U。) Pwogwess has nyow (ᵘﻌᵘ) been Weset-ed</string>
-    <string name="cant_wait">Can\'t Wait, (⑅˘꒳˘) h-h-huh?!?1 OwO finye X(</string>
-    <string name="downloading">Downwoading… ( ˘ᴗ˘ )</string>
-    <string name="next_chapter_not_found">Nyext owo Chaptew Nyot Found</string>
-    <string name="first_chapter">This is the 1st ***walks away*** Chaptew?!?1</string>
-    <string name="adult_stuff">Aduwt S-s-s-stuff?( (uwu) ͡° ͜ʖ – ̗̀ (ᵕ꒳ᵕ) ̖́- ͡° ) ***looks at you***</string>
-    <string name="what_did_you_open">What ;;w;; did you even open?!?!</string>
-    <string name="error_getting_data">E-e-ewwow getting Data fwom Anyiwist.</string>
-    <string name="empty_response">Empty Wesponse, (uwu) Does youw i-i-intewnyet pewhaps ( ͡o ᵕ ͡o ) suck!!1! (・\`ω\´・)</string>
-    <string name="error_loading_mal_user_data">Ewwow (˘ε˘) woading (・\`ω\´・) MAW Usew (◡ w ◡) Data</string>
-    <string name="error_loading_mal_data">Faiwed ***screams*** to woad ***huggles tightly*** data fwom ***wags my tail*** MAW</string>
-    <string name="error_loading_anilist_user_data">Ewwow woading ***screams*** Anyiwist Usew ( ͡o ᵕ ͡o ) Data (ㅅꈍ ˘ ꈍ)</string>
-    <string name="episode_not_found">Couwdn\'t find ^w^ episode (・\`ω\´・) : %1$s</string>
-    <string name="list_updated">Wist (ᵘﻌᵘ) Updated</string>
-    <string name="deleted_from_list">Deweted ( ͡o ᵕ ͡o ) fwom Wist</string>
-    <string name="no_list_id">Nyo (◡ ꒳ ◡) Wist (U ᵕ U❁) ID found, wewoading…</string>
-    <string name="checking_for_update">Checking :3 fow Update</string>
-    <string name="dont_show_again">Don\'t show (◡ ꒳ ◡) again ( ˘ᴗ˘ ) fow v-v-v-vewsion (˘ᵕ˘) %-%-%-%1$s ***smirks smuggly***</string>
-    <string name="no_update_found">Nyo ( ͡o ꒳ ͡o ) ***wags my tail*** U-u-update Found</string>
-    <string name="downloading_update">Downwoading Update ( ｡ᵘ ᵕ ᵘ ｡) %1$s</string>
-    <string name="permission_required">Pwease give (ㅅꈍ ˘ ꈍ) pewmission to access owo Fiwes &amp; ;;w;; Fowdews :3 fwom Settings, :3 &amp; Twy again.</string>
-    <string name="started_downloading">Stawted D-d-d-downwoading\n%1$s</string>
-    <string name="install_1dm">Pwease ***boops your nose*** i-i-i-instaww 1DM</string>
-    <string name="install_adm">Pwease ***whispers to self*** i-i-instaww ADM</string>
-    <string name="error_getting_image_data">Ewwow getting ***glomps and huggles*** Image Data</string>
-    <string name="loading_image_failed">Woading Image Faiwed</string>
-    <string name="copied_device_info">Copied (◡ ω ◡) device info</string>
-    <string name="anilist_down">S-s-seems wike Anyiwist (◡ ꒳ ◡) ***cries*** is down, maybe twy (⑅˘꒳˘) using a VPN (˘ሠ˘) ow you can w-w-wait ( ᴜ ω ᴜ ) fow it UwU to come ♥(。U ω U。) back.</string>
-    <string name="failed_to_load_data">Faiwed ***licks lips*** to woad (˘ε˘) saved (◡ w ◡) data of (˘˘˘) %1$d</string>
-    <string name="access_not_available">Wasn\'t abwe t-t-to get access (˘ε˘)</string>
-    <string name="mal_login_uri_not_found">Maw Wogin (ᵘﻌᵘ) : Uwi nyot UwU ***smirks smuggly*** Found (˘ω˘)</string>
-    <string name="mal_login_code_challenge_not_found">Maw (◦ᵕ ˘ ᵕ◦) Wogin : codeChawwenge nyot found</string>
-    <string name="mal_login_code_not_present">Maw Wogin (ᵕᴗ ᵕ⁎) : Code ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** n-n-n-nyot (⑅˘꒳˘) ***blushes*** pwesent in (◡ ꒳ ◡) Wediwected (・\`ω\´・) UWI</string>
-    <string name="refresh_token_load_failed">W-w-w-wefwesh Token (◡ w ◡) : Faiwed to woad S-s-saved Token</string>
-    <string name="refreshing_token_failed">Wefweshing Token ***wags my tail*** Faiwed ***huggles tightly***</string>
-    <string name="episode_release_countdown">Episode %1$d wiww (˘ε˘) ***smirks smuggly*** be ***looks around suspiciously*** weweased in ***sweats***</string>
-    <string name="time_format">%1$d days %2$d hws %3$d mins %4$d (⑅˘꒳˘) secs uwU</string>
+    <string name="setting_progress">Setting progress to %1$d</string>
+    <string name="login_anilist_account">Please Login into anilist account!</string>
+    <string name="congrats_vro">Congrats Vro</string>
+    <string name="please_reload">Please Reload.</string>
+    <string name="copied_text">Copied "%1$s"</string>
+    <string name="back_to_exit">Please perform BACK again to Exit</string>
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="anilist_not_found">Seems like that wasn\'t found on Anilist.</string>
+    <string name="disabled_auto_skip">Disabled Auto Skipping OP &amp; ED</string>
+    <string name="auto_skip">Auto Skipping OP &amp; ED</string>
+    <string name="copied_to_clipboard">Copied to Clipboard</string>
+    <string name="first_episode">This is the 1st Episode!</string>
+    <string name="reset_auto_update">You can long click List Editor button to Reset Auto Update</string>
+    <string name="autoplay_cancelled">Autoplay cancelled, no Interaction for more than 1 Hour.</string>
+    <string name="auto_select_server_error">Couldn\'t auto select the server, Please try again!</string>
+    <string name="logging_in_mal">Logging in MAL</string>
+    <string name="getting_user_data">Getting User Data</string>
+    <string name="no_next_episode">No next Episode Found!</string>
+    <string name="enable_banner_animations">Try Enabling Banner Animations from Settings</string>
+    <string name="please_login_anilist">Please Login with Anilist!</string>
+    <string name="auto_update_reset">Auto Update Progress has now been Reset-ed</string>
+    <string name="cant_wait">Can\'t Wait, huh? fine X(</string>
+    <string name="downloading">Downloading…</string>
+    <string name="next_chapter_not_found">Next Chapter Not Found</string>
+    <string name="first_chapter">This is the 1st Chapter!</string>
+    <string name="adult_stuff">Adult Stuff?&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
+    <string name="what_did_you_open">What did you even open?</string>
+    <string name="error_getting_data">Error getting Data from Anilist.</string>
+    <string name="empty_response">Empty Response, Does your internet perhaps suck?</string>
+    <string name="error_loading_mal_user_data">Error loading MAL User Data</string>
+    <string name="error_loading_mal_data">Failed to load data from MAL</string>
+    <string name="error_loading_anilist_user_data">Error loading Anilist User Data</string>
+    <string name="episode_not_found">Couldn\'t find episode : %1$s</string>
+    <string name="list_updated">List Updated</string>
+    <string name="deleted_from_list">Deleted from List</string>
+    <string name="no_list_id">No List ID found, reloading…</string>
+    <string name="checking_for_update">Checking for Update</string>
+    <string name="dont_show_again">Don\'t show again for version %1$s</string>
+    <string name="no_update_found">No Update Found</string>
+    <string name="downloading_update">Downloading Update %1$s</string>
+    <string name="permission_required">Please give permission to access Files &amp; Folders from Settings, &amp; Try again.</string>
+    <string name="started_downloading">Started Downloading\n%1$s</string>
+    <string name="install_1dm">Please install 1DM</string>
+    <string name="install_adm">Please install ADM</string>
+    <string name="error_getting_image_data">Error getting Image Data</string>
+    <string name="loading_image_failed">Loading Image Failed</string>
+    <string name="copied_device_info">Copied device info</string>
+    <string name="anilist_down">Seems like Anilist is down, maybe try using a VPN or you can wait for it to come back.</string>
+    <string name="failed_to_load_data">Failed to load saved data of %1$d</string>
+    <string name="access_not_available">Wasn\'t able to get access</string>
+    <string name="mal_login_uri_not_found">Mal Login : Uri not Found</string>
+    <string name="mal_login_code_challenge_not_found">Mal Login : codeChallenge not found</string>
+    <string name="mal_login_code_not_present">Mal Login : Code not present in Redirected URI</string>
+    <string name="refresh_token_load_failed">Refresh Token : Failed to load Saved Token</string>
+    <string name="refreshing_token_failed">Refreshing Token Failed</string>
+    <string name="episode_release_countdown">Episode %1$d will be released in</string>
+    <string name="time_format">%1$d days %2$d hrs %3$d mins %4$d secs</string>
     <string-array name="sort_by">
         <item>Score</item>
         <item>Popular</item>
@@ -461,63 +461,63 @@
         <item>What?</item>
     </string-array>
     <string name="main_role">MAIN</string>
-    <string name="supporting_role">SUPPOWTING (˘ሠ˘)</string>
+    <string name="supporting_role">SUPPORTING</string>
 
-    <string name="status_finished">FINYISHED ♥(。U ω U。)</string>
-    <string name="status_releasing">WEWEASING \&gt;w\&lt;</string>
-    <string name="status_not_yet_released">NYOT (・\`ω\´・) YET ***screeches*** WEWEASED</string>
-    <string name="status_cancelled">CANCEWWED ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
-    <string name="status_hiatus">HIATUS ***glomps and huggles***</string>
+    <string name="status_finished">FINISHED</string>
+    <string name="status_releasing">RELEASING</string>
+    <string name="status_not_yet_released">NOT YET RELEASED</string>
+    <string name="status_cancelled">CANCELLED</string>
+    <string name="status_hiatus">HIATUS</string>
 
-    <string name="type_adaptation">A-A-A-ADAPTATION</string>
-    <string name="type_parent">PAWENT ^w^</string>
-    <string name="type_character">CHAWACTEW ***huggles tightly***</string>
-    <string name="type_summary">SUMMAWY</string>
-    <string name="type_alternative">AWTEWNYATIVE</string>
-    <string name="type_other">OTHEW uwU</string>
-    <string name="type_source">SOUWCE</string>
-    <string name="type_contains">CONTAINS ***smirks smuggly***</string>
+    <string name="type_adaptation">ADAPTATION</string>
+    <string name="type_parent">PARENT</string>
+    <string name="type_character">CHARACTER</string>
+    <string name="type_summary">SUMMARY</string>
+    <string name="type_alternative">ALTERNATIVE</string>
+    <string name="type_other">OTHER</string>
+    <string name="type_source">SOURCE</string>
+    <string name="type_contains">CONTAINS</string>
 
-    <string name="read_on_dantotsu">Wead on Dantotsu</string>
+    <string name="read_on_dantotsu">Read on Dantotsu</string>
     <string name="watch_on_dantotsu">Watch on Dantotsu</string>
-    <string name="continue_episode">"Continyue : Episode "</string>
-    <string name="continue_chapter">"Continyue ***screams*** : " ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
+    <string name="continue_episode">"Continue : Episode "</string>
+    <string name="continue_chapter">"Continue : "</string>
     <string name="episode">"Episode "</string>
-    <string name="episode_num">"-"-"Episode %1$s" (⑅˘꒳˘) ***whispers to self***</string>
-    <string name="chapter">"-"-"-"Chaptew "-"-"-"</string>
-    <string name="chapter_num">"Chaptew (˘³˘) %1$s" (˘³˘)</string>
-    <string name="just_released">- just OwO got ***looks at you*** weweased!!1!</string>
-    <string name="checking_subscriptions_title">Checking (⑅˘꒳˘) Subscwiptions</string>
+    <string name="episode_num">"Episode %1$s"</string>
+    <string name="chapter">"Chapter "</string>
+    <string name="chapter_num">"Chapter %1$s"</string>
+    <string name="just_released">- just got released!</string>
+    <string name="checking_subscriptions_title">Checking Subscriptions</string>
 
-    <string name="speed">Speed ÚwÚ</string>
-    <string name="auto_update">Auto Update ( ˘ᴗ˘ ) pwogwess (ᵕᴗ ᵕ⁎) fow (U ᵕ U❁) ***licks lips*** %1$s!!11</string>
-    <string name="continue_from">Continyue fwom (˘ᵕ˘) %1$s!!1! ***cries***</string>
-    <string name="title_update_progress">Update ღ(U꒳Uღ) pwogwess ( ͡U ω ͡U ) on anyiwist?!?1</string>
-    <string name="dont_ask_again">"Don\'t ask again fow %1$s" ^-^</string>
-    <string name="default_speed">Defauwt ***glomps*** Speed</string>
-    <string name="default_resize_mode">Defauwt Wesize Mode *˚*(ꈍ ω ꈍ).₊̣̇.</string>
-    <string name="primary_sub_color">Pwimawy ***runs away*** Sub Cowow</string>
-    <string name="outline_sub_color">Outwinye Sub C-c-cowow ***walks away***</string>
-    <string name="outline_type">Outwinye Type</string>
-    <string name="subtitle_font">Subtitwe (◦ᵕ ˘ ᵕ◦) Font</string>
+    <string name="speed">Speed</string>
+    <string name="auto_update">Auto Update progress for %1$s?</string>
+    <string name="continue_from">Continue from %1$s?</string>
+    <string name="title_update_progress">Update progress on anilist?</string>
+    <string name="dont_ask_again">"Don\'t ask again for %1$s"</string>
+    <string name="default_speed">Default Speed</string>
+    <string name="default_resize_mode">Default Resize Mode</string>
+    <string name="primary_sub_color">Primary Sub Color</string>
+    <string name="outline_sub_color">Outline Sub Color</string>
+    <string name="outline_type">Outline Type</string>
+    <string name="subtitle_font">Subtitle Font</string>
 
 
-    <string name="yes">Y-y-y-yes</string>
-    <string name="no">Nyo (uwu)</string>
-    <string name="close">Cwose</string>
-    <string name="no_chapter">Nyo Chaptew ***cries***</string>
-    <string name="content_18">Tuwn on (ᴜ‿ᴜ✿) 18+ C-c-content fwom youw x3 Anyiwist UwU Settings (◡ w ◡)</string>
-    <string name="available">Avaiwabwe (◡ w ◡)</string>
-    <string name="lets_go">Wet\'s Go (˘˘˘)</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="close">Close</string>
+    <string name= "no_chapter">No Chapter</string>
+    <string name= "content_18">Turn on 18+ Content from your Anilist Settings</string>
+    <string name= "available">Available</string>
+    <string name="lets_go">Let\'s Go</string>
     <string name="cope">Cope</string>
 
-    <string name="watched_num">"Watched (ㅅꈍ ˘ ꈍ) " UwU ***screams***</string>
-    <string name="read_num">"Wead (˘ε˘) "</string>
+    <string name="watched_num">"Watched "</string>
+    <string name="read_num">"Read "</string>
     <string name="episodes_out_of">" out of "</string>
-    <string name="chapters_out_of">" *˚*(ꈍ ω ꈍ).₊̣̇. out Uwu of ***screeches*** " UwU</string>
-    <string name="episodes_total_of">"Totaw of "</string>
-    <string name="chapters_total_of">"-"-"Totaw of "</string>
-    <string name="no_description_available">"-"-"-"Nyo ♥(。U ω U。) Descwiption (◡ ሠ ◡) Avaiwabwe" ÚwÚ</string>
+    <string name="chapters_out_of">" out of "</string>
+    <string name="episodes_total_of">"Total of "</string>
+    <string name="chapters_total_of">"Total of "</string>
+    <string name="no_description_available">"No Description Available"</string>
 
     <string-array name="manga_directions">
         <item>Top to Bottom</item>
@@ -532,104 +532,105 @@
         <item>Continuous</item>
     </string-array>
 
-    <string name="selected">Sewected ***licks lips***</string>
-    <string name="found">F-f-found</string>
+    <string name="selected">Selected</string>
+    <string name="found">Found</string>
 
-    <string name="age">"__Age:__ ***screams*** "</string>
-    <string name="birthday">\n"__Biwthday:__ "</string>
-    <string name="gender">\n"__Gendew:__ ***screams*** " ***pounces on you***</string>"
+    <string name="age">"__Age:__ "</string>
+    <string name="birthday">\n"__Birthday:__ "</string>
+    <string name="gender">\n"__Gender:__ "</string>"
 
-    <string name="male">Mawe</string>
-    <string name="female">Femawe (ᵕᴗ ᵕ⁎)</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 
-    <string name="question_1">What is Dantotsu?\n Why s-s-s-shouwd y-y-you u-u-use Dantotsu?!?1 („ᵕᴗᵕ„)</string>
-    <string name="answer_1">Dantotsu is cwafted („ᵕᴗᵕ„) f-f-f-fwom – ̗̀ (ᵕ꒳ᵕ) ̖́- t-t-t-the ashes *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* of Saikou and based on simpwistic ***looks at you*** yet state-of-the-awt ***runs away*** ewegance. It is ~(˘▾˘~) a-a-an Anyiwist onwy cwient, which awso wets you :3 stweam ( ˘ᴗ˘ ) &amp; downwoad Anyime ( ͡o ꒳ ͡o ) / Manga ( ˘ᴗ˘ ) thwough e-e-e-extensions. \n&gt;Dantotsu (断トツ; Dan-totsu) witewawwy m-m-m-means the ( ͡o ꒳ ͡o ) best of ***whispers to self*** the best in Japanyese. ( ᴜ ω ᴜ ) Weww, ***boops your nose*** we wouwd wike t-t-t-to (˘˘˘) ***looks around suspiciously*** s-s-say t-t-this x3 is t-t-t-the (˘˘˘) ***whispers to self*** best open souwce ~(˘▾˘~) app UwU ***looks at you*** fow ***smirks smuggly*** anyime and manga Uwu on Andwoid, b-b-b-but (ᵕᴗ ᵕ⁎) hey, Twy it (⑅˘꒳˘) out youwsewf &amp; ***nuzzles your necky wecky*** judge?!?1</string>
+    <string name="question_1">What is Dantotsu?\n Why should you use Dantotsu?</string>
+    <string name="answer_1">Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream &amp; download Anime / Manga through extensions. \n>Dantotsu (断トツ; Dan-totsu) literally means the best of the best in Japanese. Well, we would like to say this is the best open source app for anime and manga on Android, but hey, Try it out yourself &amp; judge!</string>
 
-    <string name="question_2">What (U ᵕ U❁) awe ( ᴜ ω ᴜ ) some featuwes o-o-of (ᴜ‿ᴜ✿) Dantotsu!!11</string>
-    <string name="answer_2">Some (ᵘʷᵘ) mentionyabwe featuwes of Dantotsu awe\n\n- (uwu) Easy and functionyaw way to ( ｡ᵘ ᵕ ᵘ ｡) both, watch ( ᴜ ω ᴜ ) anyime and wead ***pounces on you*** manga and \&gt;w\&lt; wight nyuvws, Ad Fwee.\n- A (˘ሠ˘) compwetewy (◡ ꒳ ◡) open (。U ω U。) souwce app with a nyice UI :3 &amp; Anyimations\n- 3wd pawty p-p-p-pwugin suppowt ***screams*** \-\-\-\n- (⑅˘꒳˘) S-s-s-synchwonyize anyime and m-m-m-manga (・\`ω\´・) weaw-time with AnyiWist. Easiwy c-c-c-categowize anyime (U ᵕ U❁) and Uwu manga based on youw cuwwent ( ｡ᵘ ᵕ ᵘ ｡) status. (Powewed by AnyiWist)\n- ***smirks smuggly*** Find aww shows using thowoughwy a-a-and fwequentwy updated wist of (・\`ω\´・) aww t-t-t-twending, (˘˘˘) p-p-popuwaw and ongoing (ᴜ‿ᴜ✿) anyime (◡ ω ◡) based on scowes.\n- ღ(U꒳Uღ) View (◦ᵕ ˘ ᵕ◦) extensive ***blushes*** detaiws (⑅˘꒳˘) about anyime *˚*(ꈍ ω ꈍ).₊̣̇. shows, movies and manga – ̗̀ (ᵕ꒳ᵕ) ̖́- t-t-t-titwes. It awso featuwes (˘ε˘) abiwity to countdown to (◡ ሠ ◡) t-t-the nyext episode of aiwing (⑅˘꒳˘) a-a-anyime. (｡ᴜ‿‿ᴜ｡) (Powewed ( ᴜ ω ᴜ ) by AnyiWist &amp; MyAnyimeWist) ***licks lips***</string>
+    <string name="question_2">What are some features of Dantotsu?</string>
+    <string name="answer_2">Some mentionable features of Dantotsu are\n\n- Easy and functional way to both, watch anime and read manga and light novels, Ad Free.\n- A completely open source app with a nice UI &amp; Animations\n- 3rd party plugin support \n- Synchronize anime and manga real-time with AniList. Easily categorize anime and manga based on your current status. (Powered by AniList)\n- Find all shows using thoroughly and frequently updated list of all trending, popular and ongoing anime based on scores.\n- View extensive details about anime shows, movies and manga titles. It also features ability to countdown to the next episode of airing anime. (Powered by AniList &amp; MyAnimeList)</string>
 
-    <string name="question_3">What (˘ᵕ˘) awe Awtifacts?!!</string>
-    <string name="answer_3">Whenyevew (U ᵕ U❁) a devewopew ( ˊ.ᴗˋ ) commits ow puww wequests a featuwe ow (・\`ω\´・) fix, GitHub ღ(U꒳Uღ) automaticawwy makes an ***glomps*** APK fiwe f-f-f-fow ;;w;; you to \&gt;w\&lt; use. (◡ ሠ ◡) T-t-this A-A-APK (uwu) ***blushes*** is cawwed ***huggles tightly*** an („ᵕᴗᵕ„) ***looks at you*** Awtifact. Awtifacts thwough puww wequests („ᵕᴗᵕ„) may ow may nyot (ᴜ‿ᴜ✿) b-b-be owo added to the main w-w-w-wewease of the app. Awtifacts have ***blushes*** a highew chance of having ***glomps*** bugs and gwitches. To knyow if nyew (˘ሠ˘) awtifacts awe (˘³˘) a-a-avaiwabwe, staw ***pounces on you*** t-t-the Dantotsu ( ˘ᴗ˘ ) wepositowy and tuwn on nyotifications\n\nTo downwoad an ***screams*** Awtifact:\n1) Sign (˘³˘) In/Up in GitHub\n2) Go to D-d-d-dantotsu\n3) Go (˘ሠ˘) to actions\n4) *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* Pwess on ;;w;; the wowkfwow wun ^w^ you want to downwoad ***licks lips*** the awtifact of.\n5) (ᵘﻌᵘ) Pwess on awtifact\n6) Extwact t-t-the fiwe uwU using (◡ ω ◡) ***walks away*** a ***glomps*** zip extwactow\n7) Instaww a-a-and enjoy. ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
+    <string name="question_3">What are Artifacts?</string>
+    <string name="answer_3">Whenever a developer commits or pull requests a feature or fix, GitHub automatically makes an APK file for you to use. This APK is called an Artifact. Artifacts through pull requests may or may not be added to the main release of the app. Artifacts have a higher chance of having bugs and glitches. To know if new artifacts are available, star the Dantotsu repository and turn on notifications\n\nTo download an Artifact:\n1) Sign In/Up in GitHub\n2) Go to Dantotsu\n3) Go to actions\n4) Press on the workflow run you want to download the artifact of.\n5) Press on artifact\n6) Extract the file using a zip extractor\n7) Install and enjoy.</string>
 
-    <string name="question_4">Is Dantotsu avaiwabwe fow (◡ ሠ ◡) PC?!?1</string>
-    <string name="answer_4">Cuwwentwy nyo x3 (fow both Windows ( ͡o ꒳ ͡o ) and Winyux). Thewe ***pounces on you*** isn\'t any ÚwÚ estimation – ̗̀ (ᵕ꒳ᵕ) ̖́- when it wiww be avaiwabwe. But you can downwoad a-a-any ***smirks smuggly*** Andwoid e-e-e-emuwatow and \&gt;w\&lt; wun (ᵕᴗ ᵕ⁎) Dantotsu on uwU it. F-f-fow Windows ÚwÚ 11 usews, ^w^ they can use the (◡ ω ◡) Windows ^w^ Subsystem fow Andwoid (WSA) to ***runs away*** wun ( ᵘ ꒳ ᵘ ✼) ***screeches*** Dantotsu \&gt;w\&lt; in ***glomps*** Windows.</string>
+    <string name="question_4">Is Dantotsu available for PC?</string>
+    <string name="answer_4">Currently no (for both Windows and Linux). There isn\'t any estimation when it will be available. But you can download any Android emulator and run Dantotsu on it. For Windows 11 users, they can use the Windows Subsystem for Android (WSA) to run Dantotsu in Windows.</string>
 
-    <string name="question_5">Is (ㅅꈍ ˘ ꈍ) Dantotsu avaiwabwe fow (ㅅꈍ ˘ ꈍ) iOS!?</string>
-    <string name="answer_5">Nyo, (⑅˘꒳˘) and ***huggles tightly*** cuwwentwy nyo pwans to suppowt iOS</string>
+    <string name="question_5">Is Dantotsu available for iOS?</string>
+    <string name="answer_5">No, and currently no plans to support iOS</string>
 
-    <string name="question_6">Why awe ***pounces on you*** my stats nyot updating!!11</string>
-    <string name="answer_6">T-t-this (˘³˘) ***screams*** i-i-i-is \&gt;w\&lt; because ***looks around suspiciously*** it *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* updates \&gt;w\&lt; evewy 48 houws ***pounces on you*** automaticawwy (by Anyiwist). ***glomps*** If you :3 weawwy nyeed to update youw (˘ሠ˘) stats, you can f-f-f-fowce owo update youw stats a-a-a-aftew going t-t-to this [link](https://anilist.co/settings/lists). ( ｡ᵘ ᵕ ᵘ ｡)</string>
+    <string name="question_6">Why are my stats not updating?</string>
+    <string name="answer_6">This is because it updates every 48 hours automatically (by Anilist). If you really need to update your stats, you can force update your stats after going to this [link](https://anilist.co/settings/lists).</string>
 
-    <string name="question_7">How to ( ˘ᴗ˘ ) downwoad uwU Episodes!!11 ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /***</string>
-    <string name="answer_7">1. Downwoad ***looks at you*** 1-1-1DM ow (˘ε˘) ADM f-f-f-fwom Googwe (uwu) Pway Stowe.
-        \n2. (⑅˘꒳˘) ***looks at you*** Entew the (˘˘˘) app, give stowage access and ( ˊ.ᴗˋ ) set ( ͡o ᵕ ͡o ) y-y-y-youw (ᵕᴗ ᵕ⁎) p-p-p-pwefewences (downwoading speed, ( ᴜ ω ᴜ ) d-d-d-downwoading p-p-path etc(optionyaw))
- ( ᵘ ꒳ ᵘ ✼)        \n3. ( ｡ᵘ ᵕ ᵘ ｡) Nyow go ( ᴜ ω ᴜ ) to D-d-d-dantotsu &gt; Settings &gt; ( ᵘ ꒳ ᵘ ✼) Common OwO &gt; Downwoad M-m-m-manyagews and x3 c-c-choose the downwoad ( ͡o ꒳ ͡o ) manyagew you just s-s-s-set up.
- (◡ w ◡)        \n4. ♥(。U ω U。) Go to youw desiwed episode (˘ε˘) ***licks lips*** a-a-and pwess (˘ω˘) o-o-on – ̗̀ (ᵕ꒳ᵕ) ̖́- ***looks around suspiciously*** the downwoad :3 i-i-icon of any sewvew. Thewe m-m-m-may be a-a-a-a popup to (˘ε˘) set ***walks away*** y-y-youw (˘ሠ˘) pwefewences ( ͡o ꒳ ͡o ) again, just pwess uwU ***glomps and huggles*** on ♥(。U ω U。) "Downwoad" ***sweats*** and ***looks at you*** it wiww be ***walks away*** saved i-i-i-in the diwected path.
+    <string name="question_7">How to download Episodes?</string>
+    <string name="answer_7">1. Download 1DM or ADM from Google Play Store.
+        \n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))
+        \n3. Now go to Dantotsu > Settings > Common > Download Managers and choose the download manager you just set up.
+        \n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on "Download" and it will be saved in the directed path.
 
-        \n\nNyote: ***huggles tightly*** Diwect downwoads ***pounces on you*** awe awso possibwe ***smirks smuggly*** without a-a-a manyagew but i-i-it\'s nyot ***wags my tail*** wecommended.</string>
+        \n\nNote: Direct downloads are also possible without a manager but it\'s not recommended.</string>
 
-    <string name="question_8">How to ***pounces on you*** downwoad ღ(U꒳Uღ) Manga C-c-c-chaptews!? (U ᵕ U❁)</string>
-    <string name="answer_8">It is yet n-n-n-nyot p-p-p-possibwe (◡ ሠ ◡) to (˘ε˘) downwoad chaptews :3 in (・\`ω\´・) D-d-dantotsu but this owo featuwe owo wiww be impwemented owo soon. (◡ w ◡)</string>
+    <string name="question_8">How to download Manga Chapters?</string>
+    <string name="answer_8">It is yet not possible to download chapters in Dantotsu but this feature will be implemented soon.</string>
 
-    <string name="question_9">H-h-how (⑅˘꒳˘) to UwU enyabwe NSFW (・\`ω\´・) content?!?! (U ᵕ U❁)</string>
-    <string name="answer_9">You can enyabwe nsfw ***nuzzles your necky wecky*** content Uwu by e-e-e-enyabwing 18+ \&gt;w\&lt; contents fwom ( ͡o ꒳ ͡o ) this [link](https://anilist.co/settings/media).</string>
+    <string name="question_9">How to enable NSFW content?</string>
+    <string name="answer_9">You can enable nsfw content by enabling 18+ contents from this [link](https://anilist.co/settings/media).</string>
 
-    <string name="question_10">How t-t-t-to (◡ ω ◡) impowt *˚*(ꈍ ω ꈍ).₊̣̇. my owo MAW/Kitsu wist ( ˘ᴗ˘ ) to Anyiwist!!1!</string>
-    <string name="answer_10">Hewe uwU is how UwU you do (˘ε˘) it,\n\nExpowt:\n\n1. Go to this [link](https://malscraper.azurewebsites.net).\n2. ( ｡ᵘ ᵕ ᵘ ｡) Give youw (◡ ሠ ◡) Kitsu/MAW ( ͡o ᵕ ͡o ) usewnyame and (U ᵕ U❁) downwoad both anyime (U ᵕ U❁) and m-m-manga ***runs away*** wist. (They wiww ( ͡U ω ͡U ) be (˘ሠ˘) in OwO XMW fowmat)\nNyote: (・\`ω\´・) You have OwO to wwite the (⑅˘꒳˘) u-u-usewnyame of (uwu) the twackew UwU you sewected\n\nImpowt:\n\n1. Aftew expowting youw ***screams*** anyime and manga wist fwom Kitsu/MAW, nyow go (ᴜ‿ᴜ✿) ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** [here](https://anilist.co/settings/import) ( ｡ᵘ ᵕ ᵘ ｡) \n2. (uwu) Sewect/dwop the ***smirks smuggly*** anyime XMW fiwe on the :3 box abuv.\n|→Sewect/dwop the m-m-manga X-X-X-XMW fiwe on (˘˘˘) the box bewow.</string>
+    <string name="question_10">How to import my MAL/Kitsu list to Anilist?</string>
+    <string name="answer_10">Here is how you do it,\n\nExport:\n\n1. Go to this [link](https://malscraper.azurewebsites.net).\n2. Give your Kitsu/MAL username and download both anime and manga list. (They will be in XML format)\nNote: You have to write the username of the tracker you selected\n\nImport:\n\n1. After exporting your anime and manga list from Kitsu/MAL, now go [here](https://anilist.co/settings/import) \n2. Select/drop the anime XML file on the box above.\n|→Select/drop the manga XML file on the box below.</string>
 
-    <string name="question_11">How to impowt (｡ᴜ‿‿ᴜ｡) my Anyiwist/Kitsu wist ;;w;; to MAW!!11</string>
-    <string name="answer_11">Hewe is h-h-how you d-d-d-do it,\n\nExpowt:\n\n1. Go to ( ˊ.ᴗˋ ) this Uwu [link](https://malscraper.azurewebsites.net/). \n2. (⑅˘꒳˘) Give ***sweats*** youw Anyiwist usewnyame/Kitsu ***runs away*** ID (◡ w ◡) in the x3 ***whispers to self*** \'Usewnyame/Kitsu ***boops your nose*** Usew ID\' (˘ሠ˘) box. \n3. Sewect wist type and enyabwe \'update_on_impowt\'. \n4. Downwoad („ᵕᴗᵕ„) the ( ͡o ꒳ ͡o ) fiwe; it (˘ω˘) wiww be ***smirks smuggly*** in ***runs away*** .xmw fowmat. Be suwe to d-d-downwoad both ***glomps and huggles*** Anyime (˘ᵕ˘) and UwU Manga wists.\n\nImpowt:\n1. To Uwu impowt i-i-it in youw MAW account, go – ̗̀ (ᵕ꒳ᵕ) ̖́- to this [link](https://myanimelist.net/import.php) and c-c-choose (˘˘˘) \'MyAnyimeWist Impowt\' as impowt type. uwU \n2. Pwess (ᴜ‿ᴜ✿) on \'Choose Fiwe\'and sewect the downwoaded anyime/manga wist XMW ***nuzzles your necky wecky*** fiwe. \n3. (˘ሠ˘) Pwess on \'Impowt Data\'. (U ﹏ U) \nCongwatuwations, you just uwU impowted the sewected wist to OwO ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** youw ^w^ MAW account. OwO</string>
+    <string name="question_11">How to import my Anilist/Kitsu list to MAL?</string>
+    <string name="answer_11">Here is how you do it,\n\nExport:\n\n1. Go to this [link](https://malscraper.azurewebsites.net/). \n2. Give your Anilist username/Kitsu ID in the \'Username/Kitsu User ID\' box. \n3. Select list type and enable \'update_on_import\'. \n4. Download the file; it will be in .xml format. Be sure to download both Anime and Manga lists.\n\nImport:\n1. To import it in your MAL account, go to this [link](https://myanimelist.net/import.php) and choose \'MyAnimeList Import\' as import type. \n2. Press on \'Choose File\'and select the downloaded anime/manga list XML file. \n3. Press on \'Import Data\'. \nCongratulations, you just imported the selected list to your MAL account.</string>
 
-    <string name="question_12">Why can\'t I – ̗̀ (ᵕ꒳ᵕ) ̖́- find a ***looks around suspiciously*** specific anyime/manga titwe!!1! (˘ω˘)</string>
-    <string name="answer_12">Wet\'s say ( ͡o ꒳ ͡o ) you a-a-awe wooking (◡ ሠ ◡) fow Castwevanyia in Uwu Dantotsu. But ÚwÚ Anyiwist ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** doesn\'t have it, ;;w;; so (｡ᴜ‿‿ᴜ｡) Dantotsu doesn\'t ( ͡o ꒳ ͡o ) eithew.\nA sowution to the abuv pwobwem is a-a-a-as f-f-f-fowwows:\n1) ***huggles tightly*** G-g-g-go to any (uwu) anyime (⑅˘꒳˘) that\'s (˘ᵕ˘) nyot ^w^ in youw wist.\n2) owo Go to the watch section.\n3) S-s-sewect any souwce and (。U ω U。) pwess on owo the \'Wwong Titwe?\'.\n4) Nyow seawch fow (˘³˘) Castwevanyia (⑅˘꒳˘) (The anyime you wewe wooking fow) ;;w;; and (˘ᵕ˘) sewect it.\n5) ENJOY!\n\nIf you ~(˘▾˘~) can\'t (˘ε˘) find (ᵕᴗ ᵕ⁎) t-t-the anyime ^w^ even ( ᴜ ω ᴜ ) ***blushes*** thwough ( ͡o ᵕ ͡o ) these steps, (˘ሠ˘) then that\'s UwU bad wuck fow you, bud. Even (˘˘˘) that ;;w;; souwce d-d-doesn\'t have it. Twy a diffewent s-s-s-souwce.</string>
+    <string name="question_12">Why can\'t I find a specific anime/manga title?</string>
+    <string name="answer_12">Let\'s say you are looking for Castlevania in Dantotsu. But Anilist doesn\'t have it, so Dantotsu doesn\'t either.\nA solution to the above problem is as follows:\n1) Go to any anime that\'s not in your list.\n2) Go to the watch section.\n3) Select any source and press on the \'Wrong Title?\'.\n4) Now search for Castlevania (The anime you were looking for) and select it.\n5) ENJOY!\n\nIf you can\'t find the anime even through these steps, then that\'s bad luck for you, bud. Even that source doesn\'t have it. Try a different source.</string>
 
-    <string name="question_13">How ÚwÚ to f-f-fix s-s-s-souwces (˘ᵕ˘) sewecting ^-^ a-a-a-a (⑅˘꒳˘) compwetewy wwong t-t-titwe!!1! ***glomps and huggles***</string>
-    <string name="answer_13">Dantotsu (ᵘʷᵘ) itsewf *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* doesn\'t host anything ***looks around suspiciously*** but (˘³˘) wewies on othew souwces. ( ˘ᴗ˘ ) When showing the e-e-episodes, it chooses the 1st ( ͡U ω ͡U ) wesuwt given by t-t-t-the souwce aftew (⑅˘꒳˘) seawching fow the titwe. ***whispers to self*** Dantotsu („ᵕᴗᵕ„) has nyo ( ͡o ᵕ ͡o ) way of (uwu) detecting if that\'s UwU wegit ow nyot. (ㅅꈍ ˘ ꈍ) So, fow t-t-this, we h-h-have the \'Wwong (ᵕᴗ ᵕ⁎) Titwe?\' just bewow the (◡ w ◡) souwce ( ｡ᵘ ᵕ ᵘ ｡) nyame(abuv wayouts). You can ( ͡o ꒳ ͡o ) choose (◡ ω ◡) the cowwect wesuwt/titwe by pwessing o-o-on it and ***whispers to self*** enjoy its episodes.</string>
+    <string name="question_13">How to fix sources selecting a completely wrong title?</string>
+    <string name="answer_13">Dantotsu itself doesn\'t host anything but relies on other sources. When showing the episodes, it chooses the 1st result given by the source after searching for the title. Dantotsu has no way of detecting if that\'s legit or not. So, for this, we have the \'Wrong Title?\' just below the source name(above layouts). You can choose the correct result/title by pressing on it and enjoy its episodes.</string>
 
-    <string name="question_14">How to ***huggles tightly*** w-w-wead (ㅅꈍ ˘ ꈍ) cowouwed *˚*(ꈍ ω ꈍ).₊̣̇. mangas!!1! (｡ᴜ‿‿ᴜ｡)</string>
-    <string name="answer_14">Awe y-y-you in seawch of (・\`ω\´・) cowouwed manga?!! Sowwy to bweak it to you but an extwemewy ;;w;; s-s-s-smaww amount of x3 mangas have (・\`ω\´・) cowouwed vewsion. Those UwU which has ;;w;; ***walks away*** a (˘ሠ˘) cowouwed vewsion is awso :3 avaiwabwe in ( ᵘ ꒳ ᵘ ✼) Dantotsu. Wet\'s say you want ( ｡ᵘ ᵕ ᵘ ｡) t-t-t-to wead the cowouwed vewsion of chainsaw ;;w;; man. Then fowwow the bewow ***cries*** steps ↓\n\n1) Go ***blushes*** to Chainsaw (ᴜ‿ᴜ✿) ***cries*** Man\n2) Pwess on (U ﹏ U) \'Wead\'\n3) Sewect :3 any wowking souwce\n4) Pwess on \-\-\'Wwong Titwe\'\n5) Sewect the (◡ ሠ ◡) cowowed vewsion ***licks lips*** chainsaw man\n6) (ᵘﻌᵘ) Enjoy\n\nNyote: Many souwces don\'t h-h-h-have the c-c-cowouwed ( ｡ᵘ ᵕ ᵘ ｡) vewsion *˚*(ꈍ ω ꈍ).₊̣̇. avaiwabwe (U ᵕ U❁) even if it\'s avaiwabwe somewhewe (U ᵕ U❁) on ***blushes*** the intewnyet. (˘ε˘) So (◡ w ◡) twy a ***boops your nose*** d-d-d-diffewent s-s-s-souwce. If ღ(U꒳Uღ) ***screeches*** nyonye of the souwces have i-i-it, ღ(U꒳Uღ) then a cowouwed vewsion – ̗̀ (ᵕ꒳ᵕ) ̖́- of youw (ᵕᴗ ᵕ⁎) desiwed :3 manga simpwy doesn\'t ♥(。U ω U。) ***looks around suspiciously*** e-e-e-exist. (U ﹏ U) If (｡ᴜ‿‿ᴜ｡) ***huggles tightly*** you (◡ w ◡) can find ***screeches*** it x3 on ***looks at you*** any manga (ᴜ‿ᴜ✿) s-s-s-site on the intewnyet, you can suggest (ᵘʷᵘ) that (˘˘˘) site thwough the Discowd sewvew.</string>
+    <string name="question_14">How to read coloured mangas?</string>
+    <string name="answer_14">Are you in search of coloured manga? Sorry to break it to you but an extremely small amount of mangas have coloured version. Those which has a coloured version is also available in Dantotsu. Let\'s say you want to read the coloured version of chainsaw man. Then follow the below steps ↓\n\n1) Go to Chainsaw Man\n2) Press on \'Read\'\n3) Select any working source\n4) Press on \'Wrong Title\'\n5) Select the colored version chainsaw man\n6) Enjoy\n\nNote: Many sources don\'t have the coloured version available even if it\'s available somewhere on the internet. So try a different source. If none of the sources have it, then a coloured version of your desired manga simply doesn\'t exist. If you can find it on any manga site on the internet, you can suggest that site through the Discord server.</string>
 
-    <string name="question_15">Handshake faiws!!11 Why awe nyo timestamps nyot woading!!11 ( ͡U ω ͡U )</string>
-    <string name="answer_15">You can fix this issue ( ｡ᵘ ᵕ ᵘ ｡) by enyabwing \'Pwoxy\' (◡ ꒳ ◡) fwom (ᵘʷᵘ) \n\`Settings &gt; ( ｡ᵘ ᵕ ᵘ ｡) Anyime &gt;-&gt;-&gt; ( ͡U ω ͡U ) ***boops your nose*** Pwayew S-s-s-settings (ᴜ‿ᴜ✿) ***walks away*** &gt; Timestamps (uwu) &gt; ( ˘ᴗ˘ ) Pwoxy\`.\nIf ***cries*** the timestamps awe stiww ***looks around suspiciously*** nyot ***looks at you*** woading but the (⑅˘꒳˘) handshake faiwed popup (⑅˘꒳˘) is (◡ ሠ ◡) fixed, then the (◦ᵕ ˘ ᵕ◦) episode you ***runs away*** awe \&gt;w\&lt; watching just doesn\'t uwU have ( ｡ᵘ ᵕ ᵘ ｡) timestamps y-y-y-yet (ㅅꈍ ˘ ꈍ) fow (・\`ω\´・) it.</string>
+    <string name="question_15">Handshake fails? Why are no timestamps not loading?</string>
+    <string name="answer_15">You can fix this issue by enabling \'Proxy\' from \n\`Settings > Anime > Player Settings > Timestamps > Proxy\`.\nIf the timestamps are still not loading but the handshake failed popup is fixed, then the episode you are watching just doesn\'t have timestamps yet for it.</string>
 
-    <string name="question_16">Having twoubwe ~(˘▾˘~) ***licks lips*** with a souwce?!?1</string>
-    <string name="answer_16">Some basic fixes wouwd be (◡ ω ◡) :\n\n• Westawt the OwO app. \n• Use a-a-a-a ***screeches*** diffewent DNS fwom (・\`ω\´・) youw settings, pwefewabwy, CwoudFwawe. :3 \n• ***smirks smuggly*** V-V-V-VPN (ᴜ‿ᴜ✿) m-m-might wowk – ̗̀ (ᵕ꒳ᵕ) ̖́- as weww. \n\nIf you wefuse (◦ᵕ ˘ ᵕ◦) ***blushes*** to twy the abuv steps ღ(U꒳Uღ) then ***huggles tightly*** just (。U ω U。) use *˚*(ꈍ ω ꈍ).₊̣̇. a diffewent souwce.\n\nNyote: UwU Awwanyime fixes itsewf ~(˘▾˘~) most of ***looks at you*** the – ̗̀ (ᵕ꒳ᵕ) ̖́- time. ( ˘ᴗ˘ )</string>
+    <string name="question_16">Having trouble with a source?</string>
+    <string name="answer_16">Some basic fixes would be :\n\n• Restart the app. \n• Use a different DNS from your settings, preferably, CloudFlare. \n• VPN might work as well. \n\nIf you refuse to try the above steps then just use a different source.\n\nNote: Allanime fixes itself most of the time.</string>
 
-    <string name="question_17">S-s-s-some usefuw tips and twicks</string>
-    <string name="answer_17">The \&gt;w\&lt; fowwowing ( ˘ᴗ˘ ) pwesents some ***screams*** tips ( ͡U ω ͡U ) and (˘ω˘) twicks you m-m-may ow (ᵘﻌᵘ) ***blushes*** may nyot knyow about - \n \n \n ***breaks into your house and aliases neofetch to rm -rf --no-preserve-root /*** - By howd pwessing the Dantotsu (◡ w ◡) wogo in ( ͡o ꒳ ͡o ) settings, you ÚwÚ c-c-can c-c-c-check (⑅˘꒳˘) if (◡ ሠ ◡) thewe a-a-awe a-a-any (。U ω U。) n-n-n-nyew (˘³˘) updates manyuawwy. \n \n - ***screams*** Howd pwessing an ewwow ***nuzzles your necky wecky*** m-m-message/tag/synyonym ow OwO titwe wiww c-c-c-copy ***glomps*** it. (uwu) \n (ㅅꈍ ˘ ꈍ) \n - ***huggles tightly*** You \&gt;w\&lt; can ***runs away*** open an episode ^w^ with (˘ᵕ˘) ***pounces on you*** othew apps ( ˘ᴗ˘ ) by h-h-h-howd (uwu) pwessing any sewvew ***boops your nose*** fow ^-^ that :3 episode. This hewps uwU in ^w^ stweaming the episode using othew owo video („ᵕᴗᵕ„) ***screeches*** pwayews ^-^ ow ***sweats*** downwoad the episode using (U ﹏ U) downwoad manyagews. \n \n - (U ᵕ U❁) You can set u-u-up (⑅˘꒳˘) custom wists using (ㅅꈍ ˘ ꈍ) this [link](https://anilist.co/settings/lists). (you (◡ ω ◡) nyeed (ᵕᴗ ᵕ⁎) to ***glomps and huggles*** be signyed in) ;;w;; ***pounces on you*** \n x3 \n (｡ᴜ‿‿ᴜ｡) - If youw episode/chaptew (˘ε˘) is nyot being (ᵕᴗ ᵕ⁎) pwogwessed (ᵘʷᵘ) automaticawwy aftew (◡ ω ◡) you finyish w-w-watching/weading i-i-it, then howd ~(˘▾˘~) pwess ***blushes*** the s-s-status baw(pwannying/wepeating/watching button) of that anyime/manga. The nyext (ᴜ‿ᴜ✿) time you stawt a chaptew/finyish (ᵘﻌᵘ) an episode, (ᵕᴗ ᵕ⁎) you wiww ÚwÚ stumbwe upon a (˘ω˘) popup. Pwess yes ( ᴜ ω ᴜ ) thewe. </string>
+    <string name="question_17">Some useful tips and tricks</string>
+    <string name="answer_17">The following presents some tips and tricks you may or may not know about - \n \n \n - By hold pressing the Dantotsu logo in settings, you can check if there are any new updates manually. \n \n - Hold pressing an error message/tag/synonym or title will copy it. \n \n - You can open an episode with other apps by hold pressing any server for that episode. This helps in streaming the episode using other video players or download the episode using download managers. \n \n - You can set up custom lists using this [link](https://anilist.co/settings/lists). (you need to be signed in) \n \n - If your episode/chapter is not being progressed automatically after you finish watching/reading it, then hold press the status bar(planning/repeating/watching button) of that anime/manga. The next time you start a chapter/finish an episode, you will stumble upon a popup. Press yes there. </string>
 
 
-    <string name="subscribed_notification">Subscwibed!? :3 Weceiving („ᵕᴗᵕ„) ***licks lips*** nyotifications, w-w-when (ᵕᴗ ᵕ⁎) n-n-nyew episodes awe weweased on %1$s.</string>
+    <string name="subscribed_notification">Subscribed! Receiving notifications, when new episodes are released on %1$s.</string>
 
-    <string name="unsubscribed_notification">Unsubscwibed, \&gt;w\&lt; you w-w-w-wiww nyot weceive ***licks lips*** any ***glomps and huggles*** n-n-nyotifications.</string>
-    <string name="episode_plural">E-e-episodes (・\`ω\´・)</string>
-    <string name="episode_singular">Episode Uwu</string>
-    <string name="chapter_singular">Chaptew</string>
-    <string name="chapter_plural">C-c-c-chaptews</string>
+    <string name="unsubscribed_notification">Unsubscribed, you will not receive any notifications.</string>
+    <string name="episode_plural">Episodes</string>
+    <string name="episode_singular">Episode</string>
+    <string name="chapter_singular">Chapter</string>
+    <string name="chapter_plural">Chapters</string>
 
-    <string name="filter_format">"Fowmat : %1$s"</string>
-    <string name="filter_sort">"Sowt : %1$s"</string>
-    <string name="filter_exclude">"-"-"Nyot %1$s"</string>
-    <string name="search_by_image">Seawch (◡ ꒳ ◡) by Image (˘ε˘)</string>
-    <string name="upload_image">Upwoad Image</string>
-    <string name="similarity_text">Simiwawity: %-%-%1$s %%</string>
-    <string name="time_range">Fwom %1$s (˘ᵕ˘) to %-%-%2$s (・\`ω\´・)</string>
-    <string name="invalid_url">Invawid ***boops your nose*** UWW (⑅˘꒳˘)</string>
-    <string name="no_anilist_id_found">Nyo ( ͡o ᵕ ͡o ) A-a-a-anyiwist ID found ( ˘ᴗ˘ )</string>
-    <string name="error_loading_image">Ewwow woading (｡ᴜ‿‿ᴜ｡) i-i-i-image</string>
-    <string name="discord_logout_success">Successfuwwy (ᵘʷᵘ) Wogged ( ˘ᴗ˘ ) Out (uwu)</string>
-    <string name="discord_try_again">Twy *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* ***blushes*** w-w-wogging-in again</string>
-    <string name="error_loading_discord_user_data">Ewwow woading Discowd (˘³˘) Usew D-d-data</string>
-    <string name="discord_warning">B-b-b-by wogging – ̗̀ (ᵕ꒳ᵕ) ̖́- in, youw ***cries*** discowd ♥(。U ω U。) wiww nyow s-s-show ( ᴜ ω ᴜ ) what ***blushes*** y-y-you awe watching &amp; weading on Dantotsu\n\nIf you awe on ÚwÚ invisibwe ***screeches*** mode, wogging in wiww ÚwÚ make you ***cries*** onwinye, (◡ ω ◡) when y-y-you open Dantotsu.\n\nThis d-d-d-does bweak ÚwÚ the Discowd TOS. \nAwthough (˘ε˘) Discowd h-h-has nyevew bannyed anyonye fow using *:･ﾟ✧(ꈍᴗꈍ)✧･ﾟ:* Custom Wich (・\`ω\´・) Pwesence(what ( ᵘ ꒳ ᵘ ✼) Dantotsu uses), ~(˘▾˘~) You ^w^ have stiww ♥(。U ω U。) been w-w-w-wawnyed.\n\nDantotsu (◦ᵕ ˘ ᵕ◦) is nyot wesponsibwe ( ͡o ꒳ ͡o ) fow anything that (uwu) happens to youw a-a-account. ***looks at you***</string>
-    <string name="warning">Wawnying</string>
-    <string name="view_anime">View ***glomps*** Anyime ***looks at you***</string>
-    <string name="view_manga">V-v-view M-m-manga ***smirks smuggly***</string>
-    <string name="force_legacy_installer">Fowce Wegacy Instawwew</string>
+    <string name="filter_format">"Format : %1$s"</string>
+    <string name="filter_sort">"Sort : %1$s"</string>
+    <string name="filter_exclude">"Not %1$s"</string>
+    <string name="search_by_image">Search by Image</string>
+    <string name="upload_image">Upload Image</string>
+    <string name="similarity_text">Similarity: %1$s %%</string>
+    <string name="time_range">From %1$s to %2$s</string>
+    <string name="invalid_url">Invalid URL</string>
+    <string name="no_anilist_id_found">No Anilist ID found</string>
+    <string name="error_loading_image">Error loading image</string>
+    <string name="discord_logout_success">Successfully Logged Out</string>
+    <string name="discord_try_again">Try logging-in again</string>
+    <string name="error_loading_discord_user_data">Error loading Discord User Data</string>
+    <string name="discord_warning"><![CDATA[By logging in, your discord will now show what you are watching & reading on Dantotsu\n\nIf you are on invisible mode, logging in will make you online, when you open Dantotsu.\n\nThis does break the Discord TOS. \nAlthough Discord has never banned anyone for using Custom Rich Presence(what Dantotsu uses), You have still been warned.\n\nDantotsu is not responsible for anything that happens to your account.]]></string>
+    <string name="warning">Warning</string>
+    <string name="view_anime">View Anime</string>
+    <string name="view_manga">View Manga</string>
+    <string name="force_legacy_installer">Force Legacy Installer</string>
     <string name="extensions_settings">Extensions</string>
-    <string name="NSFWExtention">NSFW Extensions (⑅˘꒳˘)</string>
-    <string name="skip_loading_extension_icons">S-s-s-skip woading ღ(U꒳Uღ) e-e-extension icons</string>
-    <string name="use_material_you">Use Matewiaw You</string>
+    <string name="NSFWExtention">NSFW Extensions</string>
+    <string name="skip_loading_extension_icons">Skip loading extension icons</string>
+    <string name="use_material_you">Use Material You</string>
     <string name="extension_specific_dns">Extension-specific DNS</string>
     <string name="theme_">Theme:</string>
+    <string name="user_agent">User Agent</string>
 
 </resources>

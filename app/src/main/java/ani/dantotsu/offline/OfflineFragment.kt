@@ -13,7 +13,11 @@ import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
 
 class OfflineFragment : Fragment() {
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         val binding = FragmentOfflineBinding.inflate(inflater, container, false)
         binding.refreshContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight

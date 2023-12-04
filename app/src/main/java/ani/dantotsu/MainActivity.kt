@@ -1,15 +1,9 @@
 package ani.dantotsu
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
-import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.graphics.Color
 import android.graphics.drawable.Animatable
-import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
@@ -17,18 +11,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
-import android.widget.FrameLayout
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
 import androidx.core.view.updateLayoutParams
@@ -37,13 +27,10 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
-import ani.dantotsu.databinding.ItemNavbarBinding
 import ani.dantotsu.databinding.SplashScreenBinding
-import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
@@ -51,27 +38,17 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.parsers.AnimeSources
-import ani.dantotsu.parsers.MangaSources
-import ani.dantotsu.settings.SettingsActivity
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
-import uy.kohesive.injekt.injectLazy
 import java.io.Serializable
 
 
@@ -81,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private var load = false
 
     private var uiSettings = UserInterfaceSettings()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
@@ -264,10 +242,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    }
-
-    override fun onResume() {
-        super.onResume()
     }
 
 

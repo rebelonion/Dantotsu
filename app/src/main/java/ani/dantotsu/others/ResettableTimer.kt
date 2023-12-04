@@ -1,7 +1,8 @@
 package ani.dantotsu.others
 
-import java.util.*
-import java.util.concurrent.atomic.*
+import java.util.Timer
+import java.util.TimerTask
+import java.util.concurrent.atomic.AtomicBoolean
 
 class ResettableTimer {
     var resetLock = AtomicBoolean(false)

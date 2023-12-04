@@ -2,8 +2,9 @@ package ani.dantotsu.connections.discord.serializers
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+
 @Serializable
-data class Activity (
+data class Activity(
     @SerialName("application_id")
     val applicationId: String? = null,
     val name: String? = null,

@@ -20,10 +20,12 @@ class ImageSearchResultAdapter(private val searchResults: List<ImageSearchViewMo
         itemClickListener = listener
     }
 
-    inner class SearchResultViewHolder(val binding : ItemSearchByImageBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class SearchResultViewHolder(val binding: ItemSearchByImageBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchResultViewHolder {
-        val binding = ItemSearchByImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemSearchByImageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SearchResultViewHolder(binding)
     }
 
@@ -40,7 +42,8 @@ class ImageSearchResultAdapter(private val searchResults: List<ImageSearchViewMo
                 R.string.similarity_text, String.format("%.1f", searchResult.similarity?.times(100))
             )
 
-            binding.episodeNumber.text = getString(R.string.episode_num, searchResult.episode.toString())
+            binding.episodeNumber.text =
+                getString(R.string.episode_num, searchResult.episode.toString())
             binding.timeStamp.text = getString(
                 R.string.time_range,
                 toTimestamp(searchResult.from),

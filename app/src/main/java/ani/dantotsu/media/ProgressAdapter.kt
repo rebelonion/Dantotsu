@@ -22,7 +22,8 @@ class ProgressAdapter(private val horizontal: Boolean = true, searched: Boolean)
     var bar: ProgressBar? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProgressViewHolder {
-        val binding = ItemProgressbarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemProgressbarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProgressViewHolder(binding)
     }
 
@@ -33,7 +34,12 @@ class ProgressAdapter(private val horizontal: Boolean = true, searched: Boolean)
         val doubleClickDetector = GestureDetector(progressBar.context, object : GesturesListener() {
             override fun onDoubleClick(event: MotionEvent) {
                 snackString(currContext()?.getString(R.string.cant_wait))
-                ObjectAnimator.ofFloat(progressBar, "translationX", progressBar.translationX, progressBar.translationX + 100f)
+                ObjectAnimator.ofFloat(
+                    progressBar,
+                    "translationX",
+                    progressBar.translationX,
+                    progressBar.translationX + 100f
+                )
                     .setDuration(300).start()
             }
 
@@ -51,7 +57,8 @@ class ProgressAdapter(private val horizontal: Boolean = true, searched: Boolean)
     }
 
     override fun getItemCount(): Int = 1
-    inner class ProgressViewHolder(val binding: ItemProgressbarBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ProgressViewHolder(val binding: ItemProgressbarBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.updateLayoutParams { if (horizontal) width = -1 else height = -1 }
         }

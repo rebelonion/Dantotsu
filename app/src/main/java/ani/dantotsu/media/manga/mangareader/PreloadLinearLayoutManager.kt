@@ -10,14 +10,15 @@ import kotlin.math.max
 
 class PreloadLinearLayoutManager(context: Context, orientation: Int, reverseLayout: Boolean) :
     LinearLayoutManager(context, orientation, reverseLayout) {
-    private val mOrientationHelper: OrientationHelper = OrientationHelper.createOrientationHelper(this, orientation)
+    private val mOrientationHelper: OrientationHelper =
+        OrientationHelper.createOrientationHelper(this, orientation)
 
     /**
      * As [LinearLayoutManager.collectAdjacentPrefetchPositions] will prefetch one view for us,
      * we only need to prefetch additional ones.
      */
     var preloadItemCount = 1
-        set(count){
+        set(count) {
             require(count >= 1) { "preloadItemCount must not be smaller than 1!" }
             field = count - 1
         }
@@ -37,7 +38,8 @@ class PreloadLinearLayoutManager(context: Context, orientation: Int, reverseLayo
         val currentPosition: Int = getPosition(child ?: return) + layoutDirection
 
         if (layoutDirection == 1) {
-            val scrollingOffset = (mOrientationHelper.getDecoratedEnd(child) - mOrientationHelper.endAfterPadding)
+            val scrollingOffset =
+                (mOrientationHelper.getDecoratedEnd(child) - mOrientationHelper.endAfterPadding)
             ((currentPosition + 1) until (currentPosition + preloadItemCount + 1)).forEach {
                 if (it >= 0 && it < state.itemCount) {
                     layoutPrefetchRegistry.addPosition(it, max(0, scrollingOffset))

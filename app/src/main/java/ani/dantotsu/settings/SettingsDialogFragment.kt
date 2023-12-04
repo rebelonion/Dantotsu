@@ -10,21 +10,31 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Switch
 import androidx.core.content.ContextCompat
-import ani.dantotsu.*
+import ani.dantotsu.BottomSheetDialogFragment
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
 import ani.dantotsu.download.DownloadContainerActivity
 import ani.dantotsu.download.manga.OfflineMangaFragment
+import ani.dantotsu.loadData
+import ani.dantotsu.loadImage
+import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.imagesearch.ImageSearchActivity
+import ani.dantotsu.setSafeOnClickListener
+import ani.dantotsu.startMainActivity
+import ani.dantotsu.toast
 
 
 class SettingsDialogFragment(val pageType: PageType) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,7 +53,7 @@ class SettingsDialogFragment(val pageType: PageType) : BottomSheetDialogFragment
             binding.settingsLogin.setOnClickListener {
                 Anilist.removeSavedToken(it.context)
                 dismiss()
-                startMainActivity(requireActivity(),)
+                startMainActivity(requireActivity())
             }
             binding.settingsUsername.text = Anilist.username
             binding.settingsUserAvatar.loadImage(Anilist.avatar)
@@ -73,15 +83,17 @@ class SettingsDialogFragment(val pageType: PageType) : BottomSheetDialogFragment
             dismiss()
         }
         binding.settingsDownloads.setSafeOnClickListener {
-            when(pageType) {
+            when (pageType) {
                 PageType.MANGA -> {
                     val intent = Intent(activity, DownloadContainerActivity::class.java)
                     intent.putExtra("FRAGMENT_CLASS_NAME", OfflineMangaFragment::class.java.name)
                     startActivity(intent)
                 }
+
                 PageType.ANIME -> {
                     try {
-                        val arrayOfFiles = ContextCompat.getExternalFilesDirs(requireContext(), null)
+                        val arrayOfFiles =
+                            ContextCompat.getExternalFilesDirs(requireContext(), null)
                         startActivity(
                             if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
                                 val parentDirectory = arrayOfFiles[1].toString()
@@ -93,9 +105,11 @@ class SettingsDialogFragment(val pageType: PageType) : BottomSheetDialogFragment
                         toast(getString(R.string.file_manager_not_found))
                     }
                 }
+
                 PageType.HOME -> {
                     try {
-                        val arrayOfFiles = ContextCompat.getExternalFilesDirs(requireContext(), null)
+                        val arrayOfFiles =
+                            ContextCompat.getExternalFilesDirs(requireContext(), null)
                         startActivity(
                             if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
                                 val parentDirectory = arrayOfFiles[1].toString()
@@ -118,8 +132,8 @@ class SettingsDialogFragment(val pageType: PageType) : BottomSheetDialogFragment
         _binding = null
     }
 
-    companion object{
-        enum class PageType{
+    companion object {
+        enum class PageType {
             MANGA, ANIME, HOME
         }
     }

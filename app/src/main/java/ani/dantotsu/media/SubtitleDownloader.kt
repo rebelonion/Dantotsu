@@ -1,18 +1,13 @@
 package ani.dantotsu.media
 
 import android.content.Context
-import android.os.Environment
 import ani.dantotsu.parsers.SubtitleType
 import eu.kanade.tachiyomi.network.NetworkHelper
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import okhttp3.Request
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import java.io.FileInputStream
 
 class SubtitleDownloader {
 
@@ -30,7 +25,7 @@ class SubtitleDownloader {
 
                 // Check if response is successful
                 if (response.isSuccessful) {
-                    val responseBody = response.body?.string()
+                    val responseBody = response.body.string()
 
 
                     val subtitleType = when {

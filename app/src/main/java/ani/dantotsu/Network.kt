@@ -8,58 +8,51 @@ import ani.dantotsu.others.webview.WebViewBottomDialog
 import com.lagradost.nicehttp.Requests
 import com.lagradost.nicehttp.ResponseParser
 import com.lagradost.nicehttp.addGenericDns
-import kotlinx.coroutines.*
+import eu.kanade.tachiyomi.network.NetworkHelper
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.InternalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
-import okhttp3.Cache
 import okhttp3.OkHttpClient
-import java.io.File
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.PrintWriter
 import java.io.Serializable
 import java.io.StringWriter
-import java.util.concurrent.*
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 
-val defaultHeaders = mapOf(
-    "User-Agent" to
-            "Mozilla/5.0 (Linux; Android %s; %s) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Mobile Safari/537.36"
-                .format(Build.VERSION.RELEASE, Build.MODEL)
-)
-lateinit var cache: Cache
+lateinit var defaultHeaders: Map<String, String>
 
 lateinit var okHttpClient: OkHttpClient
 lateinit var client: Requests
 
 fun initializeNetwork(context: Context) {
-    val dns = loadData<Int>("settings_dns")
-    cache = Cache(
-        File(context.cacheDir, "http_cache"),
-        5 * 1024L * 1024L // 5 MiB
+
+    val networkHelper = Injekt.get<NetworkHelper>()
+
+    defaultHeaders = mapOf(
+        "User-Agent" to
+                Injekt.get<NetworkHelper>().defaultUserAgentProvider()
+                    .format(Build.VERSION.RELEASE, Build.MODEL)
     )
-    okHttpClient = OkHttpClient.Builder()
-        .followRedirects(true)
-        .followSslRedirects(true)
-        .cache(cache)
-        .apply {
-            when (dns) {
-                1 -> addGoogleDns()
-                2 -> addCloudFlareDns()
-                3 -> addAdGuardDns()
-            }
-        }
-        .build()
+
+    okHttpClient = networkHelper.client
     client = Requests(
-        okHttpClient,
+        networkHelper.client,
         defaultHeaders,
         defaultCacheTime = 6,
         defaultCacheTimeUnit = TimeUnit.HOURS,
         responseParser = Mapper
     )
+
 }
 
 object Mapper : ResponseParser {
@@ -122,7 +115,11 @@ fun <T> tryWith(post: Boolean = false, snackbar: Boolean = true, call: () -> T):
     }
 }
 
-suspend fun <T> tryWithSuspend(post: Boolean = false, snackbar: Boolean = true, call: suspend () -> T): T? {
+suspend fun <T> tryWithSuspend(
+    post: Boolean = false,
+    snackbar: Boolean = true,
+    call: suspend () -> T
+): T? {
     return try {
         call.invoke()
     } catch (e: Throwable) {
@@ -202,28 +199,29 @@ fun OkHttpClient.Builder.addAdGuardDns() = (
 
 @Suppress("BlockingMethodInNonBlockingContext")
 suspend fun webViewInterface(webViewDialog: WebViewBottomDialog): Map<String, String>? {
-    var map : Map<String,String>? = null
+    var map: Map<String, String>? = null
 
     val latch = CountDownLatch(1)
     webViewDialog.callback = {
         map = it
         latch.countDown()
     }
-    val fragmentManager = (currContext() as FragmentActivity?)?.supportFragmentManager ?: return null
+    val fragmentManager =
+        (currContext() as FragmentActivity?)?.supportFragmentManager ?: return null
     webViewDialog.show(fragmentManager, "web-view")
     delay(0)
-    latch.await(2,TimeUnit.MINUTES)
+    latch.await(2, TimeUnit.MINUTES)
     return map
 }
 
 suspend fun webViewInterface(type: String, url: FileUrl): Map<String, String>? {
     val webViewDialog: WebViewBottomDialog = when (type) {
         "Cloudflare" -> CloudFlare.newInstance(url)
-        else         -> return null
+        else -> return null
     }
     return webViewInterface(webViewDialog)
 }
 
 suspend fun webViewInterface(type: String, url: String): Map<String, String>? {
-    return webViewInterface(type,FileUrl(url))
+    return webViewInterface(type, FileUrl(url))
 }

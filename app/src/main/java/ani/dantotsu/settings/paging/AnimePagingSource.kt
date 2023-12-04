@@ -1,8 +1,8 @@
 package ani.dantotsu.settings.paging
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.ImageView
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -16,18 +16,25 @@ import androidx.paging.PagingState
 import androidx.paging.cachedIn
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class AnimeExtensionsViewModelFactory(
@@ -47,11 +54,19 @@ class AnimeExtensionsViewModel(
     fun setSearchQuery(query: String) {
         searchQuery.value = query
     }
+
     fun invalidatePager() {
         currentPagingSource?.invalidate()
     }
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    val pagerFlow: Flow<PagingData<AnimeExtension.Available>> = searchQuery.flatMapLatest { query ->
+    val pagerFlow: Flow<PagingData<AnimeExtension.Available>> = combine(
+        animeExtensionManager.availableExtensionsFlow,
+        animeExtensionManager.installedExtensionsFlow,
+        searchQuery
+    ) { available, installed, query ->
+        Triple(available, installed, query)
+    }.flatMapLatest { (available, installed, query) ->
         Pager(
             PagingConfig(
                 pageSize = 15,
@@ -59,34 +74,31 @@ class AnimeExtensionsViewModel(
                 prefetchDistance = 15
             )
         ) {
-            AnimeExtensionPagingSource(
-                animeExtensionManager.availableExtensionsFlow,
-                animeExtensionManager.installedExtensionsFlow,
-                searchQuery
-            ).also { currentPagingSource = it }
+            AnimeExtensionPagingSource(available, installed, query)
         }.flow
     }.cachedIn(viewModelScope)
 }
 
 class AnimeExtensionPagingSource(
-    private val availableExtensionsFlow: StateFlow<List<AnimeExtension.Available>>,
-    private val installedExtensionsFlow: StateFlow<List<AnimeExtension.Installed>>,
-    private val searchQuery: StateFlow<String>
+    private val availableExtensionsFlow: List<AnimeExtension.Available>,
+    private val installedExtensionsFlow: List<AnimeExtension.Installed>,
+    private val searchQuery: String
 ) : PagingSource<Int, AnimeExtension.Available>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, AnimeExtension.Available> {
         val position = params.key ?: 0
-        val installedExtensions = installedExtensionsFlow.first().map { it.pkgName }.toSet()
-        val availableExtensions = availableExtensionsFlow.first().filterNot { it.pkgName in installedExtensions }
-        val query = searchQuery.first()
-        val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: false
+        val installedExtensions = installedExtensionsFlow.map { it.pkgName }.toSet()
+        val availableExtensions =
+            availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
+        val query = searchQuery
+        val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
 
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = if(isNsfwEnabled) {
+        val filternfsw = if (isNsfwEnabled) {
             filteredExtensions
         } else {
             filteredExtensions.filterNot { it.isNsfw }
@@ -120,12 +132,18 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<AnimeExtension.Available>() {
-            override fun areItemsTheSame(oldItem: AnimeExtension.Available, newItem: AnimeExtension.Available): Boolean {
+            override fun areItemsTheSame(
+                oldItem: AnimeExtension.Available,
+                newItem: AnimeExtension.Available
+            ): Boolean {
                 // Your logic here
                 return oldItem.pkgName == newItem.pkgName
             }
 
-            override fun areContentsTheSame(oldItem: AnimeExtension.Available, newItem: AnimeExtension.Available): Boolean {
+            override fun areContentsTheSame(
+                oldItem: AnimeExtension.Available,
+                newItem: AnimeExtension.Available
+            ): Boolean {
                 // Your logic here
                 return oldItem == newItem
             }
@@ -133,7 +151,8 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimeExtensionViewHolder {
-        val binding = ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemExtensionAllBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AnimeExtensionViewHolder(binding)
     }
 
@@ -149,23 +168,51 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
         }
     }
 
-    inner class AnimeExtensionViewHolder(private val binding: ItemExtensionAllBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class AnimeExtensionViewHolder(private val binding: ItemExtensionAllBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        private val job = Job()
+        private val scope = CoroutineScope(Dispatchers.Main + job)
+
         init {
             binding.closeTextView.setOnClickListener {
                 val extension = getItem(bindingAdapterPosition)
                 if (extension != null) {
                     clickListener.onInstallClick(extension)
+                    binding.closeTextView.setImageResource(R.drawable.ic_sync)
+                    scope.launch {
+                        while (isActive) {
+                            withContext(Dispatchers.Main) {
+                                binding.closeTextView.animate()
+                                    .rotationBy(360f)
+                                    .setDuration(1000)
+                                    .setInterpolator(LinearInterpolator())
+                                    .start()
+                            }
+                            delay(1000)
+                        }
+                    }
                 }
             }
         }
+
         val extensionIconImageView: ImageView = binding.extensionIconImageView
 
-            fun bind(extension: AnimeExtension.Available) {
+        fun bind(extension: AnimeExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
             binding.extensionNameTextView.text = extension.name
             binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }
+
+        fun clear() {
+            job.cancel() // Cancel the coroutine when the view is recycled
+        }
+    }
+
+    override fun onViewRecycled(holder: AnimeExtensionViewHolder) {
+        super.onViewRecycled(holder)
+        holder.clear()
     }
 }
 

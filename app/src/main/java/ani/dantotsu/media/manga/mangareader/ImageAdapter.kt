@@ -30,15 +30,15 @@ open class ImageAdapter(
 
     inner class ImageViewHolder(binding: ItemImageBinding) : RecyclerView.ViewHolder(binding.root)
 
-    open suspend fun loadBitmap(position: Int, parent: View) : Bitmap? {
+    open suspend fun loadBitmap(position: Int, parent: View): Bitmap? {
         val link = images.getOrNull(position)?.url ?: return null
         if (link.url.isEmpty()) return null
 
         val transforms = mutableListOf<BitmapTransformation>()
         val parserTransformation = activity.getTransformation(images[position])
 
-        if(parserTransformation!=null) transforms.add(parserTransformation)
-        if(settings.cropBorders) {
+        if (parserTransformation != null) transforms.add(parserTransformation)
+        if (settings.cropBorders) {
             transforms.add(RemoveBordersTransformation(true, settings.cropBorderThreshold))
             transforms.add(RemoveBordersTransformation(false, settings.cropBorderThreshold))
         }
@@ -47,7 +47,8 @@ open class ImageAdapter(
     }
 
     override suspend fun loadImage(position: Int, parent: View): Boolean {
-        val imageView = parent.findViewById<SubsamplingScaleImageView>(R.id.imgProgImageNoGestures) ?: return false
+        val imageView = parent.findViewById<SubsamplingScaleImageView>(R.id.imgProgImageNoGestures)
+            ?: return false
         val progress = parent.findViewById<View>(R.id.imgProgProgress) ?: return false
         imageView.recycle()
         imageView.visibility = View.GONE
@@ -60,10 +61,12 @@ open class ImageAdapter(
         if (settings.layout != PAGED)
             parent.updateLayoutParams {
                 if (settings.direction != LEFT_TO_RIGHT && settings.direction != RIGHT_TO_LEFT) {
-                    sHeight = if (settings.wrapImages) bitmap.height else (sWidth * bitmap.height * 1f / bitmap.width).toInt()
+                    sHeight =
+                        if (settings.wrapImages) bitmap.height else (sWidth * bitmap.height * 1f / bitmap.width).toInt()
                     height = sHeight
                 } else {
-                    sWidth = if (settings.wrapImages) bitmap.width else (sHeight * bitmap.width * 1f / bitmap.height).toInt()
+                    sWidth =
+                        if (settings.wrapImages) bitmap.width else (sHeight * bitmap.width * 1f / bitmap.height).toInt()
                     width = sWidth
                 }
             }
@@ -73,7 +76,8 @@ open class ImageAdapter(
 
         val parentArea = sWidth * sHeight * 1f
         val bitmapArea = bitmap.width * bitmap.height * 1f
-        val scale = if (parentArea < bitmapArea) (bitmapArea / parentArea) else (parentArea / bitmapArea)
+        val scale =
+            if (parentArea < bitmapArea) (bitmapArea / parentArea) else (parentArea / bitmapArea)
 
         imageView.maxScale = scale * 1.1f
         imageView.minScale = scale

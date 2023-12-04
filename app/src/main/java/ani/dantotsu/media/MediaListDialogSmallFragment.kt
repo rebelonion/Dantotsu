@@ -12,11 +12,9 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.databinding.BottomSheetMediaListSmallBinding
 import ani.dantotsu.connections.mal.MAL
+import ani.dantotsu.databinding.BottomSheetMediaListSmallBinding
 import ani.dantotsu.others.getSerialized
-import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -46,7 +44,11 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetMediaListSmallBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetMediaListSmallBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -60,8 +62,12 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
         binding.mediaListProgressBar.visibility = View.GONE
         binding.mediaListLayout.visibility = View.VISIBLE
         val statuses: Array<String> = resources.getStringArray(R.array.status)
-        val statusStrings = if (media.manga==null) resources.getStringArray(R.array.status_anime) else resources.getStringArray(R.array.status_manga)
-        val userStatus = if(media.userStatus != null) statusStrings[statuses.indexOf(media.userStatus)] else statusStrings[0]
+        val statusStrings =
+            if (media.manga == null) resources.getStringArray(R.array.status_anime) else resources.getStringArray(
+                R.array.status_manga
+            )
+        val userStatus =
+            if (media.userStatus != null) statusStrings[statuses.indexOf(media.userStatus)] else statusStrings[0]
 
         binding.mediaListStatus.setText(userStatus)
         binding.mediaListStatus.setAdapter(
@@ -130,10 +136,26 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
                 withContext(Dispatchers.IO) {
                     withContext(Dispatchers.IO) {
                         val progress = _binding?.mediaListProgress?.text.toString().toIntOrNull()
-                        val score = (_binding?.mediaListScore?.text.toString().toDoubleOrNull()?.times(10))?.toInt()
-                        val status = statuses[statusStrings.indexOf(_binding?.mediaListStatus?.text.toString())]
-                        Anilist.mutation.editList(media.id, progress, score, null, null, status,  media.isListPrivate)
-                        MAL.query.editList(media.idMAL, media.anime != null, progress, score, status)
+                        val score = (_binding?.mediaListScore?.text.toString().toDoubleOrNull()
+                            ?.times(10))?.toInt()
+                        val status =
+                            statuses[statusStrings.indexOf(_binding?.mediaListStatus?.text.toString())]
+                        Anilist.mutation.editList(
+                            media.id,
+                            progress,
+                            score,
+                            null,
+                            null,
+                            status,
+                            media.isListPrivate
+                        )
+                        MAL.query.editList(
+                            media.idMAL,
+                            media.anime != null,
+                            progress,
+                            score,
+                            status
+                        )
                     }
                 }
                 Refresh.all()

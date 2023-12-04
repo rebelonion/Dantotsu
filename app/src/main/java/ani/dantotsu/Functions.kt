@@ -132,9 +132,10 @@ fun <T> loadData(fileName: String, context: Context? = null, toast: Boolean = tr
 fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
-    val uiSettings = loadData<UserInterfaceSettings>("ui_settings", toast = false) ?: UserInterfaceSettings().apply {
-        saveData("ui_settings", this)
-    }
+    val uiSettings = loadData<UserInterfaceSettings>("ui_settings", toast = false)
+        ?: UserInterfaceSettings().apply {
+            saveData("ui_settings", this)
+        }
     uiSettings.darkMode.apply {
         AppCompatDelegate.setDefaultNightMode(
             when (this) {
@@ -146,9 +147,10 @@ fun initActivity(a: Activity) {
     }
     if (uiSettings.immersiveMode) {
         if (navBarHeight == 0) {
-            ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))?.apply {
-                navBarHeight = this.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-            }
+            ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
+                ?.apply {
+                    navBarHeight = this.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+                }
         }
         a.hideStatusBar()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0 && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -160,7 +162,8 @@ fun initActivity(a: Activity) {
         }
     } else
         if (statusBarHeight == 0) {
-            val windowInsets = ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
+            val windowInsets =
+                ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
             if (windowInsets != null) {
                 val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
                 statusBarHeight = insets.top
@@ -205,7 +208,8 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
 }
 
 fun isOnline(context: Context): Boolean {
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val connectivityManager =
+        context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return tryWith {
         val cap = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         return@tryWith if (cap != null) {
@@ -219,7 +223,7 @@ fun isOnline(context: Context): Boolean {
                         cap.hasTransport(TRANSPORT_WIFI) ||
                         cap.hasTransport(TRANSPORT_WIFI_AWARE) -> true
 
-                else                                           -> false
+                else -> false
             }
         } else false
     } ?: false
@@ -239,7 +243,8 @@ fun startMainActivity(activity: Activity, bundle: Bundle? = null) {
 }
 
 
-class DatePickerFragment(activity: Activity, var date: FuzzyDate = FuzzyDate().getToday()) : DialogFragment(),
+class DatePickerFragment(activity: Activity, var date: FuzzyDate = FuzzyDate().getToday()) :
+    DialogFragment(),
     DatePickerDialog.OnDateSetListener {
     var dialog: DatePickerDialog
 
@@ -264,9 +269,20 @@ class DatePickerFragment(activity: Activity, var date: FuzzyDate = FuzzyDate().g
     }
 }
 
-class InputFilterMinMax(private val min: Double, private val max: Double, private val status: AutoCompleteTextView? = null) :
+class InputFilterMinMax(
+    private val min: Double,
+    private val max: Double,
+    private val status: AutoCompleteTextView? = null
+) :
     InputFilter {
-    override fun filter(source: CharSequence, start: Int, end: Int, dest: Spanned, dstart: Int, dend: Int): CharSequence? {
+    override fun filter(
+        source: CharSequence,
+        start: Int,
+        end: Int,
+        dest: Spanned,
+        dstart: Int,
+        dend: Int
+    ): CharSequence? {
         try {
             val input = (dest.toString() + source.toString()).toDouble()
             if (isInRange(min, max, input)) return null
@@ -289,11 +305,20 @@ class InputFilterMinMax(private val min: Double, private val max: Double, privat
 }
 
 
-class ZoomOutPageTransformer(private val uiSettings: UserInterfaceSettings) : ViewPager2.PageTransformer {
+class ZoomOutPageTransformer(private val uiSettings: UserInterfaceSettings) :
+    ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
         if (position == 0.0f && uiSettings.layoutAnimations) {
-            setAnimation(view.context, view, uiSettings, 300, floatArrayOf(1.3f, 1f, 1.3f, 1f), 0.5f to 0f)
-            ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f).setDuration((200 * uiSettings.animationSpeed).toLong()).start()
+            setAnimation(
+                view.context,
+                view,
+                uiSettings,
+                300,
+                floatArrayOf(1.3f, 1f, 1.3f, 1f),
+                0.5f to 0f
+            )
+            ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f)
+                .setDuration((200 * uiSettings.animationSpeed).toLong()).start()
         }
     }
 }
@@ -328,7 +353,11 @@ class FadingEdgeRecyclerView : RecyclerView {
 
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     override fun isPaddingOffsetRequired(): Boolean {
         return !clipToPadding
@@ -414,7 +443,7 @@ fun MutableList<ShowResponse>.sortByTitle(string: String) {
 }
 
 fun String.findBetween(a: String, b: String): String? {
-    val string = substringAfter(a, "").substringBefore(b,"")
+    val string = substringAfter(a, "").substringBefore(b, "")
     return string.ifEmpty { null }
 }
 
@@ -423,8 +452,7 @@ fun ImageView.loadImage(url: String?, size: Int = 0) {
         val localFile = File(url)
         if (localFile.exists()) {
             loadLocalImage(localFile, size)
-        }
-        else {
+        } else {
             loadImage(FileUrl(url), size)
         }
     }
@@ -434,7 +462,8 @@ fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
     if (file?.url?.isNotEmpty() == true) {
         tryWith {
             val glideUrl = GlideUrl(file.url) { file.headers }
-            Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size).into(this)
+            Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)
+                .into(this)
         }
     }
 }
@@ -442,7 +471,8 @@ fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
 fun ImageView.loadLocalImage(file: File?, size: Int = 0) {
     if (file?.exists() == true) {
         tryWith {
-            Glide.with(this.context).load(file).transition(withCrossFade()).override(size).into(this)
+            Glide.with(this.context).load(file).transition(withCrossFade()).override(size)
+                .into(this)
         }
     }
 }
@@ -500,7 +530,12 @@ abstract class GesturesListener : GestureDetector.SimpleOnGestureListener() {
         return super.onDoubleTap(e)
     }
 
-    override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+    override fun onScroll(
+        e1: MotionEvent?,
+        e2: MotionEvent,
+        distanceX: Float,
+        distanceY: Float
+    ): Boolean {
         onScrollYClick(distanceY)
         onScrollXClick(distanceX)
         return super.onScroll(e1, e2, distanceX, distanceY)
@@ -642,9 +677,15 @@ fun countDown(media: Media, view: ViewGroup) {
         val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
         view.addView(v.root, 0)
         v.mediaCountdownText.text =
-            currActivity()?.getString(R.string.episode_release_countdown, media.anime.nextAiringEpisode!! + 1)
+            currActivity()?.getString(
+                R.string.episode_release_countdown,
+                media.anime.nextAiringEpisode!! + 1
+            )
 
-        object : CountDownTimer((media.anime.nextAiringEpisodeTime!! + 10000) * 1000 - System.currentTimeMillis(), 1000) {
+        object : CountDownTimer(
+            (media.anime.nextAiringEpisodeTime!! + 10000) * 1000 - System.currentTimeMillis(),
+            1000
+        ) {
             override fun onTick(millisUntilFinished: Long) {
                 val a = millisUntilFinished / 1000
                 v.mediaCountdown.text = currActivity()?.getString(
@@ -735,7 +776,8 @@ fun toast(string: String?) {
     if (string != null) {
         logger(string)
         MainScope().launch {
-            Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT).show()
+            Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT)
+                .show()
         }
     }
 }
@@ -744,7 +786,11 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
     if (s != null) {
         (activity ?: currActivity())?.apply {
             runOnUiThread {
-                val snackBar = Snackbar.make(window.decorView.findViewById(android.R.id.content), s, Snackbar.LENGTH_SHORT)
+                val snackBar = Snackbar.make(
+                    window.decorView.findViewById(android.R.id.content),
+                    s,
+                    Snackbar.LENGTH_SHORT
+                )
                 snackBar.view.apply {
                     updateLayoutParams<FrameLayout.LayoutParams> {
                         gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
@@ -769,7 +815,8 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
     }
 }
 
-open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) : ArrayAdapter<T>(context, layoutId, items) {
+open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :
+    ArrayAdapter<T>(context, layoutId, items) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view = super.getView(position, convertView, parent)
         view.setPadding(0, view.paddingTop, view.paddingRight, view.paddingBottom)
@@ -790,16 +837,21 @@ class SpinnerNoSwipe : androidx.appcompat.widget.AppCompatSpinner {
         setup()
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         setup()
     }
 
     private fun setup() {
-        mGestureDetector = GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                return performClick()
-            }
-        })
+        mGestureDetector =
+            GestureDetector(context, object : GestureDetector.SimpleOnGestureListener() {
+                override fun onSingleTapUp(e: MotionEvent): Boolean {
+                    return performClick()
+                }
+            })
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
@@ -843,7 +895,11 @@ fun getCurrentBrightnessValue(context: Context): Float {
     }
 
     fun getCur(): Float {
-        return Settings.System.getInt(context.contentResolver, Settings.System.SCREEN_BRIGHTNESS, 127).toFloat()
+        return Settings.System.getInt(
+            context.contentResolver,
+            Settings.System.SCREEN_BRIGHTNESS,
+            127
+        ).toFloat()
     }
 
     return brightnessConverter(getCur() / getMax(), true)
@@ -865,12 +921,12 @@ fun checkCountry(context: Context): Boolean {
             tz.equals("Asia/Kolkata", ignoreCase = true)
         }
 
-        TelephonyManager.SIM_STATE_READY  -> {
+        TelephonyManager.SIM_STATE_READY -> {
             val countryCodeValue = telMgr.networkCountryIso
             countryCodeValue.equals("in", ignoreCase = true)
         }
 
-        else                              -> false
+        else -> false
     }
 }
 

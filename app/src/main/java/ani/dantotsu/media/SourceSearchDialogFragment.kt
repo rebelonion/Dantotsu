@@ -13,8 +13,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import ani.dantotsu.BottomSheetDialogFragment
-import ani.dantotsu.media.anime.AnimeSourceAdapter
 import ani.dantotsu.databinding.BottomSheetSourceSearchBinding
+import ani.dantotsu.media.anime.AnimeSourceAdapter
 import ani.dantotsu.media.manga.MangaSourceAdapter
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.parsers.AnimeSources
@@ -38,7 +38,11 @@ class SourceSearchDialogFragment : BottomSheetDialogFragment() {
     var id: Int? = null
     var media: Media? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetSourceSearchBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -47,7 +51,8 @@ class SourceSearchDialogFragment : BottomSheetDialogFragment() {
         binding.mediaListContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
 
         val scope = requireActivity().lifecycleScope
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         model.getMedia().observe(viewLifecycleOwner) {
             media = it
             if (media != null) {
@@ -65,6 +70,7 @@ class SourceSearchDialogFragment : BottomSheetDialogFragment() {
                     anime = false
                     (if (media!!.isAdult) HMangaSources else MangaSources)[i!!]
                 }
+
                 fun search() {
                     binding.searchBarText.clearFocus()
                     imm.hideSoftInputFromWindow(binding.searchBarText.windowToken, 0)
@@ -86,7 +92,8 @@ class SourceSearchDialogFragment : BottomSheetDialogFragment() {
                             search()
                             true
                         }
-                        else                         -> false
+
+                        else -> false
                     }
                 }
                 binding.searchBar.setEndIconOnClickListener { search() }
@@ -101,7 +108,11 @@ class SourceSearchDialogFragment : BottomSheetDialogFragment() {
                             else MangaSourceAdapter(j, model, i!!, media!!.id, this, scope)
                         binding.searchRecyclerView.layoutManager = GridLayoutManager(
                             requireActivity(),
-                            clamp(requireActivity().resources.displayMetrics.widthPixels / 124f.px, 1, 4)
+                            clamp(
+                                requireActivity().resources.displayMetrics.widthPixels / 124f.px,
+                                1,
+                                4
+                            )
                         )
                     }
                 }

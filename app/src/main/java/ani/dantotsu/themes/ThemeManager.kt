@@ -1,16 +1,45 @@
 package ani.dantotsu.themes
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
+import android.graphics.Bitmap
 import ani.dantotsu.R
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.color.DynamicColorsOptions
+
 
 class ThemeManager(private val context: Context) {
-    fun applyTheme() {
-        val useOLED = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_oled", false) && isDarkThemeActive(context)
-        if(context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_material_you", false)){
-            return
+    fun applyTheme(fromImage: Bitmap? = null) {
+        val useOLED = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            .getBoolean("use_oled", false) && isDarkThemeActive(context)
+        val useCustomTheme = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            .getBoolean("use_custom_theme", false)
+        val customTheme = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            .getInt("custom_theme_int", 16712221)
+        val useSource = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            .getBoolean("use_source_theme", false)
+        val useMaterial = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            .getBoolean("use_material_you", false)
+        if (useSource) {
+            val returnedEarly = applyDynamicColors(
+                useMaterial,
+                context,
+                useOLED,
+                fromImage,
+                useCustom = if (useCustomTheme) customTheme else null
+            )
+            if (!returnedEarly) return
+        } else if (useCustomTheme) {
+            val returnedEarly =
+                applyDynamicColors(useMaterial, context, useOLED, useCustom = customTheme)
+            if (!returnedEarly) return
+        } else {
+            val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = null)
+            if (!returnedEarly) return
         }
-        val theme = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getString("theme", "PURPLE")!!
+        val theme = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            .getString("theme", "PURPLE")!!
 
         val themeToApply = when (theme) {
             "PURPLE" -> if (useOLED) R.style.Theme_Dantotsu_PurpleOLED else R.style.Theme_Dantotsu_Purple
@@ -27,6 +56,47 @@ class ThemeManager(private val context: Context) {
         context.setTheme(themeToApply)
     }
 
+    private fun applyDynamicColors(
+        useMaterialYou: Boolean,
+        context: Context,
+        useOLED: Boolean,
+        bitmap: Bitmap? = null,
+        useCustom: Int? = null
+    ): Boolean {
+        val builder = DynamicColorsOptions.Builder()
+        var needMaterial = true
+
+        // Set content-based source if a bitmap is provided
+        if (bitmap != null) {
+            builder.setContentBasedSource(bitmap)
+            needMaterial = false
+        } else if (useCustom != null) {
+            builder.setContentBasedSource(useCustom)
+            needMaterial = false
+        }
+
+        if (useOLED) {
+            builder.setThemeOverlay(R.style.AppTheme_Amoled)
+        }
+        if (needMaterial && !useMaterialYou) return true
+
+        // Build the options
+        val options = builder.build()
+
+        // Apply the dynamic colors to the activity
+        val activity = context as Activity
+        DynamicColors.applyToActivityIfAvailable(activity, options)
+
+        if (useOLED) {
+            val options2 = DynamicColorsOptions.Builder()
+                .setThemeOverlay(R.style.AppTheme_Amoled)
+                .build()
+            DynamicColors.applyToActivityIfAvailable(activity, options2)
+        }
+
+        return false
+    }
+
     private fun isDarkThemeActive(context: Context): Boolean {
         return when (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
             Configuration.UI_MODE_NIGHT_YES -> true
@@ -37,7 +107,7 @@ class ThemeManager(private val context: Context) {
     }
 
 
-    companion object{
+    companion object {
         enum class Theme(val theme: String) {
             PURPLE("PURPLE"),
             BLUE("BLUE"),

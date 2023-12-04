@@ -12,13 +12,13 @@ data class Identity(
 ) {
 
     @Serializable
-    data class Response (
+    data class Response(
         val op: Long,
         val d: Identity
     )
 
     @Serializable
-    data class Properties (
+    data class Properties(
         @SerialName("\$os")
         val os: String,
 

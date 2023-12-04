@@ -14,9 +14,9 @@ import ani.dantotsu.databinding.ActivityGenreBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -28,7 +28,7 @@ class GenreActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityGenreBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initActivity(this)
@@ -50,7 +50,8 @@ ThemeManager(this).applyTheme()
                     model.doneListener?.invoke()
             }
             binding.mediaInfoGenresRecyclerView.adapter = adapter
-            binding.mediaInfoGenresRecyclerView.layoutManager = GridLayoutManager(this, (screenWidth / 156f).toInt())
+            binding.mediaInfoGenresRecyclerView.layoutManager =
+                GridLayoutManager(this, (screenWidth / 156f).toInt())
 
             lifecycleScope.launch(Dispatchers.IO) {
                 model.loadGenres(Anilist.genres ?: loadData("genres_list") ?: arrayListOf()) {

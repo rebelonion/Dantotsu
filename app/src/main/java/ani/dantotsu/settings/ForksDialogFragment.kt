@@ -14,10 +14,19 @@ class ForksDialogFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private val developers = arrayOf(
-        Developer("Dantotsu","https://avatars.githubusercontent.com/u/87634197?v=4","rebelonion","https://github.com/rebelonion/Dantotsu"),
+        Developer(
+            "Dantotsu",
+            "https://avatars.githubusercontent.com/u/87634197?v=4",
+            "rebelonion",
+            "https://github.com/rebelonion/Dantotsu"
+        ),
     )
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetDevelopersBinding.inflate(inflater, container, false)
         return binding.root
     }

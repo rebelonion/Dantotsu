@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -25,6 +26,7 @@ import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.databinding.ActivitySettingsBinding
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.subcriptions.Notifications
@@ -33,9 +35,9 @@ import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.skydoves.colorpickerview.listeners.ColorListener
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
@@ -61,7 +63,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -72,20 +74,21 @@ ThemeManager(this).applyTheme()
             fun getArch(): String {
                 SUPPORTED_ABIS.forEach {
                     when (it) {
-                        "arm64-v8a"   -> return "aarch64"
+                        "arm64-v8a" -> return "aarch64"
                         "armeabi-v7a" -> return "arm"
-                        "x86_64"      -> return "x86_64"
-                        "x86"         -> return "i686"
+                        "x86_64" -> return "x86_64"
+                        "x86" -> return "i686"
                     }
                 }
-                return System.getProperty("os.arch") ?: System.getProperty("os.product.cpu.abi") ?: "Unknown Architecture"
+                return System.getProperty("os.arch") ?: System.getProperty("os.product.cpu.abi")
+                ?: "Unknown Architecture"
             }
 
             val info = """
-dantotsu Version: ${BuildConfig.VERSION_NAME}
-Device: $BRAND $DEVICE
-Architecture: ${getArch()}
-OS Version: $CODENAME $RELEASE ($SDK_INT)
+                dantotsu Version: ${BuildConfig.VERSION_NAME}
+                Device: $BRAND $DEVICE
+                Architecture: ${getArch()}
+                OS Version: $CODENAME $RELEASE ($SDK_INT)
             """.trimIndent()
             copyToClipboard(info, false)
             toast(getString(R.string.copied_device_info))
@@ -103,43 +106,125 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.settingsUseMaterialYou.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_material_you", false)
+        binding.settingsUseMaterialYou.isChecked =
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
+                "use_material_you",
+                false
+            )
         binding.settingsUseMaterialYou.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_material_you", isChecked).apply()
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                .putBoolean("use_material_you", isChecked).apply()
+            if (isChecked) binding.settingsUseCustomTheme.isChecked = false
             restartApp()
         }
 
-        binding.settingsUseOLED.isChecked = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_oled", false)
+        binding.settingsUseCustomTheme.isChecked =
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
+                "use_custom_theme",
+                false
+            )
+        binding.settingsUseCustomTheme.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                .putBoolean("use_custom_theme", isChecked).apply()
+            if (isChecked) {
+                binding.settingsUseMaterialYou.isChecked = false
+            }
+
+            restartApp()
+        }
+
+        binding.settingsUseSourceTheme.isChecked =
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
+                "use_source_theme",
+                false
+            )
+        binding.settingsUseSourceTheme.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                .putBoolean("use_source_theme", isChecked).apply()
+        }
+
+        binding.settingsUseOLED.isChecked =
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_oled", false)
         binding.settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_oled", isChecked).apply()
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                .putBoolean("use_oled", isChecked).apply()
             restartApp()
         }
 
-        val themeString  = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getString("theme", "PURPLE")!!
-        binding.themeSwitcher.setText(themeString.substring(0, 1) + themeString.substring(1).lowercase())
+        val themeString =
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getString("theme", "PURPLE")!!
+        binding.themeSwitcher.setText(
+            themeString.substring(0, 1) + themeString.substring(1).lowercase()
+        )
 
-        binding.themeSwitcher.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, ThemeManager.Companion.Theme.values().map { it.theme.substring(0, 1) + it.theme.substring(1).lowercase() }))
+        binding.themeSwitcher.setAdapter(
+            ArrayAdapter(
+                this,
+                R.layout.item_dropdown,
+                ThemeManager.Companion.Theme.values()
+                    .map { it.theme.substring(0, 1) + it.theme.substring(1).lowercase() })
+        )
 
         binding.themeSwitcher.setOnItemClickListener { _, _, i, _ ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putString("theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                .putString("theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
             //ActivityHelper.shouldRefreshMainActivity = true
             binding.themeSwitcher.clearFocus()
             restartApp()
 
         }
 
+
+        binding.customTheme.setOnClickListener {
+            var passedColor: Int = 0
+            val dialogView = layoutInflater.inflate(R.layout.dialog_color_picker, null)
+            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Custom Theme")
+                .setView(dialogView)
+                .setPositiveButton("OK") { dialog, _ ->
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putInt("custom_theme_int", passedColor).apply()
+                    logger("Custom Theme: $passedColor")
+                    dialog.dismiss()
+                    restartApp()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            val colorPickerView =
+                dialogView.findViewById<com.skydoves.colorpickerview.ColorPickerView>(R.id.colorPickerView)
+            colorPickerView.setColorListener(ColorListener { color, fromUser ->
+                val linearLayout = dialogView.findViewById<LinearLayout>(R.id.linear)
+                passedColor = color
+                linearLayout.setBackgroundColor(color)
+            })
+
+            alertDialog.show()
+        }
+
         //val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
-        val animeSource = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("settings_def_anime_source_s_r", 0)
+        val animeSource = getSharedPreferences(
+            "Dantotsu",
+            Context.MODE_PRIVATE
+        ).getInt("settings_def_anime_source_s_r", 0)
         if (AnimeSources.names.isNotEmpty() && animeSource in 0 until AnimeSources.names.size) {
             binding.animeSource.setText(AnimeSources.names[animeSource], false)
 
         }
 
-        binding.animeSource.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, AnimeSources.names))
+        binding.animeSource.setAdapter(
+            ArrayAdapter(
+                this,
+                R.layout.item_dropdown,
+                AnimeSources.names
+            )
+        )
 
         binding.animeSource.setOnItemClickListener { _, _, i, _ ->
             //saveData("settings_def_anime_source_s", i)
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("settings_def_anime_source_s_r", i).apply()
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                .putInt("settings_def_anime_source_s_r", i).apply()
             binding.animeSource.clearFocus()
         }
 
@@ -148,7 +233,8 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
 
         val managers = arrayOf("Default", "1DM", "ADM")
-        val downloadManagerDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle("Download Manager")
+        val downloadManagerDialog =
+            AlertDialog.Builder(this, R.style.DialogTheme).setTitle("Download Manager")
         var downloadManager = loadData<Int>("settings_download_manager") ?: 0
         binding.settingsDownloadManager.setOnClickListener {
             downloadManagerDialog.setSingleChoiceItems(managers, downloadManager) { dialog, count ->
@@ -158,11 +244,12 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             }.show()
         }
 
-        binding.settingsForceLegacyInstall.isChecked = extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY
+        binding.settingsForceLegacyInstall.isChecked =
+            extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY
         binding.settingsForceLegacyInstall.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 extensionInstaller.set(BasePreferences.ExtensionInstaller.LEGACY)
-            }else{
+            } else {
                 extensionInstaller.set(BasePreferences.ExtensionInstaller.PACKAGEINSTALLER)
             }
         }
@@ -177,20 +264,24 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
 
         }
 
-       // binding.userAgent.setText(networkPreferences.defaultUserAgent().get())
-        binding.userAgent.setOnClickListener{
+        binding.userAgent.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
             val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
             editText.setText(networkPreferences.defaultUserAgent().get())
-            val alertDialog = AlertDialog.Builder(this)
+            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("User Agent")
                 .setView(dialogView)
                 .setPositiveButton("OK") { dialog, _ ->
                     networkPreferences.defaultUserAgent().set(editText.text.toString())
                     dialog.dismiss()
                 }
-                .setNegativeButton("Reset") { dialog, _ ->
-                    networkPreferences.defaultUserAgent().set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0") // Reset to default or empty
+                .setNeutralButton("Reset") { dialog, _ ->
+                    networkPreferences.defaultUserAgent()
+                        .set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0") // Reset to default or empty
                     editText.setText("")
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()
@@ -199,7 +290,22 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
 
 
-        val exDns = listOf("None", "Cloudflare", "Google", "AdGuard", "Quad9", "AliDNS", "DNSPod", "360", "Quad101", "Mullvad", "Controld", "Njalla", "Shecan", "Libre")
+        val exDns = listOf(
+            "None",
+            "Cloudflare",
+            "Google",
+            "AdGuard",
+            "Quad9",
+            "AliDNS",
+            "DNSPod",
+            "360",
+            "Quad101",
+            "Mullvad",
+            "Controld",
+            "Njalla",
+            "Shecan",
+            "Libre"
+        )
         binding.settingsExtensionDns.setText(exDns[networkPreferences.dohProvider().get()], false)
         binding.settingsExtensionDns.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, exDns))
         binding.settingsExtensionDns.setOnItemClickListener { _, _, i, _ ->
@@ -246,19 +352,29 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             saveData("settings_prefer_dub", isChecked)
         }
 
-            //val mangaSource = loadData<Int>("settings_def_manga_source_s")?.let { if (it >= MangaSources.names.size) 0 else it } ?: 0
-            val mangaSource = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("settings_def_manga_source_s_r", 0)
-            if (MangaSources.names.isNotEmpty() && mangaSource in 0 until MangaSources.names.size) {
-                binding.mangaSource.setText(MangaSources.names[mangaSource], false)
+        //val mangaSource = loadData<Int>("settings_def_manga_source_s")?.let { if (it >= MangaSources.names.size) 0 else it } ?: 0
+        val mangaSource = getSharedPreferences(
+            "Dantotsu",
+            Context.MODE_PRIVATE
+        ).getInt("settings_def_manga_source_s_r", 0)
+        if (MangaSources.names.isNotEmpty() && mangaSource in 0 until MangaSources.names.size) {
+            binding.mangaSource.setText(MangaSources.names[mangaSource], false)
         }
 
         // Set up the dropdown adapter.
-        binding.mangaSource.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, MangaSources.names))
+        binding.mangaSource.setAdapter(
+            ArrayAdapter(
+                this,
+                R.layout.item_dropdown,
+                MangaSources.names
+            )
+        )
 
         // Set up the item click listener for the dropdown.
         binding.mangaSource.setOnItemClickListener { _, _, i, _ ->
             //saveData("settings_def_manga_source_s", i)
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("settings_def_manga_source_s_r", i).apply()
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                .putInt("settings_def_manga_source_s_r", i).apply()
             binding.mangaSource.clearFocus()
         }
 
@@ -267,10 +383,11 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
 
         val uiSettings: UserInterfaceSettings =
-            loadData("ui_settings", toast = false) ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
+            loadData("ui_settings", toast = false)
+                ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
         var previous: View = when (uiSettings.darkMode) {
-            null  -> binding.settingsUiAuto
-            true  -> binding.settingsUiDark
+            null -> binding.settingsUiAuto
+            true -> binding.settingsUiDark
             false -> binding.settingsUiLight
         }
         previous.alpha = 1f
@@ -291,6 +408,7 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
 
         binding.settingsUiLight.setOnClickListener {
+            binding.settingsUseOLED.isChecked = false
             uiTheme(false, it)
         }
 
@@ -299,9 +417,9 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
 
         var previousStart: View = when (uiSettings.defaultStartUpTab) {
-            0    -> binding.uiSettingsAnime
-            1    -> binding.uiSettingsHome
-            2    -> binding.uiSettingsManga
+            0 -> binding.uiSettingsAnime
+            1 -> binding.uiSettingsHome
+            2 -> binding.uiSettingsManga
             else -> binding.uiSettingsHome
         }
         previousStart.alpha = 1f
@@ -333,9 +451,9 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
 
         var previousEp: View = when (uiSettings.animeDefaultView) {
-            0    -> binding.settingsEpList
-            1    -> binding.settingsEpGrid
-            2    -> binding.settingsEpCompact
+            0 -> binding.settingsEpList
+            1 -> binding.settingsEpGrid
+            2 -> binding.settingsEpCompact
             else -> binding.settingsEpList
         }
         previousEp.alpha = 1f
@@ -360,8 +478,8 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         }
 
         var previousChp: View = when (uiSettings.mangaDefaultView) {
-            0    -> binding.settingsChpList
-            1    -> binding.settingsChpCompact
+            0 -> binding.settingsChpList
+            1 -> binding.settingsChpCompact
             else -> binding.settingsChpList
         }
         previousChp.alpha = 1f
@@ -416,11 +534,16 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
         binding.settingsLogo.setSafeOnClickListener {
             cursedCounter++
             (binding.settingsLogo.drawable as Animatable).start()
-            if (cursedCounter % 7 == 0){
+            if (cursedCounter % 7 == 0) {
                 snackString("youwu have been cuwsed :pwayge:")
-                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean("use_cursed_lang",
-                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_cursed_lang", false).not()).apply()
-            } else{
+                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean(
+                    "use_cursed_lang",
+                    getSharedPreferences(
+                        "Dantotsu",
+                        Context.MODE_PRIVATE
+                    ).getBoolean("use_cursed_lang", false).not()
+                ).apply()
+            } else {
                 snackString(array[(Math.random() * array.size).toInt()], this)
             }
 
@@ -454,12 +577,15 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             if (it > 0) "${if (hours > 0) "$hours hrs " else ""}${if (mins > 0) "$mins mins" else ""}"
             else getString(R.string.do_not_update)
         }.toTypedArray()
-        binding.settingsSubscriptionsTime.text = getString(R.string.subscriptions_checking_time_s, timeNames[curTime])
-        val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(R.string.subscriptions_checking_time)
+        binding.settingsSubscriptionsTime.text =
+            getString(R.string.subscriptions_checking_time_s, timeNames[curTime])
+        val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(R.string.subscriptions_checking_time)
         binding.settingsSubscriptionsTime.setOnClickListener {
             speedDialog.setSingleChoiceItems(timeNames, curTime) { dialog, i ->
                 curTime = i
-                binding.settingsSubscriptionsTime.text = getString(R.string.subscriptions_checking_time_s, timeNames[i])
+                binding.settingsSubscriptionsTime.text =
+                    getString(R.string.subscriptions_checking_time_s, timeNames[i])
                 saveData("subscriptions_time_s", curTime)
                 dialog.dismiss()
                 startSubscription(true)
@@ -471,7 +597,8 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             true
         }
 
-        binding.settingsNotificationsCheckingSubscriptions.isChecked = loadData("subscription_checking_notifications") ?: true
+        binding.settingsNotificationsCheckingSubscriptions.isChecked =
+            loadData("subscription_checking_notifications") ?: true
         binding.settingsNotificationsCheckingSubscriptions.setOnCheckedChangeListener { _, isChecked ->
             saveData("subscription_checking_notifications", isChecked)
             if (isChecked)
@@ -520,7 +647,8 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
                 setTitleText(title)
                 addView(
                     TextView(it.context).apply {
-                        val markWon = Markwon.builder(it.context).usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
+                        val markWon = Markwon.builder(it.context)
+                            .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
                         markWon.setMarkdown(this, full)
                     }
                 )
@@ -574,11 +702,24 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             }
 
             if (Discord.token != null) {
-                if (Discord.avatar != null) {
-                    binding.settingsDiscordAvatar.loadImage(Discord.avatar)
+                val id = getSharedPreferences(
+                    getString(R.string.preference_file_key),
+                    Context.MODE_PRIVATE
+                ).getString("discord_id", null)
+                val avatar = getSharedPreferences(
+                    getString(R.string.preference_file_key),
+                    Context.MODE_PRIVATE
+                ).getString("discord_avatar", null)
+                val username = getSharedPreferences(
+                    getString(R.string.preference_file_key),
+                    Context.MODE_PRIVATE
+                ).getString("discord_username", null)
+                if (id != null && avatar != null) {
+                    binding.settingsDiscordAvatar.loadImage("https://cdn.discordapp.com/avatars/$id/$avatar.png")
                 }
                 binding.settingsDiscordUsername.visibility = View.VISIBLE
-                binding.settingsDiscordUsername.text = Discord.userid ?: Discord.token?.replace(Regex("."),"*")
+                binding.settingsDiscordUsername.text =
+                    username ?: Discord.token?.replace(Regex("."), "*")
                 binding.settingsDiscordLogin.setText(R.string.logout)
                 binding.settingsDiscordLogin.setOnClickListener {
                     Discord.removeSavedToken(this)
@@ -623,13 +764,18 @@ OS Version: $CODENAME $RELEASE ($SDK_INT)
             }
         }
     }
+
     private fun restartApp() {
         Snackbar.make(
             binding.root,
             R.string.restart_app, Snackbar.LENGTH_SHORT
         ).apply {
             val mainIntent =
-                Intent.makeRestartActivityTask(context.packageManager.getLaunchIntentForPackage(context.packageName)!!.component)
+                Intent.makeRestartActivityTask(
+                    context.packageManager.getLaunchIntentForPackage(
+                        context.packageName
+                    )!!.component
+                )
             setAction("Do it!") {
                 context.startActivity(mainIntent)
                 Runtime.getRuntime().exit(0)

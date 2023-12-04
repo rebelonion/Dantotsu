@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
-import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.currContext
 import ani.dantotsu.defaultHeaders
 import ani.dantotsu.loadData
+import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.parsers.Book
 import ani.dantotsu.toast
 import kotlinx.coroutines.CoroutineScope
@@ -50,12 +50,17 @@ object Download {
 
     fun download(context: Context, episode: Episode, animeTitle: String) {
         toast(context.getString(R.string.downloading))
-        val extractor = episode.extractors?.find { it.server.name == episode.selectedExtractor } ?: return
+        val extractor =
+            episode.extractors?.find { it.server.name == episode.selectedExtractor } ?: return
         val video =
             if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else return
         val regex = "[\\\\/:*?\"<>|]".toRegex()
         val aTitle = animeTitle.replace(regex, "")
-        val title = "Episode ${episode.number}${if (episode.title != null) " - ${episode.title}" else ""}".replace(regex, "")
+        val title =
+            "Episode ${episode.number}${if (episode.title != null) " - ${episode.title}" else ""}".replace(
+                regex,
+                ""
+            )
 
         val notif = "$title : $aTitle"
         val folder = "/Anime/${aTitle}/"
@@ -64,7 +69,7 @@ object Download {
         download(context, file, fileName, folder, notif)
     }
 
-    fun download(context: Context, book:Book, pos:Int, novelTitle:String){
+    fun download(context: Context, book: Book, pos: Int, novelTitle: String) {
         toast(currContext()?.getString(R.string.downloading))
         val regex = "[\\\\/:*?\"<>|]".toRegex()
         val nTitle = novelTitle.replace(regex, "")
@@ -77,19 +82,32 @@ object Download {
         download(context, file, fileName, folder, notif)
     }
 
-    fun download(context: Context, file: FileUrl, fileName: String, folder: String, notif: String? = null) {
-        if(!file.url.startsWith("http"))
+    fun download(
+        context: Context,
+        file: FileUrl,
+        fileName: String,
+        folder: String,
+        notif: String? = null
+    ) {
+        if (!file.url.startsWith("http"))
             toast(context.getString(R.string.invalid_url))
         else
             when (loadData<Int>("settings_download_manager", context, false) ?: 0) {
-                1    -> oneDM(context, file, notif ?: fileName)
-                2    -> adm(context, file, fileName, folder)
+                1 -> oneDM(context, file, notif ?: fileName)
+                2 -> adm(context, file, fileName, folder)
                 else -> defaultDownload(context, file, fileName, folder, notif ?: fileName)
             }
     }
 
-    private fun defaultDownload(context: Context, file: FileUrl, fileName: String, folder: String, notif: String) {
-        val manager = context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
+    private fun defaultDownload(
+        context: Context,
+        file: FileUrl,
+        fileName: String,
+        folder: String,
+        notif: String
+    ) {
+        val manager =
+            context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
         val request: DownloadManager.Request = DownloadManager.Request(Uri.parse(file.url))
         file.headers.forEach {
             request.addRequestHeader(it.key, it.value)
@@ -124,15 +142,24 @@ object Download {
     }
 
     private fun oneDM(context: Context, file: FileUrl, notif: String) {
-        val appName = if (isPackageInstalled("idm.internet.download.manager.plus", context.packageManager)) {
-            "idm.internet.download.manager.plus"
-        } else if (isPackageInstalled("idm.internet.download.manager", context.packageManager)) {
-            "idm.internet.download.manager"
-        } else if (isPackageInstalled("idm.internet.download.manager.adm.lite", context.packageManager)) {
-            "idm.internet.download.manager.adm.lite"
-        } else {
-            ""
-        }
+        val appName =
+            if (isPackageInstalled("idm.internet.download.manager.plus", context.packageManager)) {
+                "idm.internet.download.manager.plus"
+            } else if (isPackageInstalled(
+                    "idm.internet.download.manager",
+                    context.packageManager
+                )
+            ) {
+                "idm.internet.download.manager"
+            } else if (isPackageInstalled(
+                    "idm.internet.download.manager.adm.lite",
+                    context.packageManager
+                )
+            ) {
+                "idm.internet.download.manager.adm.lite"
+            } else {
+                ""
+            }
         if (appName.isNotEmpty()) {
             val bundle = Bundle()
             defaultHeaders.forEach { a -> bundle.putString(a.key, a.value) }
@@ -177,7 +204,9 @@ object Download {
         } else {
             ContextCompat.startActivity(
                 context,
-                Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.dv.adm")).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.dv.adm")).addFlags(
+                    Intent.FLAG_ACTIVITY_NEW_TASK
+                ),
                 null
             )
             toast(currContext()?.getString(R.string.install_adm))

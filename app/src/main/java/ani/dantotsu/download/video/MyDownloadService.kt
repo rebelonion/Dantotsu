@@ -21,7 +21,10 @@ class MyDownloadService : DownloadService(1, 1, "download_service", R.string.dow
 
     override fun getScheduler(): Scheduler = PlatformScheduler(this, JOB_ID)
 
-    override fun getForegroundNotification(downloads: MutableList<Download>, notMetRequirements: Int): Notification =
+    override fun getForegroundNotification(
+        downloads: MutableList<Download>,
+        notMetRequirements: Int
+    ): Notification =
         DownloadNotificationHelper(this, "download_service").buildProgressNotification(
             this,
             R.drawable.mono,

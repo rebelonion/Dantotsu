@@ -14,8 +14,8 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
+import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
-import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.settings.CurrentReaderSettings
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.Glide
@@ -23,12 +23,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import eu.kanade.tachiyomi.source.model.Page
-import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ani.dantotsu.media.manga.MangaCache
-import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 
@@ -118,7 +115,10 @@ abstract class BaseImageAdapter(
     abstract suspend fun loadImage(position: Int, parent: View): Boolean
 
     companion object {
-        suspend fun Context.loadBitmap_old(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? { //still used in some places
+        suspend fun Context.loadBitmap_old(
+            link: FileUrl,
+            transforms: List<BitmapTransformation>
+        ): Bitmap? { //still used in some places
             return tryWithSuspend {
                 withContext(Dispatchers.IO) {
                     Glide.with(this@loadBitmap_old)
@@ -135,8 +135,7 @@ abstract class BaseImageAdapter(
                         .let {
                             if (transforms.isNotEmpty()) {
                                 it.transform(*transforms.toTypedArray())
-                            }
-                            else {
+                            } else {
                                 it
                             }
                         }
@@ -146,7 +145,10 @@ abstract class BaseImageAdapter(
             }
         }
 
-        suspend fun Context.loadBitmap(link: FileUrl, transforms: List<BitmapTransformation>): Bitmap? {
+        suspend fun Context.loadBitmap(
+            link: FileUrl,
+            transforms: List<BitmapTransformation>
+        ): Bitmap? {
             return tryWithSuspend {
                 val mangaCache = uy.kohesive.injekt.Injekt.get<MangaCache>()
                 withContext(Dispatchers.IO) {
@@ -161,7 +163,11 @@ abstract class BaseImageAdapter(
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                             } else {
                                 mangaCache.get(link.url)?.let { imageData ->
-                                    val bitmap = imageData.fetchAndProcessImage(imageData.page, imageData.source, context = this@loadBitmap)
+                                    val bitmap = imageData.fetchAndProcessImage(
+                                        imageData.page,
+                                        imageData.source,
+                                        context = this@loadBitmap
+                                    )
                                     it.load(bitmap)
                                         .skipMemoryCache(true)
                                         .diskCacheStrategy(DiskCacheStrategy.NONE)

@@ -8,14 +8,15 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
-import eu.kanade.tachiyomi.data.notification.Notifications
-import tachiyomi.core.util.system.logcat
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.parsers.NovelSources
+import ani.dantotsu.parsers.novel.NovelExtensionManager
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
+import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.coroutines.CoroutineScope
@@ -25,14 +26,16 @@ import kotlinx.coroutines.launch
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
+import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.Locale
+
 
 @SuppressLint("StaticFieldLeak")
 class App : MultiDexApplication() {
     private lateinit var animeExtensionManager: AnimeExtensionManager
     private lateinit var mangaExtensionManager: MangaExtensionManager
+    private lateinit var novelExtensionManager: NovelExtensionManager
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -48,16 +51,18 @@ class App : MultiDexApplication() {
         super.onCreate()
         val sharedPreferences = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
         val useMaterialYou = sharedPreferences.getBoolean("use_material_you", false)
-        if(useMaterialYou) {
+        if (useMaterialYou) {
             DynamicColors.applyToActivitiesIfAvailable(this)
+            //TODO: HarmonizedColors
         }
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
         Firebase.crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)
-        initializeNetwork(baseContext)
 
         Injekt.importModule(AppModule(this))
         Injekt.importModule(PreferenceModule(this))
+
+        initializeNetwork(baseContext)
 
         setupNotificationChannels()
         if (!LogcatLogger.isInstalled) {
@@ -66,6 +71,7 @@ class App : MultiDexApplication() {
 
         animeExtensionManager = Injekt.get()
         mangaExtensionManager = Injekt.get()
+        novelExtensionManager = Injekt.get()
 
         val animeScope = CoroutineScope(Dispatchers.Default)
         animeScope.launch {
@@ -79,8 +85,15 @@ class App : MultiDexApplication() {
             logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
             MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
+        val novelScope = CoroutineScope(Dispatchers.Default)
+        novelScope.launch {
+            novelExtensionManager.findAvailableExtensions()
+            logger("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
+            NovelSources.init(novelExtensionManager.installedExtensionsFlow)
+        }
 
     }
+
 
     private fun setupNotificationChannels() {
         try {
@@ -109,7 +122,7 @@ class App : MultiDexApplication() {
 
     companion object {
         private var instance: App? = null
-        var context : Context? = null
+        var context: Context? = null
         fun currentContext(): Context? {
             return instance?.mFTActivityLifecycleCallbacks?.currentActivity ?: context
         }

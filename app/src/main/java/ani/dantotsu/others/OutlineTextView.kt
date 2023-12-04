@@ -25,7 +25,11 @@ class OutlineTextView : AppCompatTextView {
 
     }
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    ) {
         initResources(context, attrs)
 
     }
@@ -55,7 +59,8 @@ class OutlineTextView : AppCompatTextView {
         strokeWidth = width.toPx(context)
     }
 
-    private fun Float.toPx(context: Context) = (this * context.resources.displayMetrics.scaledDensity + 0.5F)
+    private fun Float.toPx(context: Context) =
+        (this * context.resources.displayMetrics.scaledDensity + 0.5F)
 
     override fun invalidate() {
         if (isDrawing) return

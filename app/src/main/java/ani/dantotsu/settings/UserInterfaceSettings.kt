@@ -12,7 +12,15 @@ data class UserInterfaceSettings(
     var immersiveMode: Boolean = false,
     var smallView: Boolean = true,
     var defaultStartUpTab: Int = 1,
-    var homeLayoutShow: MutableList<Boolean> = mutableListOf(true, false, false, true, false, false, true),
+    var homeLayoutShow: MutableList<Boolean> = mutableListOf(
+        true,
+        false,
+        false,
+        true,
+        false,
+        false,
+        true
+    ),
 
     //Animations
     var bannerAnimations: Boolean = true,

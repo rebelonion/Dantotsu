@@ -1,7 +1,7 @@
 package ani.dantotsu.connections.mal
 
-import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.client
+import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.tryWithSuspend
 import kotlinx.serialization.Serializable
 
@@ -43,18 +43,18 @@ class MALQueries {
         start: FuzzyDate? = null,
         end: FuzzyDate? = null
     ) {
-        if(idMAL==null) return
+        if (idMAL == null) return
         val data = mutableMapOf("status" to convertStatus(isAnime, status))
         if (progress != null)
             data[if (isAnime) "num_watched_episodes" else "num_chapters_read"] = progress.toString()
         data[if (isAnime) "is_rewatching" else "is_rereading"] = (status == "REPEATING").toString()
         if (score != null)
             data["score"] = score.div(10).toString()
-        if(rewatch!=null)
-            data[if(isAnime) "num_times_rewatched" else "num_times_reread"] = rewatch.toString()
-        if(start!=null)
+        if (rewatch != null)
+            data[if (isAnime) "num_times_rewatched" else "num_times_reread"] = rewatch.toString()
+        if (start != null)
             data["start_date"] = start.toMALString()
-        if(end!=null)
+        if (end != null)
             data["finish_date"] = end.toMALString()
         tryWithSuspend {
             client.put(
@@ -65,8 +65,8 @@ class MALQueries {
         }
     }
 
-    suspend fun deleteList(isAnime: Boolean, idMAL: Int?){
-        if(idMAL==null) return
+    suspend fun deleteList(isAnime: Boolean, idMAL: Int?) {
+        if (idMAL == null) return
         tryWithSuspend {
             client.delete(
                 "$apiUrl/${if (isAnime) "anime" else "manga"}/$idMAL/my_list_status",

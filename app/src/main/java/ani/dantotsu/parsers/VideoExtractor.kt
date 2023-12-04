@@ -56,14 +56,19 @@ abstract class VideoExtractor : Serializable {
 data class VideoServer(
     val name: String,
     val embed: FileUrl,
-    val extraData : Map<String,String>?=null,
+    val extraData: Map<String, String>? = null,
     val video: eu.kanade.tachiyomi.animesource.model.Video? = null
 ) : Serializable {
-    constructor(name: String, embedUrl: String,extraData: Map<String,String>?=null)
-            : this(name, FileUrl(embedUrl),extraData)
+    constructor(name: String, embedUrl: String, extraData: Map<String, String>? = null)
+            : this(name, FileUrl(embedUrl), extraData)
 
-    constructor(name: String, embedUrl: String,extraData: Map<String,String>?=null, video: eu.kanade.tachiyomi.animesource.model.Video?)
-            : this(name, FileUrl(embedUrl),extraData, video)
+    constructor(
+        name: String,
+        embedUrl: String,
+        extraData: Map<String, String>? = null,
+        video: eu.kanade.tachiyomi.animesource.model.Video?
+    )
+            : this(name, FileUrl(embedUrl), extraData, video)
 }
 
 /**
@@ -117,7 +122,13 @@ data class Video(
     val extraNote: String? = null,
 ) : Serializable {
 
-    constructor(quality: Int? = null, videoType: VideoType, url: String, size: Double?, extraNote: String? = null)
+    constructor(
+        quality: Int? = null,
+        videoType: VideoType,
+        url: String,
+        size: Double?,
+        extraNote: String? = null
+    )
             : this(quality, videoType, FileUrl(url), size, extraNote)
 
     constructor(quality: Int? = null, videoType: VideoType, url: String, size: Double?)
@@ -149,15 +160,19 @@ data class Subtitle(
      *
      * Supports VTT, SRT & ASS
      * **/
-    val type:SubtitleType = SubtitleType.VTT,
+    val type: SubtitleType = SubtitleType.VTT,
 ) : Serializable {
-    constructor(language: String, url: String, type: SubtitleType = SubtitleType.VTT) : this(language, FileUrl(url), type)
+    constructor(language: String, url: String, type: SubtitleType = SubtitleType.VTT) : this(
+        language,
+        FileUrl(url),
+        type
+    )
 }
 
-enum class VideoType{
+enum class VideoType {
     CONTAINER, M3U8, DASH
 }
 
-enum class SubtitleType{
+enum class SubtitleType {
     VTT, ASS, SRT, UNKNOWN
 }

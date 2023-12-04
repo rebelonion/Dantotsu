@@ -12,7 +12,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 
-class OfflineMangaParser: MangaParser() {
+class OfflineMangaParser : MangaParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()
 
     override val hostUrl: String = "Offline"
@@ -32,7 +32,14 @@ class OfflineMangaParser: MangaParser() {
         if (directory.exists()) {
             directory.listFiles()?.forEach {
                 if (it.isDirectory) {
-                    val chapter = MangaChapter(it.name, "$mangaLink/${it.name}", it.name, null, null, SChapter.create())
+                    val chapter = MangaChapter(
+                        it.name,
+                        "$mangaLink/${it.name}",
+                        it.name,
+                        null,
+                        null,
+                        SChapter.create()
+                    )
                     chapters.add(chapter)
                 }
             }
