@@ -84,15 +84,18 @@
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Installed Anime"/>
+                android:text="Installed Anime"
+                tools:ignore="HardcodedText"/>
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Available Anime"/>
+                android:text="Available Anime"
+                tools:ignore="HardcodedText"/>
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Installed Manga"/>
+                android:text="Installed Manga"
+                tools:ignore="HardcodedText"/>
             <com.google.android.material.tabs.TabItem
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

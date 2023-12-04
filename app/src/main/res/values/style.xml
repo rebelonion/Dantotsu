@@ -58,15 +58,16 @@
     </style>
 
     <style name="MyPopup" parent="">
-    <item name="android:fontFamily">@font/poppins</item>
-    <item name="android:textColor">?attr/colorOnBackground</item>
-    <item name="android:popupBackground">?attr/colorSurface</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:windowBackground">@drawable/shape_corner_16dp</item>
-    <item name="android:windowIsFloating">true</item>
-    <item name="android:windowNoTitle">true</item>
-    <item name="windowActionBar">false</item>
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:popupBackground">?attr/colorSurface</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:windowBackground">@drawable/shape_corner_16dp</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:textSize">14sp</item>
 </style>
 
     <style name="BottomNavBar" parent="">

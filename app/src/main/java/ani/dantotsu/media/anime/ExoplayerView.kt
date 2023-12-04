@@ -816,14 +816,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             fun fastForward() {
                 isFastForwarding = true
                 exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
-                snackString("Playing at 2x speed")
+                snackString("Playing at ${exoPlayer.playbackParameters.speed} speed")
             }
 
             fun stopFastForward() {
                 if (isFastForwarding) {
                     isFastForwarding = false
                     exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed / 2)
-                    snackString("Playing at normal speed")
+                    snackString("Playing at default speed ${exoPlayer.playbackParameters.speed}")
                 }
             }
 

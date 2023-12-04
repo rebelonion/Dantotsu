@@ -24,15 +24,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="?attr/colorSecondaryContainer"
+            android:backgroundTint="@color/yt_red"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/play_yt"
-            android:textColor="?attr/colorOnSecondaryContainer"
+            android:textColor="@color/bg_white"
+            android:fontFamily="@font/poppins_bold"
             android:visibility="gone"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_round_play_circle_24"
-            app:iconTint="?attr/colorOnSecondaryContainer"
+            app:iconTint="@color/bg_white"
             tools:ignore="TextContrastCheck" />
 
         <TextView

@@ -632,9 +632,10 @@
     <string name="extension_specific_dns">Extension-specific DNS</string>
     <string name="theme_">Theme:</string>
     <string name="user_agent">User Agent</string>
-    <string name="custom_theme">Custom Theme</string>
-    <string name="use_custom_theme">Custom theme</string>
-    <string name="use_unique_theme_for_each_item">Use cover as theme for each entry</string>
+    <string name="custom_theme">Custom Theme:</string>
+    <string name="use_custom_theme">Use custom theme</string>
+    <string name="use_unique_theme_for_each_item">Color same as Anime/Manga cover</string>
     <string name="oled_theme_variant">OLED theme variant</string>
+    <string name="color_picker">Color Picker</string>
 
 </resources>

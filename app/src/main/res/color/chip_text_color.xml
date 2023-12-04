@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Color when the chip is selected -->
-    <item android:color="?attr/colorSurface" android:state_selected="true"/>
+    <item android:color="#ffffff" android:state_selected="true"/>
     <!-- Color when the chip is not selected -->
-    <item android:color="?attr/colorOnSurface"/>
+    <item android:color="#aaadab"/>
 </selector>

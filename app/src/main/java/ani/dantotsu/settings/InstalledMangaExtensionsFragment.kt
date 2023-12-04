@@ -64,10 +64,8 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                 var selectedIndex = 0
                 AlertDialog.Builder(requireContext(), R.style.MyPopup)
                     .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, selectedIndex) { _, which ->
+                    .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
                         selectedIndex = which
-                    }
-                    .setPositiveButton("OK") { dialog, _ ->
                         selectedSetting = allSettings[selectedIndex]
                         dialog.dismiss()
 
@@ -81,11 +79,6 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                             .replace(R.id.fragmentExtensionsContainer, fragment)
                             .addToBackStack(null)
                             .commit()
-                    }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.cancel()
-                        changeUIVisibility(true)
-                        return@setNegativeButton
                     }
                     .show()
             } else {
