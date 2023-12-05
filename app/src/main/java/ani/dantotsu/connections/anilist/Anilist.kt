@@ -10,7 +10,7 @@ import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.tryWithSuspend
 import java.io.File
-import java.util.*
+import java.util.Calendar
 
 object Anilist {
     val query: AnilistQueries = AnilistQueries()
@@ -29,7 +29,12 @@ object Anilist {
     var tags: Map<Boolean, List<String>>? = null
 
     val sortBy = listOf(
-        "SCORE_DESC","POPULARITY_DESC","TRENDING_DESC","TITLE_ENGLISH","TITLE_ENGLISH_DESC","SCORE"
+        "SCORE_DESC",
+        "POPULARITY_DESC",
+        "TRENDING_DESC",
+        "TITLE_ENGLISH",
+        "TITLE_ENGLISH_DESC",
+        "SCORE"
     )
 
     val seasons = listOf(
@@ -51,11 +56,11 @@ object Anilist {
     private val cal: Calendar = Calendar.getInstance()
     private val currentYear = cal.get(Calendar.YEAR)
     private val currentSeason: Int = when (cal.get(Calendar.MONTH)) {
-        0, 1, 2   -> 0
-        3, 4, 5   -> 1
-        6, 7, 8   -> 2
+        0, 1, 2 -> 0
+        3, 4, 5 -> 1
+        6, 7, 8 -> 2
         9, 10, 11 -> 3
-        else      -> 0
+        else -> 0
     }
 
     private fun getSeason(next: Boolean): Pair<String, Int> {
@@ -132,7 +137,12 @@ object Anilist {
             if (token != null || force) {
                 if (token != null && useToken) headers["Authorization"] = "Bearer $token"
 
-                val json = client.post("https://graphql.anilist.co/", headers, data = data, cacheTime = cache ?: 10)
+                val json = client.post(
+                    "https://graphql.anilist.co/",
+                    headers,
+                    data = data,
+                    cacheTime = cache ?: 10
+                )
                 if (!json.text.startsWith("{")) throw Exception(currContext()?.getString(R.string.anilist_down))
                 if (show) println("Response : ${json.text}")
                 json.parsed()

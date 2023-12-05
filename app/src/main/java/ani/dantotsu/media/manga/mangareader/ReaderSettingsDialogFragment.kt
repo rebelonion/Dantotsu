@@ -14,7 +14,11 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetCurrentReaderSettingsBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetCurrentReaderSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -24,11 +28,14 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
         val activity = requireActivity() as MangaReaderActivity
         val settings = activity.settings.default
 
-        binding.readerDirectionText.text = resources.getStringArray(R.array.manga_directions)[settings.direction.ordinal]
+        binding.readerDirectionText.text =
+            resources.getStringArray(R.array.manga_directions)[settings.direction.ordinal]
         binding.readerDirection.rotation = 90f * (settings.direction.ordinal)
         binding.readerDirection.setOnClickListener {
-            settings.direction = Directions[settings.direction.ordinal + 1] ?: Directions.TOP_TO_BOTTOM
-            binding.readerDirectionText.text = resources.getStringArray(R.array.manga_directions)[settings.direction.ordinal]
+            settings.direction =
+                Directions[settings.direction.ordinal + 1] ?: Directions.TOP_TO_BOTTOM
+            binding.readerDirectionText.text =
+                resources.getStringArray(R.array.manga_directions)[settings.direction.ordinal]
             binding.readerDirection.rotation = 90f * (settings.direction.ordinal)
             activity.applySettings()
         }
@@ -39,36 +46,39 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
             binding.readerContinuous
         )
 
-        binding.readerPadding.isEnabled = settings.layout.ordinal!=0
-        fun paddingAvailable(enable:Boolean){
+        binding.readerPadding.isEnabled = settings.layout.ordinal != 0
+        fun paddingAvailable(enable: Boolean) {
             binding.readerPadding.isEnabled = enable
         }
 
         binding.readerPadding.isChecked = settings.padding
-        binding.readerPadding.setOnCheckedChangeListener { _,isChecked ->
+        binding.readerPadding.setOnCheckedChangeListener { _, isChecked ->
             settings.padding = isChecked
             activity.applySettings()
         }
 
         binding.readerCropBorders.isChecked = settings.cropBorders
-        binding.readerCropBorders.setOnCheckedChangeListener { _,isChecked ->
+        binding.readerCropBorders.setOnCheckedChangeListener { _, isChecked ->
             settings.cropBorders = isChecked
             activity.applySettings()
         }
 
-        binding.readerLayoutText.text = resources.getStringArray(R.array.manga_layouts)[settings.layout.ordinal]
+        binding.readerLayoutText.text =
+            resources.getStringArray(R.array.manga_layouts)[settings.layout.ordinal]
         var selected = list[settings.layout.ordinal]
         selected.alpha = 1f
 
-        list.forEachIndexed { index , imageButton ->
+        list.forEachIndexed { index, imageButton ->
             imageButton.setOnClickListener {
                 selected.alpha = 0.33f
                 selected = imageButton
                 selected.alpha = 1f
-                settings.layout = CurrentReaderSettings.Layouts[index]?:CurrentReaderSettings.Layouts.CONTINUOUS
-                binding.readerLayoutText.text = resources.getStringArray(R.array.manga_layouts)[settings.layout.ordinal]
+                settings.layout =
+                    CurrentReaderSettings.Layouts[index] ?: CurrentReaderSettings.Layouts.CONTINUOUS
+                binding.readerLayoutText.text =
+                    resources.getStringArray(R.array.manga_layouts)[settings.layout.ordinal]
                 activity.applySettings()
-                paddingAvailable(settings.layout.ordinal!=0)
+                paddingAvailable(settings.layout.ordinal != 0)
             }
         }
 
@@ -87,7 +97,8 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
                 selectedDual.alpha = 0.33f
                 selectedDual = imageButton
                 selectedDual.alpha = 1f
-                settings.dualPageMode = CurrentReaderSettings.DualPageModes[index] ?: CurrentReaderSettings.DualPageModes.Automatic
+                settings.dualPageMode = CurrentReaderSettings.DualPageModes[index]
+                    ?: CurrentReaderSettings.DualPageModes.Automatic
                 binding.readerDualPageText.text = settings.dualPageMode.toString()
                 activity.applySettings()
             }
@@ -111,37 +122,37 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
         }
 
         binding.readerKeepScreenOn.isChecked = settings.keepScreenOn
-        binding.readerKeepScreenOn.setOnCheckedChangeListener { _,isChecked ->
+        binding.readerKeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
             settings.keepScreenOn = isChecked
             activity.applySettings()
         }
 
         binding.readerHidePageNumbers.isChecked = settings.hidePageNumbers
-        binding.readerHidePageNumbers.setOnCheckedChangeListener { _,isChecked ->
+        binding.readerHidePageNumbers.setOnCheckedChangeListener { _, isChecked ->
             settings.hidePageNumbers = isChecked
             activity.applySettings()
         }
 
         binding.readerOverscroll.isChecked = settings.overScrollMode
-        binding.readerOverscroll.setOnCheckedChangeListener { _,isChecked ->
+        binding.readerOverscroll.setOnCheckedChangeListener { _, isChecked ->
             settings.overScrollMode = isChecked
             activity.applySettings()
         }
 
         binding.readerVolumeButton.isChecked = settings.volumeButtons
-        binding.readerVolumeButton.setOnCheckedChangeListener { _,isChecked ->
+        binding.readerVolumeButton.setOnCheckedChangeListener { _, isChecked ->
             settings.volumeButtons = isChecked
             activity.applySettings()
         }
 
         binding.readerWrapImage.isChecked = settings.wrapImages
-        binding.readerWrapImage.setOnCheckedChangeListener { _,isChecked ->
+        binding.readerWrapImage.setOnCheckedChangeListener { _, isChecked ->
             settings.wrapImages = isChecked
             activity.applySettings()
         }
 
         binding.readerLongClickImage.isChecked = settings.longClickImage
-        binding.readerLongClickImage.setOnCheckedChangeListener { _,isChecked ->
+        binding.readerLongClickImage.setOnCheckedChangeListener { _, isChecked ->
             settings.longClickImage = isChecked
             activity.applySettings()
         }
@@ -152,7 +163,7 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
         super.onDestroy()
     }
 
-    companion object{
+    companion object {
         fun newInstance() = ReaderSettingsDialogFragment()
     }
 }

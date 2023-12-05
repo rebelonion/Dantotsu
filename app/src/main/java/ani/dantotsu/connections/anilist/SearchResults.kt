@@ -27,7 +27,15 @@ data class SearchResults(
         val list = mutableListOf<SearchChip>()
         sort?.let {
             val c = currContext()!!
-            list.add(SearchChip("SORT", c.getString(R.string.filter_sort, c.resources.getStringArray(R.array.sort_by)[Anilist.sortBy.indexOf(it)])))
+            list.add(
+                SearchChip(
+                    "SORT",
+                    c.getString(
+                        R.string.filter_sort,
+                        c.resources.getStringArray(R.array.sort_by)[Anilist.sortBy.indexOf(it)]
+                    )
+                )
+            )
         }
         format?.let {
             list.add(SearchChip("FORMAT", currContext()!!.getString(R.string.filter_format, it)))
@@ -42,27 +50,37 @@ data class SearchResults(
             list.add(SearchChip("GENRE", it))
         }
         excludedGenres?.forEach {
-            list.add(SearchChip("EXCLUDED_GENRE", currContext()!!.getString(R.string.filter_exclude, it)))
+            list.add(
+                SearchChip(
+                    "EXCLUDED_GENRE",
+                    currContext()!!.getString(R.string.filter_exclude, it)
+                )
+            )
         }
         tags?.forEach {
             list.add(SearchChip("TAG", it))
         }
         excludedTags?.forEach {
-            list.add(SearchChip("EXCLUDED_TAG", currContext()!!.getString(R.string.filter_exclude, it)))
+            list.add(
+                SearchChip(
+                    "EXCLUDED_TAG",
+                    currContext()!!.getString(R.string.filter_exclude, it)
+                )
+            )
         }
         return list
     }
 
     fun removeChip(chip: SearchChip) {
         when (chip.type) {
-            "SORT"           -> sort = null
-            "FORMAT"         -> format = null
-            "SEASON"         -> season = null
-            "SEASON_YEAR"    -> seasonYear = null
-            "GENRE"          -> genres?.remove(chip.text)
+            "SORT" -> sort = null
+            "FORMAT" -> format = null
+            "SEASON" -> season = null
+            "SEASON_YEAR" -> seasonYear = null
+            "GENRE" -> genres?.remove(chip.text)
             "EXCLUDED_GENRE" -> excludedGenres?.remove(chip.text)
-            "TAG"            -> tags?.remove(chip.text)
-            "EXCLUDED_TAG"   -> excludedTags?.remove(chip.text)
+            "TAG" -> tags?.remove(chip.text)
+            "EXCLUDED_TAG" -> excludedTags?.remove(chip.text)
         }
     }
 

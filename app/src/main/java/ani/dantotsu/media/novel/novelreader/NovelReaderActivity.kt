@@ -2,8 +2,10 @@ package ani.dantotsu.media.novel.novelreader
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Base64
@@ -14,12 +16,14 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import android.widget.AdapterView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import androidx.webkit.WebViewCompat
 import ani.dantotsu.GesturesListener
 import ani.dantotsu.NoPaddingArrayAdapter
 import ani.dantotsu.R
@@ -27,6 +31,7 @@ import ani.dantotsu.databinding.ActivityNovelReaderBinding
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.loadData
 import ani.dantotsu.others.ImageViewDialog
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.saveData
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.CurrentNovelReaderSettings
@@ -35,7 +40,6 @@ import ani.dantotsu.settings.NovelReaderSettings
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.tryWith
 import com.google.android.material.slider.Slider
 import com.vipulog.ebookreader.Book
@@ -137,8 +141,22 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //check for supported webview
+        val webViewVersion = WebViewCompat.getCurrentWebViewPackage(this)?.versionName
+        val firstVersion = webViewVersion?.split(".")?.firstOrNull()?.toIntOrNull()
+        if (webViewVersion == null || firstVersion == null || firstVersion < 87) {
+            Toast.makeText(this, "Please update WebView from PlayStore", Toast.LENGTH_LONG).show()
+            //open playstore
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.data = Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")
+            startActivity(intent)
+            //stop reader
+            finish()
+            return
+        }
+
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityNovelReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -161,7 +179,8 @@ ThemeManager(this).applyTheme()
 
         binding.novelReaderBack.setOnClickListener { finish() }
         binding.novelReaderSettings.setSafeOnClickListener {
-            NovelReaderSettingsDialogFragment.newInstance().show(supportFragmentManager, NovelReaderSettingsDialogFragment.TAG)
+            NovelReaderSettingsDialogFragment.newInstance()
+                .show(supportFragmentManager, NovelReaderSettingsDialogFragment.TAG)
         }
 
         val gestureDetector = GestureDetectorCompat(this, object : GesturesListener() {
@@ -233,14 +252,21 @@ ThemeManager(this).applyTheme()
         binding.novelReaderSource.text = book.author?.joinToString(", ")
 
         val tocLabels = book.toc.map { it.label ?: "" }
-        binding.novelReaderChapterSelect.adapter = NoPaddingArrayAdapter(this, R.layout.item_dropdown, tocLabels)
-        binding.novelReaderChapterSelect.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                binding.bookReader.goto(book.toc[position].href)
-            }
+        binding.novelReaderChapterSelect.adapter =
+            NoPaddingArrayAdapter(this, R.layout.item_dropdown, tocLabels)
+        binding.novelReaderChapterSelect.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    binding.bookReader.goto(book.toc[position].href)
+                }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {}
-        }
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+            }
 
         binding.bookReader.getAppearance {
             currentTheme = it
@@ -295,7 +321,7 @@ ThemeManager(this).applyTheme()
     private var onVolumeDown: (() -> Unit)? = null
     override fun dispatchKeyEvent(event: KeyEvent): Boolean {
         return when (event.keyCode) {
-            KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_PAGE_UP       -> {
+            KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_PAGE_UP -> {
                 if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP)
                     if (!settings.default.volumeButtons)
                         return false
@@ -315,7 +341,7 @@ ThemeManager(this).applyTheme()
                 } else false
             }
 
-            else                                                                                 -> {
+            else -> {
                 super.dispatchKeyEvent(event)
             }
         }
@@ -326,10 +352,11 @@ ThemeManager(this).applyTheme()
         saveData("${sanitizedBookId}_current_settings", settings.default)
         hideBars()
 
-        currentTheme = themes.first { it.name.equals(settings.default.currentThemeName, ignoreCase = true) }
+        currentTheme =
+            themes.first { it.name.equals(settings.default.currentThemeName, ignoreCase = true) }
 
         when (settings.default.layout) {
-            CurrentNovelReaderSettings.Layouts.PAGED    -> {
+            CurrentNovelReaderSettings.Layouts.PAGED -> {
                 currentTheme?.flow = ReaderFlow.PAGINATED
             }
 
@@ -340,9 +367,10 @@ ThemeManager(this).applyTheme()
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER
         when (settings.default.dualPageMode) {
-            CurrentReaderSettings.DualPageModes.No        -> currentTheme?.maxColumnCount = 1
+            CurrentReaderSettings.DualPageModes.No -> currentTheme?.maxColumnCount = 1
             CurrentReaderSettings.DualPageModes.Automatic -> currentTheme?.maxColumnCount = 2
-            CurrentReaderSettings.DualPageModes.Force     -> requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+            CurrentReaderSettings.DualPageModes.Force -> requestedOrientation =
+                ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
         currentTheme?.lineHeight = settings.default.lineHeight
@@ -393,7 +421,8 @@ ThemeManager(this).applyTheme()
             isContVisible = false
             if (!isAnimating) {
                 isAnimating = true
-                ObjectAnimator.ofFloat(binding.novelReaderCont, "alpha", 1f, 0f).setDuration(controllerDuration).start()
+                ObjectAnimator.ofFloat(binding.novelReaderCont, "alpha", 1f, 0f)
+                    .setDuration(controllerDuration).start()
                 ObjectAnimator.ofFloat(binding.novelReaderBottomCont, "translationY", 0f, 128f)
                     .apply { interpolator = overshoot;duration = controllerDuration;start() }
                 ObjectAnimator.ofFloat(binding.novelReaderTopLayout, "translationY", 0f, -128f)
@@ -403,7 +432,8 @@ ThemeManager(this).applyTheme()
         } else {
             isContVisible = true
             binding.novelReaderCont.visibility = View.VISIBLE
-            ObjectAnimator.ofFloat(binding.novelReaderCont, "alpha", 0f, 1f).setDuration(controllerDuration).start()
+            ObjectAnimator.ofFloat(binding.novelReaderCont, "alpha", 0f, 1f)
+                .setDuration(controllerDuration).start()
             ObjectAnimator.ofFloat(binding.novelReaderTopLayout, "translationY", -128f, 0f)
                 .apply { interpolator = overshoot;duration = controllerDuration;start() }
             ObjectAnimator.ofFloat(binding.novelReaderBottomCont, "translationY", 128f, 0f)
@@ -418,7 +448,10 @@ ThemeManager(this).applyTheme()
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
             if (displayCutout != null) {
                 if (displayCutout.boundingRects.size > 0) {
-                    notchHeight = min(displayCutout.boundingRects[0].width(), displayCutout.boundingRects[0].height())
+                    notchHeight = min(
+                        displayCutout.boundingRects[0].width(),
+                        displayCutout.boundingRects[0].height()
+                    )
                     applyNotchMargin()
                 }
             }

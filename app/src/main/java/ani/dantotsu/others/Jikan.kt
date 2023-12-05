@@ -1,7 +1,7 @@
 package ani.dantotsu.others
 
-import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.client
+import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.tryWithSuspend
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -23,9 +23,10 @@ object Jikan {
             val res = query<EpisodeResponse>("anime/$malId/episodes?page=$page")
             res?.data?.forEach {
                 val ep = it.malID.toString()
-                eps[ep] = Episode(ep, title = it.title,
+                eps[ep] = Episode(
+                    ep, title = it.title,
                     //Personal revenge with 34566 :prayge:
-                    filler = if(malId!=34566) it.filler else true,
+                    filler = if (malId != 34566) it.filler else true,
                 )
             }
             hasNextPage = res?.pagination?.hasNextPage == true

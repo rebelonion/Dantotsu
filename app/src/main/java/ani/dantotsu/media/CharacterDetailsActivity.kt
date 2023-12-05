@@ -13,13 +13,20 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import ani.dantotsu.*
+import ani.dantotsu.R
+import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityCharacterBinding
+import ani.dantotsu.initActivity
+import ani.dantotsu.loadData
+import ani.dantotsu.loadImage
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.others.getSerialized
-import ani.dantotsu.settings.UserInterfaceSettings
-import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.others.getSerialized
+import ani.dantotsu.px
+import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.statusBarHeight
+import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,15 +43,17 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityCharacterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initActivity(this)
         screenWidth = resources.displayMetrics.run { widthPixels / density }
-        if (uiSettings.immersiveMode) this.window.statusBarColor = ContextCompat.getColor(this, R.color.status)
+        if (uiSettings.immersiveMode) this.window.statusBarColor =
+            ContextCompat.getColor(this, R.color.status)
 
-        val banner = if (uiSettings.bannerAnimations) binding.characterBanner else binding.characterBannerNoKen
+        val banner =
+            if (uiSettings.bannerAnimations) binding.characterBanner else binding.characterBannerNoKen
 
         banner.updateLayoutParams { height += statusBarHeight }
         binding.characterClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
@@ -61,7 +70,13 @@ ThemeManager(this).applyTheme()
         binding.characterTitle.text = character.name
         banner.loadImage(character.banner)
         binding.characterCoverImage.loadImage(character.image)
-        binding.characterCoverImage.setOnLongClickListener { ImageViewDialog.newInstance(this, character.name, character.image) }
+        binding.characterCoverImage.setOnLongClickListener {
+            ImageViewDialog.newInstance(
+                this,
+                character.name,
+                character.image
+            )
+        }
 
         model.getCharacter().observe(this) {
             if (it != null && !loaded) {
@@ -73,14 +88,15 @@ ThemeManager(this).applyTheme()
                 val roles = character.roles
                 if (roles != null) {
                     val mediaAdaptor = MediaAdaptor(0, roles, this, matchParent = true)
-                    val concatAdaptor = ConcatAdapter(CharacterDetailsAdapter(character, this), mediaAdaptor)
+                    val concatAdaptor =
+                        ConcatAdapter(CharacterDetailsAdapter(character, this), mediaAdaptor)
 
                     val gridSize = (screenWidth / 124f).toInt()
                     val gridLayoutManager = GridLayoutManager(this, gridSize)
                     gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
                         override fun getSpanSize(position: Int): Int {
                             return when (position) {
-                                0    -> gridSize
+                                0 -> gridSize
                                 else -> 1
                             }
                         }
@@ -118,16 +134,19 @@ ThemeManager(this).applyTheme()
         binding.characterCover.scaleY = 1f * cap
         binding.characterCover.cardElevation = 32f * cap
 
-        binding.characterCover.visibility = if (binding.characterCover.scaleX == 0f) View.GONE else View.VISIBLE
+        binding.characterCover.visibility =
+            if (binding.characterCover.scaleX == 0f) View.GONE else View.VISIBLE
 
         if (percentage >= percent && !isCollapsed) {
             isCollapsed = true
-            if (uiSettings.immersiveMode) this.window.statusBarColor = ContextCompat.getColor(this, R.color.nav_bg)
+            if (uiSettings.immersiveMode) this.window.statusBarColor =
+                ContextCompat.getColor(this, R.color.nav_bg)
             binding.characterAppBar.setBackgroundResource(R.color.nav_bg)
         }
         if (percentage <= percent && isCollapsed) {
             isCollapsed = false
-            if (uiSettings.immersiveMode) this.window.statusBarColor = ContextCompat.getColor(this, R.color.status)
+            if (uiSettings.immersiveMode) this.window.statusBarColor =
+                ContextCompat.getColor(this, R.color.status)
             binding.characterAppBar.setBackgroundResource(R.color.bg)
         }
     }

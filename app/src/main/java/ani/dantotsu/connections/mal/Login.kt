@@ -4,11 +4,17 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import ani.dantotsu.*
+import ani.dantotsu.R
+import ani.dantotsu.client
 import ani.dantotsu.connections.mal.MAL.clientId
 import ani.dantotsu.connections.mal.MAL.saveResponse
-import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.loadData
+import ani.dantotsu.logError
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.snackString
+import ani.dantotsu.startMainActivity
+import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.tryWithSuspend
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -16,7 +22,7 @@ class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         try {
             val data: Uri = intent?.data
                 ?: throw Exception(getString(R.string.mal_login_uri_not_found))
@@ -46,9 +52,8 @@ ThemeManager(this).applyTheme()
                     }
                 }
             }
-        }
-        catch (e:Exception){
-            logError(e,snackbar = false)
+        } catch (e: Exception) {
+            logError(e, snackbar = false)
             startMainActivity(this)
         }
     }

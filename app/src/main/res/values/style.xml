@@ -7,6 +7,14 @@
         <item name="android:padding">2sp</item>
     </style>
 
+    <style name="AppTheme.Amoled" parent="">
+        <item name="android:colorBackground">@color/darkest_Black</item>
+        <!-- set colorSurface to black -->
+        <item name="colorSurface">@color/darkest_Black</item>
+    </style>
+
+
+
     <style name="Suffix">
         <item name="android:height">54dp</item>
         <item name="android:fontFamily">@font/poppins_bold</item>
@@ -49,9 +57,18 @@
         <item name="shapeAppearance">@style/ShapeAppearance.MaterialComponents.Tooltip</item>
     </style>
 
-    <style name="MyPopup" parent="@style/Widget.MaterialComponents.PopupMenu">
-        <item name="android:popupBackground">?android:colorBackground</item>
-    </style>
+    <style name="MyPopup" parent="">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:popupBackground">?attr/colorSurface</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:windowBackground">@drawable/shape_corner_16dp</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:textSize">14sp</item>
+</style>
 
     <style name="BottomNavBar" parent="">
         <!-- set background color  to transparent -->

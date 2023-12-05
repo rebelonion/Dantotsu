@@ -24,8 +24,8 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
-import ani.dantotsu.saveData
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
+import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -37,8 +37,9 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Locale
 
-class InstalledAnimeExtensionsFragment : Fragment() {
+class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
 
     private var _binding: FragmentAnimeExtensionsBinding? = null
@@ -46,84 +47,80 @@ class InstalledAnimeExtensionsFragment : Fragment() {
     private lateinit var extensionsRecyclerView: RecyclerView
     val skipIcons = loadData("skip_extension_icons") ?: false
     private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
-    private val extensionsAdapter = AnimeExtensionsAdapter({ pkg ->
-        val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>()
-        if (allSettings.isNotEmpty()) {
-            var selectedSetting = allSettings[0]
-            if (allSettings.size > 1) {
-                val names = allSettings.map { it.lang }.toTypedArray()
-                var selectedIndex = 0
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, selectedIndex) { _, which ->
-                        selectedIndex = which
-                    }
-                    .setPositiveButton("OK") { dialog, _ ->
-                        selectedSetting = allSettings[selectedIndex]
-                        dialog.dismiss()
+    private val extensionsAdapter = AnimeExtensionsAdapter(
+        { pkg ->
+            val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>()
+            if (allSettings.isNotEmpty()) {
+                var selectedSetting = allSettings[0]
+                if (allSettings.size > 1) {
+                    val names = allSettings.map { it.lang }.toTypedArray()
+                    var selectedIndex = 0
+                    AlertDialog.Builder(requireContext(), R.style.MyPopup)
+                        .setTitle("Select a Source")
+                        .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
+                            selectedIndex = which
+                            selectedSetting = allSettings[selectedIndex]
+                            dialog.dismiss()
 
-                        // Move the fragment transaction here
-                        val eActivity = requireActivity() as ExtensionsActivity
-                        eActivity.runOnUiThread {
-                            val fragment =
-                                AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                            // Move the fragment transaction here
+                            val eActivity = requireActivity() as ExtensionsActivity
+                            eActivity.runOnUiThread {
+                                val fragment =
+                                    AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
 
-                                    eActivity.findViewById<ViewPager2>(R.id.viewPager).visibility =
-                                        View.VISIBLE
-                                    eActivity.findViewById<TabLayout>(R.id.tabLayout).visibility =
-                                        View.VISIBLE
-                                    eActivity.findViewById<TextInputLayout>(R.id.searchView).visibility =
-                                        View.VISIBLE
-                                    eActivity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                                        View.GONE
-                                }
-                            parentFragmentManager.beginTransaction()
-                                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                                .replace(R.id.fragmentExtensionsContainer, fragment)
-                                .addToBackStack(null)
-                                .commit()
+                                        eActivity.findViewById<ViewPager2>(R.id.viewPager).visibility =
+                                            View.VISIBLE
+                                        eActivity.findViewById<TabLayout>(R.id.tabLayout).visibility =
+                                            View.VISIBLE
+                                        eActivity.findViewById<TextInputLayout>(R.id.searchView).visibility =
+                                            View.VISIBLE
+                                        eActivity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
+                                            View.GONE
+                                    }
+                                parentFragmentManager.beginTransaction()
+                                    .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                                    .replace(R.id.fragmentExtensionsContainer, fragment)
+                                    .addToBackStack(null)
+                                    .commit()
+                            }
                         }
-                    }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.cancel()
-                        return@setNegativeButton
-                    }
-                    .show()
-            } else {
-                // If there's only one setting, proceed with the fragment transaction
-                val eActivity = requireActivity() as ExtensionsActivity
-                eActivity.runOnUiThread {
-                    val fragment =
-                        AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                        .show()
+                } else {
+                    // If there's only one setting, proceed with the fragment transaction
+                    val eActivity = requireActivity() as ExtensionsActivity
+                    eActivity.runOnUiThread {
+                        val fragment =
+                            AnimeSourcePreferencesFragment().getInstance(selectedSetting.id) {
 
-                            eActivity.findViewById<ViewPager2>(R.id.viewPager).visibility =
-                                View.VISIBLE
-                            eActivity.findViewById<TabLayout>(R.id.tabLayout).visibility =
-                                View.VISIBLE
-                            eActivity.findViewById<TextInputLayout>(R.id.searchView).visibility =
-                                View.VISIBLE
-                            eActivity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                                View.GONE
-                        }
-                    parentFragmentManager.beginTransaction()
-                        .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                        .replace(R.id.fragmentExtensionsContainer, fragment)
-                        .addToBackStack(null)
-                        .commit()
+                                eActivity.findViewById<ViewPager2>(R.id.viewPager).visibility =
+                                    View.VISIBLE
+                                eActivity.findViewById<TabLayout>(R.id.tabLayout).visibility =
+                                    View.VISIBLE
+                                eActivity.findViewById<TextInputLayout>(R.id.searchView).visibility =
+                                    View.VISIBLE
+                                eActivity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
+                                    View.GONE
+                            }
+                        parentFragmentManager.beginTransaction()
+                            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                            .replace(R.id.fragmentExtensionsContainer, fragment)
+                            .addToBackStack(null)
+                            .commit()
+                    }
                 }
-            }
 
-            // Hide ViewPager2 and TabLayout
-            val activity = requireActivity() as ExtensionsActivity
-            activity.findViewById<ViewPager2>(R.id.viewPager).visibility = View.GONE
-            activity.findViewById<TabLayout>(R.id.tabLayout).visibility = View.GONE
-            activity.findViewById<TextInputLayout>(R.id.searchView).visibility = View.GONE
-            activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility = View.VISIBLE
-        } else {
-            Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
-                .show()
-        }
-    },
+                // Hide ViewPager2 and TabLayout
+                val activity = requireActivity() as ExtensionsActivity
+                activity.findViewById<ViewPager2>(R.id.viewPager).visibility = View.GONE
+                activity.findViewById<TabLayout>(R.id.tabLayout).visibility = View.GONE
+                activity.findViewById<TextInputLayout>(R.id.searchView).visibility = View.GONE
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
+                    View.VISIBLE
+            } else {
+                Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        },
         { pkg ->
             if (isAdded) {  // Check if the fragment is currently added to its activity
                 val context = requireContext()  // Store context in a variable
@@ -157,6 +154,7 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                                     .setContentText("Error: ${error.message}")
                                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                                 notificationManager.notify(1, builder.build())
+                                snackString("Update failed: ${error.message}")
                             },
                             {
                                 val builder = NotificationCompat.Builder(
@@ -168,10 +166,12 @@ class InstalledAnimeExtensionsFragment : Fragment() {
                                     .setContentText("The extension has been successfully updated.")
                                     .setPriority(NotificationCompat.PRIORITY_LOW)
                                 notificationManager.notify(1, builder.build())
+                                snackString("Extension updated")
                             }
                         )
                 } else {
                     animeExtensionManager.uninstallExtension(pkg.pkgName)
+                    snackString("Extension uninstalled")
                 }
             }
         }, skipIcons
@@ -202,6 +202,9 @@ class InstalledAnimeExtensionsFragment : Fragment() {
         super.onDestroyView();_binding = null
     }
 
+    override fun updateContentBasedOnQuery(query: String?) {
+        extensionsAdapter.filter(query ?: "", animeExtensionManager.installedExtensionsFlow.value)
+    }
 
     private class AnimeExtensionsAdapter(
         private val onSettingsClicked: (AnimeExtension.Installed) -> Unit,
@@ -224,7 +227,7 @@ class InstalledAnimeExtensionsFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position) // Use getItem() from ListAdapter
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang= LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
             holder.extensionNameTextView.text = extension.name
             holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
             if (!skipIcons) {
@@ -243,12 +246,23 @@ class InstalledAnimeExtensionsFragment : Fragment() {
             }
         }
 
+        fun filter(query: String, currentList: List<AnimeExtension.Installed>) {
+            val filteredList = ArrayList<AnimeExtension.Installed>()
+            for (extension in currentList) {
+                if (extension.name.lowercase(Locale.ROOT).contains(query.lowercase(Locale.ROOT))) {
+                    filteredList.add(extension)
+                }
+            }
+            submitList(filteredList)
+        }
+
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val extensionNameTextView: TextView = view.findViewById(R.id.extensionNameTextView)
-            val extensionVersionTextView: TextView = view.findViewById(R.id.extensionVersionTextView)
+            val extensionVersionTextView: TextView =
+                view.findViewById(R.id.extensionVersionTextView)
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
-            val closeTextView: ImageView  = view.findViewById(R.id.closeTextView)
+            val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
         }
 
         companion object {

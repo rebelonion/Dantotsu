@@ -19,8 +19,6 @@ import ani.dantotsu.saveImageToDownloads
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.shareImage
 import ani.dantotsu.snackString
-import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.toast
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.ImageSource
@@ -50,7 +48,11 @@ class ImageViewDialog : BottomSheetDialogFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetImageBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -81,13 +83,16 @@ class ImageViewDialog : BottomSheetDialogFragment() {
             val binding = _binding ?: return@launch
 
             var bitmap = context.loadBitmap_old(image, trans1 ?: listOf())
-            var bitmap2 = if (image2 != null) context.loadBitmap_old(image2, trans2 ?: listOf()) else null
+            var bitmap2 =
+                if (image2 != null) context.loadBitmap_old(image2, trans2 ?: listOf()) else null
             if (bitmap == null) {
                 bitmap = context.loadBitmap(image, trans1 ?: listOf())
-                bitmap2 = if (image2 != null) context.loadBitmap(image2, trans2 ?: listOf()) else null
+                bitmap2 =
+                    if (image2 != null) context.loadBitmap(image2, trans2 ?: listOf()) else null
             }
 
-            bitmap = if (bitmap2 != null && bitmap != null) mergeBitmap(bitmap, bitmap2,) else bitmap
+            bitmap =
+                if (bitmap2 != null && bitmap != null) mergeBitmap(bitmap, bitmap2) else bitmap
 
             if (bitmap != null) {
                 binding.bottomImageShare.isEnabled = true
@@ -100,10 +105,11 @@ class ImageViewDialog : BottomSheetDialogFragment() {
                 }
 
                 binding.bottomImageView.setImage(ImageSource.cachedBitmap(bitmap))
-                ObjectAnimator.ofFloat(binding.bottomImageView, "alpha", 0f, 1f).setDuration(400L).start()
+                ObjectAnimator.ofFloat(binding.bottomImageView, "alpha", 0f, 1f).setDuration(400L)
+                    .start()
                 binding.bottomImageProgress.visibility = View.GONE
             } else {
-                toast(context?.getString(R.string.loading_image_failed))
+                toast(context.getString(R.string.loading_image_failed))
                 binding.bottomImageNo.visibility = View.VISIBLE
                 binding.bottomImageProgress.visibility = View.GONE
             }
@@ -116,7 +122,12 @@ class ImageViewDialog : BottomSheetDialogFragment() {
     }
 
     companion object {
-        fun newInstance(title: String, image: FileUrl, showReload: Boolean = false, image2: FileUrl?) = ImageViewDialog().apply {
+        fun newInstance(
+            title: String,
+            image: FileUrl,
+            showReload: Boolean = false,
+            image2: FileUrl?
+        ) = ImageViewDialog().apply {
             arguments = Bundle().apply {
                 putString("title", title)
                 putBoolean("reload", showReload)

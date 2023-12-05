@@ -1,5 +1,6 @@
 package ani.dantotsu.media.manga
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.BroadcastReceiver
@@ -16,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils.clamp
 import androidx.core.view.updatePadding
@@ -30,11 +32,11 @@ import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.Download
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.manga.MangaDownloaderService
-import ani.dantotsu.download.manga.ServiceDataSingleton
-import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
+import ani.dantotsu.download.manga.MangaServiceDataSingleton
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaParser
@@ -59,10 +61,8 @@ import uy.kohesive.injekt.api.get
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.roundToInt
-import android.Manifest
-import androidx.core.app.ActivityCompat
 
-open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
+open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     private var _binding: FragmentAnimeWatchBinding? = null
     private val binding get() = _binding!!
     private val model: MediaDetailsViewModel by activityViewModels()
@@ -85,7 +85,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
     var continueEp: Boolean = false
     var loaded = false
 
-    val uiSettings = loadData("ui_settings", toast = false) ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
+    val uiSettings = loadData("ui_settings", toast = false)
+        ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,7 +106,12 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
             addAction(ACTION_DOWNLOAD_PROGRESS)
         }
 
-        ContextCompat.registerReceiver(requireContext(), downloadStatusReceiver, intentFilter, ContextCompat.RECEIVER_EXPORTED)
+        ContextCompat.registerReceiver(
+            requireContext(),
+            downloadStatusReceiver,
+            intentFilter,
+            ContextCompat.RECEIVER_EXPORTED
+        )
 
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
@@ -120,10 +126,10 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                 val style = chapterAdapter.getItemViewType(position)
 
                 return when (position) {
-                    0    -> maxGridSize
+                    0 -> maxGridSize
                     else -> when (style) {
-                        0    -> maxGridSize
-                        1    -> 1
+                        0 -> maxGridSize
+                        1 -> 1
                         else -> maxGridSize
                     }
                 }
@@ -146,7 +152,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                 if (media.format == "MANGA" || media.format == "ONE SHOT") {
                     media.selected = model.loadSelected(media)
 
-                    subscribed = SubscriptionHelper.getSubscriptions(requireContext()).containsKey(media.id)
+                    subscribed =
+                        SubscriptionHelper.getSubscriptions(requireContext()).containsKey(media.id)
 
                     style = media.selected!!.recyclerStyle
                     reverse = media.selected!!.recyclerReversed
@@ -156,13 +163,15 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
 
                         headerAdapter = MangaReadAdapter(it, this, model.mangaReadSources!!)
                         headerAdapter.scanlatorSelectionListener = this
-                        chapterAdapter = MangaChapterAdapter(style ?: uiSettings.mangaDefaultView, media, this)
+                        chapterAdapter =
+                            MangaChapterAdapter(style ?: uiSettings.mangaDefaultView, media, this)
 
-                        for (download in downloadManager.mangaDownloads){
+                        for (download in downloadManager.mangaDownloads) {
                             chapterAdapter.stopDownload(download.chapter)
                         }
 
-                        binding.animeSourceRecycler.adapter = ConcatAdapter(headerAdapter, chapterAdapter)
+                        binding.animeSourceRecycler.adapter =
+                            ConcatAdapter(headerAdapter, chapterAdapter)
 
                         lifecycleScope.launch(Dispatchers.IO) {
                             model.loadMangaChapters(media, media.selected!!.sourceIndex)
@@ -173,7 +182,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                     }
                 } else {
                     binding.animeNotSupported.visibility = View.VISIBLE
-                    binding.animeNotSupported.text = getString(R.string.not_supported, media.format ?: "")
+                    binding.animeNotSupported.text =
+                        getString(R.string.not_supported, media.format ?: "")
                 }
             }
         }
@@ -207,7 +217,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                 val limit = when {
                     (divisions < 25) -> 25
                     (divisions < 50) -> 50
-                    else             -> 100
+                    else -> 100
                 }
                 headerAdapter.clearChips()
                 if (total > limit) {
@@ -302,7 +312,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
         )
     }
 
-    fun openSettings(pkg: MangaExtension.Installed){
+    fun openSettings(pkg: MangaExtension.Installed) {
         val changeUIVisibility: (Boolean) -> Unit = { show ->
             val activity = requireActivity() as MediaDetailsActivity
             val visibility = if (show) View.VISIBLE else View.GONE
@@ -310,9 +320,9 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
             activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
             activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
             activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-            try{
+            try {
                 activity.findViewById<CustomBottomNavBar>(R.id.mediaTab).visibility = visibility
-            }catch (e: ClassCastException){
+            } catch (e: ClassCastException) {
                 activity.findViewById<NavigationRailView>(R.id.mediaTab).visibility = visibility
             }
             activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
@@ -335,7 +345,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
 
                         // Move the fragment transaction here
                         val fragment =
-                            MangaSourcePreferencesFragment().getInstance(selectedSetting.id){
+                            MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
                                 changeUIVisibility(true)
                                 loadChapters(media.selected!!.sourceIndex, true)
                             }
@@ -353,7 +363,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                     .show()
             } else {
                 // If there's only one setting, proceed with the fragment transaction
-                val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id){
+                val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
                     changeUIVisibility(true)
                     loadChapters(media.selected!!.sourceIndex, true)
                 }
@@ -376,7 +386,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
         media.manga?.chapters?.get(i)?.let {
             media.manga?.selectedChapter = i
             model.saveSelected(media.id, media.selected!!, requireActivity())
-            ChapterLoaderDialog.newInstance(it, true).show(requireActivity().supportFragmentManager, "dialog")
+            ChapterLoaderDialog.newInstance(it, true)
+                .show(requireActivity().supportFragmentManager, "dialog")
         }
     }
 
@@ -393,7 +404,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
 
         model.continueMedia = false
         media.manga?.chapters?.get(i)?.let { chapter ->
-            val parser = model.mangaReadSources?.get(media.selected!!.sourceIndex) as? DynamicMangaParser
+            val parser =
+                model.mangaReadSources?.get(media.selected!!.sourceIndex) as? DynamicMangaParser
             parser?.let {
                 CoroutineScope(Dispatchers.IO).launch {
                     val images = parser.imageList("", chapter.sChapter)
@@ -408,15 +420,15 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
                         simultaneousDownloads = 2
                     )
 
-                    ServiceDataSingleton.downloadQueue.offer(downloadTask)
+                    MangaServiceDataSingleton.downloadQueue.offer(downloadTask)
 
                     // If the service is not already running, start it
-                    if (!ServiceDataSingleton.isServiceRunning) {
+                    if (!MangaServiceDataSingleton.isServiceRunning) {
                         val intent = Intent(context, MangaDownloaderService::class.java)
                         withContext(Dispatchers.Main) {
                             ContextCompat.startForegroundService(requireContext(), intent)
                         }
-                        ServiceDataSingleton.isServiceRunning = true
+                        MangaServiceDataSingleton.isServiceRunning = true
                     }
 
                     // Inform the adapter that the download has started
@@ -439,10 +451,17 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
     }
 
 
-    fun onMangaChapterRemoveDownloadClick(i: String){
-        downloadManager.removeDownload(Download(media.nameMAL?:media.nameRomaji, i, Download.Type.MANGA))
+    fun onMangaChapterRemoveDownloadClick(i: String) {
+        downloadManager.removeDownload(
+            Download(
+                media.nameMAL ?: media.nameRomaji,
+                i,
+                Download.Type.MANGA
+            )
+        )
         chapterAdapter.deleteDownload(i)
     }
+
     fun onMangaChapterStopDownloadClick(i: String) {
         val cancelIntent = Intent().apply {
             action = MangaDownloaderService.ACTION_CANCEL_DOWNLOAD
@@ -451,11 +470,19 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
         requireContext().sendBroadcast(cancelIntent)
 
         // Remove the download from the manager and update the UI
-        downloadManager.removeDownload(Download(media.nameMAL?:media.nameRomaji, i, Download.Type.MANGA))
+        downloadManager.removeDownload(
+            Download(
+                media.nameMAL ?: media.nameRomaji,
+                i,
+                Download.Type.MANGA
+            )
+        )
         chapterAdapter.purgeDownload(i)
     }
+
     private val downloadStatusReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
+            if (!this@MangaReadFragment::chapterAdapter.isInitialized) return
             when (intent.action) {
                 ACTION_DOWNLOAD_STARTED -> {
                     val chapterNumber = intent.getStringExtra(EXTRA_CHAPTER_NUMBER)
@@ -491,8 +518,10 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
         val selected = model.loadSelected(media)
 
         //Find latest chapter for subscription
-        selected.latest = media.manga?.chapters?.values?.maxOfOrNull { it.number.toFloatOrNull() ?: 0f } ?: 0f
-        selected.latest = media.userProgress?.toFloat()?.takeIf { selected.latest < it } ?: selected.latest
+        selected.latest =
+            media.manga?.chapters?.values?.maxOfOrNull { it.number.toFloatOrNull() ?: 0f } ?: 0f
+        selected.latest =
+            media.userProgress?.toFloat()?.takeIf { selected.latest < it } ?: selected.latest
 
         model.saveSelected(media.id, selected, requireActivity())
         headerAdapter.handleChapters()
@@ -501,7 +530,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener  {
         if (media.manga!!.chapters != null) {
             val end = if (end != null && end!! < media.manga!!.chapters!!.size) end else null
             arr.addAll(
-                media.manga!!.chapters!!.values.toList().slice(start..(end ?: (media.manga!!.chapters!!.size - 1)))
+                media.manga!!.chapters!!.values.toList()
+                    .slice(start..(end ?: (media.manga!!.chapters!!.size - 1)))
             )
             if (reverse)
                 arr = (arr.reversed() as? ArrayList<MangaChapter>) ?: arr

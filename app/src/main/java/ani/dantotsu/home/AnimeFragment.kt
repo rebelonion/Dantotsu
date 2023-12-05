@@ -48,7 +48,8 @@ class AnimeFragment : Fragment() {
     private var _binding: FragmentAnimeBinding? = null
     private val binding get() = _binding!!
 
-    private var uiSettings: UserInterfaceSettings = loadData("ui_settings") ?: UserInterfaceSettings()
+    private var uiSettings: UserInterfaceSettings =
+        loadData("ui_settings") ?: UserInterfaceSettings()
 
     val model: AnilistAnimeViewModel by activityViewModels()
 
@@ -224,7 +225,8 @@ class AnimeFragment : Fragment() {
                         }
                     }
                 }
-                binding.animePageScrollTop.translationY = -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
+                binding.animePageScrollTop.translationY =
+                    -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
             }
         }
 

@@ -2,9 +2,9 @@ package ani.dantotsu.parsers
 
 import ani.dantotsu.Lazier
 import ani.dantotsu.logger
+import ani.dantotsu.media.Media
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.manga.MangaChapter
-import ani.dantotsu.media.Media
 import ani.dantotsu.tryWithSuspend
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.source.model.SManga
@@ -30,7 +30,6 @@ abstract class WatchSources : BaseSources() {
         extra: Map<String, String>?,
         sAnime: SAnime?
     ): MutableMap<String, Episode> {
-        println("finder333 $showLink")
         val map = mutableMapOf<String, Episode>()
         val parser = get(i)
         tryWithSuspend(true) {

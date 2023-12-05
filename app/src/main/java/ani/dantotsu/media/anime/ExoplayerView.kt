@@ -17,7 +17,6 @@ import android.graphics.drawable.Animatable
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.AudioManager.*
-import android.media.PlaybackParams
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -62,6 +61,8 @@ import ani.dantotsu.*
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
+import ani.dantotsu.connections.discord.DiscordService
+import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
@@ -71,6 +72,7 @@ import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
 import ani.dantotsu.others.Download.download
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.ResettableTimer
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.*
@@ -78,7 +80,6 @@ import ani.dantotsu.settings.PlayerSettings
 import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import com.bumptech.glide.Glide
 import com.google.android.material.slider.Slider
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -813,15 +814,15 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
             fun fastForward() {
                 isFastForwarding = true
-                exoPlayer.setPlaybackSpeed(2f)
-                snackString("Playing at 2x speed")
+                exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
+                snackString("Playing at ${exoPlayer.playbackParameters.speed}x speed")
             }
 
             fun stopFastForward() {
                 if (isFastForwarding) {
                     isFastForwarding = false
-                    exoPlayer.setPlaybackSpeed(1f)
-                    snackString("Playing at normal speed")
+                    exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed / 2)
+                    snackString("Playing at default speed: ${exoPlayer.playbackParameters.speed}x")
                 }
             }
 
@@ -862,6 +863,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 override fun onLongClick(event: MotionEvent) {
                     if (settings.fastforward) fastForward()
                 }
+
                 override fun onDoubleClick(event: MotionEvent) {
                     doubleTap(true, event)
                 }
@@ -994,22 +996,40 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 playbackPosition = loadData("${media.id}_${ep.number}", this) ?: 0
                 initPlayer()
                 preloading = false
-                rpc = Discord.defaultRPC()
-                rpc?.send {
-                    type = RPC.Type.WATCHING
-                    activityName = media.userPreferredName
-                    details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
-                        R.string.episode_num,
-                        ep.number
+                val context = this
+
+                lifecycleScope.launch {
+                    val presence = RPC.createPresence(RPC.Companion.RPCData(
+                        applicationId = Discord.application_Id,
+                        type = RPC.Type.WATCHING,
+                        activityName = media.userPreferredName,
+                        details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
+                            R.string.episode_num,
+                            ep.number
+                        ),
+                        state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
+                        largeImage = media.cover?.let { RPC.Link(media.userPreferredName, it) },
+                        smallImage = RPC.Link(
+                            "Dantotsu",
+                            Discord.small_Image
+                        ),
+                        buttons = mutableListOf(
+                            RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                            RPC.Link(
+                                "Stream on Dantotsu",
+                                "https://github.com/rebelonion/Dantotsu/"
+                            )
+                        )
                     )
-                    state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}"
-                    media.cover?.let { cover ->
-                        largeImage = RPC.Link(media.userPreferredName, cover)
+                    )
+
+                    val intent = Intent(context, DiscordService::class.java).apply {
+                        putExtra("presence", presence)
                     }
-                    media.shareLink?.let { link ->
-                        buttons.add(0, RPC.Link(getString(R.string.view_anime), link))
-                    }
+                    DiscordServiceRunningSingleton.running = true
+                    startService(intent)
                 }
+
                 updateProgress()
             }
         }
@@ -1129,7 +1149,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                 ?: true else false
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
-            AlertDialog.Builder(this, R.style.DialogTheme)
+            AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
                 .apply {
                     setOnCancelListener { hideSystemBars() }
@@ -1278,6 +1298,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
+        logger("url: ${video!!.file.url}")
+        logger("mimeType: $mimeType")
 
         if (sub != null) {
             val listofnotnullsubs = immutableListOf(sub).filterNotNull()
@@ -1301,7 +1323,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 .setAllowMultipleAdaptiveSelections(true)
                 .setPreferredTextLanguage(subtitle?.language ?: "en")
                 .setPreferredTextRoleFlags(C.ROLE_FLAG_SUBTITLE)
-                .setRendererDisabled(C.TRACK_TYPE_VIDEO, false)
+                .setRendererDisabled(TRACK_TYPE_VIDEO, false)
                 .setRendererDisabled(C.TRACK_TYPE_AUDIO, false)
                 .setRendererDisabled(C.TRACK_TYPE_TEXT, false)
                 .setMinVideoSize(
@@ -1310,7 +1332,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 )
                 .setMaxVideoSize(1, 1)
             //.setOverrideForType(
-           //     TrackSelectionOverride(trackSelector, 2))
+            //     TrackSelectionOverride(trackSelector, 2))
         )
 
         if (playbackPosition != 0L && !changingServer && !settings.alwaysContinue) {
@@ -1329,17 +1351,17 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             )
             AlertDialog.Builder(this, R.style.DialogTheme)
                 .setTitle(getString(R.string.continue_from, time)).apply {
-                setCancelable(false)
-                setPositiveButton(getString(R.string.yes)) { d, _ ->
-                    buildExoplayer()
-                    d.dismiss()
-                }
-                setNegativeButton(getString(R.string.no)) { d, _ ->
-                    playbackPosition = 0L
-                    buildExoplayer()
-                    d.dismiss()
-                }
-            }.show()
+                    setCancelable(false)
+                    setPositiveButton(getString(R.string.yes)) { d, _ ->
+                        buildExoplayer()
+                        d.dismiss()
+                    }
+                    setNegativeButton(getString(R.string.no)) { d, _ ->
+                        playbackPosition = 0L
+                        buildExoplayer()
+                        d.dismiss()
+                    }
+                }.show()
         } else buildExoplayer()
     }
 
@@ -1404,7 +1426,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         exoPlayer.release()
         VideoCache.release()
         mediaSession?.release()
-        rpc?.close()
+        val stopIntent = Intent(this, DiscordService::class.java)
+        DiscordServiceRunningSingleton.running = false
+        stopService(stopIntent)
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -1589,17 +1614,19 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             println("Track__: ${it.isSelected}")
             println("Track__: ${it.type}")
             println("Track__: ${it.mediaTrackGroup.id}")
-            if (it.type == 3 && it.mediaTrackGroup.id == "1:"){
+            if (it.type == 3 && it.mediaTrackGroup.id == "1:") {
                 playerView.player?.trackSelectionParameters =
                     playerView.player?.trackSelectionParameters?.buildUpon()
                         ?.setOverrideForType(
-                        TrackSelectionOverride(it.mediaTrackGroup, it.length - 1))
+                            TrackSelectionOverride(it.mediaTrackGroup, it.length - 1)
+                        )
                         ?.build()!!
-            }else if(it.type == 3){
+            } else if (it.type == 3) {
                 playerView.player?.trackSelectionParameters =
                     playerView.player?.trackSelectionParameters?.buildUpon()
                         ?.addOverride(
-                            TrackSelectionOverride(it.mediaTrackGroup, listOf()))
+                            TrackSelectionOverride(it.mediaTrackGroup, listOf())
+                        )
                         ?.build()!!
             }
         }

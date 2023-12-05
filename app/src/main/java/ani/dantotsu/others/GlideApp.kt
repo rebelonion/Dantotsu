@@ -15,7 +15,7 @@ import java.io.InputStream
 
 
 @GlideModule
-class DantotsuGlideApp : AppGlideModule(){
+class DantotsuGlideApp : AppGlideModule() {
     @SuppressLint("CheckResult")
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         super.applyOptions(context, builder)

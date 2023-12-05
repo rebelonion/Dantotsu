@@ -16,20 +16,16 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.R
 import ani.dantotsu.ZoomOutPageTransformer
-import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ActivityNoInternetBinding
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.initActivity
-import ani.dantotsu.isOnline
 import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.offline.OfflineFragment
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.selectedOption
 import ani.dantotsu.settings.UserInterfaceSettings
-import ani.dantotsu.startMainActivity
-import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class NoInternet : AppCompatActivity() {
@@ -39,7 +35,7 @@ class NoInternet : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
 
         binding = ActivityNoInternetBinding.inflate(layoutInflater)
         setContentView(binding.root)

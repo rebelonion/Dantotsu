@@ -1,13 +1,18 @@
 package ani.dantotsu.parsers
 
-import ani.dantotsu.*
+import ani.dantotsu.FileUrl
+import ani.dantotsu.R
+import ani.dantotsu.currContext
+import ani.dantotsu.loadData
+import ani.dantotsu.logger
 import ani.dantotsu.media.Media
+import ani.dantotsu.saveData
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.source.model.SManga
+import me.xdrop.fuzzywuzzy.FuzzySearch
 import java.io.Serializable
 import java.net.URLDecoder
 import java.net.URLEncoder
-import me.xdrop.fuzzywuzzy.FuzzySearch
 
 
 abstract class BaseParser {
@@ -50,24 +55,44 @@ abstract class BaseParser {
      * Isn't necessary to override, but recommended, if you want to improve auto search results
      * **/
     open suspend fun autoSearch(mediaObj: Media): ShowResponse? {
-        var response: ShowResponse? = null//loadSavedShowResponse(mediaObj.id)
+        var response: ShowResponse? = loadSavedShowResponse(mediaObj.id)
         if (response != null && this !is OfflineMangaParser) {
             saveShowResponse(mediaObj.id, response, true)
         } else {
             setUserText("Searching : ${mediaObj.mainName()}")
+            logger("Searching : ${mediaObj.mainName()}")
             val results = search(mediaObj.mainName())
+            //log all results
+            results.forEach {
+                logger("Result: ${it.name}")
+            }
             val sortedResults = if (results.isNotEmpty()) {
-                results.sortedByDescending { FuzzySearch.ratio(it.name.lowercase(), mediaObj.mainName().lowercase()) }
+                results.sortedByDescending {
+                    FuzzySearch.ratio(
+                        it.name.lowercase(),
+                        mediaObj.mainName().lowercase()
+                    )
+                }
             } else {
                 emptyList()
             }
             response = sortedResults.firstOrNull()
 
-            if (response == null || FuzzySearch.ratio(response.name.lowercase(), mediaObj.mainName().lowercase()) < 100) {
+            if (response == null || FuzzySearch.ratio(
+                    response.name.lowercase(),
+                    mediaObj.mainName().lowercase()
+                ) < 100
+            ) {
                 setUserText("Searching : ${mediaObj.nameRomaji}")
+                logger("Searching : ${mediaObj.nameRomaji}")
                 val romajiResults = search(mediaObj.nameRomaji)
                 val sortedRomajiResults = if (romajiResults.isNotEmpty()) {
-                    romajiResults.sortedByDescending { FuzzySearch.ratio(it.name.lowercase(), mediaObj.nameRomaji.lowercase()) }
+                    romajiResults.sortedByDescending {
+                        FuzzySearch.ratio(
+                            it.name.lowercase(),
+                            mediaObj.nameRomaji.lowercase()
+                        )
+                    }
                 } else {
                     emptyList()
                 }
@@ -78,8 +103,14 @@ abstract class BaseParser {
                     logger("No exact match found in results. Using closest match from RomajiResults.")
                     closestRomaji
                 } else {
-                    val romajiRatio = FuzzySearch.ratio(closestRomaji?.name?.lowercase() ?: "", mediaObj.nameRomaji.lowercase())
-                    val mainNameRatio = FuzzySearch.ratio(response.name.lowercase(), mediaObj.mainName().lowercase())
+                    val romajiRatio = FuzzySearch.ratio(
+                        closestRomaji?.name?.lowercase() ?: "",
+                        mediaObj.nameRomaji.lowercase()
+                    )
+                    val mainNameRatio = FuzzySearch.ratio(
+                        response.name.lowercase(),
+                        mediaObj.mainName().lowercase()
+                    )
                     logger("Fuzzy ratio for closest match in results: $mainNameRatio for ${response.name.lowercase()}")
                     logger("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name?.lowercase() ?: "None"}")
 
@@ -113,7 +144,13 @@ abstract class BaseParser {
     open fun saveShowResponse(mediaId: Int, response: ShowResponse?, selected: Boolean = false) {
         if (response != null) {
             checkIfVariablesAreEmpty()
-            setUserText("${if (selected) currContext()!!.getString(R.string.selected) else currContext()!!.getString(R.string.found)} : ${response.name}")
+            setUserText(
+                "${
+                    if (selected) currContext()!!.getString(R.string.selected) else currContext()!!.getString(
+                        R.string.found
+                    )
+                } : ${response.name}"
+            )
             saveData("${saveName}_$mediaId", response)
         }
     }
@@ -161,7 +198,7 @@ data class ShowResponse(
     val total: Int? = null,
 
     //In case you want to sent some extra data
-    val extra : Map<String,String>?=null,
+    val extra: MutableMap<String, String>? = null,
 
     //SAnime object from Aniyomi
     val sAnime: SAnime? = null,
@@ -169,10 +206,23 @@ data class ShowResponse(
     //SManga object from Aniyomi
     val sManga: SManga? = null
 ) : Serializable {
-    constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf(), total: Int? = null, extra: Map<String, String>?=null)
+    constructor(
+        name: String,
+        link: String,
+        coverUrl: String,
+        otherNames: List<String> = listOf(),
+        total: Int? = null,
+        extra: MutableMap<String, String>? = null
+    )
             : this(name, link, FileUrl(coverUrl), otherNames, total, extra)
 
-    constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf(), total: Int? = null)
+    constructor(
+        name: String,
+        link: String,
+        coverUrl: String,
+        otherNames: List<String> = listOf(),
+        total: Int? = null
+    )
             : this(name, link, FileUrl(coverUrl), otherNames, total)
 
     constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf())

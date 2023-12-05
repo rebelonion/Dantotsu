@@ -20,7 +20,7 @@ class AnilistMutations {
         repeat: Int? = null,
         notes: String? = null,
         status: String? = null,
-        private:Boolean? = null,
+        private: Boolean? = null,
         startedAt: FuzzyDate? = null,
         completedAt: FuzzyDate? = null,
         customList: List<String>? = null
@@ -41,7 +41,7 @@ class AnilistMutations {
             ${if (repeat != null) ""","repeat":$repeat""" else ""}
             ${if (notes != null) ""","notes":"${notes.replace("\n", "\\n")}"""" else ""}
             ${if (status != null) ""","status":"$status"""" else ""}
-            ${if (customList !=null) ""","customLists":[${customList.joinToString { "\"$it\"" }}]""" else ""}
+            ${if (customList != null) ""","customLists":[${customList.joinToString { "\"$it\"" }}]""" else ""}
             }""".replace("\n", "").replace("""    """, "")
         println(variables)
         executeQuery<JsonObject>(query, variables, show = true)

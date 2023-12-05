@@ -11,8 +11,15 @@ import androidx.cardview.widget.CardView
 import ani.dantotsu.R
 
 
-class OfflineMangaAdapter(private val context: Context, private val items: List<OfflineMangaModel>) : BaseAdapter() {
-    private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+class OfflineMangaAdapter(
+    private val context: Context,
+    private var items: List<OfflineMangaModel>,
+    private val searchListener: OfflineMangaSearchListener
+) : BaseAdapter() {
+    private val inflater: LayoutInflater =
+        context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+    private var originalItems: List<OfflineMangaModel> = items
+
     override fun getCount(): Int {
         return items.size
     }
@@ -48,5 +55,23 @@ class OfflineMangaAdapter(private val context: Context, private val items: List<
             ongoing.visibility = View.GONE
         }
         return view
+    }
+
+    fun onSearchQuery(query: String) {
+        // Implement the filtering logic here, for example:
+        items = if (query.isEmpty()) {
+            // Return the original list if the query is empty
+            originalItems
+        } else {
+            // Filter the list based on the query
+            originalItems.filter { it.title.contains(query, ignoreCase = true) }
+        }
+        notifyDataSetChanged() // Notify the adapter that the data set has changed
+    }
+
+    fun setItems(items: List<OfflineMangaModel>) {
+        this.items = items
+        this.originalItems = items
+        notifyDataSetChanged()
     }
 }

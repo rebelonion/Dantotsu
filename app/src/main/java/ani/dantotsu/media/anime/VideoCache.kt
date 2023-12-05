@@ -14,7 +14,10 @@ object VideoCache {
         val databaseProvider = StandaloneDatabaseProvider(context)
         if (simpleCache == null)
             simpleCache = SimpleCache(
-                File(context.cacheDir, "exoplayer").also { it.deleteOnExit() }, // Ensures always fresh file
+                File(
+                    context.cacheDir,
+                    "exoplayer"
+                ).also { it.deleteOnExit() }, // Ensures always fresh file
                 LeastRecentlyUsedCacheEvictor(300L * 1024L * 1024L),
                 databaseProvider
             )

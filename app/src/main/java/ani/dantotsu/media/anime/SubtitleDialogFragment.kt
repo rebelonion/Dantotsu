@@ -24,7 +24,11 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
     val model: MediaDetailsViewModel by activityViewModels()
     private lateinit var episode: Episode
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetSubtitlesBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -34,17 +38,27 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
 
         model.getMedia().observe(viewLifecycleOwner) { media ->
             episode = media?.anime?.episodes?.get(media.anime.selectedEpisode) ?: return@observe
-            val currentExtractor = episode.extractors?.find { it.server.name == episode.selectedExtractor } ?: return@observe
+            val currentExtractor =
+                episode.extractors?.find { it.server.name == episode.selectedExtractor }
+                    ?: return@observe
             binding.subtitlesRecycler.layoutManager = LinearLayoutManager(requireContext())
             binding.subtitlesRecycler.adapter = SubtitleAdapter(currentExtractor.subtitles)
         }
     }
 
-    inner class SubtitleAdapter(val subtitles: List<Subtitle>) : RecyclerView.Adapter<SubtitleAdapter.StreamViewHolder>() {
-        inner class StreamViewHolder(val binding: ItemSubtitleTextBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class SubtitleAdapter(val subtitles: List<Subtitle>) :
+        RecyclerView.Adapter<SubtitleAdapter.StreamViewHolder>() {
+        inner class StreamViewHolder(val binding: ItemSubtitleTextBinding) :
+            RecyclerView.ViewHolder(binding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StreamViewHolder =
-            StreamViewHolder(ItemSubtitleTextBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            StreamViewHolder(
+                ItemSubtitleTextBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
 
         override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
             val binding = holder.binding
@@ -60,7 +74,7 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                 binding.root.setOnClickListener {
                     episode.selectedSubtitle = null
                     model.setEpisode(episode, "Subtitle")
-                    model.getMedia().observe(viewLifecycleOwner){media ->
+                    model.getMedia().observe(viewLifecycleOwner) { media ->
                         val mediaID: Int = media.id
                         saveData("subLang_${mediaID}", "None", activity)
                     }
@@ -87,7 +101,7 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                     "pl-PL" -> "[pl-PL] Polish"
                     "ro-RO" -> "[ro-RO] Romanian"
                     "sv-SE" -> "[sv-SE] Swedish"
-                    else -> if(subtitles[position - 1].language matches Regex("([a-z]{2})-([A-Z]{2}|\\d{3})")) "[${subtitles[position - 1].language}]" else subtitles[position - 1].language
+                    else -> if (subtitles[position - 1].language matches Regex("([a-z]{2})-([A-Z]{2}|\\d{3})")) "[${subtitles[position - 1].language}]" else subtitles[position - 1].language
                 }
                 model.getMedia().observe(viewLifecycleOwner) { media ->
                     val mediaID: Int = media.id
@@ -100,7 +114,7 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                 binding.root.setOnClickListener {
                     episode.selectedSubtitle = position - 1
                     model.setEpisode(episode, "Subtitle")
-                    model.getMedia().observe(viewLifecycleOwner){media ->
+                    model.getMedia().observe(viewLifecycleOwner) { media ->
                         val mediaID: Int = media.id
                         saveData("subLang_${mediaID}", subtitles[position - 1].language, activity)
                     }

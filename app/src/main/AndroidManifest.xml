@@ -52,7 +52,7 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="${icon_placeholder_round}"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dantotsu"
         android:usesCleartextTraffic="true"
@@ -274,6 +274,14 @@
             android:exported="false" />
 
         <service android:name=".download.manga.MangaDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service android:name=".download.novel.NovelDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+
+        <service android:name=".connections.discord.DiscordService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
     </application>

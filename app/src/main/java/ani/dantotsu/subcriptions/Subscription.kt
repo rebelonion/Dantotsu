@@ -40,7 +40,8 @@ class Subscription {
                 val index = subscriptions.map { i++; it.key to i }.toMap()
                 val notificationManager = NotificationManagerCompat.from(context)
 
-                val progressEnabled = loadData("subscription_checking_notifications", context) ?: true
+                val progressEnabled =
+                    loadData("subscription_checking_notifications", context) ?: true
                 val progressNotification = if (progressEnabled) getProgressNotification(
                     context,
                     subscriptions.size
@@ -69,23 +70,26 @@ class Subscription {
                 subscriptions.toList().map {
                     val media = it.second
                     val text = if (media.isAnime) {
-                        val parser = SubscriptionHelper.getAnimeParser(context, media.isAdult, media.id)
+                        val parser =
+                            SubscriptionHelper.getAnimeParser(context, media.isAdult, media.id)
                         progress(index[it.first]!!, parser.name, media.name)
-                        val ep: Episode? = SubscriptionHelper.getEpisode(context, parser, media.id, media.isAdult)
-                        if (ep != null) currActivity()!!.getString(R.string.episode)+"${ep.number}${
+                        val ep: Episode? =
+                            SubscriptionHelper.getEpisode(context, parser, media.id, media.isAdult)
+                        if (ep != null) currActivity()!!.getString(R.string.episode) + "${ep.number}${
                             if (ep.title != null) " : ${ep.title}" else ""
                         }${
                             if (ep.isFiller) " [Filler]" else ""
-                        } "+ currActivity()!!.getString(R.string.just_released) to ep.thumbnail
+                        } " + currActivity()!!.getString(R.string.just_released) to ep.thumbnail
                         else null
                     } else {
-                        val parser = SubscriptionHelper.getMangaParser(context, media.isAdult, media.id)
+                        val parser =
+                            SubscriptionHelper.getMangaParser(context, media.isAdult, media.id)
                         progress(index[it.first]!!, parser.name, media.name)
                         val ep: MangaChapter? =
                             SubscriptionHelper.getChapter(context, parser, media.id, media.isAdult)
-                        if (ep != null) currActivity()!!.getString(R.string.chapter)+"${ep.number}${
+                        if (ep != null) currActivity()!!.getString(R.string.chapter) + "${ep.number}${
                             if (ep.title != null) " : ${ep.title}" else ""
-                        } "+ currActivity()!!.getString(R.string.just_released) to null
+                        } " + currActivity()!!.getString(R.string.just_released) to null
                         else null
                     } ?: return@map
                     createNotification(context.applicationContext, media, text.first, text.second)
@@ -96,7 +100,8 @@ class Subscription {
             }
         }
 
-        fun getChannelId(isAnime: Boolean, mediaId: Int) = "${if (isAnime) "anime" else "manga"}_${mediaId}"
+        fun getChannelId(isAnime: Boolean, mediaId: Int) =
+            "${if (isAnime) "anime" else "manga"}_${mediaId}"
 
         private suspend fun createNotification(
             context: Context,
@@ -124,7 +129,10 @@ class Subscription {
 
         private const val progressNotificationId = 100
 
-        private fun getProgressNotification(context: Context, size: Int): NotificationCompat.Builder {
+        private fun getProgressNotification(
+            context: Context,
+            size: Int
+        ): NotificationCompat.Builder {
             return Notifications.getNotification(
                 context,
                 null,

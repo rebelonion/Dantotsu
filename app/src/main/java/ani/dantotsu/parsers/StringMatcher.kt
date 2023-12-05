@@ -58,10 +58,16 @@ class StringMatcher {
                 return shows // Return original list if no closest show found
             }
             logger("Closest show found for $target is ${closestShowAndIndex.first.name}")
-            return listOf(shows[closestIndex]) + shows.subList(0, closestIndex) + shows.subList(closestIndex + 1, shows.size)
+            return listOf(shows[closestIndex]) + shows.subList(0, closestIndex) + shows.subList(
+                closestIndex + 1,
+                shows.size
+            )
         }
 
-        private fun closestShow(target: String, shows: List<ShowResponse>): Pair<ShowResponse, Int> {
+        private fun closestShow(
+            target: String,
+            shows: List<ShowResponse>
+        ): Pair<ShowResponse, Int> {
             var minDistance = Int.MAX_VALUE
             var closestShow = ShowResponse("", "", "")
             var closestIndex = -1

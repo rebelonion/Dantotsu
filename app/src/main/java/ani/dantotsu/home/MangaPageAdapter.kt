@@ -17,7 +17,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.MediaPageTransformer
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
@@ -25,6 +24,7 @@ import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemMangaPageBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
+import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.SearchActivity
 import ani.dantotsu.px
@@ -43,10 +43,12 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
     private var trendHandler: Handler? = null
     private lateinit var trendRun: Runnable
     var trendingViewPager: ViewPager2? = null
-    private var uiSettings: UserInterfaceSettings = loadData("ui_settings") ?: UserInterfaceSettings()
+    private var uiSettings: UserInterfaceSettings =
+        loadData("ui_settings") ?: UserInterfaceSettings()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaPageViewHolder {
-        val binding = ItemMangaPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemMangaPageBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return MangaPageViewHolder(binding)
     }
 
@@ -58,14 +60,16 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         val currentColor = textInputLayout.boxBackgroundColor
         val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xA8000000.toInt()
         textInputLayout.boxBackgroundColor = semiTransparentColor
-        val materialCardView = holder.itemView.findViewById<MaterialCardView>(R.id.mangaUserAvatarContainer)
+        val materialCardView =
+            holder.itemView.findViewById<MaterialCardView>(R.id.mangaUserAvatarContainer)
         materialCardView.setCardBackgroundColor(semiTransparentColor)
         val typedValue = TypedValue()
         currContext()?.theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         val color = typedValue.data
 
 
-        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean("colorOverflow", false) ?: false
+        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getBoolean("colorOverflow", false) ?: false
         if (!colorOverflow) {
             textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
             materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
@@ -89,7 +93,10 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         }
 
         binding.mangaUserAvatar.setSafeOnClickListener {
-            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.MANGA).show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
+            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.MANGA).show(
+                (it.context as AppCompatActivity).supportFragmentManager,
+                "dialog"
+            )
         }
 
         binding.mangaSearchBar.setEndIconOnClickListener {
@@ -117,7 +124,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             )
         }
 
-        binding.mangaIncludeList.visibility = if(Anilist.userid!=null) View.VISIBLE else View.GONE
+        binding.mangaIncludeList.visibility =
+            if (Anilist.userid != null) View.VISIBLE else View.GONE
         binding.mangaIncludeList.setOnCheckedChangeListener { _, isChecked ->
             onIncludeListClick.invoke(isChecked)
         }
@@ -126,7 +134,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             ready.postValue(true)
     }
 
-    lateinit var onIncludeListClick : ((Boolean)->Unit)
+    lateinit var onIncludeListClick: ((Boolean) -> Unit)
 
     override fun getItemCount(): Int = 1
 
@@ -142,7 +150,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         binding.mangaTrendingViewPager.setPageTransformer(MediaPageTransformer())
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
-            binding.mangaTrendingViewPager.currentItem = binding.mangaTrendingViewPager.currentItem + 1
+            binding.mangaTrendingViewPager.currentItem =
+                binding.mangaTrendingViewPager.currentItem + 1
         }
         binding.mangaTrendingViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
@@ -154,21 +163,28 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             }
         )
 
-        binding.mangaTrendingViewPager.layoutAnimation = LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+        binding.mangaTrendingViewPager.layoutAnimation =
+            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
         binding.mangaTitleContainer.startAnimation(setSlideUp(uiSettings))
-        binding.mangaListContainer.layoutAnimation = LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+        binding.mangaListContainer.layoutAnimation =
+            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
     }
 
     fun updateNovel(adaptor: MediaAdaptor) {
         binding.mangaNovelProgressBar.visibility = View.GONE
         binding.mangaNovelRecyclerView.adapter = adaptor
         binding.mangaNovelRecyclerView.layoutManager =
-            LinearLayoutManager(binding.mangaNovelRecyclerView.context, LinearLayoutManager.HORIZONTAL, false)
+            LinearLayoutManager(
+                binding.mangaNovelRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
         binding.mangaNovelRecyclerView.visibility = View.VISIBLE
 
         binding.mangaNovel.visibility = View.VISIBLE
         binding.mangaNovel.startAnimation(setSlideUp(uiSettings))
-        binding.mangaNovelRecyclerView.layoutAnimation = LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+        binding.mangaNovelRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
         binding.mangaPopular.visibility = View.VISIBLE
         binding.mangaPopular.startAnimation(setSlideUp(uiSettings))
     }
@@ -180,5 +196,6 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         }
     }
 
-    inner class MangaPageViewHolder(val binding: ItemMangaPageBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class MangaPageViewHolder(val binding: ItemMangaPageBinding) :
+        RecyclerView.ViewHolder(binding.root)
 }

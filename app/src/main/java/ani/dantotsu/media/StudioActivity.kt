@@ -12,11 +12,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
-import ani.dantotsu.*
+import ani.dantotsu.EmptyAdapter
+import ani.dantotsu.R
+import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityStudioBinding
-import ani.dantotsu.others.getSerialized
-import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.initActivity
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.others.getSerialized
+import ani.dantotsu.px
+import ani.dantotsu.statusBarHeight
+import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -31,7 +37,7 @@ class StudioActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityStudioBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

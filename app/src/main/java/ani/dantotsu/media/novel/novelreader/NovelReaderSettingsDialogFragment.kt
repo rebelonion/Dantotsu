@@ -17,7 +17,11 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetCurrentNovelReaderSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -29,10 +33,16 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
         val settings = activity.settings.default
 
         val themeLabels = activity.themes.map { it.name }
-        binding.themeSelect.adapter = NoPaddingArrayAdapter(activity, R.layout.item_dropdown, themeLabels)
+        binding.themeSelect.adapter =
+            NoPaddingArrayAdapter(activity, R.layout.item_dropdown, themeLabels)
         binding.themeSelect.setSelection(themeLabels.indexOfFirst { it == settings.currentThemeName })
         binding.themeSelect.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 settings.currentThemeName = themeLabels[position]
                 activity.applySettings()
             }
@@ -54,7 +64,8 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
                 selected.alpha = 0.33f
                 selected = imageButton
                 selected.alpha = 1f
-                settings.layout = CurrentNovelReaderSettings.Layouts[index]?:CurrentNovelReaderSettings.Layouts.PAGED
+                settings.layout = CurrentNovelReaderSettings.Layouts[index]
+                    ?: CurrentNovelReaderSettings.Layouts.PAGED
                 binding.layoutText.text = settings.layout.string
                 activity.applySettings()
             }
@@ -75,7 +86,8 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
                 selectedDual.alpha = 0.33f
                 selectedDual = imageButton
                 selectedDual.alpha = 1f
-                settings.dualPageMode = CurrentReaderSettings.DualPageModes[index] ?: CurrentReaderSettings.DualPageModes.Automatic
+                settings.dualPageMode = CurrentReaderSettings.DualPageModes[index]
+                    ?: CurrentReaderSettings.DualPageModes.Automatic
                 binding.dualPageText.text = settings.dualPageMode.toString()
                 activity.applySettings()
             }
@@ -164,19 +176,19 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
         }
 
         binding.useDarkTheme.isChecked = settings.useDarkTheme
-        binding.useDarkTheme.setOnCheckedChangeListener { _,isChecked ->
+        binding.useDarkTheme.setOnCheckedChangeListener { _, isChecked ->
             settings.useDarkTheme = isChecked
             activity.applySettings()
         }
 
         binding.keepScreenOn.isChecked = settings.keepScreenOn
-        binding.keepScreenOn.setOnCheckedChangeListener { _,isChecked ->
+        binding.keepScreenOn.setOnCheckedChangeListener { _, isChecked ->
             settings.keepScreenOn = isChecked
             activity.applySettings()
         }
 
         binding.volumeButton.isChecked = settings.volumeButtons
-        binding.volumeButton.setOnCheckedChangeListener { _,isChecked ->
+        binding.volumeButton.setOnCheckedChangeListener { _, isChecked ->
             settings.volumeButtons = isChecked
             activity.applySettings()
         }
@@ -189,7 +201,7 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
     }
 
 
-    companion object{
+    companion object {
         fun newInstance() = NovelReaderSettingsDialogFragment()
         const val TAG = "NovelReaderSettingsDialogFragment"
     }

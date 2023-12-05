@@ -31,24 +31,24 @@ import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.ZoomOutPageTransformer
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.media.anime.AnimeWatchFragment
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityMediaBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
+import ani.dantotsu.media.anime.AnimeWatchFragment
 import ani.dantotsu.media.manga.MangaReadFragment
-import ani.dantotsu.navBarHeight
 import ani.dantotsu.media.novel.NovelReadFragment
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.saveData
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.navigation.NavigationBarView
@@ -72,9 +72,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        var media: Media = intent.getSerialized("media") ?: return
+        ThemeManager(this).applyTheme(MediaSingleton.bitmap)
+        MediaSingleton.bitmap = null
+        super.onCreate(savedInstanceState)
         binding = ActivityMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
@@ -119,7 +121,7 @@ ThemeManager(this).applyTheme()
         viewPager.isUserInputEnabled = false
         viewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
 
-        var media: Media = intent.getSerialized("media") ?: return
+
         val isDownload = intent.getBooleanExtra("download", false)
         media.selected = model.loadSelected(media, isDownload)
 

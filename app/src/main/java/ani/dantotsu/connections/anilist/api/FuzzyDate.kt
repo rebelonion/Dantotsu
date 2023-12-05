@@ -3,7 +3,7 @@ package ani.dantotsu.connections.anilist.api
 import kotlinx.serialization.SerialName
 import java.io.Serializable
 import java.text.DateFormatSymbols
-import java.util.*
+import java.util.Calendar
 
 @kotlinx.serialization.Serializable
 data class FuzzyDate(
@@ -16,9 +16,11 @@ data class FuzzyDate(
     fun isEmpty(): Boolean {
         return year == null && month == null && day == null
     }
+
     override fun toString(): String {
-        return if ( isEmpty() ) "??" else toStringOrEmpty()
+        return if (isEmpty()) "??" else toStringOrEmpty()
     }
+
     fun toStringOrEmpty(): String {
         return listOfNotNull(
             day?.toString(),
@@ -29,16 +31,21 @@ data class FuzzyDate(
 
     fun getToday(): FuzzyDate {
         val cal = Calendar.getInstance()
-        return FuzzyDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH))
+        return FuzzyDate(
+            cal.get(Calendar.YEAR),
+            cal.get(Calendar.MONTH) + 1,
+            cal.get(Calendar.DAY_OF_MONTH)
+        )
     }
 
     fun toVariableString(): String {
         return listOfNotNull(
-            year?.let {"year:$it"},
-            month?.let {"month:$it"},
-            day?.let {"day:$it"}
+            year?.let { "year:$it" },
+            month?.let { "month:$it" },
+            day?.let { "day:$it" }
         ).joinToString(",", "{", "}")
     }
+
     fun toMALString(): String {
         val padding = '0'
         val values = listOf(
@@ -46,7 +53,7 @@ data class FuzzyDate(
             month?.toString()?.padStart(2, padding),
             day?.toString()?.padStart(2, padding)
         )
-        return values.takeWhile {it is String}.joinToString("-")
+        return values.takeWhile { it is String }.joinToString("-")
     }
 
 //    fun toInt(): Int {
@@ -54,8 +61,8 @@ data class FuzzyDate(
 //    }
 
     override fun compareTo(other: FuzzyDate): Int = when {
-        year != other.year   -> (year ?: 0) - (other.year ?: 0)
+        year != other.year -> (year ?: 0) - (other.year ?: 0)
         month != other.month -> (month ?: 0) - (other.month ?: 0)
-        else                 -> (day ?: 0) - (other.day ?: 0)
+        else -> (day ?: 0) - (other.day ?: 0)
     }
 }

@@ -16,8 +16,8 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistSearch
 import ani.dantotsu.connections.anilist.SearchResults
 import ani.dantotsu.databinding.ActivitySearchBinding
-import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
@@ -35,12 +35,12 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var concatAdapter: ConcatAdapter
 
     lateinit var result: SearchResults
-    lateinit var updateChips: (()->Unit)
+    lateinit var updateChips: (() -> Unit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initActivity(this)
@@ -83,10 +83,10 @@ ThemeManager(this).applyTheme()
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return when (position) {
-                    0                           -> gridSize
+                    0 -> gridSize
                     concatAdapter.itemCount - 1 -> gridSize
-                    else                        -> when (style) {
-                        0    -> 1
+                    else -> when (style) {
+                        0 -> 1
                         else -> gridSize
                     }
                 }
@@ -149,7 +149,7 @@ ThemeManager(this).applyTheme()
                 } else
                     headerAdaptor.requestFocus?.run()
 
-                if(intent.getBooleanExtra("search",false)) search()
+                if (intent.getBooleanExtra("search", false)) search()
             }
         }
     }

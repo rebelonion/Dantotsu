@@ -17,11 +17,14 @@ object MalScraper {
         try {
             withTimeout(6000) {
                 if (media.anime != null) {
-                    val res = client.get("https://myanimelist.net/anime/${media.idMAL}", headers).document
+                    val res =
+                        client.get("https://myanimelist.net/anime/${media.idMAL}", headers).document
                     val a = res.select(".title-english").text()
                     media.nameMAL = if (a != "") a else res.select(".title-name").text()
                     media.typeMAL =
-                        if (res.select("div.spaceit_pad > a").isNotEmpty()) res.select("div.spaceit_pad > a")[0].text() else null
+                        if (res.select("div.spaceit_pad > a")
+                                .isNotEmpty()
+                        ) res.select("div.spaceit_pad > a")[0].text() else null
                     media.anime.op = arrayListOf()
                     res.select(".opnening > table > tbody > tr").forEach {
                         val text = it.text()
@@ -35,12 +38,15 @@ object MalScraper {
                             media.anime.ed.add(it.text())
                     }
                 } else {
-                    val res = client.get("https://myanimelist.net/manga/${media.idMAL}", headers).document
+                    val res =
+                        client.get("https://myanimelist.net/manga/${media.idMAL}", headers).document
                     val b = res.select(".title-english").text()
                     val a = res.select(".h1-title").text().removeSuffix(b)
                     media.nameMAL = a
                     media.typeMAL =
-                        if (res.select("div.spaceit_pad > a").isNotEmpty()) res.select("div.spaceit_pad > a")[0].text() else null
+                        if (res.select("div.spaceit_pad > a")
+                                .isNotEmpty()
+                        ) res.select("div.spaceit_pad > a")[0].text() else null
                 }
             }
         } catch (e: Exception) {

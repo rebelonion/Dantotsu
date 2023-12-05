@@ -160,23 +160,6 @@
                     </LinearLayout>
 
                 </LinearLayout>
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/settingsUseMaterialYou"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="false"
-                android:drawableStart="@drawable/ic_round_new_releases_24"
-                android:drawablePadding="16dp"
-                android:elegantTextHeight="true"
-                android:fontFamily="@font/poppins_bold"
-                android:minHeight="64dp"
-                android:text="@string/use_material_you"
-                android:textAlignment="viewStart"
-                android:textColor="?attr/colorOnBackground"
-                app:cornerRadius="0dp"
-                app:drawableTint="?attr/colorPrimary"
-                app:showText="false"
-                app:thumbTint="@color/button_switch_track" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/settingsUseOLED"
@@ -188,7 +171,7 @@
                     android:elegantTextHeight="true"
                     android:fontFamily="@font/poppins_bold"
                     android:minHeight="64dp"
-                    android:text="Use OLED theme variant"
+                    android:text="@string/oled_theme_variant"
                     android:textAlignment="viewStart"
                     android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
@@ -229,6 +212,118 @@
                         android:textSize="14sp"
                         tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:id="@+id/themeDivider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="Requires Android 12+"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="?attr/colorSecondary"
+                    android:gravity="center"
+                    android:padding="16dp"/>
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/settingsUseMaterialYou"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_round_new_releases_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/use_material_you"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/settingsUseSourceTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_palette"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/use_unique_theme_for_each_item"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/custom_theme"/>
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/settingsUseCustomTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_palette"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/use_custom_theme"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <Button
+                    android:id="@+id/customTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-32dp"
+                    android:layout_marginEnd="-32dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="@string/color_picker"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_color_picker_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:id="@+id/themeDivider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="?android:attr/listDivider" />
+
             </ani.dantotsu.others.Xpandable>
 
             <ani.dantotsu.others.Xpandable

@@ -17,8 +17,9 @@ open class CustomBottomDialog : BottomSheetDialogFragment() {
     fun addView(view: View) {
         viewList.add(view)
     }
-    var title: String?=null
-    fun setTitleText(string: String){
+
+    var title: String? = null
+    fun setTitleText(string: String) {
         title = string
     }
 
@@ -46,7 +47,11 @@ open class CustomBottomDialog : BottomSheetDialogFragment() {
         positiveCallback = callback
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         _binding = BottomSheetCustomBinding.inflate(inflater, container, false)
         val window = dialog?.window
         window?.statusBarColor = Color.TRANSPARENT
@@ -70,16 +75,16 @@ open class CustomBottomDialog : BottomSheetDialogFragment() {
                 checkCallback?.invoke(checked)
             }
         }
-        
-        if(negativeText!=null) binding.bottomDialogCustomNegative.apply {
+
+        if (negativeText != null) binding.bottomDialogCustomNegative.apply {
             visibility = View.VISIBLE
             text = negativeText
-            setOnClickListener { 
+            setOnClickListener {
                 negativeCallback?.invoke()
             }
         }
 
-        if(positiveText!=null) binding.bottomDialogCustomPositive.apply {
+        if (positiveText != null) binding.bottomDialogCustomPositive.apply {
             visibility = View.VISIBLE
             text = positiveText
             setOnClickListener {

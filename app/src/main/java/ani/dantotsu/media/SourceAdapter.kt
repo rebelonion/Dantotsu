@@ -17,7 +17,8 @@ abstract class SourceAdapter(
     private val scope: CoroutineScope
 ) : RecyclerView.Adapter<SourceAdapter.SourceViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SourceViewHolder {
-        val binding = ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemCharacterBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SourceViewHolder(binding)
     }
 
@@ -34,7 +35,8 @@ abstract class SourceAdapter(
 
     abstract suspend fun onItemClick(source: ShowResponse)
 
-    inner class SourceViewHolder(val binding: ItemCharacterBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class SourceViewHolder(val binding: ItemCharacterBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
                 dialogFragment.dismiss()

@@ -13,7 +13,7 @@ class Swipy @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : FrameLayout(context, attrs) {
 
-    var dragDivider : Int = 5
+    var dragDivider: Int = 5
     var vertical = true
 
     //public, in case a different sub child needs to be considered
@@ -100,7 +100,7 @@ class Swipy @JvmOverloads constructor(
         }
 
         when (action) {
-            MotionEvent.ACTION_DOWN                          -> {
+            MotionEvent.ACTION_DOWN -> {
                 activePointerId = ev.getPointerId(0)
                 isBeingDragged = false
                 pointerIndex = ev.findPointerIndex(activePointerId)
@@ -109,7 +109,8 @@ class Swipy @JvmOverloads constructor(
                 }
                 initialDown = if (vertical) ev.getY(pointerIndex) else ev.getX(pointerIndex)
             }
-            MotionEvent.ACTION_MOVE                          -> {
+
+            MotionEvent.ACTION_MOVE -> {
                 if (activePointerId == INVALID_POINTER) {
                     //("Got ACTION_MOVE event but don't have an active pointer id.")
                     return false
@@ -121,7 +122,8 @@ class Swipy @JvmOverloads constructor(
                 val pos = if (vertical) ev.getY(pointerIndex) else ev.getX(pointerIndex)
                 startDragging(pos)
             }
-            MotionEvent.ACTION_POINTER_UP                    -> onSecondaryPointerUp(ev)
+
+            MotionEvent.ACTION_POINTER_UP -> onSecondaryPointerUp(ev)
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
                 isBeingDragged = false
                 activePointerId = INVALID_POINTER
@@ -138,11 +140,12 @@ class Swipy @JvmOverloads constructor(
             return false
         }
         when (action) {
-            MotionEvent.ACTION_DOWN         -> {
+            MotionEvent.ACTION_DOWN -> {
                 activePointerId = ev.getPointerId(0)
                 isBeingDragged = false
             }
-            MotionEvent.ACTION_MOVE         -> {
+
+            MotionEvent.ACTION_MOVE -> {
                 pointerIndex = ev.findPointerIndex(activePointerId)
                 if (pointerIndex < 0) {
                     //("Got ACTION_MOVE event but have an invalid active pointer id.")
@@ -160,16 +163,16 @@ class Swipy @JvmOverloads constructor(
 
                     if (overscroll > 0) {
                         parent.requestDisallowInterceptTouchEvent(true)
-                        if (vertical){
-                            val totalDragDistance = Resources.getSystem().displayMetrics.heightPixels / dragDivider
+                        if (vertical) {
+                            val totalDragDistance =
+                                Resources.getSystem().displayMetrics.heightPixels / dragDivider
                             if (verticalPos == VerticalPosition.Top)
                                 topBeingSwiped.invoke(overscroll / totalDragDistance)
                             else
                                 bottomBeingSwiped.invoke(overscroll / totalDragDistance)
-                        }
-
-                        else {
-                            val totalDragDistance = Resources.getSystem().displayMetrics.widthPixels / dragDivider
+                        } else {
+                            val totalDragDistance =
+                                Resources.getSystem().displayMetrics.widthPixels / dragDivider
                             if (horizontalPos == HorizontalPosition.Left)
                                 leftBeingSwiped.invoke(overscroll / totalDragDistance)
                             else
@@ -180,6 +183,7 @@ class Swipy @JvmOverloads constructor(
                     }
                 }
             }
+
             MotionEvent.ACTION_POINTER_DOWN -> {
                 pointerIndex = ev.actionIndex
                 if (pointerIndex < 0) {
@@ -188,8 +192,9 @@ class Swipy @JvmOverloads constructor(
                 }
                 activePointerId = ev.getPointerId(pointerIndex)
             }
-            MotionEvent.ACTION_POINTER_UP   -> onSecondaryPointerUp(ev)
-            MotionEvent.ACTION_UP           -> {
+
+            MotionEvent.ACTION_POINTER_UP -> onSecondaryPointerUp(ev)
+            MotionEvent.ACTION_UP -> {
                 if (vertical) {
                     topBeingSwiped.invoke(0f)
                     bottomBeingSwiped.invoke(0f)
@@ -216,7 +221,8 @@ class Swipy @JvmOverloads constructor(
                 activePointerId = INVALID_POINTER
                 return false
             }
-            MotionEvent.ACTION_CANCEL       -> return false
+
+            MotionEvent.ACTION_CANCEL -> return false
         }
         return true
     }
@@ -235,21 +241,20 @@ class Swipy @JvmOverloads constructor(
 
     private fun finishSpinner(overscrollDistance: Float) {
 
-            if (vertical) {
-                val totalDragDistance = Resources.getSystem().displayMetrics.heightPixels / dragDivider
-                if (overscrollDistance > totalDragDistance)
-                    if (verticalPos == VerticalPosition.Top)
-                        onTopSwiped.invoke()
-                    else
-                        onBottomSwiped.invoke()
-            }
-            else {
-                val totalDragDistance = Resources.getSystem().displayMetrics.widthPixels / dragDivider
-                if (overscrollDistance > totalDragDistance)
+        if (vertical) {
+            val totalDragDistance = Resources.getSystem().displayMetrics.heightPixels / dragDivider
+            if (overscrollDistance > totalDragDistance)
+                if (verticalPos == VerticalPosition.Top)
+                    onTopSwiped.invoke()
+                else
+                    onBottomSwiped.invoke()
+        } else {
+            val totalDragDistance = Resources.getSystem().displayMetrics.widthPixels / dragDivider
+            if (overscrollDistance > totalDragDistance)
                 if (horizontalPos == HorizontalPosition.Left)
                     onLeftSwiped.invoke()
                 else
                     onRightSwiped.invoke()
-            }
+        }
     }
 }

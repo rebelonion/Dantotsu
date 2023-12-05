@@ -20,14 +20,16 @@ import ani.dantotsu.saveData
 import com.google.android.material.checkbox.MaterialCheckBox.*
 
 
-class SearchAdapter(private val activity: SearchActivity) : RecyclerView.Adapter<SearchAdapter.SearchHeaderViewHolder>() {
+class SearchAdapter(private val activity: SearchActivity) :
+    RecyclerView.Adapter<SearchAdapter.SearchHeaderViewHolder>() {
     private val itemViewType = 6969
     var search: Runnable? = null
     var requestFocus: Runnable? = null
     private var textWatcher: TextWatcher? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHeaderViewHolder {
-        val binding = ItemSearchHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            ItemSearchHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return SearchHeaderViewHolder(binding)
     }
 
@@ -36,13 +38,15 @@ class SearchAdapter(private val activity: SearchActivity) : RecyclerView.Adapter
         val binding = holder.binding
 
 
-        val imm: InputMethodManager = activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm: InputMethodManager =
+            activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
 
         when (activity.style) {
             0 -> {
                 binding.searchResultGrid.alpha = 1f
                 binding.searchResultList.alpha = 0.33f
             }
+
             1 -> {
                 binding.searchResultList.alpha = 1f
                 binding.searchResultGrid.alpha = 0.33f
@@ -62,7 +66,8 @@ class SearchAdapter(private val activity: SearchActivity) : RecyclerView.Adapter
         binding.searchChipRecycler.adapter = SearchChipAdapter(activity).also {
             activity.updateChips = { it.update() }
         }
-        binding.searchChipRecycler.layoutManager = LinearLayoutManager(binding.root.context, HORIZONTAL, false)
+        binding.searchChipRecycler.layoutManager =
+            LinearLayoutManager(binding.root.context, HORIZONTAL, false)
 
         binding.searchFilter.setOnClickListener {
             SearchFilterBottomDialog.newInstance().show(activity.supportFragmentManager, "dialog")
@@ -70,7 +75,8 @@ class SearchAdapter(private val activity: SearchActivity) : RecyclerView.Adapter
 
         fun searchTitle() {
             activity.result.apply {
-                search = if (binding.searchBarText.text.toString() != "") binding.searchBarText.text.toString() else null
+                search =
+                    if (binding.searchBarText.text.toString() != "") binding.searchBarText.text.toString() else null
                 onList = listOnly
                 isAdult = adult
             }
@@ -96,7 +102,8 @@ class SearchAdapter(private val activity: SearchActivity) : RecyclerView.Adapter
                     imm.hideSoftInputFromWindow(binding.searchBarText.windowToken, 0)
                     true
                 }
-                else                         -> false
+
+                else -> false
             }
         }
         binding.searchBar.setEndIconOnClickListener { searchTitle() }
@@ -127,7 +134,7 @@ class SearchAdapter(private val activity: SearchActivity) : RecyclerView.Adapter
         binding.searchList.apply {
             if (Anilist.userid != null) {
                 visibility = View.VISIBLE
-                checkedState = when(listOnly){
+                checkedState = when (listOnly) {
                     null -> STATE_UNCHECKED
                     true -> STATE_CHECKED
                     false -> STATE_INDETERMINATE
@@ -135,10 +142,10 @@ class SearchAdapter(private val activity: SearchActivity) : RecyclerView.Adapter
 
                 addOnCheckedStateChangedListener { _, state ->
                     listOnly = when (state) {
-                        STATE_CHECKED       -> true
+                        STATE_CHECKED -> true
                         STATE_INDETERMINATE -> false
-                        STATE_UNCHECKED     -> null
-                        else                -> null
+                        STATE_UNCHECKED -> null
+                        else -> null
                     }
                 }
 
@@ -158,20 +165,24 @@ class SearchAdapter(private val activity: SearchActivity) : RecyclerView.Adapter
 
     override fun getItemCount(): Int = 1
 
-    inner class SearchHeaderViewHolder(val binding: ItemSearchHeaderBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class SearchHeaderViewHolder(val binding: ItemSearchHeaderBinding) :
+        RecyclerView.ViewHolder(binding.root)
 
     override fun getItemViewType(position: Int): Int {
         return itemViewType
     }
 
 
-    class SearchChipAdapter(val activity: SearchActivity) : RecyclerView.Adapter<SearchChipAdapter.SearchChipViewHolder>() {
+    class SearchChipAdapter(val activity: SearchActivity) :
+        RecyclerView.Adapter<SearchChipAdapter.SearchChipViewHolder>() {
         private var chips = activity.result.toChipList()
 
-        inner class SearchChipViewHolder(val binding: ItemChipBinding) : RecyclerView.ViewHolder(binding.root)
+        inner class SearchChipViewHolder(val binding: ItemChipBinding) :
+            RecyclerView.ViewHolder(binding.root)
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchChipViewHolder {
-            val binding = ItemChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding =
+                ItemChipBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             return SearchChipViewHolder(binding)
         }
 

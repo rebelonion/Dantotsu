@@ -10,24 +10,23 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
-import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
-import kotlinx.coroutines.launch
-import rx.android.schedulers.AndroidSchedulers
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import ani.dantotsu.settings.paging.MangaExtensionAdapter
 import ani.dantotsu.settings.paging.MangaExtensionsViewModel
 import ani.dantotsu.settings.paging.MangaExtensionsViewModelFactory
 import ani.dantotsu.settings.paging.OnMangaInstallClickListener
-import kotlinx.coroutines.flow.Flow
+import ani.dantotsu.snackString
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
+import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import rx.android.schedulers.AndroidSchedulers
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 class MangaExtensionsFragment : Fragment(),
     SearchQueryHandler, OnMangaInstallClickListener {
@@ -55,7 +54,8 @@ class MangaExtensionsFragment : Fragment(),
         binding.allMangaExtensionsRecyclerView.isNestedScrollingEnabled = false
         binding.allMangaExtensionsRecyclerView.adapter = adapter
         binding.allMangaExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        (binding.allMangaExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled = true
+        (binding.allMangaExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =
+            true
 
         lifecycleScope.launch {
             viewModel.pagerFlow.collectLatest { pagingData ->
@@ -104,6 +104,7 @@ class MangaExtensionsFragment : Fragment(),
                             .setContentText("Error: ${error.message}")
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                         notificationManager.notify(1, builder.build())
+                        snackString("Installation failed: ${error.message}")
                     },
                     {
                         val builder = NotificationCompat.Builder(
@@ -116,6 +117,7 @@ class MangaExtensionsFragment : Fragment(),
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                         notificationManager.notify(1, builder.build())
                         viewModel.invalidatePager()
+                        snackString("Extension installed")
                     }
                 )
         }
@@ -124,7 +126,6 @@ class MangaExtensionsFragment : Fragment(),
     override fun onDestroyView() {
         super.onDestroyView();_binding = null
     }
-
 
 
 }

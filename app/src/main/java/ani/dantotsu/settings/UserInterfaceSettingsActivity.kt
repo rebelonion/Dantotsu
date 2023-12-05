@@ -6,10 +6,15 @@ import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
-import ani.dantotsu.*
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityUserInterfaceSettingsBinding
-import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.initActivity
+import ani.dantotsu.loadData
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.saveData
+import ani.dantotsu.statusBarHeight
+import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
 
 class UserInterfaceSettingsActivity : AppCompatActivity() {
@@ -18,7 +23,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityUserInterfaceSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -28,7 +33,8 @@ ThemeManager(this).applyTheme()
             bottomMargin = navBarHeight
         }
 
-        val settings = loadData<UserInterfaceSettings>(ui, toast = false) ?: UserInterfaceSettings().apply { saveData(ui, this) }
+        val settings = loadData<UserInterfaceSettings>(ui, toast = false)
+            ?: UserInterfaceSettings().apply { saveData(ui, this) }
 
         binding.uiSettingsBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -36,8 +42,12 @@ ThemeManager(this).applyTheme()
 
         val views = resources.getStringArray(R.array.home_layouts)
         binding.uiSettingsHomeLayout.setOnClickListener {
-            AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.home_layout_show)).apply {
-                setMultiChoiceItems(views, settings.homeLayoutShow.toBooleanArray()) { _, i, value ->
+            AlertDialog.Builder(this, R.style.DialogTheme)
+                .setTitle(getString(R.string.home_layout_show)).apply {
+                setMultiChoiceItems(
+                    views,
+                    settings.homeLayoutShow.toBooleanArray()
+                ) { _, i, value ->
                     settings.homeLayoutShow[i] = value
                     saveData(ui, settings)
                 }
@@ -100,7 +110,11 @@ ThemeManager(this).applyTheme()
             R.string.restart_app, Snackbar.LENGTH_SHORT
         ).apply {
             val mainIntent =
-                Intent.makeRestartActivityTask(context.packageManager.getLaunchIntentForPackage(context.packageName)!!.component)
+                Intent.makeRestartActivityTask(
+                    context.packageManager.getLaunchIntentForPackage(
+                        context.packageName
+                    )!!.component
+                )
             setAction("Do it!") {
                 context.startActivity(mainIntent)
                 Runtime.getRuntime().exit(0)

@@ -11,13 +11,20 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
-import ani.dantotsu.*
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityPlayerSettingsBinding
+import ani.dantotsu.initActivity
+import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
+import ani.dantotsu.navBarHeight
+import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.saveData
+import ani.dantotsu.snackString
+import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.others.LangSet
+import ani.dantotsu.toast
 import com.google.android.material.snackbar.Snackbar
 import kotlin.math.roundToInt
 
@@ -26,14 +33,14 @@ class PlayerSettingsActivity : AppCompatActivity() {
     lateinit var binding: ActivityPlayerSettingsBinding
     private val player = "player_settings"
 
-    var media:Media?=null
-    var subtitle:Subtitle?=null
+    var media: Media? = null
+    var subtitle: Subtitle? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
-ThemeManager(this).applyTheme()
+        ThemeManager(this).applyTheme()
         binding = ActivityPlayerSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -55,7 +62,12 @@ ThemeManager(this).applyTheme()
             bottomMargin = navBarHeight
         }
 
-        val settings = loadData<PlayerSettings>(player, toast = false) ?: PlayerSettings().apply { saveData(player, this) }
+        val settings = loadData<PlayerSettings>(player, toast = false) ?: PlayerSettings().apply {
+            saveData(
+                player,
+                this
+            )
+        }
 
         binding.playerSettingsBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
@@ -68,28 +80,36 @@ ThemeManager(this).applyTheme()
             saveData(player, settings)
         }
 
-        binding.playerSettingsQualityHeight.setText((loadData<Int>("maxHeight", toast = false) ?: 480).toString())
+        binding.playerSettingsQualityHeight.setText(
+            (loadData<Int>("maxHeight", toast = false) ?: 480).toString()
+        )
         binding.playerSettingsQualityHeight.addTextChangedListener {
             val height = binding.playerSettingsQualityHeight.text.toString().toIntOrNull()
             saveData("maxHeight", height)
         }
-        binding.playerSettingsQualityWidth.setText((loadData<Int>("maxWidth", toast = false) ?: 720).toString())
+        binding.playerSettingsQualityWidth.setText(
+            (loadData<Int>("maxWidth", toast = false) ?: 720).toString()
+        )
         binding.playerSettingsQualityWidth.addTextChangedListener {
             val height = binding.playerSettingsQualityWidth.text.toString().toIntOrNull()
             saveData("maxWidth", height)
         }
 
 
-        val speeds = arrayOf(0.25f, 0.33f, 0.5f, 0.66f, 0.75f, 1f, 1.25f, 1.33f, 1.5f, 1.66f, 1.75f, 2f)
+        val speeds =
+            arrayOf(0.25f, 0.33f, 0.5f, 0.66f, 0.75f, 1f, 1.25f, 1.33f, 1.5f, 1.66f, 1.75f, 2f)
         val cursedSpeeds = arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)
         var curSpeedArr = if (settings.cursedSpeeds) cursedSpeeds else speeds
         var speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
-        binding.playerSettingsSpeed.text = getString(R.string.default_playback_speed, speedsName[settings.defaultSpeed])
-        val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.default_speed))
+        binding.playerSettingsSpeed.text =
+            getString(R.string.default_playback_speed, speedsName[settings.defaultSpeed])
+        val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(getString(R.string.default_speed))
         binding.playerSettingsSpeed.setOnClickListener {
             speedDialog.setSingleChoiceItems(speedsName, settings.defaultSpeed) { dialog, i ->
                 settings.defaultSpeed = i
-                binding.playerSettingsSpeed.text = getString(R.string.default_playback_speed, speedsName[i])
+                binding.playerSettingsSpeed.text =
+                    getString(R.string.default_playback_speed, speedsName[i])
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
@@ -101,7 +121,8 @@ ThemeManager(this).applyTheme()
             curSpeedArr = if (settings.cursedSpeeds) cursedSpeeds else speeds
             settings.defaultSpeed = if (settings.cursedSpeeds) 0 else 5
             speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
-            binding.playerSettingsSpeed.text = getString(R.string.default_playback_speed, speedsName[settings.defaultSpeed])
+            binding.playerSettingsSpeed.text =
+                getString(R.string.default_playback_speed, speedsName[settings.defaultSpeed])
             saveData(player, settings)
         }
 
@@ -155,7 +176,8 @@ ThemeManager(this).applyTheme()
             if (isChecked) snackString(getString(R.string.very_bold))
             saveData(player, settings)
         }
-        binding.playerSettingsCompletePercentage.value = (settings.watchPercentage * 100).roundToInt().toFloat()
+        binding.playerSettingsCompletePercentage.value =
+            (settings.watchPercentage * 100).roundToInt().toFloat()
         binding.playerSettingsCompletePercentage.addOnChangeListener { _, value, _ ->
             settings.watchPercentage = value / 100
             saveData(player, settings)
@@ -230,7 +252,8 @@ ThemeManager(this).applyTheme()
         }
 
         val resizeModes = arrayOf("Original", "Zoom", "Stretch")
-        val resizeDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.default_resize_mode))
+        val resizeDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(getString(R.string.default_resize_mode))
         binding.playerResizeMode.setOnClickListener {
             resizeDialog.setSingleChoiceItems(resizeModes, settings.resize) { dialog, count ->
                 settings.resize = count
@@ -244,7 +267,11 @@ ThemeManager(this).applyTheme()
                 R.string.restart_app, Snackbar.LENGTH_SHORT
             ).apply {
                 val mainIntent =
-                    Intent.makeRestartActivityTask(context.packageManager.getLaunchIntentForPackage(context.packageName)!!.component)
+                    Intent.makeRestartActivityTask(
+                        context.packageManager.getLaunchIntentForPackage(
+                            context.packageName
+                        )!!.component
+                    )
                 setAction("Do it!") {
                     context.startActivity(mainIntent)
                     Runtime.getRuntime().exit(0)
@@ -256,7 +283,7 @@ ThemeManager(this).applyTheme()
         fun toggleButton(button: android.widget.Button, toggle: Boolean) {
             button.isClickable = toggle
             button.alpha = when (toggle) {
-                true  -> 1f
+                true -> 1f
                 false -> 0.5f
             }
         }
@@ -269,21 +296,24 @@ ThemeManager(this).applyTheme()
             binding.subtitleFontSizeCard.isEnabled = isChecked
             binding.subtitleFontSizeCard.isClickable = isChecked
             binding.subtitleFontSizeCard.alpha = when (isChecked) {
-                true  -> 1f
+                true -> 1f
                 false -> 0.5f
             }
             binding.subtitleFontSize.isEnabled = isChecked
             binding.subtitleFontSize.isClickable = isChecked
             binding.subtitleFontSize.alpha = when (isChecked) {
-                true  -> 1f
+                true -> 1f
                 false -> 0.5f
             }
-            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.isEnabled = isChecked
-            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.isClickable = isChecked
-            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.alpha = when (isChecked) {
-                true  -> 1f
-                false -> 0.5f
-            }
+            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.isEnabled =
+                isChecked
+            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.isClickable =
+                isChecked
+            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.alpha =
+                when (isChecked) {
+                    true -> 1f
+                    false -> 0.5f
+                }
         }
         binding.subSwitch.isChecked = settings.subtitles
         binding.subSwitch.setOnCheckedChangeListener { _, isChecked ->
@@ -293,10 +323,26 @@ ThemeManager(this).applyTheme()
             restartApp()
         }
         val colorsPrimary =
-            arrayOf("Black", "Dark Gray", "Gray", "Light Gray", "White", "Red", "Yellow", "Green", "Cyan", "Blue", "Magenta")
-        val primaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.primary_sub_color))
+            arrayOf(
+                "Black",
+                "Dark Gray",
+                "Gray",
+                "Light Gray",
+                "White",
+                "Red",
+                "Yellow",
+                "Green",
+                "Cyan",
+                "Blue",
+                "Magenta"
+            )
+        val primaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(getString(R.string.primary_sub_color))
         binding.videoSubColorPrimary.setOnClickListener {
-            primaryColorDialog.setSingleChoiceItems(colorsPrimary, settings.primaryColor) { dialog, count ->
+            primaryColorDialog.setSingleChoiceItems(
+                colorsPrimary,
+                settings.primaryColor
+            ) { dialog, count ->
                 settings.primaryColor = count
                 saveData(player, settings)
                 dialog.dismiss()
@@ -316,16 +362,21 @@ ThemeManager(this).applyTheme()
             "Magenta",
             "Transparent"
         )
-        val secondaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.outline_sub_color))
+        val secondaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorSecondary.setOnClickListener {
-            secondaryColorDialog.setSingleChoiceItems(colorsSecondary, settings.secondaryColor) { dialog, count ->
+            secondaryColorDialog.setSingleChoiceItems(
+                colorsSecondary,
+                settings.secondaryColor
+            ) { dialog, count ->
                 settings.secondaryColor = count
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
         }
         val typesOutline = arrayOf("Outline", "Shine", "Drop Shadow", "None")
-        val outlineDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.outline_type))
+        val outlineDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(getString(R.string.outline_type))
         binding.videoSubOutline.setOnClickListener {
             outlineDialog.setSingleChoiceItems(typesOutline, settings.outline) { dialog, count ->
                 settings.outline = count
@@ -347,9 +398,13 @@ ThemeManager(this).applyTheme()
             "Blue",
             "Magenta"
         )
-        val subBackgroundDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.outline_sub_color))
+        val subBackgroundDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorBackground.setOnClickListener {
-            subBackgroundDialog.setSingleChoiceItems(colorsSubBackground, settings.subBackground) { dialog, count ->
+            subBackgroundDialog.setSingleChoiceItems(
+                colorsSubBackground,
+                settings.subBackground
+            ) { dialog, count ->
                 settings.subBackground = count
                 saveData(player, settings)
                 dialog.dismiss()
@@ -370,16 +425,28 @@ ThemeManager(this).applyTheme()
             "Blue",
             "Magenta"
         )
-        val subWindowDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.outline_sub_color))
+        val subWindowDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorWindow.setOnClickListener {
-            subWindowDialog.setSingleChoiceItems(colorsSubWindow, settings.subWindow) { dialog, count ->
+            subWindowDialog.setSingleChoiceItems(
+                colorsSubWindow,
+                settings.subWindow
+            ) { dialog, count ->
                 settings.subWindow = count
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
         }
-        val fonts = arrayOf("Poppins Semi Bold", "Poppins Bold", "Poppins", "Poppins Thin","Century Gothic","Century Gothic Bold")
-        val fontDialog = AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.subtitle_font))
+        val fonts = arrayOf(
+            "Poppins Semi Bold",
+            "Poppins Bold",
+            "Poppins",
+            "Poppins Thin",
+            "Century Gothic",
+            "Century Gothic Bold"
+        )
+        val fontDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            .setTitle(getString(R.string.subtitle_font))
         binding.videoSubFont.setOnClickListener {
             fontDialog.setSingleChoiceItems(fonts, settings.font) { dialog, count ->
                 settings.font = count

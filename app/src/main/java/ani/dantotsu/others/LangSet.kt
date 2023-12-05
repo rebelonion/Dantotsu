@@ -6,13 +6,12 @@ import android.content.res.Resources
 import java.util.Locale
 
 
-
-
 class LangSet {
-    companion object{
+    companion object {
         fun setLocale(activity: Activity) {
-            val useCursedLang = activity.getSharedPreferences("Dantotsu", Activity.MODE_PRIVATE).getBoolean("use_cursed_lang", false)
-            val locale = if(useCursedLang) Locale("en", "DW") else Locale("en", "US")
+            val useCursedLang = activity.getSharedPreferences("Dantotsu", Activity.MODE_PRIVATE)
+                .getBoolean("use_cursed_lang", false)
+            val locale = if (useCursedLang) Locale("en", "DW") else Locale("en", "US")
             Locale.setDefault(locale)
             val resources: Resources = activity.resources
             val config: Configuration = resources.configuration

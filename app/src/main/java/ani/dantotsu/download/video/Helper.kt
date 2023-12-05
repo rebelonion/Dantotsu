@@ -38,9 +38,10 @@ import java.util.concurrent.*
 object Helper {
 
     @SuppressLint("UnsafeOptInUsageError")
-    fun downloadVideo(context : Context, video: Video, subtitle: Subtitle?){
+    fun downloadVideo(context: Context, video: Video, subtitle: Subtitle?) {
         val dataSourceFactory = DataSource.Factory {
-            val dataSource: HttpDataSource = OkHttpDataSource.Factory(okHttpClient).createDataSource()
+            val dataSource: HttpDataSource =
+                OkHttpDataSource.Factory(okHttpClient).createDataSource()
             defaultHeaders.forEach {
                 dataSource.setRequestProperty(it.key, it.value)
             }
@@ -52,7 +53,7 @@ object Helper {
         val mimeType = when (video.format) {
             VideoType.M3U8 -> MimeTypes.APPLICATION_M3U8
             VideoType.DASH -> MimeTypes.APPLICATION_MPD
-            else           -> MimeTypes.APPLICATION_MP4
+            else -> MimeTypes.APPLICATION_MP4
         }
 
         val builder = MediaItem.Builder().setUri(video.file.url).setMimeType(mimeType)
@@ -79,12 +80,13 @@ object Helper {
             DefaultRenderersFactory(context),
             dataSourceFactory
         )
-        downloadHelper.prepare(object : DownloadHelper.Callback{
+        downloadHelper.prepare(object : DownloadHelper.Callback {
             override fun onPrepared(helper: DownloadHelper) {
-                TrackSelectionDialogBuilder(context,"Select thingy",helper.getTracks(0).groups
+                TrackSelectionDialogBuilder(
+                    context, "Select thingy", helper.getTracks(0).groups
                 ) { _, overrides ->
                     val params = TrackSelectionParameters.Builder(context)
-                    overrides.forEach{
+                    overrides.forEach {
                         params.addOverride(it.value)
                     }
                     helper.addTrackSelection(0, params.build())
@@ -124,7 +126,8 @@ object Helper {
                 //val dataSource: HttpDataSource = OkHttpDataSource.Factory(okHttpClient).createDataSource()
                 val networkHelper = Injekt.get<NetworkHelper>()
                 val okHttpClient = networkHelper.client
-                val dataSource: HttpDataSource = OkHttpDataSource.Factory(okHttpClient).createDataSource()
+                val dataSource: HttpDataSource =
+                    OkHttpDataSource.Factory(okHttpClient).createDataSource()
                 defaultHeaders.forEach {
                     dataSource.setRequestProperty(it.key, it.value)
                 }
@@ -137,7 +140,8 @@ object Helper {
                 dataSourceFactory,
                 Executor(Runnable::run)
             ).apply {
-                requirements = Requirements(Requirements.NETWORK or Requirements.DEVICE_STORAGE_NOT_LOW)
+                requirements =
+                    Requirements(Requirements.NETWORK or Requirements.DEVICE_STORAGE_NOT_LOW)
                 maxParallelDownloads = 3
             }
         }
