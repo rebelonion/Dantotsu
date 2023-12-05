@@ -124,7 +124,7 @@ class MangaReaderActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         mangaCache.clear()
-        if (isOnline(baseContext)) {  //TODO:
+        if (DiscordServiceRunningSingleton.running) {
             DiscordServiceRunningSingleton.running = false
             val stopIntent = Intent(this, DiscordService::class.java)
             stopService(stopIntent)
@@ -329,7 +329,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 applySettings()
                 val context = this
-                if (isOnline(context)) {
+                if (isOnline(context) && Discord.token != null) {
                     lifecycleScope.launch {
                         val presence = RPC.createPresence(
                             RPC.Companion.RPCData(
