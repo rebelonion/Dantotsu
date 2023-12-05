@@ -998,7 +998,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 preloading = false
                 val context = this
 
-                if (isOnline(context) && Discord.token != null) {
+                val incognito = this.getSharedPreferences("Dantotsu", MODE_PRIVATE)
+                    .getBoolean("incognito", false)
+                if (isOnline(context) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
                         val presence = RPC.createPresence(RPC.Companion.RPCData(
                             applicationId = Discord.application_Id,
@@ -1158,6 +1160,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
+                .setMessage(getString(R.string.incognito_will_not_update))
                 .apply {
                     setOnCancelListener { hideSystemBars() }
                     setCancelable(false)
