@@ -167,9 +167,9 @@ class Swipy @JvmOverloads constructor(
                             val totalDragDistance =
                                 Resources.getSystem().displayMetrics.heightPixels / dragDivider
                             if (verticalPos == VerticalPosition.Top)
-                                topBeingSwiped.invoke(overscroll / totalDragDistance)
+                                topBeingSwiped.invoke(overscroll * 2 / totalDragDistance)
                             else
-                                bottomBeingSwiped.invoke(overscroll / totalDragDistance)
+                                bottomBeingSwiped.invoke(overscroll * 2 / totalDragDistance)
                         } else {
                             val totalDragDistance =
                                 Resources.getSystem().displayMetrics.widthPixels / dragDivider
@@ -243,7 +243,7 @@ class Swipy @JvmOverloads constructor(
 
         if (vertical) {
             val totalDragDistance = Resources.getSystem().displayMetrics.heightPixels / dragDivider
-            if (overscrollDistance > totalDragDistance)
+            if (overscrollDistance * 2 > totalDragDistance)
                 if (verticalPos == VerticalPosition.Top)
                     onTopSwiped.invoke()
                 else
