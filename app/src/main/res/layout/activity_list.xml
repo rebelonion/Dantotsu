@@ -45,11 +45,20 @@
                 android:layout_weight="1" />
 
             <ImageButton
+                android:id="@+id/random"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/random_selection"
+                app:tint="?attr/colorOnBackground"
+                app:srcCompat="@drawable/ic_shuffle_24" />
+
+            <ImageButton
                 android:id="@+id/listSort"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
+                android:layout_marginEnd="16dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:contentDescription="@string/sort_by"
                 app:tint="?attr/colorOnBackground"

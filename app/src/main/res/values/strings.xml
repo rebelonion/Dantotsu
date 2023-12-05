@@ -640,5 +640,6 @@
     <string name="available_anime">Available Anime</string>
     <string name="installed_manga">Installed Manga</string>
     <string name="color_picker">Color Picker</string>
+    <string name="random_selection">Random Selection</string>
 
 </resources>
