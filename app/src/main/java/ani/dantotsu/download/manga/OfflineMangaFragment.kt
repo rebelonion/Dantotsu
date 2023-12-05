@@ -284,7 +284,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             } else {
                 null
             }
-            val title = mediaModel.nameMAL ?: "unknown"
+            val title = mediaModel.nameMAL ?: mediaModel.nameRomaji
             val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore
                 ?: 0) else mediaModel.userScore) / 10.0).toString()
             val isOngoing = false
