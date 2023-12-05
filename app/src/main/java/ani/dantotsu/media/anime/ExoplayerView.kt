@@ -1404,7 +1404,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         exoPlayer.addAnalyticsListener(EventLogger())
         isInitialized = true
     }
-    /*private fun selectSubtitleTrack() {
+    /*private fun selectSubtitleTrack() { saving this for later
         // Get the current track groups
         val trackGroups = exoPlayer.currentTrackGroups
 
@@ -1543,6 +1543,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         if (exoPlayer.duration < playbackPosition)
             exoPlayer.seekTo(0)
+
+        //if playbackPosition is within 90% of the episode length, reset it to 0
+        if (playbackPosition > episodeLength * 0.9) {
+            playbackPosition = 0
+            exoPlayer.seekTo(0)
+        }
 
         if (!isTimeStampsLoaded && settings.timeStampsEnabled) {
             val dur = exoPlayer.duration
