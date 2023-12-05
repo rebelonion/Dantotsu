@@ -14,6 +14,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Animatable
+import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.AudioManager.*
@@ -185,8 +186,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     private var isFastForwarding = false
 
     var rotation = 0
-
-    private var rpc: RPC? = null
 
     override fun onAttachedToWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -385,14 +384,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }, AUDIO_CONTENT_TYPE_MOVIE, AUDIOFOCUS_GAIN)
 
         if (System.getInt(contentResolver, System.ACCELEROMETER_ROTATION, 0) != 1) {
-            requestedOrientation = rotation
-            exoRotate.setOnClickListener {
-                requestedOrientation = rotation
-                it.visibility = View.GONE
-            }
             orientationListener =
                 object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
                     override fun onOrientationChanged(orientation: Int) {
+                        println(orientation)
                         if (orientation in 45..135) {
                             if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) exoRotate.visibility =
                                 View.VISIBLE
@@ -405,6 +400,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     }
                 }
             orientationListener?.enable()
+
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            exoRotate.setOnClickListener {
+                requestedOrientation = rotation
+                it.visibility = View.GONE
+            }
         }
 
         setupSubFormatting(playerView, settings)
