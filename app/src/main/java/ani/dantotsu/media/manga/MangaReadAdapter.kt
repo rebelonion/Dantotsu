@@ -238,7 +238,20 @@ class MangaReadAdapter(
                         0
                     )
                 }
-                chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
+                val startChapter = MangaNameAdapter.findChapterNumber(names[limit * (position)])
+                val endChapter = MangaNameAdapter.findChapterNumber(names[last - 1])
+                val startChapterString = if (startChapter != null) {
+                    "Ch.$startChapter"
+                } else {
+                    names[limit * (position)]
+                }
+                val endChapterString = if (endChapter != null) {
+                    "Ch.$endChapter"
+                } else {
+                    names[last - 1]
+                }
+                //chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
+                chip.text = "$startChapterString - $endChapterString"
                 chip.setTextColor(
                     ContextCompat.getColorStateList(
                         fragment.requireContext(),
