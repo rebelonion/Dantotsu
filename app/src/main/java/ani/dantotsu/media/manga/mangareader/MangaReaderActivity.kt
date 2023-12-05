@@ -124,12 +124,10 @@ class MangaReaderActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         mangaCache.clear()
-        val stopIntent = Intent(this, DiscordService::class.java).apply {
-            putExtra(DiscordService.ACTION_STOP_SERVICE, true)
-        }
-        if (!isOnline(this)) {  //TODO:
+        if (isOnline(baseContext)) {  //TODO:
             DiscordServiceRunningSingleton.running = false
-            startService(stopIntent)
+            val stopIntent = Intent(this, DiscordService::class.java)
+            stopService(stopIntent)
         }
         super.onDestroy()
     }

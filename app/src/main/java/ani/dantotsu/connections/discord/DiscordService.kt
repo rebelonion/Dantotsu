@@ -105,17 +105,14 @@ class DiscordService : Service() {
         if (intent != null) {
             if (intent.hasExtra("presence")) {
                 log("Service onStartCommand() setPresence")
-                var lPresence = intent.getStringExtra("presence")
+                val lPresence = intent.getStringExtra("presence")
                 if (this::webSocket.isInitialized) webSocket.send(lPresence!!)
                 presenceStore = lPresence!!
             } else {
                 log("Service onStartCommand() no presence")
                 DiscordServiceRunningSingleton.running = false
-                client.dispatcher.executorService.shutdown()
-                stopSelf()
-            }
-            if (intent.hasExtra(ACTION_STOP_SERVICE)) {
-                log("Service onStartCommand() stopService")
+                //kill the client
+                client = OkHttpClient()
                 stopSelf()
             }
         }
@@ -145,6 +142,7 @@ class DiscordService : Service() {
             wakeLock.release()
         }
         SERVICE_RUNNING = false
+        client = OkHttpClient()
         if (this::webSocket.isInitialized) webSocket.close(1000, "Closed by user")
         super.onDestroy()
         //saveLogToFile()
@@ -468,7 +466,6 @@ class DiscordService : Service() {
 
     companion object {
         var SERVICE_RUNNING = false
-        const val ACTION_STOP_SERVICE = "ACTION_STOP_SERVICE"
     }
 }
 
