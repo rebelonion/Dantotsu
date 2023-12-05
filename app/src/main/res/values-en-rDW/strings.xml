@@ -493,6 +493,7 @@
     <string name="auto_update">Auto Update progress for %1$s?</string>
     <string name="continue_from">Continue from %1$s?</string>
     <string name="title_update_progress">Update progress on anilist?</string>
+    <string name="incognito_will_not_update">Incognito mode will still ignore progress.</string>
     <string name="dont_ask_again">"Don\'t ask again for %1$s"</string>
     <string name="default_speed">Default Speed</string>
     <string name="default_resize_mode">Default Resize Mode</string>
@@ -628,9 +629,19 @@
     <string name="extensions_settings">Extensions</string>
     <string name="NSFWExtention">NSFW Extensions</string>
     <string name="skip_loading_extension_icons">Skip loading extension icons</string>
-    <string name="use_material_you">Use Material You</string>
+    <string name="use_material_you">Material You</string>
     <string name="extension_specific_dns">Extension-specific DNS</string>
     <string name="theme_">Theme:</string>
     <string name="user_agent">User Agent</string>
+    <string name="custom_theme">Custom Theme</string>
+    <string name="use_custom_theme">Custom theme</string>
+    <string name="use_unique_theme_for_each_item">Color same as Anime/Manga cover</string>
+    <string name="oled_theme_variant">OLED theme variant</string>
+    <string name="installed_anime">Installed Anime</string>
+    <string name="available_anime">Available Anime</string>
+    <string name="installed_manga">Installed Manga</string>
+    <string name="color_picker">Color Picker</string>
+    <string name="random_selection">Random Selection</string>
+    <string name="incognito_mode">Incognito Mode</string>
 
 </resources>

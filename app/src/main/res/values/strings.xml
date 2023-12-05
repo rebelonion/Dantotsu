@@ -493,6 +493,7 @@
     <string name="auto_update">Auto Update progress for %1$s?</string>
     <string name="continue_from">Continue from %1$s?</string>
     <string name="title_update_progress">Update progress on anilist?</string>
+    <string name="incognito_will_not_update">Incognito mode will still ignore progress.</string>
     <string name="dont_ask_again">"Don\'t ask again for %1$s"</string>
     <string name="default_speed">Default Speed</string>
     <string name="default_resize_mode">Default Resize Mode</string>
@@ -640,5 +641,7 @@
     <string name="available_anime">Available Anime</string>
     <string name="installed_manga">Installed Manga</string>
     <string name="color_picker">Color Picker</string>
+    <string name="random_selection">Random Selection</string>
+    <string name="incognito_mode">Incognito Mode</string>
 
 </resources>

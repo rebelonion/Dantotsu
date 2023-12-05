@@ -998,36 +998,45 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 preloading = false
                 val context = this
 
-                lifecycleScope.launch {
-                    val presence = RPC.createPresence(RPC.Companion.RPCData(
-                        applicationId = Discord.application_Id,
-                        type = RPC.Type.WATCHING,
-                        activityName = media.userPreferredName,
-                        details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
-                            R.string.episode_num,
-                            ep.number
-                        ),
-                        state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
-                        largeImage = media.cover?.let { RPC.Link(media.userPreferredName, it) },
-                        smallImage = RPC.Link(
-                            "Dantotsu",
-                            Discord.small_Image
-                        ),
-                        buttons = mutableListOf(
-                            RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                            RPC.Link(
-                                "Stream on Dantotsu",
-                                "https://github.com/rebelonion/Dantotsu/"
+                val incognito = this.getSharedPreferences("Dantotsu", MODE_PRIVATE)
+                    .getBoolean("incognito", false)
+                if (isOnline(context) && Discord.token != null && !incognito) {
+                    lifecycleScope.launch {
+                        val presence = RPC.createPresence(RPC.Companion.RPCData(
+                            applicationId = Discord.application_Id,
+                            type = RPC.Type.WATCHING,
+                            activityName = media.userPreferredName,
+                            details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
+                                R.string.episode_num,
+                                ep.number
+                            ),
+                            state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
+                            largeImage = media.cover?.let {
+                                RPC.Link(
+                                    media.userPreferredName,
+                                    it
+                                )
+                            },
+                            smallImage = RPC.Link(
+                                "Dantotsu",
+                                Discord.small_Image
+                            ),
+                            buttons = mutableListOf(
+                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                                RPC.Link(
+                                    "Stream on Dantotsu",
+                                    "https://github.com/rebelonion/Dantotsu/"
+                                )
                             )
                         )
-                    )
-                    )
+                        )
 
-                    val intent = Intent(context, DiscordService::class.java).apply {
-                        putExtra("presence", presence)
+                        val intent = Intent(context, DiscordService::class.java).apply {
+                            putExtra("presence", presence)
+                        }
+                        DiscordServiceRunningSingleton.running = true
+                        startService(intent)
                     }
-                    DiscordServiceRunningSingleton.running = true
-                    startService(intent)
                 }
 
                 updateProgress()
@@ -1151,6 +1160,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
+                .setMessage(getString(R.string.incognito_will_not_update))
                 .apply {
                     setOnCancelListener { hideSystemBars() }
                     setCancelable(false)
@@ -1426,9 +1436,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         exoPlayer.release()
         VideoCache.release()
         mediaSession?.release()
-        val stopIntent = Intent(this, DiscordService::class.java)
-        DiscordServiceRunningSingleton.running = false
-        stopService(stopIntent)
+        if(DiscordServiceRunningSingleton.running) {
+            val stopIntent = Intent(this, DiscordService::class.java)
+            DiscordServiceRunningSingleton.running = false
+            stopService(stopIntent)
+        }
 
     }
 
