@@ -62,7 +62,6 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.discord.DiscordService
-import ani.dantotsu.connections.discord.DiscordService.Companion.ACTION_STOP_SERVICE
 import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
@@ -816,14 +815,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             fun fastForward() {
                 isFastForwarding = true
                 exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
-                snackString("Playing at 2x speed")
+                snackString("Playing at ${exoPlayer.playbackParameters.speed}x speed")
             }
 
             fun stopFastForward() {
                 if (isFastForwarding) {
                     isFastForwarding = false
                     exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed / 2)
-                    snackString("Playing at normal speed")
+                    snackString("Playing at default speed: ${exoPlayer.playbackParameters.speed}x")
                 }
             }
 
@@ -1427,11 +1426,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         exoPlayer.release()
         VideoCache.release()
         mediaSession?.release()
-        val stopIntent = Intent(this, DiscordService::class.java).apply {
-            putExtra(ACTION_STOP_SERVICE, true)
-        }
+        val stopIntent = Intent(this, DiscordService::class.java)
         DiscordServiceRunningSingleton.running = false
-        startService(stopIntent)
+        stopService(stopIntent)
 
     }
 
