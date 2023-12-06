@@ -24,7 +24,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
-import rx.android.BuildConfig
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
