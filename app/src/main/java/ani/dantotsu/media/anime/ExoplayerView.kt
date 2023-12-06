@@ -1111,7 +1111,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         val speedDialog =
             AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.speed))
         exoSpeed.setOnClickListener {
-            speedDialog.setSingleChoiceItems(speedsName, curSpeed) { dialog, i ->
+            val dialog = speedDialog.setSingleChoiceItems(speedsName, curSpeed) { dialog, i ->
                 if (isInitialized) {
                     saveData("${media.id}_speed", i, this)
                     speed = speeds[i]
@@ -1122,6 +1122,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     hideSystemBars()
                 }
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
         speedDialog.setOnCancelListener { hideSystemBars() }
 
@@ -1360,7 +1361,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     )
                 )
             )
-            AlertDialog.Builder(this, R.style.DialogTheme)
+            val dialog = AlertDialog.Builder(this, R.style.DialogTheme)
                 .setTitle(getString(R.string.continue_from, time)).apply {
                     setCancelable(false)
                     setPositiveButton(getString(R.string.yes)) { d, _ ->
@@ -1373,6 +1374,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                         d.dismiss()
                     }
                 }.show()
+            dialog.window?.setDimAmount(0.8f)
         } else buildExoplayer()
     }
 

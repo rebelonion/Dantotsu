@@ -136,7 +136,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             builder.setNegativeButton("No") { _, _ ->
                 // Do nothing
             }
-            builder.show()
+             val dialog = builder.show()
+            dialog.window?.setDimAmount(0.8f)
             true
         }
 

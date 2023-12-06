@@ -169,7 +169,7 @@ class MangaReadAdapter(
             }
 
             // Create AlertDialog
-            AlertDialog.Builder(currContext(), R.style.MyPopup)
+            val dialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
                 .setView(dialogView)
                 .setPositiveButton("OK") { dialog, which ->
                     //add unchecked to hidden
@@ -185,6 +185,7 @@ class MangaReadAdapter(
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
+            dialog.window?.setDimAmount(0.8f)
         }
 
         binding.animeDownloadTop.setOnClickListener {
@@ -202,6 +203,7 @@ class MangaReadAdapter(
             }
             alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
             val dialog = alertDialog.show()
+            dialog.window?.setDimAmount(0.8f)
         }
 
         var selected = when (style) {

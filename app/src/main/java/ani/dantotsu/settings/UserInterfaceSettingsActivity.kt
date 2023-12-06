@@ -42,7 +42,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
 
         val views = resources.getStringArray(R.array.home_layouts)
         binding.uiSettingsHomeLayout.setOnClickListener {
-            AlertDialog.Builder(this, R.style.DialogTheme)
+            val dialog = AlertDialog.Builder(this, R.style.DialogTheme)
                 .setTitle(getString(R.string.home_layout_show)).apply {
                 setMultiChoiceItems(
                     views,
@@ -52,6 +52,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     saveData(ui, settings)
                 }
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
 
         binding.uiSettingsSmallView.isChecked = settings.smallView

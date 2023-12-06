@@ -106,13 +106,14 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.default_speed))
         binding.playerSettingsSpeed.setOnClickListener {
-            speedDialog.setSingleChoiceItems(speedsName, settings.defaultSpeed) { dialog, i ->
+            val dialog = speedDialog.setSingleChoiceItems(speedsName, settings.defaultSpeed) { dialog, i ->
                 settings.defaultSpeed = i
                 binding.playerSettingsSpeed.text =
                     getString(R.string.default_playback_speed, speedsName[i])
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
 
         binding.playerSettingsCursedSpeeds.isChecked = settings.cursedSpeeds
@@ -255,11 +256,12 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val resizeDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.default_resize_mode))
         binding.playerResizeMode.setOnClickListener {
-            resizeDialog.setSingleChoiceItems(resizeModes, settings.resize) { dialog, count ->
+            val dialog = resizeDialog.setSingleChoiceItems(resizeModes, settings.resize) { dialog, count ->
                 settings.resize = count
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
         fun restartApp() {
             Snackbar.make(
@@ -339,7 +341,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val primaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.primary_sub_color))
         binding.videoSubColorPrimary.setOnClickListener {
-            primaryColorDialog.setSingleChoiceItems(
+            val dialog = primaryColorDialog.setSingleChoiceItems(
                 colorsPrimary,
                 settings.primaryColor
             ) { dialog, count ->
@@ -347,6 +349,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
         val colorsSecondary = arrayOf(
             "Black",
@@ -365,7 +368,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val secondaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorSecondary.setOnClickListener {
-            secondaryColorDialog.setSingleChoiceItems(
+            val dialog = secondaryColorDialog.setSingleChoiceItems(
                 colorsSecondary,
                 settings.secondaryColor
             ) { dialog, count ->
@@ -373,16 +376,18 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
         val typesOutline = arrayOf("Outline", "Shine", "Drop Shadow", "None")
         val outlineDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.outline_type))
         binding.videoSubOutline.setOnClickListener {
-            outlineDialog.setSingleChoiceItems(typesOutline, settings.outline) { dialog, count ->
+            val dialog = outlineDialog.setSingleChoiceItems(typesOutline, settings.outline) { dialog, count ->
                 settings.outline = count
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
         val colorsSubBackground = arrayOf(
             "Transparent",
@@ -401,7 +406,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val subBackgroundDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorBackground.setOnClickListener {
-            subBackgroundDialog.setSingleChoiceItems(
+            val dialog = subBackgroundDialog.setSingleChoiceItems(
                 colorsSubBackground,
                 settings.subBackground
             ) { dialog, count ->
@@ -409,6 +414,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
 
         val colorsSubWindow = arrayOf(
@@ -428,7 +434,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val subWindowDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorWindow.setOnClickListener {
-            subWindowDialog.setSingleChoiceItems(
+            val dialog = subWindowDialog.setSingleChoiceItems(
                 colorsSubWindow,
                 settings.subWindow
             ) { dialog, count ->
@@ -436,6 +442,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
         val fonts = arrayOf(
             "Poppins Semi Bold",
@@ -448,11 +455,12 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val fontDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.subtitle_font))
         binding.videoSubFont.setOnClickListener {
-            fontDialog.setSingleChoiceItems(fonts, settings.font) { dialog, count ->
+            val dialog = fontDialog.setSingleChoiceItems(fonts, settings.font) { dialog, count ->
                 settings.font = count
                 saveData(player, settings)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
         binding.subtitleFontSize.setText(settings.fontSize.toString())
         binding.subtitleFontSize.setOnEditorActionListener { _, actionId, _ ->
