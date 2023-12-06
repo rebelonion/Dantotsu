@@ -199,6 +199,7 @@ class SettingsActivity : AppCompatActivity() {
                 passedColor = color
                 linearLayout.setBackgroundColor(color)
             })
+            alertDialog.show()
             alertDialog.window?.setDimAmount(0.8f)
         }
 
@@ -536,7 +537,9 @@ class SettingsActivity : AppCompatActivity() {
             cursedCounter++
             (binding.settingsLogo.drawable as Animatable).start()
             if (cursedCounter % 7 == 0) {
-                snackString("youwu have been cuwsed :pwayge:")
+                Toast.makeText(this, "youwu have been cuwsed :pwayge:", Toast.LENGTH_LONG).show()
+                val url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                openLinkInBrowser(url)
                 getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean(
                     "use_cursed_lang",
                     getSharedPreferences(
