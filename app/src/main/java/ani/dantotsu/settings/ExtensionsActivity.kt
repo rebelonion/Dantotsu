@@ -21,7 +21,6 @@ import ani.dantotsu.others.LangSet
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 
 class ExtensionsActivity : AppCompatActivity() {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
@@ -120,15 +119,17 @@ class ExtensionsActivity : AppCompatActivity() {
 
 
         initActivity(this)
-
-        fun bind(extension: AnimeExtension.Available) {
-            binding.languageselect.setOnClickListener {
-                val popup = PopupMenu(this, it)
-
-                popup.inflate(R.menu.launguage_selector_menu)
-                popup.show()
+/* TODO
+        binding.languageselect.setOnClickListener {
+            val popup = PopupMenu(this, it)
+            popup.inflate(R.menu.launguage_selector_menu)
+            popup.setOnMenuItemClickListener { menuItem ->
+                true
             }
-        }
+            popup.setOnDismissListener {
+            }
+            popup.show()
+        }*/
         binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
             bottomMargin = navBarHeight

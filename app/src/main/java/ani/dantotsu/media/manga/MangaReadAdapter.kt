@@ -180,7 +180,7 @@ class MangaReadAdapter(
                             hiddenScanlators.add(checkBox.text.toString())
                         }
                     }
-                    media.selected!!.scanlators = hiddenScanlators
+                    fragment.onScanlatorChange(hiddenScanlators)
                     scanlatorSelectionListener?.onScanlatorsSelected()
                 }
                 .setNegativeButton("Cancel", null)
