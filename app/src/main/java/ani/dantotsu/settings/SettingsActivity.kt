@@ -338,16 +338,6 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
             saveData("recently_list_only", isChecked)
         }
-
-        val dns = listOf("None", "Google", "Cloudflare", "AdGuard")
-        binding.settingsDns.setText(dns[loadData("settings_dns") ?: 0], false)
-        binding.settingsDns.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, dns))
-        binding.settingsDns.setOnItemClickListener { _, _, i, _ ->
-            saveData("settings_dns", i)
-            initializeNetwork(this)
-            binding.settingsDns.clearFocus()
-        }
-
         binding.settingsPreferDub.isChecked = loadData("settings_prefer_dub") ?: false
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
             saveData("settings_prefer_dub", isChecked)
