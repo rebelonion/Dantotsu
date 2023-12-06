@@ -162,5 +162,15 @@ class ListActivity : AppCompatActivity() {
             popup.inflate(R.menu.list_sort_menu)
             popup.show()
         }
+
+        binding.random.setOnClickListener {
+            //get the current tab
+            val currentTab =
+                binding.listTabLayout.getTabAt(binding.listTabLayout.selectedTabPosition)
+            val currentViewePager = binding.listViewPager.getChildAt(0)
+            val currentFragment =
+                supportFragmentManager.findFragmentByTag("f" + currentTab?.position.toString()) as? ListFragment
+            currentFragment?.randomOptionClick()
+        }
     }
 }

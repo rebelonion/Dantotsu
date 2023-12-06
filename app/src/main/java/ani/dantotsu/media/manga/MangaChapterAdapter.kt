@@ -1,10 +1,12 @@
 package ani.dantotsu.media.manga
 
+import android.app.AlertDialog
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
+import android.widget.NumberPicker
 import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
@@ -114,6 +116,49 @@ class MangaChapterAdapter(
         }
     }
 
+    fun downloadNextNChapters(n: Int) {
+        //find last viewed chapter
+        var lastViewedChapter = arr.indexOfFirst { MangaNameAdapter.findChapterNumber(it.number)?.toInt() == media.userProgress }
+        if (lastViewedChapter == -1) {
+            lastViewedChapter = 0
+        }
+        //download next n chapters
+        for (i in 1..n) {
+            if (lastViewedChapter + i < arr.size) {
+                val chapterNumber = arr[lastViewedChapter + i].number
+                if (activeDownloads.contains(chapterNumber)) {
+                    //do nothing
+                    continue
+                } else if (downloadedChapters.contains(chapterNumber)) {
+                    //do nothing
+                    continue
+                } else {
+                    fragment.onMangaChapterDownloadClick(chapterNumber)
+                    startDownload(chapterNumber)
+                }
+            }
+        }
+    }
+
+    fun downloadNChaptersFrom(position: Int, n: Int) {
+        //download next n chapters
+        for (i in 0..<n) {
+            if (position + i < arr.size) {
+                val chapterNumber = arr[position + i].number
+                if (activeDownloads.contains(chapterNumber)) {
+                    //do nothing
+                    continue
+                } else if (downloadedChapters.contains(chapterNumber)) {
+                    //do nothing
+                    continue
+                } else {
+                    fragment.onMangaChapterDownloadClick(chapterNumber)
+                    startDownload(chapterNumber)
+                }
+            }
+        }
+    }
+
     inner class ChapterListViewHolder(val binding: ItemChapterListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val activeCoroutines = mutableSetOf<String>()
@@ -199,6 +244,24 @@ class MangaChapterAdapter(
                         startDownload(chapterNumber)
                     }
                 }
+            }
+            binding.itemDownload.setOnLongClickListener {
+                //Alert dialog asking for the number of chapters to download
+                val alertDialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
+                alertDialog.setTitle("Multi Chapter Downloader")
+                alertDialog.setMessage("Enter the number of chapters to download")
+                val input = NumberPicker(currContext())
+                input.minValue = 1
+                input.maxValue = itemCount - bindingAdapterPosition
+                input.value = 1
+                alertDialog.setView(input)
+                alertDialog.setPositiveButton("OK") { dialog, which ->
+                    downloadNChaptersFrom(bindingAdapterPosition, input.value)
+                }
+                alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+                val dialog = alertDialog.show()
+                dialog.window?.setDimAmount(0.8f)
+                true
             }
 
         }

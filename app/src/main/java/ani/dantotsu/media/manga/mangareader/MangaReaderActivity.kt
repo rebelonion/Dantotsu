@@ -12,6 +12,7 @@ import android.view.*
 import android.view.KeyEvent.*
 import android.view.animation.OvershootInterpolator
 import android.widget.AdapterView
+import android.widget.CheckBox
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -124,7 +125,7 @@ class MangaReaderActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         mangaCache.clear()
-        if (isOnline(baseContext)) {  //TODO:
+        if (DiscordServiceRunningSingleton.running) {
             DiscordServiceRunningSingleton.running = false
             val stopIntent = Intent(this, DiscordService::class.java)
             stopService(stopIntent)
@@ -253,20 +254,22 @@ class MangaReaderActivity : AppCompatActivity() {
         showProgressDialog =
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog") != true else false
         progressDialog =
-            if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
+            if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true) {
+                val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)
+                val checkbox = dialogView.findViewById<CheckBox>(R.id.dialog_checkbox)
+                checkbox.text = getString(R.string.dont_ask_again, media.userPreferredName)
+                checkbox.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) progressDialog = null
+                    saveData("${media.id}_progressDialog", isChecked)
+                    showProgressDialog = isChecked
+                }
                 AlertDialog.Builder(this, R.style.MyPopup)
-                    .setTitle(getString(R.string.title_update_progress)).apply {
-                        setMultiChoiceItems(
-                            arrayOf(getString(R.string.dont_ask_again, media.userPreferredName)),
-                            booleanArrayOf(false)
-                        ) { _, _, isChecked ->
-                            if (isChecked) progressDialog = null
-                            saveData("${media.id}_progressDialog", isChecked)
-                            showProgressDialog = isChecked
-                        }
+                    .setTitle(getString(R.string.title_update_progress))
+                    .setView(dialogView)
+                    .apply {
                         setOnCancelListener { hideBars() }
                     }
-            else null
+            } else null
 
         //Chapter Change
         fun change(index: Int) {
@@ -329,7 +332,9 @@ class MangaReaderActivity : AppCompatActivity() {
                     chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 applySettings()
                 val context = this
-                if (isOnline(context)) {
+                val incognito = context.getSharedPreferences("Dantotsu", 0)
+                    ?.getBoolean("incognito", false) ?: false
+                if (isOnline(context) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
                         val presence = RPC.createPresence(
                             RPC.Companion.RPCData(

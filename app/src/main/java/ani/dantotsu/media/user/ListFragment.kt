@@ -76,6 +76,11 @@ class ListFragment : Fragment() {
         }
     }
 
+    fun randomOptionClick() {
+        val adapter = binding.listRecyclerView.adapter as MediaAdaptor
+        adapter.randomOptionClick()
+    }
+
     companion object {
         fun newInstance(pos: Int, calendar: Boolean = false): ListFragment =
             ListFragment().apply {

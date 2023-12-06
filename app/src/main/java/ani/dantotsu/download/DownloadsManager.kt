@@ -69,9 +69,73 @@ class DownloadsManager(private val context: Context) {
             }
         } else {
             Toast.makeText(context, "Directory does not exist", Toast.LENGTH_SHORT).show()
+            cleanDownloads()
         }
         downloadsList.removeAll { it.title == title }
         saveDownloads()
+    }
+
+    private fun cleanDownloads() {
+        cleanDownload(Download.Type.MANGA)
+        cleanDownload(Download.Type.ANIME)
+        cleanDownload(Download.Type.NOVEL)
+    }
+
+    private fun cleanDownload(type: Download.Type) {
+        // remove all folders that are not in the downloads list
+        val subDirectory = if (type == Download.Type.MANGA) {
+            "Manga"
+        } else if (type == Download.Type.ANIME) {
+            "Anime"
+        } else {
+            "Novel"
+        }
+        val directory = File(
+            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+            "Dantotsu/$subDirectory"
+        )
+        val downloadsSubList = if (type == Download.Type.MANGA) {
+            mangaDownloads
+        } else if (type == Download.Type.ANIME) {
+            animeDownloads
+        } else {
+            novelDownloads
+        }
+        if (directory.exists()) {
+            val files = directory.listFiles()
+            if (files != null) {
+                for (file in files) {
+                    if (!downloadsSubList.any { it.title == file.name }) {
+                        val deleted = file.deleteRecursively()
+                    }
+                }
+            }
+        }
+        //now remove all downloads that do not have a folder
+        val iterator = downloadsList.iterator()
+        while (iterator.hasNext()) {
+            val download = iterator.next()
+            val downloadDir = File(directory, download.title)
+            if ((!downloadDir.exists() && download.type == type) || download.title.isBlank()) {
+                iterator.remove()
+            }
+        }
+    }
+
+    fun saveDownloadsListToJSONFileInDownloadsFolder(downloadsList: List<Download>)  //for debugging
+    {
+        val jsonString = gson.toJson(downloadsList)
+        val file = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            "Dantotsu/downloads.json"
+        )
+        if (file.parentFile?.exists() == false) {
+            file.parentFile?.mkdirs()
+        }
+        if (!file.exists()) {
+            file.createNewFile()
+        }
+        file.writeText(jsonString)
     }
 
     fun queryDownload(download: Download): Boolean {

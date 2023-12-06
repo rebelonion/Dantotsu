@@ -7,7 +7,7 @@
     android:layout_marginTop="-4dp"
     android:layout_marginEnd="4dp"
     android:layout_marginBottom="-4dp"
-    app:chipBackgroundColor="@color/bg_black"
+    app:chipBackgroundColor="@color/chip_background_color"
     android:elegantTextHeight="true"
     android:textAppearance="@style/Suffix"
     app:chipStrokeColor="?attr/colorPrimaryContainer"

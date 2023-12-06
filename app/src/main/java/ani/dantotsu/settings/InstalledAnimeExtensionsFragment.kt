@@ -55,7 +55,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 if (allSettings.size > 1) {
                     val names = allSettings.map { it.lang }.toTypedArray()
                     var selectedIndex = 0
-                    AlertDialog.Builder(requireContext(), R.style.MyPopup)
+                    val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                         .setTitle("Select a Source")
                         .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
                             selectedIndex = which
@@ -85,6 +85,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                             }
                         }
                         .show()
+                    dialog.window?.setDimAmount(0.8f)
                 } else {
                     // If there's only one setting, proceed with the fragment transaction
                     val eActivity = requireActivity() as ExtensionsActivity

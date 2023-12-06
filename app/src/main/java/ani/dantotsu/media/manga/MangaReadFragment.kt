@@ -197,6 +197,10 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         updateChapters()
     }
 
+    fun multiDownload(n: Int) {
+        chapterAdapter.downloadNextNChapters(n)
+    }
+
     private fun updateChapters() {
         val loadedChapters = model.getMangaChapters().value
         if (loadedChapters != null) {
@@ -334,7 +338,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             if (allSettings.size > 1) {
                 val names = allSettings.map { it.lang }.toTypedArray()
                 var selectedIndex = 0
-                AlertDialog.Builder(requireContext())
+                val dialog = AlertDialog.Builder(requireContext())
                     .setTitle("Select a Source")
                     .setSingleChoiceItems(names, selectedIndex) { _, which ->
                         selectedIndex = which
@@ -361,6 +365,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                         return@setNegativeButton
                     }
                     .show()
+                dialog.window?.setDimAmount(0.8f)
             } else {
                 // If there's only one setting, proceed with the fragment transaction
                 val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {

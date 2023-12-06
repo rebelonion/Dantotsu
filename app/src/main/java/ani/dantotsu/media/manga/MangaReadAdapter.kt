@@ -5,10 +5,12 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -167,7 +169,7 @@ class MangaReadAdapter(
             }
 
             // Create AlertDialog
-            AlertDialog.Builder(currContext())
+            val dialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
                 .setView(dialogView)
                 .setPositiveButton("OK") { dialog, which ->
                     //add unchecked to hidden
@@ -183,6 +185,25 @@ class MangaReadAdapter(
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
+            dialog.window?.setDimAmount(0.8f)
+        }
+
+        binding.animeDownloadTop.setOnClickListener {
+            //Alert dialog asking for the number of chapters to download
+            val alertDialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
+            alertDialog.setTitle("Multi Chapter Downloader")
+            alertDialog.setMessage("Enter the number of chapters to download")
+            val input = NumberPicker(currContext())
+            input.minValue = 1
+            input.maxValue = 20
+            input.value = 1
+            alertDialog.setView(input)
+            alertDialog.setPositiveButton("OK") { dialog, which ->
+                fragment.multiDownload(input.value)
+            }
+            alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+            val dialog = alertDialog.show()
+            dialog.window?.setDimAmount(0.8f)
         }
 
         var selected = when (style) {
@@ -238,7 +259,20 @@ class MangaReadAdapter(
                         0
                     )
                 }
-                chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
+                val startChapter = MangaNameAdapter.findChapterNumber(names[limit * (position)])
+                val endChapter = MangaNameAdapter.findChapterNumber(names[last - 1])
+                val startChapterString = if (startChapter != null) {
+                    "Ch.$startChapter"
+                } else {
+                    names[limit * (position)]
+                }
+                val endChapterString = if (endChapter != null) {
+                    "Ch.$endChapter"
+                } else {
+                    names[last - 1]
+                }
+                //chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
+                chip.text = "$startChapterString - $endChapterString"
                 chip.setTextColor(
                     ContextCompat.getColorStateList(
                         fragment.requireContext(),

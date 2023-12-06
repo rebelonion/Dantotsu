@@ -14,6 +14,7 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Animatable
+import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.AudioManager.*
@@ -185,8 +186,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     private var isFastForwarding = false
 
     var rotation = 0
-
-    private var rpc: RPC? = null
 
     override fun onAttachedToWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -385,14 +384,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }, AUDIO_CONTENT_TYPE_MOVIE, AUDIOFOCUS_GAIN)
 
         if (System.getInt(contentResolver, System.ACCELEROMETER_ROTATION, 0) != 1) {
-            requestedOrientation = rotation
-            exoRotate.setOnClickListener {
-                requestedOrientation = rotation
-                it.visibility = View.GONE
-            }
             orientationListener =
                 object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
                     override fun onOrientationChanged(orientation: Int) {
+                        println(orientation)
                         if (orientation in 45..135) {
                             if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) exoRotate.visibility =
                                 View.VISIBLE
@@ -405,6 +400,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     }
                 }
             orientationListener?.enable()
+
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            exoRotate.setOnClickListener {
+                requestedOrientation = rotation
+                it.visibility = View.GONE
+            }
         }
 
         setupSubFormatting(playerView, settings)
@@ -998,36 +999,45 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 preloading = false
                 val context = this
 
-                lifecycleScope.launch {
-                    val presence = RPC.createPresence(RPC.Companion.RPCData(
-                        applicationId = Discord.application_Id,
-                        type = RPC.Type.WATCHING,
-                        activityName = media.userPreferredName,
-                        details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
-                            R.string.episode_num,
-                            ep.number
-                        ),
-                        state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
-                        largeImage = media.cover?.let { RPC.Link(media.userPreferredName, it) },
-                        smallImage = RPC.Link(
-                            "Dantotsu",
-                            Discord.small_Image
-                        ),
-                        buttons = mutableListOf(
-                            RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                            RPC.Link(
-                                "Stream on Dantotsu",
-                                "https://github.com/rebelonion/Dantotsu/"
+                val incognito = baseContext.getSharedPreferences("Dantotsu", MODE_PRIVATE)
+                    .getBoolean("incognito", false)
+                if (isOnline(context) && Discord.token != null && !incognito) {
+                    lifecycleScope.launch {
+                        val presence = RPC.createPresence(RPC.Companion.RPCData(
+                            applicationId = Discord.application_Id,
+                            type = RPC.Type.WATCHING,
+                            activityName = media.userPreferredName,
+                            details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
+                                R.string.episode_num,
+                                ep.number
+                            ),
+                            state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
+                            largeImage = media.cover?.let {
+                                RPC.Link(
+                                    media.userPreferredName,
+                                    it
+                                )
+                            },
+                            smallImage = RPC.Link(
+                                "Dantotsu",
+                                Discord.small_Image
+                            ),
+                            buttons = mutableListOf(
+                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                                RPC.Link(
+                                    "Stream on Dantotsu",
+                                    "https://github.com/rebelonion/Dantotsu/"
+                                )
                             )
                         )
-                    )
-                    )
+                        )
 
-                    val intent = Intent(context, DiscordService::class.java).apply {
-                        putExtra("presence", presence)
+                        val intent = Intent(context, DiscordService::class.java).apply {
+                            putExtra("presence", presence)
+                        }
+                        DiscordServiceRunningSingleton.running = true
+                        startService(intent)
                     }
-                    DiscordServiceRunningSingleton.running = true
-                    startService(intent)
                 }
 
                 updateProgress()
@@ -1101,7 +1111,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         val speedDialog =
             AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.speed))
         exoSpeed.setOnClickListener {
-            speedDialog.setSingleChoiceItems(speedsName, curSpeed) { dialog, i ->
+            val dialog = speedDialog.setSingleChoiceItems(speedsName, curSpeed) { dialog, i ->
                 if (isInitialized) {
                     saveData("${media.id}_speed", i, this)
                     speed = speeds[i]
@@ -1112,6 +1122,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     hideSystemBars()
                 }
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
         speedDialog.setOnCancelListener { hideSystemBars() }
 
@@ -1151,6 +1162,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
+                .setMessage(getString(R.string.incognito_will_not_update))
                 .apply {
                     setOnCancelListener { hideSystemBars() }
                     setCancelable(false)
@@ -1349,7 +1361,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                     )
                 )
             )
-            AlertDialog.Builder(this, R.style.DialogTheme)
+            val dialog = AlertDialog.Builder(this, R.style.DialogTheme)
                 .setTitle(getString(R.string.continue_from, time)).apply {
                     setCancelable(false)
                     setPositiveButton(getString(R.string.yes)) { d, _ ->
@@ -1362,6 +1374,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                         d.dismiss()
                     }
                 }.show()
+            dialog.window?.setDimAmount(0.8f)
         } else buildExoplayer()
     }
 
@@ -1394,7 +1407,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         exoPlayer.addAnalyticsListener(EventLogger())
         isInitialized = true
     }
-    /*private fun selectSubtitleTrack() {
+    /*private fun selectSubtitleTrack() { saving this for later
         // Get the current track groups
         val trackGroups = exoPlayer.currentTrackGroups
 
@@ -1426,9 +1439,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         exoPlayer.release()
         VideoCache.release()
         mediaSession?.release()
-        val stopIntent = Intent(this, DiscordService::class.java)
-        DiscordServiceRunningSingleton.running = false
-        stopService(stopIntent)
+        if(DiscordServiceRunningSingleton.running) {
+            val stopIntent = Intent(this, DiscordService::class.java)
+            DiscordServiceRunningSingleton.running = false
+            stopService(stopIntent)
+        }
 
     }
 
@@ -1531,6 +1546,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         if (exoPlayer.duration < playbackPosition)
             exoPlayer.seekTo(0)
+
+        //if playbackPosition is within 92% of the episode length, reset it to 0
+        if (playbackPosition > exoPlayer.duration.toFloat() * 0.92) {
+            playbackPosition = 0
+            exoPlayer.seekTo(0)
+        }
 
         if (!isTimeStampsLoaded && settings.timeStampsEnabled) {
             val dur = exoPlayer.duration

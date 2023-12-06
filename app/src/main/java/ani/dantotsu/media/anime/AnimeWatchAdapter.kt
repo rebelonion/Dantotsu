@@ -204,6 +204,7 @@ class AnimeWatchAdapter(
             fragment.onIconPressed(style, reversed)
         }
         binding.animeScanlatorTop.visibility = View.GONE
+        binding.animeDownloadTop.visibility = View.GONE
         //Episode Handling
         handleEpisodes()
     }

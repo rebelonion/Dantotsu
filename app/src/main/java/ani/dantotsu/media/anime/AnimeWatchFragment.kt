@@ -318,7 +318,7 @@ class AnimeWatchFragment : Fragment() {
             if (allSettings.size > 1) {
                 val names = allSettings.map { it.lang }.toTypedArray()
                 var selectedIndex = 0
-                AlertDialog.Builder(requireContext())
+                val dialog = AlertDialog.Builder(requireContext())
                     .setTitle("Select a Source")
                     .setSingleChoiceItems(names, selectedIndex) { _, which ->
                         selectedIndex = which
@@ -347,6 +347,7 @@ class AnimeWatchFragment : Fragment() {
                         return@setNegativeButton
                     }
                     .show()
+                dialog.window?.setDimAmount(0.8f)
             } else {
                 // If there's only one setting, proceed with the fragment transaction
                 requireActivity().runOnUiThread {

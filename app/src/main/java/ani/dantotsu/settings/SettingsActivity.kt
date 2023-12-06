@@ -199,8 +199,7 @@ class SettingsActivity : AppCompatActivity() {
                 passedColor = color
                 linearLayout.setBackgroundColor(color)
             })
-
-            alertDialog.show()
+            alertDialog.window?.setDimAmount(0.8f)
         }
 
         //val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
@@ -237,11 +236,12 @@ class SettingsActivity : AppCompatActivity() {
             AlertDialog.Builder(this, R.style.DialogTheme).setTitle("Download Manager")
         var downloadManager = loadData<Int>("settings_download_manager") ?: 0
         binding.settingsDownloadManager.setOnClickListener {
-            downloadManagerDialog.setSingleChoiceItems(managers, downloadManager) { dialog, count ->
+            val dialog = downloadManagerDialog.setSingleChoiceItems(managers, downloadManager) { dialog, count ->
                 downloadManager = count
                 saveData("settings_download_manager", downloadManager)
                 dialog.dismiss()
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
 
         binding.settingsForceLegacyInstall.isChecked =
@@ -287,6 +287,7 @@ class SettingsActivity : AppCompatActivity() {
                 .create()
 
             alertDialog.show()
+            alertDialog.window?.setDimAmount(0.8f)
         }
 
 
@@ -414,6 +415,16 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.settingsUiDark.setOnClickListener {
             uiTheme(true, it)
+        }
+
+        binding.settingsIncognito.isChecked =
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
+                "incognito",
+                false
+            )
+        binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                .putBoolean("incognito", isChecked).apply()
         }
 
         var previousStart: View = when (uiSettings.defaultStartUpTab) {
@@ -582,7 +593,7 @@ class SettingsActivity : AppCompatActivity() {
         val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(R.string.subscriptions_checking_time)
         binding.settingsSubscriptionsTime.setOnClickListener {
-            speedDialog.setSingleChoiceItems(timeNames, curTime) { dialog, i ->
+            val dialog = speedDialog.setSingleChoiceItems(timeNames, curTime) { dialog, i ->
                 curTime = i
                 binding.settingsSubscriptionsTime.text =
                     getString(R.string.subscriptions_checking_time_s, timeNames[i])
@@ -590,6 +601,7 @@ class SettingsActivity : AppCompatActivity() {
                 dialog.dismiss()
                 startSubscription(true)
             }.show()
+            dialog.window?.setDimAmount(0.8f)
         }
 
         binding.settingsSubscriptionsTime.setOnLongClickListener {

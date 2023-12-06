@@ -300,6 +300,19 @@ class MediaAdaptor(
         return type
     }
 
+    fun randomOptionClick() { //used for user list
+        val media = mediaList?.random()
+        if (media != null) {
+            mediaList?.let {
+                clicked(
+                    it.indexOf(media),
+                    null
+                )
+            }
+        }
+
+    }
+
     inner class MediaViewHolder(val binding: ItemMediaCompactBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
