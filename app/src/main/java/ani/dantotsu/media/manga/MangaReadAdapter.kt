@@ -167,7 +167,7 @@ class MangaReadAdapter(
             }
 
             // Create AlertDialog
-            AlertDialog.Builder(currContext())
+            AlertDialog.Builder(currContext(), R.style.MyPopup)
                 .setView(dialogView)
                 .setPositiveButton("OK") { dialog, which ->
                     //add unchecked to hidden

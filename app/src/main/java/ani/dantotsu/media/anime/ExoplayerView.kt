@@ -999,7 +999,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 preloading = false
                 val context = this
 
-                val incognito = this.getSharedPreferences("Dantotsu", MODE_PRIVATE)
+                val incognito = baseContext.getSharedPreferences("Dantotsu", MODE_PRIVATE)
                     .getBoolean("incognito", false)
                 if (isOnline(context) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
@@ -1545,8 +1545,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         if (exoPlayer.duration < playbackPosition)
             exoPlayer.seekTo(0)
 
-        //if playbackPosition is within 90% of the episode length, reset it to 0
-        if (playbackPosition > episodeLength * 0.9) {
+        //if playbackPosition is within 92% of the episode length, reset it to 0
+        if (playbackPosition > exoPlayer.duration.toFloat() * 0.92) {
             playbackPosition = 0
             exoPlayer.seekTo(0)
         }
