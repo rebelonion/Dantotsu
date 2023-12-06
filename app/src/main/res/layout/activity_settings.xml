@@ -341,6 +341,25 @@
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
 
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/settingsIncognito"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_incognito_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/incognito_mode"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    android:layout_marginStart="4dp"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
                 <LinearLayout
                     android:id="@+id/settingsAnilistLoginContainer"
                     android:layout_width="match_parent"
@@ -353,6 +372,7 @@
                         android:layout_marginStart="4dp"
                         android:layout_marginEnd="20dp"
                         android:contentDescription="@string/anilist"
+                        app:tint="?attr/colorPrimary"
                         app:srcCompat="@drawable/ic_anilist" />
 
                     <LinearLayout
@@ -371,7 +391,8 @@
                             android:fontFamily="@font/poppins_bold"
                             android:gravity="center"
                             android:text="@string/username"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorSecondary"/>
 
                         <TextView
                             android:id="@+id/settingsAnilistLogin"
@@ -383,7 +404,6 @@
                             android:fontFamily="@font/poppins_bold"
                             android:padding="16dp"
                             android:text="@string/logout"
-                            android:textColor="?attr/colorSecondary"
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -419,6 +439,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginEnd="16dp"
                         android:contentDescription="@string/myanimelist"
+                        app:tint="?attr/colorPrimary"
                         app:srcCompat="@drawable/ic_myanimelist" />
 
                     <LinearLayout
@@ -447,7 +468,8 @@
                             android:fontFamily="@font/poppins_bold"
                             android:gravity="center"
                             android:text="@string/username"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorSecondary"/>
 
                         <TextView
                             android:id="@+id/settingsMALLogin"
@@ -459,7 +481,6 @@
                             android:fontFamily="@font/poppins_bold"
                             android:padding="16dp"
                             android:text="@string/logout"
-                            android:textColor="?attr/colorSecondary"
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -495,7 +516,7 @@
                         android:layout_height="match_parent"
                         android:layout_marginEnd="16dp"
                         android:src="@drawable/ic_discord"
-                        app:tint="?attr/colorOnBackground"
+                        app:tint="?attr/colorPrimary"
                         tools:ignore="ContentDescription" />
 
                     <LinearLayout
@@ -515,7 +536,8 @@
                             android:gravity="center"
                             android:maxLines="1"
                             android:text="@string/username"
-                            android:textSize="16sp" />
+                            android:textSize="16sp"
+                            android:textColor="?attr/colorSecondary"/>
 
                         <TextView
                             android:id="@+id/settingsDiscordLogin"
@@ -527,7 +549,6 @@
                             android:fontFamily="@font/poppins_bold"
                             android:padding="16dp"
                             android:text="@string/logout"
-                            android:textColor="?attr/colorSecondary"
                             android:textSize="14sp" />
 
                     </LinearLayout>
@@ -572,25 +593,6 @@
                     app:cornerRadius="0dp"
                     app:drawableStartCompat="@drawable/ic_round_help_24"
                     app:drawableTint="?attr/colorPrimary" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/settingsIncognito"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawableStart="@drawable/ic_incognito_24"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/incognito_mode"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
 
             </ani.dantotsu.others.Xpandable>
 
