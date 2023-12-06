@@ -27,6 +27,28 @@ class LanguageMapper {
                 else -> ""
             }
         }
+
+        enum class Language(val code: String) {
+            ALL("all"),
+            ARABIC("ar"),
+            GERMAN("de"),
+            ENGLISH("en"),
+            SPANISH("es"),
+            FRENCH("fr"),
+            INDONESIAN("id"),
+            ITALIAN("it"),
+            JAPANESE("ja"),
+            KOREAN("ko"),
+            POLISH("pl"),
+            PORTUGUESE_BRAZIL("pt-BR"),
+            RUSSIAN("ru"),
+            THAI("th"),
+            TURKISH("tr"),
+            UKRAINIAN("uk"),
+            VIETNAMESE("vi"),
+            CHINESE("zh"),
+            CHINESE_SIMPLIFIED("zh-Hans")
+        }
     }
 }
 

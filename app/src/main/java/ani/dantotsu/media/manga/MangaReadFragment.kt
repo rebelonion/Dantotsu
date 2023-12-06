@@ -198,7 +198,21 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     }
 
     fun multiDownload(n: Int) {
-        chapterAdapter.downloadNextNChapters(n)
+        //get last viewed chapter
+        val selected = media.userProgress
+        val chapters = media.manga?.chapters?.values?.toList()
+        //filter by selected language
+        val progressChapterIndex = chapters?.indexOfFirst { MangaNameAdapter.findChapterNumber(it.number)?.toInt() == selected }?:0
+        val chaptersToDownload = chapters?.subList(
+            progressChapterIndex + 1,
+            progressChapterIndex + n + 1
+        )
+        if (chaptersToDownload != null) {
+            for (chapter in chaptersToDownload) {
+                onMangaChapterDownloadClick(chapter.title!!)
+            }
+        }
+
     }
 
     private fun updateChapters() {
@@ -275,6 +289,12 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         media.selected = selected
     }
 
+    fun onScanlatorChange(list: List<String>) {
+        val selected = model.loadSelected(media)
+        selected.scanlators = list
+        model.saveSelected(media.id, selected, requireActivity())
+        media.selected = selected
+    }
 
     fun loadChapters(i: Int, invalidate: Boolean) {
         lifecycleScope.launch(Dispatchers.IO) { model.loadMangaChapters(media, i, invalidate) }

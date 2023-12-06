@@ -199,6 +199,7 @@ class SettingsActivity : AppCompatActivity() {
                 passedColor = color
                 linearLayout.setBackgroundColor(color)
             })
+            alertDialog.show()
             alertDialog.window?.setDimAmount(0.8f)
         }
 
@@ -338,16 +339,6 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
             saveData("recently_list_only", isChecked)
         }
-
-        val dns = listOf("None", "Google", "Cloudflare", "AdGuard")
-        binding.settingsDns.setText(dns[loadData("settings_dns") ?: 0], false)
-        binding.settingsDns.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, dns))
-        binding.settingsDns.setOnItemClickListener { _, _, i, _ ->
-            saveData("settings_dns", i)
-            initializeNetwork(this)
-            binding.settingsDns.clearFocus()
-        }
-
         binding.settingsPreferDub.isChecked = loadData("settings_prefer_dub") ?: false
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
             saveData("settings_prefer_dub", isChecked)
@@ -546,7 +537,9 @@ class SettingsActivity : AppCompatActivity() {
             cursedCounter++
             (binding.settingsLogo.drawable as Animatable).start()
             if (cursedCounter % 7 == 0) {
-                snackString("youwu have been cuwsed :pwayge:")
+                Toast.makeText(this, "youwu have been cuwsed :pwayge:", Toast.LENGTH_LONG).show()
+                val url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                openLinkInBrowser(url)
                 getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean(
                     "use_cursed_lang",
                     getSharedPreferences(

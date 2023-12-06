@@ -92,6 +92,7 @@ class MangaChapterAdapter(
         // Find the position of the chapter and notify only that item
         val position = arr.indexOfFirst { it.number == chapterNumber }
         if (position != -1) {
+            arr[position].progress = ""
             notifyItemChanged(position)
         }
     }
@@ -102,6 +103,7 @@ class MangaChapterAdapter(
         // Find the position of the chapter and notify only that item
         val position = arr.indexOfFirst { it.number == chapterNumber }
         if (position != -1) {
+            arr[position].progress = ""
             notifyItemChanged(position)
         }
     }
@@ -113,30 +115,6 @@ class MangaChapterAdapter(
             arr[position].progress = "Downloading: ${progress}%"
 
             notifyItemChanged(position)
-        }
-    }
-
-    fun downloadNextNChapters(n: Int) {
-        //find last viewed chapter
-        var lastViewedChapter = arr.indexOfFirst { MangaNameAdapter.findChapterNumber(it.number)?.toInt() == media.userProgress }
-        if (lastViewedChapter == -1) {
-            lastViewedChapter = 0
-        }
-        //download next n chapters
-        for (i in 1..n) {
-            if (lastViewedChapter + i < arr.size) {
-                val chapterNumber = arr[lastViewedChapter + i].number
-                if (activeDownloads.contains(chapterNumber)) {
-                    //do nothing
-                    continue
-                } else if (downloadedChapters.contains(chapterNumber)) {
-                    //do nothing
-                    continue
-                } else {
-                    fragment.onMangaChapterDownloadClick(chapterNumber)
-                    startDownload(chapterNumber)
-                }
-            }
         }
     }
 
@@ -179,10 +157,10 @@ class MangaChapterAdapter(
             } else if (downloadedChapters.contains(chapterNumber)) {
                 // Show checkmark
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_check)
-                binding.itemDownload.setColorFilter(typedValue2.data)
+                //binding.itemDownload.setColorFilter(typedValue2.data) //TODO: colors go to wrong places
                 binding.itemDownload.postDelayed({
-                    binding.itemDownload.setImageResource(R.drawable.ic_circle_cancel)
-                    binding.itemDownload.setColorFilter(typedValue2.data)
+                    binding.itemDownload.setImageResource(R.drawable.ic_round_delete_24)
+                    //binding.itemDownload.setColorFilter(typedValue2.data)
                 }, 1000)
             } else {
                 // Show download icon
