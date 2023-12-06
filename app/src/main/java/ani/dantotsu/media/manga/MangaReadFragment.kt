@@ -197,6 +197,10 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         updateChapters()
     }
 
+    fun multiDownload(n: Int) {
+        chapterAdapter.downloadNextNChapters(n)
+    }
+
     private fun updateChapters() {
         val loadedChapters = model.getMangaChapters().value
         if (loadedChapters != null) {

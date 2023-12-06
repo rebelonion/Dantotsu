@@ -114,6 +114,30 @@ class MangaChapterAdapter(
         }
     }
 
+    fun downloadNextNChapters(n: Int) {
+        //find last viewed chapter
+        var lastViewedChapter = arr.indexOfFirst { MangaNameAdapter.findChapterNumber(it.number)?.toInt() == media.userProgress }
+        if (lastViewedChapter == -1) {
+            lastViewedChapter = 0
+        }
+        //download next n chapters
+        for (i in 1..n) {
+            if (lastViewedChapter + i < arr.size) {
+                val chapterNumber = arr[lastViewedChapter + i].number
+                if (activeDownloads.contains(chapterNumber)) {
+                    //do nothing
+                    continue
+                } else if (downloadedChapters.contains(chapterNumber)) {
+                    //do nothing
+                    continue
+                } else {
+                    fragment.onMangaChapterDownloadClick(chapterNumber)
+                    startDownload(chapterNumber)
+                }
+            }
+        }
+    }
+
     inner class ChapterListViewHolder(val binding: ItemChapterListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val activeCoroutines = mutableSetOf<String>()

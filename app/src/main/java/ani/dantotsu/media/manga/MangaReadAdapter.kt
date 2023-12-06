@@ -5,10 +5,12 @@ import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
@@ -183,6 +185,23 @@ class MangaReadAdapter(
                 }
                 .setNegativeButton("Cancel", null)
                 .show()
+        }
+
+        binding.animeDownloadTop.setOnClickListener {
+            //Alert dialog asking for the number of chapters to download
+            val alertDialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
+            alertDialog.setTitle("Multi Chapter Downloader")
+            alertDialog.setMessage("Enter the number of chapters to download")
+            val input = NumberPicker(currContext())
+            input.minValue = 1
+            input.maxValue = 20
+            input.value = 1
+            alertDialog.setView(input)
+            alertDialog.setPositiveButton("OK") { dialog, which ->
+                fragment.multiDownload(input.value)
+            }
+            alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+            val dialog = alertDialog.show()
         }
 
         var selected = when (style) {
