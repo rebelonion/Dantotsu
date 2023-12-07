@@ -300,17 +300,16 @@ class MediaAdaptor(
         return type
     }
 
-    fun randomOptionClick() { //used for user list
-        val media = mediaList?.random()
-        if (media != null) {
-            mediaList?.let {
-                clicked(
-                    it.indexOf(media),
-                    null
-                )
-            }
+    fun randomOptionClick() {
+        val media = if (!mediaList.isNullOrEmpty()) {
+            mediaList.random()
+        } else {
+            null
         }
-
+        media?.let {
+            val index = mediaList?.indexOf(it) ?: -1
+            clicked(index, null)
+        }
     }
 
     inner class MediaViewHolder(val binding: ItemMediaCompactBinding) :
