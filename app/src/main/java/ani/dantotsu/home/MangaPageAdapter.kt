@@ -93,10 +93,9 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         }
 
         binding.mangaUserAvatar.setSafeOnClickListener {
-            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.MANGA).show(
-                (it.context as AppCompatActivity).supportFragmentManager,
-                "dialog"
-            )
+            val dialogFragment =
+                SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.MANGA)
+            dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
 
         binding.mangaSearchBar.setEndIconOnClickListener {
