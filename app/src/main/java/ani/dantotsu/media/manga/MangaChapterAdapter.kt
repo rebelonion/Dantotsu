@@ -161,6 +161,7 @@ class MangaChapterAdapter(
                 //binding.itemDownload.setColorFilter(typedValue2.data) //TODO: colors go to wrong places
                 binding.itemDownload.postDelayed({
                     binding.itemDownload.setImageResource(R.drawable.ic_round_delete_24)
+                    binding.itemDownload.rotation = 0f
                     //binding.itemDownload.setColorFilter(typedValue2.data)
                 }, 1000)
             } else {
