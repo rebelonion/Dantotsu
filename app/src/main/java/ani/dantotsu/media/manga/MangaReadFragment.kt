@@ -203,6 +203,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         val chapters = media.manga?.chapters?.values?.toList()
         //filter by selected language
         val progressChapterIndex = chapters?.indexOfFirst { MangaNameAdapter.findChapterNumber(it.number)?.toInt() == selected }?:0
+        if (progressChapterIndex < 0 || n < 1) return
         val chaptersToDownload = chapters?.subList(
             progressChapterIndex + 1,
             progressChapterIndex + n + 1
