@@ -338,19 +338,21 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
 
     fun openSettings(pkg: MangaExtension.Installed) {
         val changeUIVisibility: (Boolean) -> Unit = { show ->
-            val activity = requireActivity() as MediaDetailsActivity
-            val visibility = if (show) View.VISIBLE else View.GONE
-            activity.findViewById<AppBarLayout>(R.id.mediaAppBar).visibility = visibility
-            activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
-            activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
-            activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-            try {
-                activity.findViewById<CustomBottomNavBar>(R.id.mediaTab).visibility = visibility
-            } catch (e: ClassCastException) {
-                activity.findViewById<NavigationRailView>(R.id.mediaTab).visibility = visibility
+            val activity = activity
+            if (activity is MediaDetailsActivity && isAdded) {
+                val visibility = if (show) View.VISIBLE else View.GONE
+                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).visibility = visibility
+                activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
+                activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
+                activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
+                try {
+                    activity.findViewById<CustomBottomNavBar>(R.id.mediaTab).visibility = visibility
+                } catch (e: ClassCastException) {
+                    activity.findViewById<NavigationRailView>(R.id.mediaTab).visibility = visibility
+                }
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
+                    if (show) View.GONE else View.VISIBLE
             }
-            activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                if (show) View.GONE else View.VISIBLE
         }
         val allSettings = pkg.sources.filterIsInstance<ConfigurableSource>()
         if (allSettings.isNotEmpty()) {
