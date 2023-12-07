@@ -120,6 +120,7 @@ class MangaChapterAdapter(
 
     fun downloadNChaptersFrom(position: Int, n: Int) {
         //download next n chapters
+        if (position < 0 || position >= arr.size) return
         for (i in 0..<n) {
             if (position + i < arr.size) {
                 val chapterNumber = arr[position + i].number
