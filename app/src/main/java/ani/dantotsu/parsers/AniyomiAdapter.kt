@@ -16,6 +16,7 @@ import ani.dantotsu.logger
 import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
+import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
@@ -327,8 +328,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
             } catch (e: Exception) {
                 logger("loadImages Exception: $e")
-                Toast.makeText(currContext(), "Failed to load images: $e", Toast.LENGTH_SHORT)
-                    .show()
+                snackString("Failed to load images: $e")
                 emptyList()
             }
         }

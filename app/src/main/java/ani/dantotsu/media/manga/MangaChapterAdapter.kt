@@ -120,6 +120,7 @@ class MangaChapterAdapter(
 
     fun downloadNChaptersFrom(position: Int, n: Int) {
         //download next n chapters
+        if (position < 0 || position >= arr.size) return
         for (i in 0..<n) {
             if (position + i < arr.size) {
                 val chapterNumber = arr[position + i].number
@@ -160,6 +161,7 @@ class MangaChapterAdapter(
                 //binding.itemDownload.setColorFilter(typedValue2.data) //TODO: colors go to wrong places
                 binding.itemDownload.postDelayed({
                     binding.itemDownload.setImageResource(R.drawable.ic_round_delete_24)
+                    binding.itemDownload.rotation = 0f
                     //binding.itemDownload.setColorFilter(typedValue2.data)
                 }, 1000)
             } else {

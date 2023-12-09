@@ -113,8 +113,10 @@ class HomeFragment : Fragment() {
         }
 
         binding.homeUserAvatarContainer.setSafeOnClickListener {
-            SettingsDialogFragment(SettingsDialogFragment.Companion.PageType.HOME).show(
-                parentFragmentManager,
+            val dialogFragment =
+                SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.HOME)
+            dialogFragment.show(
+                (it.context as androidx.appcompat.app.AppCompatActivity).supportFragmentManager,
                 "dialog"
             )
         }
@@ -127,19 +129,17 @@ class HomeFragment : Fragment() {
 
         var reached = false
         val duration = (uiSettings.animationSpeed * 200).toLong()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            binding.homeScroll.setOnScrollChangeListener { _, _, _, _, _ ->
-                if (!binding.homeScroll.canScrollVertically(1)) {
-                    reached = true
-                    bottomBar.animate().translationZ(0f).setDuration(duration).start()
-                    ObjectAnimator.ofFloat(bottomBar, "elevation", 4f, 0f).setDuration(duration)
+        binding.homeScroll.setOnScrollChangeListener { _, _, _, _, _ ->
+            if (!binding.homeScroll.canScrollVertically(1)) {
+                reached = true
+                bottomBar.animate().translationZ(0f).setDuration(duration).start()
+                ObjectAnimator.ofFloat(bottomBar, "elevation", 4f, 0f).setDuration(duration)
+                    .start()
+            } else {
+                if (reached) {
+                    bottomBar.animate().translationZ(12f).setDuration(duration).start()
+                    ObjectAnimator.ofFloat(bottomBar, "elevation", 0f, 4f).setDuration(duration)
                         .start()
-                } else {
-                    if (reached) {
-                        bottomBar.animate().translationZ(12f).setDuration(duration).start()
-                        ObjectAnimator.ofFloat(bottomBar, "elevation", 0f, 4f).setDuration(duration)
-                            .start()
-                    }
                 }
             }
         }

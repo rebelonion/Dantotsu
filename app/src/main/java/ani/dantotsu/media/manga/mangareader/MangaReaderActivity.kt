@@ -81,7 +81,8 @@ class MangaReaderActivity : AppCompatActivity() {
 
     private var isContVisible = false
     private var showProgressDialog = true
-    private var progressDialog: AlertDialog.Builder? = null
+
+    //private var progressDialog: AlertDialog.Builder? = null
     private var maxChapterPage = 0L
     private var currentChapterPage = 0L
 
@@ -253,23 +254,6 @@ class MangaReaderActivity : AppCompatActivity() {
 
         showProgressDialog =
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog") != true else false
-        progressDialog =
-            if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true) {
-                val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)
-                val checkbox = dialogView.findViewById<CheckBox>(R.id.dialog_checkbox)
-                checkbox.text = getString(R.string.dont_ask_again, media.userPreferredName)
-                checkbox.setOnCheckedChangeListener { _, isChecked ->
-                    if (isChecked) progressDialog = null
-                    saveData("${media.id}_progressDialog", isChecked)
-                    showProgressDialog = isChecked
-                }
-                AlertDialog.Builder(this, R.style.MyPopup)
-                    .setTitle(getString(R.string.title_update_progress))
-                    .setView(dialogView)
-                    .apply {
-                        setOnCancelListener { hideBars() }
-                    }
-            } else null
 
         //Chapter Change
         fun change(index: Int) {
@@ -811,9 +795,20 @@ class MangaReaderActivity : AppCompatActivity() {
 
     private fun progress(runnable: Runnable) {
         if (maxChapterPage - currentChapterPage <= 1 && Anilist.userid != null) {
-            if (showProgressDialog && progressDialog != null) {
-                progressDialog?.setCancelable(false)
-                    ?.setPositiveButton(getString(R.string.yes)) { dialog, _ ->
+            if (showProgressDialog) {
+                val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)
+                val checkbox = dialogView.findViewById<CheckBox>(R.id.dialog_checkbox)
+                checkbox.text = getString(R.string.dont_ask_again, media.userPreferredName)
+                checkbox.setOnCheckedChangeListener { _, isChecked ->
+                    saveData("${media.id}_progressDialog", isChecked)
+                    showProgressDialog = !isChecked
+                }
+
+                AlertDialog.Builder(this, R.style.MyPopup)
+                    .setTitle(getString(R.string.title_update_progress))
+                    .setView(dialogView)
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                         saveData("${media.id}_save_progress", true)
                         updateProgress(
                             media,
@@ -823,12 +818,14 @@ class MangaReaderActivity : AppCompatActivity() {
                         dialog.dismiss()
                         runnable.run()
                     }
-                    ?.setNegativeButton(getString(R.string.no)) { dialog, _ ->
+                    .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                         saveData("${media.id}_save_progress", false)
                         dialog.dismiss()
                         runnable.run()
                     }
-                progressDialog?.show()
+                    .setOnCancelListener { hideBars() }
+                    .create()
+                    .show()
             } else {
                 if (loadData<Boolean>("${media.id}_save_progress") != false && if (media.isAdult) settings.updateForH else true)
                     updateProgress(

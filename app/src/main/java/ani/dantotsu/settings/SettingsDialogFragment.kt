@@ -26,10 +26,16 @@ import ani.dantotsu.startMainActivity
 import ani.dantotsu.toast
 
 
-class SettingsDialogFragment(val pageType: PageType) : BottomSheetDialogFragment() {
+class SettingsDialogFragment() : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var pageType: PageType
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        pageType = arguments?.getSerializable("pageType") as? PageType ?: PageType.HOME
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -135,6 +141,14 @@ class SettingsDialogFragment(val pageType: PageType) : BottomSheetDialogFragment
     companion object {
         enum class PageType {
             MANGA, ANIME, HOME
+        }
+
+        fun newInstance(pageType: PageType): SettingsDialogFragment {
+            val fragment = SettingsDialogFragment()
+            val args = Bundle()
+            args.putSerializable("pageType", pageType)
+            fragment.arguments = args
+            return fragment
         }
     }
 }
