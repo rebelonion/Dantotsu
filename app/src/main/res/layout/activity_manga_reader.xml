@@ -22,7 +22,7 @@
             android:id="@+id/mangaReaderRecyclerContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:gest_doubleTapZoom="2"
+            app:gest_doubleTapZoom="1.5"
             app:gest_maxZoom="6"
             app:gest_restrictRotation="true"
             app:gest_rotationEnabled="true">
