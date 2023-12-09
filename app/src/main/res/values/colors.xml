@@ -274,14 +274,19 @@
     <color name="md_theme_dark_4_outlineVariant">#504349</color>
     <color name="md_theme_dark_4_scrim">#000000</color>
 
-    <color name="seed_7">#FF007F</color>                                <!-- if there are any issues with Saikou theme message @Wai What to get it fixed, unallocated colors are also set to "#00FF00" as they are not yet being used-->
+    <color name="seed_7">#FF007F
+    </color>                                <!-- if there are any issues with Saikou theme message @Wai What to get it fixed, unallocated colors are also set to "#00FF00" as they are not yet being used-->
     <color name="md_theme_light_5_primary">#FF007F</color>
-    <color name="md_theme_light_5_onPrimary">#EEEEEE</color>            <!-- good but shared with anime and manga list headers -->
-    <color name="md_theme_light_5_primaryContainer">#000000</color>     <!-- good-ish, it's shared with slider colors so I've had to set it to "#000000" instead of "#78757C" -->
-    <color name="md_theme_light_5_onPrimaryContainer">#FF007F</color>   <!-- good (login button text, "#EEEEEE" also works) -->
+    <color name="md_theme_light_5_onPrimary">#EEEEEE
+    </color>            <!-- good but shared with anime and manga list headers -->
+    <color name="md_theme_light_5_primaryContainer">#000000
+    </color>     <!-- good-ish, it's shared with slider colors so I've had to set it to "#000000" instead of "#78757C" -->
+    <color name="md_theme_light_5_onPrimaryContainer">#FF007F
+    </color>   <!-- good (login button text, "#EEEEEE" also works) -->
     <color name="md_theme_light_5_secondary">#91A6FF</color>
     <color name="md_theme_light_5_onSecondary">#EEEEEE</color>
-    <color name="md_theme_light_5_secondaryContainer">#91A6FF</color>   <!-- good but shared with youtube play -->
+    <color name="md_theme_light_5_secondaryContainer">#91A6FF
+    </color>   <!-- good but shared with youtube play -->
     <color name="md_theme_light_5_onSecondaryContainer">#EEEEEE</color>
     <color name="md_theme_light_5_tertiary">#91A6FF</color>
     <color name="md_theme_light_5_onTertiary">#00FF00</color>
@@ -306,12 +311,16 @@
     <color name="md_theme_light_5_outlineVariant">#00FF00</color>
     <color name="md_theme_light_5_scrim">#00FF00</color>
     <color name="md_theme_dark_5_primary">#FF5DAE</color>
-    <color name="md_theme_dark_5_onPrimary">#EEEEEE</color>             <!-- good but shared with anime and manga list headers -->
-    <color name="md_theme_dark_5_primaryContainer">#EEEEEE</color>      <!-- good-ish, it's shared with slider colors so I've had to set it to "#EEEEEE" instead of "#928F98" -->
-    <color name="md_theme_dark_5_onPrimaryContainer">#FF5DAE</color>    <!-- good (login button text, "#000000" also works) -->
+    <color name="md_theme_dark_5_onPrimary">#EEEEEE
+    </color>             <!-- good but shared with anime and manga list headers -->
+    <color name="md_theme_dark_5_primaryContainer">#EEEEEE
+    </color>      <!-- good-ish, it's shared with slider colors so I've had to set it to "#EEEEEE" instead of "#928F98" -->
+    <color name="md_theme_dark_5_onPrimaryContainer">#FF5DAE
+    </color>    <!-- good (login button text, "#000000" also works) -->
     <color name="md_theme_dark_5_secondary">#91A6FF</color>
     <color name="md_theme_dark_5_onSecondary">#EEEEEE</color>
-    <color name="md_theme_dark_5_secondaryContainer">#91A6FF</color>    <!-- good but shared with youtube play -->
+    <color name="md_theme_dark_5_secondaryContainer">#91A6FF
+    </color>    <!-- good but shared with youtube play -->
     <color name="md_theme_dark_5_onSecondaryContainer">#EEEEEE</color>
     <color name="md_theme_dark_5_tertiary">#91A6FF</color>
     <color name="md_theme_dark_5_onTertiary">#00FF00</color>
@@ -463,4 +472,8 @@
     <color name="CustomColor2">#68AF86</color>
     <color name="CustomColor3">#0096AE</color>
     <color name="CustomColor4">#000000</color>
+    <color name="light_blue_50">#FFE1F5FE</color>
+    <color name="light_blue_200">#FF81D4FA</color>
+    <color name="light_blue_600">#FF039BE5</color>
+    <color name="light_blue_900">#FF01579B</color>
 </resources>

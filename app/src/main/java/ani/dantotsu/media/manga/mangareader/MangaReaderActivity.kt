@@ -795,7 +795,7 @@ class MangaReaderActivity : AppCompatActivity() {
 
     private fun progress(runnable: Runnable) {
         if (maxChapterPage - currentChapterPage <= 1 && Anilist.userid != null) {
-            if (showProgressDialog) {
+           if (showProgressDialog) {
                 val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)
                 val checkbox = dialogView.findViewById<CheckBox>(R.id.dialog_checkbox)
                 checkbox.text = getString(R.string.dont_ask_again, media.userPreferredName)
@@ -810,7 +810,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
                         saveData("${media.id}_save_progress", true)
-                        updateProgress(
+                       updateProgress(
                             media,
                             MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
                                 .toString()

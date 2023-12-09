@@ -1,4 +1,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <style name="Theme.Base" parent="Theme.Material3.DayNight">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">?android:colorBackground</item>
@@ -12,16 +13,21 @@
         <item name="android:ambientShadowAlpha">0.08</item>
         <item name="android:spotShadowAlpha">0.08</item>
         <item name="snackbarStyle">@style/MySnackbar</item>
-        <item name="snackbarButtonStyle">@style/Widget.MaterialComponents.Button.TextButton.Snackbar</item>
+        <item name="snackbarButtonStyle">
+            @style/Widget.MaterialComponents.Button.TextButton.Snackbar
+        </item>
         <item name="snackbarTextViewStyle">@string/MySnackBarText</item>
         <item name="popupMenuStyle">@style/MyPopup</item>
         <item name="android:windowSplashScreenAnimationDuration" tools:targetApi="s">1000</item>
-        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/anim_splash</item>
-        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">
+            @drawable/anim_splash
+        </item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:targetApi="o_mr1">shortEdges
+        </item>
     </style>
 
     <style name="Theme.Dantotsu" parent="Theme.Base">
-        <item name="android:windowLightStatusBar" >true</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
     <style name="Theme.Dantotsu.NoActionBar">
@@ -30,6 +36,7 @@
     </style>
 
     <style name="Theme.Dantotsu.AppBarOverlay" parent="Theme.Dantotsu" />
+
     <style name="Theme.Dantotsu.PopupOverlay" parent="Theme.Dantotsu" />
 
     <style name="Theme.Dantotsu.NeverCutout" parent="@style/Theme.Dantotsu.NoActionBar">
@@ -305,6 +312,21 @@
         <item name="colorOnSurfaceInverse">@color/md_theme_light_5_inverseOnSurface</item>
         <item name="colorSurfaceInverse">@color/md_theme_light_5_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_5_inversePrimary</item>
+    </style>
+
+    <style name="Theme.Dantotsu.AppWidgetContainerParent" parent="@android:style/Theme.DeviceDefault">
+        <!-- Radius of the outer bound of widgets to make the rounded corners -->
+        <item name="appWidgetRadius">16dp</item>
+        <!--
+        Radius of the inner view's bound of widgets to make the rounded corners.
+        It needs to be 8dp or less than the value of appWidgetRadius
+        -->
+        <item name="appWidgetInnerRadius">8dp</item>
+    </style>
+
+    <style name="Theme.Dantotsu.AppWidgetContainer" parent="Theme.Dantotsu.AppWidgetContainerParent">
+        <!-- Apply padding to avoid the content of the widget colliding with the rounded corners -->
+        <item name="appWidgetPadding">16dp</item>
     </style>
 
 </resources>

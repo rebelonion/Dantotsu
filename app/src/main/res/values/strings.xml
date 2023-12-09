@@ -1,5 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:locale="en-rUS">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en-rUS">
 
     <string name="repo">rebelonion/Dantotsu</string>
     <string name="preference_file_key" translatable="false">dantotsuprefs</string>
@@ -506,9 +505,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="close">Close</string>
-    <string name= "no_chapter">No Chapter</string>
-    <string name= "content_18">Turn on 18+ Content from your Anilist Settings</string>
-    <string name= "available">Available</string>
+    <string name="no_chapter">No Chapter</string>
+    <string name="content_18">Turn on 18+ Content from your Anilist Settings</string>
+    <string name="available">Available</string>
     <string name="lets_go">Let\'s Go</string>
     <string name="cope">Cope</string>
 
@@ -598,7 +597,7 @@
 
     <string name="question_17">Some useful tips and tricks</string>
     <string name="answer_17">The following presents some tips and tricks you may or may not know about - \n \n \n - By hold pressing the Dantotsu logo in settings, you can check if there are any new updates manually. \n \n - Hold pressing an error message/tag/synonym or title will copy it. \n \n - You can open an episode with other apps by hold pressing any server for that episode. This helps in streaming the episode using other video players or download the episode using download managers. \n \n - You can set up custom lists using this [link](https://anilist.co/settings/lists). (you need to be signed in) \n \n - If your episode/chapter is not being progressed automatically after you finish watching/reading it, then hold press the status bar(planning/repeating/watching button) of that anime/manga. The next time you start a chapter/finish an episode, you will stumble upon a popup. Press yes there. </string>
-    
+
 
     <string name="subscribed_notification">Subscribed! Receiving notifications, when new episodes are released on %1$s.</string>
 
@@ -643,5 +642,10 @@
     <string name="color_picker">Color Picker</string>
     <string name="random_selection">Random Selection</string>
     <string name="incognito_mode">Incognito Mode</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="airing_image">Airing Image</string>
 
 </resources>
