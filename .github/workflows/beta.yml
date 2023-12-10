@@ -29,7 +29,7 @@ jobs:
         cache: gradle
 
     - name: Decode Keystore File
-      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > key.keystore
+      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > app/key.keystore
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
