@@ -29,13 +29,16 @@ jobs:
         cache: gradle
 
     - name: Decode Keystore File
-      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > app/key.keystore
+      run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > key.keystore
+
+    - name: List files in the directory
+      run: ls -l
 
     - name: Make gradlew executable
       run: chmod +x ./gradlew
 
     - name: Build with Gradle
-      run: ./gradlew assembleDebug -Pandroid.injected.signing.store.file=key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      run: ./gradlew assembleDebug -Pandroid.injected.signing.store.file=../key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
