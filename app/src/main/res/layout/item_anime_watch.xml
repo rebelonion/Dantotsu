@@ -32,6 +32,7 @@
             android:fontFamily="@font/poppins_bold"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_round_play_circle_24"
+            android:drawableTint="@color/bg_white"
             tools:ignore="TextContrastCheck" />
 
         <TextView
