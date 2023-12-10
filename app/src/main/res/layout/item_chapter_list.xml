@@ -17,7 +17,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="65dp"
             android:orientation="horizontal"
             android:gravity="center">
 
@@ -42,7 +42,6 @@
                 android:layout_height="48dp"
                 android:layout_marginEnd="5dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/random_selection"
                 app:tint="?attr/colorOnBackground"
                 app:srcCompat="@drawable/ic_round_remove_red_eye_24" />
 
@@ -50,8 +49,8 @@
                 android:id="@+id/itemDownload"
                 android:layout_width="24dp"
                 android:layout_height="48dp"
+                android:layout_marginEnd="5dp"
                 android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/sort_by"
                 app:tint="?attr/colorOnBackground"
                 app:srcCompat="@drawable/ic_round_download_24" />
 
