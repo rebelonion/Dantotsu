@@ -30,10 +30,8 @@
             android:text="@string/play_yt"
             android:textColor="@color/bg_white"
             android:fontFamily="@font/poppins_bold"
-            android:visibility="gone"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_round_play_circle_24"
-            app:iconTint="?attr/colorOnSecondaryContainer"
             tools:ignore="TextContrastCheck" />
 
         <TextView
