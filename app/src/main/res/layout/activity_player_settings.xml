@@ -90,7 +90,7 @@
                 android:paddingEnd="32dp"
                 android:text="@string/video" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsVideoInfo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -111,7 +111,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"
@@ -239,7 +239,7 @@
                 app:iconPadding="16dp"
                 app:iconSize="24dp" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsCursedSpeeds"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -299,7 +299,7 @@
                 android:paddingEnd="32dp"
                 android:text="@string/subtitles" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/subSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -546,7 +546,7 @@
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/playerSettingsTimeStamps"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -567,7 +567,7 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/playerSettingsTimeStampsProxy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -601,7 +601,7 @@
                     android:text="@string/timestamp_proxy_desc"
                     android:textSize="14sp" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/playerSettingsShowTimeStamp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -622,7 +622,7 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track">
 
-                </com.google.android.material.switchmaterial.SwitchMaterial>
+                </com.google.android.material.materialswitch.MaterialSwitch>
 
             </ani.dantotsu.others.Xpandable>
 
@@ -643,7 +643,7 @@
                 android:paddingEnd="32dp"
                 android:text="@string/auto" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsAutoSkipOpEd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -676,7 +676,7 @@
                 android:text="@string/requires_time_stamps_to_be_enabled"
                 android:textSize="14sp" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsAutoPlay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -697,7 +697,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"
@@ -711,7 +711,7 @@
                 android:text="@string/auto_play_next_episode_info"
                 android:textSize="14sp" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsAutoSkip"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -732,7 +732,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"
@@ -765,7 +765,7 @@
                 android:paddingEnd="32dp"
                 android:text="@string/update_progress" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsAskUpdateProgress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -786,7 +786,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"
@@ -800,7 +800,7 @@
                 android:text="@string/ask_update_progress_info_ep"
                 android:textSize="14sp" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsAskUpdateHentai"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -821,7 +821,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"
@@ -882,7 +882,7 @@
                 android:paddingEnd="32dp"
                 android:text="@string/behaviour" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsAlwaysContinue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -903,9 +903,9 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsPauseVideo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -925,9 +925,9 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsVerticalGestures"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -947,9 +947,9 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsFastForward"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -970,9 +970,9 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsDoubleTap"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -993,7 +993,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"
