@@ -1156,7 +1156,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/debug_Mode"
+                android:id="@+id/playerSettingsDebug"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
