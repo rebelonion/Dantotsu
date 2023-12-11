@@ -17,7 +17,7 @@ android {
     compileSdk 34
 
     defaultConfig {
-        applicationId "ani.dantotsu.test"
+        applicationId "ani.dantotsu"
         minSdk 23
         targetSdk 34
         versionCode ((System.currentTimeMillis() / 60000).toInteger())
@@ -27,7 +27,7 @@ android {
 
     buildTypes {
         debug {
-            applicationIdSuffix ".beta"
+            applicationIdSuffix ".sad"
             manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta", icon_placeholder_round: "@mipmap/ic_launcher_beta_round"]
             debuggable true
         }
