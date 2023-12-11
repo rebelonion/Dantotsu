@@ -11,7 +11,6 @@
     </style>
     
     <style name="Theme.App" parent="Theme.Material3.*">
-    ...
     <item name="colorPrimary">@color/pink_200</item>
     <item name="colorSurfaceVariant">@color/pink_100</item>
 </style>
