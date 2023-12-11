@@ -409,6 +409,39 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                 .putBoolean("incognito", isChecked).apply()
         }
+        
+        class MyApplication : Application(), Application.ActivityLifecycleCallbacks {
+
+    override fun onCreate() {
+        super.onCreate()
+        registerActivityLifecycleCallbacks(this)
+    }
+
+    override fun onActivityStopped(activity: Activity) {
+        if (activity.isFinishing) {
+            val preferences = getSharedPreferences("Dantotsu", MODE_PRIVATE)
+            if (binding.settingsIncognito.isChecked) {
+                binding.settingsIncognito.isChecked = false
+                preferences.edit().putBoolean("incognito", false).apply()
+            }
+        }
+    }
+}
+
+class MainActivity : AppCompatActivity() {
+
+    private lateinit var preferences: SharedPreferences
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        preferences = getSharedPreferences("Dantotsu", MODE_PRIVATE)
+        binding.settingsIncognito.isChecked = preferences.getBoolean("incognito", false)
+        binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
+            preferences.edit().putBoolean("incognito", isChecked).apply()
+        }
+    }
+}
+
 
         var previousStart: View = when (uiSettings.defaultStartUpTab) {
             0 -> binding.uiSettingsAnime
