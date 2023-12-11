@@ -9,10 +9,5 @@
         <item name="android:background">?android:attr/colorBackground</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
-    
-    <style name="Theme.App" parent="Theme.Material3.*">
-    <item name="colorPrimary">@color/pink_200</item>
-    <item name="colorSurfaceVariant">@color/pink_100</item>
-</style>
 
 </resources>
