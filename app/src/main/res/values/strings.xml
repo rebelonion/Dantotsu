@@ -267,6 +267,7 @@
 
     <string name="app">App</string>
     <string name="immersive_mode">Hide Status Bar</string>
+    <string name="immersive_modelist">Hide Status Bar for list</string>
     <string name="immersive_mode_info">Requires App restart to fully apply.</string>
     <string name="home_layout_show">Show/Hide Layouts on Home</string>
     <string-array name="home_layouts">

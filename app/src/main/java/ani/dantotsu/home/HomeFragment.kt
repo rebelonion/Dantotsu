@@ -1,6 +1,8 @@
 package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
+import android.content.Context
+import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Build
@@ -71,6 +73,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val scope = lifecycleScope
         var uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
+
         fun load() {
             if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
                 binding.homeUserName.text = Anilist.username
@@ -111,7 +114,11 @@ class HomeFragment : Fragment() {
                 snackString(currContext()?.getString(R.string.please_reload))
             }
         }
-
+        val settings = loadData("incognito") ?: false
+        if(settings) {
+            binding.incognitoTextView.visibility = View.VISIBLE
+            binding.incognitoView.visibility = View.VISIBLE
+        }
         binding.homeUserAvatarContainer.setSafeOnClickListener {
             val dialogFragment =
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.HOME)

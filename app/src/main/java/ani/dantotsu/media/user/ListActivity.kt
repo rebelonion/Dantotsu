@@ -62,7 +62,7 @@ class ListActivity : AppCompatActivity() {
         binding.listTabLayout.setTabTextColors(secondaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
         val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-        if (!uiSettings.immersiveMode) {
+        if (!uiSettings.immersiveModeList) {
             this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.nav_bg_inv)
             binding.root.fitsSystemWindows = true

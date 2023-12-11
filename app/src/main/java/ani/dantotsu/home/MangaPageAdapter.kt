@@ -75,6 +75,12 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
         }
 
+        val settings = loadData("incognito") ?: false
+        if(settings) {
+            binding.incognitoTextView.visibility = View.VISIBLE
+            binding.incognitoView.visibility = View.VISIBLE
+        }
+
         binding.mangaTitleContainer.updatePadding(top = statusBarHeight)
 
         if (uiSettings.smallView) binding.mangaTrendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {

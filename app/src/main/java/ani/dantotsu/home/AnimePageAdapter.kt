@@ -76,6 +76,12 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
         }
 
+        val settings = loadData("incognito") ?: false
+        if(settings) {
+            binding.incognitoTextView.visibility = View.VISIBLE
+            binding.incognitoView.visibility = View.VISIBLE
+        }
+
         binding.animeTitleContainer.updatePadding(top = statusBarHeight)
 
         if (uiSettings.smallView) binding.animeTrendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {

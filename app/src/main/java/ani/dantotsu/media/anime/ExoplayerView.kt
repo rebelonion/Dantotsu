@@ -1156,14 +1156,17 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         preloading = false
+        val setting = loadData("incognito") ?: false
         val showProgressDialog =
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                 ?: true else false
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
-                .setMessage(getString(R.string.incognito_will_not_update))
                 .apply {
+                    if (setting) {
+                        setMessage(getString(R.string.incognito_will_not_update))
+                    }
                     setOnCancelListener { hideSystemBars() }
                     setCancelable(false)
                     setPositiveButton(getString(R.string.yes)) { dialog, _ ->

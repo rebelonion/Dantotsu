@@ -796,6 +796,7 @@ class MangaReaderActivity : AppCompatActivity() {
     private fun progress(runnable: Runnable) {
         if (maxChapterPage - currentChapterPage <= 1 && Anilist.userid != null) {
            if (showProgressDialog) {
+
                 val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)
                 val checkbox = dialogView.findViewById<CheckBox>(R.id.dialog_checkbox)
                 checkbox.text = getString(R.string.dont_ask_again, media.userPreferredName)
@@ -803,9 +804,14 @@ class MangaReaderActivity : AppCompatActivity() {
                     saveData("${media.id}_progressDialog", isChecked)
                     showProgressDialog = !isChecked
                 }
-
+                val setting = loadData("incognito") ?: false
                 AlertDialog.Builder(this, R.style.MyPopup)
                     .setTitle(getString(R.string.title_update_progress))
+                    .apply {
+                        if (setting) {
+                            setMessage(getString(R.string.incognito_will_not_update))
+                        }
+                    }
                     .setView(dialogView)
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
