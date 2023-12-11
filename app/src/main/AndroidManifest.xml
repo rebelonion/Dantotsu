@@ -122,7 +122,8 @@
         <activity
             android:name=".media.MediaDetailsActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.Dantotsu.NeverCutout" />
+            android:theme="@style/Theme.Dantotsu.NeverCutout"
+            android:theme="@style/Theme.Material3"/>
         <activity android:name=".media.CharacterDetailsActivity" />
         <activity android:name=".home.NoInternet" />
         <activity

@@ -13,4 +13,10 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:clipToOutline">true</item>
     </style>
+    
+    <style name="Theme.Material3" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <item name="windowActionBar">false</item>
+    <item name="windowNoTitle">true</item>
+
+    </style>
 </resources>
