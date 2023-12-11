@@ -29,7 +29,7 @@ jobs:
         cache: gradle
 
       
-      - name: Decode Keystore File
+    - name: Decode Keystore File
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
 
     - name: List files in the directory
