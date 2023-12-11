@@ -1159,7 +1159,7 @@
                  android:id="@+id/playerSettingsDebug"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
-                 android:theme="@style/Theme.Material3"
+                 android:theme="@style/Theme.Dantotsu"
                  app:thumbColor="@color/button_switch_track"
                  app:trackColor="@color/bg_opp"
                  android:checked="true"

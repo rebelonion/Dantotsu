@@ -51,7 +51,6 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="${icon_placeholder_round}"
-        android:theme="@style/Theme.Material3"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dantotsu"
         android:usesCleartextTraffic="true"
