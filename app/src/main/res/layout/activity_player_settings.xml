@@ -1159,12 +1159,20 @@
                  android:id="@+id/playerSettingsDebug"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
+                 android.checked="false"
+                 android.drawableStart="@drawable/build_circle"
+                 android.drawablePadding="16dp"
+                 app:drawableTint="?attr/colorPrimary"
                  android:theme="@style/Theme.Dantotsu"
                  app:thumbColor="@color/button_switch_track"
                  app:trackColor="@color/bg_opp"
-                 android:checked="true"
                  android:text="@string/nerd_mode"
-                 android:fontFamily="@font/poppins_bold" />
+                 android:fontFamily="@font/poppins_bold"
+                 android:minHeight="64dp"
+                 android:textAlignment="viewStart"
+                android:textColor="@color/bg_opp"
+                 android:paddingStart="32dp"
+                 android:paddingEnd="32dp"/>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/playerSettingsPiP"
