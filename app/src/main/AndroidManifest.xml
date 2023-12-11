@@ -51,6 +51,7 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="${icon_placeholder_round}"
+        android:theme="@style/Theme.Material3"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dantotsu"
         android:usesCleartextTraffic="true"
@@ -122,8 +123,7 @@
         <activity
             android:name=".media.MediaDetailsActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.Dantotsu.NeverCutout"
-            android:theme="@style/Theme.Material3"/>
+            android:theme="@style/Theme.Dantotsu.NeverCutout"/>
         <activity android:name=".media.CharacterDetailsActivity" />
         <activity android:name=".home.NoInternet" />
         <activity
