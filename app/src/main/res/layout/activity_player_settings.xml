@@ -1162,7 +1162,7 @@
                 android:checked="false"
                 android:drawableStart="@drawable/debug_icon"
                 android:drawablePadding="16dp"
-                app:drawableTint="?attr/colorPrimary"
+                android:theme="@themes/Theme.Base"
                 android:elegantTextHeight="true"
                 android:fontFamily="@font/poppins_bold"
                 android:minHeight="64dp"
