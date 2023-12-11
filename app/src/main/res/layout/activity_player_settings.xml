@@ -1155,7 +1155,7 @@
                 android:textColor="?attr/colorSecondary"
                 tools:ignore="TextContrastCheck" />
                 
-                <androidx.appcompat.widget.SwitchCompat
+                <com.google.android.material.switchmaterial.SwitchMaterial
                  android:id="@+id/playerSettingsDebug"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
