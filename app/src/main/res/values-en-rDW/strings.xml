@@ -643,5 +643,5 @@
     <string name="color_picker">Color Picker</string>
     <string name="random_selection">Random Selection</string>
     <string name="incognito_mode">Incognito Mode</string>
-    <string name="vide_nerd">Debug Mode</string>
+    <string name="nerd_mode">Debug Mode</string>
 </resources>
