@@ -1155,7 +1155,7 @@
                 android:textColor="?attr/colorSecondary"
                 tools:ignore="TextContrastCheck" />
                 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                  android:id="@+id/playerSettingsDebug"
                  android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1195,7 +1195,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track"/>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/playerSettingsCast"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -1216,7 +1216,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"
@@ -1229,12 +1229,6 @@
                 android:paddingEnd="32dp"
                 android:text="@string/show_cast_button_info"
                 android:textSize="14sp" />
-                <com.google.android.material.materialswitch.MaterialSwitch
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent"
-    android:enabled="false"
-    android:text="@string/nerd_mode"/>
-
 
         </LinearLayout>
 
