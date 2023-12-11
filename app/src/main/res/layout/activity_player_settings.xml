@@ -1156,7 +1156,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/playerSettingsPiP"
+                android:id="@+id/debug_Mode"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
@@ -1168,7 +1168,7 @@
                 android:minHeight="64dp"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
-                android:text="@string/picture_in_picture"
+                android:text="@string/nerd_mode"
                 android:textAlignment="viewStart"
                 android:textColor="@color/bg_opp"
                 app:cornerRadius="0dp"

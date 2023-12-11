@@ -244,6 +244,17 @@ class PlayerSettingsActivity : AppCompatActivity() {
                     saveData(player, settings)
                 }
             } else visibility = View.GONE
+ 
+        }
+        binding.playerSettingsDebug.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                visibility = View.VISIBLE
+                isChecked = settings.pip
+                setOnCheckedChangeListener { _, isChecked ->
+                    settings.pip = isChecked
+                    saveData(player, settings)
+                }
+            } else visibility = View.GONE
         }
 
         binding.playerSettingsCast.isChecked = settings.cast
