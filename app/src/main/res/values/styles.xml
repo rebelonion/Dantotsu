@@ -9,10 +9,6 @@
         <item name="android:background">?android:attr/colorBackground</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+    <style name="theme.switch" parent="Theme.AppCompat.DayNight.NoActionBar" />
     
-    <style name="theme.switch" parent="android:Widget">
-    <item name="colorPrimary">?android:attr/textColorPrimary</item>
-    <item name="colorSurfaceVariant">?android:attr/colorBackground</item>
-</style>
-<style name="theme.switch" parent="Theme.AppCompat.DayNight.NoActionBar" />
 </resources>
