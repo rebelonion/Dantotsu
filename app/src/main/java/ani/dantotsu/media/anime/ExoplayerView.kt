@@ -1156,7 +1156,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         preloading = false
-        val setting = loadData("incognito") ?: false
+        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getBoolean("incognito", false) ?: false
         val showProgressDialog =
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                 ?: true else false
@@ -1164,7 +1165,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
                 .apply {
-                    if (setting) {
+                    if (incognito) {
                         setMessage(getString(R.string.incognito_will_not_update))
                     }
                     setOnCancelListener { hideSystemBars() }

@@ -408,7 +408,6 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                 .putBoolean("incognito", isChecked).apply()
-                saveData("incognito", isChecked)
             restartApp()
         }
 

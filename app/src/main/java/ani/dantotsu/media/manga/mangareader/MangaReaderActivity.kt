@@ -3,6 +3,7 @@ package ani.dantotsu.media.manga.mangareader
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -804,11 +805,12 @@ class MangaReaderActivity : AppCompatActivity() {
                     saveData("${media.id}_progressDialog", isChecked)
                     showProgressDialog = !isChecked
                 }
-                val setting = loadData("incognito") ?: false
+               val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                   ?.getBoolean("incognito", false) ?: false
                 AlertDialog.Builder(this, R.style.MyPopup)
                     .setTitle(getString(R.string.title_update_progress))
                     .apply {
-                        if (setting) {
+                        if (incognito) {
                             setMessage(getString(R.string.incognito_will_not_update))
                         }
                     }
