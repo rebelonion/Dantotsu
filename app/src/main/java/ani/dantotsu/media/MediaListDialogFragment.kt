@@ -16,11 +16,10 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.databinding.BottomSheetMediaListBinding
-import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.materialswitch.MaterialSwitch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.google.android.material.materialswitch.SwitchMaterial
 import androidx.compose.material.Switch
 
 
@@ -199,7 +198,7 @@ class MediaListDialogFragment : BottomSheetDialogFragment() {
                     }
 
                 media?.inCustomListsOf?.forEach {
-                    SwitchMaterial(requireContext()).apply {
+                    MaterialSwitch(requireContext()).apply {
                         isChecked = it.value
                         text = it.key
                         setOnCheckedChangeListener { _, isChecked ->
