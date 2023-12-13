@@ -493,7 +493,7 @@
             android:text="Maximum height (horizontal writing) or width (vertical writing)"
             android:textSize="14sp" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/useDarkTheme"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -512,7 +512,7 @@
             app:thumbTint="@color/button_switch_track"
             tools:ignore="VisualLintButtonSize" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/keepScreenOn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -531,7 +531,7 @@
             app:thumbTint="@color/button_switch_track"
             tools:ignore="VisualLintButtonSize" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/volumeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
