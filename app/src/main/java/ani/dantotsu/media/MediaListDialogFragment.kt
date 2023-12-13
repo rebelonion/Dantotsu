@@ -196,7 +196,7 @@ class MediaListDialogFragment : BottomSheetDialogFragment() {
                     }
 
                 media?.inCustomListsOf?.forEach {
-                    SwitchMaterial(requireContext()).apply {
+                    MaterialSwitch(requireContext()).apply {
                         isChecked = it.value
                         text = it.key
                         setOnCheckedChangeListener { _, isChecked ->
