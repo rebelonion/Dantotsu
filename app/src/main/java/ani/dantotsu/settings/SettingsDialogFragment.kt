@@ -113,19 +113,9 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
                 }
 
                 PageType.HOME -> {
-                    try {
-                        val arrayOfFiles =
-                            ContextCompat.getExternalFilesDirs(requireContext(), null)
-                        startActivity(
-                            if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
-                                val parentDirectory = arrayOfFiles[1].toString()
-                                val intent = Intent(Intent.ACTION_VIEW)
-                                intent.setDataAndType(Uri.parse(parentDirectory), "resource/folder")
-                            } else Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
-                        )
-                    } catch (e: ActivityNotFoundException) {
-                        toast(getString(R.string.file_manager_not_found))
-                    }
+                    val intent = Intent(activity, DownloadContainerActivity::class.java)
+                    intent.putExtra("FRAGMENT_CLASS_NAME", OfflineMangaFragment::class.java.name)
+                    startActivity(intent)
                 }
             }
 

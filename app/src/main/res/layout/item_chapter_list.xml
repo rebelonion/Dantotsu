@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,60 +8,60 @@
     android:background="@drawable/card_outline"
     app:cardCornerRadius="12dp">
 
-    <LinearLayout
-        android:layout_width="312dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/listAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        android:theme="@style/Theme.Dantotsu.AppBarOverlay">
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ellipsize="end"
-                android:fontFamily="@font/poppins_bold"
-                android:singleLine="true"
-                android:text=""
-                android:textSize="14dp"
-                tools:ignore="SpUsage" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_bold"
-                android:text=""
-                android:textSize="14dp"
-                tools:ignore="SpUsage" />
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/itemChapterNumber"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="48dp"
+                android:layout_marginStart="10dp"
                 android:fontFamily="@font/poppins_bold"
-                android:maxWidth="250dp"
-                android:paddingEnd="8dp"
+                android:gravity="center|start"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:textSize="16sp"
                 android:singleLine="true"
-                android:textSize="14dp"
-                tools:ignore="SpUsage"
+                android:textColor="?attr/colorOnBackground"
+                android:ellipsize="end"
                 tools:text="1" />
 
-        </LinearLayout>
+            <ImageButton
+                android:id="@+id/itemEpisodeViewed"
+                android:layout_width="24dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="5dp"
+                android:background="?android:attr/selectableItemBackground"
+                app:tint="?attr/colorOnBackground"
+                app:srcCompat="@drawable/ic_round_remove_red_eye_24" />
 
+            <ImageButton
+                android:id="@+id/itemDownload"
+                android:layout_width="24dp"
+                android:layout_height="48dp"
+                android:layout_marginEnd="5dp"
+                android:background="?android:attr/selectableItemBackground"
+                app:tint="?attr/colorOnBackground"
+                app:srcCompat="@drawable/ic_round_download_24" />
+
+        </LinearLayout>
         <TextView
             android:id="@+id/itemChapterTitle"
             android:layout_width="312dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="-10dp"
+            android:layout_marginBottom="10dp"
             android:alpha="0.66"
             android:ellipsize="end"
             android:fontFamily="@font/poppins_bold"
@@ -69,17 +69,7 @@
             android:textSize="14dp"
             android:visibility="gone"
             tools:ignore="SpUsage" />
-
-    </LinearLayout>
-
-    <ImageView
-        android:id="@+id/itemDownload"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="8dp"
-        app:srcCompat="@drawable/ic_round_download_24"
-        tools:ignore="ContentDescription" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <View
         android:id="@+id/itemEpisodeViewedCover"
@@ -88,14 +78,5 @@
         android:alpha="0.33"
         android:background="?android:colorBackground"
         android:visibility="gone" />
-
-    <ImageView
-        android:id="@+id/itemEpisodeViewed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|center_vertical"
-        android:layout_marginEnd="40dp"
-        app:srcCompat="@drawable/ic_round_remove_red_eye_24"
-        tools:ignore="ContentDescription" />
 
 </androidx.cardview.widget.CardView>
