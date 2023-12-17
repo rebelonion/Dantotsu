@@ -79,7 +79,9 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             ?.getBoolean("incognito", false) ?: false
         if(incognito) {
             binding.incognitoTextView.visibility = View.VISIBLE
-            binding.incognitoView.visibility = View.VISIBLE
+            if (!uiSettings.immersiveMode) {
+                binding.root.fitsSystemWindows = true
+            }
         }
 
         binding.mangaTitleContainer.updatePadding(top = statusBarHeight)

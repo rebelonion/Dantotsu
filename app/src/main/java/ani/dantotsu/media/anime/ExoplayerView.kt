@@ -1479,11 +1479,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         SubtitleDialogFragment().show(supportFragmentManager, "dialog")
     }
 
-    @RequiresApi(Build.VERSION_CODES.N)
     override fun onPause() {
         super.onPause()
         orientationListener?.disable()
-        if (isPlayerPlaying) enterPipMode()
         if (isInitialized) {
             playerView.player?.pause()
             saveData(

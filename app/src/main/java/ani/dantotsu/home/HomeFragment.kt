@@ -119,7 +119,9 @@ class HomeFragment : Fragment() {
             ?.getBoolean("incognito", false) ?: false
         if(incognito) {
             binding.incognitoTextView.visibility = View.VISIBLE
-            binding.incognitoView.visibility = View.VISIBLE
+            if (!uiSettings.immersiveMode) {
+                binding.root.fitsSystemWindows = true
+            }
         }
         binding.homeUserAvatarContainer.setSafeOnClickListener {
             val dialogFragment =
