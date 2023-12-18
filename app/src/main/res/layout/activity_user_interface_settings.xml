@@ -98,7 +98,7 @@
                 android:textColor="?attr/colorSecondary"
                 tools:ignore="TextContrastCheck" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/uiSettingsImmersive"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -119,7 +119,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/uiSettingsImmersiveList"
@@ -177,7 +177,7 @@
                 android:layout_marginEnd="16dp"
                 android:background="?android:attr/listDivider" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/uiSettingsSmallView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -197,7 +197,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"
@@ -210,7 +210,7 @@
                 android:textColor="?attr/colorSecondary"
                 tools:ignore="TextContrastCheck" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/uiSettingsBannerAnimation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -230,9 +230,9 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/uiSettingsLayoutAnimation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -253,7 +253,7 @@
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 
-            </com.google.android.material.switchmaterial.SwitchMaterial>
+            </com.google.android.material.materialswitch.MaterialSwitch>
 
             <TextView
                 android:layout_width="match_parent"

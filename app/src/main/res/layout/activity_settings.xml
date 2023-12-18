@@ -161,7 +161,7 @@
 
                 </LinearLayout>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsUseOLED"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -230,7 +230,7 @@
                     android:textColor="?attr/colorSecondary"
                     android:gravity="center"
                     android:padding="16dp"/>
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsUseMaterialYou"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -248,7 +248,7 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsUseSourceTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -273,7 +273,7 @@
                     android:fontFamily="@font/poppins_bold"
                     android:text="@string/custom_theme"/>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsUseCustomTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -341,7 +341,7 @@
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsIncognito"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -611,7 +611,7 @@
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsForceLegacyInstall"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -629,7 +629,7 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/skipExtensionIcons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -647,7 +647,7 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/NSFWExtension"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -898,7 +898,7 @@
                     app:iconPadding="16dp"
                     app:iconSize="24dp" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsDownloadInSd"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -916,7 +916,7 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsContinueMedia"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -934,7 +934,7 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsRecentlyListOnly"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -997,7 +997,7 @@
                     android:text="@string/subscriptions_info"
                     android:textSize="14sp" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsNotificationsCheckingSubscriptions"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1066,7 +1066,7 @@
                         tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsPreferDub"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1084,7 +1084,7 @@
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsShowYt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -1400,7 +1400,7 @@
                     app:iconSize="24dp"
                     app:iconTint="?attr/colorPrimary" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsCheckUpdate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

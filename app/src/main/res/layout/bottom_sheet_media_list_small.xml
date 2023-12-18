@@ -170,7 +170,7 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/mediaListPrivate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
