@@ -68,6 +68,12 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             saveData(ui, settings)
             restartApp()
         }
+        binding.uiSettingsImmersiveList.isChecked = settings.immersiveModeList
+        binding.uiSettingsImmersiveList.setOnCheckedChangeListener { _, isChecked ->
+            settings.immersiveModeList = isChecked
+            saveData(ui, settings)
+            restartApp()
+        }
 
         binding.uiSettingsBannerAnimation.isChecked = settings.bannerAnimations
         binding.uiSettingsBannerAnimation.setOnCheckedChangeListener { _, isChecked ->

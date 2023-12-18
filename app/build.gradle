@@ -100,7 +100,7 @@ dependencies {
     implementation 'com.alexvasilkov:gesture-views:2.8.3'
     implementation 'com.github.VipulOG:ebook-reader:0.1.6'
     implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
-    implementation "com.github.skydoves:colorpickerview:2.3.0"
+    implementation 'com.github.eltos:simpledialogfragments:v3.7'
 
 //    string matching
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'

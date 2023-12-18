@@ -1101,7 +1101,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             if (settings.cursedSpeeds)
                 arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)
             else
-                arrayOf(0.25f, 0.33f, 0.5f, 0.66f, 0.75f, 1f, 1.25f, 1.33f, 1.5f, 1.66f, 1.75f, 2f)
+                arrayOf(0.25f, 0.33f, 0.5f, 0.66f, 0.75f, 1f, 1.15f, 1.25f, 1.33f, 1.5f, 1.66f, 1.75f, 2f)
 
         val speedsName = speeds.map { "${it}x" }.toTypedArray()
         var curSpeed = loadData("${media.id}_speed", this) ?: settings.defaultSpeed
@@ -1156,14 +1156,18 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         preloading = false
+        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getBoolean("incognito", false) ?: false
         val showProgressDialog =
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                 ?: true else false
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
-                .setMessage(getString(R.string.incognito_will_not_update))
                 .apply {
+                    if (incognito) {
+                        setMessage(getString(R.string.incognito_will_not_update))
+                    }
                     setOnCancelListener { hideSystemBars() }
                     setCancelable(false)
                     setPositiveButton(getString(R.string.yes)) { dialog, _ ->

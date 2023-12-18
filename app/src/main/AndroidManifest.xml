@@ -17,25 +17,22 @@
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
-
-    <!-- For background jobs -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" /> <!-- For background jobs -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
-
-    <!-- For managing extensions -->
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- For managing extensions -->
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
-    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" />
-    <!-- To view extension packages in API 30+ -->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES"
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" /> <!-- To view extension packages in API 30+ -->
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
-
-    <uses-permission android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
+    <uses-permission
+        android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
         tools:ignore="ProtectedPermissions" />
 
     <queries>
@@ -48,6 +45,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:banner="@drawable/ic_banner_foreground"
         android:icon="${icon_placeholder}"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -56,14 +54,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dantotsu"
         android:usesCleartextTraffic="true"
-        tools:ignore="AllowBackup"
-        android:banner="@drawable/ic_banner_foreground">
+        tools:ignore="AllowBackup">
+        <receiver
+            android:name=".widgets.CurrentlyAiringWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/currently_airing_widget_info" />
+        </receiver>
+
         <activity
-            android:name="ani.dantotsu.media.novel.novelreader.NovelReaderActivity"
+            android:name=".media.novel.novelreader.NovelReaderActivity"
             android:configChanges="orientation|screenSize"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="application/epub+zip" />
@@ -71,13 +81,11 @@
                 <data android:mimeType="application/vnd.amazon.ebook" />
                 <data android:mimeType="application/fb2+zip" />
                 <data android:mimeType="application/vnd.comicbook+zip" />
-
                 <data android:pathPattern=".*\\.epub" />
                 <data android:pathPattern=".*\\.mobi" />
                 <data android:pathPattern=".*\\.kf8" />
                 <data android:pathPattern=".*\\.fb2" />
                 <data android:pathPattern=".*\\.cbz" />
-
                 <data android:scheme="content" />
                 <data android:scheme="file" />
             </intent-filter>
@@ -103,9 +111,9 @@
         <activity
             android:name=".media.CalendarActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name="ani.dantotsu.media.user.ListActivity" />
+        <activity android:name=".media.user.ListActivity" />
         <activity
-            android:name="ani.dantotsu.media.manga.mangareader.MangaReaderActivity"
+            android:name=".media.manga.mangareader.MangaReaderActivity"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="@string/manga"
@@ -118,7 +126,7 @@
         <activity android:name=".media.CharacterDetailsActivity" />
         <activity android:name=".home.NoInternet" />
         <activity
-            android:name="ani.dantotsu.media.anime.ExoplayerView"
+            android:name=".media.anime.ExoplayerView"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|navigation"
             android:excludeFromRecents="true"
             android:exported="true"
@@ -127,7 +135,7 @@
             android:supportsPictureInPicture="true"
             tools:targetApi="n" />
         <activity
-            android:name="ani.dantotsu.connections.anilist.Login"
+            android:name=".connections.anilist.Login"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:excludeFromRecents="true"
             android:exported="true"
@@ -144,7 +152,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="ani.dantotsu.connections.mal.Login"
+            android:name=".connections.mal.Login"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:excludeFromRecents="true"
             android:exported="true"
@@ -160,8 +168,8 @@
                     android:scheme="dantotsu" />
             </intent-filter>
         </activity>
-
-        <activity android:name="ani.dantotsu.connections.discord.Login"
+        <activity
+            android:name=".connections.discord.Login"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:excludeFromRecents="true"
             android:exported="true"
@@ -172,15 +180,14 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="dantotsu"/>
+                <data android:scheme="dantotsu" />
                 <data android:scheme="http" />
                 <data android:scheme="https" />
-                <data android:host="discord.dantotsu.com"/>
+                <data android:host="discord.dantotsu.com" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name="ani.dantotsu.connections.anilist.UrlMedia"
+            android:name=".connections.anilist.UrlMedia"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:excludeFromRecents="true"
             android:exported="true"
@@ -216,30 +223,31 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter>
-                <action android:name="android.intent.action.Main"  />
-                <category android:name="android.intent.category.LEANBACK_LAUNCHER"/>
+                <action android:name="android.intent.action.Main" />
+
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".download.DownloadContainerActivity" />
         <activity
             android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:exported="false" />
-
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <receiver
             android:name=".subcriptions.AlarmReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="Aani.dantotsu.ACTION_ALARM"/>
+                <action android:name="Aani.dantotsu.ACTION_ALARM" />
             </intent-filter>
         </receiver>
 
@@ -258,30 +266,37 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <service android:name=".download.video.MyDownloadService"
+        <service
+            android:name=".widgets.CurrentlyAiringRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="true" />
+        <service
+            android:name=".download.video.MyDownloadService"
             android:exported="false">
             <intent-filter>
-                <action android:name="androidx.media3.exoplayer.downloadService.action.RESTART"/>
-                <category android:name="android.intent.category.DEFAULT"/>
+                <action android:name="androidx.media3.exoplayer.downloadService.action.RESTART" />
+
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
-        <service android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallService"
-            android:foregroundServiceType="dataSync"
-            android:exported="false" />
-
-        <service android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallService"
-            android:foregroundServiceType="dataSync"
-            android:exported="false" />
-
-        <service android:name=".download.manga.MangaDownloaderService"
+        <service
+            android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
-
-        <service android:name=".download.novel.NovelDownloaderService"
+        <service
+            android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
-
-        <service android:name=".connections.discord.DiscordService"
+        <service
+            android:name=".download.manga.MangaDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".download.novel.NovelDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".connections.discord.DiscordService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
     </application>

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.Animatable
 import android.os.Build.*
 import android.os.Build.VERSION.*
@@ -11,7 +12,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -37,7 +37,9 @@ import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.skydoves.colorpickerview.listeners.ColorListener
+import eltos.simpledialogfragment.SimpleDialog
+import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
+import eltos.simpledialogfragment.color.SimpleColorDialog
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
@@ -50,7 +52,7 @@ import uy.kohesive.injekt.api.get
 import kotlin.random.Random
 
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListener {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@SettingsActivity)
     }
@@ -176,31 +178,21 @@ class SettingsActivity : AppCompatActivity() {
 
 
         binding.customTheme.setOnClickListener {
-            var passedColor: Int = 0
-            val dialogView = layoutInflater.inflate(R.layout.dialog_color_picker, null)
-            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Custom Theme")
-                .setView(dialogView)
-                .setPositiveButton("OK") { dialog, _ ->
-                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                        .putInt("custom_theme_int", passedColor).apply()
-                    logger("Custom Theme: $passedColor")
-                    dialog.dismiss()
-                    restartApp()
-                }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .create()
-            val colorPickerView =
-                dialogView.findViewById<com.skydoves.colorpickerview.ColorPickerView>(R.id.colorPickerView)
-            colorPickerView.setColorListener(ColorListener { color, fromUser ->
-                val linearLayout = dialogView.findViewById<LinearLayout>(R.id.linear)
-                passedColor = color
-                linearLayout.setBackgroundColor(color)
-            })
-            alertDialog.show()
-            alertDialog.window?.setDimAmount(0.8f)
+            val originalColor = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt(
+                "custom_theme_int",
+                Color.parseColor("#6200EE")
+            )
+            val tag = "colorPicker"
+            SimpleColorDialog.build()
+                .title("Custom Theme")
+                .colorPreset(originalColor)
+                .colors(this, SimpleColorDialog.BEIGE_COLOR_PALLET)
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this, tag)
         }
 
         //val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
@@ -416,6 +408,7 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                 .putBoolean("incognito", isChecked).apply()
+            restartApp()
         }
 
         var previousStart: View = when (uiSettings.defaultStartUpTab) {
@@ -768,6 +761,18 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
+        if (which == BUTTON_POSITIVE) {
+            if (dialogTag == "colorPicker") {
+                val color = extras.getInt(SimpleColorDialog.COLOR)
+                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                    .putInt("custom_theme_int", color).apply()
+                logger("Custom Theme: $color")
+            }
+        }
+        return true
     }
 
     private fun restartApp() {
