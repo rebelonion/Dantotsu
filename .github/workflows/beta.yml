@@ -3,7 +3,6 @@ name: Build APK and Notify Discord
 on:
   push:
     branches:
-      - main
       - dev
 
 jobs:
