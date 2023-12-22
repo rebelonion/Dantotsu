@@ -569,9 +569,6 @@
 
         \n\nNote: Direct downloads are also possible without a manager but it\'s not recommended.</string>
 
-    <string name="question_8">How to download Manga Chapters?</string>
-    <string name="answer_8">It is yet not possible to download chapters in Dantotsu but this feature will be implemented soon.</string>
-
     <string name="question_9">How to enable NSFW content?</string>
     <string name="answer_9">You can enable nsfw content by enabling 18+ contents from this [link](https://anilist.co/settings/media).</string>
 
