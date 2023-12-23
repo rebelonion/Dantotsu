@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
+import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.Download
 import ani.dantotsu.download.DownloadsManager
@@ -286,20 +287,24 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             val cover = File(directory, "cover.jpg")
             val coverUri: Uri? = if (cover.exists()) {
                 Uri.fromFile(cover)
-            } else {
-                null
-            }
+            } else null
+            val banner = File(directory, "banner.jpg")
+            val bannerUri: Uri? = if (banner.exists()) {
+                Uri.fromFile(banner)
+            } else null
             val title = mediaModel.nameMAL ?: mediaModel.nameRomaji
             val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore
                 ?: 0) else mediaModel.userScore) / 10.0).toString()
-            val isOngoing = false
+            val isOngoing = mediaModel.status == currActivity()!!.getString(R.string.status_releasing)
             val isUserScored = mediaModel.userScore != 0
-            return OfflineMangaModel(title, score, isOngoing, isUserScored, coverUri)
+            val chap = "${mediaModel.manga?.totalChapters ?: "??"}"
+            val chapters = " Chapters"
+            return OfflineMangaModel(title, score, chap, type, chapters, isOngoing, isUserScored, coverUri , bannerUri )
         } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
             FirebaseCrashlytics.getInstance().recordException(e)
-            return OfflineMangaModel("unknown", "0", false, false, null)
+            return OfflineMangaModel("unknown", "0", "??", "movie" ,"hmm", false, false, null , null)
         }
     }
 }
