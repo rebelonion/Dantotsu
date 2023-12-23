@@ -100,9 +100,10 @@
                 android:numColumns="1"
                 android:verticalSpacing="20dp"
                 android:horizontalSpacing="10dp"
-                android:paddingStart="0dp"
+                android:paddingStart="20dp"
                 android:paddingEnd="20dp"
-                android:gravity="center" />
+                android:gravity="center"
+                android:scrollbars="none"/>
         </LinearLayout>
     </FrameLayout>
 
