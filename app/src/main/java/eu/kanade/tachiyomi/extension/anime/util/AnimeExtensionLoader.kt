@@ -135,16 +135,7 @@ internal object AnimeExtensionLoader {
             return AnimeLoadResult.Error
         }
 
-        val signatureHash = getSignatureHash(pkgInfo)
-
-        if (signatureHash == null) {
-            logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
-            return AnimeLoadResult.Error
-        } else if (signatureHash !in trustedSignatures) {
-            val extension = AnimeExtension.Untrusted(extName, pkgName, versionName, versionCode, libVersion, signatureHash)
-            logcat(LogPriority.WARN, message = { "Extension $pkgName isn't trusted" })
-            return AnimeLoadResult.Untrusted(extension)
-        }
+        val signatureHash: String? = null
 
         val isNsfw = appInfo.metaData.getInt(METADATA_NSFW) == 1
         if (!loadNsfwSource && isNsfw) {
