@@ -1,5 +1,6 @@
 package ani.dantotsu.download.manga
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -33,33 +34,51 @@ class OfflineMangaAdapter(
         return position.toLong()
     }
 
+    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+
+        val style = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("offline_view", 0)
+
         var view = convertView
-        if (view == null) {
-            view = inflater.inflate(R.layout.item_media_large, parent, false)
+
+        if (view == null && style == 0 ) {
+            view = inflater.inflate(R.layout.item_media_large, parent, false) // large view
+        }
+        else if (view == null && style == 1){
+            view = inflater.inflate(R.layout.item_media_compact, parent, false) // compact view
         }
 
         val item = getItem(position) as OfflineMangaModel
         val imageView = view!!.findViewById<ImageView>(R.id.itemCompactImage)
-        val bannerView = view.findViewById<ImageView>(R.id.itemCompactBanner)
         val titleTextView = view.findViewById<TextView>(R.id.itemCompactTitle)
         val itemScore = view.findViewById<TextView>(R.id.itemCompactScore)
         val itemScoreBG = view.findViewById<View>(R.id.itemCompactScoreBG)
         val ongoing = view.findViewById<CardView>(R.id.itemCompactOngoing)
-        val chap = view.findViewById<TextView>(R.id.itemCompactTotal)
-        val chapters = view.findViewById<TextView>(R.id.itemTotal)
-        val typeView = view.findViewById<LinearLayout>(R.id.itemCompactType)
+        val totalchapter = view.findViewById<TextView>(R.id.itemCompactTotal)
         val type = view.findViewById<TextView>(R.id.itemCompactRelation)
+        val typeView = view.findViewById<LinearLayout>(R.id.itemCompactType)
+
+        if (style == 0){
+            val bannerView = view.findViewById<ImageView>(R.id.itemCompactBanner) // for large view
+            val chapters = view.findViewById<TextView>(R.id.itemTotal)
+            chapters.text = " Chapters"
+            bannerView.setImageURI(item.banner)
+            totalchapter.text = item.totalchapter
+        }
+
+        else if (style == 1){
+            val readchapter = view.findViewById<TextView>(R.id.itemCompactUserProgress) // for compact view
+            readchapter.text = item.readchapter
+            totalchapter.text = " | "+item.totalchapter
+        }
+
         // Bind item data to the views
-        // For example:
-        bannerView.setImageURI(item.banner)
-        imageView.setImageURI(item.image)
-        chapters.text = item.chapters
-        chap.text = item.chap
         type.text = item.type
         typeView.visibility = View.VISIBLE
+        imageView.setImageURI(item.image)
         titleTextView.text = item.title
         itemScore.text = item.score
+
         if (item.isOngoing) {
             ongoing.visibility = View.VISIBLE
         } else {

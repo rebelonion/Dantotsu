@@ -80,7 +80,43 @@
                 </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
+                <TextView
+                    android:id="@+id/sourceTitle"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center"
+                    android:text="Downloaded Manga and Novels"
+                    android:textSize="14sp"
+                    tools:ignore="HardcodedText" />
+
+                <ImageView
+                    android:id="@+id/downloadedList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.33"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_round_view_list_24"
+                    app:tint="?attr/colorOnBackground"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
+
+                <ImageView
+                    android:id="@+id/downloadedGrid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.33"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_round_grid_view_24"
+                    app:tint="?attr/colorOnBackground"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            </LinearLayout>
             <!-- This TextView might overlap with GridView if GridView has items -->
             <TextView
                 android:id="@+id/noMangaOffline"
@@ -91,7 +127,7 @@
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 android:visibility="gone" />
-
+            <!-- for large view  -->
             <GridView
                 android:id="@+id/gridView"
                 android:layout_width="match_parent"
@@ -100,10 +136,26 @@
                 android:numColumns="1"
                 android:verticalSpacing="20dp"
                 android:horizontalSpacing="10dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
+                android:paddingStart="25dp"
+                android:paddingEnd="25dp"
                 android:gravity="center"
-                android:scrollbars="none"/>
+                android:scrollbars="none"
+                android:visibility="gone"/>
+            <!-- for compact view -->
+            <GridView
+                android:id="@+id/gridView1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:columnWidth="138dp"
+                android:gravity="center"
+                android:horizontalSpacing="-30dp"
+                android:numColumns="auto_fit"
+                android:paddingStart="-10dp"
+                android:paddingEnd="-10dp"
+                android:scrollbars="none"
+                android:verticalSpacing="20dp"
+                android:visibility="gone"/>
         </LinearLayout>
     </FrameLayout>
 
