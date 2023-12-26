@@ -2,6 +2,7 @@ package ani.dantotsu.download.manga
 
 import android.animation.ObjectAnimator
 import android.content.Context
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -16,17 +17,23 @@ import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
 import android.widget.AutoCompleteTextView
 import android.widget.GridView
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
+import ani.dantotsu.Refresh
+import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.Download
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.initActivity
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.setSafeOnClickListener
+import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
@@ -45,6 +52,7 @@ import kotlin.math.max
 import kotlin.math.min
 
 class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
+
     private val downloadManager = Injekt.get<DownloadsManager>()
     private var downloads: List<OfflineMangaModel> = listOf()
     private lateinit var gridView: GridView
@@ -91,15 +99,49 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             override fun afterTextChanged(s: Editable?) {
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int, ) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 onSearchQuery(s.toString())
             }
         })
+        var style = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getInt("offline_view", 0)
+        val layoutList = view.findViewById<ImageView>(R.id.downloadedList)
+        val layoutcompact = view.findViewById<ImageView>(R.id.downloadedGrid)
+        var selected = when (style) {
+            0 -> layoutList
+            1 -> layoutcompact
+            else -> layoutList
+        }
+        selected.alpha = 1f
 
-        gridView = view.findViewById(R.id.gridView)
+        fun selected(it: ImageView) {
+            selected.alpha = 0.33f
+            selected = it
+            selected.alpha = 1f
+        }
+
+        layoutList.setOnClickListener {
+            selected(it as ImageView)
+            style = 0
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                ?.putInt("offline_view", style!!)?.apply()
+            recreate(requireActivity())
+
+        }
+
+        layoutcompact.setOnClickListener {
+            selected(it as ImageView)
+            style = 1
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                ?.putInt("offline_view", style!!)?.apply()
+            recreate(requireActivity())
+        }
+
+        gridView = if(style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
+        gridView.visibility = View.VISIBLE
         getDownloads()
         adapter = OfflineMangaAdapter(requireContext(), downloads, this)
         gridView.adapter = adapter
@@ -286,20 +328,25 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             val cover = File(directory, "cover.jpg")
             val coverUri: Uri? = if (cover.exists()) {
                 Uri.fromFile(cover)
-            } else {
-                null
-            }
+            } else null
+            val banner = File(directory, "banner.jpg")
+            val bannerUri: Uri? = if (banner.exists()) {
+                Uri.fromFile(banner)
+            } else null
             val title = mediaModel.nameMAL ?: mediaModel.nameRomaji
             val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore
                 ?: 0) else mediaModel.userScore) / 10.0).toString()
-            val isOngoing = false
+            val isOngoing = mediaModel.status == currActivity()!!.getString(R.string.status_releasing)
             val isUserScored = mediaModel.userScore != 0
-            return OfflineMangaModel(title, score, isOngoing, isUserScored, coverUri)
+            val readchapter = (mediaModel.userProgress ?: "~").toString()
+            val totalchapter = "${mediaModel.manga?.totalChapters ?: "??"}"
+            val chapters = " Chapters"
+            return OfflineMangaModel(title, score, totalchapter, readchapter, type, chapters, isOngoing, isUserScored, coverUri , bannerUri )
         } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
             FirebaseCrashlytics.getInstance().recordException(e)
-            return OfflineMangaModel("unknown", "0", false, false, null)
+            return OfflineMangaModel("unknown", "0", "??", "??","movie" ,"hmm", false, false, null , null)
         }
     }
 }
