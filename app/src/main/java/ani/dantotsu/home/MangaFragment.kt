@@ -2,6 +2,7 @@ package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -24,6 +25,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistMangaViewModel
 import ani.dantotsu.connections.anilist.SearchResults
 import ani.dantotsu.connections.anilist.getUserId
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentMangaBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.media.MediaAdaptor
@@ -43,16 +45,17 @@ import kotlin.math.min
 class MangaFragment : Fragment() {
     private var _binding: FragmentMangaBinding? = null
     private val binding get() = _binding!!
+    private lateinit var mangaPageAdapter: MangaPageAdapter
 
     private var uiSettings: UserInterfaceSettings =
-        loadData("ui_settings") ?: UserInterfaceSettings()
+            loadData("ui_settings") ?: UserInterfaceSettings()
 
     val model: AnilistMangaViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMangaBinding.inflate(inflater, container, false)
         return binding.root
@@ -73,11 +76,11 @@ class MangaFragment : Fragment() {
             if (displayCutout != null) {
                 if (displayCutout.boundingRects.size > 0) {
                     height = max(
-                        statusBarHeight,
-                        min(
-                            displayCutout.boundingRects[0].width(),
-                            displayCutout.boundingRects[0].height()
-                        )
+                            statusBarHeight,
+                            min(
+                                    displayCutout.boundingRects[0].width(),
+                                    displayCutout.boundingRects[0].height()
+                            )
                     )
                 }
             }
@@ -90,23 +93,23 @@ class MangaFragment : Fragment() {
 
         binding.mangaPageRecyclerView.updatePaddingRelative(bottom = navBarHeight + 160f.px)
 
-        val mangaPageAdapter = MangaPageAdapter()
+        mangaPageAdapter = MangaPageAdapter()
         var loading = true
         if (model.notSet) {
             model.notSet = false
             model.searchResults = SearchResults(
-                "MANGA",
-                isAdult = false,
-                onList = false,
-                results = arrayListOf(),
-                hasNextPage = true,
-                sort = Anilist.sortBy[1]
+                    "MANGA",
+                    isAdult = false,
+                    onList = false,
+                    results = arrayListOf(),
+                    hasNextPage = true,
+                    sort = Anilist.sortBy[1]
             )
         }
         val popularAdaptor = MediaAdaptor(1, model.searchResults.results, requireActivity())
         val progressAdaptor = ProgressAdapter(searched = model.searched)
         binding.mangaPageRecyclerView.adapter =
-            ConcatAdapter(mangaPageAdapter, popularAdaptor, progressAdaptor)
+                ConcatAdapter(mangaPageAdapter, popularAdaptor, progressAdaptor)
         val layout = LinearLayoutManager(requireContext())
         binding.mangaPageRecyclerView.layoutManager = layout
 
@@ -132,7 +135,7 @@ class MangaFragment : Fragment() {
         }
 
         binding.mangaPageRecyclerView.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
+                RecyclerView.OnScrollListener() {
             override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
                 if (!v.canScrollVertically(1)) {
                     if (model.searchResults.hasNextPage && model.searchResults.results.isNotEmpty() && !loading) {
@@ -172,19 +175,19 @@ class MangaFragment : Fragment() {
                     model.getTrending().observe(viewLifecycleOwner) {
                         if (it != null) {
                             mangaPageAdapter.updateTrending(
-                                MediaAdaptor(
-                                    if (uiSettings.smallView) 3 else 2,
-                                    it,
-                                    requireActivity(),
-                                    viewPager = mangaPageAdapter.trendingViewPager
-                                )
+                                    MediaAdaptor(
+                                            if (uiSettings.smallView) 3 else 2,
+                                            it,
+                                            requireActivity(),
+                                            viewPager = mangaPageAdapter.trendingViewPager
+                                    )
                             )
                             mangaPageAdapter.updateAvatar()
                         }
                     }
                 }
                 binding.mangaPageScrollTop.translationY =
-                    -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
+                        -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
 
             }
         }
@@ -251,6 +254,12 @@ class MangaFragment : Fragment() {
 
     override fun onResume() {
         if (!model.loaded) Refresh.activity[this.hashCode()]!!.postValue(true)
+        //make sure mangaPageAdapter is initialized
+        if (mangaPageAdapter.trendingViewPager != null) {
+            mangaPageAdapter.setIncognito()
+            binding.root.requestApplyInsets()
+            binding.root.requestLayout()
+        }
         super.onResume()
     }
 

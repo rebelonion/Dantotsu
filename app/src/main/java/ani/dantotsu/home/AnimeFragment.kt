@@ -2,6 +2,7 @@ package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +27,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistAnimeViewModel
 import ani.dantotsu.connections.anilist.SearchResults
 import ani.dantotsu.connections.anilist.getUserId
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentAnimeBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.media.MediaAdaptor
@@ -47,16 +49,17 @@ import kotlin.math.min
 class AnimeFragment : Fragment() {
     private var _binding: FragmentAnimeBinding? = null
     private val binding get() = _binding!!
+    private lateinit var animePageAdapter: AnimePageAdapter
 
     private var uiSettings: UserInterfaceSettings =
-        loadData("ui_settings") ?: UserInterfaceSettings()
+            loadData("ui_settings") ?: UserInterfaceSettings()
 
     val model: AnilistAnimeViewModel by activityViewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         _binding = FragmentAnimeBinding.inflate(inflater, container, false)
         return binding.root
@@ -78,11 +81,11 @@ class AnimeFragment : Fragment() {
             if (displayCutout != null) {
                 if (displayCutout.boundingRects.size > 0) {
                     height = max(
-                        statusBarHeight,
-                        min(
-                            displayCutout.boundingRects[0].width(),
-                            displayCutout.boundingRects[0].height()
-                        )
+                            statusBarHeight,
+                            min(
+                                    displayCutout.boundingRects[0].width(),
+                                    displayCutout.boundingRects[0].height()
+                            )
                     )
                 }
             }
@@ -95,18 +98,18 @@ class AnimeFragment : Fragment() {
 
         binding.animePageRecyclerView.updatePaddingRelative(bottom = navBarHeight + 160f.px)
 
-        val animePageAdapter = AnimePageAdapter()
+        animePageAdapter = AnimePageAdapter()
 
         var loading = true
         if (model.notSet) {
             model.notSet = false
             model.searchResults = SearchResults(
-                "ANIME",
-                isAdult = false,
-                onList = false,
-                results = mutableListOf(),
-                hasNextPage = true,
-                sort = Anilist.sortBy[1]
+                    "ANIME",
+                    isAdult = false,
+                    onList = false,
+                    results = mutableListOf(),
+                    hasNextPage = true,
+                    sort = Anilist.sortBy[1]
             )
         }
         val popularAdaptor = MediaAdaptor(1, model.searchResults.results, requireActivity())
@@ -174,7 +177,7 @@ class AnimeFragment : Fragment() {
         }
 
         binding.animePageRecyclerView.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
+                RecyclerView.OnScrollListener() {
             override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
                 if (!v.canScrollVertically(1)) {
                     if (model.searchResults.hasNextPage && model.searchResults.results.isNotEmpty() && !loading) {
@@ -214,19 +217,19 @@ class AnimeFragment : Fragment() {
                     model.getTrending().observe(viewLifecycleOwner) {
                         if (it != null) {
                             animePageAdapter.updateTrending(
-                                MediaAdaptor(
-                                    if (uiSettings.smallView) 3 else 2,
-                                    it,
-                                    requireActivity(),
-                                    viewPager = animePageAdapter.trendingViewPager
-                                )
+                                    MediaAdaptor(
+                                            if (uiSettings.smallView) 3 else 2,
+                                            it,
+                                            requireActivity(),
+                                            viewPager = animePageAdapter.trendingViewPager
+                                    )
                             )
                             animePageAdapter.updateAvatar()
                         }
                     }
                 }
                 binding.animePageScrollTop.translationY =
-                    -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
+                        -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
             }
         }
 
@@ -244,13 +247,13 @@ class AnimeFragment : Fragment() {
         animePageAdapter.onSeasonLongClick = { i ->
             val (season, year) = Anilist.currentSeasons[i]
             ContextCompat.startActivity(
-                requireContext(),
-                Intent(requireContext(), SearchActivity::class.java)
-                    .putExtra("type", "ANIME")
-                    .putExtra("season", season)
-                    .putExtra("seasonYear", year.toString())
-                    .putExtra("search", true),
-                null
+                    requireContext(),
+                    Intent(requireContext(), SearchActivity::class.java)
+                            .putExtra("type", "ANIME")
+                            .putExtra("season", season)
+                            .putExtra("seasonYear", year.toString())
+                            .putExtra("search", true),
+                    null
             )
             true
         }
@@ -277,6 +280,12 @@ class AnimeFragment : Fragment() {
 
     override fun onResume() {
         if (!model.loaded) Refresh.activity[this.hashCode()]!!.postValue(true)
+        if (animePageAdapter.trendingViewPager != null) {
+            animePageAdapter.setIncognito()
+            binding.root.requestApplyInsets()
+            binding.root.requestLayout()
+        }
+
         super.onResume()
     }
 }

@@ -16,7 +16,7 @@
         android:text="Incognito Mode"
         android:fontFamily="@font/poppins_bold"
         android:textSize="15sp"
-        android:textColor="#4f2dbd"
+        android:textColor="?attr/colorPrimary"
         android:layout_gravity="bottom|center_horizontal"
         android:background="#00FFFFFF"
         android:padding="8dp"

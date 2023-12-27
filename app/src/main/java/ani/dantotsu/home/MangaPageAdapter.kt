@@ -150,6 +150,19 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         trendingViewPager!!.updateLayoutParams { height += statusBarHeight }
     }
 
+    fun setIncognito() {
+        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("incognito", false) ?: false
+        if(incognito) {
+            binding.incognitoTextView.visibility = View.VISIBLE
+            if (!uiSettings.immersiveMode) {
+                binding.root.fitsSystemWindows = true
+            }
+        } else {
+            binding.incognitoTextView.visibility = View.GONE
+        }
+    }
+
     fun updateTrending(adaptor: MediaAdaptor) {
         binding.mangaTrendingProgressBar.visibility = View.GONE
         binding.mangaTrendingViewPager.adapter = adaptor
