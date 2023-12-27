@@ -227,7 +227,7 @@
     <string name="sub_background_color_select">Subtitle Background Color</string>
     <string name="sub_window_color_select">Subtitle Window Color</string>
     <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn\'t)"</string>
-    <string name="sub_color_info"><b>Note:</b> Changing Subtitle formatting only works with Soft-Subbed Sources such as Zoro!</string>
+    <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
     <string name="sub_font_select">Subtitle Font</string>
     <string name="subtitle_font_size">Subtitle Size</string>
 
