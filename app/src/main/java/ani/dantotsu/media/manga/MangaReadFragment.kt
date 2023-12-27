@@ -196,25 +196,26 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     override fun onScanlatorsSelected() {
         updateChapters()
     }
-
     fun multiDownload(n: Int) {
         //get last viewed chapter
         val selected = media.userProgress
         val chapters = media.manga?.chapters?.values?.toList()
         //filter by selected language
-        val progressChapterIndex = chapters?.indexOfFirst { MangaNameAdapter.findChapterNumber(it.number)?.toInt() == selected }?:0
-        if (progressChapterIndex < 0 || n < 1) return
-        val chaptersToDownload = chapters?.subList(
-            progressChapterIndex + 1,
-            progressChapterIndex + n + 1
-        )
-        if (chaptersToDownload != null) {
-            for (chapter in chaptersToDownload) {
-                onMangaChapterDownloadClick(chapter.title!!)
-            }
-        }
+        val progressChapterIndex = chapters?.indexOfFirst { MangaNameAdapter.findChapterNumber(it.number)?.toInt() == selected } ?: 0
 
+        if (progressChapterIndex < 0 || n < 1 || chapters == null) return
+
+        // Calculate the end index
+        val endIndex = minOf(progressChapterIndex + n, chapters.size)
+
+        //make sure there are enough chapters
+        val chaptersToDownload = chapters.subList(progressChapterIndex + 1, endIndex)
+
+        for (chapter in chaptersToDownload) {
+            onMangaChapterDownloadClick(chapter.title!!)
+        }
     }
+
 
     private fun updateChapters() {
         val loadedChapters = model.getMangaChapters().value
