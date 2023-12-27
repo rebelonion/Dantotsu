@@ -174,12 +174,11 @@
                         app:srcCompat="@drawable/ic_round_screen_rotation_alt_24"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
-                    <ImageButton
+                    <androidx.mediarouter.app.MediaRouteButton
                         android:id="@+id/exo_cast"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"
                         android:backgroundTint="#00FFFFFF"
-                        android:src="@drawable/ic_round_cast_24"
                         android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"

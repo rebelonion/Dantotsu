@@ -14,7 +14,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Animatable
-import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.AudioManager.*
@@ -96,11 +95,15 @@ import java.util.concurrent.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
-
+import androidx.media3.cast.SessionAvailabilityListener
+import androidx.media3.cast.CastPlayer
+import androidx.mediarouter.app.MediaRouteButton
+import com.google.android.gms.cast.framework.CastButtonFactory
+import com.google.android.gms.cast.framework.CastContext
 
 @UnstableApi
 @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
-class ExoplayerView : AppCompatActivity(), Player.Listener {
+class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityListener {
 
     private val resumeWindow = "resumeWindow"
     private val resumePosition = "resumePosition"
@@ -108,6 +111,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     private val playerOnPlay = "playerOnPlay"
 
     private lateinit var exoPlayer: ExoPlayer
+    private lateinit var castPlayer: CastPlayer
+    private lateinit var castContext: CastContext
     private lateinit var trackSelector: DefaultTrackSelector
     private lateinit var cacheFactory: CacheDataSource.Factory
     private lateinit var playbackParameters: PlaybackParameters
@@ -328,6 +333,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         setContentView(binding.root)
 
         //Initialize
+
+        castContext = CastContext.getSharedInstance(this)
+        castPlayer = CastPlayer(castContext)
+        castPlayer.setSessionAvailabilityListener(this)
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         hideSystemBars()
 
@@ -387,7 +397,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             orientationListener =
                 object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
                     override fun onOrientationChanged(orientation: Int) {
-                        println(orientation)
                         if (orientation in 45..135) {
                             if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) exoRotate.visibility =
                                 View.VISIBLE
@@ -466,12 +475,18 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             if (isInitialized) {
                 isPlayerPlaying = exoPlayer.isPlaying
                 (exoPlay.drawable as Animatable?)?.start()
-                if (isPlayerPlaying) {
+                if (isPlayerPlaying || castPlayer.isPlaying ) {
                     Glide.with(this).load(R.drawable.anim_play_to_pause).into(exoPlay)
                     exoPlayer.pause()
+                    castPlayer.pause()
                 } else {
-                    Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
-                    exoPlayer.play()
+                    if (!castPlayer.isPlaying && castPlayer.currentMediaItem != null) {
+                        Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
+                        castPlayer.play()
+                    } else if (!isPlayerPlaying) {
+                        Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
+                        exoPlayer.play()
+                    }
                 }
             }
         }
@@ -1074,11 +1089,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         //Cast
         if (settings.cast) {
-            playerView.findViewById<ImageButton>(R.id.exo_cast).apply {
+            playerView.findViewById<MediaRouteButton>(R.id.exo_cast).apply {
                 visibility = View.VISIBLE
-                setSafeOnClickListener {
-                    cast()
-                }
+                CastButtonFactory.setUpMediaRouteButton(context, this)
+                dialogFactory = CustomCastThemeFactory()
             }
         }
 
@@ -1483,7 +1497,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         super.onPause()
         orientationListener?.disable()
         if (isInitialized) {
-            playerView.player?.pause()
+            if (!castPlayer.isPlaying) {
+                playerView.player?.pause()
+            }
             saveData(
                 "${media.id}_${media.anime!!.selectedEpisode}",
                 exoPlayer.currentPosition,
@@ -1504,7 +1520,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     }
 
     override fun onStop() {
-        playerView.player?.pause()
+        if (!castPlayer.isPlaying) {
+            playerView.player?.pause()
+        }
         super.onStop()
     }
 
@@ -1797,7 +1815,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
     // Enter PiP Mode
     @Suppress("DEPRECATION")
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun enterPipMode() {
         wasPlaying = isPlayerPlaying
         if (!pipEnabled) return
@@ -1869,6 +1886,47 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             super.dispatchKeyEvent(event)
         }
     }
+
+
+    private fun startCastPlayer() {
+        castPlayer.setMediaItem(mediaItem)
+        castPlayer.prepare()
+        playerView.player = castPlayer
+        exoPlayer.stop()
+        castPlayer.addListener(object : Player.Listener {
+            //if the player is paused changed, we want to update the UI
+            override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+                super.onPlayWhenReadyChanged(playWhenReady, reason)
+                if (playWhenReady) {
+                    (exoPlay.drawable as Animatable?)?.start()
+                    Glide.with(this@ExoplayerView)
+                        .load(R.drawable.anim_play_to_pause)
+                        .into(exoPlay)
+                } else {
+                    (exoPlay.drawable as Animatable?)?.start()
+                    Glide.with(this@ExoplayerView)
+                        .load(R.drawable.anim_pause_to_play)
+                        .into(exoPlay)
+                }
+            }
+        })
+    }
+
+    private fun startExoPlayer() {
+        exoPlayer.setMediaItem(mediaItem)
+        exoPlayer.prepare()
+        playerView.player = exoPlayer
+        castPlayer.stop()
+    }
+
+    override fun onCastSessionAvailable() {
+        startCastPlayer()
+    }
+
+    override fun onCastSessionUnavailable() {
+        startExoPlayer()
+    }
+
 
     @SuppressLint("ViewConstructor")
     class ExtendedTimeBar(
