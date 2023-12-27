@@ -16,5 +16,17 @@ class AnimeNameAdapter {
                 null
             }
         }
+
+        fun findEpisodeNumber(text: String): Float? {
+            val episodeRegex = "(episode|ep|e)[\\s:.\\-]*([\\d]+\\.?[\\d]*)"
+            val episodePattern: Pattern = Pattern.compile(episodeRegex, Pattern.CASE_INSENSITIVE)
+            val episodeMatcher: Matcher = episodePattern.matcher(text)
+
+            return if (episodeMatcher.find()) {
+                episodeMatcher.group(2)?.toFloat()
+            } else {
+                null
+            }
+        }
     }
 }

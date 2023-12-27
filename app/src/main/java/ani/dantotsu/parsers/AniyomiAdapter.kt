@@ -112,7 +112,13 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     seasonGroups.keys.sorted().flatMap { season ->
                         seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
                             if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
-                                episode.episode_number = episodeCounter++
+                                val potentialNumber = AnimeNameAdapter.findEpisodeNumber(episode.name)
+                                if (potentialNumber != null) {
+                                    episode.episode_number = potentialNumber
+                                } else {
+                                    episode.episode_number = episodeCounter
+                                }
+                                episodeCounter++
                             }
                             episode
                         } ?: emptyList()
@@ -202,7 +208,11 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             }
         return Episode(
             if (episodeNumberInt.toInt() != -1) {
-                episodeNumberInt.toString()
+                if (sEpisode.episode_number % 1 == 0f) {
+                    episodeNumberInt.toInt().toString()
+                } else {
+                    sEpisode.episode_number.toString()
+                }
             } else {
                 sEpisode.name
             },
