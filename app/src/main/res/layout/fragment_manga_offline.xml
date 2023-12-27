@@ -35,6 +35,7 @@
                     android:hint="@string/manga"
                     android:textColorHint="@color/bg_opp"
                     android:transitionName="@string/search"
+                    android:fontFamily="@font/poppins_bold"
                     app:boxBackgroundColor="?attr/colorPrimaryContainer"
                     app:boxCornerRadiusBottomEnd="28dp"
                     app:boxCornerRadiusBottomStart="28dp"

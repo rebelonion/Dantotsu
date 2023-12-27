@@ -21,6 +21,7 @@ class OfflineMangaAdapter(
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private var originalItems: List<OfflineMangaModel> = items
+    private var style = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("offline_view", 0)
 
     override fun getCount(): Int {
         return items.size
@@ -37,15 +38,10 @@ class OfflineMangaAdapter(
     @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
-        val style = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("offline_view", 0)
-
-        var view = convertView
-
-        if (view == null && style == 0 ) {
-            view = inflater.inflate(R.layout.item_media_large, parent, false) // large view
-        }
-        else if (view == null && style == 1){
-            view = inflater.inflate(R.layout.item_media_compact, parent, false) // compact view
+        val view: View = convertView ?: when(style) {
+            0 -> inflater.inflate(R.layout.item_media_large, parent, false) // large view
+            1 -> inflater.inflate(R.layout.item_media_compact, parent, false) // compact view
+            else -> inflater.inflate(R.layout.item_media_compact, parent, false) // compact view
         }
 
         val item = getItem(position) as OfflineMangaModel
@@ -69,7 +65,7 @@ class OfflineMangaAdapter(
         else if (style == 1){
             val readchapter = view.findViewById<TextView>(R.id.itemCompactUserProgress) // for compact view
             readchapter.text = item.readchapter
-            totalchapter.text = " | "+item.totalchapter
+            totalchapter.text = " | " + item.totalchapter
         }
 
         // Bind item data to the views
@@ -102,6 +98,11 @@ class OfflineMangaAdapter(
     fun setItems(items: List<OfflineMangaModel>) {
         this.items = items
         this.originalItems = items
+        notifyDataSetChanged()
+    }
+
+    fun notifyNewGrid(){
+        style = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("offline_view", 0)
         notifyDataSetChanged()
     }
 }

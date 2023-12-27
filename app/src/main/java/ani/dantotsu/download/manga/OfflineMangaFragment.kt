@@ -15,6 +15,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.OvershootInterpolator
+import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
 import android.widget.GridView
 import android.widget.ImageView
@@ -128,7 +129,11 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             style = 0
             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
                 ?.putInt("offline_view", style!!)?.apply()
-            recreate(requireActivity())
+            gridView.visibility = View.GONE
+            gridView = view.findViewById(R.id.gridView)
+            gridView.adapter = adapter
+            gridView.visibility = View.VISIBLE
+            adapter.notifyNewGrid()
 
         }
 
@@ -137,7 +142,11 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             style = 1
             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
                 ?.putInt("offline_view", style!!)?.apply()
-            recreate(requireActivity())
+            gridView.visibility = View.GONE
+            gridView = view.findViewById(R.id.gridView1)
+            gridView.adapter = adapter
+            gridView.visibility = View.VISIBLE
+            adapter.notifyNewGrid()
         }
 
         gridView = if(style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
@@ -229,8 +238,24 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         }
 
         scrollTop.setOnClickListener {
-            //TODO: scroll to top
+            gridView.smoothScrollToPosition(0)
         }
+
+        // Assuming 'scrollTop' is a view that you want to hide/show
+        scrollTop.visibility = View.GONE
+
+        gridView.setOnScrollListener(object : AbsListView.OnScrollListener {
+            override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
+                // Implement behavior for different scroll states if needed
+            }
+
+            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+                val first = view.getChildAt(0)
+                val visibility = first != null && first.top < -height
+                scrollTop.visibility = if (visibility) View.VISIBLE else View.GONE
+            }
+        })
+
 
     }
 
