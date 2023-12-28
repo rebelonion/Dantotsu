@@ -1,8 +1,17 @@
 package ani.dantotsu.download.video
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
+import android.util.Log
+import androidx.annotation.OptIn
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
@@ -15,6 +24,7 @@ import androidx.media3.datasource.cache.NoOpCacheEvictor
 import androidx.media3.datasource.cache.SimpleCache
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.DefaultRenderersFactory
+import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadService
@@ -22,7 +32,10 @@ import androidx.media3.exoplayer.scheduler.Requirements
 import androidx.media3.ui.TrackSelectionDialogBuilder
 import ani.dantotsu.R
 import ani.dantotsu.defaultHeaders
+import ani.dantotsu.download.anime.AnimeDownloaderService
+import ani.dantotsu.download.anime.AnimeServiceDataSingleton
 import ani.dantotsu.logError
+import ani.dantotsu.media.Media
 import ani.dantotsu.okHttpClient
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.SubtitleType
@@ -37,6 +50,7 @@ import java.util.concurrent.*
 
 object Helper {
 
+    var simpleCache: SimpleCache? = null
     @SuppressLint("UnsafeOptInUsageError")
     fun downloadVideo(context: Context, video: Video, subtitle: Subtitle?) {
         val dataSourceFactory = DataSource.Factory {
@@ -114,13 +128,13 @@ object Helper {
 
 
     private var download: DownloadManager? = null
-    private const val DOWNLOAD_CONTENT_DIRECTORY = "downloads"
+    private const val DOWNLOAD_CONTENT_DIRECTORY = "Anime_Downloads"
 
     @Synchronized
     @UnstableApi
     fun downloadManager(context: Context): DownloadManager {
         return download ?: let {
-            val database = StandaloneDatabaseProvider(context)
+            val database = Injekt.get<StandaloneDatabaseProvider>()
             val downloadDirectory = File(getDownloadDirectory(context), DOWNLOAD_CONTENT_DIRECTORY)
             val dataSourceFactory = DataSource.Factory {
                 //val dataSource: HttpDataSource = OkHttpDataSource.Factory(okHttpClient).createDataSource()
@@ -133,17 +147,42 @@ object Helper {
                 }
                 dataSource
             }
-            DownloadManager(
+            val threadPoolSize = Runtime.getRuntime().availableProcessors()
+            val executorService = Executors.newFixedThreadPool(threadPoolSize)
+            val downloadManager =  DownloadManager(
                 context,
                 database,
-                SimpleCache(downloadDirectory, NoOpCacheEvictor(), database),
+                getSimpleCache(context),
                 dataSourceFactory,
-                Executor(Runnable::run)
+                executorService
             ).apply {
                 requirements =
                     Requirements(Requirements.NETWORK or Requirements.DEVICE_STORAGE_NOT_LOW)
                 maxParallelDownloads = 3
             }
+            downloadManager.addListener(
+                object : DownloadManager.Listener { // Override methods of interest here.
+                    override fun onDownloadChanged(
+                        downloadManager: DownloadManager,
+                        download: Download,
+                        finalException: Exception?
+                    ) {
+                        if (download.state == Download.STATE_COMPLETED) {
+                           Log.e("Downloader", "Download Completed")
+                        } else if (download.state == Download.STATE_FAILED) {
+                            Log.e("Downloader", "Download Failed")
+                        } else if (download.state == Download.STATE_STOPPED) {
+                            Log.e("Downloader", "Download Stopped")
+                        } else if (download.state == Download.STATE_QUEUED) {
+                            Log.e("Downloader", "Download Queued")
+                        } else if (download.state == Download.STATE_DOWNLOADING) {
+                            Log.e("Downloader", "Download Downloading")
+                        }
+                    }
+                }
+            )
+
+            downloadManager
         }
     }
 
@@ -158,5 +197,60 @@ object Helper {
             }
         }
         return downloadDirectory!!
+    }
+
+    fun startAnimeDownloadService(
+        context: Context,
+        title: String,
+        episode: String,
+        video: Video,
+        subtitle: Subtitle? = null,
+        sourceMedia: Media? = null
+    ) {
+        if (!isNotificationPermissionGranted(context)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                ActivityCompat.requestPermissions(
+                    context as Activity,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    1
+                )
+            }
+        }
+
+        val downloadTask = AnimeDownloaderService.DownloadTask(
+            title,
+            episode,
+            video,
+            subtitle,
+            sourceMedia
+        )
+        AnimeServiceDataSingleton.downloadQueue.offer(downloadTask)
+
+        if (!AnimeServiceDataSingleton.isServiceRunning) {
+            val intent = Intent(context, AnimeDownloaderService::class.java)
+            ContextCompat.startForegroundService(context, intent)
+            AnimeServiceDataSingleton.isServiceRunning = true
+        }
+    }
+
+    @OptIn(UnstableApi::class) private fun getSimpleCache(context: Context): SimpleCache {
+        return if (simpleCache == null) {
+            val downloadDirectory = File(getDownloadDirectory(context), DOWNLOAD_CONTENT_DIRECTORY)
+            val database = Injekt.get<StandaloneDatabaseProvider>()
+            simpleCache = SimpleCache(downloadDirectory, NoOpCacheEvictor(), database)
+            simpleCache!!
+        } else {
+            simpleCache!!
+        }
+    }
+
+    private fun isNotificationPermissionGranted(context: Context): Boolean {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return ActivityCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED
+        }
+        return true
     }
 }

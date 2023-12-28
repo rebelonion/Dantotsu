@@ -274,8 +274,9 @@
             android:exported="true" />
         <service
             android:name=".download.video.MyDownloadService"
-            android:exported="false">
-            <intent-filter>
+            android:exported="false"
+            android:foregroundServiceType="dataSync">
+        <intent-filter>
                 <action android:name="androidx.media3.exoplayer.downloadService.action.RESTART" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -295,6 +296,9 @@
             android:foregroundServiceType="dataSync" />
         <service
             android:name=".download.novel.NovelDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service android:name=".download.anime.AnimeDownloaderService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
         <service

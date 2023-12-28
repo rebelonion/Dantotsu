@@ -20,6 +20,7 @@ import ani.dantotsu.*
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
 import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
+import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.others.Download.download
@@ -214,7 +215,8 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
 
         override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
             val extractor = links[position]
-            holder.binding.streamName.text = extractor.server.name
+            holder.binding.streamName.text = ""//extractor.server.name
+            holder.binding.streamName.visibility = View.GONE
 
             holder.binding.streamRecyclerView.layoutManager = LinearLayoutManager(requireContext())
             holder.binding.streamRecyclerView.adapter = VideoAdapter(extractor)
@@ -256,10 +258,10 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         override fun onBindViewHolder(holder: UrlViewHolder, position: Int) {
             val binding = holder.binding
             val video = extractor.videos[position]
-            binding.urlQuality.text =
-                if (video.quality != null) "${video.quality}p" else "Default Quality"
-            binding.urlNote.text = video.extraNote ?: ""
-            binding.urlNote.visibility = if (video.extraNote != null) View.VISIBLE else View.GONE
+            //binding.urlQuality.text =
+            //    if (video.quality != null) "${video.quality}p" else "Default Quality"
+            //binding.urlNote.text = video.extraNote ?: ""
+            //binding.urlNote.visibility = if (video.extraNote != null) View.VISIBLE else View.GONE
             binding.urlDownload.visibility = View.VISIBLE
             binding.urlDownload.setSafeOnClickListener {
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedExtractor =
@@ -267,11 +269,23 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedVideo =
                     position
                 binding.urlDownload.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                download(
-                    requireActivity(),
-                    media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!,
-                    media!!.userPreferredName
-                )
+                //download(
+                //    requireActivity(),
+                //    media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!,
+                //    media!!.userPreferredName
+                //)
+                val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
+                val video = if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
+                if (video != null) {
+                    Helper.startAnimeDownloadService(
+                        requireActivity(),
+                        media!!.userPreferredName,
+                        episode.number,
+                        video,
+                        null,
+                        media
+                    )
+                }
                 dismiss()
             }
             if (video.format == VideoType.CONTAINER) {
@@ -282,11 +296,13 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         "#.##"
                     ).format(video.size ?: 0).toString() + " MB"))
             } else {
-                binding.urlQuality.text = "Multi Quality"
                 if ((loadData<Int>("settings_download_manager") ?: 0) == 0) {
-                    binding.urlDownload.visibility = View.GONE
+                    ////binding.urlDownload.visibility = View.GONE
                 }
             }
+            binding.urlNote.visibility = View.VISIBLE
+            binding.urlNote.text = video.format.name
+            binding.urlQuality.text = extractor.server.name
         }
 
         override fun getItemCount(): Int = extractor.videos.size

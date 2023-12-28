@@ -3,7 +3,11 @@ package ani.dantotsu.aniyomi.anime.custom
 
 import android.app.Application
 import android.content.Context
+import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.database.StandaloneDatabaseProvider
+import androidx.media3.datasource.cache.SimpleCache
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.parsers.novel.NovelExtensionManager
@@ -27,7 +31,7 @@ import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
 
 class AppModule(val app: Application) : InjektModule {
-    override fun InjektRegistrar.registerInjectables() {
+    @OptIn(UnstableApi::class) override fun InjektRegistrar.registerInjectables() {
         addSingleton(app)
 
         addSingletonFactory { DownloadsManager(app) }
@@ -50,6 +54,8 @@ class AppModule(val app: Application) : InjektModule {
                 explicitNulls = false
             }
         }
+
+        addSingletonFactory { StandaloneDatabaseProvider(app) }
 
         addSingletonFactory { MangaCache() }
 

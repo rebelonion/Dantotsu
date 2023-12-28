@@ -424,4 +424,12 @@ class AnimeWatchFragment : Fragment() {
         state = binding.animeSourceRecycler.layoutManager?.onSaveInstanceState()
     }
 
+    companion object {
+        const val ACTION_DOWNLOAD_STARTED = "ani.dantotsu.ACTION_DOWNLOAD_STARTED"
+        const val ACTION_DOWNLOAD_FINISHED = "ani.dantotsu.ACTION_DOWNLOAD_FINISHED"
+        const val ACTION_DOWNLOAD_FAILED = "ani.dantotsu.ACTION_DOWNLOAD_FAILED"
+        const val ACTION_DOWNLOAD_PROGRESS = "ani.dantotsu.ACTION_DOWNLOAD_PROGRESS"
+        const val EXTRA_EPISODE_NUMBER = "extra_episode_number"
+    }
+
 }
