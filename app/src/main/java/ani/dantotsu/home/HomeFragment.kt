@@ -116,14 +116,6 @@ class HomeFragment : Fragment() {
                 snackString(currContext()?.getString(R.string.please_reload))
             }
         }
-        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false) ?: false
-        if(incognito) {
-            binding.incognitoTextView.visibility = View.VISIBLE
-            if (!uiSettings.immersiveMode) {
-                binding.root.fitsSystemWindows = true
-            }
-        }
         binding.homeUserAvatarContainer.setSafeOnClickListener {
             val dialogFragment =
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.HOME)

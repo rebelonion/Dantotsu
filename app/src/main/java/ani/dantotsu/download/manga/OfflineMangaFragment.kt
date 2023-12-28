@@ -14,6 +14,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.LayoutAnimationController
 import android.view.animation.OvershootInterpolator
 import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
@@ -145,6 +147,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView1)
             gridView.adapter = adapter
+            gridView.scheduleLayoutAnimation()
             gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
         }
@@ -152,8 +155,15 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         gridView = if(style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
         gridView.visibility = View.VISIBLE
         getDownloads()
+
+        val fadeIn = AlphaAnimation(0f, 1f)
+        fadeIn.duration = 200 // animations  pog
+        val animation = LayoutAnimationController(fadeIn)
+
+        gridView.layoutAnimation = animation
         adapter = OfflineMangaAdapter(requireContext(), downloads, this)
         gridView.adapter = adapter
+        gridView.scheduleLayoutAnimation()
         gridView.setOnItemClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
