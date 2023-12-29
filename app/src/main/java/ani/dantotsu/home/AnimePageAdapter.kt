@@ -77,12 +77,6 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         }
         val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             ?.getBoolean("incognito", false) ?: false
-        if(incognito) {
-            binding.incognitoTextView.visibility = View.VISIBLE
-            if (!uiSettings.immersiveMode) {
-                binding.root.fitsSystemWindows = true
-            }
-        }
 
         binding.animeTitleContainer.updatePadding(top = statusBarHeight)
 

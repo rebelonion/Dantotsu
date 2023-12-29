@@ -81,23 +81,6 @@
             app:tabPaddingStart="16dp"
             app:tabTextAppearance="@style/NavBarText"
             app:tabGravity="fill">
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/installed_anime"/>
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/available_anime"/>
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/installed_manga"/>
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Available Manga"
-                tools:ignore="HardcodedText" />
         </com.google.android.material.tabs.TabLayout>
 
         <com.google.android.material.textfield.TextInputLayout
