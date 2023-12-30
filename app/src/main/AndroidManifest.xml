@@ -47,7 +47,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:banner="@drawable/ic_banner_foreground"
+        android:banner="@mipmap/ic_banner_foreground"
         android:icon="${icon_placeholder}"
         android:label="@string/app_name"
         android:largeHeap="true"

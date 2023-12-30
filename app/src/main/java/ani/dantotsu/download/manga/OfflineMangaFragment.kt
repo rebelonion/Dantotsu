@@ -129,6 +129,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView)
             gridView.adapter = adapter
+            gridView.scheduleLayoutAnimation()
             gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
 
@@ -210,6 +211,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initActivity(requireActivity())
         var height = statusBarHeight
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val displayCutout = activity?.window?.decorView?.rootWindowInsets?.displayCutout

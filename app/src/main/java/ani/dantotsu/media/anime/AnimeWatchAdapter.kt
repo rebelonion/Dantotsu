@@ -1,23 +1,28 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
+import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
+import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.DynamicAnimeParser
 import ani.dantotsu.parsers.WatchSources
@@ -26,6 +31,7 @@ import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+
 
 class AnimeWatchAdapter(
     private val media: Media,
@@ -40,6 +46,8 @@ class AnimeWatchAdapter(
         val bind = ItemAnimeWatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
+    private var nestedDialog: AlertDialog? = null
+
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -147,8 +155,9 @@ class AnimeWatchAdapter(
             }
         }
 
+        //Icons
 
-        //Subscription
+        //subscribe
         subscribe = MediaDetailsActivity.PopImageButton(
             fragment.lifecycleScope,
             binding.animeSourceSubscribe,
@@ -167,44 +176,71 @@ class AnimeWatchAdapter(
             openSettings(fragment.requireContext(), getChannelId(true, media.id))
         }
 
-        //Icons
-        var reversed = media.selected!!.recyclerReversed
-        var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.animeDefaultView
-        binding.animeSourceTop.rotation = if (reversed) -90f else 90f
-        binding.animeSourceTop.setOnClickListener {
-            reversed = !reversed
-            binding.animeSourceTop.rotation = if (reversed) -90f else 90f
-            fragment.onIconPressed(style, reversed)
-        }
-        var selected = when (style) {
-            0 -> binding.animeSourceList
-            1 -> binding.animeSourceGrid
-            2 -> binding.animeSourceCompact
-            else -> binding.animeSourceList
-        }
-        selected.alpha = 1f
-        fun selected(it: ImageView) {
-            selected.alpha = 0.33f
-            selected = it
+        //Nested Button
+        binding.animeNestedButton.setOnClickListener {
+            val dialogView =
+                LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
+            val dialogBinding = DialogLayoutBinding.bind(dialogView)
+
+            var reversed = media.selected!!.recyclerReversed
+            var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.animeDefaultView
+            dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
+            dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
+            dialogBinding.animeSourceTop.setOnClickListener {
+                reversed = !reversed
+                dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
+                dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
+            }
+            //Grids
+            var selected = when (style) {
+                0 -> dialogBinding.animeSourceList
+                1 -> dialogBinding.animeSourceGrid
+                2 -> dialogBinding.animeSourceCompact
+                else -> dialogBinding.animeSourceList
+            }
+            when (style) {
+                0 -> dialogBinding.layoutText.text = "List"
+                1 -> dialogBinding.layoutText.text = "Grid"
+                2 -> dialogBinding.layoutText.text = "Compact"
+                else -> dialogBinding.animeSourceList
+            }
             selected.alpha = 1f
+            fun selected(it: ImageButton) {
+                selected.alpha = 0.33f
+                selected = it
+                selected.alpha = 1f
+            }
+            dialogBinding.animeSourceList.setOnClickListener {
+                selected(it as ImageButton)
+                style = 0
+                dialogBinding.layoutText.text = "List"
+            }
+            dialogBinding.animeSourceGrid.setOnClickListener {
+                selected(it as ImageButton)
+                style = 1
+                dialogBinding.layoutText.text = "Grid"
+            }
+            dialogBinding.animeSourceCompact.setOnClickListener {
+                selected(it as ImageButton)
+                style = 2
+                dialogBinding.layoutText.text = "Compact"
+            }
+
+            //hidden
+            dialogBinding.animeScanlatorContainer.visibility = View.GONE
+            dialogBinding.animeDownloadContainer.visibility = View.GONE
+
+            nestedDialog = AlertDialog.Builder(fragment.requireContext() , R.style.MyPopup)
+                .setTitle("Options")
+                .setView(dialogView)
+                .setPositiveButton("OK") { _, _ ->
+                    fragment.onIconPressed(style, reversed)
+                }
+                .setNegativeButton("Cancel") { _, _ ->
+                }
+                .create()
+            nestedDialog?.show()
         }
-        binding.animeSourceList.setOnClickListener {
-            selected(it as ImageView)
-            style = 0
-            fragment.onIconPressed(style, reversed)
-        }
-        binding.animeSourceGrid.setOnClickListener {
-            selected(it as ImageView)
-            style = 1
-            fragment.onIconPressed(style, reversed)
-        }
-        binding.animeSourceCompact.setOnClickListener {
-            selected(it as ImageView)
-            style = 2
-            fragment.onIconPressed(style, reversed)
-        }
-        binding.animeScanlatorTop.visibility = View.GONE
-        binding.animeDownloadTop.visibility = View.GONE
         //Episode Handling
         handleEpisodes()
     }
@@ -351,12 +387,15 @@ class AnimeWatchAdapter(
                         parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
                     )
                 }
-                binding?.animeSourceLanguage?.setAdapter(
-                    ArrayAdapter(
-                        fragment.requireContext(),
-                        R.layout.item_dropdown,
-                        parser.extension.sources.map { it.lang })
+                val adapter = ArrayAdapter(
+                    fragment.requireContext(),
+                    R.layout.item_dropdown,
+                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
+                val items = adapter.count
+                if (items < 2) binding?.animeSourceLanguageContainer?.visibility  =  View.GONE else binding?.animeSourceLanguageContainer?.visibility  =  View.VISIBLE
+
+                binding?.animeSourceLanguage?.setAdapter(adapter)
 
             }
         }
