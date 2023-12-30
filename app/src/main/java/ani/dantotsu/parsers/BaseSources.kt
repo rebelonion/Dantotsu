@@ -46,6 +46,19 @@ abstract class WatchSources : BaseSources() {
                         sEpisode = it.sEpisode
                     )
                 }
+            } else if (parser is OfflineAnimeParser) {
+                parser.loadEpisodes(showLink, extra, SAnime.create()).forEach {
+                    map[it.number] = Episode(
+                        it.number,
+                        it.link,
+                        it.title,
+                        it.description,
+                        it.thumbnail,
+                        it.isFiller,
+                        extra = it.extra,
+                        sEpisode = it.sEpisode
+                    )
+                }
             }
         }
         return map

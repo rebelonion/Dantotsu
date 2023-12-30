@@ -3,6 +3,7 @@ package ani.dantotsu.download.video
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -12,6 +13,7 @@ import android.util.Log
 import androidx.annotation.OptIn
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getString
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
@@ -32,6 +34,8 @@ import androidx.media3.exoplayer.scheduler.Requirements
 import androidx.media3.ui.TrackSelectionDialogBuilder
 import ani.dantotsu.R
 import ani.dantotsu.defaultHeaders
+import ani.dantotsu.download.DownloadedType
+import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.anime.AnimeServiceDataSingleton
 import ani.dantotsu.logError
@@ -50,7 +54,8 @@ import java.util.concurrent.*
 
 object Helper {
 
-    var simpleCache: SimpleCache? = null
+    private var simpleCache: SimpleCache? = null
+
     @SuppressLint("UnsafeOptInUsageError")
     fun downloadVideo(context: Context, video: Video, subtitle: Subtitle?) {
         val dataSourceFactory = DataSource.Factory {
@@ -96,18 +101,18 @@ object Helper {
         )
         downloadHelper.prepare(object : DownloadHelper.Callback {
             override fun onPrepared(helper: DownloadHelper) {
-                TrackSelectionDialogBuilder(
-                    context, "Select thingy", helper.getTracks(0).groups
+                /*TrackSelectionDialogBuilder(  TODO: use this for subtitles
+                    context, "Select Source", helper.getTracks(0).groups
                 ) { _, overrides ->
                     val params = TrackSelectionParameters.Builder(context)
                     overrides.forEach {
                         params.addOverride(it.value)
                     }
                     helper.addTrackSelection(0, params.build())
-                    MyDownloadService
+                    ExoplayerDownloadService
                     DownloadService.sendAddDownload(
                         context,
-                        MyDownloadService::class.java,
+                        ExoplayerDownloadService::class.java,
                         helper.getDownloadRequest(null),
                         false
                     )
@@ -117,6 +122,14 @@ object Helper {
                         if (it.frameRate > 0f) it.height.toString() + "p" else it.height.toString() + "p (fps : N/A)"
                     }
                     build().show()
+                }*/
+                helper.getDownloadRequest(null).let {
+                    DownloadService.sendAddDownload(
+                        context,
+                        ExoplayerDownloadService::class.java,
+                        it,
+                        false
+                    )
                 }
             }
 
@@ -149,7 +162,7 @@ object Helper {
             }
             val threadPoolSize = Runtime.getRuntime().availableProcessors()
             val executorService = Executors.newFixedThreadPool(threadPoolSize)
-            val downloadManager =  DownloadManager(
+            val downloadManager = DownloadManager(
                 context,
                 database,
                 getSimpleCache(context),
@@ -160,15 +173,15 @@ object Helper {
                     Requirements(Requirements.NETWORK or Requirements.DEVICE_STORAGE_NOT_LOW)
                 maxParallelDownloads = 3
             }
-            downloadManager.addListener(
-                object : DownloadManager.Listener { // Override methods of interest here.
+            downloadManager.addListener(  //for testing
+                object : DownloadManager.Listener {
                     override fun onDownloadChanged(
                         downloadManager: DownloadManager,
                         download: Download,
                         finalException: Exception?
                     ) {
                         if (download.state == Download.STATE_COMPLETED) {
-                           Log.e("Downloader", "Download Completed")
+                            Log.e("Downloader", "Download Completed")
                         } else if (download.state == Download.STATE_FAILED) {
                             Log.e("Downloader", "Download Failed")
                         } else if (download.state == Download.STATE_STOPPED) {
@@ -199,6 +212,7 @@ object Helper {
         return downloadDirectory!!
     }
 
+    @OptIn(UnstableApi::class)
     fun startAnimeDownloadService(
         context: Context,
         title: String,
@@ -224,16 +238,62 @@ object Helper {
             subtitle,
             sourceMedia
         )
-        AnimeServiceDataSingleton.downloadQueue.offer(downloadTask)
 
-        if (!AnimeServiceDataSingleton.isServiceRunning) {
-            val intent = Intent(context, AnimeDownloaderService::class.java)
-            ContextCompat.startForegroundService(context, intent)
-            AnimeServiceDataSingleton.isServiceRunning = true
+        val downloadsManger = Injekt.get<DownloadsManager>()
+        val downloadCheck = downloadsManger
+            .queryDownload(title, episode, DownloadedType.Type.ANIME)
+
+        if (downloadCheck) {
+            AlertDialog.Builder(context)
+                .setTitle("Download Exists")
+                .setMessage("A download for this episode already exists. Do you want to overwrite it?")
+                .setPositiveButton("Yes") { _, _ ->
+                    DownloadService.sendRemoveDownload(
+                        context,
+                        ExoplayerDownloadService::class.java,
+                        context.getSharedPreferences(
+                            getString(context, R.string.anime_downloads),
+                            Context.MODE_PRIVATE
+                        ).getString(
+                            downloadTask.getTaskName(),
+                            ""
+                        ) ?: "",
+                        false
+                    )
+                    context.getSharedPreferences(
+                        getString(context, R.string.anime_downloads),
+                        Context.MODE_PRIVATE
+                    ).edit()
+                        .remove(downloadTask.getTaskName())
+                        .apply()
+                    downloadsManger.removeDownload(
+                        DownloadedType(
+                            title,
+                            episode,
+                            DownloadedType.Type.ANIME
+                        )
+                    )
+                    AnimeServiceDataSingleton.downloadQueue.offer(downloadTask)
+                    if (!AnimeServiceDataSingleton.isServiceRunning) {
+                        val intent = Intent(context, AnimeDownloaderService::class.java)
+                        ContextCompat.startForegroundService(context, intent)
+                        AnimeServiceDataSingleton.isServiceRunning = true
+                    }
+                }
+                .setNegativeButton("No") { _, _ -> }
+                .show()
+        } else {
+            AnimeServiceDataSingleton.downloadQueue.offer(downloadTask)
+            if (!AnimeServiceDataSingleton.isServiceRunning) {
+                val intent = Intent(context, AnimeDownloaderService::class.java)
+                ContextCompat.startForegroundService(context, intent)
+                AnimeServiceDataSingleton.isServiceRunning = true
+            }
         }
     }
 
-    @OptIn(UnstableApi::class) private fun getSimpleCache(context: Context): SimpleCache {
+    @OptIn(UnstableApi::class)
+    fun getSimpleCache(context: Context): SimpleCache {
         return if (simpleCache == null) {
             val downloadDirectory = File(getDownloadDirectory(context), DOWNLOAD_CONTENT_DIRECTORY)
             val database = Injekt.get<StandaloneDatabaseProvider>()

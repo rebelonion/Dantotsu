@@ -76,7 +76,7 @@ class OfflineMangaParser : MangaParser() {
     }
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val titles = downloadManager.mangaDownloads.map { it.title }.distinct()
+        val titles = downloadManager.mangaDownloadedTypes.map { it.title }.distinct()
         val returnTitles: MutableList<String> = mutableListOf()
         for (title in titles) {
             if (FuzzySearch.ratio(title.lowercase(), query.lowercase()) > 80) {

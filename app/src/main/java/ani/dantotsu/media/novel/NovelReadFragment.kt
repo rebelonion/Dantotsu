@@ -22,7 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
-import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.novel.NovelDownloaderService
 import ani.dantotsu.download.novel.NovelServiceDataSingleton
@@ -92,10 +92,10 @@ class NovelReadFragment : Fragment(),
     override fun downloadedCheckWithStart(novel: ShowResponse): Boolean {
         val downloadsManager = Injekt.get<DownloadsManager>()
         if (downloadsManager.queryDownload(
-                Download(
+                DownloadedType(
                     media.nameMAL ?: media.nameRomaji,
                     novel.name,
-                    Download.Type.NOVEL
+                    DownloadedType.Type.NOVEL
                 )
             )
         ) {
@@ -124,10 +124,10 @@ class NovelReadFragment : Fragment(),
     override fun downloadedCheck(novel: ShowResponse): Boolean {
         val downloadsManager = Injekt.get<DownloadsManager>()
         return downloadsManager.queryDownload(
-            Download(
+            DownloadedType(
                 media.nameMAL ?: media.nameRomaji,
                 novel.name,
-                Download.Type.NOVEL
+                DownloadedType.Type.NOVEL
             )
         )
     }
@@ -135,10 +135,10 @@ class NovelReadFragment : Fragment(),
     override fun deleteDownload(novel: ShowResponse) {
         val downloadsManager = Injekt.get<DownloadsManager>()
         downloadsManager.removeDownload(
-            Download(
+            DownloadedType(
                 media.nameMAL ?: media.nameRomaji,
                 novel.name,
-                Download.Type.NOVEL
+                DownloadedType.Type.NOVEL
             )
         )
     }

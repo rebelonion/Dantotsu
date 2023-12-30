@@ -273,7 +273,7 @@
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="true" />
         <service
-            android:name=".download.video.MyDownloadService"
+            android:name=".download.video.ExoplayerDownloadService"
             android:exported="false"
             android:foregroundServiceType="dataSync">
         <intent-filter>

@@ -7,9 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 object MangaSources : MangaReadSources() {
-    // Instantiate the static parser
-    private val offlineMangaParser by lazy { OfflineMangaParser() }
-
     override var list: List<Lazier<BaseParser>> = emptyList()
 
     suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
