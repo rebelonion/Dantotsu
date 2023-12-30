@@ -244,7 +244,7 @@ object Helper {
             .queryDownload(title, episode, DownloadedType.Type.ANIME)
 
         if (downloadCheck) {
-            AlertDialog.Builder(context)
+            AlertDialog.Builder(context , R.style.MyPopup)
                 .setTitle("Download Exists")
                 .setMessage("A download for this episode already exists. Do you want to overwrite it?")
                 .setPositiveButton("Yes") { _, _ ->
