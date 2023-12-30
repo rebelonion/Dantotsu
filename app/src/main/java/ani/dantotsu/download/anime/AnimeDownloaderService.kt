@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
@@ -18,15 +17,15 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
+import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.R
 import ani.dantotsu.currActivity
-import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.download.anime.AnimeDownloaderService
-import ani.dantotsu.download.anime.AnimeServiceDataSingleton
 import ani.dantotsu.download.video.Helper
-import ani.dantotsu.download.video.MyDownloadService
+import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.anime.AnimeWatchFragment
@@ -44,14 +43,11 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -161,7 +157,7 @@ class AnimeDownloaderService : Service() {
                 val url = AnimeServiceDataSingleton.downloadQueue.find { it.getTaskName() == taskName }?.video?.file?.url ?: ""
                 DownloadService.sendRemoveDownload(
                     this@AnimeDownloaderService,
-                    MyDownloadService::class.java,
+                    ExoplayerDownloadService::class.java,
                     url,
                     false
                 )
@@ -220,16 +216,28 @@ class AnimeDownloaderService : Service() {
                 }
 
                 saveMediaInfo(task)
-                downloadsManager.addDownload(
-                    Download(
-                        task.title,
-                        task.episode,
-                        Download.Type.ANIME,
-                    )
+                var continueDownload = false
+                downloadManager.addListener(
+                    object : androidx.media3.exoplayer.offline.DownloadManager.Listener {
+                        override fun onDownloadChanged(
+                            downloadManager: DownloadManager,
+                            download: Download,
+                            finalException: Exception?
+                        ) {
+                            continueDownload = true
+                        }
+                    }
                 )
 
+                //set an async timeout of 30 seconds before setting continueDownload to true
+                launch {
+                    kotlinx.coroutines.delay(30000)
+                    continueDownload = true
+                }
+
+
                 // periodically check if the download is complete
-                while (downloadManager.downloadIndex.getDownload(task.video.file.url) != null) {
+                while (downloadManager.downloadIndex.getDownload(task.video.file.url) != null || continueDownload == false) {
                     val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
                     if (download != null) {
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_FAILED) {
@@ -251,6 +259,13 @@ class AnimeDownloaderService : Service() {
                                 task.getTaskName(),
                                 task.video.file.url
                             ).apply()
+                            downloadsManager.addDownload(
+                                DownloadedType(
+                                    task.title,
+                                    task.episode,
+                                    DownloadedType.Type.ANIME,
+                                )
+                            )
                             broadcastDownloadFinished(task.getTaskName())
                             break
                         }
@@ -284,9 +299,11 @@ class AnimeDownloaderService : Service() {
         GlobalScope.launch(Dispatchers.IO) {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Anime/${task.title}"
+                "${DownloadsManager.animeLocation}/${task.title}"
             )
+            val episodeDirectory = File(directory, task.episode)
             if (!directory.exists()) directory.mkdirs()
+            if (!episodeDirectory.exists()) episodeDirectory.mkdirs()
 
             val file = File(directory, "media.json")
             val gson = GsonBuilder()
@@ -305,6 +322,9 @@ class AnimeDownloaderService : Service() {
             if (media != null) {
                 media.cover = media.cover?.let { downloadImage(it, directory, "cover.jpg") }
                 media.banner = media.banner?.let { downloadImage(it, directory, "banner.jpg") }
+                if (task.episodeImage != null) {
+                    downloadImage(task.episodeImage, episodeDirectory, "episodeImage.jpg")
+                }
 
                 val jsonString = gson.toJson(media)
                 withContext(Dispatchers.Main) {
@@ -395,6 +415,7 @@ class AnimeDownloaderService : Service() {
         val video: Video,
         val subtitle: Subtitle? = null,
         val sourceMedia: Media? = null,
+        val episodeImage: String? = null,
         val retries: Int = 2,
         val simultaneousDownloads: Int = 2,
     ) {

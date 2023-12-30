@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
-import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.manga.MangaDownloaderService
 import ani.dantotsu.download.manga.MangaServiceDataSingleton
@@ -166,7 +166,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                         chapterAdapter =
                             MangaChapterAdapter(style ?: uiSettings.mangaDefaultView, media, this)
 
-                        for (download in downloadManager.mangaDownloads) {
+                        for (download in downloadManager.mangaDownloadedTypes) {
                             chapterAdapter.stopDownload(download.chapter)
                         }
 
@@ -482,10 +482,10 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
 
     fun onMangaChapterRemoveDownloadClick(i: String) {
         downloadManager.removeDownload(
-            Download(
+            DownloadedType(
                 media.nameMAL ?: media.nameRomaji,
                 i,
-                Download.Type.MANGA
+                DownloadedType.Type.MANGA
             )
         )
         chapterAdapter.deleteDownload(i)
@@ -500,10 +500,10 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
 
         // Remove the download from the manager and update the UI
         downloadManager.removeDownload(
-            Download(
+            DownloadedType(
                 media.nameMAL ?: media.nameRomaji,
                 i,
-                Download.Type.MANGA
+                DownloadedType.Type.MANGA
             )
         )
         chapterAdapter.purgeDownload(i)

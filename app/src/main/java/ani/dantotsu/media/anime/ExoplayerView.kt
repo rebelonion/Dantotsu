@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
+import android.app.DownloadManager
 import android.app.PictureInPictureParams
 import android.app.PictureInPictureUiState
 import android.content.ActivityNotFoundException
@@ -97,7 +98,9 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.cast.CastPlayer
+import androidx.media3.exoplayer.offline.Download
 import androidx.mediarouter.app.MediaRouteButton
+import ani.dantotsu.download.video.Helper
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
 
@@ -149,6 +152,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private lateinit var episodeTitle: Spinner
 
     private var orientationListener: OrientationEventListener? = null
+
+    private var downloadId: String? = null
 
     companion object {
         var initialized = false
@@ -475,7 +480,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             if (isInitialized) {
                 isPlayerPlaying = exoPlayer.isPlaying
                 (exoPlay.drawable as Animatable?)?.start()
-                if (isPlayerPlaying || castPlayer.isPlaying ) {
+                if (isPlayerPlaying || castPlayer.isPlaying) {
                     Glide.with(this).load(R.drawable.anim_play_to_pause).into(exoPlay)
                     exoPlayer.pause()
                     castPlayer.pause()
@@ -1115,7 +1120,21 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             if (settings.cursedSpeeds)
                 arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)
             else
-                arrayOf(0.25f, 0.33f, 0.5f, 0.66f, 0.75f, 1f, 1.15f, 1.25f, 1.33f, 1.5f, 1.66f, 1.75f, 2f)
+                arrayOf(
+                    0.25f,
+                    0.33f,
+                    0.5f,
+                    0.66f,
+                    0.75f,
+                    1f,
+                    1.15f,
+                    1.25f,
+                    1.33f,
+                    1.5f,
+                    1.66f,
+                    1.75f,
+                    2f
+                )
 
         val speedsName = speeds.map { "${it}x" }.toTypedArray()
         var curSpeed = loadData("${media.id}_speed", this) ?: settings.defaultSpeed
@@ -1292,7 +1311,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if (video?.format == VideoType.CONTAINER || (loadData<Int>("settings_download_manager")
                 ?: 0) != 0
         ) {
-            but.visibility = View.VISIBLE
+            //but.visibility = View.VISIBLE TODO: not sure if this is needed
             but.setOnClickListener {
                 download(this, episode, animeTitle.text.toString())
             }
@@ -1317,8 +1336,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             dataSource
         }
         cacheFactory = CacheDataSource.Factory().apply {
-            setCache(simpleCache)
+            setCache(Helper.getSimpleCache(this@ExoplayerView))
             setUpstreamDataSourceFactory(dataSourceFactory)
+            setCacheWriteDataSinkFactory(null)
         }
 
         val mimeType = when (video?.format) {
@@ -1327,15 +1347,33 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             else -> MimeTypes.APPLICATION_MP4
         }
 
-        val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
-        logger("url: ${video!!.file.url}")
-        logger("mimeType: $mimeType")
+        val downloadedMediaItem = if (ext.server.offline) {
+            val key = ext.server.name
+            downloadId = getSharedPreferences(getString(R.string.anime_downloads), MODE_PRIVATE)
+                .getString(key, null)
+            if (downloadId != null) {
+                Helper.downloadManager(this)
+                    .downloadIndex.getDownload(downloadId!!)?.request?.toMediaItem()
+            } else {
+                snackString("Download not found")
+                null
+            }
+        } else null
 
-        if (sub != null) {
-            val listofnotnullsubs = immutableListOf(sub).filterNotNull()
-            builder.setSubtitleConfigurations(listofnotnullsubs)
+        mediaItem = if (downloadedMediaItem == null) {
+            val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
+            logger("url: ${video!!.file.url}")
+            logger("mimeType: $mimeType")
+
+            if (sub != null) {
+                val listofnotnullsubs = immutableListOf(sub).filterNotNull()
+                builder.setSubtitleConfigurations(listofnotnullsubs)
+            }
+            builder.build()
+        } else {
+            downloadedMediaItem
         }
-        mediaItem = builder.build()
+
 
         //Source
         exoSource.setOnClickListener {
@@ -1457,7 +1495,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         exoPlayer.release()
         VideoCache.release()
         mediaSession?.release()
-        if(DiscordServiceRunningSingleton.running) {
+        if (DiscordServiceRunningSingleton.running) {
             val stopIntent = Intent(this, DiscordService::class.java)
             DiscordServiceRunningSingleton.running = false
             stopService(stopIntent)
@@ -1594,7 +1632,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if (isInitialized) {
             if (exoPlayer.currentPosition.toFloat() / exoPlayer.duration > settings.watchPercentage) {
                 preloading = true
-                nextEpisode(false) { i ->
+                nextEpisode(false) { i ->  //TODO: make sure this works for offline episodes
                     val ep = episodes[episodeArr[currentEpisodeIndex + i]] ?: return@nextEpisode
                     val selected = media.selected ?: return@nextEpisode
                     lifecycleScope.launch(Dispatchers.IO) {

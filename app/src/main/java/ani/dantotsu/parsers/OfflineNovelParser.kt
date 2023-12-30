@@ -3,10 +3,7 @@ package ani.dantotsu.parsers
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.logger
 import ani.dantotsu.media.manga.MangaNameAdapter
-import eu.kanade.tachiyomi.source.model.SChapter
-import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -53,7 +50,7 @@ class OfflineNovelParser: NovelParser() {
     }
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val titles = downloadManager.novelDownloads.map { it.title }.distinct()
+        val titles = downloadManager.novelDownloadedTypes.map { it.title }.distinct()
         val returnTitles: MutableList<String> = mutableListOf()
         for (title in titles) {
             if (FuzzySearch.ratio(title.lowercase(), query.lowercase()) > 80) {

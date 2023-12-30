@@ -91,4 +91,14 @@ open class ImageAdapter(
     }
 
     override fun getItemCount(): Int = images.size
+
+    override fun isZoomed(): Boolean {
+        val imageView = activity.findViewById<SubsamplingScaleImageView>(R.id.imgProgImageNoGestures)
+        return imageView.scale > imageView.minScale
+    }
+
+    override fun setZoom(zoom: Float) {
+        val imageView = activity.findViewById<SubsamplingScaleImageView>(R.id.imgProgImageNoGestures)
+        imageView.setScaleAndCenter(zoom, imageView.center)
+    }
 }

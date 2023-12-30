@@ -2,7 +2,6 @@ package ani.dantotsu.download.manga
 
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -23,20 +22,16 @@ import android.widget.GridView
 import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
-import ani.dantotsu.Refresh
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
-import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.initActivity
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.setSafeOnClickListener
-import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
@@ -168,8 +163,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
             val media =
-                downloadManager.mangaDownloads.firstOrNull { it.title == item.title }
-                    ?: downloadManager.novelDownloads.firstOrNull { it.title == item.title }
+                downloadManager.mangaDownloadedTypes.firstOrNull { it.title == item.title }
+                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title == item.title }
             media?.let {
                 startActivity(
                     Intent(requireContext(), MediaDetailsActivity::class.java)
@@ -184,10 +179,10 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         gridView.setOnItemLongClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
-            val type: Download.Type = if (downloadManager.mangaDownloads.any { it.title == item.title }) {
-                Download.Type.MANGA
+            val type: DownloadedType.Type = if (downloadManager.mangaDownloadedTypes.any { it.title == item.title }) {
+                DownloadedType.Type.MANGA
             } else {
-                Download.Type.NOVEL
+                DownloadedType.Type.NOVEL
             }
             // Alert dialog to confirm deletion
             val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.MyPopup)
@@ -292,19 +287,19 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
 
     private fun getDownloads() {
         downloads = listOf()
-        val mangaTitles = downloadManager.mangaDownloads.map { it.title }.distinct()
+        val mangaTitles = downloadManager.mangaDownloadedTypes.map { it.title }.distinct()
         val newMangaDownloads = mutableListOf<OfflineMangaModel>()
         for (title in mangaTitles) {
-            val _downloads = downloadManager.mangaDownloads.filter { it.title == title }
+            val _downloads = downloadManager.mangaDownloadedTypes.filter { it.title == title }
             val download = _downloads.first()
             val offlineMangaModel = loadOfflineMangaModel(download)
             newMangaDownloads += offlineMangaModel
         }
         downloads = newMangaDownloads
-        val novelTitles = downloadManager.novelDownloads.map { it.title }.distinct()
+        val novelTitles = downloadManager.novelDownloadedTypes.map { it.title }.distinct()
         val newNovelDownloads = mutableListOf<OfflineMangaModel>()
         for (title in novelTitles) {
-            val _downloads = downloadManager.novelDownloads.filter { it.title == title }
+            val _downloads = downloadManager.novelDownloadedTypes.filter { it.title == title }
             val download = _downloads.first()
             val offlineMangaModel = loadOfflineMangaModel(download)
             newNovelDownloads += offlineMangaModel
@@ -313,17 +308,17 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
 
     }
 
-    private fun getMedia(download: Download): Media? {
-        val type = if (download.type == Download.Type.MANGA) {
+    private fun getMedia(downloadedType: DownloadedType): Media? {
+        val type = if (downloadedType.type == DownloadedType.Type.MANGA) {
             "Manga"
-        } else if (download.type == Download.Type.ANIME) {
+        } else if (downloadedType.type == DownloadedType.Type.ANIME) {
             "Anime"
         } else {
             "Novel"
         }
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/$type/${download.title}"
+            "Dantotsu/$type/${downloadedType.title}"
         )
         //load media.json and convert to media class with gson
         return try {
@@ -343,23 +338,23 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         }
     }
 
-    private fun loadOfflineMangaModel(download: Download): OfflineMangaModel {
-        val type = if (download.type == Download.Type.MANGA) {
+    private fun loadOfflineMangaModel(downloadedType: DownloadedType): OfflineMangaModel {
+        val type = if (downloadedType.type == DownloadedType.Type.MANGA) {
             "Manga"
-        } else if (download.type == Download.Type.ANIME) {
+        } else if (downloadedType.type == DownloadedType.Type.ANIME) {
             "Anime"
         } else {
             "Novel"
         }
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/$type/${download.title}"
+            "Dantotsu/$type/${downloadedType.title}"
         )
         //load media.json and convert to media class with gson
         try {
             val media = File(directory, "media.json")
             val mediaJson = media.readText()
-            val mediaModel = getMedia(download)!!
+            val mediaModel = getMedia(downloadedType)!!
             val cover = File(directory, "cover.jpg")
             val coverUri: Uri? = if (cover.exists()) {
                 Uri.fromFile(cover)
