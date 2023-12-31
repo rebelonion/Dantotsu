@@ -79,15 +79,9 @@ class MainActivity : AppCompatActivity() {
 
             val backgroundDrawable = _bottomBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
-            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xE8000000.toInt()
+            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xF0000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
             _bottomBar.background = backgroundDrawable
-        }
-        val colorOverflow = this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("colorOverflow", false)
-        if (!colorOverflow) {
-            _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
-
         }
 
 
