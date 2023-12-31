@@ -51,7 +51,7 @@ class MangaReadAdapter(
         val bind = ItemAnimeWatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
-    private var nestedDialog: androidx.appcompat.app.AlertDialog? = null
+    private var nestedDialog: AlertDialog? = null
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
@@ -147,7 +147,7 @@ class MangaReadAdapter(
                 LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
             val dialogBinding = DialogLayoutBinding.bind(dialogView)
 
-
+            var run = false
             var reversed = media.selected!!.recyclerReversed
             var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.animeDefaultView
             dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
@@ -156,6 +156,7 @@ class MangaReadAdapter(
                 reversed = !reversed
                 dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
                 dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
+                run = true
             }
 
             //Grids
@@ -180,11 +181,13 @@ class MangaReadAdapter(
                 selected(it as ImageButton)
                 style = 0
                 dialogBinding.layoutText.text = "List"
+                run = true
             }
             dialogBinding.animeSourceCompact.setOnClickListener {
                 selected(it as ImageButton)
                 style = 1
                 dialogBinding.layoutText.text = "Compact"
+                run = true
             }
 
             //Multi download
@@ -248,11 +251,11 @@ class MangaReadAdapter(
                 dialog.window?.setDimAmount(0.8f)
             }
 
-            nestedDialog = androidx.appcompat.app.AlertDialog.Builder(fragment.requireContext() , R.style.MyPopup)
+            nestedDialog = AlertDialog.Builder(fragment.requireContext() , R.style.MyPopup)
                 .setTitle("Options")
                 .setView(dialogView)
                 .setPositiveButton("OK") { _, _ ->
-                    fragment.onIconPressed(style, reversed)
+                    if(run) fragment.onIconPressed(style, reversed)
                     if (dialogBinding.downloadNo.text != "0"){
                         fragment.multiDownload(dialogBinding.downloadNo.text.toString().toInt())
                     }
@@ -425,7 +428,7 @@ class MangaReadAdapter(
                     parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
-                if (items < 2) binding?.animeSourceLanguageContainer?.visibility  =  View.GONE else binding?.animeSourceLanguageContainer?.visibility  =  View.VISIBLE
+                if (items > 1) binding?.animeSourceLanguageContainer?.visibility  =  View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility  =  View.GONE
 
                 binding?.animeSourceLanguage?.setAdapter(adapter)
 
