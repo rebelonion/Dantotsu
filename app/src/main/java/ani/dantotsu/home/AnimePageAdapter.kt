@@ -75,8 +75,6 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
             materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
         }
-        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false) ?: false
 
         binding.animeTitleContainer.updatePadding(top = statusBarHeight)
 

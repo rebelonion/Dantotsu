@@ -31,7 +31,7 @@ class CustomMediaRouterChooserDialogFragment: MediaRouteChooserDialogFragment() 
             context: Context,
             savedInstanceState: Bundle?
     ): MediaRouteChooserDialog =
-            MediaRouteChooserDialog(context)
+            MediaRouteChooserDialog(context, R.style.MyPopup)
 }
 
 class CustomMediaRouteControllerDialogFragment: MediaRouteControllerDialogFragment() {
@@ -39,5 +39,5 @@ class CustomMediaRouteControllerDialogFragment: MediaRouteControllerDialogFragme
             context: Context,
             savedInstanceState: Bundle?
     ): MediaRouteControllerDialog =
-            MediaRouteControllerDialog(context, R.style.ThemeOverlay_Dantotsu_MediaRouter)
+            MediaRouteControllerDialog(context, R.style.MyPopup)
 }
