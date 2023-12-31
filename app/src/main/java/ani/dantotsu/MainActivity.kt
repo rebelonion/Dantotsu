@@ -29,6 +29,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
@@ -249,15 +250,19 @@ class MainActivity : AppCompatActivity() {
 
         GlobalScope.launch(Dispatchers.IO) {
             val index = Helper.downloadManager(this@MainActivity).downloadIndex
-            if (index != null) {
-                val downloadCursor = index.getDownloads()
-                if (downloadCursor != null) {
-                    while (downloadCursor.moveToNext()) {
-                        val download = downloadCursor.download
-                        Log.e("Downloader", download.request.uri.toString())
-                        Log.e("Downloader", download.request.id.toString())
-                        Log.e("Downloader", download.request.mimeType.toString())
-                    }
+            val downloadCursor = index.getDownloads()
+            while (downloadCursor.moveToNext()) {
+                val download = downloadCursor.download
+                Log.e("Downloader", download.request.uri.toString())
+                Log.e("Downloader", download.request.id.toString())
+                Log.e("Downloader", download.request.mimeType.toString())
+                Log.e("Downloader", download.request.data.size.toString())
+                Log.e("Downloader", download.bytesDownloaded.toString())
+                Log.e("Downloader", download.state.toString())
+                Log.e("Downloader", download.failureReason.toString())
+
+                if (download.state == Download.STATE_FAILED) {  //simple cleanup
+                    Helper.downloadManager(this@MainActivity).removeDownload(download.request.id)
                 }
             }
         }

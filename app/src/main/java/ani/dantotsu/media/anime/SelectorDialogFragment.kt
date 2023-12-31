@@ -283,7 +283,8 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         episode.number,
                         video,
                         null,
-                        media
+                        media,
+                        episode.thumb?.url?: media!!.banner?: media!!.cover
                     )
                 }
                 dismiss()

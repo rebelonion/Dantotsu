@@ -219,7 +219,8 @@ object Helper {
         episode: String,
         video: Video,
         subtitle: Subtitle? = null,
-        sourceMedia: Media? = null
+        sourceMedia: Media? = null,
+        episodeImage: String? = null
     ) {
         if (!isNotificationPermissionGranted(context)) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -236,7 +237,8 @@ object Helper {
             episode,
             video,
             subtitle,
-            sourceMedia
+            sourceMedia,
+            episodeImage
         )
 
         val downloadsManger = Injekt.get<DownloadsManager>()

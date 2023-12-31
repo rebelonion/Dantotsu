@@ -20,6 +20,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadService
+import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.currActivity
 import ani.dantotsu.download.DownloadedType
@@ -84,7 +85,6 @@ class AnimeDownloaderService : Service() {
             setSmallIcon(R.drawable.ic_round_download_24)
             priority = NotificationCompat.PRIORITY_DEFAULT
             setOnlyAlertOnce(true)
-            setProgress(0, 0, false)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
@@ -216,43 +216,39 @@ class AnimeDownloaderService : Service() {
                 }
 
                 saveMediaInfo(task)
-                var continueDownload = false
-                downloadManager.addListener(
-                    object : androidx.media3.exoplayer.offline.DownloadManager.Listener {
-                        override fun onDownloadChanged(
-                            downloadManager: DownloadManager,
-                            download: Download,
-                            finalException: Exception?
-                        ) {
-                            continueDownload = true
-                        }
-                    }
-                )
+                val downloadStarted = hasDownloadStarted(downloadManager, task, 30000) // 30 seconds timeout
 
-                //set an async timeout of 30 seconds before setting continueDownload to true
-                launch {
-                    kotlinx.coroutines.delay(30000)
-                    continueDownload = true
+                if (!downloadStarted) {
+                    logger("Download failed to start")
+                    builder.setContentText("${task.title} - ${task.episode} Download failed to start")
+                    notificationManager.notify(NOTIFICATION_ID, builder.build())
+                    snackString("${task.title} - ${task.episode} Download failed to start")
+                    broadcastDownloadFailed(task.getTaskName())
+                    return@withContext
                 }
 
 
                 // periodically check if the download is complete
-                while (downloadManager.downloadIndex.getDownload(task.video.file.url) != null || continueDownload == false) {
+                while (downloadManager.downloadIndex.getDownload(task.video.file.url) != null) {
                     val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
                     if (download != null) {
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_FAILED) {
                             logger("Download failed")
                             builder.setContentText("${task.title} - ${task.episode} Download failed")
-                                .setProgress(0, 0, false)
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download failed")
+                            logger("Download failed: ${download.failureReason}")
+                            FirebaseCrashlytics.getInstance().recordException(Exception("Anime Download failed:" +
+                                    " ${download.failureReason}" +
+                                    " url: ${task.video.file.url}" +
+                                    " title: ${task.title}" +
+                                    " episode: ${task.episode}"))
                             broadcastDownloadFailed(task.getTaskName())
                             break
                         }
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED) {
                             logger("Download completed")
                             builder.setContentText("${task.title} - ${task.episode} Download completed")
-                                .setProgress(0, 0, false)
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download completed")
                             getSharedPreferences(getString(R.string.anime_downloads), Context.MODE_PRIVATE).edit().putString(
@@ -272,13 +268,11 @@ class AnimeDownloaderService : Service() {
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_STOPPED) {
                             logger("Download stopped")
                             builder.setContentText("${task.title} - ${task.episode} Download stopped")
-                                .setProgress(0, 0, false)
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download stopped")
                             break
                         }
                         broadcastDownloadProgress(task.getTaskName(), download.percentDownloaded.toInt())
-                        builder.setProgress(100, download.percentDownloaded.toInt(), false)
                         if (notifi) {
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                         }
@@ -292,6 +286,19 @@ class AnimeDownloaderService : Service() {
             FirebaseCrashlytics.getInstance().recordException(e)
             broadcastDownloadFailed(task.getTaskName())
         }
+    }
+
+    @androidx.annotation.OptIn(UnstableApi::class) suspend fun hasDownloadStarted(downloadManager: DownloadManager, task: DownloadTask, timeout: Long): Boolean {
+        val startTime = System.currentTimeMillis()
+        while (System.currentTimeMillis() - startTime < timeout) {
+            val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
+            if (download != null) {
+                return true
+            }
+            // Delay between each poll
+            kotlinx.coroutines.delay(500)
+        }
+        return false
     }
 
     @OptIn(DelicateCoroutinesApi::class)
@@ -323,6 +330,13 @@ class AnimeDownloaderService : Service() {
                 media.cover = media.cover?.let { downloadImage(it, directory, "cover.jpg") }
                 media.banner = media.banner?.let { downloadImage(it, directory, "banner.jpg") }
                 if (task.episodeImage != null) {
+                    media.anime?.episodes?.get(task.episode)?.let { episode ->
+                        episode.thumb = downloadImage(task.episodeImage, episodeDirectory, "episodeImage.jpg")?.let {
+                            FileUrl(
+                                it
+                            )
+                        }
+                    }
                     downloadImage(task.episodeImage, episodeDirectory, "episodeImage.jpg")
                 }
 
