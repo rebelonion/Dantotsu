@@ -108,6 +108,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:id="@+id/animeSourceLanguageContainer"
+                android:visibility="gone"
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:hint="Language"
