@@ -400,17 +400,6 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
             uiTheme(true, it)
         }
 
-        binding.settingsIncognito.isChecked =
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
-                "incognito",
-                false
-            )
-        binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putBoolean("incognito", isChecked).apply()
-            restartApp()
-        }
-
         var previousStart: View = when (uiSettings.defaultStartUpTab) {
             0 -> binding.uiSettingsAnime
             1 -> binding.uiSettingsHome
