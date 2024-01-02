@@ -71,6 +71,28 @@
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
+        
+         <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/settingsIncognito"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:checked="false"
+            android:drawableStart="@drawable/ic_incognito_24"
+            android:drawablePadding="16dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:elegantTextHeight="true"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/incognito_mode"
+            android:textAlignment="viewStart"
+            android:textColor="?attr/colorOnBackground"
+            android:layout_marginStart="4dp"
+            app:cornerRadius="0dp"
+            app:drawableTint="?attr/colorPrimary"
+            app:showText="false"
+            app:thumbTint="@color/button_switch_track" />
 
         <Button
             android:id="@+id/image_search"
