@@ -314,19 +314,19 @@ class AnimeWatchFragment : Fragment() {
                     if (show) View.GONE else View.VISIBLE
             }
         }
+        var itemSelected = false
         val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>()
         if (allSettings.isNotEmpty()) {
             var selectedSetting = allSettings[0]
             if (allSettings.size > 1) {
-                val names = allSettings.map { it.lang }.toTypedArray()
+                val names = allSettings.sortedBy { it.lang }.map { it.lang }.toTypedArray()
                 var selectedIndex = 0
-                val dialog = AlertDialog.Builder(requireContext())
+                val dialog = AlertDialog.Builder(requireContext() , R.style.MyPopup)
                     .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, selectedIndex) { _, which ->
+                    .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
                         selectedIndex = which
-                    }
-                    .setPositiveButton("OK") { dialog, _ ->
                         selectedSetting = allSettings[selectedIndex]
+                        itemSelected = true
                         dialog.dismiss()
 
                         // Move the fragment transaction here
@@ -343,10 +343,10 @@ class AnimeWatchFragment : Fragment() {
                                 .commit()
                         }
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.cancel()
-                        changeUIVisibility(true)
-                        return@setNegativeButton
+                    .setOnDismissListener {
+                        if (!itemSelected) {
+                            changeUIVisibility(true)
+                        }
                     }
                     .show()
                 dialog.window?.setDimAmount(0.8f)
