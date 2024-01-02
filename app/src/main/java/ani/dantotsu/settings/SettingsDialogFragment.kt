@@ -3,6 +3,7 @@ package ani.dantotsu.settings
 import android.app.DownloadManager
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.Context
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -137,6 +138,25 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun restartApp() {
+        Snackbar.make(
+            binding.root,
+            R.string.restart_app, Snackbar.LENGTH_SHORT
+        ).apply {
+            val mainIntent =
+                Intent.makeRestartActivityTask(
+                    context.packageManager.getLaunchIntentForPackage(
+                        context.packageName
+                    )!!.component
+                )
+            setAction("Do it!") {
+                context.startActivity(mainIntent)
+                Runtime.getRuntime().exit(0)
+            }
+            show()
+        }
     }
 
     companion object {
