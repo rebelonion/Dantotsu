@@ -19,6 +19,7 @@ import ani.dantotsu.databinding.BottomSheetSettingsBinding
 import ani.dantotsu.download.DownloadContainerActivity
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.loadData
+import ani.dantotsu.snackString
 import ani.dantotsu.loadImage
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
