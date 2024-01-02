@@ -14,6 +14,8 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.R
+import android.content.SharedPreferences
+import androidx.core.content.edit
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
 import ani.dantotsu.download.DownloadContainerActivity
