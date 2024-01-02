@@ -395,7 +395,7 @@ class AnimeWatchAdapter(
                 val adapter = ArrayAdapter(
                     fragment.requireContext(),
                     R.layout.item_dropdown,
-                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    parser.extension.sources.sortedBy { it.lang }.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
                 if (items > 1) binding?.animeSourceLanguageContainer?.visibility  =  View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility  =  View.GONE

@@ -67,7 +67,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             if (allSettings.isNotEmpty()) {
                 var selectedSetting = allSettings[0]
                 if (allSettings.size > 1) {
-                    val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
+                    val names = allSettings.sortedBy { it.lang }.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
                     var selectedIndex = 0
                     val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                         .setTitle("Select a Source")
