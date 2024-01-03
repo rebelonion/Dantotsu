@@ -8,6 +8,7 @@ data class ReaderSettings(
 
     var autoDetectWebtoon: Boolean = true,
     var default: CurrentReaderSettings = CurrentReaderSettings(),
+    var defaultLN: CurrentNovelReaderSettings = CurrentNovelReaderSettings(),
 
     var askIndividual: Boolean = true,
     var updateForH: Boolean = false
