@@ -85,10 +85,10 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
         }
         
         binding.settingsIncognito.isChecked =
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
-                "incognito",
-                false
-            )
+             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean(
+               "incognito",
+              false
+          ) ?: false
 
         var incognito = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
           ?.getBoolean(
