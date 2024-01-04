@@ -29,7 +29,7 @@ android {
         debug {
             applicationIdSuffix ".sad"
             manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta", icon_placeholder_round: "@mipmap/ic_launcher_beta_round"]
-            debuggable true
+            debuggable false
         }
         release {
             manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher", icon_placeholder_round: "@mipmap/ic_launcher_round"]

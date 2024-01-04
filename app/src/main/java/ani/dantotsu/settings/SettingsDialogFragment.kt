@@ -28,6 +28,7 @@ import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.toast
+import com.google.android.material.snackbar.Snackbar
 
 
 class SettingsDialogFragment() : BottomSheetDialogFragment() {
@@ -75,17 +76,25 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
                 Anilist.loginIntent(requireActivity())
             }
         }
+        
 
         binding.settingsIncognito.isChecked =
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getBoolean(
                 "incognito",
                 false
             )
+
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putBoolean("incognito", isChecked).apply()
-            restartApp()
-        }
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                ?.putBoolean("incognito", isChecked).apply()
+        } 
+
+         incognito = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getBoolean(
+                "incognito",
+                false
+            ) 
 
         binding.settingsExtensionSettings.setSafeOnClickListener {
             startActivity(Intent(activity, ExtensionsActivity::class.java))
@@ -141,25 +150,6 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun restartApp() {
-        Snackbar.make(
-            binding.root,
-            R.string.restart_app, Snackbar.LENGTH_SHORT
-        ).apply {
-            val mainIntent =
-                Intent.makeRestartActivityTask(
-                    context.packageManager.getLaunchIntentForPackage(
-                        context.packageName
-                    )!!.component
-                )
-            setAction("Do it!") {
-                context.startActivity(mainIntent)
-                Runtime.getRuntime().exit(0)
-            }
-            show()
-        }
     }
 
     companion object {
