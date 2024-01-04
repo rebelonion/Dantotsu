@@ -76,14 +76,9 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
                 Anilist.loginIntent(requireActivity())
             }
         }
-        
 
-        binding.settingsIncognito.isChecked =
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean(
-                "incognito",
-                false
-            )
+        currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("incognito", false) ?: false
 
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
