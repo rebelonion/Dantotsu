@@ -28,8 +28,7 @@ import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.toast
-import com.google.android.material.snackbar.Snackbar
-
+import ani.dantotsu.currContext
 
 class SettingsDialogFragment() : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSettingsBinding? = null
@@ -81,15 +80,15 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
                 ?.getBoolean("incognito", false) ?: false
 
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putBoolean("incognito", isChecked).apply()
-        } 
+             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+               ?.putBoolean("incognito", isChecked)?.apply()
+        }
 
-         var incognito = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean(
-                "incognito",
-                false
-            ) 
+        var incognito = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+          ?.getBoolean(
+              "incognito",
+              false
+          ) 
 
         binding.settingsExtensionSettings.setSafeOnClickListener {
             startActivity(Intent(activity, ExtensionsActivity::class.java))
