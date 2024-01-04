@@ -1,13 +1,17 @@
 package ani.dantotsu.settings
 
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
+import ani.dantotsu.NoPaddingArrayAdapter
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityReaderSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
+import ani.dantotsu.media.novel.novelreader.NovelReaderActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.saveData
@@ -42,7 +46,7 @@ class ReaderSettingsActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        //General
+        //Manga Settings
         binding.readerSettingsSourceName.isChecked = settings.showSource
         binding.readerSettingsSourceName.setOnCheckedChangeListener { _, isChecked ->
             settings.showSource = isChecked
@@ -54,14 +58,14 @@ class ReaderSettingsActivity : AppCompatActivity() {
             settings.showSystemBars = isChecked
             saveData(reader, settings)
         }
-
+        //Default Manga
         binding.readerSettingsAutoWebToon.isChecked = settings.autoDetectWebtoon
         binding.readerSettingsAutoWebToon.setOnCheckedChangeListener { _, isChecked ->
             settings.autoDetectWebtoon = isChecked
             saveData(reader, settings)
         }
 
-        //Default
+
         val layoutList = listOf(
             binding.readerSettingsPaged,
             binding.readerSettingsContinuousPaged,
@@ -182,6 +186,169 @@ class ReaderSettingsActivity : AppCompatActivity() {
         binding.readerSettingsLongClickImage.isChecked = settings.default.longClickImage
         binding.readerSettingsLongClickImage.setOnCheckedChangeListener { _, isChecked ->
             settings.default.longClickImage = isChecked
+            saveData(reader, settings)
+        }
+
+        //LN settings
+        val layoutListLN = listOf(
+            binding.LNpaged,
+            binding.LNcontinuous
+        )
+
+        binding.LNlayoutText.text = settings.defaultLN.layout.string
+        var selectedLN = layoutListLN[settings.defaultLN.layout.ordinal]
+        selectedLN.alpha = 1f
+
+        layoutListLN.forEachIndexed { index, imageButton ->
+            imageButton.setOnClickListener {
+                selectedLN.alpha = 0.33f
+                selectedLN = imageButton
+                selectedLN.alpha = 1f
+                settings.defaultLN.layout = CurrentNovelReaderSettings.Layouts[index]
+                    ?: CurrentNovelReaderSettings.Layouts.PAGED
+                binding.LNlayoutText.text = settings.defaultLN.layout.string
+                saveData(reader, settings)
+            }
+        }
+
+        val dualListLN = listOf(
+            binding.LNdualNo,
+            binding.LNdualAuto,
+            binding.LNdualForce
+        )
+
+        binding.LNdualPageText.text = settings.defaultLN.dualPageMode.toString()
+        var selectedDualLN = dualListLN[settings.defaultLN.dualPageMode.ordinal]
+        selectedDualLN.alpha = 1f
+
+        dualListLN.forEachIndexed { index, imageButton ->
+            imageButton.setOnClickListener {
+                selectedDualLN.alpha = 0.33f
+                selectedDualLN = imageButton
+                selectedDualLN.alpha = 1f
+                settings.defaultLN.dualPageMode = CurrentReaderSettings.DualPageModes[index]
+                    ?: CurrentReaderSettings.DualPageModes.Automatic
+                binding.LNdualPageText.text = settings.defaultLN.dualPageMode.toString()
+                saveData(reader, settings)
+            }
+        }
+
+        binding.LNlineHeight.setText(settings.defaultLN.lineHeight.toString())
+        binding.LNlineHeight.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val value = binding.LNlineHeight.text.toString().toFloatOrNull() ?: 1.4f
+                settings.defaultLN.lineHeight = value
+                binding.LNlineHeight.setText(value.toString())
+                saveData(reader, settings)
+            }
+        }
+
+        binding.LNincrementLineHeight.setOnClickListener {
+            val value = binding.LNlineHeight.text.toString().toFloatOrNull() ?: 1.4f
+            settings.defaultLN.lineHeight = value + 0.1f
+            binding.LNlineHeight.setText(settings.defaultLN.lineHeight.toString())
+            saveData(reader, settings)
+        }
+
+        binding.LNdecrementLineHeight.setOnClickListener {
+            val value = binding.LNlineHeight.text.toString().toFloatOrNull() ?: 1.4f
+            settings.defaultLN.lineHeight = value - 0.1f
+            binding.LNlineHeight.setText(settings.defaultLN.lineHeight.toString())
+            saveData(reader, settings)
+        }
+
+        binding.LNmargin.setText(settings.defaultLN.margin.toString())
+        binding.LNmargin.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val value = binding.LNmargin.text.toString().toFloatOrNull() ?: 0.06f
+                settings.defaultLN.margin = value
+                binding.LNmargin.setText(value.toString())
+                saveData(reader, settings)
+            }
+        }
+
+        binding.LNincrementMargin.setOnClickListener {
+            val value = binding.LNmargin.text.toString().toFloatOrNull() ?: 0.06f
+            settings.defaultLN.margin = value + 0.01f
+            binding.LNmargin.setText(settings.defaultLN.margin.toString())
+            saveData(reader, settings)
+        }
+
+        binding.LNdecrementMargin.setOnClickListener {
+            val value = binding.LNmargin.text.toString().toFloatOrNull() ?: 0.06f
+            settings.defaultLN.margin = value - 0.01f
+            binding.LNmargin.setText(settings.defaultLN.margin.toString())
+            saveData(reader, settings)
+        }
+
+        binding.LNmaxInlineSize.setText(settings.defaultLN.maxInlineSize.toString())
+        binding.LNmaxInlineSize.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val value = binding.LNmaxInlineSize.text.toString().toIntOrNull() ?: 720
+                settings.defaultLN.maxInlineSize = value
+                binding.LNmaxInlineSize.setText(value.toString())
+                saveData(reader, settings)
+            }
+        }
+
+        binding.LNincrementMaxInlineSize.setOnClickListener {
+            val value = binding.LNmaxInlineSize.text.toString().toIntOrNull() ?: 720
+            settings.defaultLN.maxInlineSize = value + 10
+            binding.LNmaxInlineSize.setText(settings.defaultLN.maxInlineSize.toString())
+            saveData(reader, settings)
+        }
+
+        binding.LNdecrementMaxInlineSize.setOnClickListener {
+            val value = binding.LNmaxInlineSize.text.toString().toIntOrNull() ?: 720
+            settings.defaultLN.maxInlineSize = value - 10
+            binding.LNmaxInlineSize.setText(settings.defaultLN.maxInlineSize.toString())
+            saveData(reader, settings)
+        }
+
+        binding.LNmaxBlockSize.setText(settings.defaultLN.maxBlockSize.toString())
+        binding.LNmaxBlockSize.setOnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                val value = binding.LNmaxBlockSize.text.toString().toIntOrNull() ?: 720
+                settings.defaultLN.maxBlockSize = value
+                binding.LNmaxBlockSize.setText(value.toString())
+                saveData(reader, settings)
+            }
+        }
+        binding.LNincrementMaxBlockSize.setOnClickListener {
+            val value = binding.LNmaxBlockSize.text.toString().toIntOrNull() ?: 720
+            settings.defaultLN.maxInlineSize = value + 10
+            binding.LNmaxBlockSize.setText(settings.defaultLN.maxInlineSize.toString())
+            saveData(reader, settings)
+        }
+
+        binding.LNdecrementMaxBlockSize.setOnClickListener {
+            val value = binding.LNmaxBlockSize.text.toString().toIntOrNull() ?: 720
+            settings.defaultLN.maxBlockSize = value - 10
+            binding.LNmaxBlockSize.setText(settings.defaultLN.maxBlockSize.toString())
+            saveData(reader, settings)
+        }
+
+        binding.LNuseDarkTheme.isChecked = settings.defaultLN.useDarkTheme
+        binding.LNuseDarkTheme.setOnCheckedChangeListener { _, isChecked ->
+            settings.defaultLN.useDarkTheme = isChecked
+            saveData(reader, settings)
+        }
+
+        binding.LNuseOledTheme.isChecked = settings.defaultLN.useOledTheme
+        binding.LNuseOledTheme.setOnCheckedChangeListener { _, isChecked ->
+            settings.defaultLN.useOledTheme = isChecked
+            saveData(reader, settings)
+        }
+
+        binding.LNkeepScreenOn.isChecked = settings.defaultLN.keepScreenOn
+        binding.LNkeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
+            settings.defaultLN.keepScreenOn = isChecked
+            saveData(reader, settings)
+        }
+
+        binding.LNvolumeButton.isChecked = settings.defaultLN.volumeButtons
+        binding.LNvolumeButton.setOnCheckedChangeListener { _, isChecked ->
+            settings.defaultLN.volumeButtons = isChecked
             saveData(reader, settings)
         }
 

@@ -30,8 +30,7 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val activity = requireActivity() as NovelReaderActivity
-        val settings = activity.settings.default
-
+        val settings = activity.settings.defaultLN
         val themeLabels = activity.themes.map { it.name }
         binding.themeSelect.adapter =
             NoPaddingArrayAdapter(activity, R.layout.item_dropdown, themeLabels)
@@ -49,7 +48,11 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
+        binding.useOledTheme.isChecked = settings.useOledTheme
+        binding.useOledTheme.setOnCheckedChangeListener { _, isChecked ->
+            settings.useOledTheme = isChecked
+            activity.applySettings()
+        }
         val layoutList = listOf(
             binding.paged,
             binding.continuous
@@ -173,6 +176,20 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
                 binding.maxBlockSize.setText(value.toString())
                 activity.applySettings()
             }
+
+        }
+        binding.incrementMaxBlockSize.setOnClickListener {
+            val value = binding.maxBlockSize.text.toString().toIntOrNull() ?: 720
+            settings.maxBlockSize = value + 10
+            binding.maxBlockSize.setText(settings.maxBlockSize.toString())
+            activity.applySettings()
+        }
+
+        binding.decrementMaxBlockSize.setOnClickListener {
+            val value = binding.maxBlockSize.text.toString().toIntOrNull() ?: 720
+            settings.maxBlockSize = value - 10
+            binding.maxBlockSize.setText(settings.maxBlockSize.toString())
+            activity.applySettings()
         }
 
         binding.useDarkTheme.isChecked = settings.useDarkTheme

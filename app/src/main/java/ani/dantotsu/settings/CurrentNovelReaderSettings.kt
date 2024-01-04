@@ -11,6 +11,7 @@ data class CurrentNovelReaderSettings(
     var justify: Boolean = true,
     var hyphenation: Boolean = true,
     var useDarkTheme: Boolean = false,
+    var useOledTheme: Boolean = false,
     var invert: Boolean = false,
     var maxInlineSize: Int = 720,
     var maxBlockSize: Int = 1440,
