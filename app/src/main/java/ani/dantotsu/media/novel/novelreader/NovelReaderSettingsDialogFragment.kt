@@ -31,7 +31,6 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val activity = requireActivity() as NovelReaderActivity
         val settings = activity.settings.defaultLN
-
         val themeLabels = activity.themes.map { it.name }
         binding.themeSelect.adapter =
             NoPaddingArrayAdapter(activity, R.layout.item_dropdown, themeLabels)
@@ -49,7 +48,11 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-
+        binding.useOledTheme.isChecked = settings.useOledTheme
+        binding.useOledTheme.setOnCheckedChangeListener { _, isChecked ->
+            settings.useOledTheme = isChecked
+            activity.applySettings()
+        }
         val layoutList = listOf(
             binding.paged,
             binding.continuous

@@ -334,6 +334,12 @@ class ReaderSettingsActivity : AppCompatActivity() {
             saveData(reader, settings)
         }
 
+        binding.LNuseOledTheme.isChecked = settings.defaultLN.useOledTheme
+        binding.LNuseOledTheme.setOnCheckedChangeListener { _, isChecked ->
+            settings.defaultLN.useOledTheme = isChecked
+            saveData(reader, settings)
+        }
+
         binding.LNkeepScreenOn.isChecked = settings.defaultLN.keepScreenOn
         binding.LNkeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
             settings.defaultLN.keepScreenOn = isChecked

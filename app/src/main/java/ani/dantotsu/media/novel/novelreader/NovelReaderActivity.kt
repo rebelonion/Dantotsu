@@ -351,6 +351,11 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         saveData("${sanitizedBookId}_current_settings", settings.defaultLN)
         hideBars()
 
+        if(settings.defaultLN.useOledTheme) {
+            themes.forEach { theme ->
+                theme.darkBg = Color.parseColor("#000000")
+            }
+        }
         currentTheme =
             themes.first { it.name.equals(settings.defaultLN.currentThemeName, ignoreCase = true) }
 
