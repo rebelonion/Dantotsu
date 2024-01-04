@@ -23,6 +23,7 @@ import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
@@ -319,7 +320,7 @@ class AnimeWatchFragment : Fragment() {
         if (allSettings.isNotEmpty()) {
             var selectedSetting = allSettings[0]
             if (allSettings.size > 1) {
-                val names = allSettings.sortedBy { it.lang }.map { it.lang }.toTypedArray()
+                val names = allSettings.sortedBy { it.lang }.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
                 var selectedIndex = 0
                 val dialog = AlertDialog.Builder(requireContext() , R.style.MyPopup)
                     .setTitle("Select a Source")
