@@ -83,6 +83,17 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
              context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
                ?.putBoolean("incognito", isChecked)?.apply()
         }
+        
+        binding.settingsIncognito.isChecked =
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
+                "incognito",
+                false
+            )
+            
+        binding.settingsIncognito.setSafeOnClickListener {
+             startActivity(Intent(activity, MainActivity::class.java))
+             dismiss()
+         }
 
         var incognito = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
           ?.getBoolean(
