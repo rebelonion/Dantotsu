@@ -90,7 +90,7 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
                 ?.putBoolean("incognito", isChecked).apply()
         } 
 
-         incognito = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+         var incognito = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             ?.getBoolean(
                 "incognito",
                 false
