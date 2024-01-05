@@ -75,12 +75,6 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
             materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
         }
-        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false) ?: false
-        if(incognito) {
-            binding.incognitoTextView.visibility = View.VISIBLE
-            binding.incognitoView.visibility = View.VISIBLE
-        }
 
         binding.animeTitleContainer.updatePadding(top = statusBarHeight)
 
@@ -153,6 +147,19 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
     fun updateHeight() {
         trendingViewPager!!.updateLayoutParams { height += statusBarHeight }
+    }
+
+    fun setIncognito() {
+        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("incognito", false) ?: false
+        if(incognito) {
+            binding.incognitoTextView.visibility = View.VISIBLE
+            if (!uiSettings.immersiveMode) {
+                binding.root.fitsSystemWindows = true
+            }
+        } else {
+            binding.incognitoTextView.visibility = View.GONE
+        }
     }
 
     fun updateTrending(adaptor: MediaAdaptor) {

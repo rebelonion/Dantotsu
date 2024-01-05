@@ -11,7 +11,7 @@ import androidx.media3.exoplayer.scheduler.Scheduler
 import ani.dantotsu.R
 
 @UnstableApi
-class MyDownloadService : DownloadService(1, 1, "download_service", R.string.downloads, 0) {
+class ExoplayerDownloadService : DownloadService(1, 2000, "download_service", R.string.downloads, 0) {
     companion object {
         private const val JOB_ID = 1
         private const val FOREGROUND_NOTIFICATION_ID = 1

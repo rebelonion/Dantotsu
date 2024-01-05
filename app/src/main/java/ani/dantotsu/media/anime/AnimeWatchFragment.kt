@@ -23,6 +23,7 @@ import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
@@ -314,19 +315,19 @@ class AnimeWatchFragment : Fragment() {
                     if (show) View.GONE else View.VISIBLE
             }
         }
+        var itemSelected = false
         val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>()
         if (allSettings.isNotEmpty()) {
             var selectedSetting = allSettings[0]
             if (allSettings.size > 1) {
-                val names = allSettings.map { it.lang }.toTypedArray()
+                val names = allSettings.sortedBy { it.lang }.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
                 var selectedIndex = 0
-                val dialog = AlertDialog.Builder(requireContext())
+                val dialog = AlertDialog.Builder(requireContext() , R.style.MyPopup)
                     .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, selectedIndex) { _, which ->
+                    .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
                         selectedIndex = which
-                    }
-                    .setPositiveButton("OK") { dialog, _ ->
                         selectedSetting = allSettings[selectedIndex]
+                        itemSelected = true
                         dialog.dismiss()
 
                         // Move the fragment transaction here
@@ -343,10 +344,10 @@ class AnimeWatchFragment : Fragment() {
                                 .commit()
                         }
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.cancel()
-                        changeUIVisibility(true)
-                        return@setNegativeButton
+                    .setOnDismissListener {
+                        if (!itemSelected) {
+                            changeUIVisibility(true)
+                        }
                     }
                     .show()
                 dialog.window?.setDimAmount(0.8f)
@@ -422,6 +423,14 @@ class AnimeWatchFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         state = binding.animeSourceRecycler.layoutManager?.onSaveInstanceState()
+    }
+
+    companion object {
+        const val ACTION_DOWNLOAD_STARTED = "ani.dantotsu.ACTION_DOWNLOAD_STARTED"
+        const val ACTION_DOWNLOAD_FINISHED = "ani.dantotsu.ACTION_DOWNLOAD_FINISHED"
+        const val ACTION_DOWNLOAD_FAILED = "ani.dantotsu.ACTION_DOWNLOAD_FAILED"
+        const val ACTION_DOWNLOAD_PROGRESS = "ani.dantotsu.ACTION_DOWNLOAD_PROGRESS"
+        const val EXTRA_EPISODE_NUMBER = "extra_episode_number"
     }
 
 }

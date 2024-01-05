@@ -227,7 +227,7 @@
     <string name="sub_background_color_select">Subtitle Background Color</string>
     <string name="sub_window_color_select">Subtitle Window Color</string>
     <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn\'t)"</string>
-    <string name="sub_color_info"><b>Note:</b> Changing Subtitle formatting only works with Soft-Subbed Sources such as Zoro!</string>
+    <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
     <string name="sub_font_select">Subtitle Font</string>
     <string name="subtitle_font_size">Subtitle Size</string>
 
@@ -569,9 +569,6 @@
 
         \n\nNote: Direct downloads are also possible without a manager but it\'s not recommended.</string>
 
-    <string name="question_8">How to download Manga Chapters?</string>
-    <string name="answer_8">It is yet not possible to download chapters in Dantotsu but this feature will be implemented soon.</string>
-
     <string name="question_9">How to enable NSFW content?</string>
     <string name="answer_9">You can enable nsfw content by enabling 18+ contents from this [link](https://anilist.co/settings/media).</string>
 
@@ -648,5 +645,6 @@
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
     <string name="airing_image">Airing Image</string>
+    <string name="anime_downloads">animeDownloads</string>
 
 </resources>

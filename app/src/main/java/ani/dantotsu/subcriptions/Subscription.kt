@@ -87,9 +87,7 @@ class Subscription {
                         progress(index[it.first]!!, parser.name, media.name)
                         val ep: MangaChapter? =
                             SubscriptionHelper.getChapter(context, parser, media.id, media.isAdult)
-                        if (ep != null) currActivity()!!.getString(R.string.chapter) + "${ep.number}${
-                            if (ep.title != null) " : ${ep.title}" else ""
-                        } " + currActivity()!!.getString(R.string.just_released) to null
+                        if (ep != null) ep.number + " " + currActivity()!!.getString(R.string.just_released) to null
                         else null
                     } ?: return@map
                     createNotification(context.applicationContext, media, text.first, text.second)

@@ -42,14 +42,15 @@ class ThemeManager(private val context: Context) {
             .getString("theme", "PURPLE")!!
 
         val themeToApply = when (theme) {
-            "PURPLE" -> if (useOLED) R.style.Theme_Dantotsu_PurpleOLED else R.style.Theme_Dantotsu_Purple
             "BLUE" -> if (useOLED) R.style.Theme_Dantotsu_BlueOLED else R.style.Theme_Dantotsu_Blue
             "GREEN" -> if (useOLED) R.style.Theme_Dantotsu_GreenOLED else R.style.Theme_Dantotsu_Green
+            "PURPLE" -> if (useOLED) R.style.Theme_Dantotsu_PurpleOLED else R.style.Theme_Dantotsu_Purple
             "PINK" -> if (useOLED) R.style.Theme_Dantotsu_PinkOLED else R.style.Theme_Dantotsu_Pink
+            "SAIKOU" -> if (useOLED) R.style.Theme_Dantotsu_SaikouOLED else R.style.Theme_Dantotsu_Saikou
             "RED" -> if (useOLED) R.style.Theme_Dantotsu_RedOLED else R.style.Theme_Dantotsu_Red
             "LAVENDER" -> if (useOLED) R.style.Theme_Dantotsu_LavenderOLED else R.style.Theme_Dantotsu_Lavender
+            "EMERALD" -> if (useOLED) R.style.Theme_Dantotsu_EmeraldOLED else R.style.Theme_Dantotsu_Emerald
             "MONOCHROME (BETA)" -> if (useOLED) R.style.Theme_Dantotsu_MonochromeOLED else R.style.Theme_Dantotsu_Monochrome
-            "SAIKOU" -> if (useOLED) R.style.Theme_Dantotsu_SaikouOLED else R.style.Theme_Dantotsu_Saikou
             else -> if (useOLED) R.style.Theme_Dantotsu_PurpleOLED else R.style.Theme_Dantotsu_Purple
         }
 
@@ -109,14 +110,15 @@ class ThemeManager(private val context: Context) {
 
     companion object {
         enum class Theme(val theme: String) {
-            PURPLE("PURPLE"),
             BLUE("BLUE"),
             GREEN("GREEN"),
+            PURPLE("PURPLE"),
             PINK("PINK"),
+            SAIKOU("SAIKOU"),
             RED("RED"),
             LAVENDER("LAVENDER"),
-            MONOCHROME("MONOCHROME (BETA)"),
-            SAIKOU("SAIKOU");
+            EMERALD("EMERALD"),
+            MONOCHROME("MONOCHROME (BETA)");
 
             companion object {
                 fun fromString(value: String): Theme {

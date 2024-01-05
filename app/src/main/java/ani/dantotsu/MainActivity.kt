@@ -11,12 +11,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
@@ -26,11 +28,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
 import ani.dantotsu.databinding.SplashScreenBinding
+import ani.dantotsu.download.video.Helper
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
@@ -45,6 +50,7 @@ import ani.dantotsu.themes.ThemeManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -60,7 +66,7 @@ class MainActivity : AppCompatActivity() {
     private var uiSettings = UserInterfaceSettings()
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    @OptIn(UnstableApi::class) override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
         LangSet.setLocale(this)
         super.onCreate(savedInstanceState)
@@ -73,15 +79,9 @@ class MainActivity : AppCompatActivity() {
 
             val backgroundDrawable = _bottomBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
-            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xE8000000.toInt()
+            val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xF0000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
             _bottomBar.background = backgroundDrawable
-        }
-        val colorOverflow = this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("colorOverflow", false)
-        if (!colorOverflow) {
-            _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
-
         }
 
 
@@ -238,6 +238,25 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }.show(supportFragmentManager, "dialog")
+                }
+            }
+        }
+
+        GlobalScope.launch(Dispatchers.IO) {
+            val index = Helper.downloadManager(this@MainActivity).downloadIndex
+            val downloadCursor = index.getDownloads()
+            while (downloadCursor.moveToNext()) {
+                val download = downloadCursor.download
+                Log.e("Downloader", download.request.uri.toString())
+                Log.e("Downloader", download.request.id.toString())
+                Log.e("Downloader", download.request.mimeType.toString())
+                Log.e("Downloader", download.request.data.size.toString())
+                Log.e("Downloader", download.bytesDownloaded.toString())
+                Log.e("Downloader", download.state.toString())
+                Log.e("Downloader", download.failureReason.toString())
+
+                if (download.state == Download.STATE_FAILED) {  //simple cleanup
+                    Helper.downloadManager(this@MainActivity).removeDownload(download.request.id)
                 }
             }
         }

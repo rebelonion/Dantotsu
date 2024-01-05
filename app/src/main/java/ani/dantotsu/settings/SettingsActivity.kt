@@ -178,13 +178,18 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
 
 
         binding.customTheme.setOnClickListener {
-            val originalColor = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt(
+            val originalColor = getSharedPreferences("Dantotsu", MODE_PRIVATE).getInt(
                 "custom_theme_int",
                 Color.parseColor("#6200EE")
             )
+            class CustomColorDialog : SimpleColorDialog() { //idk where to put it
+                override fun onPositiveButtonClick() {
+                    restartApp()
+                    super.onPositiveButtonClick()
+                }
+            }
             val tag = "colorPicker"
-            SimpleColorDialog.build()
-                .title("Custom Theme")
+            CustomColorDialog().title("Custom Theme")
                 .colorPreset(originalColor)
                 .colors(this, SimpleColorDialog.BEIGE_COLOR_PALLET)
                 .allowCustom(true)
@@ -251,9 +256,9 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
         binding.skipExtensionIcons.setOnCheckedChangeListener { _, isChecked ->
             saveData("skip_extension_icons", isChecked)
         }
-        binding.NSFWExtension.isChecked = loadData("NFSWExtension") ?: true
+        binding.NSFWExtension.isChecked = loadData("NSFWExtension") ?: true
         binding.NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
-            saveData("NFSWExtension", isChecked)
+            saveData("NSFWExtension", isChecked)
 
         }
 
@@ -400,6 +405,7 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
             uiTheme(true, it)
         }
 
+
         var previousStart: View = when (uiSettings.defaultStartUpTab) {
             0 -> binding.uiSettingsAnime
             1 -> binding.uiSettingsHome
@@ -415,6 +421,7 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
             saveData("ui_settings", uiSettings)
             initActivity(this)
         }
+
 
         binding.uiSettingsAnime.setOnClickListener {
             uiTheme(0, it)

@@ -89,7 +89,7 @@ abstract class BaseImageAdapter(
             }
         } else {
             val detector = GestureDetectorCompat(view.context, object : GesturesListener() {
-                override fun onSingleClick(event: MotionEvent) = activity.handleController()
+                override fun onSingleClick(event: MotionEvent) = activity.handleController(event = event)
             })
             view.findViewById<View>(R.id.imgProgCover).apply {
                 setOnTouchListener { _, event ->
@@ -111,6 +111,9 @@ abstract class BaseImageAdapter(
         }
         activity.lifecycleScope.launch { loadImage(holder.bindingAdapterPosition, view) }
     }
+
+    abstract fun isZoomed(): Boolean
+    abstract fun setZoom(zoom: Float)
 
     abstract suspend fun loadImage(position: Int, parent: View): Boolean
 

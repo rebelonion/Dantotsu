@@ -1,5 +1,6 @@
 package ani.dantotsu.settings.paging
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
@@ -91,17 +92,13 @@ class MangaExtensionPagingSource(
         val availableExtensions =
             availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
         val query = searchQuery
-        val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
+        val isNsfwEnabled: Boolean = loadData("NSFWExtension") ?: true
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = if (isNsfwEnabled) {
-            filteredExtensions
-        } else {
-            filteredExtensions.filterNot { it.isNsfw }
-        }
+        val filternfsw = if (isNsfwEnabled) filteredExtensions else filteredExtensions.filterNot { it.isNsfw }
         return try {
             val sublist = filternfsw.subList(
                 fromIndex = position,
@@ -194,6 +191,7 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
         }
 
         val extensionIconImageView: ImageView = binding.extensionIconImageView
+        @SuppressLint("SetTextI18n")
         fun bind(extension: MangaExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""
             val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)

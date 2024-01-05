@@ -46,7 +46,7 @@ class ListFragment : Fragment() {
                 binding.listRecyclerView.layoutManager =
                     GridLayoutManager(
                         requireContext(),
-                        if (grid!!) (screenWidth / 124f).toInt() else 1
+                        if (grid!!) (screenWidth / 120f).toInt() else 1
                     )
                 binding.listRecyclerView.adapter = adapter
             }

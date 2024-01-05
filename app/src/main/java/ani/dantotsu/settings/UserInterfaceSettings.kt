@@ -10,7 +10,6 @@ data class UserInterfaceSettings(
 
     //App
     var immersiveMode: Boolean = false,
-    var immersiveModeList: Boolean = false,
     var smallView: Boolean = true,
     var defaultStartUpTab: Int = 1,
     var homeLayoutShow: MutableList<Boolean> = mutableListOf(

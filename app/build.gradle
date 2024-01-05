@@ -21,7 +21,7 @@ android {
         minSdk 23
         targetSdk 34
         versionCode ((System.currentTimeMillis() / 60000).toInteger())
-        versionName "2.0.0-beta00-i"
+        versionName "2.0.0-beta00-iv2"
         signingConfig signingConfigs.debug
     }
 
@@ -90,6 +90,9 @@ dependencies {
     implementation "androidx.media3:media3-exoplayer-dash:$exo_version"
     implementation "androidx.media3:media3-datasource-okhttp:$exo_version"
     implementation "androidx.media3:media3-session:$exo_version"
+    //media3 casting
+    implementation "androidx.media3:media3-cast:$exo_version"
+    implementation "androidx.mediarouter:mediarouter:1.6.0"
 
 //    UI
     implementation 'com.google.android.material:material:1.10.0'

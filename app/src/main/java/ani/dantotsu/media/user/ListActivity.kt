@@ -1,6 +1,7 @@
 package ani.dantotsu.media.user
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -14,9 +15,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityListBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.saveData
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
@@ -62,7 +65,7 @@ class ListActivity : AppCompatActivity() {
         binding.listTabLayout.setTabTextColors(secondaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
         val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-        if (!uiSettings.immersiveModeList) {
+        if (!uiSettings.immersiveMode) {
             this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.nav_bg_inv)
             binding.root.fitsSystemWindows = true
@@ -78,8 +81,7 @@ class ListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val anime = intent.getBooleanExtra("anime", true)
-        binding.listTitle.text =
-            intent.getStringExtra("username") + "'s " + (if (anime) "Anime" else "Manga") + " List"
+        binding.listTitle.text = (if (anime) "Anime" else "Manga") + " List"
 
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
@@ -145,7 +147,8 @@ class ListActivity : AppCompatActivity() {
                     R.id.release -> "release"
                     else -> null
                 }
-
+                currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                    ?.putString("sort_order", sort)?.apply()
                 binding.listProgressBar.visibility = View.VISIBLE
                 binding.listViewPager.adapter = null
                 scope.launch {

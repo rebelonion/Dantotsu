@@ -12,11 +12,17 @@ object AnimeSources : WatchSources() {
     suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>) {
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()
-        list = createParsersFromExtensions(initialExtensions)
+        list = createParsersFromExtensions(initialExtensions) + Lazier(
+            { OfflineAnimeParser() },
+            "Downloaded"
+        )
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->
-            list = createParsersFromExtensions(extensions)
+            list = createParsersFromExtensions(extensions) + Lazier(
+                { OfflineAnimeParser() },
+                "Downloaded"
+            )
         }
     }
 

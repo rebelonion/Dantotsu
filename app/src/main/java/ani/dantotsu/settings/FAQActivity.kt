@@ -62,11 +62,6 @@ class FAQActivity : AppCompatActivity() {
                 currContext()!!.getString(R.string.answer_7)
             ),
             Triple(
-                R.drawable.ic_round_menu_book_24,
-                currContext()!!.getString(R.string.question_8),
-                currContext()!!.getString(R.string.answer_8)
-            ),
-            Triple(
                 R.drawable.ic_round_lock_open_24,
                 currContext()!!.getString(R.string.question_9),
                 currContext()!!.getString(R.string.answer_9)

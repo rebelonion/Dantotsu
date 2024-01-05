@@ -53,6 +53,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import java.io.*
@@ -673,7 +674,7 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
 
 @SuppressLint("SetTextI18n")
 fun countDown(media: Media, view: ViewGroup) {
-    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 7.toLong()) {
+    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
         val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
         view.addView(v.root, 0)
         v.mediaCountdownText.text =
@@ -783,35 +784,40 @@ fun toast(string: String?) {
 }
 
 fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null) {
-    if (s != null) {
-        (activity ?: currActivity())?.apply {
-            runOnUiThread {
-                val snackBar = Snackbar.make(
-                    window.decorView.findViewById(android.R.id.content),
-                    s,
-                    Snackbar.LENGTH_SHORT
-                )
-                snackBar.view.apply {
-                    updateLayoutParams<FrameLayout.LayoutParams> {
-                        gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
-                        width = WRAP_CONTENT
+    try { //I have no idea why this sometimes crashes for some people...
+        if (s != null) {
+            (activity ?: currActivity())?.apply {
+                runOnUiThread {
+                    val snackBar = Snackbar.make(
+                        window.decorView.findViewById(android.R.id.content),
+                        s,
+                        Snackbar.LENGTH_SHORT
+                    )
+                    snackBar.view.apply {
+                        updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
+                            width = WRAP_CONTENT
+                        }
+                        translationY = -(navBarHeight.dp + 32f)
+                        translationZ = 32f
+                        updatePadding(16f.px, right = 16f.px)
+                        setOnClickListener {
+                            snackBar.dismiss()
+                        }
+                        setOnLongClickListener {
+                            copyToClipboard(clipboard ?: s, false)
+                            toast(getString(R.string.copied_to_clipboard))
+                            true
+                        }
                     }
-                    translationY = -(navBarHeight.dp + 32f)
-                    translationZ = 32f
-                    updatePadding(16f.px, right = 16f.px)
-                    setOnClickListener {
-                        snackBar.dismiss()
-                    }
-                    setOnLongClickListener {
-                        copyToClipboard(clipboard ?: s, false)
-                        toast(getString(R.string.copied_to_clipboard))
-                        true
-                    }
+                    snackBar.show()
                 }
-                snackBar.show()
             }
+            logger(s)
         }
-        logger(s)
+    } catch (e: Exception) {
+        logger(e.stackTraceToString())
+        FirebaseCrashlytics.getInstance().recordException(e)
     }
 }
 

@@ -10,6 +10,8 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"
+        tools:ignore="LeanbackUsesWifi" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -45,7 +47,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
-        android:banner="@drawable/ic_banner_foreground"
+        android:banner="@mipmap/ic_banner_foreground"
         android:icon="${icon_placeholder}"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -271,9 +273,10 @@
             android:permission="android.permission.BIND_REMOTEVIEWS"
             android:exported="true" />
         <service
-            android:name=".download.video.MyDownloadService"
-            android:exported="false">
-            <intent-filter>
+            android:name=".download.video.ExoplayerDownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync">
+        <intent-filter>
                 <action android:name="androidx.media3.exoplayer.downloadService.action.RESTART" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -295,10 +298,16 @@
             android:name=".download.novel.NovelDownloaderService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+        <service android:name=".download.anime.AnimeDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
         <service
             android:name=".connections.discord.DiscordService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+
+        <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+            android:value="androidx.media3.cast.DefaultCastOptionsProvider"/>
     </application>
 
 </manifest>

@@ -26,6 +26,7 @@ import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
+import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.interceptor.CloudflareBypassException
 import eu.kanade.tachiyomi.source.model.MangasPage
 import eu.kanade.tachiyomi.source.model.Page
@@ -41,6 +42,7 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import okhttp3.Request
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -112,7 +114,14 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     seasonGroups.keys.sorted().flatMap { season ->
                         seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
                             if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
-                                episode.episode_number = episodeCounter++
+                                val potentialNumber =
+                                    AnimeNameAdapter.findEpisodeNumber(episode.name)
+                                if (potentialNumber != null) {
+                                    episode.episode_number = potentialNumber
+                                } else {
+                                    episode.episode_number = episodeCounter
+                                }
+                                episodeCounter++
                             }
                             episode
                         } ?: emptyList()
@@ -202,7 +211,11 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             }
         return Episode(
             if (episodeNumberInt.toInt() != -1) {
-                episodeNumberInt.toString()
+                if (sEpisode.episode_number % 1 == 0f) {
+                    episodeNumberInt.toInt().toString()
+                } else {
+                    sEpisode.episode_number.toString()
+                }
             } else {
                 sEpisode.name
             },
@@ -603,13 +616,18 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
             val fileName = queryPairs.find { it.first == "file" }?.second ?: ""
 
             format = getVideoType(fileName)
+            // this solves a problem no one has, so I'm commenting it out for now
+            //if (format == null) {
+            //    val networkHelper = Injekt.get<NetworkHelper>()
+            //    format = headRequest(videoUrl, networkHelper)
+            //}
         }
 
-        // If the format is still undetermined, log an error or handle it appropriately
+        // If the format is still undetermined, log an error
         if (format == null) {
             logger("Unknown video format: $videoUrl")
-            FirebaseCrashlytics.getInstance()
-                .recordException(Exception("Unknown video format: $videoUrl"))
+            //FirebaseCrashlytics.getInstance()
+             //   .recordException(Exception("Unknown video format: $videoUrl"))
             format = VideoType.CONTAINER
         }
         val headersMap: Map<String, String> =
@@ -620,12 +638,12 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
             number,
             format,
             FileUrl(videoUrl, headersMap),
-            aniVideo.totalContentLength.toDouble()
+            if (aniVideo.totalContentLength == 0L) null else aniVideo.bytesDownloaded.toDouble()
         )
     }
 
     private fun getVideoType(fileName: String): VideoType? {
-        return when {
+        val type = when {
             fileName.endsWith(".mp4", ignoreCase = true) || fileName.endsWith(
                 ".mkv",
                 ignoreCase = true
@@ -635,6 +653,47 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
             fileName.endsWith(".mpd", ignoreCase = true) -> VideoType.DASH
             else -> null
         }
+
+        return type
+    }
+
+    private fun headRequest(fileName: String, networkHelper: NetworkHelper): VideoType? {
+        return try {
+            logger("attempting head request for $fileName")
+            val request = Request.Builder()
+                .url(fileName)
+                .head()
+                .build()
+
+            networkHelper.client.newCall(request).execute().use { response ->
+                val contentType = response.header("Content-Type")
+                val contentDisposition = response.header("Content-Disposition")
+
+                if (contentType != null) {
+                    when {
+                        contentType.contains("mpegurl", ignoreCase = true) -> VideoType.M3U8
+                        contentType.contains("dash", ignoreCase = true) -> VideoType.DASH
+                        contentType.contains("mp4", ignoreCase = true) -> VideoType.CONTAINER
+                        else -> null
+                    }
+                } else if (contentDisposition != null) {
+                    when {
+                        contentDisposition.contains("mpegurl", ignoreCase = true) -> VideoType.M3U8
+                        contentDisposition.contains("dash", ignoreCase = true) -> VideoType.DASH
+                        contentDisposition.contains("mp4", ignoreCase = true) -> VideoType.CONTAINER
+                        else -> null
+                    }
+                } else {
+                    logger("failed head request for $fileName")
+                    null
+                }
+
+            }
+        } catch (e: Exception) {
+            logger("Exception in headRequest: $e")
+            null
+        }
+
     }
 
     private fun TrackToSubtitle(track: Track): Subtitle {

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="NavBarText">
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/poppins_bold</item>
@@ -12,7 +13,6 @@
         <!-- set colorSurface to black -->
         <item name="colorSurface">@color/darkest_Black</item>
     </style>
-
 
 
     <style name="Suffix">
@@ -37,19 +37,22 @@
         <item name="background">@id/bg</item>
         <item name="cornerFamily">rounded</item>
     </style>
+
     <style name="roundedImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">16dp</item>
     </style>
+
     <style name="MySnackbar" parent="Widget.MaterialComponents.Snackbar">
         <item name="android:layout_marginLeft">16dp</item>
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:background">@drawable/round_corner</item>
     </style>
+
     <string name="MySnackBarText" parent="Widget.MaterialComponents.Snackbar.TextView" translatable="false">
         <item name="android:textColor">@color/bg_opp</item>
     </string>
-    
+
     <style name="fontTooltip" parent="Widget.Material3.Tooltip">
         <item name="android:padding">8dp</item>
         <item name="android:textAppearance">@style/Suffix</item>
@@ -62,15 +65,17 @@
         <item name="android:textColor">?attr/colorOnBackground</item>
         <item name="android:popupBackground">?attr/colorSurface</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:windowBackground">@drawable/shape_corner_16dp</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
-</style>
+    </style>
 
     <style name="BottomNavBar" parent="">
         <!-- set background color  to transparent -->
         <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="ThemeOverlay_Dantotsu_MediaRouter" parent="ThemeOverlay.AppCompat">
     </style>
 </resources>

@@ -7,7 +7,7 @@
     app:gest_disableGestures="true"
     app:gest_rotationEnabled="true"
     app:gest_restrictRotation="true"
-    app:gest_doubleTapZoom="3"
+    app:gest_doubleTapZoom="1.5"
     app:gest_maxZoom="6">
 
     <FrameLayout

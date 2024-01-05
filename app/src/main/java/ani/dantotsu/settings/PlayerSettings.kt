@@ -45,6 +45,6 @@ data class PlayerSettings(
     var skipTime: Int = 85,
 
     //Other
-    var cast: Boolean = false,
+    var cast: Boolean = true,
     var pip: Boolean = true
 ) : Serializable

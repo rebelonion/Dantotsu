@@ -1,4 +1,4 @@
-package ani.dantotsu.download.manga
+package ani.dantotsu.download.anime
 
 import android.Manifest
 import android.app.Service
@@ -8,7 +8,6 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
-import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
 import android.os.IBinder
@@ -17,32 +16,39 @@ import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
+import androidx.media3.exoplayer.offline.DownloadManager
+import androidx.media3.exoplayer.offline.DownloadService
+import ani.dantotsu.FileUrl
 import ani.dantotsu.R
+import ani.dantotsu.currActivity
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.video.Helper
+import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
-import ani.dantotsu.media.manga.ImageData
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FAILED
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FINISHED
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_PROGRESS
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_STARTED
-import ani.dantotsu.media.manga.MangaReadFragment.Companion.EXTRA_CHAPTER_NUMBER
+import ani.dantotsu.media.anime.AnimeWatchFragment
+import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.parsers.Video
 import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
-import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_DOWNLOADER_PROGRESS
+import eu.kanade.tachiyomi.animesource.model.SAnime
+import eu.kanade.tachiyomi.animesource.model.SAnimeImpl
+import eu.kanade.tachiyomi.animesource.model.SEpisode
+import eu.kanade.tachiyomi.animesource.model.SEpisodeImpl
+import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -56,7 +62,7 @@ import java.net.URL
 import java.util.Queue
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class MangaDownloaderService : Service() {
+class AnimeDownloaderService : Service() {
 
     private lateinit var notificationManager: NotificationManagerCompat
     private lateinit var builder: NotificationCompat.Builder
@@ -74,12 +80,11 @@ class MangaDownloaderService : Service() {
     override fun onCreate() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
-        builder = NotificationCompat.Builder(this, CHANNEL_DOWNLOADER_PROGRESS).apply {
-            setContentTitle("Manga Download Progress")
+        builder = NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
+            setContentTitle("Anime Download Progress")
             setSmallIcon(R.drawable.ic_round_download_24)
             priority = NotificationCompat.PRIORITY_DEFAULT
             setOnlyAlertOnce(true)
-            setProgress(0, 0, false)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
@@ -100,9 +105,9 @@ class MangaDownloaderService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        MangaServiceDataSingleton.downloadQueue.clear()
+        AnimeServiceDataSingleton.downloadQueue.clear()
         downloadJobs.clear()
-        MangaServiceDataSingleton.isServiceRunning = false
+        AnimeServiceDataSingleton.isServiceRunning = false
         unregisterReceiver(cancelReceiver)
     }
 
@@ -123,20 +128,20 @@ class MangaDownloaderService : Service() {
 
     private fun processQueue() {
         CoroutineScope(Dispatchers.Default).launch {
-            while (MangaServiceDataSingleton.downloadQueue.isNotEmpty()) {
-                val task = MangaServiceDataSingleton.downloadQueue.poll()
+            while (AnimeServiceDataSingleton.downloadQueue.isNotEmpty()) {
+                val task = AnimeServiceDataSingleton.downloadQueue.poll()
                 if (task != null) {
                     val job = launch { download(task) }
                     mutex.withLock {
-                        downloadJobs[task.chapter] = job
+                        downloadJobs[task.getTaskName()] = job
                     }
                     job.join() // Wait for the job to complete before continuing to the next task
                     mutex.withLock {
-                        downloadJobs.remove(task.chapter)
+                        downloadJobs.remove(task.getTaskName())
                     }
                     updateNotification() // Update the notification after each task is completed
                 }
-                if (MangaServiceDataSingleton.downloadQueue.isEmpty()) {
+                if (AnimeServiceDataSingleton.downloadQueue.isEmpty()) {
                     withContext(Dispatchers.Main) {
                         stopSelf() // Stop the service when the queue is empty
                     }
@@ -145,12 +150,20 @@ class MangaDownloaderService : Service() {
         }
     }
 
-    fun cancelDownload(chapter: String) {
+    @UnstableApi
+    fun cancelDownload(taskName: String) {
         CoroutineScope(Dispatchers.Default).launch {
             mutex.withLock {
-                downloadJobs[chapter]?.cancel()
-                downloadJobs.remove(chapter)
-                MangaServiceDataSingleton.downloadQueue.removeAll { it.chapter == chapter }
+                val url = AnimeServiceDataSingleton.downloadQueue.find { it.getTaskName() == taskName }?.video?.file?.url ?: ""
+                DownloadService.sendRemoveDownload(
+                    this@AnimeDownloaderService,
+                    ExoplayerDownloadService::class.java,
+                    url,
+                    false
+                )
+                downloadJobs[taskName]?.cancel()
+                downloadJobs.remove(taskName)
+                AnimeServiceDataSingleton.downloadQueue.removeAll { it.getTaskName() == taskName }
                 updateNotification() // Update the notification after cancellation
             }
         }
@@ -158,7 +171,7 @@ class MangaDownloaderService : Service() {
 
     private fun updateNotification() {
         // Update the notification to reflect the current state of the queue
-        val pendingDownloads = MangaServiceDataSingleton.downloadQueue.size
+        val pendingDownloads = AnimeServiceDataSingleton.downloadQueue.size
         val text = if (pendingDownloads > 0) {
             "Pending downloads: $pendingDownloads"
         } else {
@@ -175,135 +188,140 @@ class MangaDownloaderService : Service() {
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
-    suspend fun download(task: DownloadTask) {
+    @androidx.annotation.OptIn(UnstableApi::class) suspend fun download(task: DownloadTask) {
         try {
+            val downloadManager = Helper.downloadManager(this@AnimeDownloaderService)
             withContext(Dispatchers.Main) {
                 val notifi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     ContextCompat.checkSelfPermission(
-                        this@MangaDownloaderService,
+                        this@AnimeDownloaderService,
                         Manifest.permission.POST_NOTIFICATIONS
                     ) == PackageManager.PERMISSION_GRANTED
                 } else {
                     true
                 }
 
-                val deferredList = mutableListOf<Deferred<Bitmap?>>()
-                builder.setContentText("Downloading ${task.title} - ${task.chapter}")
+                builder.setContentText("Downloading ${task.title} - ${task.episode}")
                 if (notifi) {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                 }
 
-                // Loop through each ImageData object from the task
-                var farthest = 0
-                for ((index, image) in task.imageData.withIndex()) {
-                    // Limit the number of simultaneous downloads from the task
-                    if (deferredList.size >= task.simultaneousDownloads) {
-                        // Wait for all deferred to complete and clear the list
-                        deferredList.awaitAll()
-                        deferredList.clear()
-                    }
+                broadcastDownloadStarted(task.getTaskName())
 
-                    // Download the image and add to deferred list
-                    val deferred = async(Dispatchers.IO) {
-                        var bitmap: Bitmap? = null
-                        var retryCount = 0
+                currActivity()?.let {
+                    Helper.downloadVideo(
+                        it,
+                        task.video,
+                        task.subtitle)
+                }
 
-                        while (bitmap == null && retryCount < task.retries) {
-                            bitmap = image.fetchAndProcessImage(
-                                image.page,
-                                image.source,
-                                this@MangaDownloaderService
+                saveMediaInfo(task)
+                val downloadStarted = hasDownloadStarted(downloadManager, task, 30000) // 30 seconds timeout
+
+                if (!downloadStarted) {
+                    logger("Download failed to start")
+                    builder.setContentText("${task.title} - ${task.episode} Download failed to start")
+                    notificationManager.notify(NOTIFICATION_ID, builder.build())
+                    snackString("${task.title} - ${task.episode} Download failed to start")
+                    broadcastDownloadFailed(task.getTaskName())
+                    return@withContext
+                }
+
+
+                // periodically check if the download is complete
+                while (downloadManager.downloadIndex.getDownload(task.video.file.url) != null) {
+                    val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
+                    if (download != null) {
+                        if (download.state == androidx.media3.exoplayer.offline.Download.STATE_FAILED) {
+                            logger("Download failed")
+                            builder.setContentText("${task.title} - ${task.episode} Download failed")
+                            notificationManager.notify(NOTIFICATION_ID, builder.build())
+                            snackString("${task.title} - ${task.episode} Download failed")
+                            logger("Download failed: ${download.failureReason}")
+                            FirebaseCrashlytics.getInstance().recordException(Exception("Anime Download failed:" +
+                                    " ${download.failureReason}" +
+                                    " url: ${task.video.file.url}" +
+                                    " title: ${task.title}" +
+                                    " episode: ${task.episode}"))
+                            broadcastDownloadFailed(task.getTaskName())
+                            break
+                        }
+                        if (download.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED) {
+                            logger("Download completed")
+                            builder.setContentText("${task.title} - ${task.episode} Download completed")
+                            notificationManager.notify(NOTIFICATION_ID, builder.build())
+                            snackString("${task.title} - ${task.episode} Download completed")
+                            getSharedPreferences(getString(R.string.anime_downloads), Context.MODE_PRIVATE).edit().putString(
+                                task.getTaskName(),
+                                task.video.file.url
+                            ).apply()
+                            downloadsManager.addDownload(
+                                DownloadedType(
+                                    task.title,
+                                    task.episode,
+                                    DownloadedType.Type.ANIME,
+                                )
                             )
-                            retryCount++
+                            broadcastDownloadFinished(task.getTaskName())
+                            break
                         }
-
-                        // Cache the image if successful
-                        if (bitmap != null) {
-                            saveToDisk("$index.jpg", bitmap, task.title, task.chapter)
+                        if (download.state == androidx.media3.exoplayer.offline.Download.STATE_STOPPED) {
+                            logger("Download stopped")
+                            builder.setContentText("${task.title} - ${task.episode} Download stopped")
+                            notificationManager.notify(NOTIFICATION_ID, builder.build())
+                            snackString("${task.title} - ${task.episode} Download stopped")
+                            break
                         }
-                        farthest++
-                        builder.setProgress(task.imageData.size, farthest, false)
-                        broadcastDownloadProgress(
-                            task.chapter,
-                            farthest * 100 / task.imageData.size
-                        )
+                        broadcastDownloadProgress(task.getTaskName(), download.percentDownloaded.toInt())
                         if (notifi) {
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                         }
-
-                        bitmap
                     }
-
-                    deferredList.add(deferred)
+                    kotlinx.coroutines.delay(2000)
                 }
-
-                // Wait for any remaining deferred to complete
-                deferredList.awaitAll()
-
-                builder.setContentText("${task.title} - ${task.chapter} Download complete")
-                    .setProgress(0, 0, false)
-                notificationManager.notify(NOTIFICATION_ID, builder.build())
-
-                saveMediaInfo(task)
-                downloadsManager.addDownload(
-                    DownloadedType(
-                        task.title,
-                        task.chapter,
-                        DownloadedType.Type.MANGA
-                    )
-                )
-                broadcastDownloadFinished(task.chapter)
-                snackString("${task.title} - ${task.chapter} Download finished")
             }
         } catch (e: Exception) {
             logger("Exception while downloading file: ${e.message}")
             snackString("Exception while downloading file: ${e.message}")
             FirebaseCrashlytics.getInstance().recordException(e)
-            broadcastDownloadFailed(task.chapter)
+            broadcastDownloadFailed(task.getTaskName())
         }
     }
 
-
-    private fun saveToDisk(fileName: String, bitmap: Bitmap, title: String, chapter: String) {
-        try {
-            // Define the directory within the private external storage space
-            val directory = File(
-                this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Manga/$title/$chapter"
-            )
-
-            if (!directory.exists()) {
-                directory.mkdirs()
+    @androidx.annotation.OptIn(UnstableApi::class) suspend fun hasDownloadStarted(downloadManager: DownloadManager, task: DownloadTask, timeout: Long): Boolean {
+        val startTime = System.currentTimeMillis()
+        while (System.currentTimeMillis() - startTime < timeout) {
+            val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
+            if (download != null) {
+                return true
             }
-
-            // Create a file reference within that directory for your image
-            val file = File(directory, fileName)
-
-            // Use a FileOutputStream to write the bitmap to the file
-            FileOutputStream(file).use { outputStream ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            }
-
-
-        } catch (e: Exception) {
-            println("Exception while saving image: ${e.message}")
-            snackString("Exception while saving image: ${e.message}")
-            FirebaseCrashlytics.getInstance().recordException(e)
+            // Delay between each poll
+            kotlinx.coroutines.delay(500)
         }
+        return false
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: DownloadTask) {
         GlobalScope.launch(Dispatchers.IO) {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Manga/${task.title}"
+                "${DownloadsManager.animeLocation}/${task.title}"
             )
+            val episodeDirectory = File(directory, task.episode)
             if (!directory.exists()) directory.mkdirs()
+            if (!episodeDirectory.exists()) episodeDirectory.mkdirs()
 
             val file = File(directory, "media.json")
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
                     SChapterImpl() // Provide an instance of SChapterImpl
+                })
+                .registerTypeAdapter(SAnime::class.java, InstanceCreator<SAnime> {
+                    SAnimeImpl() // Provide an instance of SAnimeImpl
+                })
+                .registerTypeAdapter(SEpisode::class.java, InstanceCreator<SEpisode> {
+                    SEpisodeImpl() // Provide an instance of SEpisodeImpl
                 })
                 .create()
             val mediaJson = gson.toJson(task.sourceMedia)
@@ -311,6 +329,16 @@ class MangaDownloaderService : Service() {
             if (media != null) {
                 media.cover = media.cover?.let { downloadImage(it, directory, "cover.jpg") }
                 media.banner = media.banner?.let { downloadImage(it, directory, "banner.jpg") }
+                if (task.episodeImage != null) {
+                    media.anime?.episodes?.get(task.episode)?.let { episode ->
+                        episode.thumb = downloadImage(task.episodeImage, episodeDirectory, "episodeImage.jpg")?.let {
+                            FileUrl(
+                                it
+                            )
+                        }
+                    }
+                    downloadImage(task.episodeImage, episodeDirectory, "episodeImage.jpg")
+                }
 
                 val jsonString = gson.toJson(media)
                 withContext(Dispatchers.Main) {
@@ -343,7 +371,7 @@ class MangaDownloaderService : Service() {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
-                        this@MangaDownloaderService,
+                        this@AnimeDownloaderService,
                         "Exception while saving ${name}: ${e.message}",
                         Toast.LENGTH_LONG
                     ).show()
@@ -355,39 +383,39 @@ class MangaDownloaderService : Service() {
         }
 
     private fun broadcastDownloadStarted(chapterNumber: String) {
-        val intent = Intent(ACTION_DOWNLOAD_STARTED).apply {
-            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+        val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_STARTED).apply {
+            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, chapterNumber)
         }
         sendBroadcast(intent)
     }
 
     private fun broadcastDownloadFinished(chapterNumber: String) {
-        val intent = Intent(ACTION_DOWNLOAD_FINISHED).apply {
-            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+        val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_FINISHED).apply {
+            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, chapterNumber)
         }
         sendBroadcast(intent)
     }
 
     private fun broadcastDownloadFailed(chapterNumber: String) {
-        val intent = Intent(ACTION_DOWNLOAD_FAILED).apply {
-            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+        val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_FAILED).apply {
+            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, chapterNumber)
         }
         sendBroadcast(intent)
     }
 
     private fun broadcastDownloadProgress(chapterNumber: String, progress: Int) {
-        val intent = Intent(ACTION_DOWNLOAD_PROGRESS).apply {
-            putExtra(EXTRA_CHAPTER_NUMBER, chapterNumber)
+        val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_PROGRESS).apply {
+            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, chapterNumber)
             putExtra("progress", progress)
         }
         sendBroadcast(intent)
     }
 
     private val cancelReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
+        @androidx.annotation.OptIn(UnstableApi::class) override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == ACTION_CANCEL_DOWNLOAD) {
-                val chapter = intent.getStringExtra(EXTRA_CHAPTER)
-                chapter?.let {
+                val taskName = intent.getStringExtra(EXTRA_TASK_NAME)
+                taskName?.let {
                     cancelDownload(it)
                 }
             }
@@ -397,24 +425,30 @@ class MangaDownloaderService : Service() {
 
     data class DownloadTask(
         val title: String,
-        val chapter: String,
-        val imageData: List<ImageData>,
+        val episode: String,
+        val video: Video,
+        val subtitle: Subtitle? = null,
         val sourceMedia: Media? = null,
+        val episodeImage: String? = null,
         val retries: Int = 2,
         val simultaneousDownloads: Int = 2,
-    )
+    ) {
+        fun getTaskName(): String {
+            return "$title - $episode"
+        }
+    }
 
     companion object {
         private const val NOTIFICATION_ID = 1103
         const val ACTION_CANCEL_DOWNLOAD = "action_cancel_download"
-        const val EXTRA_CHAPTER = "extra_chapter"
+        const val EXTRA_TASK_NAME = "extra_task_name"
     }
 }
 
-object MangaServiceDataSingleton {
-    var imageData: List<ImageData> = listOf()
+object AnimeServiceDataSingleton {
+    var video: Video? = null
     var sourceMedia: Media? = null
-    var downloadQueue: Queue<MangaDownloaderService.DownloadTask> = ConcurrentLinkedQueue()
+    var downloadQueue: Queue<AnimeDownloaderService.DownloadTask> = ConcurrentLinkedQueue()
 
     @Volatile
     var isServiceRunning: Boolean = false

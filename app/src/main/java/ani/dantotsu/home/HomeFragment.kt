@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.LayoutAnimationController
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
@@ -114,12 +115,6 @@ class HomeFragment : Fragment() {
             else {
                 snackString(currContext()?.getString(R.string.please_reload))
             }
-        }
-        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false) ?: false
-        if(incognito) {
-            binding.incognitoTextView.visibility = View.VISIBLE
-            binding.incognitoView.visibility = View.VISIBLE
         }
         binding.homeUserAvatarContainer.setSafeOnClickListener {
             val dialogFragment =
@@ -369,6 +364,23 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
+        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("incognito", false) ?: false
+        if(incognito) {
+            val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
+            binding.incognitoTextView.visibility = View.VISIBLE
+            if (!uiSettings.immersiveMode) {
+                binding.root.fitsSystemWindows = true
+                //holy deprecation
+                binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                binding.root.requestApplyInsets()
+                binding.root.requestLayout()
+            }
+        } else {
+            binding.incognitoTextView.visibility = View.GONE
+        }
         super.onResume()
     }
 }
