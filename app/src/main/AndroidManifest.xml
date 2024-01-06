@@ -234,7 +234,6 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".download.DownloadContainerActivity" />
         <activity
             android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallActivity"
             android:exported="false"

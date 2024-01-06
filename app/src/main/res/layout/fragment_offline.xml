@@ -30,6 +30,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/no_internet"
                 android:layout_width="200dp"
                 android:layout_height="wrap_content"
                 android:text="@string/no_internet"

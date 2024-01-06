@@ -2,7 +2,6 @@ package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
 import android.content.Context
-import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Build
@@ -10,7 +9,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.LayoutAnimationController
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
@@ -22,7 +20,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.App
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.bottomBar
@@ -75,7 +72,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val scope = lifecycleScope
         var uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-
+        setIncognito()
         fun load() {
             if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
                 binding.homeUserName.text = Anilist.username
@@ -361,11 +358,9 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
-    override fun onResume() {
-        if (!model.loaded) Refresh.activity[1]!!.postValue(true)
+    private fun setIncognito() {
         val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                ?.getBoolean("incognito", false) ?: false
+            ?.getBoolean("incognito", false) ?: false
         if(incognito) {
             val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
             binding.incognitoTextView.visibility = View.VISIBLE
@@ -381,6 +376,10 @@ class HomeFragment : Fragment() {
         } else {
             binding.incognitoTextView.visibility = View.GONE
         }
+    }
+    override fun onResume() {
+        if (!model.loaded) Refresh.activity[1]!!.postValue(true)
+        setIncognito()
         super.onResume()
     }
 }

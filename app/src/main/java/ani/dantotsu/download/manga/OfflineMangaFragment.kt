@@ -76,14 +76,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
 
         val animeUserAvatar = view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
         animeUserAvatar.setSafeOnClickListener {
-            animeUserAvatar.setSafeOnClickListener {
-                val dialogFragment = SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.HOME)
-                dialogFragment.show(
-                    (it.context as AppCompatActivity).supportFragmentManager,
-                    "dialog"
-                )
-            }
-
+            val dialogFragment = SettingsDialogFragment.newInstance2(SettingsDialogFragment.Companion.PageType2.OfflineMANGA)
+            dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
 
         val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
