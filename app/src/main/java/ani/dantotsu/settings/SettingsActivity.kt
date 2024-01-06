@@ -519,7 +519,9 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
         binding.loginGithub.setOnClickListener {
             openLinkInBrowser(getString(R.string.github))
         }
-
+        binding.loginTelegram.setOnClickListener {
+            openLinkInBrowser(getString(R.string.telegram))
+        }
         binding.settingsUi.setOnClickListener {
             startActivity(Intent(this, UserInterfaceSettingsActivity::class.java))
         }

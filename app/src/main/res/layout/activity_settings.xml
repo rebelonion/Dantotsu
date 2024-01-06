@@ -1565,6 +1565,15 @@
                     app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription" />
 
+                <ImageView
+                    android:id="@+id/loginTelegram"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_margin="8dp"
+                    android:padding="6dp"
+                    android:src="@drawable/ic_telegram"
+                    app:tint="?attr/colorOnBackground"
+                    tools:ignore="ContentDescription" />
 
             </LinearLayout>
 
