@@ -1510,19 +1510,6 @@
                     android:layout_height="wrap_content"
                     app:srcCompat="@drawable/ic_bmc_button"
                     tools:ignore="ContentDescription" />
-
-                <View
-                    android:layout_width="16dp"
-                    android:layout_height="match_parent" />
-
-
-                <ImageView
-                    android:id="@+id/settingUPI"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:srcCompat="@drawable/ic_upi_icon"
-                    tools:ignore="ContentDescription" />
-
             </LinearLayout>
 
             <TextView

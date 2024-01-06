@@ -508,10 +508,6 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
         lifecycleScope.launch {
             binding.settingBuyMeCoffee.pop()
         }
-        binding.settingUPI.visibility = if (checkCountry(this)) View.VISIBLE else View.GONE
-        lifecycleScope.launch {
-            binding.settingUPI.pop()
-        }
 
         binding.loginDiscord.setOnClickListener {
             openLinkInBrowser(getString(R.string.discord))
@@ -759,8 +755,7 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
                         }
 
                         setPositiveButton("denote :)") {
-                            if (binding.settingUPI.visibility == View.VISIBLE) binding.settingUPI.performClick()
-                            else binding.settingBuyMeCoffee.performClick()
+                            binding.settingBuyMeCoffee.performClick()
                             dismiss()
                         }
                         show(supportFragmentManager, "dialog")
