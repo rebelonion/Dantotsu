@@ -89,6 +89,7 @@
             android:textAlignment="viewStart"
             android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
+            android:layout_marginBottom="8dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
@@ -109,8 +110,8 @@
             android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
             android:drawableStart="@drawable/ic_round_download_24"
-            app:iconPadding="16dp"
-            app:iconSize="24dp"
+            android:drawablePadding="16dp"
+            android:layout_marginBottom="8dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
             app:thumbTint="@color/button_switch_track"
