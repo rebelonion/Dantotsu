@@ -108,7 +108,7 @@
             android:textAllCaps="false"
             android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
-            app:icon="@drawable/ic_round_download_24"
+            android:drawableStart="@drawable/ic_round_download_24"
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:drawableTint="?attr/colorPrimary"
