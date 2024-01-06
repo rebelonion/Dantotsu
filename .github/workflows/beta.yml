@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - dev
+      -Dunno
     paths-ignore:
       - '**/README.md'
 
