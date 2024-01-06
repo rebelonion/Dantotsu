@@ -27,6 +27,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import ani.dantotsu.App.Companion.context
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
@@ -147,7 +148,6 @@ class MainActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
         }
-
         if (!isOnline(this)) {
     snackString(this@MainActivity.getString(R.string.no_internet_connection))
     startActivity(Intent(this, NoInternet::class.java))
