@@ -1,6 +1,7 @@
 package ani.dantotsu.download.manga
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -20,6 +21,7 @@ import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
 import android.widget.GridView
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -57,6 +59,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineMangaAdapter
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -177,7 +180,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 snackString("no media found")
             }
         }
-
+        val total = view.findViewById<TextView>(R.id.total)
+        total.text = if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
         gridView.setOnItemLongClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
@@ -194,6 +198,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 downloadManager.removeMedia(item.title, type)
                 getDownloads()
                 adapter.setItems(downloads)
+
             }
             builder.setNegativeButton("No") { _, _ ->
                 // Do nothing
@@ -202,7 +207,6 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             dialog.window?.setDimAmount(0.8f)
             true
         }
-
         return view
     }
 

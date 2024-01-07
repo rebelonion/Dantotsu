@@ -87,14 +87,14 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/sourceTitle"
+                    android:id="@+id/total"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:paddingStart="24dp"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center_vertical"
-                    android:text="Manga and Novels"
+                    android:hint="Manga and Novels"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
 
