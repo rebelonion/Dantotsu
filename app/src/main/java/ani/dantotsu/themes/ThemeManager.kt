@@ -49,7 +49,7 @@ class ThemeManager(private val context: Context) {
             "SAIKOU" -> if (useOLED) R.style.Theme_Dantotsu_SaikouOLED else R.style.Theme_Dantotsu_Saikou
             "RED" -> if (useOLED) R.style.Theme_Dantotsu_RedOLED else R.style.Theme_Dantotsu_Red
             "LAVENDER" -> if (useOLED) R.style.Theme_Dantotsu_LavenderOLED else R.style.Theme_Dantotsu_Lavender
-            "EMERALD" -> if (useOLED) R.style.Theme_Dantotsu_EmeraldOLED else R.style.Theme_Dantotsu_Emerald
+            "OCEAN" -> if (useOLED) R.style.Theme_Dantotsu_OceanOLED else R.style.Theme_Dantotsu_Ocean
             "MONOCHROME (BETA)" -> if (useOLED) R.style.Theme_Dantotsu_MonochromeOLED else R.style.Theme_Dantotsu_Monochrome
             else -> if (useOLED) R.style.Theme_Dantotsu_PurpleOLED else R.style.Theme_Dantotsu_Purple
         }
@@ -117,7 +117,7 @@ class ThemeManager(private val context: Context) {
             SAIKOU("SAIKOU"),
             RED("RED"),
             LAVENDER("LAVENDER"),
-            EMERALD("EMERALD"),
+            OCEAN("OCEAN"),
             MONOCHROME("MONOCHROME (BETA)");
 
             companion object {

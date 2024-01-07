@@ -11,7 +11,7 @@
 
     <string name="discord">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github">https://github.com/rebelonion/Dantotsu</string>
-
+    <string name="telegram" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
     <string name="home">Home</string>
     <string name="anime">Anime</string>
     <string name="browse_anime">Browse Anime</string>

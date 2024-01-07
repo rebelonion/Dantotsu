@@ -236,6 +236,7 @@ class MainActivity : AppCompatActivity() {
                                         .setData(Uri.parse("package:$packageName"))
                                 )
                             }
+                            dismiss()
                         }
                     }.show(supportFragmentManager, "dialog")
                 }

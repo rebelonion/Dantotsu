@@ -209,7 +209,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_dark_7_inversePrimary</item>
     </style>
 
-    <style name="Theme.Dantotsu.Emerald" parent="Theme.Base">
+    <style name="Theme.Dantotsu.Ocean" parent="Theme.Base">
         <item name="colorPrimary">@color/md_theme_dark_8_primary</item>
         <item name="colorOnPrimary">@color/md_theme_dark_8_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_dark_8_primaryContainer</item>
@@ -306,7 +306,8 @@
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
     </style>
-    <style name="Theme.Dantotsu.EmeraldOLED" parent="Theme.Dantotsu.Emerald">
+
+    <style name="Theme.Dantotsu.OceanOLED" parent="Theme.Dantotsu.Ocean">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
     </style>

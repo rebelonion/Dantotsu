@@ -416,7 +416,7 @@ class MangaReadAdapter(
                     ext.sourceLanguage = lang
                 }
                 try {
-                    binding?.animeSourceLanguage?.setText(parser.extension.sources[lang].lang)
+                    binding?.animeSourceLanguage?.setText(parser.extension.sources.sortedBy { it.lang }[lang].lang)
                 } catch (e: IndexOutOfBoundsException) {
                     binding?.animeSourceLanguage?.setText(
                         parser.extension.sources.firstOrNull()?.lang ?: "Unknown"

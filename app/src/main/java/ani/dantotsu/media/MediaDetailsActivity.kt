@@ -68,6 +68,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     private lateinit var uiSettings: UserInterfaceSettings
     var selected = 0
     var anime = true
+    var novel = false
     private var adult = false
 
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
@@ -305,7 +306,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         }
 
         adult = media.isAdult
-
         tabLayout.menu.clear()
         if (media.anime != null) {
             viewPager.adapter =
@@ -317,7 +317,13 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 lifecycle,
                 if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA
             )
-            tabLayout.inflateMenu(R.menu.manga_menu_detail)
+            if (media.format == "NOVEL") {
+                novel = true
+                tabLayout.inflateMenu(R.menu.novel_menu_detail)
+            }
+            else {
+                tabLayout.inflateMenu(R.menu.manga_menu_detail)
+            }
             anime = false
         }
 
