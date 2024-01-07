@@ -285,7 +285,7 @@
         <item name="colorPrimaryInverse">@color/md_theme_light_7_inversePrimary</item>
     </style>
 
-    <style name="Theme.Dantotsu.Emerald" parent="Theme.Base">
+    <style name="Theme.Dantotsu.Ocean" parent="Theme.Base">
         <item name="colorPrimary">@color/md_theme_light_8_primary</item>
         <item name="colorOnPrimary">@color/md_theme_light_8_onPrimary</item>
         <item name="colorPrimaryContainer">@color/md_theme_light_8_primaryContainer</item>
