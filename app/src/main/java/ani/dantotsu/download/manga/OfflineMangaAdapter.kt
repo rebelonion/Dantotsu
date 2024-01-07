@@ -51,6 +51,7 @@ class OfflineMangaAdapter(
         val itemScoreBG = view.findViewById<View>(R.id.itemCompactScoreBG)
         val ongoing = view.findViewById<CardView>(R.id.itemCompactOngoing)
         val totalchapter = view.findViewById<TextView>(R.id.itemCompactTotal)
+        val typeimage = view.findViewById<ImageView>(R.id.itemCompactTypeImage)
         val type = view.findViewById<TextView>(R.id.itemCompactRelation)
         val typeView = view.findViewById<LinearLayout>(R.id.itemCompactType)
 
@@ -69,6 +70,7 @@ class OfflineMangaAdapter(
         }
 
         // Bind item data to the views
+        typeimage.setImageResource(if (item.type == "Novel" ) R.drawable.ic_round_book_24 else R.drawable.ic_round_import_contacts_24)
         type.text = item.type
         typeView.visibility = View.VISIBLE
         imageView.setImageURI(item.image)
