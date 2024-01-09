@@ -31,6 +31,7 @@ import android.view.*
 import android.view.KeyEvent.*
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
+import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
@@ -42,6 +43,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.math.MathUtils.clamp
 import androidx.core.view.WindowCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.*
 import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MOVIE
@@ -103,6 +105,7 @@ import androidx.mediarouter.app.MediaRouteButton
 import ani.dantotsu.download.video.Helper
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
+import com.google.android.material.snackbar.Snackbar
 
 @UnstableApi
 @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
@@ -832,18 +835,19 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 audioManager.setStreamVolume(STREAM_MUSIC, volume, 0)
                 volumeHide()
             }
-
+            val fastForward = playerView.findViewById<TextView>(R.id.exo_fast_forward_text)
             fun fastForward() {
                 isFastForwarding = true
                 exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
-                snackString("Playing at ${exoPlayer.playbackParameters.speed}x speed")
+                fastForward.visibility = View.VISIBLE
+                fastForward.text = ("${exoPlayer.playbackParameters.speed}x")
             }
 
             fun stopFastForward() {
                 if (isFastForwarding) {
                     isFastForwarding = false
                     exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed / 2)
-                    snackString("Playing at default speed: ${exoPlayer.playbackParameters.speed}x")
+                    fastForward.visibility = View.GONE
                 }
             }
 

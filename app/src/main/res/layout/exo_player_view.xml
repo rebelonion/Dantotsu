@@ -163,6 +163,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
+    <TextView
+        android:id="@+id/exo_fast_forward_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="15dp"
+        android:layout_gravity="top|center"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:paddingStart="9dp"
+        android:paddingEnd="9dp"
+        android:visibility="gone"
+        android:background="@drawable/rounded_top_nav"
+        android:textColor="@color/bg_white"
+        android:textSize="18sp"
+        tools:hint= "2x"
+        tools:visibility="visible"
+        app:drawableEndCompat="@drawable/ic_round_fast_forward_24"
+        app:drawableTint= "@color/bg_white"/>
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/exo_skip_timestamp"
         android:layout_width="wrap_content"
