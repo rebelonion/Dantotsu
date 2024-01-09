@@ -29,7 +29,7 @@ android {
         debug {
             applicationIdSuffix ".beta"
             manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta", icon_placeholder_round: "@mipmap/ic_launcher_beta_round"]
-            debuggable true
+            debuggable System.getenv("CI") == null
         }
         release {
             manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher", icon_placeholder_round: "@mipmap/ic_launcher_round"]
