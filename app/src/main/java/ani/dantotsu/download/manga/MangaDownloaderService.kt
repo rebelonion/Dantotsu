@@ -196,14 +196,12 @@ class MangaDownloaderService : Service() {
                 // Loop through each ImageData object from the task
                 var farthest = 0
                 for ((index, image) in task.imageData.withIndex()) {
-                    // Limit the number of simultaneous downloads from the task
                     if (deferredList.size >= task.simultaneousDownloads) {
-                        // Wait for all deferred to complete and clear the list
                         deferredList.awaitAll()
                         deferredList.clear()
                     }
 
-                    // Download the image and add to deferred list
+                    val currentIndex = index // Capture the current index
                     val deferred = async(Dispatchers.IO) {
                         var bitmap: Bitmap? = null
                         var retryCount = 0
@@ -217,9 +215,8 @@ class MangaDownloaderService : Service() {
                             retryCount++
                         }
 
-                        // Cache the image if successful
                         if (bitmap != null) {
-                            saveToDisk("$index.jpg", bitmap, task.title, task.chapter)
+                            saveToDisk("$currentIndex.jpg", bitmap, task.title, task.chapter)
                         }
                         farthest++
                         builder.setProgress(task.imageData.size, farthest, false)
