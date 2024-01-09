@@ -1,6 +1,7 @@
 package ani.dantotsu.settings
 
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
@@ -44,7 +45,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentMangaExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
-    val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons = loadData("skip_extension_icons") ?: false
     private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
     private val extensionsAdapter = MangaExtensionsAdapter({ pkg ->
         val name= pkg.name
@@ -64,7 +65,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
         if (allSettings.isNotEmpty()) {
             var selectedSetting = allSettings[0]
             if (allSettings.size > 1) {
-                val names = allSettings.sortedBy { it.lang }.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
+                val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
                 var selectedIndex = 0
                 val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                     .setTitle("Select a Source")
@@ -216,6 +217,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)  // Use getItem() from ListAdapter
             val nsfw = if (extension.isNsfw) "(18+)" else ""

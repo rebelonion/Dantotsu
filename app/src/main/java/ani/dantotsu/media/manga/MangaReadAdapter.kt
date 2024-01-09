@@ -2,15 +2,12 @@ package ani.dantotsu.media.manga
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
@@ -202,7 +199,7 @@ class MangaReadAdapter(
                 input.maxValue = 20
                 input.value = 1
                 alertDialog.setView(input)
-                alertDialog.setPositiveButton("OK") { dialog, which ->
+                alertDialog.setPositiveButton("OK") { _, _ ->
                     dialogBinding.downloadNo.text = "${input.value}"
                 }
                 alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
@@ -234,7 +231,7 @@ class MangaReadAdapter(
                 // Create AlertDialog
                 val dialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
                     .setView(dialogView2)
-                    .setPositiveButton("OK") { dialog, which ->
+                    .setPositiveButton("OK") { _, _ ->
                         //add unchecked to hidden
                         hiddenScanlators.clear()
                         for (i in 0 until checkboxContainer.childCount) {
@@ -407,7 +404,7 @@ class MangaReadAdapter(
         }
     }
 
-    fun setLanguageList(lang: Int, source: Int) {
+    private fun setLanguageList(lang: Int, source: Int) {
         val binding = _binding
         if (mangaReadSources is MangaSources) {
             val parser = mangaReadSources[source] as? DynamicMangaParser
@@ -416,7 +413,7 @@ class MangaReadAdapter(
                     ext.sourceLanguage = lang
                 }
                 try {
-                    binding?.animeSourceLanguage?.setText(parser.extension.sources.sortedBy { it.lang }[lang].lang)
+                    binding?.animeSourceLanguage?.setText(parser.extension.sources[lang].lang)
                 } catch (e: IndexOutOfBoundsException) {
                     binding?.animeSourceLanguage?.setText(
                         parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
@@ -425,7 +422,7 @@ class MangaReadAdapter(
                 val adapter = ArrayAdapter(
                     fragment.requireContext(),
                     R.layout.item_dropdown,
-                    parser.extension.sources.sortedBy { it.lang }.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
                 if (items > 1) binding?.animeSourceLanguageContainer?.visibility  =  View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility  =  View.GONE
