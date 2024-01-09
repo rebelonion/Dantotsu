@@ -141,8 +141,8 @@ class MangaChapterAdapter(
     inner class ChapterListViewHolder(val binding: ItemChapterListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val activeCoroutines = mutableSetOf<String>()
-        val typedValue1 = TypedValue()
-        val typedValue2 = TypedValue()
+        private val typedValue1 = TypedValue()
+        private val typedValue2 = TypedValue()
         fun bind(chapterNumber: String, progress: String?) {
             if (progress != null) {
                 binding.itemChapterTitle.visibility = View.VISIBLE
@@ -235,7 +235,7 @@ class MangaChapterAdapter(
                 input.maxValue = itemCount - bindingAdapterPosition
                 input.value = 1
                 alertDialog.setView(input)
-                alertDialog.setPositiveButton("OK") { dialog, which ->
+                alertDialog.setPositiveButton("OK") { _, _ ->
                     downloadNChaptersFrom(bindingAdapterPosition, input.value)
                 }
                 alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }

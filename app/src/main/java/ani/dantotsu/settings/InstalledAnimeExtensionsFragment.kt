@@ -46,7 +46,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentAnimeExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
-    val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons = loadData("skip_extension_icons") ?: false
     private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
     private val extensionsAdapter = AnimeExtensionsAdapter(
         { pkg ->
@@ -67,7 +67,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             if (allSettings.isNotEmpty()) {
                 var selectedSetting = allSettings[0]
                 if (allSettings.size > 1) {
-                    val names = allSettings.sortedBy { it.lang }.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
+                    val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
                     var selectedIndex = 0
                     val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                         .setTitle("Select a Source")
