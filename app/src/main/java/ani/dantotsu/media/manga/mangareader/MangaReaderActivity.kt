@@ -255,7 +255,7 @@ class MangaReaderActivity : AppCompatActivity() {
         }
 
         showProgressDialog =
-            if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog") != true else false
+            if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")?: true else false
 
         //Chapter Change
         fun change(index: Int) {
@@ -849,13 +849,15 @@ class MangaReaderActivity : AppCompatActivity() {
 
     private fun progress(runnable: Runnable) {
         if (maxChapterPage - currentChapterPage <= 1 && Anilist.userid != null) {
+            showProgressDialog =
+                if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")?: true else false
             if (showProgressDialog) {
 
                 val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)
                 val checkbox = dialogView.findViewById<CheckBox>(R.id.dialog_checkbox)
                 checkbox.text = getString(R.string.dont_ask_again, media.userPreferredName)
                 checkbox.setOnCheckedChangeListener { _, isChecked ->
-                    saveData("${media.id}_progressDialog", isChecked)
+                    saveData("${media.id}_progressDialog", !isChecked)
                     showProgressDialog = !isChecked
                 }
                 val incognito =
