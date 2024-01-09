@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".media.user.ListActivity"
-    android:fitsSystemWindows="true">
+    tools:context=".media.user.ListActivity">
 
     <ProgressBar
         android:id="@+id/listProgressBar"
@@ -20,59 +19,62 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         android:theme="@style/Theme.Dantotsu.AppBarOverlay">
-
         <LinearLayout
+            android:id="@+id/settingsContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/listTitle"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="48dp"
-                android:layout_marginStart="32dp"
-                android:fontFamily="@font/poppins_bold"
-                android:gravity="center|start"
-                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                android:textSize="16sp"
-                android:singleLine="true"
-                android:textColor="?attr/colorOnBackground"
-                android:ellipsize="end"
-                tools:text="@string/app_name" />
+                <TextView
+                    android:id="@+id/listTitle"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="32dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center|start"
+                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                    android:textSize="16sp"
+                    android:singleLine="true"
+                    android:textColor="?attr/colorOnBackground"
+                    android:ellipsize="end"
+                    tools:text="@string/app_name" />
 
-            <ImageButton
-                android:id="@+id/random"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/random_selection"
-                app:tint="?attr/colorOnBackground"
-                app:srcCompat="@drawable/ic_shuffle_24" />
+                <ImageButton
+                    android:id="@+id/random"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/random_selection"
+                    app:tint="?attr/colorOnBackground"
+                    app:srcCompat="@drawable/ic_shuffle_24" />
 
-            <ImageButton
-                android:id="@+id/listSort"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="8dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:contentDescription="@string/sort_by"
-                app:tint="?attr/colorOnBackground"
-                app:srcCompat="@drawable/ic_round_sort_24" />
+                <ImageButton
+                    android:id="@+id/listSort"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/sort_by"
+                    app:tint="?attr/colorOnBackground"
+                    app:srcCompat="@drawable/ic_round_sort_24" />
 
+            </LinearLayout>
         </LinearLayout>
-
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/listTabLayout"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:background="?attr/colorSurface"
             app:tabContentStart="32dp"
             app:tabMode="scrollable"
             app:tabPaddingEnd="16dp"
             app:tabPaddingStart="16dp"
             app:tabTextAppearance="@style/NavBarText"
-            tools:ignore="SpeakableTextPresentCheck" />
+            tools:ignore="SpeakableTextPresentCheck"/>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2

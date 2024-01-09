@@ -305,7 +305,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         }
 
         adult = media.isAdult
-
         tabLayout.menu.clear()
         if (media.anime != null) {
             viewPager.adapter =
@@ -317,7 +316,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 lifecycle,
                 if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA
             )
-            tabLayout.inflateMenu(R.menu.manga_menu_detail)
+            if (media.format == "NOVEL") {
+                tabLayout.inflateMenu(R.menu.novel_menu_detail)
+            }
+            else {
+                tabLayout.inflateMenu(R.menu.manga_menu_detail)
+            }
             anime = false
         }
 
@@ -361,7 +365,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             R.id.info -> {
                 selected = 0
             }
-
             R.id.watch, R.id.read -> {
                 selected = 1
             }
