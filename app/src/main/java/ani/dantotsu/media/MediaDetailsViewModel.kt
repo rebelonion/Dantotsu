@@ -314,7 +314,8 @@ class MediaDetailsViewModel : ViewModel() {
     val novelSources = NovelSources
     val novelResponses = MutableLiveData<List<ShowResponse>>(null)
     suspend fun searchNovels(query: String, i: Int) {
-        val source = novelSources[i]
+        val position = if (i >= novelSources.list.size) 0 else i
+        val source = novelSources[position]
         tryWithSuspend(post = true) {
             if (source != null) {
                 novelResponses.postValue(source.search(query))

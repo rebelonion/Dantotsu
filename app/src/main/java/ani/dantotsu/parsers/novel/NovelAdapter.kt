@@ -22,10 +22,10 @@ class DynamicNovelParser(extension: NovelExtension.Installed) : NovelParser() {
 
     override suspend fun search(query: String): List<ShowResponse> {
         val source = extension.sources.firstOrNull()
-        if (source is NovelInterface) {
-            return source.search(query, client)
+        return if (source is NovelInterface) {
+            source.search(query, client)
         } else {
-            return emptyList()
+            emptyList()
         }
     }
 
