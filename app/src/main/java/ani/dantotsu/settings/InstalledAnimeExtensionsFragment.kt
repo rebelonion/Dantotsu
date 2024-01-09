@@ -115,13 +115,13 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                     .show()
             }
         },
-        { pkg ->
+        { pkg, forceDelete ->
             if (isAdded) {  // Check if the fragment is currently added to its activity
                 val context = requireContext()  // Store context in a variable
                 val notificationManager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
 
-                if (pkg.hasUpdate) {
+                if (pkg.hasUpdate && !forceDelete) {
                     animeExtensionManager.updateExtension(pkg)
                         .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
                         .subscribe(
@@ -202,7 +202,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
     private class AnimeExtensionsAdapter(
         private val onSettingsClicked: (AnimeExtension.Installed) -> Unit,
-        private val onUninstallClicked: (AnimeExtension.Installed) -> Unit,
+        private val onUninstallClicked: (AnimeExtension.Installed, Boolean) -> Unit,
         val skipIcons: Boolean
     ) : ListAdapter<AnimeExtension.Installed, AnimeExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
@@ -234,10 +234,14 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 holder.closeTextView.setImageResource(R.drawable.ic_round_delete_24)
             }
             holder.closeTextView.setOnClickListener {
-                onUninstallClicked(extension)
+                onUninstallClicked(extension, false)
             }
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
+            }
+            holder.card.setOnLongClickListener {
+                onUninstallClicked(extension, true)
+                true
             }
         }
 
@@ -258,6 +262,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
+            val card = view.findViewById<View>(R.id.extensionCardView)
         }
 
         companion object {

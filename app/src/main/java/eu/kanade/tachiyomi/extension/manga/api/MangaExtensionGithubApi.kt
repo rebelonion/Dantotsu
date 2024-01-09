@@ -127,7 +127,7 @@ internal class MangaExtensionGithubApi {
                     hasChangelog = it.hasChangelog == 1,
                     sources = it.sources?.toExtensionSources().orEmpty(),
                     apkName = it.apk,
-                    iconUrl = "${getUrlPrefix()}icon/${it.apk.replace(".apk", ".png")}",
+                    iconUrl = "${getUrlPrefix()}icon/${it.pkg}.png",
                 )
             }
     }
@@ -160,8 +160,8 @@ internal class MangaExtensionGithubApi {
     }
 }
 
-private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/tachiyomiorg/tachiyomi-extensions/repo/"
-private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/tachiyomiorg/tachiyomi-extensions@repo/"
+private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/keiyoushi/extensions/main/"
+private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/keiyoushi/extensions@main/"
 
 @Serializable
 private data class ExtensionJsonObject(

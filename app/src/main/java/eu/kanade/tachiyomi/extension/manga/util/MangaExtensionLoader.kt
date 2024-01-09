@@ -137,6 +137,7 @@ internal object MangaExtensionLoader {
 
         val signatureHash = getSignatureHash(pkgInfo)
 
+        /*  temporarily disabling signature check TODO: remove?
         if (signatureHash == null) {
             logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
             return MangaLoadResult.Error
@@ -145,6 +146,7 @@ internal object MangaExtensionLoader {
             logcat(LogPriority.WARN) { "Extension $pkgName isn't trusted" }
             return MangaLoadResult.Untrusted(extension)
         }
+        */
 
         val isNsfw = appInfo.metaData.getInt(METADATA_NSFW) == 1
         if (!loadNsfwSource && isNsfw) {

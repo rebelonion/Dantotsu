@@ -111,13 +111,13 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                 .show()
         }
     },
-        { pkg ->
+        { pkg: MangaExtension.Installed , forceDelete: Boolean ->
             if (isAdded) {  // Check if the fragment is currently added to its activity
                 val context = requireContext()  // Store context in a variable
                 val notificationManager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
 
-                if (pkg.hasUpdate) {
+                if (pkg.hasUpdate && !forceDelete) {
                     mangaExtensionManager.updateExtension(pkg)
                         .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
                         .subscribe(
@@ -198,7 +198,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
 
     private class MangaExtensionsAdapter(
         private val onSettingsClicked: (MangaExtension.Installed) -> Unit,
-        private val onUninstallClicked: (MangaExtension.Installed) -> Unit,
+        private val onUninstallClicked: (MangaExtension.Installed, Boolean) -> Unit,
         skipIcons: Boolean
     ) : ListAdapter<MangaExtension.Installed, MangaExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
@@ -231,10 +231,15 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                 holder.closeTextView.setImageResource(R.drawable.ic_round_delete_24)
             }
             holder.closeTextView.setOnClickListener {
-                onUninstallClicked(extension)
+                onUninstallClicked(extension, false)
             }
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
+            }
+
+            holder.card.setOnLongClickListener {
+                onUninstallClicked(extension, true)
+                true
             }
         }
 
@@ -255,6 +260,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
+            val card: View = view.findViewById(R.id.extensionCardView)
         }
 
         companion object {

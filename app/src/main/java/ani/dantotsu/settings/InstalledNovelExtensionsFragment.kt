@@ -43,13 +43,13 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
         Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
             .show()
     },
-        { pkg ->
+        { pkg, forceDelete ->
             if (isAdded) {  // Check if the fragment is currently added to its activity
                 val context = requireContext()  // Store context in a variable
                 val notificationManager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
 
-                if (pkg.hasUpdate) {
+                if (pkg.hasUpdate && !forceDelete) {
                     novelExtensionManager.updateExtension(pkg)
                         .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
                         .subscribe(
@@ -130,7 +130,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
 
     private class NovelExtensionsAdapter(
         private val onSettingsClicked: (NovelExtension.Installed) -> Unit,
-        private val onUninstallClicked: (NovelExtension.Installed) -> Unit,
+        private val onUninstallClicked: (NovelExtension.Installed, Boolean) -> Unit,
         skipIcons: Boolean
     ) : ListAdapter<NovelExtension.Installed, NovelExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
@@ -165,10 +165,14 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                 holder.closeTextView.setImageResource(R.drawable.ic_round_delete_24)
             }
             holder.closeTextView.setOnClickListener {
-                onUninstallClicked(extension)
+                onUninstallClicked(extension, false)
             }
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
+            }
+            holder.card.setOnLongClickListener {
+                onUninstallClicked(extension, true)
+                true
             }
         }
 
@@ -189,6 +193,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
+            val card = view.findViewById<View>(R.id.extensionCardView)
         }
 
         companion object {
