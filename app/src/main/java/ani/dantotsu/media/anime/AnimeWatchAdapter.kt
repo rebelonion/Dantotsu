@@ -1,7 +1,6 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -9,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
@@ -377,7 +375,7 @@ class AnimeWatchAdapter(
         }
     }
 
-    fun setLanguageList(lang: Int, source: Int) {
+    private fun setLanguageList(lang: Int, source: Int) {
         val binding = _binding
         if (watchSources is AnimeSources) {
             val parser = watchSources[source] as? DynamicAnimeParser
@@ -386,7 +384,7 @@ class AnimeWatchAdapter(
                     ext.sourceLanguage = lang
                 }
                 try {
-                    binding?.animeSourceLanguage?.setText(parser.extension.sources.sortedBy { it.lang }[lang].lang)
+                    binding?.animeSourceLanguage?.setText(parser.extension.sources[lang].lang)
                 } catch (e: IndexOutOfBoundsException) {
                     binding?.animeSourceLanguage?.setText(
                         parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
@@ -395,7 +393,7 @@ class AnimeWatchAdapter(
                 val adapter = ArrayAdapter(
                     fragment.requireContext(),
                     R.layout.item_dropdown,
-                    parser.extension.sources.sortedBy { it.lang }.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
                 if (items > 1) binding?.animeSourceLanguageContainer?.visibility  =  View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility  =  View.GONE
