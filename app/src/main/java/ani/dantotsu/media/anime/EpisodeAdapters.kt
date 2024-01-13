@@ -76,12 +76,11 @@ class EpisodeAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val ep = arr[position]
-        val title =
-            "${
-                if (!ep.title.isNullOrEmpty() && ep.title != "null") "" else currContext()!!.getString(
-                    R.string.episode_singular
-                )
-            } ${if (!ep.title.isNullOrEmpty() && ep.title != "null") ep.title else ep.number}"
+        val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {
+    (ep.title as? String)?.replaceFirst(Regex("^(Ep\\.|Episode\\.?)\\s*\\d+:\\s*"), "")
+} else {
+    ep.number
+} ?: ""
 
         when (holder) {
             is EpisodeListViewHolder -> {
@@ -245,5 +244,4 @@ class EpisodeAdapter(
         type = t
     }
 }
-
 
