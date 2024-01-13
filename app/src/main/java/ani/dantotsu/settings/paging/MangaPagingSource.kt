@@ -170,7 +170,8 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
 
         init {
             binding.closeTextView.setOnClickListener {
-               val extension = getItem(bindingAdapterPosition)
+                if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
+                val extension = getItem(bindingAdapterPosition)
                 if (extension != null) {
                     clickListener.onInstallClick(extension)
                     binding.closeTextView.setImageResource(R.drawable.ic_sync)
