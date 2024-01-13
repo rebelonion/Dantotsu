@@ -955,7 +955,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val episodeTitleArr = arrayListOf<String>()
         episodes.forEach {
             val episode = it.value
-            episodeTitleArr.add("${if (!episode.title.isNullOrEmpty() && episode.title != "null") "" else "numeric :"}${episode.number}${if (episode.filler) " [Filler]" else ""}${if (!episode.title.isNullOrEmpty() && episode.title != "null") " : " + episode.title else ""}")
+            val cleanedTitle = AnimeNameAdapter.removeEpisodeNumberCompletely(episode.title ?: "")
+            episodeTitleArr.add("Episode ${episode.number}${if (episode.filler) " [Filler]" else ""}${if (cleanedTitle.isNotEmpty() && cleanedTitle != "null") ": $cleanedTitle" else ""}")
         }
 
         for (i in episodeTitleArr.indices) {

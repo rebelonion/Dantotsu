@@ -37,5 +37,10 @@ class AnimeNameAdapter {
                 text
             }
         }
+
+        fun removeEpisodeNumberCompletely(text: String): String {
+            val regexPattern = Regex(episodeRegex, RegexOption.IGNORE_CASE)
+            return text.replace(regexPattern, "")
+        }
     }
 }
