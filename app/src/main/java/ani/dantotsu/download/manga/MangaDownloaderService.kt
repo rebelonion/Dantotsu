@@ -187,7 +187,8 @@ class MangaDownloaderService : Service() {
                     true
                 }
 
-                val deferredList = mutableListOf<Deferred<Bitmap?>>()
+                //val deferredList = mutableListOf<Deferred<Bitmap?>>()
+                val deferredMap = mutableMapOf<Int, Deferred<Bitmap?>>()
                 builder.setContentText("Downloading ${task.title} - ${task.chapter}")
                 if (notifi) {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
@@ -196,13 +197,12 @@ class MangaDownloaderService : Service() {
                 // Loop through each ImageData object from the task
                 var farthest = 0
                 for ((index, image) in task.imageData.withIndex()) {
-                    if (deferredList.size >= task.simultaneousDownloads) {
-                        deferredList.awaitAll()
-                        deferredList.clear()
+                    if (deferredMap.size >= task.simultaneousDownloads) {
+                        deferredMap.values.awaitAll()
+                        deferredMap.clear()
                     }
 
-                    val currentIndex = index // Capture the current index
-                    val deferred = async(Dispatchers.IO) {
+                    deferredMap[index] = async(Dispatchers.IO) {
                         var bitmap: Bitmap? = null
                         var retryCount = 0
 
@@ -216,7 +216,7 @@ class MangaDownloaderService : Service() {
                         }
 
                         if (bitmap != null) {
-                            saveToDisk("$currentIndex.jpg", bitmap, task.title, task.chapter)
+                            saveToDisk("$index.jpg", bitmap, task.title, task.chapter)
                         }
                         farthest++
                         builder.setProgress(task.imageData.size, farthest, false)
@@ -230,12 +230,10 @@ class MangaDownloaderService : Service() {
 
                         bitmap
                     }
-
-                    deferredList.add(deferred)
                 }
 
                 // Wait for any remaining deferred to complete
-                deferredList.awaitAll()
+                deferredMap.values.awaitAll()
 
                 builder.setContentText("${task.title} - ${task.chapter} Download complete")
                     .setProgress(0, 0, false)

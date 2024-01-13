@@ -650,5 +650,6 @@
     <string name="purge_anime_downloads">Purge anime downloads</string>
     <string name="purge_manga_downloads">Purge Manga Downloads</string>
     <string name="purge_novel_downloads">Purge Novel Downloads</string>
+    <string name="requires_android_12">Requires Android 12+</string>
 
 </resources>
