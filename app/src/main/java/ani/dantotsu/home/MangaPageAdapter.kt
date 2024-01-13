@@ -98,6 +98,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
 
+        setIncognito()
         binding.mangaSearchBar.setEndIconOnClickListener {
             binding.mangaSearchBarText.performClick()
         }

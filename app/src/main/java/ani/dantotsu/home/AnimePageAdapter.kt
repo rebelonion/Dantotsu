@@ -93,6 +93,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             )
         }
 
+        setIncognito()
         binding.animeSearchBar.setEndIconOnClickListener {
             binding.animeSearchBarText.performClick()
         }
