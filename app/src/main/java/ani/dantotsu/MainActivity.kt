@@ -248,6 +248,25 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+                   val index = Helper.downloadManager(this@MainActivity).downloadIndex
+            val downloadCursor = index.getDownloads()
+            while (downloadCursor.moveToNext()) {
+                val download = downloadCursor.download
+                Log.e("Downloader", download.request.uri.toString())
+                Log.e("Downloader", download.request.id.toString())
+                Log.e("Downloader", download.request.mimeType.toString())
+                Log.e("Downloader", download.request.data.size.toString())
+                Log.e("Downloader", download.bytesDownloaded.toString())
+                Log.e("Downloader", download.state.toString())
+                Log.e("Downloader", download.failureReason.toString())
+
+                if (download.state == Download.STATE_FAILED) {  //simple cleanup
+                    Helper.downloadManager(this@MainActivity).removeDownload(download.request.id)
+                }
+            }
+        }
+
+
 
     }
 
