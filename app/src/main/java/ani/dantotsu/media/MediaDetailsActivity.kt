@@ -318,8 +318,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             )
             if (media.format == "NOVEL") {
                 tabLayout.inflateMenu(R.menu.novel_menu_detail)
-            }
-            else {
+            } else {
                 tabLayout.inflateMenu(R.menu.manga_menu_detail)
             }
             anime = false
@@ -365,6 +364,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             R.id.info -> {
                 selected = 0
             }
+
             R.id.watch, R.id.read -> {
                 selected = 1
             }

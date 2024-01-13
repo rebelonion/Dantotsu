@@ -1,17 +1,13 @@
 package ani.dantotsu.settings
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
-import ani.dantotsu.NoPaddingArrayAdapter
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityReaderSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
-import ani.dantotsu.media.novel.novelreader.NovelReaderActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.saveData

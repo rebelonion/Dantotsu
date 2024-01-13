@@ -339,7 +339,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         setContentView(binding.root)
 
         //Initialize
-        isCastApiAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        isCastApiAvailable = GoogleApiAvailability.getInstance()
+            .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
         try {
             castContext = CastContext.getSharedInstance(this)
             castPlayer = CastPlayer(castContext!!)

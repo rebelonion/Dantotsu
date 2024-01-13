@@ -99,7 +99,8 @@ class AnimeExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = if (isNsfwEnabled) filteredExtensions else filteredExtensions.filterNot { it.isNsfw }
+        val filternfsw =
+            if (isNsfwEnabled) filteredExtensions else filteredExtensions.filterNot { it.isNsfw }
         return try {
             val sublist = filternfsw.subList(
                 fromIndex = position,

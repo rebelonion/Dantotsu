@@ -23,7 +23,6 @@ import ani.dantotsu.databinding.ItemUrlBinding
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
-import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
 import kotlinx.coroutines.CoroutineScope
@@ -275,7 +274,8 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 //    media!!.userPreferredName
                 //)
                 val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
-                val video = if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
+                val video =
+                    if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
                 if (video != null) {
                     Helper.startAnimeDownloadService(
                         requireActivity(),
@@ -284,7 +284,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         video,
                         null,
                         media,
-                        episode.thumb?.url?: media!!.banner?: media!!.cover
+                        episode.thumb?.url ?: media!!.banner ?: media!!.cover
                     )
                 }
                 dismiss()

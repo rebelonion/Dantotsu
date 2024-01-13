@@ -26,18 +26,18 @@ class CustomCastThemeFactory : MediaRouteDialogFactory() {
     }
 }
 
-class CustomMediaRouterChooserDialogFragment: MediaRouteChooserDialogFragment() {
+class CustomMediaRouterChooserDialogFragment : MediaRouteChooserDialogFragment() {
     override fun onCreateChooserDialog(
-            context: Context,
-            savedInstanceState: Bundle?
+        context: Context,
+        savedInstanceState: Bundle?
     ): MediaRouteChooserDialog =
-            MediaRouteChooserDialog(context, R.style.MyPopup)
+        MediaRouteChooserDialog(context, R.style.MyPopup)
 }
 
-class CustomMediaRouteControllerDialogFragment: MediaRouteControllerDialogFragment() {
+class CustomMediaRouteControllerDialogFragment : MediaRouteControllerDialogFragment() {
     override fun onCreateControllerDialog(
-            context: Context,
-            savedInstanceState: Bundle?
+        context: Context,
+        savedInstanceState: Bundle?
     ): MediaRouteControllerDialog =
-            MediaRouteControllerDialog(context, R.style.MyPopup)
+        MediaRouteControllerDialog(context, R.style.MyPopup)
 }

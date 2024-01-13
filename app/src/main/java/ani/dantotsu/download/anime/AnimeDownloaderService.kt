@@ -17,7 +17,6 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.FileUrl
@@ -25,8 +24,8 @@ import ani.dantotsu.R
 import ani.dantotsu.currActivity
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.download.video.Helper
 import ani.dantotsu.download.video.ExoplayerDownloadService
+import ani.dantotsu.download.video.Helper
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.anime.AnimeWatchFragment
@@ -80,12 +79,13 @@ class AnimeDownloaderService : Service() {
     override fun onCreate() {
         super.onCreate()
         notificationManager = NotificationManagerCompat.from(this)
-        builder = NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
-            setContentTitle("Anime Download Progress")
-            setSmallIcon(R.drawable.ic_round_download_24)
-            priority = NotificationCompat.PRIORITY_DEFAULT
-            setOnlyAlertOnce(true)
-        }
+        builder =
+            NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
+                setContentTitle("Anime Download Progress")
+                setSmallIcon(R.drawable.ic_round_download_24)
+                priority = NotificationCompat.PRIORITY_DEFAULT
+                setOnlyAlertOnce(true)
+            }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
                 NOTIFICATION_ID,
@@ -154,7 +154,9 @@ class AnimeDownloaderService : Service() {
     fun cancelDownload(taskName: String) {
         CoroutineScope(Dispatchers.Default).launch {
             mutex.withLock {
-                val url = AnimeServiceDataSingleton.downloadQueue.find { it.getTaskName() == taskName }?.video?.file?.url ?: ""
+                val url =
+                    AnimeServiceDataSingleton.downloadQueue.find { it.getTaskName() == taskName }?.video?.file?.url
+                        ?: ""
                 DownloadService.sendRemoveDownload(
                     this@AnimeDownloaderService,
                     ExoplayerDownloadService::class.java,
@@ -188,7 +190,8 @@ class AnimeDownloaderService : Service() {
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 
-    @androidx.annotation.OptIn(UnstableApi::class) suspend fun download(task: DownloadTask) {
+    @androidx.annotation.OptIn(UnstableApi::class)
+    suspend fun download(task: DownloadTask) {
         try {
             val downloadManager = Helper.downloadManager(this@AnimeDownloaderService)
             withContext(Dispatchers.Main) {
@@ -212,11 +215,13 @@ class AnimeDownloaderService : Service() {
                     Helper.downloadVideo(
                         it,
                         task.video,
-                        task.subtitle)
+                        task.subtitle
+                    )
                 }
 
                 saveMediaInfo(task)
-                val downloadStarted = hasDownloadStarted(downloadManager, task, 30000) // 30 seconds timeout
+                val downloadStarted =
+                    hasDownloadStarted(downloadManager, task, 30000) // 30 seconds timeout
 
                 if (!downloadStarted) {
                     logger("Download failed to start")
@@ -238,11 +243,15 @@ class AnimeDownloaderService : Service() {
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download failed")
                             logger("Download failed: ${download.failureReason}")
-                            FirebaseCrashlytics.getInstance().recordException(Exception("Anime Download failed:" +
-                                    " ${download.failureReason}" +
-                                    " url: ${task.video.file.url}" +
-                                    " title: ${task.title}" +
-                                    " episode: ${task.episode}"))
+                            FirebaseCrashlytics.getInstance().recordException(
+                                Exception(
+                                    "Anime Download failed:" +
+                                            " ${download.failureReason}" +
+                                            " url: ${task.video.file.url}" +
+                                            " title: ${task.title}" +
+                                            " episode: ${task.episode}"
+                                )
+                            )
                             broadcastDownloadFailed(task.getTaskName())
                             break
                         }
@@ -251,7 +260,10 @@ class AnimeDownloaderService : Service() {
                             builder.setContentText("${task.title} - ${task.episode} Download completed")
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download completed")
-                            getSharedPreferences(getString(R.string.anime_downloads), Context.MODE_PRIVATE).edit().putString(
+                            getSharedPreferences(
+                                getString(R.string.anime_downloads),
+                                Context.MODE_PRIVATE
+                            ).edit().putString(
                                 task.getTaskName(),
                                 task.video.file.url
                             ).apply()
@@ -272,7 +284,10 @@ class AnimeDownloaderService : Service() {
                             snackString("${task.title} - ${task.episode} Download stopped")
                             break
                         }
-                        broadcastDownloadProgress(task.getTaskName(), download.percentDownloaded.toInt())
+                        broadcastDownloadProgress(
+                            task.getTaskName(),
+                            download.percentDownloaded.toInt()
+                        )
                         if (notifi) {
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                         }
@@ -288,7 +303,12 @@ class AnimeDownloaderService : Service() {
         }
     }
 
-    @androidx.annotation.OptIn(UnstableApi::class) suspend fun hasDownloadStarted(downloadManager: DownloadManager, task: DownloadTask, timeout: Long): Boolean {
+    @androidx.annotation.OptIn(UnstableApi::class)
+    suspend fun hasDownloadStarted(
+        downloadManager: DownloadManager,
+        task: DownloadTask,
+        timeout: Long
+    ): Boolean {
         val startTime = System.currentTimeMillis()
         while (System.currentTimeMillis() - startTime < timeout) {
             val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
@@ -331,7 +351,11 @@ class AnimeDownloaderService : Service() {
                 media.banner = media.banner?.let { downloadImage(it, directory, "banner.jpg") }
                 if (task.episodeImage != null) {
                     media.anime?.episodes?.get(task.episode)?.let { episode ->
-                        episode.thumb = downloadImage(task.episodeImage, episodeDirectory, "episodeImage.jpg")?.let {
+                        episode.thumb = downloadImage(
+                            task.episodeImage,
+                            episodeDirectory,
+                            "episodeImage.jpg"
+                        )?.let {
                             FileUrl(
                                 it
                             )
@@ -412,7 +436,8 @@ class AnimeDownloaderService : Service() {
     }
 
     private val cancelReceiver = object : BroadcastReceiver() {
-        @androidx.annotation.OptIn(UnstableApi::class) override fun onReceive(context: Context, intent: Intent) {
+        @androidx.annotation.OptIn(UnstableApi::class)
+        override fun onReceive(context: Context, intent: Intent) {
             if (intent.action == ACTION_CANCEL_DOWNLOAD) {
                 val taskName = intent.getStringExtra(EXTRA_TASK_NAME)
                 taskName?.let {

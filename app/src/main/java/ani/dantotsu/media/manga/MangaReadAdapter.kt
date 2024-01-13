@@ -48,7 +48,9 @@ class MangaReadAdapter(
         val bind = ItemAnimeWatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
+
     private var nestedDialog: AlertDialog? = null
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
@@ -211,7 +213,8 @@ class MangaReadAdapter(
             dialogBinding.animeScanlatorTop.setOnClickListener {
                 val dialogView2 =
                     LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
-                val checkboxContainer = dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
+                val checkboxContainer =
+                    dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
 
                 // Dynamically add checkboxes
                 options.forEach { option ->
@@ -248,12 +251,12 @@ class MangaReadAdapter(
                 dialog.window?.setDimAmount(0.8f)
             }
 
-            nestedDialog = AlertDialog.Builder(fragment.requireContext() , R.style.MyPopup)
+            nestedDialog = AlertDialog.Builder(fragment.requireContext(), R.style.MyPopup)
                 .setTitle("Options")
                 .setView(dialogView)
                 .setPositiveButton("OK") { _, _ ->
-                    if(run) fragment.onIconPressed(style, reversed)
-                    if (dialogBinding.downloadNo.text != "0"){
+                    if (run) fragment.onIconPressed(style, reversed)
+                    if (dialogBinding.downloadNo.text != "0") {
                         fragment.multiDownload(dialogBinding.downloadNo.text.toString().toInt())
                     }
                 }
@@ -293,6 +296,7 @@ class MangaReadAdapter(
                         0
                     )
                 }
+
                 val startChapter = MangaNameAdapter.findChapterNumber(names[limit * (position)])
                 val endChapter = MangaNameAdapter.findChapterNumber(names[last - 1])
                 val startChapterString = if (startChapter != null) {
@@ -425,7 +429,8 @@ class MangaReadAdapter(
                     parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
-                if (items > 1) binding?.animeSourceLanguageContainer?.visibility  =  View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility  =  View.GONE
+                if (items > 1) binding?.animeSourceLanguageContainer?.visibility =
+                    View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility = View.GONE
 
                 binding?.animeSourceLanguage?.setAdapter(adapter)
 

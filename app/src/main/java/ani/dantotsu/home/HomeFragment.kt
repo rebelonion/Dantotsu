@@ -358,11 +358,13 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     private fun setIncognito() {
         val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             ?.getBoolean("incognito", false) ?: false
-        if(incognito) {
-            val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
+        if (incognito) {
+            val uiSettings =
+                loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
             binding.incognitoTextView.visibility = View.VISIBLE
             if (!uiSettings.immersiveMode) {
                 binding.root.fitsSystemWindows = true
@@ -377,6 +379,7 @@ class HomeFragment : Fragment() {
             binding.incognitoTextView.visibility = View.GONE
         }
     }
+
     override fun onResume() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
         setIncognito()

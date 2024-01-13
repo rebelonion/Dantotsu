@@ -58,7 +58,7 @@ import uy.kohesive.injekt.api.get
 import kotlin.random.Random
 
 
-class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListener {
+class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListener {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@SettingsActivity)
     }
@@ -67,7 +67,8 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
     private val networkPreferences = Injekt.get<NetworkPreferences>()
     private var cursedCounter = 0
 
-    @OptIn(UnstableApi::class) @SuppressLint("SetTextI18n")
+    @OptIn(UnstableApi::class)
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
@@ -188,12 +189,14 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
                 "custom_theme_int",
                 Color.parseColor("#6200EE")
             )
+
             class CustomColorDialog : SimpleColorDialog() { //idk where to put it
                 override fun onPositiveButtonClick() {
                     restartApp()
                     super.onPositiveButtonClick()
                 }
             }
+
             val tag = "colorPicker"
             CustomColorDialog().title("Custom Theme")
                 .colorPreset(originalColor)
@@ -240,7 +243,10 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
             AlertDialog.Builder(this, R.style.DialogTheme).setTitle("Download Manager")
         var downloadManager = loadData<Int>("settings_download_manager") ?: 0
         binding.settingsDownloadManager.setOnClickListener {
-            val dialog = downloadManagerDialog.setSingleChoiceItems(managers, downloadManager) { dialog, count ->
+            val dialog = downloadManagerDialog.setSingleChoiceItems(
+                managers,
+                downloadManager
+            ) { dialog, count ->
                 downloadManager = count
                 saveData("settings_download_manager", downloadManager)
                 dialog.dismiss()
@@ -255,7 +261,11 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
                 .setPositiveButton("Yes") { dialog, _ ->
                     val downloadsManager = Injekt.get<DownloadsManager>()
                     downloadsManager.purgeDownloads(DownloadedType.Type.ANIME)
-                    DownloadService.sendRemoveAllDownloads(this, ExoplayerDownloadService::class.java, false)
+                    DownloadService.sendRemoveAllDownloads(
+                        this,
+                        ExoplayerDownloadService::class.java,
+                        false
+                    )
                     dialog.dismiss()
                 }
                 .setNegativeButton("No") { dialog, _ ->

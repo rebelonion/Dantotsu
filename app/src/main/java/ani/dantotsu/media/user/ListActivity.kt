@@ -22,7 +22,6 @@ import ani.dantotsu.databinding.ActivityListBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LangSet
-import ani.dantotsu.saveData
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager

@@ -20,6 +20,7 @@ import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
 import android.widget.GridView
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
@@ -76,7 +77,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
 
         val animeUserAvatar = view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
         animeUserAvatar.setSafeOnClickListener {
-            val dialogFragment = SettingsDialogFragment.newInstance2(SettingsDialogFragment.Companion.PageType2.OfflineMANGA)
+            val dialogFragment =
+                SettingsDialogFragment.newInstance2(SettingsDialogFragment.Companion.PageType2.OfflineMANGA)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
 
@@ -92,7 +94,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             override fun afterTextChanged(s: Editable?) {
             }
 
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int, ) {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -143,7 +145,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             adapter.notifyNewGrid()
         }
 
-        gridView = if(style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
+        gridView =
+            if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
         gridView.visibility = View.VISIBLE
         getDownloads()
 
@@ -173,17 +176,20 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         }
 
         val total = view.findViewById<TextView>(R.id.total)
-        total.text = if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
+        total.text =
+            if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
         gridView.setOnItemLongClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
-            val type: DownloadedType.Type = if (downloadManager.mangaDownloadedTypes.any { it.title == item.title }) {
-                DownloadedType.Type.MANGA
-            } else {
-                DownloadedType.Type.NOVEL
-            }
+            val type: DownloadedType.Type =
+                if (downloadManager.mangaDownloadedTypes.any { it.title == item.title }) {
+                    DownloadedType.Type.MANGA
+                } else {
+                    DownloadedType.Type.NOVEL
+                }
             // Alert dialog to confirm deletion
-            val builder = androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.MyPopup)
+            val builder =
+                androidx.appcompat.app.AlertDialog.Builder(requireContext(), R.style.MyPopup)
             builder.setTitle("Delete ${item.title}?")
             builder.setMessage("Are you sure you want to delete ${item.title}?")
             builder.setPositiveButton("Yes") { _, _ ->
@@ -194,7 +200,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             builder.setNegativeButton("No") { _, _ ->
                 // Do nothing
             }
-             val dialog = builder.show()
+            val dialog = builder.show()
             dialog.window?.setDimAmount(0.8f)
             true
         }
@@ -253,7 +259,12 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 // Implement behavior for different scroll states if needed
             }
 
-            override fun onScroll(view: AbsListView, firstVisibleItem: Int, visibleItemCount: Int, totalItemCount: Int) {
+            override fun onScroll(
+                view: AbsListView,
+                firstVisibleItem: Int,
+                visibleItemCount: Int,
+                totalItemCount: Int
+            ) {
                 val first = view.getChildAt(0)
                 val visibility = first != null && first.top < -height
                 scrollTop.visibility = if (visibility) View.VISIBLE else View.GONE
@@ -365,17 +376,40 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             val title = mediaModel.nameMAL ?: mediaModel.nameRomaji
             val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore
                 ?: 0) else mediaModel.userScore) / 10.0).toString()
-            val isOngoing = mediaModel.status == currActivity()!!.getString(R.string.status_releasing)
+            val isOngoing =
+                mediaModel.status == currActivity()!!.getString(R.string.status_releasing)
             val isUserScored = mediaModel.userScore != 0
             val readchapter = (mediaModel.userProgress ?: "~").toString()
             val totalchapter = "${mediaModel.manga?.totalChapters ?: "??"}"
             val chapters = " Chapters"
-            return OfflineMangaModel(title, score, totalchapter, readchapter, type, chapters, isOngoing, isUserScored, coverUri , bannerUri )
+            return OfflineMangaModel(
+                title,
+                score,
+                totalchapter,
+                readchapter,
+                type,
+                chapters,
+                isOngoing,
+                isUserScored,
+                coverUri,
+                bannerUri
+            )
         } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
             FirebaseCrashlytics.getInstance().recordException(e)
-            return OfflineMangaModel("unknown", "0", "??", "??","movie" ,"hmm", false, false, null , null)
+            return OfflineMangaModel(
+                "unknown",
+                "0",
+                "??",
+                "??",
+                "movie",
+                "hmm",
+                false,
+                false,
+                null,
+                null
+            )
         }
     }
 }

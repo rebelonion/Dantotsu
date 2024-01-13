@@ -29,8 +29,8 @@ class SubtitleDownloader {
 
 
                     val subtitleType = when {
-                        responseBody?.contains("[Script Info]") == true -> SubtitleType.ASS
-                        responseBody?.contains("WEBVTT") == true -> SubtitleType.VTT
+                        responseBody.contains("[Script Info]") == true -> SubtitleType.ASS
+                        responseBody.contains("WEBVTT") == true -> SubtitleType.VTT
                         else -> SubtitleType.SRT
                     }
 

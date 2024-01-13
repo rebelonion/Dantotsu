@@ -3,7 +3,6 @@ package ani.dantotsu.parsers
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.logger
 import ani.dantotsu.media.anime.AnimeNameAdapter
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode

@@ -1,7 +1,7 @@
 package ani.dantotsu.settings
 
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -9,25 +9,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ani.dantotsu.BottomSheetDialogFragment
-import ani.dantotsu.R
 import ani.dantotsu.MainActivity
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
 import ani.dantotsu.download.manga.OfflineMangaFragment
-import ani.dantotsu.loadImage
-import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.others.imagesearch.ImageSearchActivity
-import ani.dantotsu.setSafeOnClickListener
-import ani.dantotsu.startMainActivity
-import ani.dantotsu.currContext
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
 import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
+import ani.dantotsu.loadImage
 import ani.dantotsu.offline.OfflineFragment
+import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.imagesearch.ImageSearchActivity
+import ani.dantotsu.setSafeOnClickListener
+import ani.dantotsu.startMainActivity
 
-class   SettingsDialogFragment() : BottomSheetDialogFragment() {
+class SettingsDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!
 
@@ -36,8 +35,10 @@ class   SettingsDialogFragment() : BottomSheetDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageType = arguments?.getSerializable("pageType") as? PageType ?: PageType.HOME
-        pageType2 = arguments?.getSerializable("pageType2") as? PageType2 ?: PageType2.OfflineMANGA // changed when offline home page comes
+        pageType2 = arguments?.getSerializable("pageType2") as? PageType2
+            ?: PageType2.OfflineMANGA // changed when offline home page comes
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -81,8 +82,8 @@ class   SettingsDialogFragment() : BottomSheetDialogFragment() {
             ) ?: false
 
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
-             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-               ?.putBoolean("incognito", isChecked)?.apply()
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                ?.putBoolean("incognito", isChecked)?.apply()
         }
         binding.settingsExtensionSettings.setSafeOnClickListener {
             startActivity(Intent(activity, ExtensionsActivity::class.java))
@@ -102,7 +103,8 @@ class   SettingsDialogFragment() : BottomSheetDialogFragment() {
         }
 
         binding.settingsDownloads.isChecked =
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean("offlineMode", false) ?: false
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("offlineMode", false) ?: false
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
 
             if (!isChecked) {
@@ -112,11 +114,16 @@ class   SettingsDialogFragment() : BottomSheetDialogFragment() {
                         intent.putExtra("FRAGMENT_CLASS_NAME", MangaFragment::class.java.name)
                         startActivity(intent)
                     }
+
                     PageType2.OfflineHOME -> { //no offline home for now
                         val intent = Intent(activity, MainActivity::class.java)
-                        intent.putExtra("FRAGMENT_CLASS_NAME", if (Anilist.token != null) HomeFragment::class.java.name else LoginFragment::class.java.name)
+                        intent.putExtra(
+                            "FRAGMENT_CLASS_NAME",
+                            if (Anilist.token != null) HomeFragment::class.java.name else LoginFragment::class.java.name
+                        )
                         startActivity(intent)
                     }
+
                     PageType2.OfflineANIME -> { //no offline anime for now
                         val intent = Intent(activity, MainActivity::class.java)
                         intent.putExtra("FRAGMENT_CLASS_NAME", AnimeFragment::class.java.name)
@@ -127,14 +134,19 @@ class   SettingsDialogFragment() : BottomSheetDialogFragment() {
                 when (pageType) {
                     PageType.MANGA -> {
                         val intent = Intent(activity, NoInternet::class.java)
-                        intent.putExtra("FRAGMENT_CLASS_NAME", OfflineMangaFragment::class.java.name)
+                        intent.putExtra(
+                            "FRAGMENT_CLASS_NAME",
+                            OfflineMangaFragment::class.java.name
+                        )
                         startActivity(intent)
                     }
-                     PageType.ANIME -> {
-                            val intent = Intent(activity, NoInternet::class.java)
-                            intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
-                            startActivity(intent)
-                        }
+
+                    PageType.ANIME -> {
+                        val intent = Intent(activity, NoInternet::class.java)
+                        intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
+                        startActivity(intent)
+                    }
+
                     PageType.HOME -> {
                         val intent = Intent(activity, NoInternet::class.java)
                         intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
@@ -145,8 +157,8 @@ class   SettingsDialogFragment() : BottomSheetDialogFragment() {
             dismiss()
             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
                 ?.putBoolean("offlineMode", isChecked)?.apply()
-            }
         }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -157,9 +169,11 @@ class   SettingsDialogFragment() : BottomSheetDialogFragment() {
         enum class PageType {
             MANGA, ANIME, HOME
         }
+
         enum class PageType2 {
             OfflineMANGA, OfflineANIME, OfflineHOME
         }
+
         fun newInstance(pageType: PageType): SettingsDialogFragment {
             val fragment = SettingsDialogFragment()
             val args = Bundle()
@@ -167,6 +181,7 @@ class   SettingsDialogFragment() : BottomSheetDialogFragment() {
             fragment.arguments = args
             return fragment
         }
+
         fun newInstance2(pageType: PageType2): SettingsDialogFragment {
             val fragment = SettingsDialogFragment()
             val args = Bundle()

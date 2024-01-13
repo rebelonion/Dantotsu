@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat.getString
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
-import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.database.StandaloneDatabaseProvider
 import androidx.media3.datasource.DataSource
@@ -31,7 +30,6 @@ import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.media3.exoplayer.scheduler.Requirements
-import androidx.media3.ui.TrackSelectionDialogBuilder
 import ani.dantotsu.R
 import ani.dantotsu.defaultHeaders
 import ani.dantotsu.download.DownloadedType
@@ -246,7 +244,7 @@ object Helper {
             .queryDownload(title, episode, DownloadedType.Type.ANIME)
 
         if (downloadCheck) {
-            AlertDialog.Builder(context , R.style.MyPopup)
+            AlertDialog.Builder(context, R.style.MyPopup)
                 .setTitle("Download Exists")
                 .setMessage("A download for this episode already exists. Do you want to overwrite it?")
                 .setPositiveButton("Yes") { _, _ ->

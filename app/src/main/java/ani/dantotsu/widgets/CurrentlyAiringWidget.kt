@@ -20,7 +20,11 @@ import ani.dantotsu.R
  * App Widget Configuration implemented in [CurrentlyAiringWidgetConfigureActivity]
  */
 class CurrentlyAiringWidget : AppWidgetProvider() {
-    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray) {
+    override fun onUpdate(
+        context: Context,
+        appWidgetManager: AppWidgetManager,
+        appWidgetIds: IntArray
+    ) {
         appWidgetIds.forEach { appWidgetId ->
             val intent = Intent(context, CurrentlyAiringRemoteViewsService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
@@ -36,6 +40,7 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds)
     }
+
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
@@ -51,6 +56,7 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
     override fun onDisabled(context: Context) {
         super.onDisabled(context)
     }
+
     companion object {
         fun updateAppWidget(
             context: Context,
@@ -60,10 +66,15 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
         ) {
             // Create an intent to launch the configuration activity when the widget is clicked
             val intent = Intent(context, CurrentlyAiringWidgetConfigureActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+            val pendingIntent =
+                PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
             // Get the gradient drawable resource and update its start color with the user-selected color
-            val gradientDrawable = ResourcesCompat.getDrawable(context.resources, R.drawable.gradient_background, null) as GradientDrawable
+            val gradientDrawable = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.gradient_background,
+                null
+            ) as GradientDrawable
             gradientDrawable.colors = intArrayOf(color, Color.GRAY) // End color is gray.
 
             // Create the RemoteViews object and set the background

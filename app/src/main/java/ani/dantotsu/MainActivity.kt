@@ -11,12 +11,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
 import androidx.activity.addCallback
 import androidx.activity.viewModels
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
@@ -26,12 +28,14 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.Download
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ani.dantotsu.App.Companion.context
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
 import ani.dantotsu.databinding.SplashScreenBinding
+import ani.dantotsu.download.video.Helper
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
@@ -46,6 +50,7 @@ import ani.dantotsu.themes.ThemeManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -61,6 +66,7 @@ class MainActivity : AppCompatActivity() {
     private var uiSettings = UserInterfaceSettings()
 
 
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
         LangSet.setLocale(this)
@@ -149,48 +155,49 @@ class MainActivity : AppCompatActivity() {
             }
         }
         if (!isOnline(this)) {
-    snackString(this@MainActivity.getString(R.string.no_internet_connection))
-    startActivity(Intent(this, NoInternet::class.java))
-    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        .edit()
-        .putBoolean("offlineMode", true)
-        .apply()} else {
-    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        .edit()
-        .putBoolean("offlineMode", false)
-        .apply()
-    val model: AnilistHomeViewModel by viewModels()
-    model.genres.observe(this) { it ->
-        if (it != null) {
-            if (it) {
-                val navbar = binding.includedNavbar.navbar
-                bottomBar = navbar
-                navbar.visibility = View.VISIBLE
-                binding.mainProgressBar.visibility = View.GONE
-                val mainViewPager = binding.viewpager
-                mainViewPager.isUserInputEnabled = false
-                mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
-                mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
-                navbar.setOnTabSelectListener(object :
-                    AnimatedBottomBar.OnTabSelectListener {
-                    override fun onTabSelected(
-                        lastIndex: Int,
-                        lastTab: AnimatedBottomBar.Tab?,
-                        newIndex: Int,
-                        newTab: AnimatedBottomBar.Tab
-                    ) {
-                        navbar.animate().translationZ(12f).setDuration(200).start()
-                        selectedOption = newIndex
-                        mainViewPager.setCurrentItem(newIndex, false)
+            snackString(this@MainActivity.getString(R.string.no_internet_connection))
+            startActivity(Intent(this, NoInternet::class.java))
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean("offlineMode", true)
+                .apply()
+        } else {
+            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                .edit()
+                .putBoolean("offlineMode", false)
+                .apply()
+            val model: AnilistHomeViewModel by viewModels()
+            model.genres.observe(this) { it ->
+                if (it != null) {
+                    if (it) {
+                        val navbar = binding.includedNavbar.navbar
+                        bottomBar = navbar
+                        navbar.visibility = View.VISIBLE
+                        binding.mainProgressBar.visibility = View.GONE
+                        val mainViewPager = binding.viewpager
+                        mainViewPager.isUserInputEnabled = false
+                        mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+                        mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
+                        navbar.setOnTabSelectListener(object :
+                            AnimatedBottomBar.OnTabSelectListener {
+                            override fun onTabSelected(
+                                lastIndex: Int,
+                                lastTab: AnimatedBottomBar.Tab?,
+                                newIndex: Int,
+                                newTab: AnimatedBottomBar.Tab
+                            ) {
+                                navbar.animate().translationZ(12f).setDuration(200).start()
+                                selectedOption = newIndex
+                                mainViewPager.setCurrentItem(newIndex, false)
+                            }
+                        })
+                        navbar.selectTabAt(selectedOption)
+                        mainViewPager.post { mainViewPager.setCurrentItem(selectedOption, false) }
+                    } else {
+                        binding.mainProgressBar.visibility = View.GONE
                     }
-                })
-                navbar.selectTabAt(selectedOption)
-                mainViewPager.post { mainViewPager.setCurrentItem(selectedOption, false) }
-            } else {
-                binding.mainProgressBar.visibility = View.GONE
-             }
+                }
             }
-           }
             //Load Data
             if (!load) {
                 scope.launch(Dispatchers.IO) {
@@ -249,7 +256,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         GlobalScope.launch(Dispatchers.IO) {
-                   val index = Helper.downloadManager(this@MainActivity).downloadIndex
+            val index = Helper.downloadManager(this@MainActivity).downloadIndex
             val downloadCursor = index.getDownloads()
             while (downloadCursor.moveToNext()) {
                 val download = downloadCursor.download
@@ -266,8 +273,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
-
 
     }
 

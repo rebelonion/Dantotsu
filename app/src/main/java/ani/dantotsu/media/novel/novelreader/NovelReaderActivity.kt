@@ -148,7 +148,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
             Toast.makeText(this, "Please update WebView from PlayStore", Toast.LENGTH_LONG).show()
             //open playstore
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")
+            intent.data =
+                Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")
             startActivity(intent)
             //stop reader
             finish()
@@ -270,7 +271,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         binding.bookReader.getAppearance {
             currentTheme = it
             themes.add(0, it)
-            settings.defaultLN = loadData("${sanitizedBookId}_current_settings") ?: settings.defaultLN
+            settings.defaultLN =
+                loadData("${sanitizedBookId}_current_settings") ?: settings.defaultLN
             applySettings()
         }
 
@@ -351,7 +353,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         saveData("${sanitizedBookId}_current_settings", settings.defaultLN)
         hideBars()
 
-        if(settings.defaultLN.useOledTheme) {
+        if (settings.defaultLN.useOledTheme) {
             themes.forEach { theme ->
                 theme.darkBg = Color.parseColor("#000000")
             }

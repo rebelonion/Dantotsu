@@ -34,7 +34,7 @@ abstract class NovelParser : BaseParser() {
         //val query = mediaObj.name ?: mediaObj.nameRomaji
         //return search(query).sortByVolume(query)
         val results: List<ShowResponse>
-        return if(mediaObj.name != null) {
+        return if (mediaObj.name != null) {
             val query = mediaObj.name
             results = search(query).sortByVolume(query)
             results.ifEmpty {

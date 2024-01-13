@@ -17,7 +17,6 @@ import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.snackString
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -317,6 +316,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         }
         return ret
     }
+
     suspend fun imageList(chapterLink: String, sChapter: SChapter): List<ImageData> {
         val source = try {
             extension.sources[sourceLanguage]
@@ -329,7 +329,8 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             try {
                 println("source.name " + source.name)
                 val res = source.getPageList(sChapter)
-                val reIndexedPages = res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
+                val reIndexedPages =
+                    res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
 
                 val semaphore = Semaphore(5)
                 val deferreds = reIndexedPages.map { page ->
@@ -367,7 +368,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 // Convert InputStream to Bitmap
                 val bitmap = BitmapFactory.decodeStream(inputStream)
 
-                inputStream?.close()
+                inputStream.close()
                 ani.dantotsu.media.manga.saveImage(
                     bitmap,
                     context.contentResolver,
@@ -409,7 +410,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                     )
                 }
 
-                inputStream?.close()
+                inputStream.close()
             } catch (e: Exception) {
                 // Handle any exceptions
                 println("An error occurred: ${e.message}")
@@ -628,7 +629,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         if (format == null) {
             logger("Unknown video format: $videoUrl")
             //FirebaseCrashlytics.getInstance()
-             //   .recordException(Exception("Unknown video format: $videoUrl"))
+            //   .recordException(Exception("Unknown video format: $videoUrl"))
             format = VideoType.CONTAINER
         }
         val headersMap: Map<String, String> =
@@ -706,7 +707,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         return Subtitle(track.lang, track.url, type ?: SubtitleType.SRT)
     }
 
-    private fun findSubtitleType(url: String): SubtitleType? {
+    private fun findSubtitleType(url: String): SubtitleType {
         // First, try to determine the type based on the URL file extension
         val type: SubtitleType = when {
             url.endsWith(".vtt", true) -> SubtitleType.VTT

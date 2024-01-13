@@ -50,7 +50,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
     private val extensionsAdapter = AnimeExtensionsAdapter(
         { pkg ->
-            val name= pkg.name
+            val name = pkg.name
             val changeUIVisibility: (Boolean) -> Unit = { show ->
                 val activity = requireActivity() as ExtensionsActivity
                 val visibility = if (show) View.VISIBLE else View.GONE
@@ -58,7 +58,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 activity.findViewById<TabLayout>(R.id.tabLayout).visibility = visibility
                 activity.findViewById<TextInputLayout>(R.id.searchView).visibility = visibility
                 activity.findViewById<ImageView>(R.id.languageselect).visibility = visibility
-                activity.findViewById<TextView>(R.id.extensions).text = if (show) getString(R.string.extensions) else name
+                activity.findViewById<TextView>(R.id.extensions).text =
+                    if (show) getString(R.string.extensions) else name
                 activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
                     if (show) View.GONE else View.VISIBLE
             }
@@ -67,7 +68,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             if (allSettings.isNotEmpty()) {
                 var selectedSetting = allSettings[0]
                 if (allSettings.size > 1) {
-                    val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
+                    val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                        .toTypedArray()
                     var selectedIndex = 0
                     val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                         .setTitle("Select a Source")

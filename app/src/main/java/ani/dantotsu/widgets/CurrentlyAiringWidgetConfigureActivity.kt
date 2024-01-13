@@ -57,7 +57,7 @@ class CurrentlyAiringWidgetConfigureActivity : Activity() {
         binding = CurrentlyAiringWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        appWidgetText = binding.appwidgetText as EditText
+        appWidgetText = binding.appwidgetText
         binding.addButton.setOnClickListener(onClickListener)
 
         // Find the widget id from the intent.

@@ -14,10 +14,9 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
+import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
-import ani.dantotsu.databinding.DialogLayoutBinding
-import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
@@ -45,6 +44,7 @@ class AnimeWatchAdapter(
         val bind = ItemAnimeWatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
+
     private var nestedDialog: AlertDialog? = null
 
 
@@ -234,11 +234,11 @@ class AnimeWatchAdapter(
             dialogBinding.animeScanlatorContainer.visibility = View.GONE
             dialogBinding.animeDownloadContainer.visibility = View.GONE
 
-            nestedDialog = AlertDialog.Builder(fragment.requireContext() , R.style.MyPopup)
+            nestedDialog = AlertDialog.Builder(fragment.requireContext(), R.style.MyPopup)
                 .setTitle("Options")
                 .setView(dialogView)
                 .setPositiveButton("OK") { _, _ ->
-                   if (run) fragment.onIconPressed(style, reversed)
+                    if (run) fragment.onIconPressed(style, reversed)
                 }
                 .setNegativeButton("Cancel") { _, _ ->
                 }
@@ -311,74 +311,74 @@ class AnimeWatchAdapter(
     }
 
     @SuppressLint("SetTextI18n")
-fun handleEpisodes() {
-    val binding = _binding
-    if (binding != null) {
-        if (media.anime?.episodes != null) {
-            val episodes = media.anime.episodes!!.keys.toTypedArray()
+    fun handleEpisodes() {
+        val binding = _binding
+        if (binding != null) {
+            if (media.anime?.episodes != null) {
+                val episodes = media.anime.episodes!!.keys.toTypedArray()
 
-            val anilistEp = (media.userProgress ?: 0).plus(1)
-            val appEp = loadData<String>("${media.id}_current_ep")?.toIntOrNull() ?: 1
+                val anilistEp = (media.userProgress ?: 0).plus(1)
+                val appEp = loadData<String>("${media.id}_current_ep")?.toIntOrNull() ?: 1
 
-            var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
-            if (episodes.contains(continueEp)) {
-                binding.animeSourceContinue.visibility = View.VISIBLE
-                handleProgress(
-                    binding.itemEpisodeProgressCont,
-                    binding.itemEpisodeProgress,
-                    binding.itemEpisodeProgressEmpty,
-                    media.id,
-                    continueEp
-                )
-                if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight > fragment.playerSettings.watchPercentage) {
-                    val e = episodes.indexOf(continueEp)
-                    if (e != -1 && e + 1 < episodes.size) {
-                        continueEp = episodes[e + 1]
-                        handleProgress(
-                            binding.itemEpisodeProgressCont,
-                            binding.itemEpisodeProgress,
-                            binding.itemEpisodeProgressEmpty,
-                            media.id,
-                            continueEp
-                        )
+                var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
+                if (episodes.contains(continueEp)) {
+                    binding.animeSourceContinue.visibility = View.VISIBLE
+                    handleProgress(
+                        binding.itemEpisodeProgressCont,
+                        binding.itemEpisodeProgress,
+                        binding.itemEpisodeProgressEmpty,
+                        media.id,
+                        continueEp
+                    )
+                    if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight > fragment.playerSettings.watchPercentage) {
+                        val e = episodes.indexOf(continueEp)
+                        if (e != -1 && e + 1 < episodes.size) {
+                            continueEp = episodes[e + 1]
+                            handleProgress(
+                                binding.itemEpisodeProgressCont,
+                                binding.itemEpisodeProgress,
+                                binding.itemEpisodeProgressEmpty,
+                                media.id,
+                                continueEp
+                            )
+                        }
                     }
-                }
-                val ep = media.anime.episodes!![continueEp]!!
+                    val ep = media.anime.episodes!![continueEp]!!
 
-                val cleanedTitle = ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
+                    val cleanedTitle = ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
 
-                binding.itemEpisodeImage.loadImage(
-                    ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
-                )
-                if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
-                binding.animeSourceContinueText.text =
-                    currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${"\n$cleanedTitle"}"
-                binding.animeSourceContinue.setOnClickListener {
-                    fragment.onEpisodeClick(continueEp)
-                }
-                if (fragment.continueEp) {
-                    if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight < fragment.playerSettings.watchPercentage) {
-                        binding.animeSourceContinue.performClick()
-                        fragment.continueEp = false
+                    binding.itemEpisodeImage.loadImage(
+                        ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
+                    )
+                    if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
+                    binding.animeSourceContinueText.text =
+                        currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${"\n$cleanedTitle"}"
+                    binding.animeSourceContinue.setOnClickListener {
+                        fragment.onEpisodeClick(continueEp)
                     }
+                    if (fragment.continueEp) {
+                        if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight < fragment.playerSettings.watchPercentage) {
+                            binding.animeSourceContinue.performClick()
+                            fragment.continueEp = false
+                        }
+                    }
+                } else {
+                    binding.animeSourceContinue.visibility = View.GONE
                 }
+
+                binding.animeSourceProgressBar.visibility = View.GONE
+                if (media.anime.episodes!!.isNotEmpty())
+                    binding.animeSourceNotFound.visibility = View.GONE
+                else
+                    binding.animeSourceNotFound.visibility = View.VISIBLE
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
-            }
-
-            binding.animeSourceProgressBar.visibility = View.GONE
-            if (media.anime.episodes!!.isNotEmpty())
                 binding.animeSourceNotFound.visibility = View.GONE
-            else
-                binding.animeSourceNotFound.visibility = View.VISIBLE
-        } else {
-            binding.animeSourceContinue.visibility = View.GONE
-            binding.animeSourceNotFound.visibility = View.GONE
-            clearChips()
-            binding.animeSourceProgressBar.visibility = View.VISIBLE
+                clearChips()
+                binding.animeSourceProgressBar.visibility = View.VISIBLE
+            }
         }
     }
-}
 
     private fun setLanguageList(lang: Int, source: Int) {
         val binding = _binding
@@ -401,7 +401,8 @@ fun handleEpisodes() {
                     parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
-                if (items > 1) binding?.animeSourceLanguageContainer?.visibility  =  View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility  =  View.GONE
+                if (items > 1) binding?.animeSourceLanguageContainer?.visibility =
+                    View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility = View.GONE
 
                 binding?.animeSourceLanguage?.setAdapter(adapter)
 

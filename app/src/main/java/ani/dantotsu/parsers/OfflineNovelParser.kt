@@ -9,7 +9,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 
-class OfflineNovelParser: NovelParser() {
+class OfflineNovelParser : NovelParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()
 
     override val hostUrl: String = "Offline"
@@ -31,7 +31,7 @@ class OfflineNovelParser: NovelParser() {
                 if (it.isDirectory) {
                     val chapter = Book(
                         it.name,
-                        it.absolutePath +  "/cover.jpg",
+                        it.absolutePath + "/cover.jpg",
                         null,
                         listOf(it.absolutePath + "/0.epub")
                     )
@@ -72,7 +72,8 @@ class OfflineNovelParser: NovelParser() {
                     }
                 }
             }
-            val cover = currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Dantotsu/Novel/$title/cover.jpg"
+            val cover =
+                currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Dantotsu/Novel/$title/cover.jpg"
             names.forEach {
                 returnList.add(ShowResponse(it, it, cover))
             }

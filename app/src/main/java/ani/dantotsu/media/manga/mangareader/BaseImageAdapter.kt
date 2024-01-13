@@ -89,7 +89,8 @@ abstract class BaseImageAdapter(
             }
         } else {
             val detector = GestureDetectorCompat(view.context, object : GesturesListener() {
-                override fun onSingleClick(event: MotionEvent) = activity.handleController(event = event)
+                override fun onSingleClick(event: MotionEvent) =
+                    activity.handleController(event = event)
             })
             view.findViewById<View>(R.id.imgProgCover).apply {
                 setOnTouchListener { _, event ->

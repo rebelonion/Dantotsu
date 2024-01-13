@@ -197,12 +197,15 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     override fun onScanlatorsSelected() {
         updateChapters()
     }
+
     fun multiDownload(n: Int) {
         //get last viewed chapter
         val selected = media.userProgress
         val chapters = media.manga?.chapters?.values?.toList()
         //filter by selected language
-        val progressChapterIndex = (chapters?.indexOfFirst { MangaNameAdapter.findChapterNumber(it.number)?.toInt() == selected } ?: 0) + 1
+        val progressChapterIndex = (chapters?.indexOfFirst {
+            MangaNameAdapter.findChapterNumber(it.number)?.toInt() == selected
+        } ?: 0) + 1
 
         if (progressChapterIndex < 0 || n < 1 || chapters == null) return
 
@@ -363,7 +366,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         if (allSettings.isNotEmpty()) {
             var selectedSetting = allSettings[0]
             if (allSettings.size > 1) {
-                val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
+                val names =
+                    allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
                 var selectedIndex = 0
                 val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                     .setTitle("Select a Source")

@@ -98,7 +98,8 @@ class MangaExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = if (isNsfwEnabled) filteredExtensions else filteredExtensions.filterNot { it.isNsfw }
+        val filternfsw =
+            if (isNsfwEnabled) filteredExtensions else filteredExtensions.filterNot { it.isNsfw }
         return try {
             val sublist = filternfsw.subList(
                 fromIndex = position,
@@ -192,6 +193,7 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
         }
 
         val extensionIconImageView: ImageView = binding.extensionIconImageView
+
         @SuppressLint("SetTextI18n")
         fun bind(extension: MangaExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""

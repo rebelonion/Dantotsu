@@ -144,8 +144,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
 
     fun setIncognito() {
         val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                ?.getBoolean("incognito", false) ?: false
-        if(incognito) {
+            ?.getBoolean("incognito", false) ?: false
+        if (incognito) {
             binding.incognitoTextView.visibility = View.VISIBLE
             if (!uiSettings.immersiveMode) {
                 binding.root.fitsSystemWindows = true

@@ -9,9 +9,7 @@ import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -117,17 +115,17 @@ class ExtensionsActivity : AppCompatActivity() {
 
         initActivity(this)
         binding.languageselect.visibility = View.GONE
-/* TODO
-        binding.languageselect.setOnClickListener {
-            val popup = PopupMenu(this, it)
-            popup.inflate(R.menu.launguage_selector_menu)
-            popup.setOnMenuItemClickListener { menuItem ->
-                true
-            }
-            popup.setOnDismissListener {
-            }
-            popup.show()
-        }*/
+        /* TODO
+                binding.languageselect.setOnClickListener {
+                    val popup = PopupMenu(this, it)
+                    popup.inflate(R.menu.launguage_selector_menu)
+                    popup.setOnMenuItemClickListener { menuItem ->
+                        true
+                    }
+                    popup.setOnDismissListener {
+                    }
+                    popup.show()
+                }*/
         binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
             bottomMargin = navBarHeight

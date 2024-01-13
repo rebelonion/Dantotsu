@@ -4,17 +4,16 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
-import androidx.core.net.toUri
 import ani.dantotsu.R
 import ani.dantotsu.logger
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class CurrentlyAiringRemoteViewsFactory(private val context: Context, intent: Intent) : RemoteViewsService.RemoteViewsFactory {
+class CurrentlyAiringRemoteViewsFactory(private val context: Context, intent: Intent) :
+    RemoteViewsService.RemoteViewsFactory {
     private var widgetItems = mutableListOf<WidgetItem>()
 
     override fun onCreate() {
@@ -22,7 +21,11 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context, intent: In
         widgetItems.clear()
         logger("CurrentlyAiringRemoteViewsFactory onCreate")
         widgetItems = List(4) {
-            WidgetItem("Show $it", "$it days $it hours $it minutes", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg")
+            WidgetItem(
+                "Show $it",
+                "$it days $it hours $it minutes",
+                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
+            )
         }.toMutableList()
     }
 
@@ -30,11 +33,41 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context, intent: In
         // 4 items for testing
         logger("CurrentlyAiringRemoteViewsFactory onDataSetChanged")
         widgetItems.clear()
-        widgetItems.add(WidgetItem("Show 1", "1 day 2 hours 3 minutes", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"))
-        widgetItems.add(WidgetItem("Show 2", "2 days 3 hours 4 minutes", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"))
-        widgetItems.add(WidgetItem("Show 3", "3 days 4 hours 5 minutes", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"))
-        widgetItems.add(WidgetItem("Show 4", "4 days 5 hours 6 minutes", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"))
-        widgetItems.add(WidgetItem("Show 5", "5 days 6 hours 7 minutes", "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"))
+        widgetItems.add(
+            WidgetItem(
+                "Show 1",
+                "1 day 2 hours 3 minutes",
+                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
+            )
+        )
+        widgetItems.add(
+            WidgetItem(
+                "Show 2",
+                "2 days 3 hours 4 minutes",
+                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
+            )
+        )
+        widgetItems.add(
+            WidgetItem(
+                "Show 3",
+                "3 days 4 hours 5 minutes",
+                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
+            )
+        )
+        widgetItems.add(
+            WidgetItem(
+                "Show 4",
+                "4 days 5 hours 6 minutes",
+                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
+            )
+        )
+        widgetItems.add(
+            WidgetItem(
+                "Show 5",
+                "5 days 6 hours 7 minutes",
+                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
+            )
+        )
     }
 
     override fun onDestroy() {

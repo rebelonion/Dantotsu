@@ -39,10 +39,11 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
     private lateinit var extensionsRecyclerView: RecyclerView
     val skipIcons = loadData("skip_extension_icons") ?: false
     private val novelExtensionManager: NovelExtensionManager = Injekt.get()
-    private val extensionsAdapter = NovelExtensionsAdapter({ pkg ->
-        Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
-            .show()
-    },
+    private val extensionsAdapter = NovelExtensionsAdapter(
+        { pkg ->
+            Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
+                .show()
+        },
         { pkg, forceDelete ->
             if (isAdded) {  // Check if the fragment is currently added to its activity
                 val context = requireContext()  // Store context in a variable

@@ -42,7 +42,11 @@ class NovelResponseAdapter(
             .into(binding.itemEpisodeImage)
 
         val typedValue = TypedValue()
-        fragment.requireContext().theme?.resolveAttribute(com.google.android.material.R.attr.colorOnBackground, typedValue, true)
+        fragment.requireContext().theme?.resolveAttribute(
+            com.google.android.material.R.attr.colorOnBackground,
+            typedValue,
+            true
+        )
         val color = typedValue.data
 
         binding.itemEpisodeTitle.text = novel.name
@@ -98,14 +102,19 @@ class NovelResponseAdapter(
         }
 
         binding.root.setOnLongClickListener {
-            val builder = androidx.appcompat.app.AlertDialog.Builder(fragment.requireContext(), R.style.DialogTheme)
+            val builder = androidx.appcompat.app.AlertDialog.Builder(
+                fragment.requireContext(),
+                R.style.DialogTheme
+            )
             builder.setTitle("Delete ${novel.name}?")
             builder.setMessage("Are you sure you want to delete ${novel.name}?")
             builder.setPositiveButton("Yes") { _, _ ->
                 downloadedCheckCallback.deleteDownload(novel)
                 deleteDownload(novel.link)
                 snackString("Deleted ${novel.name}")
-                if (binding.itemEpisodeFiller.text.toString().contains("Download", ignoreCase = true)) {
+                if (binding.itemEpisodeFiller.text.toString()
+                        .contains("Download", ignoreCase = true)
+                ) {
                     binding.itemEpisodeFiller.text = ""
                 }
             }
