@@ -31,11 +31,10 @@ class OfflineFragment : Fragment() {
         offline = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             ?.getBoolean("offlineMode", false) ?: false
         binding.noInternet.text =
-            if (!isOnline(requireContext())) getString(R.string.no_internet) else "OFFLINE MODE"
+            if (offline) "Offline Mode" else getString(R.string.no_internet)
+        binding.refreshButton.visibility = if (offline) View.GONE else View.VISIBLE
         binding.refreshButton.setOnClickListener {
-            println("Offline: $offline")
-            println("Online: ${isOnline(requireContext())}")
-            if (isOnline(requireContext()) && !offline) {
+            if (isOnline(requireContext())) {
                 startMainActivity(requireActivity())
             }
         }

@@ -154,96 +154,104 @@ class MainActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
         }
+        val offline = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                .getBoolean("offlineMode", false)
         if (!isOnline(this)) {
             snackString(this@MainActivity.getString(R.string.no_internet_connection))
             startActivity(Intent(this, NoInternet::class.java))
         } else {
-            val model: AnilistHomeViewModel by viewModels()
-            model.genres.observe(this) { it ->
-                if (it != null) {
-                    if (it) {
-                        val navbar = binding.includedNavbar.navbar
-                        bottomBar = navbar
-                        navbar.visibility = View.VISIBLE
-                        binding.mainProgressBar.visibility = View.GONE
-                        val mainViewPager = binding.viewpager
-                        mainViewPager.isUserInputEnabled = false
-                        mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
-                        mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
-                        navbar.setOnTabSelectListener(object :
-                            AnimatedBottomBar.OnTabSelectListener {
-                            override fun onTabSelected(
-                                lastIndex: Int,
-                                lastTab: AnimatedBottomBar.Tab?,
-                                newIndex: Int,
-                                newTab: AnimatedBottomBar.Tab
-                            ) {
-                                navbar.animate().translationZ(12f).setDuration(200).start()
-                                selectedOption = newIndex
-                                mainViewPager.setCurrentItem(newIndex, false)
-                            }
-                        })
-                        navbar.selectTabAt(selectedOption)
-                        mainViewPager.post { mainViewPager.setCurrentItem(selectedOption, false) }
-                    } else {
-                        binding.mainProgressBar.visibility = View.GONE
-                    }
-                }
+            if (offline){
+                snackString(this@MainActivity.getString(R.string.no_internet_connection))
+                startActivity(Intent(this, NoInternet::class.java))
             }
-            //Load Data
-            if (!load) {
-                scope.launch(Dispatchers.IO) {
-                    model.loadMain(this@MainActivity)
-                    val id = intent.extras?.getInt("mediaId", 0)
-                    val isMAL = intent.extras?.getBoolean("mal") ?: false
-                    val cont = intent.extras?.getBoolean("continue") ?: false
-                    if (id != null && id != 0) {
-                        val media = withContext(Dispatchers.IO) {
-                            Anilist.query.getMedia(id, isMAL)
-                        }
-                        if (media != null) {
-                            media.cameFromContinue = cont
-                            startActivity(
-                                Intent(this@MainActivity, MediaDetailsActivity::class.java)
-                                    .putExtra("media", media as Serializable)
-                            )
+            else {
+                val model: AnilistHomeViewModel by viewModels()
+                model.genres.observe(this) { it ->
+                    if (it != null) {
+                        if (it) {
+                            val navbar = binding.includedNavbar.navbar
+                            bottomBar = navbar
+                            navbar.visibility = View.VISIBLE
+                            binding.mainProgressBar.visibility = View.GONE
+                            val mainViewPager = binding.viewpager
+                            mainViewPager.isUserInputEnabled = false
+                            mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+                            mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
+                            navbar.setOnTabSelectListener(object :
+                                    AnimatedBottomBar.OnTabSelectListener {
+                                override fun onTabSelected(
+                                        lastIndex: Int,
+                                        lastTab: AnimatedBottomBar.Tab?,
+                                        newIndex: Int,
+                                        newTab: AnimatedBottomBar.Tab
+                                ) {
+                                    navbar.animate().translationZ(12f).setDuration(200).start()
+                                    selectedOption = newIndex
+                                    mainViewPager.setCurrentItem(newIndex, false)
+                                }
+                            })
+                            navbar.selectTabAt(selectedOption)
+                            mainViewPager.post { mainViewPager.setCurrentItem(selectedOption, false) }
                         } else {
-                            snackString(this@MainActivity.getString(R.string.anilist_not_found))
+                            binding.mainProgressBar.visibility = View.GONE
                         }
                     }
-                    delay(500)
-                    startSubscription()
                 }
-                load = true
-            }
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                if (loadData<Boolean>("allow_opening_links", this) != true) {
-                    CustomBottomDialog.newInstance().apply {
-                        title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
-                        val md = "Open settings & click +Add Links & select Anilist & Mal urls"
-                        addView(TextView(this@MainActivity).apply {
-                            val markWon =
-                                Markwon.builder(this@MainActivity)
-                                    .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
-                            markWon.setMarkdown(this, md)
-                        })
-
-                        setNegativeButton(this@MainActivity.getString(R.string.no)) {
-                            saveData("allow_opening_links", true, this@MainActivity)
-                            dismiss()
-                        }
-
-                        setPositiveButton(this@MainActivity.getString(R.string.yes)) {
-                            saveData("allow_opening_links", true, this@MainActivity)
-                            tryWith(true) {
+                //Load Data
+                if (!load) {
+                    scope.launch(Dispatchers.IO) {
+                        model.loadMain(this@MainActivity)
+                        val id = intent.extras?.getInt("mediaId", 0)
+                        val isMAL = intent.extras?.getBoolean("mal") ?: false
+                        val cont = intent.extras?.getBoolean("continue") ?: false
+                        if (id != null && id != 0) {
+                            val media = withContext(Dispatchers.IO) {
+                                Anilist.query.getMedia(id, isMAL)
+                            }
+                            if (media != null) {
+                                media.cameFromContinue = cont
                                 startActivity(
-                                    Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
-                                        .setData(Uri.parse("package:$packageName"))
+                                        Intent(this@MainActivity, MediaDetailsActivity::class.java)
+                                                .putExtra("media", media as Serializable)
                                 )
+                            } else {
+                                snackString(this@MainActivity.getString(R.string.anilist_not_found))
                             }
                         }
-                    }.show(supportFragmentManager, "dialog")
+                        delay(500)
+                        startSubscription()
+                    }
+                    load = true
+                }
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    if (loadData<Boolean>("allow_opening_links", this) != true) {
+                        CustomBottomDialog.newInstance().apply {
+                            title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
+                            val md = "Open settings & click +Add Links & select Anilist & Mal urls"
+                            addView(TextView(this@MainActivity).apply {
+                                val markWon =
+                                        Markwon.builder(this@MainActivity)
+                                                .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
+                                markWon.setMarkdown(this, md)
+                            })
+
+                            setNegativeButton(this@MainActivity.getString(R.string.no)) {
+                                saveData("allow_opening_links", true, this@MainActivity)
+                                dismiss()
+                            }
+
+                            setPositiveButton(this@MainActivity.getString(R.string.yes)) {
+                                saveData("allow_opening_links", true, this@MainActivity)
+                                tryWith(true) {
+                                    startActivity(
+                                            Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
+                                                    .setData(Uri.parse("package:$packageName"))
+                                    )
+                                }
+                            }
+                        }.show(supportFragmentManager, "dialog")
+                    }
                 }
             }
         }
