@@ -5,7 +5,7 @@ import java.util.regex.Pattern
 
 class MangaNameAdapter {
     companion object {
-        val chapterRegex = "(chapter|chap|ch|c)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*"
+        const val chapterRegex = "(chapter|chap|ch|c)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*"
         fun findChapterNumber(text: String): Float? {
             val pattern: Pattern = Pattern.compile(chapterRegex, Pattern.CASE_INSENSITIVE)
             val matcher: Matcher = pattern.matcher(text)

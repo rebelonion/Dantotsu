@@ -305,6 +305,9 @@
             android:name=".connections.discord.DiscordService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
+        <service android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
 
         <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
             android:value="androidx.media3.cast.DefaultCastOptionsProvider"/>
