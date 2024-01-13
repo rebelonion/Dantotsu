@@ -157,15 +157,7 @@ class MainActivity : AppCompatActivity() {
         if (!isOnline(this)) {
             snackString(this@MainActivity.getString(R.string.no_internet_connection))
             startActivity(Intent(this, NoInternet::class.java))
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                .edit()
-                .putBoolean("offlineMode", true)
-                .apply()
         } else {
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                .edit()
-                .putBoolean("offlineMode", false)
-                .apply()
             val model: AnilistHomeViewModel by viewModels()
             model.genres.observe(this) { it ->
                 if (it != null) {
