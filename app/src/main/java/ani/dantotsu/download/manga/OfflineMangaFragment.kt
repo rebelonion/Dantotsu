@@ -172,6 +172,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             }
         }
 
+        val total = view.findViewById<TextView>(R.id.total)
+        total.text = if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
         gridView.setOnItemLongClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
