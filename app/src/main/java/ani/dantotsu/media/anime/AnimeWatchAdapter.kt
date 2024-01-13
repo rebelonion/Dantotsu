@@ -17,6 +17,7 @@ import ani.dantotsu.*
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.DialogLayoutBinding
+import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
@@ -344,7 +345,7 @@ fun handleEpisodes() {
                 }
                 val ep = media.anime.episodes!![continueEp]!!
 
-                val cleanedTitle = ep.title?.replace(Regex("^(Ep\\.|Episode\\.?)\\s*\\d+:\\s*"), "")
+                val cleanedTitle = ep.title?.replace(Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE), "")
 
                 binding.itemEpisodeImage.loadImage(
                     ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
