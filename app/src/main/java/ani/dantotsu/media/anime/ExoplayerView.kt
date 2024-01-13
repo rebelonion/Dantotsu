@@ -69,6 +69,7 @@ import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
+import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.SubtitleDownloader
@@ -955,7 +956,7 @@ episodes.forEach {
     episodeTitleArr.add("${if (!episode.title.isNullOrEmpty() && episode.title != "null") "" else "numeric :"}${episode.number}${if (episode.filler) " [Filler]" else ""}${if (!episode.title.isNullOrEmpty() && episode.title != "null") " : " + episode.title else ""}")
 }
 
-val regexPattern = Regex("Ep\\.? \\d+\\s*:?|Episode \\d+\\s*:")
+val regexPattern = Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE)
 episodeTitleArr.replaceAll { it.replace(regexPattern, "") }
 
         //Episode Change
