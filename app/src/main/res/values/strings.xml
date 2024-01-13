@@ -646,5 +646,9 @@
     <string name="app_widget_description">This is an app widget description</string>
     <string name="airing_image">Airing Image</string>
     <string name="anime_downloads">animeDownloads</string>
+    <string name="long_press_download">Long press the download button to download using the selected download manager</string>
+    <string name="purge_anime_downloads">Purge anime downloads</string>
+    <string name="purge_manga_downloads">Purge Manga Downloads</string>
+    <string name="purge_novel_downloads">Purge Novel Downloads</string>
 
 </resources>

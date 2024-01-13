@@ -15,15 +15,21 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.databinding.ActivitySettingsBinding
+import ani.dantotsu.download.DownloadedType
+import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.others.LangSet
@@ -61,7 +67,7 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
     private val networkPreferences = Injekt.get<NetworkPreferences>()
     private var cursedCounter = 0
 
-    @SuppressLint("SetTextI18n")
+    @OptIn(UnstableApi::class) @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
@@ -240,6 +246,58 @@ class SettingsActivity : AppCompatActivity(),  SimpleDialog.OnDialogResultListen
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
+        }
+
+        binding.purgeAnimeDownloads.setOnClickListener {
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Purge Anime Downloads")
+                .setMessage("Are you sure you want to purge all anime downloads?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    val downloadsManager = Injekt.get<DownloadsManager>()
+                    downloadsManager.purgeDownloads(DownloadedType.Type.ANIME)
+                    DownloadService.sendRemoveAllDownloads(this, ExoplayerDownloadService::class.java, false)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
+        }
+
+        binding.purgeMangaDownloads.setOnClickListener {
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Purge Manga Downloads")
+                .setMessage("Are you sure you want to purge all manga downloads?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    val downloadsManager = Injekt.get<DownloadsManager>()
+                    downloadsManager.purgeDownloads(DownloadedType.Type.MANGA)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
+        }
+
+        binding.purgeNovelDownloads.setOnClickListener {
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Purge Novel Downloads")
+                .setMessage("Are you sure you want to purge all novel downloads?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    val downloadsManager = Injekt.get<DownloadsManager>()
+                    downloadsManager.purgeDownloads(DownloadedType.Type.NOVEL)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
         }
 
         binding.settingsForceLegacyInstall.isChecked =
