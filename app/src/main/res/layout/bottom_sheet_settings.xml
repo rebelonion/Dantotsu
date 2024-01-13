@@ -104,7 +104,7 @@
             android:insetBottom="0dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:text="@string/downloads"
+            android:text="@string/offline_mode"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
             android:textColor="?attr/colorOnBackground"
