@@ -957,13 +957,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             episodeTitleArr.add("${if (!episode.title.isNullOrEmpty() && episode.title != "null") "" else "numeric :"}${episode.number}${if (episode.filler) " [Filler]" else ""}${if (!episode.title.isNullOrEmpty() && episode.title != "null") " : " + episode.title else ""}")
         }
 
-        val regexPattern = Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE)
-
         for (i in episodeTitleArr.indices) {
-            val replaced = episodeTitleArr[i].replace(regexPattern, "")
-            if (replaced.isNotBlank()) {
-                episodeTitleArr[i] = replaced
-            }
+            episodeTitleArr[i] = AnimeNameAdapter.removeEpisodeNumber(episodeTitleArr[i])
         }
 
 

@@ -345,14 +345,14 @@ fun handleEpisodes() {
                 }
                 val ep = media.anime.episodes!![continueEp]!!
 
-                val cleanedTitle = ep.title?.replace(Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE), "")
+                val cleanedTitle = ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
 
                 binding.itemEpisodeImage.loadImage(
                     ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
                 )
                 if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
                 binding.animeSourceContinueText.text =
-                    currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${if (cleanedTitle != null) "\n$cleanedTitle" else ""}"
+                    currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${"\n$cleanedTitle"}"
                 binding.animeSourceContinue.setOnClickListener {
                     fragment.onEpisodeClick(continueEp)
                 }

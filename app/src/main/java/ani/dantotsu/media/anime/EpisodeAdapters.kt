@@ -78,7 +78,7 @@ class EpisodeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val ep = arr[position]
 val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {
-    (ep.title as? String)?.replaceFirst(Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE), "")
+    ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
 } else {
     ep.number
 } ?: ""
