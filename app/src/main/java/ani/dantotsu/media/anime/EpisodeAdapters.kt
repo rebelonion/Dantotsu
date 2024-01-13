@@ -11,6 +11,7 @@ import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.databinding.ItemEpisodeGridBinding
 import ani.dantotsu.databinding.ItemEpisodeListBinding
+import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.Media
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
@@ -76,12 +77,11 @@ class EpisodeAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val ep = arr[position]
-        val title =
-            "${
-                if (!ep.title.isNullOrEmpty() && ep.title != "null") "" else currContext()!!.getString(
-                    R.string.episode_singular
-                )
-            } ${if (!ep.title.isNullOrEmpty() && ep.title != "null") ep.title else ep.number}"
+val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {
+    (ep.title as? String)?.replaceFirst(Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE), "")
+} else {
+    ep.number
+} ?: ""
 
         when (holder) {
             is EpisodeListViewHolder -> {
@@ -245,5 +245,4 @@ class EpisodeAdapter(
         type = t
     }
 }
-
 

@@ -69,6 +69,7 @@ import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
+import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.SubtitleDownloader
@@ -946,14 +947,17 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         //Anime Title
         animeTitle.text = media.userPreferredName
 
-        episodeArr = episodes.keys.toList()
-        currentEpisodeIndex = episodeArr.indexOf(media.anime!!.selectedEpisode!!)
+episodeArr = episodes.keys.toList()
+currentEpisodeIndex = episodeArr.indexOf(media.anime!!.selectedEpisode!!)
 
-        episodeTitleArr = arrayListOf()
-        episodes.forEach {
-            val episode = it.value
-            episodeTitleArr.add("${if (!episode.title.isNullOrEmpty() && episode.title != "null") "" else "Episode "}${episode.number}${if (episode.filler) " [Filler]" else ""}${if (!episode.title.isNullOrEmpty() && episode.title != "null") " : " + episode.title else ""}")
-        }
+val episodeTitleArr = arrayListOf<String>()
+episodes.forEach {
+    val episode = it.value
+    episodeTitleArr.add("${if (!episode.title.isNullOrEmpty() && episode.title != "null") "" else "numeric :"}${episode.number}${if (episode.filler) " [Filler]" else ""}${if (!episode.title.isNullOrEmpty() && episode.title != "null") " : " + episode.title else ""}")
+}
+
+val regexPattern = Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE)
+episodeTitleArr.replaceAll { it.replace(regexPattern, "") }
 
         //Episode Change
         fun change(index: Int) {
