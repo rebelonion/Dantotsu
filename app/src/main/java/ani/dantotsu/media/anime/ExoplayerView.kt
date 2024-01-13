@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.DownloadManager
 import android.app.PictureInPictureParams
 import android.app.PictureInPictureUiState
 import android.content.ActivityNotFoundException
@@ -31,7 +30,6 @@ import android.view.*
 import android.view.KeyEvent.*
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
-import android.widget.FrameLayout
 import android.widget.ImageButton
 import android.widget.Spinner
 import android.widget.TextView
@@ -43,8 +41,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.math.MathUtils.clamp
 import androidx.core.view.WindowCompat
 import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.cast.CastPlayer
+import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.*
 import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MOVIE
 import androidx.media3.common.C.TRACK_TYPE_VIDEO
@@ -60,6 +59,7 @@ import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.*
 import androidx.media3.ui.CaptionStyleCompat.*
+import androidx.mediarouter.app.MediaRouteButton
 import ani.dantotsu.*
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
@@ -69,7 +69,7 @@ import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
-import ani.dantotsu.media.anime.AnimeNameAdapter
+import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.SubtitleDownloader
@@ -85,6 +85,10 @@ import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
+import com.google.android.gms.cast.framework.CastButtonFactory
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.slider.Slider
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.lagradost.nicehttp.ignoreAllSSLErrors
@@ -99,14 +103,6 @@ import java.util.concurrent.*
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
-import androidx.media3.cast.SessionAvailabilityListener
-import androidx.media3.cast.CastPlayer
-import androidx.media3.exoplayer.offline.Download
-import androidx.mediarouter.app.MediaRouteButton
-import ani.dantotsu.download.video.Helper
-import com.google.android.gms.cast.framework.CastButtonFactory
-import com.google.android.gms.cast.framework.CastContext
-import com.google.android.material.snackbar.Snackbar
 
 @UnstableApi
 @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
@@ -118,8 +114,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private val playerOnPlay = "playerOnPlay"
 
     private lateinit var exoPlayer: ExoPlayer
-    private lateinit var castPlayer: CastPlayer
-    private lateinit var castContext: CastContext
+    private var castPlayer: CastPlayer? = null
+    private var castContext: CastContext? = null
+    private var isCastApiAvailable = false
     private lateinit var trackSelector: DefaultTrackSelector
     private lateinit var cacheFactory: CacheDataSource.Factory
     private lateinit var playbackParameters: PlaybackParameters
@@ -342,10 +339,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         setContentView(binding.root)
 
         //Initialize
-
-        castContext = CastContext.getSharedInstance(this)
-        castPlayer = CastPlayer(castContext)
-        castPlayer.setSessionAvailabilityListener(this)
+        isCastApiAvailable = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        try {
+            castContext = CastContext.getSharedInstance(this)
+            castPlayer = CastPlayer(castContext!!)
+            castPlayer!!.setSessionAvailabilityListener(this)
+        } catch (e: Exception) {
+            isCastApiAvailable = false
+        }
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
         hideSystemBars()
@@ -484,14 +485,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             if (isInitialized) {
                 isPlayerPlaying = exoPlayer.isPlaying
                 (exoPlay.drawable as Animatable?)?.start()
-                if (isPlayerPlaying || castPlayer.isPlaying) {
+                if (isPlayerPlaying || castPlayer?.isPlaying == true) {
                     Glide.with(this).load(R.drawable.anim_play_to_pause).into(exoPlay)
                     exoPlayer.pause()
-                    castPlayer.pause()
+                    castPlayer?.pause()
                 } else {
-                    if (!castPlayer.isPlaying && castPlayer.currentMediaItem != null) {
+                    if (castPlayer?.isPlaying == false && castPlayer?.currentMediaItem != null) {
                         Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
-                        castPlayer.play()
+                        castPlayer?.play()
                     } else if (!isPlayerPlaying) {
                         Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
                         exoPlayer.play()
@@ -947,17 +948,24 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         //Anime Title
         animeTitle.text = media.userPreferredName
 
-episodeArr = episodes.keys.toList()
-currentEpisodeIndex = episodeArr.indexOf(media.anime!!.selectedEpisode!!)
+        episodeArr = episodes.keys.toList()
+        currentEpisodeIndex = episodeArr.indexOf(media.anime!!.selectedEpisode!!)
 
-val episodeTitleArr = arrayListOf<String>()
-episodes.forEach {
-    val episode = it.value
-    episodeTitleArr.add("${if (!episode.title.isNullOrEmpty() && episode.title != "null") "" else "numeric :"}${episode.number}${if (episode.filler) " [Filler]" else ""}${if (!episode.title.isNullOrEmpty() && episode.title != "null") " : " + episode.title else ""}")
-}
+        val episodeTitleArr = arrayListOf<String>()
+        episodes.forEach {
+            val episode = it.value
+            episodeTitleArr.add("${if (!episode.title.isNullOrEmpty() && episode.title != "null") "" else "numeric :"}${episode.number}${if (episode.filler) " [Filler]" else ""}${if (!episode.title.isNullOrEmpty() && episode.title != "null") " : " + episode.title else ""}")
+        }
 
-val regexPattern = Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE)
-episodeTitleArr.replaceAll { it.replace(regexPattern, "") }
+        val regexPattern = Regex(AnimeNameAdapter.episodeRegex, RegexOption.IGNORE_CASE)
+
+        for (i in episodeTitleArr.indices) {
+            val replaced = episodeTitleArr[i].replace(regexPattern, "")
+            if (replaced.isNotBlank()) {
+                episodeTitleArr[i] = replaced
+            }
+        }
+
 
         //Episode Change
         fun change(index: Int) {
@@ -1104,8 +1112,16 @@ episodeTitleArr.replaceAll { it.replace(regexPattern, "") }
         if (settings.cast) {
             playerView.findViewById<MediaRouteButton>(R.id.exo_cast).apply {
                 visibility = View.VISIBLE
-                CastButtonFactory.setUpMediaRouteButton(context, this)
-                dialogFactory = CustomCastThemeFactory()
+                try {
+                    CastButtonFactory.setUpMediaRouteButton(context, this)
+                    dialogFactory = CustomCastThemeFactory()
+                } catch (e: Exception) {
+                    isCastApiAvailable = false
+                }
+                setOnLongClickListener {
+                    cast()
+                    true
+                }
             }
         }
 
@@ -1543,7 +1559,7 @@ episodeTitleArr.replaceAll { it.replace(regexPattern, "") }
         super.onPause()
         orientationListener?.disable()
         if (isInitialized) {
-            if (!castPlayer.isPlaying) {
+            if (castPlayer?.isPlaying == false) {
                 playerView.player?.pause()
             }
             saveData(
@@ -1566,7 +1582,7 @@ episodeTitleArr.replaceAll { it.replace(regexPattern, "") }
     }
 
     override fun onStop() {
-        if (!castPlayer.isPlaying) {
+        if (castPlayer?.isPlaying == false) {
             playerView.player?.pause()
         }
         super.onStop()
@@ -1935,11 +1951,15 @@ episodeTitleArr.replaceAll { it.replace(regexPattern, "") }
 
 
     private fun startCastPlayer() {
-        castPlayer.setMediaItem(mediaItem)
-        castPlayer.prepare()
+        if (!isCastApiAvailable) {
+            snackString("Cast API not available")
+            return
+        }
+        castPlayer?.setMediaItem(mediaItem)
+        castPlayer?.prepare()
         playerView.player = castPlayer
         exoPlayer.stop()
-        castPlayer.addListener(object : Player.Listener {
+        castPlayer?.addListener(object : Player.Listener {
             //if the player is paused changed, we want to update the UI
             override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
                 super.onPlayWhenReadyChanged(playWhenReady, reason)
@@ -1962,11 +1982,13 @@ episodeTitleArr.replaceAll { it.replace(regexPattern, "") }
         exoPlayer.setMediaItem(mediaItem)
         exoPlayer.prepare()
         playerView.player = exoPlayer
-        castPlayer.stop()
+        castPlayer?.stop()
     }
 
     override fun onCastSessionAvailable() {
-        startCastPlayer()
+        if (isCastApiAvailable) {
+            startCastPlayer()
+        }
     }
 
     override fun onCastSessionUnavailable() {
