@@ -248,6 +248,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+        GlobalScope.launch(Dispatchers.IO) {
                    val index = Helper.downloadManager(this@MainActivity).downloadIndex
             val downloadCursor = index.getDownloads()
             while (downloadCursor.moveToNext()) {
