@@ -41,6 +41,8 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import okhttp3.Request
 import uy.kohesive.injekt.Injekt
@@ -315,7 +317,6 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         }
         return ret
     }
-
     suspend fun imageList(chapterLink: String, sChapter: SChapter): List<ImageData> {
         val source = try {
             extension.sources[sourceLanguage]
@@ -323,29 +324,29 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         } as? HttpSource ?: return emptyList()
-        var imageDataList: List<ImageData> = listOf()
-        coroutineScope {
+
+        return coroutineScope {
             try {
                 println("source.name " + source.name)
                 val res = source.getPageList(sChapter)
-                val reIndexedPages =
-                    res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
+                val reIndexedPages = res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
 
+                val semaphore = Semaphore(5)
                 val deferreds = reIndexedPages.map { page ->
                     async(Dispatchers.IO) {
-                        imageDataList += ImageData(page, source)
+                        semaphore.withPermit {
+                            ImageData(page, source)
+                        }
                     }
                 }
 
                 deferreds.awaitAll()
-
             } catch (e: Exception) {
                 logger("loadImages Exception: $e")
                 snackString("Failed to load images: $e")
                 emptyList()
             }
         }
-        return imageDataList
     }
 
     suspend fun fetchAndProcessImage(
