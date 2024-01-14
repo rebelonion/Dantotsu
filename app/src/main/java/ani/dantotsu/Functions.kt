@@ -602,7 +602,7 @@ fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
         "$APPLICATION_ID.provider",
         saveImage(
             bitmap,
-            Environment.getExternalStorageDirectory().absolutePath + "/" + Environment.DIRECTORY_DOWNLOADS,
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
             title
         ) ?: return
     )
