@@ -4,8 +4,11 @@ import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
@@ -25,6 +28,7 @@ import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.selectedOption
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
@@ -54,6 +58,19 @@ class NoInternet : AppCompatActivity() {
         if (!colorOverflow) {
             _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
+        }
+
+        var doubleBackToExitPressedOnce = false
+        onBackPressedDispatcher.addCallback(this) {
+            if (doubleBackToExitPressedOnce) {
+                finishAffinity()
+            }
+            doubleBackToExitPressedOnce = true
+            snackString(this@NoInternet.getString(R.string.back_to_exit))
+            Handler(Looper.getMainLooper()).postDelayed(
+                { doubleBackToExitPressedOnce = false },
+                2000
+            )
         }
 
         binding.root.doOnAttach {
