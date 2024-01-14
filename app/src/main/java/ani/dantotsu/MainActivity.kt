@@ -91,6 +91,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        notification(this)
 
         var doubleBackToExitPressedOnce = false
         onBackPressedDispatcher.addCallback(this) {
