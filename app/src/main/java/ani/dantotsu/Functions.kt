@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.NotificationManager
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -28,6 +29,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
@@ -54,6 +56,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import java.io.*
@@ -933,6 +936,21 @@ fun checkCountry(context: Context): Boolean {
         }
 
         else -> false
+    }
+}
+fun notification(context: Context){
+    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val incognito = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("incognito", false)
+    if (incognito) {
+        val builder = NotificationCompat.Builder(context, Notifications.CHANNEL_INCOGNITO_MODE)
+            .setSmallIcon(R.drawable.ic_incognito_24)
+            .setContentTitle("Incognito Mode")
+            .setContentText("Disable Incognito Mode")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setOngoing(true)
+        notificationManager.notify(26, builder.build())
+    } else {
+        notificationManager.cancel(26)
     }
 }
 
