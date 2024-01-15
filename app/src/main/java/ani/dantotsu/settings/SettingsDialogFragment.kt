@@ -13,14 +13,15 @@ import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
+import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
 import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
-import ani.dantotsu.loadImage
 import ani.dantotsu.incognitoNotification
+import ani.dantotsu.loadImage
 import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
@@ -145,7 +146,10 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
 
                     PageType.ANIME -> {
                         val intent = Intent(activity, NoInternet::class.java)
-                        intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
+                        intent.putExtra(
+                            "FRAGMENT_CLASS_NAME",
+                            OfflineAnimeFragment::class.java.name
+                        )
                         startActivity(intent)
                     }
 

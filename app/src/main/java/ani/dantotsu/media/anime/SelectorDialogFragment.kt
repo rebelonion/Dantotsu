@@ -279,7 +279,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 if (video != null) {
                     Helper.startAnimeDownloadService(
                         requireActivity(),
-                        media!!.userPreferredName,
+                        media!!.nameMAL ?: media!!.nameRomaji,
                         episode.number,
                         video,
                         null,

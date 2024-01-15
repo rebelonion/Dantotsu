@@ -1,5 +1,6 @@
 package ani.dantotsu.home
 
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -19,7 +20,9 @@ import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.R
 import ani.dantotsu.ZoomOutPageTransformer
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityNoInternetBinding
+import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
@@ -113,12 +116,11 @@ class NoInternet : AppCompatActivity() {
         override fun getItemCount(): Int = 3
 
         override fun createFragment(position: Int): Fragment {
-            when (position) {
-                0 -> return OfflineFragment()
-                1 -> return OfflineFragment()
-                2 -> return OfflineMangaFragment()
+            return when (position) {
+                0 -> OfflineAnimeFragment()
+                2 -> OfflineMangaFragment()
+                else -> OfflineFragment()
             }
-            return LoginFragment()
         }
     }
 }

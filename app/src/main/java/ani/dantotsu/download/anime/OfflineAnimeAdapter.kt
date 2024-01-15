@@ -1,4 +1,5 @@
-package ani.dantotsu.download.manga
+package ani.dantotsu.download.anime
+
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -11,16 +12,18 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import ani.dantotsu.R
+import ani.dantotsu.download.anime.OfflineAnimeModel
+import ani.dantotsu.download.anime.OfflineAnimeSearchListener
 
 
-class OfflineMangaAdapter(
+class OfflineAnimeAdapter(
     private val context: Context,
-    private var items: List<OfflineMangaModel>,
-    private val searchListener: OfflineMangaSearchListener
+    private var items: List<OfflineAnimeModel>,
+    private val searchListener: OfflineAnimeSearchListener
 ) : BaseAdapter() {
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-    private var originalItems: List<OfflineMangaModel> = items
+    private var originalItems: List<OfflineAnimeModel> = items
     private var style =
         context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("offline_view", 0)
 
@@ -45,7 +48,7 @@ class OfflineMangaAdapter(
             else -> inflater.inflate(R.layout.item_media_compact, parent, false) // compact view
         }
 
-        val item = getItem(position) as OfflineMangaModel
+        val item = getItem(position) as OfflineAnimeModel
         val imageView = view.findViewById<ImageView>(R.id.itemCompactImage)
         val titleTextView = view.findViewById<TextView>(R.id.itemCompactTitle)
         val itemScore = view.findViewById<TextView>(R.id.itemCompactScore)
@@ -61,16 +64,16 @@ class OfflineMangaAdapter(
             val chapters = view.findViewById<TextView>(R.id.itemTotal)
             chapters.text = " Chapters"
             bannerView.setImageURI(item.banner)
-            totalchapter.text = item.totalChapter
+            totalchapter.text = item.totalEpisode
         } else if (style == 1) {
             val readchapter =
                 view.findViewById<TextView>(R.id.itemCompactUserProgress) // for compact view
-            readchapter.text = item.readChapter
-            totalchapter.text = " | " + item.totalChapter
+            readchapter.text = item.watchedEpisode
+            totalchapter.text = " | " + item.totalEpisode
         }
 
         // Bind item data to the views
-        typeimage.setImageResource(if (item.type == "Novel") R.drawable.ic_round_book_24 else R.drawable.ic_round_import_contacts_24)
+        typeimage.setImageResource(R.drawable.ic_round_movie_filter_24)
         type.text = item.type
         typeView.visibility = View.VISIBLE
         imageView.setImageURI(item.image)
@@ -97,7 +100,7 @@ class OfflineMangaAdapter(
         notifyDataSetChanged() // Notify the adapter that the data set has changed
     }
 
-    fun setItems(items: List<OfflineMangaModel>) {
+    fun setItems(items: List<OfflineAnimeModel>) {
         this.items = items
         this.originalItems = items
         notifyDataSetChanged()

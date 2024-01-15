@@ -10,6 +10,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import androidx.activity.viewModels
@@ -77,6 +78,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         ThemeManager(this).applyTheme(MediaSingleton.bitmap)
         MediaSingleton.bitmap = null
         super.onCreate(savedInstanceState)
+
         binding = ActivityMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
@@ -85,8 +87,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         initActivity(this)
         uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-        if (!uiSettings.immersiveMode) this.window.statusBarColor =
-            ContextCompat.getColor(this, R.color.nav_bg_inv)
 
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
@@ -445,7 +445,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", screenWidth)
                 .setDuration(duration).start()
             binding.mediaBanner.pause()
-            if (!uiSettings.immersiveMode) this.window.statusBarColor = color
         }
         if (percentage <= percent && isCollapsed) {
             isCollapsed = false
@@ -458,7 +457,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", 0f)
                 .setDuration(duration).start()
             if (uiSettings.bannerAnimations) binding.mediaBanner.resume()
-            if (!uiSettings.immersiveMode) this.window.statusBarColor = color
         }
         if (percentage == 1 && model.scrolledToTop.value != false) model.scrolledToTop.postValue(
             false
