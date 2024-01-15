@@ -20,7 +20,7 @@ import ani.dantotsu.home.LoginFragment
 import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.loadImage
-import ani.dantotsu.notification
+import ani.dantotsu.incognitoNotification
 import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
@@ -85,7 +85,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
                 ?.putBoolean("incognito", isChecked)?.apply()
-            notification(requireContext())
+            incognitoNotification(requireContext())
         }
         binding.settingsExtensionSettings.setSafeOnClickListener {
             startActivity(Intent(activity, ExtensionsActivity::class.java))

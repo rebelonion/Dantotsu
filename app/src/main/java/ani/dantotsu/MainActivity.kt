@@ -91,7 +91,7 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        notification(this)
+        incognitoNotification(this)
 
         var doubleBackToExitPressedOnce = false
         onBackPressedDispatcher.addCallback(this) {

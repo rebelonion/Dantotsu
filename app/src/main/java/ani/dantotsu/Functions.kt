@@ -941,7 +941,8 @@ fun checkCountry(context: Context): Boolean {
         else -> false
     }
 }
-fun notification(context: Context){
+fun incognitoNotification(context: Context){
+    val CHANNEL_ID = 26
     val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val incognito = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("incognito", false)
     if (incognito) {
@@ -951,9 +952,9 @@ fun notification(context: Context){
             .setContentText("Disable Incognito Mode")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setOngoing(true)
-        notificationManager.notify(26, builder.build())
+        notificationManager.notify(CHANNEL_ID, builder.build())
     } else {
-        notificationManager.cancel(26)
+        notificationManager.cancel(CHANNEL_ID)
     }
 }
 
