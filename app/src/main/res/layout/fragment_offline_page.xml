@@ -7,7 +7,6 @@
     tools:context=".home.MangaFragment">
 
     <FrameLayout
-        android:id="@+id/mangaRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipChildren="false"
@@ -17,8 +16,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipChildren="false"
-            android:clipToPadding="false"
             android:orientation="vertical">
 
             <LinearLayout
@@ -35,7 +32,7 @@
                     android:layout_height="56dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
-                    android:hint="@string/manga"
+                    android:hint="Something"
                     android:textColorHint="@color/bg_opp"
                     android:transitionName="@string/search"
                     android:fontFamily="@font/poppins_bold"
@@ -97,7 +94,7 @@
                     android:paddingStart="24dp"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center_vertical"
-                    android:hint="Manga and Novels"
+                    android:hint="Type"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
 
