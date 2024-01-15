@@ -18,13 +18,11 @@ import android.view.animation.LayoutAnimationController
 import android.view.animation.OvershootInterpolator
 import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
-import android.widget.FrameLayout
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
 import ani.dantotsu.currActivity
@@ -36,8 +34,6 @@ import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
-import ani.dantotsu.navBarHeight
-import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
@@ -171,7 +167,6 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         gridView.adapter = adapter
         gridView.scheduleLayoutAnimation()
         grid()
-
         val total = view.findViewById<TextView>(R.id.total)
         total.text =
             if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
@@ -243,8 +238,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 }
             }
         }
-        val mangaRefresh = view.findViewById<FrameLayout>(R.id.mangaRefresh)
-        mangaRefresh.updatePaddingRelative(bottom = navBarHeight + 160f.px)
+
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
         var visible = false
 

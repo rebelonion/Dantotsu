@@ -19,7 +19,6 @@ import android.view.animation.LayoutAnimationController
 import android.view.animation.OvershootInterpolator
 import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
-import android.widget.FrameLayout
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
@@ -178,7 +177,6 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         gridView.adapter = adapter
         gridView.scheduleLayoutAnimation()
         grid()
-
         val total = view.findViewById<TextView>(R.id.total)
         total.text =
             if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
@@ -253,9 +251,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 }
             }
         }
-        val mangaRefresh = view.findViewById<FrameLayout>(R.id.mangaRefresh)
-        mangaRefresh.updatePaddingRelative(bottom = navBarHeight + 160f.px)
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
+        scrollTop.updatePaddingRelative(bottom = navBarHeight + 160f.px)
         val visible = false
 
         fun animate() {
