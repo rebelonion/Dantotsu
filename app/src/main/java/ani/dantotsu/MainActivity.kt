@@ -152,9 +152,6 @@ class MainActivity : AppCompatActivity() {
             initActivity(this)
             uiSettings = loadData("ui_settings") ?: uiSettings
             selectedOption = uiSettings.defaultStartUpTab
-            binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = navBarHeight
-            }
         }
         val offline = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
                 .getBoolean("offlineMode", false)
