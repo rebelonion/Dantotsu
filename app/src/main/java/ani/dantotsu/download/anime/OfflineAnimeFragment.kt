@@ -25,10 +25,11 @@ import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.updatePaddingRelative
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.media3.common.util.UnstableApi
 import ani.dantotsu.R
+import ani.dantotsu.bottomBar
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
@@ -39,7 +40,6 @@ import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
@@ -252,7 +252,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             }
         }
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
-        scrollTop.updatePaddingRelative(bottom = navBarHeight + 160f.px)
+        scrollTop.translationY = -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
         val visible = false
 
         fun animate() {

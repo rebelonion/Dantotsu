@@ -23,8 +23,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
+import ani.dantotsu.bottomBar
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
@@ -34,6 +36,7 @@ import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
@@ -238,8 +241,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 }
             }
         }
-
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
+        scrollTop.translationY = -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
         var visible = false
 
         fun animate() {
