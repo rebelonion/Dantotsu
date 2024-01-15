@@ -1,6 +1,5 @@
 package ani.dantotsu.home
 
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
@@ -8,25 +7,21 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.R
 import ani.dantotsu.ZoomOutPageTransformer
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityNoInternetBinding
 import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
-import ani.dantotsu.navBarHeight
 import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.selectedOption
@@ -80,9 +75,6 @@ class NoInternet : AppCompatActivity() {
             initActivity(this)
             uiSettings = loadData("ui_settings") ?: uiSettings
             selectedOption = uiSettings.defaultStartUpTab
-            binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = navBarHeight
-            }
         }
         val navbar = binding.includedNavbar.navbar
         ani.dantotsu.bottomBar = navbar
