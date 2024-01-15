@@ -12,8 +12,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import ani.dantotsu.R
-import ani.dantotsu.download.anime.OfflineAnimeModel
-import ani.dantotsu.download.anime.OfflineAnimeSearchListener
 
 
 class OfflineAnimeAdapter(
@@ -54,22 +52,22 @@ class OfflineAnimeAdapter(
         val itemScore = view.findViewById<TextView>(R.id.itemCompactScore)
         val itemScoreBG = view.findViewById<View>(R.id.itemCompactScoreBG)
         val ongoing = view.findViewById<CardView>(R.id.itemCompactOngoing)
-        val totalchapter = view.findViewById<TextView>(R.id.itemCompactTotal)
+        val totalepisodes = view.findViewById<TextView>(R.id.itemCompactTotal)
         val typeimage = view.findViewById<ImageView>(R.id.itemCompactTypeImage)
         val type = view.findViewById<TextView>(R.id.itemCompactRelation)
         val typeView = view.findViewById<LinearLayout>(R.id.itemCompactType)
 
         if (style == 0) {
             val bannerView = view.findViewById<ImageView>(R.id.itemCompactBanner) // for large view
-            val chapters = view.findViewById<TextView>(R.id.itemTotal)
-            chapters.text = " Chapters"
+            val episodes = view.findViewById<TextView>(R.id.itemTotal)
+            episodes.text = " Episodes"
             bannerView.setImageURI(item.banner)
-            totalchapter.text = item.totalEpisode
+            totalepisodes.text = item.totalEpisode
         } else if (style == 1) {
-            val readchapter =
+            val watchedEpisodes =
                 view.findViewById<TextView>(R.id.itemCompactUserProgress) // for compact view
-            readchapter.text = item.watchedEpisode
-            totalchapter.text = " | " + item.totalEpisode
+            watchedEpisodes.text = item.watchedEpisode
+            totalepisodes.text = " | " + item.totalEpisode
         }
 
         // Bind item data to the views
