@@ -22,13 +22,10 @@ import android.widget.AutoCompleteTextView
 import android.widget.FrameLayout
 import android.widget.GridView
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.ThemedSpinnerAdapter.Helper
 import androidx.cardview.widget.CardView
-import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
 import androidx.fragment.app.Fragment
 import androidx.media3.common.util.UnstableApi
@@ -38,6 +35,7 @@ import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
+import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
@@ -45,6 +43,7 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
+import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
@@ -71,13 +70,15 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     private var downloads: List<OfflineAnimeModel> = listOf()
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineAnimeAdapter
+    private var uiSettings: UserInterfaceSettings =
+        loadData("ui_settings") ?: UserInterfaceSettings()
 
     @OptIn(UnstableApi::class) override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_manga_offline, container, false)
+        val view = inflater.inflate(R.layout.fragment_offline_page, container, false)
 
         val textInputLayout = view.findViewById<TextInputLayout>(R.id.offlineMangaSearchBar)
         textInputLayout.hint = "Anime"
@@ -90,16 +91,15 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         requireContext().theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         val color = typedValue.data
 
-        val animeTitleContainer = view.findViewById<LinearLayout>(R.id.animeTitleContainer)
-        animeTitleContainer.updatePadding(top = statusBarHeight)
-
         val animeUserAvatar = view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
         animeUserAvatar.setSafeOnClickListener {
             val dialogFragment =
                 SettingsDialogFragment.newInstance2(SettingsDialogFragment.Companion.PageType2.OfflineANIME)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
-
+        if (!uiSettings.immersiveMode) {
+            view.rootView.fitsSystemWindows = true
+        }
         val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             ?.getBoolean("colorOverflow", false) ?: false
         if (!colorOverflow) {
@@ -147,7 +147,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             gridView.scheduleLayoutAnimation()
             gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
-
+            grid()
         }
 
         layoutcompact.setOnClickListener {
@@ -161,6 +161,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             gridView.scheduleLayoutAnimation()
             gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
+            grid()
         }
 
         gridView =
@@ -176,21 +177,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         adapter = OfflineAnimeAdapter(requireContext(), downloads, this)
         gridView.adapter = adapter
         gridView.scheduleLayoutAnimation()
-        gridView.setOnItemClickListener { parent, view, position, id ->
-            // Get the OfflineAnimeModel that was clicked
-            val item = adapter.getItem(position) as OfflineAnimeModel
-            val media =
-                downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title }
-            media?.let {
-                startActivity(
-                    Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("media", getMedia(it))
-                        .putExtra("download", true)
-                )
-            } ?: run {
-                snackString("no media found")
-            }
-        }
+        grid()
 
         val total = view.findViewById<TextView>(R.id.total)
         total.text =
@@ -224,11 +211,26 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             dialog.window?.setDimAmount(0.8f)
             true
         }
-        view.rootView.fitsSystemWindows = true
 
         return view
     }
-
+    private fun grid(){
+        gridView.setOnItemClickListener { parent, view, position, id ->
+            // Get the OfflineAnimeModel that was clicked
+            val item = adapter.getItem(position) as OfflineAnimeModel
+            val media =
+                downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title }
+            media?.let {
+                startActivity(
+                    Intent(requireContext(), MediaDetailsActivity::class.java)
+                        .putExtra("media", getMedia(it))
+                        .putExtra("download", true)
+                )
+            } ?: run {
+                snackString("no media found")
+            }
+        }
+    }
     override fun onSearchQuery(query: String) {
         adapter.onSearchQuery(query)
     }
@@ -400,7 +402,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 mediaModel.status == currActivity()!!.getString(R.string.status_releasing)
             val isUserScored = mediaModel.userScore != 0
             val readEpisode = (mediaModel.userProgress ?: "~").toString()
-            val totalEpisode = "${mediaModel.anime?.totalEpisodes ?: "??"}"
+            val totalEpisode = if (mediaModel.anime?.nextAiringEpisode != null) (mediaModel.anime.nextAiringEpisode.toString() + " | " + (mediaModel.anime.totalEpisodes ?: "~").toString()) else (mediaModel.anime?.totalEpisodes ?: "~").toString()
             val chapters = " Chapters"
             return OfflineAnimeModel(
                 title,
