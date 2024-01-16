@@ -72,7 +72,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     private var uiSettings: UserInterfaceSettings =
         loadData("ui_settings") ?: UserInterfaceSettings()
 
-    @OptIn(UnstableApi::class) override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -167,19 +167,35 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
         gridView.visibility = View.VISIBLE
         getDownloads()
-
         val fadeIn = AlphaAnimation(0f, 1f)
         fadeIn.duration = 200 // animations  pog
         val animation = LayoutAnimationController(fadeIn)
-
         gridView.layoutAnimation = animation
         adapter = OfflineAnimeAdapter(requireContext(), downloads, this)
         gridView.adapter = adapter
         gridView.scheduleLayoutAnimation()
         grid()
         val total = view.findViewById<TextView>(R.id.total)
-        total.text =
-            if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
+        total.text = if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
+
+        return view
+    }
+    @OptIn(UnstableApi::class) private fun grid(){
+        gridView.setOnItemClickListener { parent, view, position, id ->
+            // Get the OfflineAnimeModel that was clicked
+            val item = adapter.getItem(position) as OfflineAnimeModel
+            val media =
+                downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title }
+            media?.let {
+                startActivity(
+                    Intent(requireContext(), MediaDetailsActivity::class.java)
+                        .putExtra("media", getMedia(it))
+                        .putExtra("download", true)
+                )
+            } ?: run {
+                snackString("no media found")
+            }
+        }
         gridView.setOnItemLongClickListener { parent, view, position, id ->
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
@@ -208,25 +224,6 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             val dialog = builder.show()
             dialog.window?.setDimAmount(0.8f)
             true
-        }
-
-        return view
-    }
-    private fun grid(){
-        gridView.setOnItemClickListener { parent, view, position, id ->
-            // Get the OfflineAnimeModel that was clicked
-            val item = adapter.getItem(position) as OfflineAnimeModel
-            val media =
-                downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title }
-            media?.let {
-                startActivity(
-                    Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("media", getMedia(it))
-                        .putExtra("download", true)
-                )
-            } ?: run {
-                snackString("no media found")
-            }
         }
     }
     override fun onSearchQuery(query: String) {

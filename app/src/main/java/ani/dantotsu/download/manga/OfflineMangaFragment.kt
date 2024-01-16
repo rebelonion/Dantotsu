@@ -171,8 +171,28 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         gridView.scheduleLayoutAnimation()
         grid()
         val total = view.findViewById<TextView>(R.id.total)
-        total.text =
-            if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
+        total.text = if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
+
+        return view
+    }
+    private fun grid(){
+        gridView.setOnItemClickListener { parent, view, position, id ->
+            // Get the OfflineMangaModel that was clicked
+            val item = adapter.getItem(position) as OfflineMangaModel
+            val media =
+                downloadManager.mangaDownloadedTypes.firstOrNull { it.title == item.title }
+                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title == item.title }
+            media?.let {
+                startActivity(
+                    Intent(requireContext(), MediaDetailsActivity::class.java)
+                        .putExtra("media", getMedia(it))
+                        .putExtra("download", true)
+                )
+            } ?: run {
+                snackString("no media found")
+            }
+        }
+
         gridView.setOnItemLongClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
@@ -199,25 +219,6 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             dialog.window?.setDimAmount(0.8f)
             true
         }
-        return view
-    }
-    private fun grid(){
-        gridView.setOnItemClickListener { parent, view, position, id ->
-            // Get the OfflineMangaModel that was clicked
-            val item = adapter.getItem(position) as OfflineMangaModel
-            val media =
-                downloadManager.mangaDownloadedTypes.firstOrNull { it.title == item.title }
-                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title == item.title }
-            media?.let {
-                startActivity(
-                    Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("media", getMedia(it))
-                        .putExtra("download", true)
-                )
-            } ?: run {
-                snackString("no media found")
-            }
-        }
     }
     override fun onSearchQuery(query: String) {
         adapter.onSearchQuery(query)
@@ -243,7 +244,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         }
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
         scrollTop.translationY = -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
-        var visible = false
+        val visible = false
 
         fun animate() {
             val start = if (visible) 0f else 1f
