@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
+import androidx.lifecycle.coroutineScope
+import androidx.media3.exoplayer.offline.Download
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
 import ani.dantotsu.connections.updateProgress
@@ -14,6 +17,8 @@ import ani.dantotsu.databinding.ItemEpisodeListBinding
 import ani.dantotsu.media.Media
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 fun handleProgress(cont: LinearLayout, bar: View, empty: View, mediaId: Int, ep: String) {
     val curr = loadData<Long>("${mediaId}_${ep}")
@@ -36,7 +41,8 @@ class EpisodeAdapter(
     private var type: Int,
     private val media: Media,
     private val fragment: AnimeWatchFragment,
-    var arr: List<Episode> = arrayListOf()
+    var arr: List<Episode> = arrayListOf(),
+    var offlineMode: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -101,6 +107,7 @@ class EpisodeAdapter(
                     binding.itemEpisodeFiller.visibility = View.GONE
                     binding.itemEpisodeFillerView.visibility = View.GONE
                 }
+                holder.bind(ep.number, ep.downloadProgress)
                 binding.itemEpisodeDesc.visibility =
                     if (ep.desc != null && ep.desc?.trim(' ') != "") View.VISIBLE else View.GONE
                 binding.itemEpisodeDesc.text = ep.desc ?: ""
@@ -204,6 +211,61 @@ class EpisodeAdapter(
 
     override fun getItemCount(): Int = arr.size
 
+    private val activeDownloads = mutableSetOf<String>()
+    private val downloadedEpisodes = mutableSetOf<String>()
+
+    fun startDownload(episodeNumber: String) {
+        activeDownloads.add(episodeNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == episodeNumber }
+        if (position != -1) {
+            notifyItemChanged(position)
+        }
+    }
+
+    fun stopDownload(episodeNumber: String) {
+        activeDownloads.remove(episodeNumber)
+        downloadedEpisodes.add(episodeNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == episodeNumber }
+        if (position != -1) {
+            arr[position].downloadProgress = "Downloaded"
+            notifyItemChanged(position)
+        }
+    }
+
+    fun deleteDownload(episodeNumber: String) {
+        downloadedEpisodes.remove(episodeNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == episodeNumber }
+        if (position != -1) {
+            arr[position].downloadProgress = null
+            notifyItemChanged(position)
+        }
+    }
+
+    fun purgeDownload(episodeNumber: String) {
+        activeDownloads.remove(episodeNumber)
+        downloadedEpisodes.remove(episodeNumber)
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == episodeNumber }
+        if (position != -1) {
+            arr[position].downloadProgress = "Failed"
+            notifyItemChanged(position)
+        }
+    }
+
+    fun updateDownloadProgress(episodeNumber: String, progress: Int) {
+        // Find the position of the chapter and notify only that item
+        val position = arr.indexOfFirst { it.number == episodeNumber }
+        if (position != -1) {
+            arr[position].downloadProgress = "Downloading: $progress%"
+
+            notifyItemChanged(position)
+        }
+    }
+
+
     inner class EpisodeCompactViewHolder(val binding: ItemEpisodeCompactBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
@@ -226,10 +288,25 @@ class EpisodeAdapter(
 
     inner class EpisodeListViewHolder(val binding: ItemEpisodeListBinding) :
         RecyclerView.ViewHolder(binding.root) {
+        private val activeCoroutines = mutableSetOf<String>()
         init {
             itemView.setOnClickListener {
                 if (bindingAdapterPosition < arr.size && bindingAdapterPosition >= 0)
                     fragment.onEpisodeClick(arr[bindingAdapterPosition].number)
+            }
+            binding.itemDownload.setOnClickListener {
+                if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size) {
+                    val episodeNumber = arr[bindingAdapterPosition].number
+                    if (activeDownloads.contains(episodeNumber)) {
+                        fragment.onAnimeEpisodeStopDownloadClick(episodeNumber)
+                        return@setOnClickListener
+                    } else if (downloadedEpisodes.contains(episodeNumber)) {
+                        fragment.onAnimeEpisodeRemoveDownloadClick(episodeNumber)
+                        return@setOnClickListener
+                    } else {
+                        fragment.onAnimeEpisodeDownloadClick(episodeNumber)
+                    }
+                }
             }
             binding.itemEpisodeDesc.setOnClickListener {
                 if (binding.itemEpisodeDesc.maxLines == 3)
@@ -237,6 +314,57 @@ class EpisodeAdapter(
                 else
                     binding.itemEpisodeDesc.maxLines = 3
             }
+        }
+
+        fun bind(episodeNumber: String, progress: String?) {
+            if (progress != null) {
+                binding.itemDownloadStatus.visibility = View.VISIBLE
+                binding.itemDownloadStatus.text = "$progress"
+            } else {
+                binding.itemDownloadStatus.visibility = View.GONE
+                binding.itemDownloadStatus.text = ""
+            }
+            if (activeDownloads.contains(episodeNumber)) {
+                // Show spinner
+                binding.itemDownload.setImageResource(R.drawable.ic_sync)
+                startOrContinueRotation(episodeNumber)
+            } else if (downloadedEpisodes.contains(episodeNumber)) {
+                // Show checkmark
+                binding.itemDownload.setImageResource(R.drawable.ic_circle_check)
+                //binding.itemDownload.setColorFilter(typedValue2.data) //TODO: colors go to wrong places
+                binding.itemDownload.postDelayed({
+                    binding.itemDownload.setImageResource(R.drawable.ic_round_delete_24)
+                    binding.itemDownload.rotation = 0f
+                    //binding.itemDownload.setColorFilter(typedValue2.data)
+                }, 1000)
+            } else {
+                // Show download icon
+                binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
+            }
+
+        }
+
+        private fun startOrContinueRotation(episodeNumber: String) {
+            if (!isRotationCoroutineRunningFor(episodeNumber)) {
+                val scope = fragment.lifecycle.coroutineScope
+                scope.launch {
+                    // Add chapter number to active coroutines set
+                    activeCoroutines.add(episodeNumber)
+                    while (activeDownloads.contains(episodeNumber)) {
+                        binding.itemDownload.animate().rotationBy(360f).setDuration(1000)
+                            .setInterpolator(
+                                LinearInterpolator()
+                            ).start()
+                        delay(1000)
+                    }
+                    // Remove chapter number from active coroutines set
+                    activeCoroutines.remove(episodeNumber)
+                }
+            }
+        }
+
+        private fun isRotationCoroutineRunningFor(episodeNumber: String): Boolean {
+            return episodeNumber in activeCoroutines
         }
     }
 

@@ -43,6 +43,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
     private var makeDefault = false
     private var selected: String? = null
     private var launch: Boolean? = null
+    private var isDownload: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +51,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             selected = it.getString("server")
             launch = it.getBoolean("launch", true)
             prevEpisode = it.getString("prev")
+            isDownload = it.getBoolean("isDownload")
         }
     }
 
@@ -77,8 +79,10 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 val ep = media?.anime?.episodes?.get(media?.anime?.selectedEpisode)
                 episode = ep
                 if (ep != null) {
-
-                    if (selected != null) {
+                    if (isDownload == true) {
+                        binding.selectorMakeDefault.visibility = View.GONE
+                    }
+                    if (selected != null && isDownload == false) {
                         binding.selectorListContainer.visibility = View.GONE
                         binding.selectorAutoListContainer.visibility = View.VISIBLE
                         binding.selectorAutoText.text = selected
@@ -258,11 +262,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         override fun onBindViewHolder(holder: UrlViewHolder, position: Int) {
             val binding = holder.binding
             val video = extractor.videos[position]
-            //binding.urlQuality.text =
-            //    if (video.quality != null) "${video.quality}p" else "Default Quality"
-            //binding.urlNote.text = video.extraNote ?: ""
-            //binding.urlNote.visibility = if (video.extraNote != null) View.VISIBLE else View.GONE
-            binding.urlDownload.visibility = View.VISIBLE
+            if (isDownload == true) {
+                binding.urlDownload.visibility = View.VISIBLE
+            } else {
+                binding.urlDownload.visibility = View.GONE
+            }
             binding.urlDownload.setSafeOnClickListener {
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedExtractor =
                     extractor.server.name
@@ -314,6 +318,10 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             RecyclerView.ViewHolder(binding.root) {
             init {
                 itemView.setSafeOnClickListener {
+                    if (isDownload == true) {
+                        binding.urlDownload.performClick()
+                        return@setSafeOnClickListener
+                    }
                     tryWith(true) {
                         media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedExtractor =
                             extractor.server.name
@@ -345,13 +353,15 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         fun newInstance(
             server: String? = null,
             la: Boolean = true,
-            prev: String? = null
+            prev: String? = null,
+            isDownload: Boolean
         ): SelectorDialogFragment =
             SelectorDialogFragment().apply {
                 arguments = Bundle().apply {
                     putString("server", server)
                     putBoolean("launch", la)
                     putString("prev", prev)
+                    putBoolean("isDownload", isDownload)
                 }
             }
     }

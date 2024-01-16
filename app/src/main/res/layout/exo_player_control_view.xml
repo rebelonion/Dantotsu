@@ -148,18 +148,6 @@
                         app:tint="#fff"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
-                    <ImageButton
-                        android:id="@+id/exo_download"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:backgroundTint="#00FFFFFF"
-                        android:src="@drawable/ic_round_download_24"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:tint="#fff"
-                        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
-
                     <View
                         android:layout_width="0dp"
                         android:layout_height="match_parent"

@@ -14,6 +14,7 @@ data class Episode(
     var selectedExtractor: String? = null,
     var selectedVideo: Int = 0,
     var selectedSubtitle: Int? = -1,
+    var downloadProgress: String? = null,
     @Transient var extractors: MutableList<VideoExtractor>? = null,
     @Transient var extractorCallback: ((VideoExtractor) -> Unit)? = null,
     var allStreams: Boolean = false,

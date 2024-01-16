@@ -230,7 +230,7 @@ object Helper {
             }
         }
 
-        val downloadTask = AnimeDownloaderService.DownloadTask(
+        val animeDownloadTask = AnimeDownloaderService.AnimeDownloadTask(
             title,
             episode,
             video,
@@ -255,7 +255,7 @@ object Helper {
                             getString(context, R.string.anime_downloads),
                             Context.MODE_PRIVATE
                         ).getString(
-                            downloadTask.getTaskName(),
+                            animeDownloadTask.getTaskName(),
                             ""
                         ) ?: "",
                         false
@@ -264,7 +264,7 @@ object Helper {
                         getString(context, R.string.anime_downloads),
                         Context.MODE_PRIVATE
                     ).edit()
-                        .remove(downloadTask.getTaskName())
+                        .remove(animeDownloadTask.getTaskName())
                         .apply()
                     downloadsManger.removeDownload(
                         DownloadedType(
@@ -273,7 +273,7 @@ object Helper {
                             DownloadedType.Type.ANIME
                         )
                     )
-                    AnimeServiceDataSingleton.downloadQueue.offer(downloadTask)
+                    AnimeServiceDataSingleton.downloadQueue.offer(animeDownloadTask)
                     if (!AnimeServiceDataSingleton.isServiceRunning) {
                         val intent = Intent(context, AnimeDownloaderService::class.java)
                         ContextCompat.startForegroundService(context, intent)
@@ -283,7 +283,7 @@ object Helper {
                 .setNegativeButton("No") { _, _ -> }
                 .show()
         } else {
-            AnimeServiceDataSingleton.downloadQueue.offer(downloadTask)
+            AnimeServiceDataSingleton.downloadQueue.offer(animeDownloadTask)
             if (!AnimeServiceDataSingleton.isServiceRunning) {
                 val intent = Intent(context, AnimeDownloaderService::class.java)
                 ContextCompat.startForegroundService(context, intent)

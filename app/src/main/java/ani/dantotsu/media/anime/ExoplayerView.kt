@@ -1328,18 +1328,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             ext.onVideoPlayed(video)
         }
 
-        val but = playerView.findViewById<ImageButton>(R.id.exo_download)
-        if (video?.format == VideoType.CONTAINER || (loadData<Int>("settings_download_manager")
-                ?: 0) != 0
-        ) {
-            //but.visibility = View.VISIBLE TODO: not sure if this is needed
-            but.setOnClickListener {
-                download(this, episode, animeTitle.text.toString())
-            }
-        } else {
-            but.visibility = View.GONE
-        }
-
         val simpleCache = VideoCache.getInstance(this)
         val httpClient = okHttpClient.newBuilder().apply {
             ignoreAllSSLErrors()

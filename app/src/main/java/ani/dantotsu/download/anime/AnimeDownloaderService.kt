@@ -157,6 +157,14 @@ class AnimeDownloaderService : Service() {
                 val url =
                     AnimeServiceDataSingleton.downloadQueue.find { it.getTaskName() == taskName }?.video?.file?.url
                         ?: ""
+                DownloadService.sendSetStopReason(
+                    this@AnimeDownloaderService,
+                    ExoplayerDownloadService::class.java,
+                    url,
+                    androidx.media3.exoplayer.offline.Download.STATE_REMOVING,
+                    false
+                )
+
                 DownloadService.sendRemoveDownload(
                     this@AnimeDownloaderService,
                     ExoplayerDownloadService::class.java,
@@ -191,7 +199,7 @@ class AnimeDownloaderService : Service() {
     }
 
     @androidx.annotation.OptIn(UnstableApi::class)
-    suspend fun download(task: DownloadTask) {
+    suspend fun download(task: AnimeDownloadTask) {
         try {
             val downloadManager = Helper.downloadManager(this@AnimeDownloaderService)
             withContext(Dispatchers.Main) {
@@ -209,7 +217,7 @@ class AnimeDownloaderService : Service() {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                 }
 
-                broadcastDownloadStarted(task.getTaskName())
+                broadcastDownloadStarted(task.episode)
 
                 currActivity()?.let {
                     Helper.downloadVideo(
@@ -228,7 +236,7 @@ class AnimeDownloaderService : Service() {
                     builder.setContentText("${task.title} - ${task.episode} Download failed to start")
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                     snackString("${task.title} - ${task.episode} Download failed to start")
-                    broadcastDownloadFailed(task.getTaskName())
+                    broadcastDownloadFailed(task.episode)
                     return@withContext
                 }
 
@@ -252,7 +260,7 @@ class AnimeDownloaderService : Service() {
                                             " episode: ${task.episode}"
                                 )
                             )
-                            broadcastDownloadFailed(task.getTaskName())
+                            broadcastDownloadFailed(task.episode)
                             break
                         }
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED) {
@@ -274,7 +282,7 @@ class AnimeDownloaderService : Service() {
                                     DownloadedType.Type.ANIME,
                                 )
                             )
-                            broadcastDownloadFinished(task.getTaskName())
+                            broadcastDownloadFinished(task.episode)
                             break
                         }
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_STOPPED) {
@@ -285,7 +293,7 @@ class AnimeDownloaderService : Service() {
                             break
                         }
                         broadcastDownloadProgress(
-                            task.getTaskName(),
+                            task.episode,
                             download.percentDownloaded.toInt()
                         )
                         if (notifi) {
@@ -299,14 +307,14 @@ class AnimeDownloaderService : Service() {
             logger("Exception while downloading file: ${e.message}")
             snackString("Exception while downloading file: ${e.message}")
             FirebaseCrashlytics.getInstance().recordException(e)
-            broadcastDownloadFailed(task.getTaskName())
+            broadcastDownloadFailed(task.episode)
         }
     }
 
     @androidx.annotation.OptIn(UnstableApi::class)
     suspend fun hasDownloadStarted(
         downloadManager: DownloadManager,
-        task: DownloadTask,
+        task: AnimeDownloadTask,
         timeout: Long
     ): Boolean {
         val startTime = System.currentTimeMillis()
@@ -322,7 +330,7 @@ class AnimeDownloaderService : Service() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private fun saveMediaInfo(task: DownloadTask) {
+    private fun saveMediaInfo(task: AnimeDownloadTask) {
         GlobalScope.launch(Dispatchers.IO) {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
@@ -406,30 +414,30 @@ class AnimeDownloaderService : Service() {
             }
         }
 
-    private fun broadcastDownloadStarted(chapterNumber: String) {
+    private fun broadcastDownloadStarted(episodeNumber: String) {
         val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_STARTED).apply {
-            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, chapterNumber)
+            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, episodeNumber)
         }
         sendBroadcast(intent)
     }
 
-    private fun broadcastDownloadFinished(chapterNumber: String) {
+    private fun broadcastDownloadFinished(episodeNumber: String) {
         val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_FINISHED).apply {
-            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, chapterNumber)
+            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, episodeNumber)
         }
         sendBroadcast(intent)
     }
 
-    private fun broadcastDownloadFailed(chapterNumber: String) {
+    private fun broadcastDownloadFailed(episodeNumber: String) {
         val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_FAILED).apply {
-            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, chapterNumber)
+            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, episodeNumber)
         }
         sendBroadcast(intent)
     }
 
-    private fun broadcastDownloadProgress(chapterNumber: String, progress: Int) {
+    private fun broadcastDownloadProgress(episodeNumber: String, progress: Int) {
         val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_PROGRESS).apply {
-            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, chapterNumber)
+            putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, episodeNumber)
             putExtra("progress", progress)
         }
         sendBroadcast(intent)
@@ -448,7 +456,7 @@ class AnimeDownloaderService : Service() {
     }
 
 
-    data class DownloadTask(
+    data class AnimeDownloadTask(
         val title: String,
         val episode: String,
         val video: Video,
@@ -460,6 +468,12 @@ class AnimeDownloaderService : Service() {
     ) {
         fun getTaskName(): String {
             return "$title - $episode"
+        }
+
+        companion object {
+            fun getTaskName(title: String, episode: String): String {
+                return "$title - $episode"
+            }
         }
     }
 
@@ -473,7 +487,7 @@ class AnimeDownloaderService : Service() {
 object AnimeServiceDataSingleton {
     var video: Video? = null
     var sourceMedia: Media? = null
-    var downloadQueue: Queue<AnimeDownloaderService.DownloadTask> = ConcurrentLinkedQueue()
+    var downloadQueue: Queue<AnimeDownloaderService.AnimeDownloadTask> = ConcurrentLinkedQueue()
 
     @Volatile
     var isServiceRunning: Boolean = false

@@ -242,7 +242,8 @@ class MediaDetailsViewModel : ViewModel() {
         i: String,
         manager: FragmentManager,
         launch: Boolean = true,
-        prevEp: String? = null
+        prevEp: String? = null,
+        isDownload: Boolean = false
     ) {
         Handler(Looper.getMainLooper()).post {
             if (manager.findFragmentByTag("dialog") == null && !manager.isDestroyed) {
@@ -254,13 +255,11 @@ class MediaDetailsViewModel : ViewModel() {
                 }
                 media.selected = this.loadSelected(media)
                 val selector =
-                    SelectorDialogFragment.newInstance(media.selected!!.server, launch, prevEp)
+                    SelectorDialogFragment.newInstance(media.selected!!.server, launch, prevEp, isDownload)
                 selector.show(manager, "dialog")
             }
         }
     }
-
-
     //Manga
     var mangaReadSources: MangaReadSources? = null
 

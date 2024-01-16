@@ -2,6 +2,10 @@ package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -9,17 +13,25 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.annotation.OptIn
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.DownloadService
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
+import ani.dantotsu.download.DownloadedType
+import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.anime.AnimeDownloaderService
+import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
@@ -43,6 +55,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -61,6 +75,8 @@ class AnimeWatchFragment : Fragment() {
 
     private lateinit var headerAdapter: AnimeWatchAdapter
     private lateinit var episodeAdapter: EpisodeAdapter
+
+    val downloadManager = Injekt.get<DownloadsManager>()
 
     var screenWidth = 0f
     private var progress = View.VISIBLE
@@ -81,6 +97,21 @@ class AnimeWatchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val intentFilter = IntentFilter().apply {
+            addAction(ACTION_DOWNLOAD_STARTED)
+            addAction(ACTION_DOWNLOAD_FINISHED)
+            addAction(ACTION_DOWNLOAD_FAILED)
+            addAction(ACTION_DOWNLOAD_PROGRESS)
+        }
+
+        ContextCompat.registerReceiver(
+            requireContext(),
+            downloadStatusReceiver,
+            intentFilter,
+            ContextCompat.RECEIVER_EXPORTED
+        )
+
+
         binding.animeSourceRecycler.updatePadding(bottom = binding.animeSourceRecycler.paddingBottom + navBarHeight)
         screenWidth = resources.displayMetrics.widthPixels.dp
 
@@ -135,9 +166,15 @@ class AnimeWatchFragment : Fragment() {
                 if (!loaded) {
                     model.watchSources = if (media.isAdult) HAnimeSources else AnimeSources
 
+                    val offlineMode = model.watchSources!!.list[media.selected!!.sourceIndex].name == "Downloaded"
+
                     headerAdapter = AnimeWatchAdapter(it, this, model.watchSources!!)
                     episodeAdapter =
-                        EpisodeAdapter(style ?: uiSettings.animeDefaultView, media, this)
+                        EpisodeAdapter(style ?: uiSettings.animeDefaultView, media, this, offlineMode = offlineMode)
+
+                    for (download in downloadManager.animeDownloadedTypes) {
+                        episodeAdapter.stopDownload(download.chapter)
+                    }
 
                     binding.animeSourceRecycler.adapter =
                         ConcatAdapter(headerAdapter, episodeAdapter)
@@ -381,6 +418,90 @@ class AnimeWatchFragment : Fragment() {
         model.onEpisodeClick(media, i, requireActivity().supportFragmentManager)
     }
 
+    fun onAnimeEpisodeDownloadClick(i: String) {
+        model.onEpisodeClick(media, i, requireActivity().supportFragmentManager, isDownload = true)
+    }
+
+    fun onAnimeEpisodeStopDownloadClick(i: String) {
+        val cancelIntent = Intent().apply {
+            action = AnimeDownloaderService.ACTION_CANCEL_DOWNLOAD
+            putExtra(AnimeDownloaderService.EXTRA_TASK_NAME, AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i))
+        }
+        requireContext().sendBroadcast(cancelIntent)
+
+        // Remove the download from the manager and update the UI
+        downloadManager.removeDownload(
+            DownloadedType(
+                media.mainName(),
+                i,
+                DownloadedType.Type.ANIME
+            )
+        )
+        episodeAdapter.purgeDownload(i)
+    }
+
+    @OptIn(UnstableApi::class)
+    fun onAnimeEpisodeRemoveDownloadClick(i: String) {
+        downloadManager.removeDownload(
+            DownloadedType(
+                media.mainName(),
+                i,
+                DownloadedType.Type.ANIME
+            )
+        )
+        val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
+        val id = requireContext().getSharedPreferences(
+                ContextCompat.getString(requireContext(), R.string.anime_downloads),
+                Context.MODE_PRIVATE
+            ).getString(
+                taskName,
+                ""
+            ) ?: ""
+        requireContext().getSharedPreferences(
+            ContextCompat.getString(requireContext(), R.string.anime_downloads),
+            Context.MODE_PRIVATE
+        ).edit().remove(taskName).apply()
+        DownloadService.sendRemoveDownload(
+            requireContext(),
+            ExoplayerDownloadService::class.java,
+            id,
+            true
+        )
+        episodeAdapter.deleteDownload(i)
+    }
+
+    private val downloadStatusReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            if (!this@AnimeWatchFragment::episodeAdapter.isInitialized) return
+            when (intent.action) {
+                ACTION_DOWNLOAD_STARTED -> {
+                    val chapterNumber = intent.getStringExtra(EXTRA_EPISODE_NUMBER)
+                    chapterNumber?.let { episodeAdapter.startDownload(it) }
+                }
+
+                ACTION_DOWNLOAD_FINISHED -> {
+                    val chapterNumber = intent.getStringExtra(EXTRA_EPISODE_NUMBER)
+                    chapterNumber?.let { episodeAdapter.stopDownload(it) }
+                }
+
+                ACTION_DOWNLOAD_FAILED -> {
+                    val chapterNumber = intent.getStringExtra(EXTRA_EPISODE_NUMBER)
+                    chapterNumber?.let {
+                        episodeAdapter.purgeDownload(it)
+                    }
+                }
+
+                ACTION_DOWNLOAD_PROGRESS -> {
+                    val chapterNumber = intent.getStringExtra(EXTRA_EPISODE_NUMBER)
+                    val progress = intent.getIntExtra("progress", 0)
+                    chapterNumber?.let {
+                        episodeAdapter.updateDownloadProgress(it, progress)
+                    }
+                }
+            }
+        }
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     private fun reload() {
         val selected = model.loadSelected(media)
@@ -393,6 +514,8 @@ class AnimeWatchFragment : Fragment() {
 
         model.saveSelected(media.id, selected, requireActivity())
         headerAdapter.handleEpisodes()
+        val isDownloaded = model.watchSources?.list?.get(selected.sourceIndex)?.name == "Downloaded"
+        episodeAdapter.offlineMode = isDownloaded
         episodeAdapter.notifyItemRangeRemoved(0, episodeAdapter.arr.size)
         var arr: ArrayList<Episode> = arrayListOf()
         if (media.anime!!.episodes != null) {
@@ -412,6 +535,7 @@ class AnimeWatchFragment : Fragment() {
     override fun onDestroy() {
         model.watchSources?.flushText()
         super.onDestroy()
+        requireContext().unregisterReceiver(downloadStatusReceiver)
     }
 
     var state: Parcelable? = null
