@@ -952,7 +952,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         episodeArr = episodes.keys.toList()
         currentEpisodeIndex = episodeArr.indexOf(media.anime!!.selectedEpisode!!)
 
-        val episodeTitleArr = arrayListOf<String>()
+        episodeTitleArr = arrayListOf<String>()
         episodes.forEach {
             val episode = it.value
             val cleanedTitle = AnimeNameAdapter.removeEpisodeNumberCompletely(episode.title ?: "")
