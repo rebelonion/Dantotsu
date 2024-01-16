@@ -211,6 +211,9 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 downloadManager.removeMedia(item.title, type)
                 val mediaIds = requireContext().getSharedPreferences(getString(R.string.anime_downloads), Context.MODE_PRIVATE)
                     ?.all?.filter { it.key.contains(item.title) }?.values ?: emptySet()
+                if (mediaIds.isEmpty()) {
+                    snackString("No media found")  // if this happens, terrible things have happened
+                }
                 for (mediaId in mediaIds) {
                     ani.dantotsu.download.video.Helper.downloadManager(requireContext())
                         .removeDownload(mediaId.toString())
