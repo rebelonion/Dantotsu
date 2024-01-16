@@ -23,6 +23,7 @@ import ani.dantotsu.databinding.ItemUrlBinding
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
 import kotlinx.coroutines.CoroutineScope
@@ -268,11 +269,6 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedVideo =
                     position
                 binding.urlDownload.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                //download(
-                //    requireActivity(),
-                //    media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!,
-                //    media!!.userPreferredName
-                //)
                 val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
                 val video =
                     if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
@@ -289,6 +285,16 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 }
                 dismiss()
             }
+            binding.urlDownload.setOnLongClickListener {
+                if ((loadData<Int>("settings_download_manager") ?: 0) != 0) {
+                    download(
+                        requireActivity(),
+                        media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!,
+                        media!!.userPreferredName
+                    )
+                }
+                true
+            }
             if (video.format == VideoType.CONTAINER) {
                 binding.urlSize.visibility = if (video.size != null) View.VISIBLE else View.GONE
                 binding.urlSize.text =
@@ -296,10 +302,6 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     (if (video.extraNote != null) " : " else "") + (if (video.size == 0.0) "Unknown Size" else (DecimalFormat(
                         "#.##"
                     ).format(video.size ?: 0).toString() + " MB"))
-            } else {
-                if ((loadData<Int>("settings_download_manager") ?: 0) == 0) {
-                    ////binding.urlDownload.visibility = View.GONE
-                }
             }
             binding.urlNote.visibility = View.VISIBLE
             binding.urlNote.text = video.format.name
