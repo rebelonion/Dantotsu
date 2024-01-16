@@ -5,6 +5,7 @@ data class OfflineAnimeModel (
     val title: String,
     val score: String,
     val totalEpisode: String,
+    val totalEpisodeList: String,
     val watchedEpisode: String,
     val type: String,
     val episodes: String,

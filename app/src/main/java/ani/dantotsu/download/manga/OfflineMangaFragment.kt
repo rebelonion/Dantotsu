@@ -18,29 +18,28 @@ import android.view.animation.LayoutAnimationController
 import android.view.animation.OvershootInterpolator
 import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
-import android.widget.FrameLayout
 import android.widget.GridView
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.view.updatePadding
-import androidx.core.view.updatePaddingRelative
+import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
+import ani.dantotsu.bottomBar
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
+import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
+import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
@@ -63,15 +62,18 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
     private var downloads: List<OfflineMangaModel> = listOf()
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineMangaAdapter
+    private var uiSettings: UserInterfaceSettings =
+        loadData("ui_settings") ?: UserInterfaceSettings()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_manga_offline, container, false)
+        val view = inflater.inflate(R.layout.fragment_offline_page, container, false)
 
         val textInputLayout = view.findViewById<TextInputLayout>(R.id.offlineMangaSearchBar)
+        textInputLayout.hint = "Manga"
         val currentColor = textInputLayout.boxBackgroundColor
         val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xA8000000.toInt()
         textInputLayout.boxBackgroundColor = semiTransparentColor
@@ -81,16 +83,15 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         requireContext().theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         val color = typedValue.data
 
-        val animeTitleContainer = view.findViewById<LinearLayout>(R.id.animeTitleContainer)
-        animeTitleContainer.updatePadding(top = statusBarHeight)
-
         val animeUserAvatar = view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
         animeUserAvatar.setSafeOnClickListener {
             val dialogFragment =
                 SettingsDialogFragment.newInstance2(SettingsDialogFragment.Companion.PageType2.OfflineMANGA)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
-
+        if (!uiSettings.immersiveMode) {
+            view.rootView.fitsSystemWindows = true
+        }
         val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             ?.getBoolean("colorOverflow", false) ?: false
         if (!colorOverflow) {
@@ -138,6 +139,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             gridView.scheduleLayoutAnimation()
             gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
+            grid()
 
         }
 
@@ -152,8 +154,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             gridView.scheduleLayoutAnimation()
             gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
+            grid()
         }
-
         gridView =
             if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
         gridView.visibility = View.VISIBLE
@@ -167,23 +169,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         adapter = OfflineMangaAdapter(requireContext(), downloads, this)
         gridView.adapter = adapter
         gridView.scheduleLayoutAnimation()
-        gridView.setOnItemClickListener { parent, view, position, id ->
-            // Get the OfflineMangaModel that was clicked
-            val item = adapter.getItem(position) as OfflineMangaModel
-            val media =
-                downloadManager.mangaDownloadedTypes.firstOrNull { it.title == item.title }
-                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title == item.title }
-            media?.let {
-                startActivity(
-                    Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("media", getMedia(it))
-                        .putExtra("download", true)
-                )
-            } ?: run {
-                snackString("no media found")
-            }
-        }
-
+        grid()
         val total = view.findViewById<TextView>(R.id.total)
         total.text =
             if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
@@ -213,11 +199,26 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             dialog.window?.setDimAmount(0.8f)
             true
         }
-        view.rootView.fitsSystemWindows = true
-
         return view
     }
-
+    private fun grid(){
+        gridView.setOnItemClickListener { parent, view, position, id ->
+            // Get the OfflineMangaModel that was clicked
+            val item = adapter.getItem(position) as OfflineMangaModel
+            val media =
+                downloadManager.mangaDownloadedTypes.firstOrNull { it.title == item.title }
+                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title == item.title }
+            media?.let {
+                startActivity(
+                    Intent(requireContext(), MediaDetailsActivity::class.java)
+                        .putExtra("media", getMedia(it))
+                        .putExtra("download", true)
+                )
+            } ?: run {
+                snackString("no media found")
+            }
+        }
+    }
     override fun onSearchQuery(query: String) {
         adapter.onSearchQuery(query)
     }
@@ -240,9 +241,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 }
             }
         }
-        val mangaRefresh = view.findViewById<FrameLayout>(R.id.mangaRefresh)
-        mangaRefresh.updatePaddingRelative(bottom = navBarHeight + 160f.px)
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
+        scrollTop.translationY = -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
         var visible = false
 
         fun animate() {
