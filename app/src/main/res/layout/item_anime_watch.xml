@@ -57,8 +57,8 @@
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:id="@+id/animeSourceNameContainer"
                 android:layout_width="0dp"
-
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:hint="@string/source"
