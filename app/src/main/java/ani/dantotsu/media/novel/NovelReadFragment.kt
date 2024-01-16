@@ -67,7 +67,7 @@ class NovelReadFragment : Fragment(),
     override fun downloadTrigger(novelDownloadPackage: NovelDownloadPackage) {
         Log.e("downloadTrigger", novelDownloadPackage.link)
         val downloadTask = NovelDownloaderService.DownloadTask(
-            title = media.nameMAL ?: media.nameRomaji,
+            title = media.mainName(),
             chapter = novelDownloadPackage.novelName,
             downloadLink = novelDownloadPackage.link,
             originalLink = novelDownloadPackage.originalLink,
@@ -93,7 +93,7 @@ class NovelReadFragment : Fragment(),
         val downloadsManager = Injekt.get<DownloadsManager>()
         if (downloadsManager.queryDownload(
                 DownloadedType(
-                    media.nameMAL ?: media.nameRomaji,
+                    media.mainName(),
                     novel.name,
                     DownloadedType.Type.NOVEL
                 )
@@ -101,7 +101,7 @@ class NovelReadFragment : Fragment(),
         ) {
             val file = File(
                 context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "${DownloadsManager.novelLocation}/${media.nameMAL ?: media.nameRomaji}/${novel.name}/0.epub"
+                "${DownloadsManager.novelLocation}/${media.mainName()}/${novel.name}/0.epub"
             )
             if (!file.exists()) return false
             val fileUri = FileProvider.getUriForFile(
@@ -125,7 +125,7 @@ class NovelReadFragment : Fragment(),
         val downloadsManager = Injekt.get<DownloadsManager>()
         return downloadsManager.queryDownload(
             DownloadedType(
-                media.nameMAL ?: media.nameRomaji,
+                media.mainName(),
                 novel.name,
                 DownloadedType.Type.NOVEL
             )
@@ -136,7 +136,7 @@ class NovelReadFragment : Fragment(),
         val downloadsManager = Injekt.get<DownloadsManager>()
         downloadsManager.removeDownload(
             DownloadedType(
-                media.nameMAL ?: media.nameRomaji,
+                media.mainName(),
                 novel.name,
                 DownloadedType.Type.NOVEL
             )

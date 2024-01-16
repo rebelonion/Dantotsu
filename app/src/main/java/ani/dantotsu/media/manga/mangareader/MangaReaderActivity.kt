@@ -361,7 +361,7 @@ class MangaReaderActivity : AppCompatActivity() {
             model.loadMangaChapterImages(
                 chapter,
                 media.selected!!,
-                media.nameMAL ?: media.nameRomaji
+                media.mainName()
             )
         }
     }
@@ -841,7 +841,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 model.loadMangaChapterImages(
                     chapters[chaptersArr.getOrNull(currentChapterIndex + 1) ?: return@launch]!!,
                     media.selected!!,
-                    media.nameMAL ?: media.nameRomaji,
+                    media.mainName(),
                     false
                 )
                 loading = false

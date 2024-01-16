@@ -447,7 +447,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
 
                     // Create a download task
                     val downloadTask = MangaDownloaderService.DownloadTask(
-                        title = media.nameMAL ?: media.nameRomaji,
+                        title = media.mainName(),
                         chapter = chapter.title!!,
                         imageData = images,
                         sourceMedia = media,
@@ -489,7 +489,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     fun onMangaChapterRemoveDownloadClick(i: String) {
         downloadManager.removeDownload(
             DownloadedType(
-                media.nameMAL ?: media.nameRomaji,
+                media.mainName(),
                 i,
                 DownloadedType.Type.MANGA
             )
@@ -507,7 +507,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         // Remove the download from the manager and update the UI
         downloadManager.removeDownload(
             DownloadedType(
-                media.nameMAL ?: media.nameRomaji,
+                media.mainName(),
                 i,
                 DownloadedType.Type.MANGA
             )
