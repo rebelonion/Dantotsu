@@ -198,13 +198,27 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:id="@+id/animeScanlatorContainer">
-            <TextView
+            <LinearLayout
                 android:layout_width="265dp"
                 android:layout_height="match_parent"
-                android:fontFamily="@font/poppins_bold"
-                android:alpha="0.58"
-                android:text="Scanlator"
-                android:gravity="center_vertical"/>
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:alpha="0.58"
+                    android:text="Scanlator" />
+
+                <TextView
+                    android:id="@+id/scanlatorNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="?attr/colorSecondary"
+                    tools:ignore="TextContrastCheck"
+                    tools:text="number" />
+            </LinearLayout>
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

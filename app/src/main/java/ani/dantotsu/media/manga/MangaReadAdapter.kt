@@ -2,6 +2,7 @@ package ani.dantotsu.media.manga
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -64,7 +65,13 @@ class MangaReadAdapter(
                 null
             )
         }
+        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("offlineMode", false) == true) View.GONE else View.VISIBLE
 
+        binding.animeSourceNameContainer.visibility = offline
+        binding.animeSourceSettings.visibility = offline
+        binding.animeSourceSearch.visibility = offline
+        binding.animeSourceTitle.visibility = offline
         //Source Selection
         var source =
             media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
@@ -142,8 +149,7 @@ class MangaReadAdapter(
 
         binding.animeNestedButton.setOnClickListener {
 
-            val dialogView =
-                LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
+            val dialogView = LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
             val dialogBinding = DialogLayoutBinding.bind(dialogView)
 
             var run = false
@@ -210,6 +216,8 @@ class MangaReadAdapter(
             }
 
             //Scanlator
+            dialogBinding.animeScanlatorContainer.visibility = if (options.count() > 1) View.VISIBLE else  View.GONE
+            dialogBinding.scanlatorNo.text = "${options.count()}"
             dialogBinding.animeScanlatorTop.setOnClickListener {
                 val dialogView2 =
                     LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
@@ -429,8 +437,7 @@ class MangaReadAdapter(
                     parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
-                if (items > 1) binding?.animeSourceLanguageContainer?.visibility =
-                    View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility = View.GONE
+                binding?.animeSourceLanguageContainer?.visibility = if (items > 1) View.VISIBLE else  View.GONE
 
                 binding?.animeSourceLanguage?.setAdapter(adapter)
 

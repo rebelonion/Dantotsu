@@ -1,6 +1,7 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -85,6 +86,13 @@ class AnimeWatchAdapter(
                 null
             )
         }
+        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("offlineMode", false) == true) View.GONE else View.VISIBLE
+
+        binding.animeSourceNameContainer.visibility = offline
+        binding.animeSourceSettings.visibility = offline
+        binding.animeSourceSearch.visibility = offline
+        binding.animeSourceTitle.visibility = offline
 
         //Source Selection
         var source =
@@ -401,9 +409,8 @@ class AnimeWatchAdapter(
                     parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
-                if (items > 1) binding?.animeSourceLanguageContainer?.visibility =
-                    View.VISIBLE else binding?.animeSourceLanguageContainer?.visibility = View.GONE
 
+                binding?.animeSourceLanguageContainer?.visibility = if (items > 1) View.VISIBLE else  View.GONE
                 binding?.animeSourceLanguage?.setAdapter(adapter)
 
             }
