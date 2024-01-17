@@ -254,7 +254,6 @@ class MangaFragment : Fragment() {
         if (!model.loaded) Refresh.activity[this.hashCode()]!!.postValue(true)
         //make sure mangaPageAdapter is initialized
         if (mangaPageAdapter.trendingViewPager != null) {
-            mangaPageAdapter.setIncognito()
             binding.root.requestApplyInsets()
             binding.root.requestLayout()
         }

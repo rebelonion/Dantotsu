@@ -72,7 +72,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val scope = lifecycleScope
         var uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-        setIncognito()
         fun load() {
             if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
                 binding.homeUserName.text = Anilist.username
@@ -359,30 +358,8 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setIncognito() {
-        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false) ?: false
-        if (incognito) {
-            val uiSettings =
-                loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-            binding.incognitoTextView.visibility = View.VISIBLE
-            if (!uiSettings.immersiveMode) {
-                binding.root.fitsSystemWindows = true
-                //holy deprecation
-                binding.root.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                binding.root.requestApplyInsets()
-                binding.root.requestLayout()
-            }
-        } else {
-            binding.incognitoTextView.visibility = View.GONE
-        }
-    }
-
     override fun onResume() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
-        setIncognito()
         super.onResume()
     }
 }

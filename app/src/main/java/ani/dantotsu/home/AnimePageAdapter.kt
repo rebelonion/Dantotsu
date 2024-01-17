@@ -93,7 +93,6 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             )
         }
 
-        setIncognito()
         binding.animeSearchBar.setEndIconOnClickListener {
             binding.animeSearchBarText.performClick()
         }
@@ -148,19 +147,6 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
     fun updateHeight() {
         trendingViewPager!!.updateLayoutParams { height += statusBarHeight }
-    }
-
-    fun setIncognito() {
-        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false) ?: false
-        if (incognito) {
-            binding.incognitoTextView.visibility = View.VISIBLE
-            if (!uiSettings.immersiveMode) {
-                binding.root.fitsSystemWindows = true
-            }
-        } else {
-            binding.incognitoTextView.visibility = View.GONE
-        }
     }
 
     fun updateTrending(adaptor: MediaAdaptor) {

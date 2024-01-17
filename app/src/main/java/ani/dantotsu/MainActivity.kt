@@ -24,7 +24,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
+import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -45,6 +47,7 @@ import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.others.LangSet
+import ani.dantotsu.others.SharedPreferenceBooleanLiveData
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
@@ -61,6 +64,7 @@ import java.io.Serializable
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var incognitoLiveData: SharedPreferenceBooleanLiveData
     private val scope = lifecycleScope
     private var load = false
 
@@ -88,13 +92,48 @@ class MainActivity : AppCompatActivity() {
             backgroundDrawable.setColor(semiTransparentColor)
             _bottomBar.background = backgroundDrawable
         }
-        val colorOverflow = this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("colorOverflow", false)
+        val sharedPreferences = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+        val colorOverflow = sharedPreferences.getBoolean("colorOverflow", false)
         if (!colorOverflow) {
             _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
         }
 
+        val layoutParams = binding.incognitoTextView.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.topMargin = 11 * statusBarHeight / 12
+        binding.incognitoTextView.layoutParams = layoutParams
+        incognitoLiveData = SharedPreferenceBooleanLiveData(
+            sharedPreferences,
+            "incognito",
+            false
+        )
+        incognitoLiveData.observe(this) {
+            if (it) {
+                val slideDownAnim = ObjectAnimator.ofFloat(
+                    binding.incognitoTextView,
+                    View.TRANSLATION_Y,
+                    -(binding.incognitoTextView.height.toFloat() + statusBarHeight),
+                    0f
+                )
+                slideDownAnim.duration = 200
+                slideDownAnim.start()
+                binding.incognitoTextView.visibility = View.VISIBLE
+            } else {
+                val slideUpAnim = ObjectAnimator.ofFloat(
+                    binding.incognitoTextView,
+                    View.TRANSLATION_Y,
+                    0f,
+                    -(binding.incognitoTextView.height.toFloat() + statusBarHeight)
+                )
+                slideUpAnim.duration = 200
+                slideUpAnim.start()
+                //wait for animation to finish
+                Handler(Looper.getMainLooper()).postDelayed(
+                    { binding.incognitoTextView.visibility = View.GONE },
+                    200
+                )
+            }
+        }
         incognitoNotification(this)
 
         var doubleBackToExitPressedOnce = false

@@ -17,17 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:id="@+id/incognitoTextView"
-                android:layout_height="wrap_content"
-                android:layout_width="wrap_content"
-                android:text="Incognito Mode"
-                android:fontFamily="@font/poppins_bold"
-                android:textSize="15sp"
-                android:textColor="?attr/colorPrimary"
-                android:layout_gravity="bottom|center_horizontal"
-                android:padding="8dp"
-                android:visibility="gone"/>
+
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">

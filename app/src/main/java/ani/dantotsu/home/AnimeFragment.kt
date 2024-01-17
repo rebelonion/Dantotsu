@@ -279,7 +279,6 @@ class AnimeFragment : Fragment() {
     override fun onResume() {
         if (!model.loaded) Refresh.activity[this.hashCode()]!!.postValue(true)
         if (animePageAdapter.trendingViewPager != null) {
-            animePageAdapter.setIncognito()
             binding.root.requestApplyInsets()
             binding.root.requestLayout()
         }
