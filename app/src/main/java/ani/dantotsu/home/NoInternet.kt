@@ -78,10 +78,9 @@ class NoInternet : AppCompatActivity() {
             initActivity(this)
             uiSettings = loadData("ui_settings") ?: uiSettings
             selectedOption = uiSettings.defaultStartUpTab
-            if (!uiSettings.immersiveMode) {
-                binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = navBarHeight
-                }
+
+            binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = navBarHeight
             }
         }
         val navbar = binding.includedNavbar.navbar

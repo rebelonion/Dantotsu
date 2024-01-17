@@ -14,7 +14,6 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
 import androidx.activity.addCallback
@@ -24,9 +23,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
-import androidx.core.view.marginTop
 import androidx.core.view.updateLayoutParams
-import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -203,10 +200,9 @@ class MainActivity : AppCompatActivity() {
             } else {
                     uiSettings.defaultStartUpTab
                 }
-            if (!uiSettings.immersiveMode) {
-                binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    bottomMargin = navBarHeight
-                }
+            binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = navBarHeight
+
             }
         }
         val offline = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
