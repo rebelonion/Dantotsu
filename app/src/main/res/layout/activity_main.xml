@@ -42,7 +42,7 @@
             android:text="Incognito Mode"
             android:textColor="?attr/colorOnError"
             android:textSize="15sp"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <FrameLayout
             android:id="@+id/fragmentContainer"

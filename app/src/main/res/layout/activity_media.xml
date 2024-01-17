@@ -156,6 +156,7 @@
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     app:contentScrim="?android:colorBackground"
+                    android:background="?attr/colorSurface"
                     android:ellipsize="marquee"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
