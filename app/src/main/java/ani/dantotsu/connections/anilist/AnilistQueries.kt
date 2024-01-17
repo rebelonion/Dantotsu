@@ -11,6 +11,7 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Page
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.currContext
+import ani.dantotsu.isOnline
 import ani.dantotsu.loadData
 import ani.dantotsu.logError
 import ani.dantotsu.media.Author
@@ -240,7 +241,9 @@ class AnilistQueries {
                         else snackString(currContext()?.getString(R.string.what_did_you_open))
                     }
                 } else {
-                    snackString(currContext()?.getString(R.string.error_getting_data))
+                    if (currContext()?.let { isOnline(it) } == true) {
+                        snackString(currContext()?.getString(R.string.error_getting_data))
+                    }
                 }
             }
             val mal = async {
