@@ -6,7 +6,7 @@ import java.util.regex.Pattern
 class AnimeNameAdapter {
     companion object {
         const val episodeRegex =
-            "(episode|ep|e)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*\\(?\\s*(sub|subbed|dub|dubbed)*\\s*\\)?\\s*|(\\b\\d+\\b)"
+            "(episode|ep|e)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*\\(?\\s*(sub|subbed|dub|dubbed)*\\s*\\)?\\s*|(\\b\\d+\\b\\s*part\\s*\\d*\\b)"
         const val seasonRegex = "(season|s)[\\s:.\\-]*(\\d+)[\\s:.\\-]*"
 
         fun findSeasonNumber(text: String): Int? {
