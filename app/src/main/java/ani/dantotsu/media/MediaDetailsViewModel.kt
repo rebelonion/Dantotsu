@@ -1,19 +1,24 @@
 package ani.dantotsu.media
 
 import android.app.Activity
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
+import androidx.annotation.OptIn
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.media3.common.util.UnstableApi
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.anime.Episode
+import ani.dantotsu.media.anime.ExoplayerView
 import ani.dantotsu.media.anime.SelectorDialogFragment
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.others.AniSkip
@@ -260,6 +265,7 @@ class MediaDetailsViewModel : ViewModel() {
             }
         }
     }
+
     //Manga
     var mangaReadSources: MangaReadSources? = null
 

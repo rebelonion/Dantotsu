@@ -166,15 +166,11 @@ class AnimeWatchFragment : Fragment() {
                 if (!loaded) {
                     model.watchSources = if (media.isAdult) HAnimeSources else AnimeSources
 
-                    val offlineMode = model.watchSources!!.list[media.selected!!.sourceIndex].name == "Downloaded"
+                    val offlineMode = model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)
 
                     headerAdapter = AnimeWatchAdapter(it, this, model.watchSources!!)
                     episodeAdapter =
                         EpisodeAdapter(style ?: uiSettings.animeDefaultView, media, this, offlineMode = offlineMode)
-
-                    for (download in downloadManager.animeDownloadedTypes) {
-                        episodeAdapter.stopDownload(download.chapter)
-                    }
 
                     binding.animeSourceRecycler.adapter =
                         ConcatAdapter(headerAdapter, episodeAdapter)
@@ -514,7 +510,7 @@ class AnimeWatchFragment : Fragment() {
 
         model.saveSelected(media.id, selected, requireActivity())
         headerAdapter.handleEpisodes()
-        val isDownloaded = model.watchSources?.list?.get(selected.sourceIndex)?.name == "Downloaded"
+        val isDownloaded = model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)
         episodeAdapter.offlineMode = isDownloaded
         episodeAdapter.notifyItemRangeRemoved(0, episodeAdapter.arr.size)
         var arr: ArrayList<Episode> = arrayListOf()
@@ -530,6 +526,9 @@ class AnimeWatchFragment : Fragment() {
         episodeAdapter.arr = arr
         episodeAdapter.updateType(style ?: uiSettings.animeDefaultView)
         episodeAdapter.notifyItemRangeInserted(0, arr.size)
+        for (download in downloadManager.animeDownloadedTypes) {
+            episodeAdapter.stopDownload(download.chapter)
+        }
     }
 
     override fun onDestroy() {

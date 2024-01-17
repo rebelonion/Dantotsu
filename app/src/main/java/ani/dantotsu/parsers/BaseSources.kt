@@ -16,6 +16,9 @@ abstract class WatchSources : BaseSources() {
             ?: EmptyAnimeParser()
     }
 
+    fun isDownloadedSource(i: Int): Boolean {
+        return get(i) is OfflineAnimeParser
+    }
 
     suspend fun loadEpisodesFromMedia(i: Int, media: Media): MutableMap<String, Episode> {
         return tryWithSuspend(true) {

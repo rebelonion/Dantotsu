@@ -1,12 +1,16 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
+import androidx.annotation.OptIn
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.coroutineScope
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
@@ -14,11 +18,15 @@ import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.databinding.ItemEpisodeGridBinding
 import ani.dantotsu.databinding.ItemEpisodeListBinding
+import ani.dantotsu.download.anime.AnimeDownloaderService
+import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.math.ln
+import kotlin.math.pow
 
 fun handleProgress(cont: LinearLayout, bar: View, empty: View, mediaId: Int, ep: String) {
     val curr = loadData<Long>("${mediaId}_${ep}")
@@ -98,7 +106,7 @@ class EpisodeAdapter(
                 Glide.with(binding.itemEpisodeImage).load(thumb ?: media.cover).override(400, 0)
                     .into(binding.itemEpisodeImage)
                 binding.itemEpisodeNumber.text = ep.number
-                binding.itemEpisodeTitle.text = title
+                binding.itemEpisodeTitle.text = if (ep.number == title) "Episode $title" else title
 
                 if (ep.filler) {
                     binding.itemEpisodeFiller.visibility = View.VISIBLE
@@ -223,13 +231,26 @@ class EpisodeAdapter(
         }
     }
 
+    @OptIn(UnstableApi::class)
     fun stopDownload(episodeNumber: String) {
         activeDownloads.remove(episodeNumber)
         downloadedEpisodes.add(episodeNumber)
         // Find the position of the chapter and notify only that item
         val position = arr.indexOfFirst { it.number == episodeNumber }
         if (position != -1) {
-            arr[position].downloadProgress = "Downloaded"
+            val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), episodeNumber)
+            val id = fragment.requireContext().getSharedPreferences(
+                ContextCompat.getString(fragment.requireContext(), R.string.anime_downloads),
+                Context.MODE_PRIVATE
+            ).getString(
+                taskName,
+                ""
+            ) ?: ""
+            val index = Helper.downloadManager(fragment.requireContext()).downloadIndex
+            val download = index.getDownload(id)
+            val size = bytesToHuman(download?.bytesDownloaded?:0)
+
+            arr[position].downloadProgress = "Downloaded" + if (size != null) ": ($size)" else ""
             notifyItemChanged(position)
         }
     }
@@ -319,7 +340,7 @@ class EpisodeAdapter(
         fun bind(episodeNumber: String, progress: String?) {
             if (progress != null) {
                 binding.itemDownloadStatus.visibility = View.VISIBLE
-                binding.itemDownloadStatus.text = "$progress"
+                binding.itemDownloadStatus.text = progress
             } else {
                 binding.itemDownloadStatus.visibility = View.GONE
                 binding.itemDownloadStatus.text = ""
@@ -329,6 +350,7 @@ class EpisodeAdapter(
                 binding.itemDownload.setImageResource(R.drawable.ic_sync)
                 startOrContinueRotation(episodeNumber)
             } else if (downloadedEpisodes.contains(episodeNumber)) {
+                binding.itemDownloadStatus.visibility = View.VISIBLE
                 // Show checkmark
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_check)
                 //binding.itemDownload.setColorFilter(typedValue2.data) //TODO: colors go to wrong places
@@ -338,6 +360,7 @@ class EpisodeAdapter(
                     //binding.itemDownload.setColorFilter(typedValue2.data)
                 }, 1000)
             } else {
+                binding.itemDownloadStatus.visibility = View.GONE
                 // Show download icon
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
             }
@@ -370,6 +393,15 @@ class EpisodeAdapter(
 
     fun updateType(t: Int) {
         type = t
+    }
+
+    private fun bytesToHuman(bytes: Long): String? {
+        if (bytes < 0) return null
+        val unit = 1000
+        if (bytes < unit) return "$bytes B"
+        val exp = (Math.log(bytes.toDouble()) / ln(unit.toDouble())).toInt()
+        val pre = ("KMGTPE")[exp - 1]
+        return String.format("%.1f %sB", bytes / unit.toDouble().pow(exp.toDouble()), pre)
     }
 }
 

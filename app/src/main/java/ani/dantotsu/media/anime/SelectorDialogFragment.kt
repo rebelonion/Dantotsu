@@ -6,6 +6,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
@@ -31,6 +32,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
+import java.util.concurrent.CountDownLatch
+
 
 class SelectorDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSelectorBinding? = null
@@ -43,7 +46,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
     private var makeDefault = false
     private var selected: String? = null
     private var launch: Boolean? = null
-    private var isDownload: Boolean? = null
+    private var isDownloadMenu: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +54,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             selected = it.getString("server")
             launch = it.getBoolean("launch", true)
             prevEpisode = it.getString("prev")
-            isDownload = it.getBoolean("isDownload")
+            isDownloadMenu = it.getBoolean("isDownload")
         }
     }
 
@@ -79,10 +82,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 val ep = media?.anime?.episodes?.get(media?.anime?.selectedEpisode)
                 episode = ep
                 if (ep != null) {
-                    if (isDownload == true) {
+                    if (isDownloadMenu == true) {
                         binding.selectorMakeDefault.visibility = View.GONE
                     }
-                    if (selected != null && isDownload == false) {
+
+                    if (selected != null && isDownloadMenu == false) {
                         binding.selectorListContainer.visibility = View.GONE
                         binding.selectorAutoListContainer.visibility = View.VISIBLE
                         binding.selectorAutoText.text = selected
@@ -100,7 +104,12 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
 
                         fun load() {
                             val size =
-                                ep.extractors?.find { it.server.name == selected }?.videos?.size
+                                if (model.watchSources!!.isDownloadedSource(media!!.selected!!.sourceIndex)) {
+                                    ep.extractors?.firstOrNull()?.videos?.size
+                                } else {
+                                    ep.extractors?.find { it.server.name == selected }?.videos?.size
+                                }
+
                             if (size != null && size >= media!!.selected!!.video) {
                                 media!!.anime!!.episodes?.get(media!!.anime!!.selectedEpisode!!)?.selectedExtractor =
                                     selected
@@ -150,6 +159,9 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             ep.extractorCallback = {
                                 scope.launch {
                                     adapter.add(it)
+                                    if (model.watchSources!!.isDownloadedSource(media?.selected!!.sourceIndex)) {
+                                        adapter.perfromClick(0)
+                                    }
                                 }
                             }
                             model.getEpisode().observe(this) {
@@ -169,6 +181,9 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         } else {
                             media!!.anime?.episodes?.set(media!!.anime?.selectedEpisode!!, ep)
                             adapter.addAll(ep.extractors)
+                            if (model.watchSources!!.isDownloadedSource(media?.selected!!.sourceIndex)) {
+                                adapter.perfromClick(0)
+                            }
                             binding.selectorProgressBar.visibility = View.GONE
                         }
                     }
@@ -184,7 +199,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         prevEpisode = null
 
         dismiss()
-        if (launch!!) {
+        if (launch!! || model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)) {
             stopAddingToList()
             val intent = Intent(activity, ExoplayerView::class.java)
             ExoplayerView.media = media
@@ -241,6 +256,14 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             notifyItemRangeInserted(0, extractors.size)
         }
 
+        fun perfromClick(position: Int) {
+            val extractor = links[position]
+            media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedExtractor =
+                extractor.server.name
+            media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedVideo = 0
+            startExoplayer(media!!)
+        }
+
         private inner class StreamViewHolder(val binding: ItemStreamBinding) :
             RecyclerView.ViewHolder(binding.root)
     }
@@ -262,7 +285,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         override fun onBindViewHolder(holder: UrlViewHolder, position: Int) {
             val binding = holder.binding
             val video = extractor.videos[position]
-            if (isDownload == true) {
+            if (isDownloadMenu == true) {
                 binding.urlDownload.visibility = View.VISIBLE
             } else {
                 binding.urlDownload.visibility = View.GONE
@@ -318,7 +341,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             RecyclerView.ViewHolder(binding.root) {
             init {
                 itemView.setSafeOnClickListener {
-                    if (isDownload == true) {
+                    if (isDownloadMenu == true) {
                         binding.urlDownload.performClick()
                         return@setSafeOnClickListener
                     }
