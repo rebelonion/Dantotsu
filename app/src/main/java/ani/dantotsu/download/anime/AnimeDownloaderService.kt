@@ -251,6 +251,13 @@ class AnimeDownloaderService : Service() {
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download failed")
                             logger("Download failed: ${download.failureReason}")
+                            downloadsManager.removeDownload(
+                                DownloadedType(
+                                    task.title,
+                                    task.episode,
+                                    DownloadedType.Type.ANIME,
+                                )
+                            )
                             FirebaseCrashlytics.getInstance().recordException(
                                 Exception(
                                     "Anime Download failed:" +
