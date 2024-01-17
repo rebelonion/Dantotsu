@@ -959,11 +959,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             episodeTitleArr.add("Episode ${episode.number}${if (episode.filler) " [Filler]" else ""}${if (cleanedTitle.isNotEmpty() && cleanedTitle != "null") ": $cleanedTitle" else ""}")
         }
 
-        for (i in episodeTitleArr.indices) {
-            episodeTitleArr[i] = AnimeNameAdapter.removeEpisodeNumber(episodeTitleArr[i])
-        }
-
-
         //Episode Change
         fun change(index: Int) {
             if (isInitialized) {
