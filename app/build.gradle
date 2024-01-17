@@ -66,7 +66,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.10'
     implementation 'com.github.Blatzar:NiceHttp:0.4.4'
     implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2'
-    implementation 'androidx.preference:preference:1.2.1'
+    implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.webkit:webkit:1.9.0'
 
 //    Glide
@@ -115,8 +115,8 @@ dependencies {
     implementation 'ca.gosyer:voyager-navigator:1.0.0-rc07'
     implementation 'com.squareup.logcat:logcat:0.1'
     implementation 'com.github.inorichi.injekt:injekt-core:65b0440'
-    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
+    implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.11'
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
     implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps'
     implementation 'com.squareup.okio:okio:3.7.0'
     implementation 'ch.acra:acra-http:5.11.3'

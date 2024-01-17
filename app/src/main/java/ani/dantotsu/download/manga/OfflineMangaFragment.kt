@@ -86,7 +86,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         val animeUserAvatar = view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
         animeUserAvatar.setSafeOnClickListener {
             val dialogFragment =
-                SettingsDialogFragment.newInstance2(SettingsDialogFragment.Companion.PageType2.OfflineMANGA)
+                SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.OfflineMANGA)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
         if (!uiSettings.immersiveMode) {

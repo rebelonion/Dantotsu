@@ -33,12 +33,9 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private lateinit var pageType: PageType
-    private lateinit var pageType2: PageType2
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageType = arguments?.getSerializable("pageType") as? PageType ?: PageType.HOME
-        pageType2 = arguments?.getSerializable("pageType2") as? PageType2
-            ?: PageType2.OfflineMANGA // changed when offline home page comes
     }
 
     override fun onCreateView(
@@ -109,57 +106,53 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
                 ?.getBoolean("offlineMode", false) ?: false
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
-
-            if (!isChecked) {
-                when (pageType2) {
-                    PageType2.OfflineMANGA -> {
-                        val intent = Intent(activity, MainActivity::class.java)
-                        intent.putExtra("FRAGMENT_CLASS_NAME", MangaFragment::class.java.name)
-                        startActivity(intent)
-                    }
-
-                    PageType2.OfflineHOME -> { //no offline home for now
-                        val intent = Intent(activity, MainActivity::class.java)
-                        intent.putExtra(
-                            "FRAGMENT_CLASS_NAME",
-                            if (Anilist.token != null) HomeFragment::class.java.name else LoginFragment::class.java.name
-                        )
-                        startActivity(intent)
-                    }
-
-                    PageType2.OfflineANIME -> { //no offline anime for now
-                        val intent = Intent(activity, MainActivity::class.java)
-                        intent.putExtra("FRAGMENT_CLASS_NAME", AnimeFragment::class.java.name)
-                        startActivity(intent)
-                    }
+            when (pageType) {
+                PageType.MANGA -> {
+                    val intent = Intent(activity, NoInternet::class.java)
+                    intent.putExtra(
+                        "FRAGMENT_CLASS_NAME",
+                        OfflineMangaFragment::class.java.name
+                    )
+                    startActivity(intent)
                 }
-            } else {
-                when (pageType) {
-                    PageType.MANGA -> {
-                        val intent = Intent(activity, NoInternet::class.java)
-                        intent.putExtra(
-                            "FRAGMENT_CLASS_NAME",
-                            OfflineMangaFragment::class.java.name
-                        )
-                        startActivity(intent)
-                    }
 
-                    PageType.ANIME -> {
-                        val intent = Intent(activity, NoInternet::class.java)
-                        intent.putExtra(
-                            "FRAGMENT_CLASS_NAME",
-                            OfflineAnimeFragment::class.java.name
-                        )
-                        startActivity(intent)
-                    }
+                PageType.ANIME -> {
+                    val intent = Intent(activity, NoInternet::class.java)
+                    intent.putExtra(
+                        "FRAGMENT_CLASS_NAME",
+                        OfflineAnimeFragment::class.java.name
+                    )
+                    startActivity(intent)
+                }
 
-                    PageType.HOME -> {
-                        val intent = Intent(activity, NoInternet::class.java)
-                        intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
-                        startActivity(intent)
-                    }
+                PageType.HOME -> {
+                    val intent = Intent(activity, NoInternet::class.java)
+                    intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
+                    startActivity(intent)
+                }
+
+                PageType.OfflineMANGA -> {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    intent.putExtra("FRAGMENT_CLASS_NAME", MangaFragment::class.java.name)
+                    startActivity(intent)
+                }
+
+                PageType.OfflineHOME -> {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    intent.putExtra(
+                        "FRAGMENT_CLASS_NAME",
+                        if (Anilist.token != null) HomeFragment::class.java.name else LoginFragment::class.java.name
+                    )
+                    startActivity(intent)
+                }
+
+                PageType.OfflineANIME -> {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    intent.putExtra("FRAGMENT_CLASS_NAME", AnimeFragment::class.java.name)
+                    startActivity(intent)
                 }
             }
+
             dismiss()
             context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
                 ?.putBoolean("offlineMode", isChecked)?.apply()
@@ -173,22 +166,10 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
 
     companion object {
         enum class PageType {
-            MANGA, ANIME, HOME
-        }
-
-        enum class PageType2 {
-            OfflineMANGA, OfflineANIME, OfflineHOME
+            MANGA, ANIME, HOME, OfflineMANGA, OfflineANIME, OfflineHOME
         }
 
         fun newInstance(pageType: PageType): SettingsDialogFragment {
-            val fragment = SettingsDialogFragment()
-            val args = Bundle()
-            args.putSerializable("pageType", pageType)
-            fragment.arguments = args
-            return fragment
-        }
-
-        fun newInstance2(pageType: PageType2): SettingsDialogFragment {
             val fragment = SettingsDialogFragment()
             val args = Bundle()
             args.putSerializable("pageType", pageType)

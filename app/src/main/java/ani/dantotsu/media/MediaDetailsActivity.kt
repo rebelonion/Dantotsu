@@ -74,7 +74,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         LangSet.setLocale(this)
-        var media: Media = intent.getSerialized("media") ?: return
+        var media: Media = intent.getSerialized("media") ?: mediaSingleton ?: return
+        mediaSingleton = null
         ThemeManager(this).applyTheme(MediaSingleton.bitmap)
         MediaSingleton.bitmap = null
         super.onCreate(savedInstanceState)
@@ -532,6 +533,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             disabled = !enabled
             image.alpha = if (disabled) 0.33f else 1f
         }
+    }
+
+    companion object {
+        var mediaSingleton: Media? = null
     }
 }
 

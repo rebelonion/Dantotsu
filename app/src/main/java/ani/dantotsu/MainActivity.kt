@@ -73,6 +73,9 @@ class MainActivity : AppCompatActivity() {
         LangSet.setLocale(this)
         super.onCreate(savedInstanceState)
 
+        //get FRAGMENT_CLASS_NAME from intent
+        val FRAGMENT_CLASS_NAME = intent.getStringExtra("FRAGMENT_CLASS_NAME")
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -151,7 +154,16 @@ class MainActivity : AppCompatActivity() {
         binding.root.doOnAttach {
             initActivity(this)
             uiSettings = loadData("ui_settings") ?: uiSettings
-            selectedOption = uiSettings.defaultStartUpTab
+            selectedOption = if (FRAGMENT_CLASS_NAME != null) {
+                when (FRAGMENT_CLASS_NAME) {
+                    AnimeFragment::class.java.name -> 0
+                    HomeFragment::class.java.name -> 1
+                    MangaFragment::class.java.name -> 2
+                    else -> 1
+                }
+            } else {
+                    uiSettings.defaultStartUpTab
+                }
             if (!uiSettings.immersiveMode) {
                 binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = navBarHeight
