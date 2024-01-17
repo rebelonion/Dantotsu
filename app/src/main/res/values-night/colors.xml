@@ -11,5 +11,5 @@
     <color name="nav_status">#80000000</color>
     <color name="filler">#29FF6B08</color>
     <color name="chip">#b3aead</color>
-    <color name="grey_nav">#E8222222</color>
+    <color name="grey_nav">#F9222222</color>
 </resources>
