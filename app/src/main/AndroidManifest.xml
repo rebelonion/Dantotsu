@@ -68,6 +68,8 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/currently_airing_widget_info" />
         </receiver>
+        <receiver android:name=".subcriptions.NotificationClickReceiver" />
+
 
         <activity
             android:name=".media.novel.novelreader.NovelReaderActivity"

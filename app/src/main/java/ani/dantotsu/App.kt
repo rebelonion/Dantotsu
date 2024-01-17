@@ -91,7 +91,6 @@ class App : MultiDexApplication() {
             logger("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }
-
     }
 
 
