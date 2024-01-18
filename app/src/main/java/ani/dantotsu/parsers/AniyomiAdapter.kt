@@ -23,6 +23,7 @@ import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Track
 import eu.kanade.tachiyomi.animesource.model.Video
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -84,57 +85,55 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
-        }
-        if (source is AnimeCatalogueSource) {
-            try {
-                val res = source.getEpisodeList(sAnime)
+        } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource
+            ?: return emptyList())
+        try {
+            val res = source.getEpisodeList(sAnime)
 
-                val sortedEpisodes = if (res[0].episode_number == -1f) {
-                    // Find the number in the string and sort by that number
-                    val sortedByStringNumber = res.sortedBy {
-                        val matchResult = "\\d+".toRegex().find(it.name)
-                        val number = matchResult?.value?.toFloat() ?: Float.MAX_VALUE
-                        it.episode_number = number  // Store the found number in episode_number
-                        number
-                    }
-
-                    // If there is no number, reverse the order and give them an incrementing number
-                    var incrementingNumber = 1f
-                    sortedByStringNumber.map {
-                        if (it.episode_number == Float.MAX_VALUE) {
-                            it.episode_number =
-                                incrementingNumber++  // Update episode_number with the incrementing number
-                        }
-                        it
-                    }
-                } else {
-                    var episodeCounter = 1f
-                    // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
-                    val seasonGroups =
-                        res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
-                    seasonGroups.keys.sorted().flatMap { season ->
-                        seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
-                            if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
-                                val potentialNumber =
-                                    AnimeNameAdapter.findEpisodeNumber(episode.name)
-                                if (potentialNumber != null) {
-                                    episode.episode_number = potentialNumber
-                                } else {
-                                    episode.episode_number = episodeCounter
-                                }
-                                episodeCounter++
-                            }
-                            episode
-                        } ?: emptyList()
-                    }
+            val sortedEpisodes = if (res[0].episode_number == -1f) {
+                // Find the number in the string and sort by that number
+                val sortedByStringNumber = res.sortedBy {
+                    val matchResult = "\\d+".toRegex().find(it.name)
+                    val number = matchResult?.value?.toFloat() ?: Float.MAX_VALUE
+                    it.episode_number = number  // Store the found number in episode_number
+                    number
                 }
-                return sortedEpisodes.map { SEpisodeToEpisode(it) }
-            } catch (e: Exception) {
-                println("Exception: $e")
+
+                // If there is no number, reverse the order and give them an incrementing number
+                var incrementingNumber = 1f
+                sortedByStringNumber.map {
+                    if (it.episode_number == Float.MAX_VALUE) {
+                        it.episode_number =
+                            incrementingNumber++  // Update episode_number with the incrementing number
+                    }
+                    it
+                }
+            } else {
+                var episodeCounter = 1f
+                // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
+                val seasonGroups =
+                    res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
+                seasonGroups.keys.sorted().flatMap { season ->
+                    seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
+                        if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
+                            val potentialNumber =
+                                AnimeNameAdapter.findEpisodeNumber(episode.name)
+                            if (potentialNumber != null) {
+                                episode.episode_number = potentialNumber
+                            } else {
+                                episode.episode_number = episodeCounter
+                            }
+                            episodeCounter++
+                        }
+                        episode
+                    } ?: emptyList()
+                }
             }
-            return emptyList()
+            return sortedEpisodes.map { SEpisodeToEpisode(it) }
+        } catch (e: Exception) {
+            logger("Exception: $e")
         }
-        return emptyList()  // Return an empty list if source is not an AnimeCatalogueSource
+        return emptyList()
     }
 
     override suspend fun loadVideoServers(
@@ -147,7 +146,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
-        } as? AnimeCatalogueSource ?: return emptyList()
+        } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource
+            ?: return emptyList())
 
         return try {
             val videos = source.getVideoList(sEpisode)
@@ -169,9 +169,10 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
-        } as? AnimeCatalogueSource ?: return emptyList()
+        } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource ?: return emptyList())
         return try {
             val res = source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
+            logger("query: $query")
             convertAnimesPageToShowResponse(res)
         } catch (e: CloudflareBypassException) {
             logger("Exception in search: $e")
@@ -291,7 +292,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         var imageDataList: List<ImageData> = listOf()
         val ret = coroutineScope {
             try {
-                println("source.name " + source.name)
+                logger("source.name " + source.name)
                 val res = source.getPageList(sChapter)
                 val reIndexedPages =
                     res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
@@ -327,7 +328,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
         return coroutineScope {
             try {
-                println("source.name " + source.name)
+                logger("source.name " + source.name)
                 val res = source.getPageList(sChapter)
                 val reIndexedPages =
                     res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
@@ -359,8 +360,8 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             try {
                 // Fetch the image
                 val response = httpSource.getImage(page)
-                println("Response: ${response.code}")
-                println("Response: ${response.message}")
+                logger("Response: ${response.code}")
+                logger("Response: ${response.message}")
 
                 // Convert the Response to an InputStream
                 val inputStream = response.body.byteStream()
@@ -380,7 +381,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 return@withContext bitmap
             } catch (e: Exception) {
                 // Handle any exceptions
-                println("An error occurred: ${e.message}")
+                logger("An error occurred: ${e.message}")
                 return@withContext null
             }
         }
@@ -413,7 +414,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 inputStream.close()
             } catch (e: Exception) {
                 // Handle any exceptions
-                println("An error occurred: ${e.message}")
+                logger("An error occurred: ${e.message}")
             }
         }
     }
@@ -460,7 +461,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             }
         } catch (e: Exception) {
             // Handle exception here
-            println("Exception while saving image: ${e.message}")
+            logger("Exception while saving image: ${e.message}")
         }
     }
 
