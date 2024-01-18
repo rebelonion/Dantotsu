@@ -62,6 +62,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
     private var downloads: List<OfflineMangaModel> = listOf()
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineMangaAdapter
+    private lateinit var total : TextView
     private var uiSettings: UserInterfaceSettings =
         loadData("ui_settings") ?: UserInterfaceSettings()
 
@@ -131,13 +132,9 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         layoutList.setOnClickListener {
             selected(it as ImageView)
             style = 0
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putInt("offline_view", style!!)?.apply()
+            requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("offline_view", style!!).apply()
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView)
-            gridView.adapter = adapter
-            gridView.scheduleLayoutAnimation()
-            gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
             grid()
 
@@ -146,39 +143,29 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         layoutcompact.setOnClickListener {
             selected(it as ImageView)
             style = 1
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putInt("offline_view", style!!)?.apply()
+            requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putInt("offline_view", style!!).apply()
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView1)
-            gridView.adapter = adapter
-            gridView.scheduleLayoutAnimation()
-            gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
             grid()
         }
-        gridView =
-            if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
-        gridView.visibility = View.VISIBLE
-        getDownloads()
-
-        val fadeIn = AlphaAnimation(0f, 1f)
-        fadeIn.duration = 200 // animations  pog
-        val animation = LayoutAnimationController(fadeIn)
-
-        gridView.layoutAnimation = animation
-        adapter = OfflineMangaAdapter(requireContext(), downloads, this)
-        gridView.adapter = adapter
-        gridView.scheduleLayoutAnimation()
+        gridView = if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
+        total = view.findViewById(R.id.total)
         grid()
-        val total = view.findViewById<TextView>(R.id.total)
-        total.text =
-            if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
-
         return view
     }
 
     private fun grid() {
-        gridView.setOnItemClickListener { parent, view, position, id ->
+        gridView.visibility = View.VISIBLE
+        getDownloads()
+        val fadeIn = AlphaAnimation(0f, 1f)
+        fadeIn.duration = 300 // animations  pog
+        gridView.layoutAnimation = LayoutAnimationController(fadeIn)
+        adapter = OfflineMangaAdapter(requireContext(), downloads, this)
+        gridView.adapter = adapter
+        gridView.scheduleLayoutAnimation()
+        total.text = if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
+        gridView.setOnItemClickListener { _, _, position, _ ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
             val media =
@@ -195,7 +182,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             }
         }
 
-        gridView.setOnItemLongClickListener { parent, view, position, id ->
+        gridView.setOnItemLongClickListener { _, _, position, _ ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
             val type: DownloadedType.Type =
@@ -213,6 +200,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 downloadManager.removeMedia(item.title, type)
                 getDownloads()
                 adapter.setItems(downloads)
+                total.text = if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
             }
             builder.setNegativeButton("No") { _, _ ->
                 // Do nothing
