@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.coroutineScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
+import androidx.media3.exoplayer.offline.DownloadIndex
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
 import ani.dantotsu.connections.updateProgress
@@ -45,6 +46,7 @@ fun handleProgress(cont: LinearLayout, bar: View, empty: View, mediaId: Int, ep:
     }
 }
 
+@OptIn(UnstableApi::class)
 class EpisodeAdapter(
     private var type: Int,
     private val media: Media,
@@ -53,6 +55,14 @@ class EpisodeAdapter(
     var offlineMode: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
+    private lateinit var index: DownloadIndex
+
+
+    init {
+        if (offlineMode) {
+            index = Helper.downloadManager(fragment.requireContext()).downloadIndex
+        }
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return (when (viewType) {
             0 -> EpisodeListViewHolder(
@@ -246,9 +256,12 @@ class EpisodeAdapter(
                 taskName,
                 ""
             ) ?: ""
-            val index = Helper.downloadManager(fragment.requireContext()).downloadIndex
-            val download = index.getDownload(id)
-            val size = bytesToHuman(download?.bytesDownloaded?:0)
+            val size = try {
+                val download = index.getDownload(id)
+                bytesToHuman(download?.bytesDownloaded ?: 0)
+            } catch (e: Exception) {
+                null
+            }
 
             arr[position].downloadProgress = "Downloaded" + if (size != null) ": ($size)" else ""
             notifyItemChanged(position)

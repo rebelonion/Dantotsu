@@ -527,7 +527,9 @@ class AnimeWatchFragment : Fragment() {
         episodeAdapter.updateType(style ?: uiSettings.animeDefaultView)
         episodeAdapter.notifyItemRangeInserted(0, arr.size)
         for (download in downloadManager.animeDownloadedTypes) {
-            episodeAdapter.stopDownload(download.chapter)
+            if (download.title == media.mainName()) {
+                episodeAdapter.stopDownload(download.chapter)
+            }
         }
     }
 
