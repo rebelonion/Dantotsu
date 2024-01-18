@@ -13,7 +13,6 @@ import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
 import eu.kanade.tachiyomi.util.preference.plusAssign
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -63,9 +62,11 @@ class MangaExtensionManager(
     private var subLanguagesEnabledOnFirstRun = preferences.enabledLanguages().isSet()
 
     fun getAppIconForSource(sourceId: Long): Drawable? {
-        val pkgName = _installedExtensionsFlow.value.find { ext -> ext.sources.any { it.id == sourceId } }?.pkgName
+        val pkgName =
+            _installedExtensionsFlow.value.find { ext -> ext.sources.any { it.id == sourceId } }?.pkgName
         if (pkgName != null) {
-            return iconMap[pkgName] ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName) }
+            return iconMap[pkgName]
+                ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName) }
         }
         return null
     }
@@ -257,14 +258,20 @@ class MangaExtensionManager(
         MangaExtensionLoader.trustedSignatures += signature
         preferences.trustedSignatures() += signature
 
-        val nowTrustedExtensions = _untrustedExtensionsFlow.value.filter { it.signatureHash == signature }
+        val nowTrustedExtensions =
+            _untrustedExtensionsFlow.value.filter { it.signatureHash == signature }
         _untrustedExtensionsFlow.value -= nowTrustedExtensions
 
         val ctx = context
         launchNow {
             nowTrustedExtensions
                 .map { extension ->
-                    async { MangaExtensionLoader.loadMangaExtensionFromPkgName(ctx, extension.pkgName) }
+                    async {
+                        MangaExtensionLoader.loadMangaExtensionFromPkgName(
+                            ctx,
+                            extension.pkgName
+                        )
+                    }
                 }
                 .map { it.await() }
                 .forEach { result ->
@@ -354,13 +361,15 @@ class MangaExtensionManager(
     }
 
     private fun MangaExtension.Installed.updateExists(availableExtension: MangaExtension.Available? = null): Boolean {
-        val availableExt = availableExtension ?: _availableExtensionsFlow.value.find { it.pkgName == pkgName }
+        val availableExt =
+            availableExtension ?: _availableExtensionsFlow.value.find { it.pkgName == pkgName }
         if (isUnofficial || availableExt == null) return false
 
         return (availableExt.versionCode > versionCode || availableExt.libVersion > libVersion)
     }
 
     private fun updatePendingUpdatesCount() {
-        preferences.mangaExtensionUpdatesCount().set(_installedExtensionsFlow.value.count { it.hasUpdate })
+        preferences.mangaExtensionUpdatesCount()
+            .set(_installedExtensionsFlow.value.count { it.hasUpdate })
     }
 }

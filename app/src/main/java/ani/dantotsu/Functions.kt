@@ -945,14 +945,19 @@ fun checkCountry(context: Context): Boolean {
 }
 
 const val INCOGNITO_CHANNEL_ID = 26
+
 @SuppressLint("LaunchActivityFromNotification")
-fun incognitoNotification(context: Context){
-    val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val incognito = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("incognito", false)
+fun incognitoNotification(context: Context) {
+    val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val incognito = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+        .getBoolean("incognito", false)
     if (incognito) {
         val intent = Intent(context, NotificationClickReceiver::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-            PendingIntent.FLAG_IMMUTABLE)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
         val builder = NotificationCompat.Builder(context, Notifications.CHANNEL_INCOGNITO_MODE)
             .setSmallIcon(R.drawable.ic_incognito_24)
             .setContentTitle("Incognito Mode")

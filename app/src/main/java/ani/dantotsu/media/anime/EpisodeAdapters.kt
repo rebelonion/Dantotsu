@@ -11,7 +11,6 @@ import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.coroutineScope
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.Download
 import androidx.media3.exoplayer.offline.DownloadIndex
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
@@ -63,6 +62,7 @@ class EpisodeAdapter(
             index = Helper.downloadManager(fragment.requireContext()).downloadIndex
         }
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return (when (viewType) {
             0 -> EpisodeListViewHolder(
@@ -248,7 +248,10 @@ class EpisodeAdapter(
         // Find the position of the chapter and notify only that item
         val position = arr.indexOfFirst { it.number == episodeNumber }
         if (position != -1) {
-            val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), episodeNumber)
+            val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(
+                media.mainName(),
+                episodeNumber
+            )
             val id = fragment.requireContext().getSharedPreferences(
                 ContextCompat.getString(fragment.requireContext(), R.string.anime_downloads),
                 Context.MODE_PRIVATE
@@ -323,6 +326,7 @@ class EpisodeAdapter(
     inner class EpisodeListViewHolder(val binding: ItemEpisodeListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val activeCoroutines = mutableSetOf<String>()
+
         init {
             itemView.setOnClickListener {
                 if (bindingAdapterPosition < arr.size && bindingAdapterPosition >= 0)

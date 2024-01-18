@@ -3,6 +3,7 @@ package ani.dantotsu.media.manga
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,12 +24,14 @@ import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.media.anime.handleProgress
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
+import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -65,8 +68,12 @@ class MangaReadAdapter(
                 null
             )
         }
-        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                ?.getBoolean("offlineMode", false) == true) View.GONE else View.VISIBLE
+        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences(
+                "Dantotsu",
+                Context.MODE_PRIVATE
+            )
+                ?.getBoolean("offlineMode", false) == true
+        ) View.GONE else View.VISIBLE
 
         binding.animeSourceNameContainer.visibility = offline
         binding.animeSourceSettings.visibility = offline
@@ -149,9 +156,10 @@ class MangaReadAdapter(
 
         binding.animeNestedButton.setOnClickListener {
 
-            val dialogView = LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
+            val dialogView =
+                LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
             val dialogBinding = DialogLayoutBinding.bind(dialogView)
-
+            var refresh = false
             var run = false
             var reversed = media.selected!!.recyclerReversed
             var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.animeDefaultView
@@ -194,6 +202,20 @@ class MangaReadAdapter(
                 dialogBinding.layoutText.text = "Compact"
                 run = true
             }
+            dialogBinding.animeWebviewContainer.setOnClickListener {
+                //start CookieCatcher activity
+                if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
+                    val sourceAHH = mangaReadSources[source] as? DynamicMangaParser
+                    val sourceHttp = sourceAHH?.extension?.sources?.firstOrNull() as? HttpSource
+                    val url = sourceHttp?.baseUrl
+                    url?.let {
+                        refresh = true
+                        val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
+                            .putExtra("url", url)
+                        ContextCompat.startActivity(fragment.requireContext(), intent, null)
+                    }
+                }
+            }
 
             //Multi download
             dialogBinding.downloadNo.text = "0"
@@ -216,7 +238,8 @@ class MangaReadAdapter(
             }
 
             //Scanlator
-            dialogBinding.animeScanlatorContainer.visibility = if (options.count() > 1) View.VISIBLE else  View.GONE
+            dialogBinding.animeScanlatorContainer.visibility =
+                if (options.count() > 1) View.VISIBLE else View.GONE
             dialogBinding.scanlatorNo.text = "${options.count()}"
             dialogBinding.animeScanlatorTop.setOnClickListener {
                 val dialogView2 =
@@ -267,8 +290,13 @@ class MangaReadAdapter(
                     if (dialogBinding.downloadNo.text != "0") {
                         fragment.multiDownload(dialogBinding.downloadNo.text.toString().toInt())
                     }
+                    if (refresh) fragment.loadChapters(source, true)
                 }
                 .setNegativeButton("Cancel") { _, _ ->
+                    if (refresh) fragment.loadChapters(source, true)
+                }
+                .setOnCancelListener {
+                    if (refresh) fragment.loadChapters(source, true)
                 }
                 .create()
             nestedDialog?.show()
@@ -437,7 +465,8 @@ class MangaReadAdapter(
                     parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
-                binding?.animeSourceLanguageContainer?.visibility = if (items > 1) View.VISIBLE else  View.GONE
+                binding?.animeSourceLanguageContainer?.visibility =
+                    if (items > 1) View.VISIBLE else View.GONE
 
                 binding?.animeSourceLanguage?.setAdapter(adapter)
 

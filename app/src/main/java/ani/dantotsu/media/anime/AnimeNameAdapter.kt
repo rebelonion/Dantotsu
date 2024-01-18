@@ -43,7 +43,8 @@ class AnimeNameAdapter {
                 text
             }
             return if (removedNumber.equals(text, true)) {
-                val failedEpisodeNumberPattern: Regex = Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
+                val failedEpisodeNumberPattern: Regex =
+                    Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
                 failedEpisodeNumberPattern.replace(removedNumber) { mr ->
                     mr.value.replaceFirst(mr.groupValues[1], "")
                 }.ifEmpty { removedNumber }
@@ -58,7 +59,8 @@ class AnimeNameAdapter {
                 text
             }
             return if (removedNumber.equals(text, true)) {
-                val failedEpisodeNumberPattern: Regex = Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
+                val failedEpisodeNumberPattern: Regex =
+                    Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
                 failedEpisodeNumberPattern.replace(removedNumber) { mr ->
                     mr.value.replaceFirst(mr.groupValues[1], "")
                 }.ifEmpty { removedNumber }

@@ -191,6 +191,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".others.webview.CookieCatcher"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter android:label="Discord Login for Dantotsu">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="dantotsu" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="discord.dantotsu.com" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".connections.anilist.UrlMedia"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:excludeFromRecents="true"

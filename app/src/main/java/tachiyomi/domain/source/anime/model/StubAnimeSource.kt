@@ -30,4 +30,5 @@ class StubAnimeSource(private val sourceData: AnimeSourceData) : AnimeSource {
         return if (sourceData.isMissingInfo.not()) "$name (${lang.uppercase()})" else id.toString()
     }
 }
+
 class AnimeSourceNotInstalledException : Exception()

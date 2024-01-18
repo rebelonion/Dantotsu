@@ -19,7 +19,11 @@ interface AnimeSourceRepository {
 
     fun getSourcesWithNonLibraryAnime(): Flow<List<AnimeSourceWithCount>>
 
-    fun searchAnime(sourceId: Long, query: String, filterList: AnimeFilterList): AnimeSourcePagingSourceType
+    fun searchAnime(
+        sourceId: Long,
+        query: String,
+        filterList: AnimeFilterList
+    ): AnimeSourcePagingSourceType
 
     fun getPopularAnime(sourceId: Long): AnimeSourcePagingSourceType
 

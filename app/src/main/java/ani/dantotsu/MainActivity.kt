@@ -198,24 +198,23 @@ class MainActivity : AppCompatActivity() {
                     else -> 1
                 }
             } else {
-                    uiSettings.defaultStartUpTab
-                }
+                uiSettings.defaultStartUpTab
+            }
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
 
             }
         }
         val offline = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                .getBoolean("offlineMode", false)
+            .getBoolean("offlineMode", false)
         if (!isOnline(this)) {
             snackString(this@MainActivity.getString(R.string.no_internet_connection))
             startActivity(Intent(this, NoInternet::class.java))
         } else {
-            if (offline){
+            if (offline) {
                 snackString(this@MainActivity.getString(R.string.no_internet_connection))
                 startActivity(Intent(this, NoInternet::class.java))
-            }
-            else {
+            } else {
                 val model: AnilistHomeViewModel by viewModels()
                 model.genres.observe(this) { it ->
                     if (it != null) {
@@ -226,15 +225,16 @@ class MainActivity : AppCompatActivity() {
                             binding.mainProgressBar.visibility = View.GONE
                             val mainViewPager = binding.viewpager
                             mainViewPager.isUserInputEnabled = false
-                            mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+                            mainViewPager.adapter =
+                                ViewPagerAdapter(supportFragmentManager, lifecycle)
                             mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
                             navbar.setOnTabSelectListener(object :
-                                    AnimatedBottomBar.OnTabSelectListener {
+                                AnimatedBottomBar.OnTabSelectListener {
                                 override fun onTabSelected(
-                                        lastIndex: Int,
-                                        lastTab: AnimatedBottomBar.Tab?,
-                                        newIndex: Int,
-                                        newTab: AnimatedBottomBar.Tab
+                                    lastIndex: Int,
+                                    lastTab: AnimatedBottomBar.Tab?,
+                                    newIndex: Int,
+                                    newTab: AnimatedBottomBar.Tab
                                 ) {
                                     navbar.animate().translationZ(12f).setDuration(200).start()
                                     selectedOption = newIndex
@@ -242,7 +242,12 @@ class MainActivity : AppCompatActivity() {
                                 }
                             })
                             navbar.selectTabAt(selectedOption)
-                            mainViewPager.post { mainViewPager.setCurrentItem(selectedOption, false) }
+                            mainViewPager.post {
+                                mainViewPager.setCurrentItem(
+                                    selectedOption,
+                                    false
+                                )
+                            }
                         } else {
                             binding.mainProgressBar.visibility = View.GONE
                         }
@@ -262,8 +267,8 @@ class MainActivity : AppCompatActivity() {
                             if (media != null) {
                                 media.cameFromContinue = cont
                                 startActivity(
-                                        Intent(this@MainActivity, MediaDetailsActivity::class.java)
-                                                .putExtra("media", media as Serializable)
+                                    Intent(this@MainActivity, MediaDetailsActivity::class.java)
+                                        .putExtra("media", media as Serializable)
                                 )
                             } else {
                                 snackString(this@MainActivity.getString(R.string.anilist_not_found))
@@ -282,8 +287,8 @@ class MainActivity : AppCompatActivity() {
                             val md = "Open settings & click +Add Links & select Anilist & Mal urls"
                             addView(TextView(this@MainActivity).apply {
                                 val markWon =
-                                        Markwon.builder(this@MainActivity)
-                                                .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
+                                    Markwon.builder(this@MainActivity)
+                                        .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
                                 markWon.setMarkdown(this, md)
                             })
 
@@ -296,8 +301,8 @@ class MainActivity : AppCompatActivity() {
                                 saveData("allow_opening_links", true, this@MainActivity)
                                 tryWith(true) {
                                     startActivity(
-                                            Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
-                                                    .setData(Uri.parse("package:$packageName"))
+                                        Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
+                                            .setData(Uri.parse("package:$packageName"))
                                     )
                                 }
                             }
