@@ -187,11 +187,15 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
             val downloads = downloadManager.animeDownloadedTypes
-            println(downloads)
             val media =
                 downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title }
             media?.let {
-                MediaDetailsActivity.mediaSingleton = getMedia(it)
+                val mediaModel = getMedia(it)
+                if (mediaModel == null) {
+                    snackString("Error loading media.json")
+                    return@let
+                }
+                MediaDetailsActivity.mediaSingleton = mediaModel
                 startActivity(
                     Intent(requireContext(), MediaDetailsActivity::class.java)
                         .putExtra("download", true)

@@ -26,6 +26,7 @@ import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -255,11 +256,15 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         }
 
         fun perfromClick(position: Int) {
-            val extractor = links[position]
-            media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedExtractor =
-                extractor.server.name
-            media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedVideo = 0
-            startExoplayer(media!!)
+            try { //bandaid fix for crash
+                val extractor = links[position]
+                media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedExtractor =
+                    extractor.server.name
+                media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedVideo = 0
+                startExoplayer(media!!)
+            } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
         }
 
         private inner class StreamViewHolder(val binding: ItemStreamBinding) :
