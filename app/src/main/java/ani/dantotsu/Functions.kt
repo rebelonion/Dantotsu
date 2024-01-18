@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
-import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.ClipData
@@ -160,22 +159,11 @@ fun initActivity(a: Activity) {
                 }
         }
         a.hideStatusBar()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R &&
-            statusBarHeight == 0 &&
-            a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
-        ) {
-            window.setDecorFitsSystemWindows(false)
-
-            window.decorView.setOnApplyWindowInsetsListener { _, insets ->
-                statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
-                navBarHeight = insets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
-                insets
-            }
-
-            window.insetsController?.let { controller ->
-                controller.systemBarsBehavior =
-                    WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                controller.hide(WindowInsetsCompat.Type.navigationBars())
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0 && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            window.decorView.rootWindowInsets?.displayCutout?.apply {
+                if (boundingRects.size > 0) {
+                    statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())
+                }
             }
         }
     } else
