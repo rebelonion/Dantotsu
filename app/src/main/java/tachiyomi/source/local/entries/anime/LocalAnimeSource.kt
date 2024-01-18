@@ -1,5 +1,6 @@
 package tachiyomi.source.local.entries.anime
 
+//import eu.kanade.tachiyomi.util.storage.toFFmpegString
 import android.content.Context
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.AnimeSource
@@ -8,15 +9,11 @@ import eu.kanade.tachiyomi.animesource.model.AnimeFilterList
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import eu.kanade.tachiyomi.util.lang.compareToCaseInsensitiveNaturalOrder
 import eu.kanade.tachiyomi.util.storage.DiskUtil
-//import eu.kanade.tachiyomi.util.storage.toFFmpegString
-import kotlinx.serialization.json.Json
 import rx.Observable
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.anime.model.Anime
 import tachiyomi.source.local.filter.anime.AnimeOrderBy
-import uy.kohesive.injekt.injectLazy
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -27,7 +24,7 @@ class LocalAnimeSource(
     private val POPULAR_FILTERS = AnimeFilterList(AnimeOrderBy.Popular(context))
     private val LATEST_FILTERS = AnimeFilterList(AnimeOrderBy.Latest(context))
 
-    override val name ="Local anime source"
+    override val name = "Local anime source"
 
     override val id: Long = ID
 
@@ -42,7 +39,11 @@ class LocalAnimeSource(
 
     override fun fetchLatestUpdates(page: Int) = fetchSearchAnime(page, "", LATEST_FILTERS)
 
-    override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
+    override fun fetchSearchAnime(
+        page: Int,
+        query: String,
+        filters: AnimeFilterList
+    ): Observable<AnimesPage> {
         //return emptyObservable()
         return Observable.just(AnimesPage(emptyList(), false))
     }
@@ -63,7 +64,8 @@ class LocalAnimeSource(
     override fun getFilterList() = AnimeFilterList(AnimeOrderBy.Popular(context))
 
     // Unused stuff
-    override suspend fun getVideoList(episode: SEpisode) = throw UnsupportedOperationException("Unused")
+    override suspend fun getVideoList(episode: SEpisode) =
+        throw UnsupportedOperationException("Unused")
 
     companion object {
         const val ID = 0L

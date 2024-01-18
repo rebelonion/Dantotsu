@@ -166,11 +166,17 @@ class AnimeWatchFragment : Fragment() {
                 if (!loaded) {
                     model.watchSources = if (media.isAdult) HAnimeSources else AnimeSources
 
-                    val offlineMode = model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)
+                    val offlineMode =
+                        model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)
 
                     headerAdapter = AnimeWatchAdapter(it, this, model.watchSources!!)
                     episodeAdapter =
-                        EpisodeAdapter(style ?: uiSettings.animeDefaultView, media, this, offlineMode = offlineMode)
+                        EpisodeAdapter(
+                            style ?: uiSettings.animeDefaultView,
+                            media,
+                            this,
+                            offlineMode = offlineMode
+                        )
 
                     binding.animeSourceRecycler.adapter =
                         ConcatAdapter(headerAdapter, episodeAdapter)
@@ -421,7 +427,10 @@ class AnimeWatchFragment : Fragment() {
     fun onAnimeEpisodeStopDownloadClick(i: String) {
         val cancelIntent = Intent().apply {
             action = AnimeDownloaderService.ACTION_CANCEL_DOWNLOAD
-            putExtra(AnimeDownloaderService.EXTRA_TASK_NAME, AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i))
+            putExtra(
+                AnimeDownloaderService.EXTRA_TASK_NAME,
+                AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
+            )
         }
         requireContext().sendBroadcast(cancelIntent)
 
@@ -447,12 +456,12 @@ class AnimeWatchFragment : Fragment() {
         )
         val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
         val id = requireContext().getSharedPreferences(
-                ContextCompat.getString(requireContext(), R.string.anime_downloads),
-                Context.MODE_PRIVATE
-            ).getString(
-                taskName,
-                ""
-            ) ?: ""
+            ContextCompat.getString(requireContext(), R.string.anime_downloads),
+            Context.MODE_PRIVATE
+        ).getString(
+            taskName,
+            ""
+        ) ?: ""
         requireContext().getSharedPreferences(
             ContextCompat.getString(requireContext(), R.string.anime_downloads),
             Context.MODE_PRIVATE

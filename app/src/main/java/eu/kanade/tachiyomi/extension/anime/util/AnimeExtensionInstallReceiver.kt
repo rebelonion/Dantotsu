@@ -62,6 +62,7 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
                     }
                 }
             }
+
             Intent.ACTION_PACKAGE_REPLACED -> {
                 launchNow {
                     when (val result = getExtensionFromIntent(context, intent)) {
@@ -72,6 +73,7 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
                     }
                 }
             }
+
             Intent.ACTION_PACKAGE_REMOVED -> {
                 if (isReplacing(intent)) return
 

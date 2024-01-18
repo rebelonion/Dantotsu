@@ -171,11 +171,13 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         gridView.scheduleLayoutAnimation()
         grid()
         val total = view.findViewById<TextView>(R.id.total)
-        total.text = if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
+        total.text =
+            if (gridView.count > 0) "Manga and Novels (${gridView.count})" else "Empty List"
 
         return view
     }
-    private fun grid(){
+
+    private fun grid() {
         gridView.setOnItemClickListener { parent, view, position, id ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
@@ -220,6 +222,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             true
         }
     }
+
     override fun onSearchQuery(query: String) {
         adapter.onSearchQuery(query)
     }
@@ -243,7 +246,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             }
         }
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
-        scrollTop.translationY = -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
+        scrollTop.translationY =
+            -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
         val visible = false
 
         fun animate() {

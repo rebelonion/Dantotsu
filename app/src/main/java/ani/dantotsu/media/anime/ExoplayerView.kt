@@ -75,7 +75,6 @@ import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
-import ani.dantotsu.others.Download.download
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.ResettableTimer
 import ani.dantotsu.others.getSerialized

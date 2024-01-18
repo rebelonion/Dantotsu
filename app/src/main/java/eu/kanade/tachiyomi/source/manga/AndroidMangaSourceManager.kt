@@ -31,7 +31,8 @@ class AndroidMangaSourceManager(
 
     private val stubSourcesMap = ConcurrentHashMap<Long, StubMangaSource>()
 
-    override val catalogueSources: Flow<List<CatalogueSource>> = sourcesMapFlow.map { it.values.filterIsInstance<CatalogueSource>() }
+    override val catalogueSources: Flow<List<CatalogueSource>> =
+        sourcesMapFlow.map { it.values.filterIsInstance<CatalogueSource>() }
 
     init {
         scope.launch {
@@ -67,7 +68,8 @@ class AndroidMangaSourceManager(
 
     override fun getOnlineSources() = sourcesMapFlow.value.values.filterIsInstance<HttpSource>()
 
-    override fun getCatalogueSources() = sourcesMapFlow.value.values.filterIsInstance<CatalogueSource>()
+    override fun getCatalogueSources() =
+        sourcesMapFlow.value.values.filterIsInstance<CatalogueSource>()
 
     override fun getStubSources(): List<StubMangaSource> {
         val onlineSourceIds = getOnlineSources().map { it.id }

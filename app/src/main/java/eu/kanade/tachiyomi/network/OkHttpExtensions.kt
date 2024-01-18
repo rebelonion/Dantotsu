@@ -1,7 +1,5 @@
 package eu.kanade.tachiyomi.network
 
-import eu.kanade.tachiyomi.network.ProgressListener
-import eu.kanade.tachiyomi.network.ProgressResponseBody
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.serialization.DeserializationStrategy

@@ -30,7 +30,11 @@ object EpisodeRecognition {
      */
     private val unwantedWhiteSpace = Regex("""\s(?=extra|special|omake)""")
 
-    fun parseEpisodeNumber(animeTitle: String, episodeName: String, episodeNumber: Float? = null): Float {
+    fun parseEpisodeNumber(
+        animeTitle: String,
+        episodeName: String,
+        episodeNumber: Float? = null
+    ): Float {
         // If episode number is known return.
         if (episodeNumber != null && (episodeNumber == -2f || episodeNumber > -1f)) {
             return episodeNumber

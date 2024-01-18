@@ -77,7 +77,11 @@ internal class AnimeExtensionInstaller(private val context: Context) {
         val request = DownloadManager.Request(downloadUri)
             .setTitle(extension.name)
             .setMimeType(APK_MIME)
-            .setDestinationInExternalFilesDir(context, Environment.DIRECTORY_DOWNLOADS, downloadUri.lastPathSegment)
+            .setDestinationInExternalFilesDir(
+                context,
+                Environment.DIRECTORY_DOWNLOADS,
+                downloadUri.lastPathSegment
+            )
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
         val id = downloadManager.enqueue(request)
@@ -144,6 +148,7 @@ internal class AnimeExtensionInstaller(private val context: Context) {
 
                 context.startActivity(intent)
             }
+
             else -> {
                 val intent =
                     AnimeExtensionInstallService.getIntent(context, downloadId, uri, installer)

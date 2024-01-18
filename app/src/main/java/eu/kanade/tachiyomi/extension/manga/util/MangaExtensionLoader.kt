@@ -41,15 +41,18 @@ internal object MangaExtensionLoader {
     const val LIB_VERSION_MIN = 1.2
     const val LIB_VERSION_MAX = 1.5
 
-    private const val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
+    private const val PACKAGE_FLAGS =
+        PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
 
     // inorichi's key
-    private const val officialSignature = "7ce04da7773d41b489f4693a366c36bcd0a11fc39b547168553c285bd7348e23"
+    private const val officialSignature =
+        "7ce04da7773d41b489f4693a366c36bcd0a11fc39b547168553c285bd7348e23"
 
     /**
      * List of the trusted signatures.
      */
-    var trustedSignatures = mutableSetOf<String>() + preferences.trustedSignatures().get() + officialSignature
+    var trustedSignatures =
+        mutableSetOf<String>() + preferences.trustedSignatures().get() + officialSignature
 
     /**
      * Return a list of all the installed extensions initialized concurrently.
@@ -105,7 +108,11 @@ internal object MangaExtensionLoader {
      * @param pkgName The package name of the extension to load.
      * @param pkgInfo The package info of the extension.
      */
-    private fun loadMangaExtension(context: Context, pkgName: String, pkgInfo: PackageInfo): MangaLoadResult {
+    private fun loadMangaExtension(
+        context: Context,
+        pkgName: String,
+        pkgInfo: PackageInfo
+    ): MangaLoadResult {
         val pkgManager = context.packageManager
 
         val appInfo = try {
@@ -116,7 +123,8 @@ internal object MangaExtensionLoader {
             return MangaLoadResult.Error
         }
 
-        val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Tachiyomi: ")
+        val extName =
+            pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Tachiyomi: ")
         val versionName = pkgInfo.versionName
         val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
 
@@ -130,7 +138,7 @@ internal object MangaExtensionLoader {
         if (libVersion == null || libVersion < LIB_VERSION_MIN || libVersion > LIB_VERSION_MAX) {
             logcat(LogPriority.WARN) {
                 "Lib version is $libVersion, while only versions " +
-                    "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
+                        "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
             }
             return MangaLoadResult.Error
         }

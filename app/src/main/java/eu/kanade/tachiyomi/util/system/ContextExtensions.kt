@@ -21,11 +21,10 @@ import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
 import androidx.core.net.toUri
+import com.hippo.unifile.UniFile
 import eu.kanade.tachiyomi.util.lang.truncateCenter
 import logcat.LogPriority
 import tachiyomi.core.util.system.logcat
-import ani.dantotsu.toast
-import com.hippo.unifile.UniFile
 import java.io.File
 import kotlin.math.roundToInt
 
@@ -59,7 +58,8 @@ fun Context.copyToClipboard(label: String, content: String) {
  * @param permission the permission to check.
  * @return true if it has permissions.
  */
-fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermission(this, permission) == PermissionChecker.PERMISSION_GRANTED
+fun Context.hasPermission(permission: String) =
+    PermissionChecker.checkSelfPermission(this, permission) == PermissionChecker.PERMISSION_GRANTED
 
 /**
  * Returns the color for the given attribute.
@@ -67,7 +67,8 @@ fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermi
  * @param resource the attribute.
  * @param alphaFactor the alpha number [0,1].
  */
-@ColorInt fun Context.getResourceColor(@AttrRes resource: Int, alphaFactor: Float = 1f): Int {
+@ColorInt
+fun Context.getResourceColor(@AttrRes resource: Int, alphaFactor: Float = 1f): Int {
     val typedArray = obtainStyledAttributes(intArrayOf(resource))
     val color = typedArray.getColor(0, 0)
     typedArray.recycle()
@@ -80,7 +81,8 @@ fun Context.hasPermission(permission: String) = PermissionChecker.checkSelfPermi
     return color
 }
 
-@ColorInt fun Context.getThemeColor(attr: Int): Int {
+@ColorInt
+fun Context.getThemeColor(attr: Int): Int {
     val tv = TypedValue()
     return if (this.theme.resolveAttribute(attr, tv, true)) {
         if (tv.resourceId != 0) {
@@ -137,7 +139,10 @@ fun Context.openInBrowser(uri: Uri, forceDefaultBrowser: Boolean = false) {
 private fun Context.defaultBrowserPackageName(): String? {
     val browserIntent = Intent(Intent.ACTION_VIEW, "http://".toUri())
     val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        packageManager.resolveActivity(browserIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()))
+        packageManager.resolveActivity(
+            browserIntent,
+            PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
+        )
     } else {
         @Suppress("DEPRECATION")
         packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
@@ -182,7 +187,6 @@ fun Context.getUriSize(uri: Uri): Long? {
 val Context.hasMiuiPackageInstaller get() = isPackageInstalled("com.miui.packageinstaller")
 
 val Context.isShizukuInstalled get() = false
-
 
 
 fun Context.getApplicationIcon(pkgName: String): Drawable? {

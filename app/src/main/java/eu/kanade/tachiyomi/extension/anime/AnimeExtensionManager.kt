@@ -13,7 +13,6 @@ import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller
 import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
 import eu.kanade.tachiyomi.util.preference.plusAssign
-import eu.kanade.tachiyomi.util.system.toast
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -57,20 +56,24 @@ class AnimeExtensionManager(
 
     private val iconMap = mutableMapOf<String, Drawable>()
 
-    private val _installedAnimeExtensionsFlow = MutableStateFlow(emptyList<AnimeExtension.Installed>())
+    private val _installedAnimeExtensionsFlow =
+        MutableStateFlow(emptyList<AnimeExtension.Installed>())
     val installedExtensionsFlow = _installedAnimeExtensionsFlow.asStateFlow()
 
     private var subLanguagesEnabledOnFirstRun = preferences.enabledLanguages().isSet()
 
     fun getAppIconForSource(sourceId: Long): Drawable? {
-        val pkgName = _installedAnimeExtensionsFlow.value.find { ext -> ext.sources.any { it.id == sourceId } }?.pkgName
+        val pkgName =
+            _installedAnimeExtensionsFlow.value.find { ext -> ext.sources.any { it.id == sourceId } }?.pkgName
         if (pkgName != null) {
-            return iconMap[pkgName] ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName) }
+            return iconMap[pkgName]
+                ?: iconMap.getOrPut(pkgName) { context.packageManager.getApplicationIcon(pkgName) }
         }
         return null
     }
 
-    private val _availableAnimeExtensionsFlow = MutableStateFlow(emptyList<AnimeExtension.Available>())
+    private val _availableAnimeExtensionsFlow =
+        MutableStateFlow(emptyList<AnimeExtension.Available>())
     val availableExtensionsFlow = _availableAnimeExtensionsFlow.asStateFlow()
 
     private var availableAnimeExtensionsSourcesData: Map<Long, AnimeSourceData> = emptyMap()
@@ -84,7 +87,8 @@ class AnimeExtensionManager(
 
     fun getSourceData(id: Long) = availableAnimeExtensionsSourcesData[id]
 
-    private val _untrustedAnimeExtensionsFlow = MutableStateFlow(emptyList<AnimeExtension.Untrusted>())
+    private val _untrustedAnimeExtensionsFlow =
+        MutableStateFlow(emptyList<AnimeExtension.Untrusted>())
     val untrustedExtensionsFlow = _untrustedAnimeExtensionsFlow.asStateFlow()
 
     init {
@@ -213,8 +217,9 @@ class AnimeExtensionManager(
      * @param extension The anime extension to be updated.
      */
     fun updateExtension(extension: AnimeExtension.Installed): Observable<InstallStep> {
-        val availableExt = _availableAnimeExtensionsFlow.value.find { it.pkgName == extension.pkgName }
-            ?: return Observable.empty()
+        val availableExt =
+            _availableAnimeExtensionsFlow.value.find { it.pkgName == extension.pkgName }
+                ?: return Observable.empty()
         return installExtension(availableExt)
     }
 
@@ -251,20 +256,27 @@ class AnimeExtensionManager(
      * @param signature The signature to whitelist.
      */
     fun trustSignature(signature: String) {
-        val untrustedSignatures = _untrustedAnimeExtensionsFlow.value.map { it.signatureHash }.toSet()
+        val untrustedSignatures =
+            _untrustedAnimeExtensionsFlow.value.map { it.signatureHash }.toSet()
         if (signature !in untrustedSignatures) return
 
         AnimeExtensionLoader.trustedSignatures += signature
         preferences.trustedSignatures() += signature
 
-        val nowTrustedAnimeExtensions = _untrustedAnimeExtensionsFlow.value.filter { it.signatureHash == signature }
+        val nowTrustedAnimeExtensions =
+            _untrustedAnimeExtensionsFlow.value.filter { it.signatureHash == signature }
         _untrustedAnimeExtensionsFlow.value -= nowTrustedAnimeExtensions
 
         val ctx = context
         launchNow {
             nowTrustedAnimeExtensions
                 .map { animeextension ->
-                    async { AnimeExtensionLoader.loadExtensionFromPkgName(ctx, animeextension.pkgName) }
+                    async {
+                        AnimeExtensionLoader.loadExtensionFromPkgName(
+                            ctx,
+                            animeextension.pkgName
+                        )
+                    }
                 }
                 .map { it.await() }
                 .forEach { result ->
@@ -307,11 +319,13 @@ class AnimeExtensionManager(
      * @param pkgName The package name of the uninstalled application.
      */
     private fun unregisterAnimeExtension(pkgName: String) {
-        val installedAnimeExtension = _installedAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
+        val installedAnimeExtension =
+            _installedAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
         if (installedAnimeExtension != null) {
             _installedAnimeExtensionsFlow.value -= installedAnimeExtension
         }
-        val untrustedAnimeExtension = _untrustedAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
+        val untrustedAnimeExtension =
+            _untrustedAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
         if (untrustedAnimeExtension != null) {
             _untrustedAnimeExtensionsFlow.value -= untrustedAnimeExtension
         }
@@ -354,13 +368,15 @@ class AnimeExtensionManager(
     }
 
     private fun AnimeExtension.Installed.updateExists(availableAnimeExtension: AnimeExtension.Available? = null): Boolean {
-        val availableExt = availableAnimeExtension ?: _availableAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
+        val availableExt = availableAnimeExtension
+            ?: _availableAnimeExtensionsFlow.value.find { it.pkgName == pkgName }
         if (isUnofficial || availableExt == null) return false
 
         return (availableExt.versionCode > versionCode || availableExt.libVersion > libVersion)
     }
 
     private fun updatePendingUpdatesCount() {
-        preferences.animeExtensionUpdatesCount().set(_installedAnimeExtensionsFlow.value.count { it.hasUpdate })
+        preferences.animeExtensionUpdatesCount()
+            .set(_installedAnimeExtensionsFlow.value.count { it.hasUpdate })
     }
 }

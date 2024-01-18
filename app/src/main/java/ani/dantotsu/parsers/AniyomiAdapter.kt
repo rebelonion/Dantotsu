@@ -169,7 +169,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } catch (e: Exception) {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
-        } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource ?: return emptyList())
+        } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource
+            ?: return emptyList())
         return try {
             val res = source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
             logger("query: $query")

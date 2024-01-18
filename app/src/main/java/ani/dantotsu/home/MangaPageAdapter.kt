@@ -140,6 +140,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
     fun updateHeight() {
         trendingViewPager!!.updateLayoutParams { height += statusBarHeight }
     }
+
     fun updateTrending(adaptor: MediaAdaptor) {
         binding.mangaTrendingProgressBar.visibility = View.GONE
         binding.mangaTrendingViewPager.adapter = adaptor

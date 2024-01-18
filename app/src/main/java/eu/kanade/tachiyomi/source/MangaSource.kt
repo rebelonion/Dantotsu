@@ -33,7 +33,8 @@ interface MangaSource {
         "Use the 1.x API instead",
         ReplaceWith("getMangaDetails"),
     )
-    fun fetchMangaDetails(manga: SManga): Observable<SManga> = throw IllegalStateException("Not used")
+    fun fetchMangaDetails(manga: SManga): Observable<SManga> =
+        throw IllegalStateException("Not used")
 
     /**
      * Returns an observable with all the available chapters for a manga.
@@ -44,7 +45,8 @@ interface MangaSource {
         "Use the 1.x API instead",
         ReplaceWith("getChapterList"),
     )
-    fun fetchChapterList(manga: SManga): Observable<List<SChapter>> = throw IllegalStateException("Not used")
+    fun fetchChapterList(manga: SManga): Observable<List<SChapter>> =
+        throw IllegalStateException("Not used")
 
     /**
      * Returns an observable with the list of pages a chapter has. Pages should be returned

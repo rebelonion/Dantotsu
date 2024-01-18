@@ -1,37 +1,16 @@
 package tachiyomi.core.util.system
 
-import android.content.Context
-import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.BitmapRegionDecoder
-import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Rect
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.GradientDrawable
-import android.os.Build
-import android.webkit.MimeTypeMap
-import androidx.annotation.ColorInt
-import androidx.core.graphics.alpha
 import androidx.core.graphics.applyCanvas
-import androidx.core.graphics.blue
 import androidx.core.graphics.createBitmap
-import androidx.core.graphics.get
-import androidx.core.graphics.green
-import androidx.core.graphics.red
-import com.hippo.unifile.UniFile
-import logcat.LogPriority
-import java.io.BufferedInputStream
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
-import java.net.URLConnection
-import kotlin.math.abs
 import kotlin.math.max
-import kotlin.math.min
 
 object ImageUtil {
 

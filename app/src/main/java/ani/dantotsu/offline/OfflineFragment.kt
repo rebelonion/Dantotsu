@@ -7,9 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
-import ani.dantotsu.App
 import ani.dantotsu.R
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentOfflineBinding
 import ani.dantotsu.isOnline
 import ani.dantotsu.navBarHeight

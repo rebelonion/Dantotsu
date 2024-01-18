@@ -1,7 +1,6 @@
 package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Build

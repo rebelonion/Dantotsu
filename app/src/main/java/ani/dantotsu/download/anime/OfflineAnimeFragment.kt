@@ -180,7 +180,9 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
 
         return view
     }
-    @OptIn(UnstableApi::class) private fun grid(){
+
+    @OptIn(UnstableApi::class)
+    private fun grid() {
         gridView.setOnItemClickListener { parent, view, position, id ->
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
@@ -211,7 +213,10 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             builder.setMessage("Are you sure you want to delete ${item.title}?")
             builder.setPositiveButton("Yes") { _, _ ->
                 downloadManager.removeMedia(item.title, type)
-                val mediaIds = requireContext().getSharedPreferences(getString(R.string.anime_downloads), Context.MODE_PRIVATE)
+                val mediaIds = requireContext().getSharedPreferences(
+                    getString(R.string.anime_downloads),
+                    Context.MODE_PRIVATE
+                )
                     ?.all?.filter { it.key.contains(item.title) }?.values ?: emptySet()
                 if (mediaIds.isEmpty()) {
                     snackString("No media found")  // if this happens, terrible things have happened
@@ -231,6 +236,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             true
         }
     }
+
     override fun onSearchQuery(query: String) {
         adapter.onSearchQuery(query)
     }
@@ -254,7 +260,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             }
         }
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
-        scrollTop.translationY = -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
+        scrollTop.translationY =
+            -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
         val visible = false
 
         fun animate() {
@@ -401,9 +408,13 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 mediaModel.status == currActivity()!!.getString(R.string.status_releasing)
             val isUserScored = mediaModel.userScore != 0
             val watchedEpisodes = (mediaModel.userProgress ?: "~").toString()
-            val totalEpisode = if (mediaModel.anime?.nextAiringEpisode != null) (mediaModel.anime.nextAiringEpisode.toString() + " | " + (mediaModel.anime.totalEpisodes ?: "~").toString()) else (mediaModel.anime?.totalEpisodes ?: "~").toString()
+            val totalEpisode =
+                if (mediaModel.anime?.nextAiringEpisode != null) (mediaModel.anime.nextAiringEpisode.toString() + " | " + (mediaModel.anime.totalEpisodes
+                    ?: "~").toString()) else (mediaModel.anime?.totalEpisodes ?: "~").toString()
             val chapters = " Chapters"
-            val totalEpisodesList = if (mediaModel.anime?.nextAiringEpisode != null) (mediaModel.anime.nextAiringEpisode.toString()) else (mediaModel.anime?.totalEpisodes ?: "~").toString()
+            val totalEpisodesList =
+                if (mediaModel.anime?.nextAiringEpisode != null) (mediaModel.anime.nextAiringEpisode.toString()) else (mediaModel.anime?.totalEpisodes
+                    ?: "~").toString()
             return OfflineAnimeModel(
                 title,
                 score,

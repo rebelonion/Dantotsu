@@ -3,7 +3,6 @@ package eu.kanade.tachiyomi.network
 import android.content.Context
 import android.os.Build
 import ani.dantotsu.Mapper
-import ani.dantotsu.defaultHeaders
 import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.interceptor.CloudflareInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UncaughtExceptionInterceptor
@@ -31,42 +30,40 @@ class NetworkHelper(
         CloudflareInterceptor(context, cookieJar, ::defaultUserAgentProvider)
     }
 
-    private fun baseClientBuilder(callTimout: Int = 2): OkHttpClient.Builder
-         {
-            val builder = OkHttpClient.Builder()
-                .cookieJar(cookieJar)
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .callTimeout(callTimout.toLong(), TimeUnit.MINUTES)
-                .addInterceptor(UncaughtExceptionInterceptor())
-                .addInterceptor(userAgentInterceptor)
+    private fun baseClientBuilder(callTimout: Int = 2): OkHttpClient.Builder {
+        val builder = OkHttpClient.Builder()
+            .cookieJar(cookieJar)
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .callTimeout(callTimout.toLong(), TimeUnit.MINUTES)
+            .addInterceptor(UncaughtExceptionInterceptor())
+            .addInterceptor(userAgentInterceptor)
 
-            if (preferences.verboseLogging().get()) {
-                val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.HEADERS
-                }
-                builder.addNetworkInterceptor(httpLoggingInterceptor)
+        if (preferences.verboseLogging().get()) {
+            val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+                level = HttpLoggingInterceptor.Level.HEADERS
             }
-
-            when (preferences.dohProvider().get()) {
-                PREF_DOH_CLOUDFLARE -> builder.dohCloudflare()
-                PREF_DOH_GOOGLE -> builder.dohGoogle()
-                PREF_DOH_ADGUARD -> builder.dohAdGuard()
-                PREF_DOH_QUAD9 -> builder.dohQuad9()
-                PREF_DOH_ALIDNS -> builder.dohAliDNS()
-                PREF_DOH_DNSPOD -> builder.dohDNSPod()
-                PREF_DOH_360 -> builder.doh360()
-                PREF_DOH_QUAD101 -> builder.dohQuad101()
-                PREF_DOH_MULLVAD -> builder.dohMullvad()
-                PREF_DOH_CONTROLD -> builder.dohControlD()
-                PREF_DOH_NJALLA -> builder.dohNajalla()
-                PREF_DOH_SHECAN -> builder.dohShecan()
-                PREF_DOH_LIBREDNS -> builder.dohLibreDNS()
-            }
-
-            return builder
+            builder.addNetworkInterceptor(httpLoggingInterceptor)
         }
 
+        when (preferences.dohProvider().get()) {
+            PREF_DOH_CLOUDFLARE -> builder.dohCloudflare()
+            PREF_DOH_GOOGLE -> builder.dohGoogle()
+            PREF_DOH_ADGUARD -> builder.dohAdGuard()
+            PREF_DOH_QUAD9 -> builder.dohQuad9()
+            PREF_DOH_ALIDNS -> builder.dohAliDNS()
+            PREF_DOH_DNSPOD -> builder.dohDNSPod()
+            PREF_DOH_360 -> builder.doh360()
+            PREF_DOH_QUAD101 -> builder.dohQuad101()
+            PREF_DOH_MULLVAD -> builder.dohMullvad()
+            PREF_DOH_CONTROLD -> builder.dohControlD()
+            PREF_DOH_NJALLA -> builder.dohNajalla()
+            PREF_DOH_SHECAN -> builder.dohShecan()
+            PREF_DOH_LIBREDNS -> builder.dohLibreDNS()
+        }
+
+        return builder
+    }
 
 
     val client by lazy { baseClientBuilder().cache(Cache(cacheDir, cacheSize)).build() }
@@ -80,15 +77,15 @@ class NetworkHelper(
     }
 
     val requestClient = Requests(
-    client,
-    mapOf(
-        "User-Agent" to
-            defaultUserAgentProvider()
-                .format(Build.VERSION.RELEASE, Build.MODEL)
-    ),
-    defaultCacheTime = 6,
-    defaultCacheTimeUnit = TimeUnit.HOURS,
-    responseParser = Mapper
+        client,
+        mapOf(
+            "User-Agent" to
+                    defaultUserAgentProvider()
+                        .format(Build.VERSION.RELEASE, Build.MODEL)
+        ),
+        defaultCacheTime = 6,
+        defaultCacheTimeUnit = TimeUnit.HOURS,
+        responseParser = Mapper
     )
 
     fun defaultUserAgentProvider() = preferences.defaultUserAgent().get().trim()

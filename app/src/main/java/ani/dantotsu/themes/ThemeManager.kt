@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
-import android.os.Build
 import android.view.Window
 import android.view.WindowManager
 import ani.dantotsu.R
@@ -72,7 +71,7 @@ class ThemeManager(private val context: Activity) {
         } else {
             winParams.flags = winParams.flags and bits.inv()
         }
-        win.setAttributes(winParams)
+        win.attributes = winParams
     }
 
     private fun applyDynamicColors(
