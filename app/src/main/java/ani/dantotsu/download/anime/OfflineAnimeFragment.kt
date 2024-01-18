@@ -184,6 +184,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         gridView.setOnItemClickListener { parent, view, position, id ->
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
+            val downloads = downloadManager.animeDownloadedTypes
+            println(downloads)
             val media =
                 downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title }
             media?.let {
@@ -392,7 +394,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             val bannerUri: Uri? = if (banner.exists()) {
                 Uri.fromFile(banner)
             } else null
-            val title = mediaModel.nameMAL ?: mediaModel.nameRomaji
+            val title = mediaModel.mainName()
             val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore
                 ?: 0) else mediaModel.userScore) / 10.0).toString()
             val isOngoing =
