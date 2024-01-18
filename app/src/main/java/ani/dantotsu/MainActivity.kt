@@ -1,6 +1,7 @@
 package ani.dantotsu
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity() {
     private var uiSettings = UserInterfaceSettings()
 
 
+    @SuppressLint("InternalInsetResource", "DiscouragedApi")
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
@@ -96,8 +98,14 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        val offset = try {
+            val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
+            resources.getDimensionPixelSize(statusBarHeightId)
+        } catch (e: Exception) {
+            statusBarHeight
+        }
         val layoutParams = binding.incognitoTextView.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.topMargin = 11 * statusBarHeight / 12
+        layoutParams.topMargin = 11 * offset / 12
         binding.incognitoTextView.layoutParams = layoutParams
         incognitoLiveData = SharedPreferenceBooleanLiveData(
             sharedPreferences,
