@@ -93,8 +93,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             val sortedEpisodes = if (res[0].episode_number == -1f) {
                 // Find the number in the string and sort by that number
                 val sortedByStringNumber = res.sortedBy {
-                    val matchResult = "\\d+".toRegex().find(it.name)
-                    val number = matchResult?.value?.toFloat() ?: Float.MAX_VALUE
+                    val matchResult = AnimeNameAdapter.findEpisodeNumber(it.name)
+                    val number = matchResult ?: Float.MAX_VALUE
                     it.episode_number = number  // Store the found number in episode_number
                     number
                 }
@@ -113,7 +113,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                 // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
                 val seasonGroups =
                     res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
-                seasonGroups.keys.sorted().flatMap { season ->
+                seasonGroups.keys.sortedBy { it.toInt() }
+                    .flatMap { season ->
                     seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
                         if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
                             val potentialNumber =

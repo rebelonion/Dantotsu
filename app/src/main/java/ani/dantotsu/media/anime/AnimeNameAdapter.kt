@@ -30,7 +30,15 @@ class AnimeNameAdapter {
                 if (episodeMatcher.group(2) != null) {
                     episodeMatcher.group(2)?.toFloat()
                 } else {
-                    episodeMatcher.group(4)?.toFloat()
+                    val failedEpisodeNumberPattern: Pattern =
+                        Pattern.compile(failedEpisodeNumberRegex, Pattern.CASE_INSENSITIVE)
+                    val failedEpisodeNumberMatcher: Matcher =
+                        failedEpisodeNumberPattern.matcher(text)
+                    if (failedEpisodeNumberMatcher.find()) {
+                        failedEpisodeNumberMatcher.group(1)?.toFloat()
+                    } else {
+                        null
+                    }
                 }
             } else {
                 null
@@ -39,17 +47,8 @@ class AnimeNameAdapter {
 
         fun removeEpisodeNumber(text: String): String {
             val regexPattern = Regex(episodeRegex, RegexOption.IGNORE_CASE)
-            val removedNumber = text.replace(regexPattern, "").ifEmpty {
+            return text.replace(regexPattern, "").ifEmpty {
                 text
-            }
-            return if (removedNumber.equals(text, true)) {
-                val failedEpisodeNumberPattern: Regex =
-                    Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
-                failedEpisodeNumberPattern.replace(removedNumber) { mr ->
-                    mr.value.replaceFirst(mr.groupValues[1], "")
-                }.ifEmpty { removedNumber }
-            } else {
-                removedNumber
             }
         }
 
