@@ -80,26 +80,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.settingsVersion.text = getString(R.string.version_current, BuildConfig.VERSION_NAME)
         binding.settingsVersion.setOnLongClickListener {
-            fun getArch(): String {
-                SUPPORTED_ABIS.forEach {
-                    when (it) {
-                        "arm64-v8a" -> return "aarch64"
-                        "armeabi-v7a" -> return "arm"
-                        "x86_64" -> return "x86_64"
-                        "x86" -> return "i686"
-                    }
-                }
-                return System.getProperty("os.arch") ?: System.getProperty("os.product.cpu.abi")
-                ?: "Unknown Architecture"
-            }
-
-            val info = """
-                dantotsu Version: ${BuildConfig.VERSION_NAME}
-                Device: $BRAND $DEVICE
-                Architecture: ${getArch()}
-                OS Version: $CODENAME $RELEASE ($SDK_INT)
-            """.trimIndent()
-            copyToClipboard(info, false)
+            copyToClipboard(getDeviceInfo(), false)
             toast(getString(R.string.copied_device_info))
             return@setOnLongClickListener true
         }
@@ -404,6 +385,17 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
             saveData("recently_list_only", isChecked)
         }
+        binding.settingsShareUsername.isChecked = getSharedPreferences(
+            getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        ).getBoolean("shared_user_id", true)
+        binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+            ).edit().putBoolean("shared_user_id", isChecked).apply()
+        }
+
         binding.settingsPreferDub.isChecked = loadData("settings_prefer_dub") ?: false
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
             saveData("settings_prefer_dub", isChecked)
@@ -851,6 +843,30 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 Runtime.getRuntime().exit(0)
             }
             show()
+        }
+    }
+
+    companion object {
+        fun getDeviceInfo(): String {
+            return """
+                dantotsu Version: ${BuildConfig.VERSION_NAME}
+                Device: $BRAND $DEVICE
+                Architecture: ${getArch()}
+                OS Version: $CODENAME $RELEASE ($SDK_INT)
+            """.trimIndent()
+        }
+
+        private fun getArch(): String {
+            SUPPORTED_ABIS.forEach {
+                when (it) {
+                    "arm64-v8a" -> return "aarch64"
+                    "armeabi-v7a" -> return "arm"
+                    "x86_64" -> return "x86_64"
+                    "x86" -> return "i686"
+                }
+            }
+            return System.getProperty("os.arch") ?: System.getProperty("os.product.cpu.abi")
+            ?: "Unknown Architecture"
         }
     }
 }

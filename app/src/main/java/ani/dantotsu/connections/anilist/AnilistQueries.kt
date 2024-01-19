@@ -35,6 +35,13 @@ class AnilistQueries {
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
+        currContext()?.let {
+            it.getSharedPreferences(it.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                .edit()
+                .putString("anilist_username", user.name)
+                .apply()
+        }
+
         Anilist.userid = user.id
         Anilist.username = user.name
         Anilist.bg = user.bannerImage
