@@ -72,12 +72,16 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        LangSet.setLocale(this)
-        var media: Media = intent.getSerialized("media") ?: mediaSingleton ?: return
+        super.onCreate(savedInstanceState)
+        var media: Media = intent.getSerialized("media") ?: mediaSingleton ?: emptyMedia()
+        if (media.name == "No media found") {
+            snackString(media.name)
+            onBackPressedDispatcher.onBackPressed()
+            return
+        }
         mediaSingleton = null
         ThemeManager(this).applyTheme(MediaSingleton.bitmap)
         MediaSingleton.bitmap = null
-        super.onCreate(savedInstanceState)
 
         binding = ActivityMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)

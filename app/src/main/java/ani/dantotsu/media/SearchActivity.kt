@@ -159,7 +159,7 @@ class SearchActivity : AppCompatActivity() {
     fun search() {
         val size = model.searchResults.results.size
         model.searchResults.results.clear()
-        runOnUiThread {
+        binding.searchRecyclerView.post {
             mediaAdaptor.notifyItemRangeRemoved(0, size)
         }
 

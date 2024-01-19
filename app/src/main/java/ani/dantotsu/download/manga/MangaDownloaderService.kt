@@ -309,7 +309,16 @@ class MangaDownloaderService : Service() {
 
                 val jsonString = gson.toJson(media)
                 withContext(Dispatchers.Main) {
-                    file.writeText(jsonString)
+                    try {
+                        file.writeText(jsonString)
+                    } catch (e: android.system.ErrnoException) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            this@MangaDownloaderService,
+                            "Error while saving: ${e.localizedMessage}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }

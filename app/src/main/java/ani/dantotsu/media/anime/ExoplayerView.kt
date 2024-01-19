@@ -1806,6 +1806,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         super.onDestroy()
+        Glide.with(this).clear(exoPlay)
         finishAndRemoveTask()
     }
 
@@ -1934,6 +1935,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             snackString("Cast API not available")
             return
         }
+        //make sure mediaItem is initialized and castPlayer is not null
+        if (!this::mediaItem.isInitialized || castPlayer == null) return
         castPlayer?.setMediaItem(mediaItem)
         castPlayer?.prepare()
         playerView.player = castPlayer

@@ -32,6 +32,7 @@ import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
 import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.util.system.WebViewUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 
@@ -203,6 +204,9 @@ class MangaReadAdapter(
                 run = true
             }
             dialogBinding.animeWebviewContainer.setOnClickListener {
+                if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
+                    toast("WebView not installed")
+                }
                 //start CookieCatcher activity
                 if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
                     val sourceAHH = mangaReadSources[source] as? DynamicMangaParser
