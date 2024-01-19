@@ -9,9 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.widget.Toast
 import ani.dantotsu.FileUrl
-import ani.dantotsu.currContext
 import ani.dantotsu.logger
 import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.manga.ImageData
@@ -179,8 +177,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } catch (e: CloudflareBypassException) {
             logger("Exception in search: $e")
             withContext(Dispatchers.Main) {
-                Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT)
-                    .show()
+                snackString( "Failed to bypass Cloudflare")
             }
             emptyList()
         } catch (e: Exception) {
@@ -312,8 +309,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
             } catch (e: Exception) {
                 logger("loadImages Exception: $e")
-                Toast.makeText(currContext(), "Failed to load images: $e", Toast.LENGTH_SHORT)
-                    .show()
+                snackString("Failed to load images: $e")
                 emptyList()
             }
         }
@@ -483,8 +479,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         } catch (e: CloudflareBypassException) {
             logger("Exception in search: $e")
             withContext(Dispatchers.Main) {
-                Toast.makeText(currContext(), "Failed to bypass Cloudflare", Toast.LENGTH_SHORT)
-                    .show()
+                snackString("Failed to bypass Cloudflare")
             }
             emptyList()
         } catch (e: Exception) {
