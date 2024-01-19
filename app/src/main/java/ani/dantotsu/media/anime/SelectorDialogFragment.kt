@@ -159,7 +159,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                 scope.launch {
                                     adapter.add(it)
                                     if (model.watchSources!!.isDownloadedSource(media?.selected!!.sourceIndex)) {
-                                        adapter.perfromClick(0)
+                                        adapter.performClick(0)
                                     }
                                 }
                             }
@@ -181,7 +181,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             media!!.anime?.episodes?.set(media!!.anime?.selectedEpisode!!, ep)
                             adapter.addAll(ep.extractors)
                             if (model.watchSources!!.isDownloadedSource(media?.selected!!.sourceIndex)) {
-                                adapter.perfromClick(0)
+                                adapter.performClick(0)
                             }
                             binding.selectorProgressBar.visibility = View.GONE
                         }
@@ -255,7 +255,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             notifyItemRangeInserted(0, extractors.size)
         }
 
-        fun perfromClick(position: Int) {
+        fun performClick(position: Int) {
             try { //bandaid fix for crash
                 val extractor = links[position]
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedExtractor =
@@ -300,28 +300,37 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     position
                 binding.urlDownload.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                 val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
-                val video =
+                val selectedVideo =
                     if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
-                if (video != null) {
+                if (selectedVideo != null) {
                     Helper.startAnimeDownloadService(
                         requireActivity(),
                         media!!.mainName(),
                         episode.number,
-                        video,
+                        selectedVideo,
                         null,
                         media,
                         episode.thumb?.url ?: media!!.banner ?: media!!.cover
                     )
+                } else {
+                    snackString("No Video Selected")
                 }
                 dismiss()
             }
             binding.urlDownload.setOnLongClickListener {
+                binding.urlDownload.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                 if ((loadData<Int>("settings_download_manager") ?: 0) != 0) {
+                    media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedExtractor =
+                        extractor.server.name
+                    media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedVideo =
+                        position
                     download(
                         requireActivity(),
                         media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!,
                         media!!.userPreferredName
                     )
+                } else {
+                    snackString("No Download Manager Selected")
                 }
                 true
             }
