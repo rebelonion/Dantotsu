@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/bg"
     android:layout_width="match_parent"
@@ -27,22 +28,25 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/incognitoTextView"
-            android:background="@drawable/rounded_top_incognito"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:fontFamily="@font/poppins_bold"
-            android:textAlignment="center"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:paddingTop="2dp"
-            android:paddingBottom="2dp"
-            android:text="Incognito Mode"
-            android:textColor="?attr/colorOnError"
-            android:textSize="15sp"
-            android:visibility="gone" />
+        <androidx.cardview.widget.CardView
+            android:id="@+id/incognito"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:translationZ="7dp"
+            app:cardBackgroundColor="@color/bg_opp"
+            app:cardCornerRadius="16dp">
+
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:id="@+id/incognitoImage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                app:tint="@color/bg"
+                android:src="@drawable/ic_incognito_24"
+                tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
 
         <FrameLayout
             android:id="@+id/fragmentContainer"

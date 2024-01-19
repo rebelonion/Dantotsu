@@ -17,7 +17,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.view.updateLayoutParams
@@ -44,7 +43,6 @@ import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.saveData
 import ani.dantotsu.settings.UserInterfaceSettings
@@ -97,6 +95,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
         binding.mediaClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+        binding.incognito.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
         binding.mediaCollapsing.minimumHeight = statusBarHeight
 
         if (binding.mediaTab is CustomBottomNavBar) binding.mediaTab.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -162,21 +161,16 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         banner.setOnTouchListener { _, motionEvent -> gestureDetector.onTouchEvent(motionEvent);true }
         if (this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
                 .getBoolean("incognito", false)) {
-            binding.mediaTitle.text = "  ${media.userPreferredName}"
-            binding.mediaTitleCollapse.text = " ${media.userPreferredName}"
-            val drawable = ContextCompat.getDrawable(this, R.drawable.ic_incognito_24)
-            val color = ContextCompat.getColor(this, R.color.incognito)
-            DrawableCompat.setTint(drawable!!, color)
-            binding.mediaTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
-            binding.mediaTitleCollapse.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+            binding.mediaTitle.text = "    ${media.userPreferredName}"
+            binding.incognito.visibility = View.VISIBLE
         }else {
             binding.mediaTitle.text = media.userPreferredName
-            binding.mediaTitleCollapse.text = media.userPreferredName
         }
         binding.mediaTitle.setOnLongClickListener {
             copyToClipboard(media.userPreferredName)
             true
         }
+        binding.mediaTitleCollapse.text = media.userPreferredName
         binding.mediaTitleCollapse.setOnLongClickListener {
             copyToClipboard(media.userPreferredName)
             true
