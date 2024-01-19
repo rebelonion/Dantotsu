@@ -48,7 +48,9 @@ import androidx.media3.common.*
 import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MOVIE
 import androidx.media3.common.C.TRACK_TYPE_VIDEO
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.common.util.Util
 import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultDataSourceFactory
 import androidx.media3.datasource.HttpDataSource
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
@@ -1284,7 +1286,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             if (subtitle?.type == SubtitleType.UNKNOWN) {
                 val context = this
                 runBlocking {
-                    val type = SubtitleDownloader.downloadSubtitles(context, subtitle!!.file.url)
+                    val type = SubtitleDownloader.loadSubtitleType(context, subtitle!!.file.url)
                     val fileUri = Uri.parse(subtitle!!.file.url)
                     sub = MediaItem.SubtitleConfiguration
                         .Builder(fileUri)
@@ -1302,8 +1304,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
                 println("sub: $sub")
             } else {
+                val subUri = Uri.parse((subtitle!!.file.url))
                 sub = MediaItem.SubtitleConfiguration
-                    .Builder(Uri.parse(subtitle!!.file.url))
+                    .Builder(subUri)
                     .setSelectionFlags(C.SELECTION_FLAG_FORCED)
                     .setMimeType(
                         when (subtitle?.type) {
@@ -1338,9 +1341,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
             dataSource
         }
+        val dafuckDataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, R.string.app_name.toString()))
         cacheFactory = CacheDataSource.Factory().apply {
             setCache(Helper.getSimpleCache(this@ExoplayerView))
-            setUpstreamDataSourceFactory(dataSourceFactory)
+            if (ext.server.offline) {
+                setUpstreamDataSourceFactory(dafuckDataSourceFactory)
+            } else {
+                setUpstreamDataSourceFactory(dataSourceFactory)
+            }
             setCacheWriteDataSinkFactory(null)
         }
 
@@ -1374,7 +1382,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
             builder.build()
         } else {
-            downloadedMediaItem
+            val addedSubsDownloadedMediaItem = downloadedMediaItem.buildUpon()
+            if (sub != null) {
+                val listofnotnullsubs = immutableListOf(sub).filterNotNull()
+                val addLanguage = listofnotnullsubs[0].buildUpon().setLanguage("en").build()
+                addedSubsDownloadedMediaItem.setSubtitleConfigurations(immutableListOf(addLanguage))
+                episode.selectedSubtitle = 0
+            }
+            addedSubsDownloadedMediaItem.build()
         }
 
 
@@ -1635,7 +1650,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if (isInitialized) {
             if (exoPlayer.currentPosition.toFloat() / exoPlayer.duration > settings.watchPercentage) {
                 preloading = true
-                nextEpisode(false) { i ->  //TODO: make sure this works for offline episodes
+                nextEpisode(false) { i ->
                     val ep = episodes[episodeArr[currentEpisodeIndex + i]] ?: return@nextEpisode
                     val selected = media.selected ?: return@nextEpisode
                     lifecycleScope.launch(Dispatchers.IO) {
@@ -1806,7 +1821,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         super.onDestroy()
-        Glide.with(this).clear(exoPlay)
         finishAndRemoveTask()
     }
 

@@ -28,6 +28,7 @@ import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.media.anime.AnimeWatchFragment
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.Video
@@ -228,6 +229,17 @@ class AnimeDownloaderService : Service() {
                 }
 
                 saveMediaInfo(task)
+                task.subtitle?.let {
+                    SubtitleDownloader.downloadSubtitle(
+                        this@AnimeDownloaderService,
+                        it.file.url,
+                        DownloadedType(
+                            task.title,
+                            task.episode,
+                            DownloadedType.Type.ANIME,
+                        )
+                    )
+                }
                 val downloadStarted =
                     hasDownloadStarted(downloadManager, task, 30000) // 30 seconds timeout
 
@@ -313,6 +325,7 @@ class AnimeDownloaderService : Service() {
         } catch (e: Exception) {
             logger("Exception while downloading file: ${e.message}")
             snackString("Exception while downloading file: ${e.message}")
+            e.printStackTrace()
             FirebaseCrashlytics.getInstance().recordException(e)
             broadcastDownloadFailed(task.episode)
         }

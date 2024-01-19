@@ -1,6 +1,7 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -24,6 +25,7 @@ import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.others.Download.download
+import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -302,18 +304,68 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
                 val selectedVideo =
                     if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
-                if (selectedVideo != null) {
-                    Helper.startAnimeDownloadService(
-                        requireActivity(),
-                        media!!.mainName(),
-                        episode.number,
-                        selectedVideo,
-                        null,
-                        media,
-                        episode.thumb?.url ?: media!!.banner ?: media!!.cover
-                    )
+
+                val subtitles = extractor.subtitles
+                val subtitleNames = subtitles.map { it.language }
+                var subtitleToDownload: Subtitle? = null
+                if (subtitles.isNotEmpty()) {
+                    AlertDialog.Builder(context, R.style.MyPopup)
+                        .setTitle("Download Subtitle")
+                        .setSingleChoiceItems(
+                            subtitleNames.toTypedArray(),
+                            -1
+                        ) { dialog, which ->
+                            subtitleToDownload = subtitles[which]
+                        }
+                        .setPositiveButton("Download") { _, _ ->
+                            dialog?.dismiss()
+                            if (selectedVideo != null) {
+                                Helper.startAnimeDownloadService(
+                                    currActivity()!!,
+                                    media!!.mainName(),
+                                    episode.number,
+                                    selectedVideo,
+                                    subtitleToDownload,
+                                    media,
+                                    episode.thumb?.url ?: media!!.banner ?: media!!.cover
+                                )
+                            } else {
+                                snackString("No Video Selected")
+                            }
+                        }
+                        .setNegativeButton("Cancel") { dialog, _ ->
+                            subtitleToDownload = null
+                            dialog.dismiss()
+                            if (selectedVideo != null) {
+                                Helper.startAnimeDownloadService(
+                                    currActivity()!!,
+                                    media!!.mainName(),
+                                    episode.number,
+                                    selectedVideo,
+                                    subtitleToDownload,
+                                    media,
+                                    episode.thumb?.url ?: media!!.banner ?: media!!.cover
+                                )
+                            } else {
+                                snackString("No Video Selected")
+                            }
+                        }
+                        .show()
+
                 } else {
-                    snackString("No Video Selected")
+                    if (selectedVideo != null) {
+                        Helper.startAnimeDownloadService(
+                            requireActivity(),
+                            media!!.mainName(),
+                            episode.number,
+                            selectedVideo,
+                            subtitleToDownload,
+                            media,
+                            episode.thumb?.url ?: media!!.banner ?: media!!.cover
+                        )
+                    } else {
+                        snackString("No Video Selected")
+                    }
                 }
                 dismiss()
             }

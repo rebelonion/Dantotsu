@@ -71,7 +71,17 @@ class DownloadsManager(private val context: Context) {
             Toast.makeText(context, "Directory does not exist", Toast.LENGTH_SHORT).show()
             cleanDownloads()
         }
-        downloadsList.removeAll { it.title == title }
+        when (type) {
+            DownloadedType.Type.MANGA -> {
+                downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.MANGA }
+            }
+            DownloadedType.Type.ANIME -> {
+                downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.ANIME }
+            }
+            DownloadedType.Type.NOVEL -> {
+                downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.NOVEL }
+            }
+        }
         saveDownloads()
     }
 
@@ -126,7 +136,7 @@ class DownloadsManager(private val context: Context) {
     {
         val jsonString = gson.toJson(downloadsList)
         val file = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             "Dantotsu/downloads.json"
         )
         if (file.parentFile?.exists() == false) {
@@ -199,7 +209,7 @@ class DownloadsManager(private val context: Context) {
             )
         }
         val destination = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             "Dantotsu/${downloadedType.title}/${downloadedType.chapter}"
         )
         if (directory.exists()) {
@@ -241,6 +251,46 @@ class DownloadsManager(private val context: Context) {
         const val novelLocation = "Dantotsu/Novel"
         const val mangaLocation = "Dantotsu/Manga"
         const val animeLocation = "Dantotsu/Anime"
+
+        fun getDirectory(context: Context, type: DownloadedType.Type, title: String, chapter: String? = null): File {
+            return if (type == DownloadedType.Type.MANGA) {
+                if (chapter != null) {
+                    File(
+                        context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                        "$mangaLocation/$title/$chapter"
+                    )
+                } else {
+                    File(
+                        context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                        "$mangaLocation/$title"
+                    )
+                }
+            } else if (type == DownloadedType.Type.ANIME) {
+                if (chapter != null) {
+                    File(
+                        context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                        "$animeLocation/$title/$chapter"
+                    )
+                } else {
+                    File(
+                        context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                        "$animeLocation/$title"
+                    )
+                }
+            } else {
+                if (chapter != null) {
+                    File(
+                        context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                        "$novelLocation/$title/$chapter"
+                    )
+                } else {
+                    File(
+                        context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
+                        "$novelLocation/$title"
+                    )
+                }
+            }
+        }
     }
 
 }

@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat.getString
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MimeTypes
+import androidx.media3.common.TrackSelectionParameters
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.database.StandaloneDatabaseProvider
 import androidx.media3.datasource.DataSource
@@ -30,6 +31,7 @@ import androidx.media3.exoplayer.offline.DownloadHelper
 import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.media3.exoplayer.scheduler.Requirements
+import androidx.media3.ui.TrackSelectionDialogBuilder
 import ani.dantotsu.R
 import ani.dantotsu.defaultHeaders
 import ani.dantotsu.download.DownloadedType
@@ -99,28 +101,6 @@ object Helper {
         )
         downloadHelper.prepare(object : DownloadHelper.Callback {
             override fun onPrepared(helper: DownloadHelper) {
-                /*TrackSelectionDialogBuilder(  TODO: use this for subtitles
-                    context, "Select Source", helper.getTracks(0).groups
-                ) { _, overrides ->
-                    val params = TrackSelectionParameters.Builder(context)
-                    overrides.forEach {
-                        params.addOverride(it.value)
-                    }
-                    helper.addTrackSelection(0, params.build())
-                    ExoplayerDownloadService
-                    DownloadService.sendAddDownload(
-                        context,
-                        ExoplayerDownloadService::class.java,
-                        helper.getDownloadRequest(null),
-                        false
-                    )
-                }.apply {
-                    setTheme(R.style.DialogTheme)
-                    setTrackNameProvider {
-                        if (it.frameRate > 0f) it.height.toString() + "p" else it.height.toString() + "p (fps : N/A)"
-                    }
-                    build().show()
-                }*/
                 helper.getDownloadRequest(null).let {
                     DownloadService.sendAddDownload(
                         context,
