@@ -2,6 +2,7 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
@@ -16,6 +17,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.view.updateLayoutParams
@@ -158,12 +160,23 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
         })
         banner.setOnTouchListener { _, motionEvent -> gestureDetector.onTouchEvent(motionEvent);true }
-        binding.mediaTitle.text = media.userPreferredName
+        if (this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                .getBoolean("incognito", false)) {
+            binding.mediaTitle.text = "  ${media.userPreferredName}"
+            binding.mediaTitleCollapse.text = " ${media.userPreferredName}"
+            val drawable = ContextCompat.getDrawable(this, R.drawable.ic_incognito_24)
+            val color = ContextCompat.getColor(this, R.color.incognito)
+            DrawableCompat.setTint(drawable!!, color)
+            binding.mediaTitle.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+            binding.mediaTitleCollapse.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable, null, null, null)
+        }else {
+            binding.mediaTitle.text = media.userPreferredName
+            binding.mediaTitleCollapse.text = media.userPreferredName
+        }
         binding.mediaTitle.setOnLongClickListener {
             copyToClipboard(media.userPreferredName)
             true
         }
-        binding.mediaTitleCollapse.text = media.userPreferredName
         binding.mediaTitleCollapse.setOnLongClickListener {
             copyToClipboard(media.userPreferredName)
             true
