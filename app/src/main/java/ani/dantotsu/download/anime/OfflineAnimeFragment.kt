@@ -69,6 +69,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     private var downloads: List<OfflineAnimeModel> = listOf()
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineAnimeAdapter
+    private lateinit var total : TextView
     private var uiSettings: UserInterfaceSettings =
         loadData("ui_settings") ?: UserInterfaceSettings()
 
@@ -142,9 +143,6 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 ?.putInt("offline_view", style!!)?.apply()
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView)
-            gridView.adapter = adapter
-            gridView.scheduleLayoutAnimation()
-            gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
             grid()
         }
@@ -156,37 +154,30 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 ?.putInt("offline_view", style!!)?.apply()
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView1)
-            gridView.adapter = adapter
-            gridView.scheduleLayoutAnimation()
-            gridView.visibility = View.VISIBLE
             adapter.notifyNewGrid()
             grid()
         }
 
-        gridView =
-            if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
-        gridView.visibility = View.VISIBLE
-        getDownloads()
-        val fadeIn = AlphaAnimation(0f, 1f)
-        fadeIn.duration = 200 // animations  pog
-        val animation = LayoutAnimationController(fadeIn)
-        gridView.layoutAnimation = animation
-        adapter = OfflineAnimeAdapter(requireContext(), downloads, this)
-        gridView.adapter = adapter
-        gridView.scheduleLayoutAnimation()
+        gridView = if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
+        total = view.findViewById(R.id.total)
         grid()
-        val total = view.findViewById<TextView>(R.id.total)
-        total.text = if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
-
         return view
     }
 
     @OptIn(UnstableApi::class)
     private fun grid() {
-        gridView.setOnItemClickListener { parent, view, position, id ->
+        gridView.visibility = View.VISIBLE
+        getDownloads()
+        val fadeIn = AlphaAnimation(0f, 1f)
+        fadeIn.duration = 300 // animations  pog
+        gridView.layoutAnimation = LayoutAnimationController(fadeIn)
+        adapter = OfflineAnimeAdapter(requireContext(), downloads, this)
+        gridView.adapter = adapter
+        gridView.scheduleLayoutAnimation()
+        total.text = if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
+        gridView.setOnItemClickListener { _, _, position, _ ->
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
-            val downloads = downloadManager.animeDownloadedTypes
             val media =
                 downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title }
             media?.let {
@@ -204,7 +195,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 snackString("no media found")
             }
         }
-        gridView.setOnItemLongClickListener { parent, view, position, id ->
+        gridView.setOnItemLongClickListener { _, _, position, _ ->
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
             val type: DownloadedType.Type =
@@ -231,6 +222,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 }
                 getDownloads()
                 adapter.setItems(downloads)
+                total.text = if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
             }
             builder.setNegativeButton("No") { _, _ ->
                 // Do nothing
