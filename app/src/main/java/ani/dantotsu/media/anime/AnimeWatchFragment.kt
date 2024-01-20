@@ -208,12 +208,9 @@ class AnimeWatchFragment : Fragment() {
                         }
                         if (media.anime?.kitsuEpisodes != null) {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
-                                episode.desc =
-                                    episode.desc ?: media.anime!!.kitsuEpisodes!![i]?.desc
-                                episode.title =
-                                    episode.title ?: media.anime!!.kitsuEpisodes!![i]?.title
-                                episode.thumb =
-                                    episode.thumb ?: media.anime!!.kitsuEpisodes!![i]?.thumb
+                                    episode.desc = media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
+                                    episode.title = media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
+                                    episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb
                                             ?: FileUrl[media.cover]
                             }
                         }
