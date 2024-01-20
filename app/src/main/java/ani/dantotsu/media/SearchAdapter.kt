@@ -1,6 +1,8 @@
 package ani.dantotsu.media
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -10,10 +12,14 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
+import ani.dantotsu.App.Companion.context
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemSearchHeaderBinding
 import ani.dantotsu.saveData
@@ -54,6 +60,14 @@ class SearchAdapter(private val activity: SearchActivity) :
         }
 
         binding.searchBar.hint = activity.result.type
+        if (currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getBoolean("incognito", false ) == true){
+            val startIconDrawableRes = R.drawable.ic_incognito_24
+            val startIconDrawable: Drawable? =
+                context?.let { AppCompatResources.getDrawable(it, startIconDrawableRes) }
+            binding.searchBar.startIconDrawable = startIconDrawable
+        }
+
         var adult = activity.result.isAdult
         var listOnly = activity.result.onList
 

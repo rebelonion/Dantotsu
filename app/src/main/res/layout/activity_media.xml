@@ -255,6 +255,27 @@
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior" />
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/incognito"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_gravity="start"
+        android:layout_margin="16dp"
+        android:translationZ="7dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/bg_opp"
+        app:cardCornerRadius="16dp">
+
+        <androidx.constraintlayout.utils.widget.ImageFilterView
+            android:id="@+id/incognitoImage"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
+            app:tint="@color/bg"
+            android:src="@drawable/ic_incognito_24"
+            tools:ignore="ContentDescription" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
         android:id="@+id/mediaClose"
         android:layout_width="32dp"
         android:layout_height="32dp"

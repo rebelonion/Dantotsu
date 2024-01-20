@@ -104,9 +104,9 @@ class MainActivity : AppCompatActivity() {
         } catch (e: Exception) {
             statusBarHeight
         }
-        val layoutParams = binding.incognitoTextView.layoutParams as ViewGroup.MarginLayoutParams
+        val layoutParams = binding.incognito.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.topMargin = 11 * offset / 12
-        binding.incognitoTextView.layoutParams = layoutParams
+        binding.incognito.layoutParams = layoutParams
         incognitoLiveData = SharedPreferenceBooleanLiveData(
             sharedPreferences,
             "incognito",
@@ -115,26 +115,26 @@ class MainActivity : AppCompatActivity() {
         incognitoLiveData.observe(this) {
             if (it) {
                 val slideDownAnim = ObjectAnimator.ofFloat(
-                    binding.incognitoTextView,
+                    binding.incognito,
                     View.TRANSLATION_Y,
-                    -(binding.incognitoTextView.height.toFloat() + statusBarHeight),
+                    -(binding.incognito.height.toFloat() + statusBarHeight),
                     0f
                 )
                 slideDownAnim.duration = 200
                 slideDownAnim.start()
-                binding.incognitoTextView.visibility = View.VISIBLE
+                binding.incognito.visibility = View.VISIBLE
             } else {
                 val slideUpAnim = ObjectAnimator.ofFloat(
-                    binding.incognitoTextView,
+                    binding.incognito,
                     View.TRANSLATION_Y,
                     0f,
-                    -(binding.incognitoTextView.height.toFloat() + statusBarHeight)
+                    -(binding.incognito.height.toFloat() + statusBarHeight)
                 )
                 slideUpAnim.duration = 200
                 slideUpAnim.start()
                 //wait for animation to finish
                 Handler(Looper.getMainLooper()).postDelayed(
-                    { binding.incognitoTextView.visibility = View.GONE },
+                    { binding.incognito.visibility = View.GONE },
                     200
                 )
             }
