@@ -163,7 +163,7 @@ class MangaReadAdapter(
             var refresh = false
             var run = false
             var reversed = media.selected!!.recyclerReversed
-            var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.animeDefaultView
+            var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.mangaDefaultView
             dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
             dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
             dialogBinding.animeSourceTop.setOnClickListener {
