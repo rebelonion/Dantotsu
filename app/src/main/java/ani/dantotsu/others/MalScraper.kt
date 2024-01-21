@@ -50,7 +50,7 @@ object MalScraper {
                 }
             }
         } catch (e: Exception) {
-            if (e is TimeoutCancellationException) snackString(currContext()?.getString(R.string.error_loading_mal_data))
+           // if (e is TimeoutCancellationException) snackString(currContext()?.getString(R.string.error_loading_mal_data))
         }
     }
 }
