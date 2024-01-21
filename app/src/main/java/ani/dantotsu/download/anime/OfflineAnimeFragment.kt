@@ -276,7 +276,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         }
 
         scrollTop.setOnClickListener {
-            gridView.smoothScrollToPosition(0)
+            gridView.smoothScrollToPositionFromTop(0, 0)
         }
 
         // Assuming 'scrollTop' is a view that you want to hide/show
