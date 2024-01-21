@@ -9,7 +9,7 @@ class AnimeNameAdapter {
             "(episode|ep|e)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*\\(?\\s*(sub|subbed|dub|dubbed)*\\s*\\)?\\s*"
         const val failedEpisodeNumberRegex =
             "(?<!part\\s)\\b(\\d+)\\b"
-        const val seasonRegex = "(season|s)[\\s:.\\-]*(\\d+)[\\s:.\\-]*"
+        const val seasonRegex = "\\s+(season|s)[\\s:.\\-]*(\\d+)[\\s:.\\-]*"
 
         fun findSeasonNumber(text: String): Int? {
             val seasonPattern: Pattern = Pattern.compile(seasonRegex, Pattern.CASE_INSENSITIVE)
