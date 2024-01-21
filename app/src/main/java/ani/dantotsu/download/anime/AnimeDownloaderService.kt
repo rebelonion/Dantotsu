@@ -71,6 +71,7 @@ class AnimeDownloaderService : Service() {
     private val downloadJobs = mutableMapOf<String, Job>()
     private val mutex = Mutex()
     private var isCurrentlyProcessing = false
+    private var currentTasks: MutableList<AnimeDownloadTask> = mutableListOf()
 
     override fun onBind(intent: Intent?): IBinder? {
         // This is only required for bound services.
@@ -133,6 +134,7 @@ class AnimeDownloaderService : Service() {
                 val task = AnimeServiceDataSingleton.downloadQueue.poll()
                 if (task != null) {
                     val job = launch { download(task) }
+                    currentTasks.add(task)
                     mutex.withLock {
                         downloadJobs[task.getTaskName()] = job
                     }
@@ -153,25 +155,29 @@ class AnimeDownloaderService : Service() {
 
     @UnstableApi
     fun cancelDownload(taskName: String) {
+        val url =
+            AnimeServiceDataSingleton.downloadQueue.find { it.getTaskName() == taskName }?.video?.file?.url
+                ?: currentTasks.find { it.getTaskName() == taskName }?.video?.file?.url ?: ""
+        if (url.isEmpty()) {
+            snackString("Failed to cancel download")
+            return
+        }
+        currentTasks.removeAll { it.getTaskName() == taskName }
+        DownloadService.sendSetStopReason(
+            this@AnimeDownloaderService,
+            ExoplayerDownloadService::class.java,
+            url,
+            androidx.media3.exoplayer.offline.Download.STATE_STOPPED,
+            false
+        )
+        DownloadService.sendRemoveDownload(
+            this@AnimeDownloaderService,
+            ExoplayerDownloadService::class.java,
+            url,
+            false
+        )
         CoroutineScope(Dispatchers.Default).launch {
             mutex.withLock {
-                val url =
-                    AnimeServiceDataSingleton.downloadQueue.find { it.getTaskName() == taskName }?.video?.file?.url
-                        ?: ""
-                DownloadService.sendSetStopReason(
-                    this@AnimeDownloaderService,
-                    ExoplayerDownloadService::class.java,
-                    url,
-                    androidx.media3.exoplayer.offline.Download.STATE_REMOVING,
-                    false
-                )
-
-                DownloadService.sendRemoveDownload(
-                    this@AnimeDownloaderService,
-                    ExoplayerDownloadService::class.java,
-                    url,
-                    false
-                )
                 downloadJobs[taskName]?.cancel()
                 downloadJobs.remove(taskName)
                 AnimeServiceDataSingleton.downloadQueue.removeAll { it.getTaskName() == taskName }
@@ -279,6 +285,7 @@ class AnimeDownloaderService : Service() {
                                             " episode: ${task.episode}"
                                 )
                             )
+                            currentTasks.removeAll { it.getTaskName() == task.getTaskName() }
                             broadcastDownloadFailed(task.episode)
                             break
                         }
@@ -301,6 +308,7 @@ class AnimeDownloaderService : Service() {
                                     DownloadedType.Type.ANIME,
                                 )
                             )
+                            currentTasks.removeAll { it.getTaskName() == task.getTaskName() }
                             broadcastDownloadFinished(task.episode)
                             break
                         }
@@ -323,10 +331,12 @@ class AnimeDownloaderService : Service() {
                 }
             }
         } catch (e: Exception) {
-            logger("Exception while downloading file: ${e.message}")
-            snackString("Exception while downloading file: ${e.message}")
-            e.printStackTrace()
-            FirebaseCrashlytics.getInstance().recordException(e)
+            if (e.message?.contains("Coroutine was cancelled") == false) {  //wut
+                logger("Exception while downloading file: ${e.message}")
+                snackString("Exception while downloading file: ${e.message}")
+                e.printStackTrace()
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
             broadcastDownloadFailed(task.episode)
         }
     }
