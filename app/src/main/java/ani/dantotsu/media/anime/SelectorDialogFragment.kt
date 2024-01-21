@@ -309,7 +309,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 val subtitleNames = subtitles.map { it.language }
                 var subtitleToDownload: Subtitle? = null
                 if (subtitles.isNotEmpty()) {
-                    AlertDialog.Builder(context, R.style.MyPopup)
+                    val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
                         .setTitle("Download Subtitle")
                         .setSingleChoiceItems(
                             subtitleNames.toTypedArray(),
@@ -333,9 +333,8 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                 snackString("No Video Selected")
                             }
                         }
-                        .setNegativeButton("Cancel") { dialog, _ ->
+                        .setNegativeButton("Skip") { dialog, _ ->
                             subtitleToDownload = null
-                            dialog.dismiss()
                             if (selectedVideo != null) {
                                 Helper.startAnimeDownloadService(
                                     currActivity()!!,
@@ -349,8 +348,14 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             } else {
                                 snackString("No Video Selected")
                             }
+                            dialog.dismiss()
+                        }
+                        .setNeutralButton("Cancel") { dialog, _ ->
+                            subtitleToDownload = null
+                            dialog.dismiss()
                         }
                         .show()
+                    alertDialog.window?.setDimAmount(0.8f)
 
                 } else {
                     if (selectedVideo != null) {

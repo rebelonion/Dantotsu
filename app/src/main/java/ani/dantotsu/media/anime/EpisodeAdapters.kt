@@ -380,6 +380,7 @@ class EpisodeAdapter(
                 binding.itemDownloadStatus.visibility = View.GONE
                 // Show download icon
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
+                binding.itemDownload.rotation = 0f
             }
 
         }

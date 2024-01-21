@@ -167,6 +167,7 @@ class MangaChapterAdapter(
             } else {
                 // Show download icon
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
+                binding.itemDownload.rotation = 0f
             }
 
         }
