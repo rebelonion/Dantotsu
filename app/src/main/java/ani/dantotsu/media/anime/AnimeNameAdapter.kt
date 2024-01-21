@@ -50,16 +50,14 @@ class AnimeNameAdapter {
             val removedNumber = text.replace(regexPattern, "").ifEmpty {
                 text
             }
-            return if (removedNumber.equals(text, true)) {  // if nothing was removed
-                val failedEpisodeNumberPattern: Regex =
-                    Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
-                failedEpisodeNumberPattern.replace(removedNumber) { mr ->
-                    mr.value.replaceFirst(mr.groupValues[1], "")
-                }.ifEmpty { removedNumber }
-            } else {
+            val letterPattern = Regex("[a-zA-Z]")
+            return if (letterPattern.containsMatchIn(removedNumber)) {
                 removedNumber
+            } else {
+                text
             }
         }
+
 
         fun removeEpisodeNumberCompletely(text: String): String {
             val regexPattern = Regex(episodeRegex, RegexOption.IGNORE_CASE)

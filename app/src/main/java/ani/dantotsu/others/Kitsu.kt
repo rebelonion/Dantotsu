@@ -85,10 +85,10 @@ query {
         return a
     }
 
-    fun decodeToString(res: NiceResponse?): String? {
+    private fun decodeToString(res: NiceResponse?): String? {
         return when (res?.headers?.get("Content-Encoding")) {
             "gzip" -> {
-                res.body.byteStream()?.use { inputStream ->
+                res.body.byteStream().use { inputStream ->
                     GZIPInputStream(inputStream).use { gzipInputStream ->
                         InputStreamReader(gzipInputStream).use { reader ->
                             reader.readText()
