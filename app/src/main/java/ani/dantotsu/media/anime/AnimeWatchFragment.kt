@@ -208,10 +208,16 @@ class AnimeWatchFragment : Fragment() {
                         }
                         if (media.anime?.kitsuEpisodes != null) {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
-                                    episode.desc = media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
-                                    episode.title = media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
-                                    episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb
-                                            ?: FileUrl[media.cover]
+                                episode.desc =
+                                    media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
+                                episode.title = if (AnimeNameAdapter.removeEpisodeNumberCompletely(
+                                        episode.title ?: ""
+                                    ).isBlank()
+                                ) media.anime!!.kitsuEpisodes!![i]?.title
+                                    ?: episode.title else episode.title
+                                    ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
+                                episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb
+                                    ?: FileUrl[media.cover]
                             }
                         }
                     }
@@ -542,7 +548,10 @@ class AnimeWatchFragment : Fragment() {
     override fun onDestroy() {
         model.watchSources?.flushText()
         super.onDestroy()
-        requireContext().unregisterReceiver(downloadStatusReceiver)
+        try {
+            requireContext().unregisterReceiver(downloadStatusReceiver)
+        } catch (_: IllegalArgumentException) {
+        }
     }
 
     var state: Parcelable? = null

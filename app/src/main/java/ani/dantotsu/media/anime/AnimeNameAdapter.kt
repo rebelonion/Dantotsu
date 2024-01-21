@@ -47,22 +47,29 @@ class AnimeNameAdapter {
 
         fun removeEpisodeNumber(text: String): String {
             val regexPattern = Regex(episodeRegex, RegexOption.IGNORE_CASE)
-            return text.replace(regexPattern, "").ifEmpty {
-                text
-            }
-        }
-
-        fun removeEpisodeNumberCompletely(text: String): String {
-            val regexPattern = Regex(episodeRegex, RegexOption.IGNORE_CASE)
             val removedNumber = text.replace(regexPattern, "").ifEmpty {
                 text
             }
-            return if (removedNumber.equals(text, true)) {
+            return if (removedNumber.equals(text, true)) {  // if nothing was removed
                 val failedEpisodeNumberPattern: Regex =
                     Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
                 failedEpisodeNumberPattern.replace(removedNumber) { mr ->
                     mr.value.replaceFirst(mr.groupValues[1], "")
                 }.ifEmpty { removedNumber }
+            } else {
+                removedNumber
+            }
+        }
+
+        fun removeEpisodeNumberCompletely(text: String): String {
+            val regexPattern = Regex(episodeRegex, RegexOption.IGNORE_CASE)
+            val removedNumber = text.replace(regexPattern, "")
+            return if (removedNumber.equals(text, true)) {  // if nothing was removed
+                val failedEpisodeNumberPattern: Regex =
+                    Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
+                failedEpisodeNumberPattern.replace(removedNumber) { mr ->
+                    mr.value.replaceFirst(mr.groupValues[1], "")
+                }
             } else {
                 removedNumber
             }
