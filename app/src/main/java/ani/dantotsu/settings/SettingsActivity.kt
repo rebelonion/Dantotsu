@@ -190,7 +190,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 .show(this, tag)
         }
 
-        //val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
         val animeSource = getSharedPreferences(
             "Dantotsu",
             Context.MODE_PRIVATE
@@ -213,6 +212,47 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                 .putInt("settings_def_anime_source_s_r", i).apply()
             binding.animeSource.clearFocus()
+        }
+
+        binding.settingsPinnedAnimeSources.setOnClickListener {
+            val animeSourcesWithoutDownloadsSource = AnimeSources.list.filter { it.name != "Downloaded" }
+            val names = animeSourcesWithoutDownloadsSource.map { it.name }
+            val pinnedSourcesBoolean = animeSourcesWithoutDownloadsSource.map { it.name in AnimeSources.pinnedAnimeSources }
+            val pinnedSourcesOriginal  = getSharedPreferences(
+                "Dantotsu",
+                Context.MODE_PRIVATE
+            ).getStringSet("pinned_anime_sources", null)
+            val pinnedSources = pinnedSourcesOriginal?.toMutableSet() ?: mutableSetOf()
+            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Pinned Anime Sources")
+                .setMultiChoiceItems(
+                    names.toTypedArray(),
+                    pinnedSourcesBoolean.toBooleanArray()
+                ) { _, which, isChecked ->
+                    if (isChecked) {
+                        pinnedSources.add(AnimeSources.names[which])
+                    } else {
+                        pinnedSources.remove(AnimeSources.names[which])
+                    }
+                }
+                .setPositiveButton("OK") { dialog, _ ->
+                    val oldDefaultSourceIndex = getSharedPreferences(
+                        "Dantotsu",
+                        Context.MODE_PRIVATE
+                    ).getInt("settings_def_anime_source_s_r", 0)
+                    val oldName = AnimeSources.names[oldDefaultSourceIndex]
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putStringSet("pinned_anime_sources", pinnedSources).apply()
+                    AnimeSources.pinnedAnimeSources = pinnedSources
+                    AnimeSources.performReorderAnimeSources()
+                    val newDefaultSourceIndex = AnimeSources.names.indexOf(oldName)
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putInt("settings_def_anime_source_s_r", newDefaultSourceIndex).apply()
+                    dialog.dismiss()
+                }
+                .create()
+            alertDialog.show()
+            alertDialog.window?.setDimAmount(0.8f)
         }
 
         binding.settingsPlayer.setOnClickListener {
@@ -324,7 +364,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 }
                 .setNeutralButton("Reset") { dialog, _ ->
                     networkPreferences.defaultUserAgent()
-                        .set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0") // Reset to default or empty
+                        .set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0")
                     editText.setText("")
                     dialog.dismiss()
                 }
@@ -425,6 +465,47 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                 .putInt("settings_def_manga_source_s_r", i).apply()
             binding.mangaSource.clearFocus()
+        }
+
+        binding.settingsPinnedMangaSources.setOnClickListener {
+            val mangaSourcesWithoutDownloadsSource = MangaSources.list.filter { it.name != "Downloaded" }
+            val names = mangaSourcesWithoutDownloadsSource.map { it.name }
+            val pinnedSourcesBoolean = mangaSourcesWithoutDownloadsSource.map { it.name in MangaSources.pinnedMangaSources }
+            val pinnedSourcesOriginal  = getSharedPreferences(
+                "Dantotsu",
+                Context.MODE_PRIVATE
+            ).getStringSet("pinned_manga_sources", null)
+            val pinnedSources = pinnedSourcesOriginal?.toMutableSet() ?: mutableSetOf()
+            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Pinned Manga Sources")
+                .setMultiChoiceItems(
+                    names.toTypedArray(),
+                    pinnedSourcesBoolean.toBooleanArray()
+                ) { _, which, isChecked ->
+                    if (isChecked) {
+                        pinnedSources.add(MangaSources.names[which])
+                    } else {
+                        pinnedSources.remove(MangaSources.names[which])
+                    }
+                }
+                .setPositiveButton("OK") { dialog, _ ->
+                    val oldDefaultSourceIndex = getSharedPreferences(
+                        "Dantotsu",
+                        Context.MODE_PRIVATE
+                    ).getInt("settings_def_manga_source_s_r", 0)
+                    val oldName = MangaSources.names[oldDefaultSourceIndex]
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putStringSet("pinned_manga_sources", pinnedSources).apply()
+                    MangaSources.pinnedMangaSources = pinnedSources
+                    MangaSources.performReorderMangaSources()
+                    val newDefaultSourceIndex = MangaSources.names.indexOf(oldName)
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putInt("settings_def_manga_source_s_r", newDefaultSourceIndex).apply()
+                    dialog.dismiss()
+                }
+                .create()
+            alertDialog.show()
+            alertDialog.window?.setDimAmount(0.8f)
         }
 
         binding.settingsReader.setOnClickListener {

@@ -1176,6 +1176,46 @@
                         tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <Button
+                    android:id="@+id/settingsPinnedAnimeSources"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-32dp"
+                    android:layout_marginEnd="-32dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="@string/pinned_sources"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_pin"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="?android:attr/listDivider" />
+
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsPreferDub"
                     android:layout_width="match_parent"
@@ -1375,6 +1415,46 @@
                         android:textSize="14sp"
                         tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <Button
+                    android:id="@+id/settingsPinnedMangaSources"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-32dp"
+                    android:layout_marginEnd="-32dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="@string/pinned_sources"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_pin"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="?android:attr/listDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

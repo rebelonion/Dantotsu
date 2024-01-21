@@ -220,7 +220,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     val mangaSources = MangaSources
                     val scope = lifecycleScope
                     scope.launch(Dispatchers.IO) {
-                        mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
+                        mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow, this@MangaReaderActivity)
                     }
                     model.mangaReadSources = mangaSources
                 } else {
