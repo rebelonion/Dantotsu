@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
+import android.webkit.WebView
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -139,13 +140,27 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
     }
 
 
+    @SuppressLint("WebViewApiAvailability")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //check for supported webview
-        val webViewVersion = WebViewCompat.getCurrentWebViewPackage(this)?.versionName
+        val webViewVersion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WebView.getCurrentWebViewPackage()?.versionName
+        } else {
+            WebViewCompat.getCurrentWebViewPackage(this)?.versionName
+        }
         val firstVersion = webViewVersion?.split(".")?.firstOrNull()?.toIntOrNull()
         if (webViewVersion == null || firstVersion == null || firstVersion < 87) {
-            Toast.makeText(this, "Please update WebView from PlayStore", Toast.LENGTH_LONG).show()
+            val text = if (webViewVersion == null) {
+                "Could not find webView installed"
+            } else if (firstVersion == null) {
+                "Could not find WebView Version Number: $webViewVersion"
+            } else if (firstVersion < 87) { //false positive?
+                "Webview Versiom: $firstVersion. PLease update"
+            } else {
+                "Please update WebView from PlayStore"
+            }
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show()
             //open playstore
             val intent = Intent(Intent.ACTION_VIEW)
             intent.data =
