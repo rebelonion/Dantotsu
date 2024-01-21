@@ -283,6 +283,7 @@
             android:layout_gravity="start"
             android:layout_margin="16dp"
             android:translationZ="7dp"
+            android:visibility="gone"
             app:cardBackgroundColor="@color/nav_bg"
             app:cardCornerRadius="16dp">
 

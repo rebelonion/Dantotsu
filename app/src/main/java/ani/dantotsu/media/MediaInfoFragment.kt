@@ -60,7 +60,7 @@ class MediaInfoFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
-        val offline = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("offlineMode", false)
+        val offline = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("offlineMode", false) || isOnline(requireContext())
         binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.visibility = if (loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }
