@@ -130,6 +130,13 @@ fun <T> loadData(fileName: String, context: Context? = null, toast: Boolean = tr
             }
     } catch (e: Exception) {
         if (toast) snackString(a?.getString(R.string.error_loading_data, fileName))
+        //try to delete the file
+        try {
+            a?.deleteFile(fileName)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("Failed to delete file $fileName")
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
         e.printStackTrace()
     }
     return null
