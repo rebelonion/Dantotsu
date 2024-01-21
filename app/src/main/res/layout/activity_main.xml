@@ -30,9 +30,9 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/incognito"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:layout_gravity="center"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="start"
             android:layout_margin="16dp"
             android:translationZ="7dp"
             app:cardBackgroundColor="@color/bg_opp"
@@ -40,8 +40,8 @@
 
             <androidx.constraintlayout.utils.widget.ImageFilterView
                 android:id="@+id/incognitoImage"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:layout_gravity="center"
                 app:tint="@color/bg"
                 android:src="@drawable/ic_incognito_24"
