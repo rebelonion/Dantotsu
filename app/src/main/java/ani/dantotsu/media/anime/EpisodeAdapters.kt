@@ -1,6 +1,7 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -125,10 +126,10 @@ class EpisodeAdapter(
                     binding.itemEpisodeFiller.visibility = View.GONE
                     binding.itemEpisodeFillerView.visibility = View.GONE
                 }
-                holder.bind(ep.number, ep.downloadProgress)
                 binding.itemEpisodeDesc.visibility =
                     if (ep.desc != null && ep.desc?.trim(' ') != "") View.VISIBLE else View.GONE
                 binding.itemEpisodeDesc.text = ep.desc ?: ""
+                holder.bind(ep.number, ep.downloadProgress , ep.desc)
 
                 if (media.userProgress != null) {
                     if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat()) {
@@ -339,7 +340,16 @@ class EpisodeAdapter(
                         fragment.onAnimeEpisodeStopDownloadClick(episodeNumber)
                         return@setOnClickListener
                     } else if (downloadedEpisodes.contains(episodeNumber)) {
-                        fragment.onAnimeEpisodeRemoveDownloadClick(episodeNumber)
+                        val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
+                        builder.setTitle("Delete Episode")
+                        builder.setMessage("Are you sure you want to delete Episode ${episodeNumber}?")
+                        builder.setPositiveButton("Yes") { _, _ ->
+                            fragment.onAnimeEpisodeRemoveDownloadClick(episodeNumber)
+                        }
+                        builder.setNegativeButton("No") { _, _ ->
+                        }
+                        val dialog = builder.show()
+                        dialog.window?.setDimAmount(0.8f)
                         return@setOnClickListener
                     } else {
                         fragment.onAnimeEpisodeDownloadClick(episodeNumber)
@@ -354,8 +364,9 @@ class EpisodeAdapter(
             }
         }
 
-        fun bind(episodeNumber: String, progress: String?) {
+        fun bind(episodeNumber: String, progress: String?, desc: String?) {
             if (progress != null) {
+                binding.itemEpisodeDesc.visibility = View.GONE
                 binding.itemDownloadStatus.visibility = View.VISIBLE
                 binding.itemDownloadStatus.text = progress
             } else {
@@ -366,7 +377,9 @@ class EpisodeAdapter(
                 // Show spinner
                 binding.itemDownload.setImageResource(R.drawable.ic_sync)
                 startOrContinueRotation(episodeNumber)
+                binding.itemEpisodeDesc.visibility = View.GONE
             } else if (downloadedEpisodes.contains(episodeNumber)) {
+                binding.itemEpisodeDesc.visibility = View.GONE
                 binding.itemDownloadStatus.visibility = View.VISIBLE
                 // Show checkmark
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_check)
@@ -378,6 +391,7 @@ class EpisodeAdapter(
                 }, 1000)
             } else {
                 binding.itemDownloadStatus.visibility = View.GONE
+                binding.itemEpisodeDesc.visibility = if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
                 // Show download icon
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
                 binding.itemDownload.rotation = 0f
