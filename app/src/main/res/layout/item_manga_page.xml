@@ -264,12 +264,14 @@
             android:text="@string/popular_manga"
             android:textSize="16sp" />
 
-        <androidx.appcompat.widget.SwitchCompat
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/mangaIncludeList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/include_media_in_list"
-            android:checked="true"/>
+            android:checked="true"
+            android:textSize="12sp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/include_media_in_list" />
 
 
     </LinearLayout>
