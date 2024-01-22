@@ -492,6 +492,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         init {
             enabled(true)
             scope.launch {
+                delay(100)
                 clicked()
             }
             image.setOnClickListener {
