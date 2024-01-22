@@ -2,6 +2,7 @@ package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -267,7 +268,8 @@ class AnimeFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending(1)
                         model.loadUpdated()
-                        model.loadPopular("ANIME", sort = Anilist.sortBy[1])
+                        model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                            .getBoolean("popular_list", false))
                     }
                     live.postValue(false)
                     _binding?.animeRefresh?.isRefreshing = false
