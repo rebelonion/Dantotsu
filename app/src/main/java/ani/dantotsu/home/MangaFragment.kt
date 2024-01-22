@@ -2,6 +2,7 @@ package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -241,7 +242,8 @@ class MangaFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending()
                         model.loadTrendingNovel()
-                        model.loadPopular("MANGA", sort = Anilist.sortBy[1])
+                        model.loadPopular("MANGA", sort = Anilist.sortBy[1], onList = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                            .getBoolean("popular_list", false) )
                     }
                     live.postValue(false)
                     _binding?.mangaRefresh?.isRefreshing = false
