@@ -329,7 +329,7 @@
 
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:layout_marginTop="16dp"
                     android:id="@+id/mediaListPrivate"
                     android:layout_width="match_parent"

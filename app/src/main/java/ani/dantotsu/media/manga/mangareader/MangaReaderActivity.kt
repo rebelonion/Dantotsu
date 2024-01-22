@@ -3,8 +3,10 @@ package ani.dantotsu.media.manga.mangareader
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
@@ -218,7 +220,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     val mangaSources = MangaSources
                     val scope = lifecycleScope
                     scope.launch(Dispatchers.IO) {
-                        mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
+                        mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow, this@MangaReaderActivity)
                     }
                     model.mangaReadSources = mangaSources
                 } else {
@@ -253,7 +255,8 @@ class MangaReaderActivity : AppCompatActivity() {
         }
 
         showProgressDialog =
-            if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog") != true else false
+            if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
+                ?: true else false
 
         //Chapter Change
         fun change(index: Int) {
@@ -358,7 +361,7 @@ class MangaReaderActivity : AppCompatActivity() {
             model.loadMangaChapterImages(
                 chapter,
                 media.selected!!,
-                media.nameMAL ?: media.nameRomaji
+                media.mainName()
             )
         }
     }
@@ -701,8 +704,60 @@ class MangaReaderActivity : AppCompatActivity() {
         goneTimer.schedule(timerTask, controllerDuration)
     }
 
-    fun handleController(shouldShow: Boolean? = null) {
+    enum class pressPos {
+        LEFT, RIGHT, CENTER
+    }
+
+    fun handleController(shouldShow: Boolean? = null, event: MotionEvent? = null) {
+        var pressLocation = pressPos.CENTER
         if (!sliding) {
+            if (event != null && settings.default.layout == PAGED) {
+                if (event.action != MotionEvent.ACTION_UP) return
+                val x = event.rawX.toInt()
+                val y = event.rawY.toInt()
+                val screenWidth = Resources.getSystem().displayMetrics.widthPixels
+                //if in the 1st 1/5th of the screen width, left and lower than 1/5th of the screen height, left
+                if (screenWidth / 5 in (x + 1)..<y) {
+                    pressLocation = if (settings.default.direction == RIGHT_TO_LEFT) {
+                        pressPos.RIGHT
+                    } else {
+                        pressPos.LEFT
+                    }
+                }
+                //if in the last 1/5th of the screen width, right and lower than 1/5th of the screen height, right
+                else if (x > screenWidth - screenWidth / 5 && y > screenWidth / 5) {
+                    pressLocation = if (settings.default.direction == RIGHT_TO_LEFT) {
+                        pressPos.LEFT
+                    } else {
+                        pressPos.RIGHT
+                    }
+                }
+            }
+
+            // if pressLocation is left or right go to previous or next page (paged mode only)
+            if (pressLocation == pressPos.LEFT) {
+
+                if (binding.mangaReaderPager.currentItem > 0) {
+                    //if  the current images zoomed in, go back to normal before going to previous page
+                    if (imageAdapter?.isZoomed() == true) {
+                        imageAdapter?.setZoom(1f)
+                    }
+                    binding.mangaReaderPager.currentItem -= 1
+                    return
+                }
+
+            } else if (pressLocation == pressPos.RIGHT) {
+                if (binding.mangaReaderPager.currentItem < maxChapterPage - 1) {
+                    //if  the current images zoomed in, go back to normal before going to next page
+                    if (imageAdapter?.isZoomed() == true) {
+                        imageAdapter?.setZoom(1f)
+                    }
+                    //if right to left, go to previous page
+                    binding.mangaReaderPager.currentItem += 1
+                    return
+                }
+            }
+
             if (!settings.showSystemBars) {
                 hideBars()
                 checkNotch()
@@ -786,7 +841,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 model.loadMangaChapterImages(
                     chapters[chaptersArr.getOrNull(currentChapterIndex + 1) ?: return@launch]!!,
                     media.selected!!,
-                    media.nameMAL ?: media.nameRomaji,
+                    media.mainName(),
                     false
                 )
                 loading = false
@@ -795,17 +850,28 @@ class MangaReaderActivity : AppCompatActivity() {
 
     private fun progress(runnable: Runnable) {
         if (maxChapterPage - currentChapterPage <= 1 && Anilist.userid != null) {
+            showProgressDialog =
+                if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
+                    ?: true else false
             if (showProgressDialog) {
+
                 val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)
                 val checkbox = dialogView.findViewById<CheckBox>(R.id.dialog_checkbox)
                 checkbox.text = getString(R.string.dont_ask_again, media.userPreferredName)
                 checkbox.setOnCheckedChangeListener { _, isChecked ->
-                    saveData("${media.id}_progressDialog", isChecked)
+                    saveData("${media.id}_progressDialog", !isChecked)
                     showProgressDialog = !isChecked
                 }
-
+                val incognito =
+                    currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                        ?.getBoolean("incognito", false) ?: false
                 AlertDialog.Builder(this, R.style.MyPopup)
                     .setTitle(getString(R.string.title_update_progress))
+                    .apply {
+                        if (incognito) {
+                            setMessage(getString(R.string.incognito_will_not_update))
+                        }
+                    }
                     .setView(dialogView)
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.yes)) { dialog, _ ->

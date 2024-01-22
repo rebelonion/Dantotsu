@@ -41,15 +41,18 @@ internal object AnimeExtensionLoader {
     const val LIB_VERSION_MIN = 12
     const val LIB_VERSION_MAX = 15
 
-    private const val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
+    private const val PACKAGE_FLAGS =
+        PackageManager.GET_CONFIGURATIONS or PackageManager.GET_SIGNATURES
 
     // jmir1's key
-    private const val officialSignature = "50ab1d1e3a20d204d0ad6d334c7691c632e41b98dfa132bf385695fdfa63839c"
+    private const val officialSignature =
+        "50ab1d1e3a20d204d0ad6d334c7691c632e41b98dfa132bf385695fdfa63839c"
 
     /**
      * List of the trusted signatures.
      */
-    var trustedSignatures = mutableSetOf<String>() + preferences.trustedSignatures().get() + officialSignature
+    var trustedSignatures =
+        mutableSetOf<String>() + preferences.trustedSignatures().get() + officialSignature
 
     /**
      * Return a list of all the installed extensions initialized concurrently.
@@ -105,7 +108,11 @@ internal object AnimeExtensionLoader {
      * @param pkgName The package name of the extension to load.
      * @param pkgInfo The package info of the extension.
      */
-    private fun loadExtension(context: Context, pkgName: String, pkgInfo: PackageInfo): AnimeLoadResult {
+    private fun loadExtension(
+        context: Context,
+        pkgName: String,
+        pkgInfo: PackageInfo
+    ): AnimeLoadResult {
         val pkgManager = context.packageManager
 
         val appInfo = try {
@@ -141,7 +148,14 @@ internal object AnimeExtensionLoader {
             logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
             return AnimeLoadResult.Error
         } else if (signatureHash !in trustedSignatures) {
-            val extension = AnimeExtension.Untrusted(extName, pkgName, versionName, versionCode, libVersion, signatureHash)
+            val extension = AnimeExtension.Untrusted(
+                extName,
+                pkgName,
+                versionName,
+                versionCode,
+                libVersion,
+                signatureHash
+            )
             logcat(LogPriority.WARN, message = { "Extension $pkgName isn't trusted" })
             return AnimeLoadResult.Untrusted(extension)
         }

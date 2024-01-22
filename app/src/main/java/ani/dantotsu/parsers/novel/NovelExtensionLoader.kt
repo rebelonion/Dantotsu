@@ -111,11 +111,12 @@ internal object NovelExtensionLoader {
 
     @Suppress("DEPRECATION")
     private fun getSignatureHash(pkgInfo: PackageInfo): List<String>? {
-        val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && pkgInfo.signingInfo != null) {
-            pkgInfo.signingInfo.apkContentsSigners
-        } else {
-            pkgInfo.signatures
-        }
+        val signatures =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && pkgInfo.signingInfo != null) {
+                pkgInfo.signingInfo.apkContentsSigners
+            } else {
+                pkgInfo.signatures
+            }
         return if (!signatures.isNullOrEmpty()) {
             signatures.map { Hash.sha256(it.toByteArray()) }
         } else {

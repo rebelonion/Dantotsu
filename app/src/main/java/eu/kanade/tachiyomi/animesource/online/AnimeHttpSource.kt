@@ -50,7 +50,8 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
     override val id by lazy {
         val key = "${name.lowercase()}/$lang/$versionId"
         val bytes = MessageDigest.getInstance("MD5").digest(key.toByteArray())
-        (0..7).map { bytes[it].toLong() and 0xff shl 8 * (7 - it) }.reduce(Long::or) and Long.MAX_VALUE
+        (0..7).map { bytes[it].toLong() and 0xff shl 8 * (7 - it) }
+            .reduce(Long::or) and Long.MAX_VALUE
     }
 
     /**
@@ -112,7 +113,11 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param query the search query.
      * @param filters the list of filters to apply.
      */
-    override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
+    override fun fetchSearchAnime(
+        page: Int,
+        query: String,
+        filters: AnimeFilterList
+    ): Observable<AnimesPage> {
         return Observable.defer {
             try {
                 client.newCall(searchAnimeRequest(page, query, filters)).asObservableSuccess()
@@ -134,7 +139,11 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @param query the search query.
      * @param filters the list of filters to apply.
      */
-    protected abstract fun searchAnimeRequest(page: Int, query: String, filters: AnimeFilterList): Request
+    protected abstract fun searchAnimeRequest(
+        page: Int,
+        query: String,
+        filters: AnimeFilterList
+    ): Request
 
     /**
      * Parses the response from the site and returns a [AnimesPage] object.
@@ -311,7 +320,12 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
         val animeDownloadClient = client.newBuilder()
             .callTimeout(30, TimeUnit.MINUTES)
             .build()
-        return animeDownloadClient.newCachelessCallWithProgress(videoRequest(video, video.totalBytesDownloaded), video)
+        return animeDownloadClient.newCachelessCallWithProgress(
+            videoRequest(
+                video,
+                video.totalBytesDownloaded
+            ), video
+        )
             .asObservableSuccess()
     }
 

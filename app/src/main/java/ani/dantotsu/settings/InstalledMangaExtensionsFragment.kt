@@ -1,6 +1,7 @@
 package ani.dantotsu.settings
 
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
@@ -44,70 +45,84 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentMangaExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
-    val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons = loadData("skip_extension_icons") ?: false
     private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
-    private val extensionsAdapter = MangaExtensionsAdapter({ pkg ->
-        val changeUIVisibility: (Boolean) -> Unit = { show ->
-            val activity = requireActivity() as ExtensionsActivity
-            val visibility = if (show) View.VISIBLE else View.GONE
-            activity.findViewById<ViewPager2>(R.id.viewPager).visibility = visibility
-            activity.findViewById<TabLayout>(R.id.tabLayout).visibility = visibility
-            activity.findViewById<TextInputLayout>(R.id.searchView).visibility = visibility
-            activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                if (show) View.GONE else View.VISIBLE
-        }
-        val allSettings = pkg.sources.filterIsInstance<ConfigurableSource>()
-        if (allSettings.isNotEmpty()) {
-            var selectedSetting = allSettings[0]
-            if (allSettings.size > 1) {
-                val names = allSettings.map { it.lang }.toTypedArray()
-                var selectedIndex = 0
-                val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                    .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
-                        selectedIndex = which
-                        selectedSetting = allSettings[selectedIndex]
-                        dialog.dismiss()
+    private val extensionsAdapter = MangaExtensionsAdapter(
+        { pkg ->
+            val name = pkg.name
+            val changeUIVisibility: (Boolean) -> Unit = { show ->
+                val activity = requireActivity() as ExtensionsActivity
+                val visibility = if (show) View.VISIBLE else View.GONE
+                activity.findViewById<ViewPager2>(R.id.viewPager).visibility = visibility
+                activity.findViewById<TabLayout>(R.id.tabLayout).visibility = visibility
+                activity.findViewById<TextInputLayout>(R.id.searchView).visibility = visibility
+                activity.findViewById<ImageView>(R.id.languageselect).visibility = visibility
+                activity.findViewById<TextView>(R.id.extensions).text =
+                    if (show) getString(R.string.extensions) else name
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
+                    if (show) View.GONE else View.VISIBLE
+            }
+            var itemSelected = false
+            val allSettings = pkg.sources.filterIsInstance<ConfigurableSource>()
+            if (allSettings.isNotEmpty()) {
+                var selectedSetting = allSettings[0]
+                if (allSettings.size > 1) {
+                    val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                        .toTypedArray()
+                    var selectedIndex = 0
+                    val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
+                        .setTitle("Select a Source")
+                        .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
+                            itemSelected = true
+                            selectedIndex = which
+                            selectedSetting = allSettings[selectedIndex]
+                            dialog.dismiss()
 
-                        // Move the fragment transaction here
-                        val fragment =
-                            MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                            // Move the fragment transaction here
+                            val fragment =
+                                MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                                    changeUIVisibility(true)
+                                }
+                            parentFragmentManager.beginTransaction()
+                                .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                                .replace(R.id.fragmentExtensionsContainer, fragment)
+                                .addToBackStack(null)
+                                .commit()
+                        }
+                        .setOnDismissListener {
+                            if (!itemSelected) {
                                 changeUIVisibility(true)
                             }
-                        parentFragmentManager.beginTransaction()
-                            .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                            .replace(R.id.fragmentExtensionsContainer, fragment)
-                            .addToBackStack(null)
-                            .commit()
-                    }
-                    .show()
-                dialog.window?.setDimAmount(0.8f)
-            } else {
-                // If there's only one setting, proceed with the fragment transaction
-                val fragment = MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
-                    changeUIVisibility(true)
+                        }
+                        .show()
+                    dialog.window?.setDimAmount(0.8f)
+                } else {
+                    // If there's only one setting, proceed with the fragment transaction
+                    val fragment =
+                        MangaSourcePreferencesFragment().getInstance(selectedSetting.id) {
+                            changeUIVisibility(true)
+                        }
+                    parentFragmentManager.beginTransaction()
+                        .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
+                        .replace(R.id.fragmentExtensionsContainer, fragment)
+                        .addToBackStack(null)
+                        .commit()
                 }
-                parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(R.anim.slide_up, R.anim.slide_down)
-                    .replace(R.id.fragmentExtensionsContainer, fragment)
-                    .addToBackStack(null)
-                    .commit()
-            }
 
-            // Hide ViewPager2 and TabLayout
-            changeUIVisibility(false)
-        } else {
-            Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
-                .show()
-        }
-    },
-        { pkg ->
+                // Hide ViewPager2 and TabLayout
+                changeUIVisibility(false)
+            } else {
+                Toast.makeText(requireContext(), "Source is not configurable", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        },
+        { pkg: MangaExtension.Installed, forceDelete: Boolean ->
             if (isAdded) {  // Check if the fragment is currently added to its activity
                 val context = requireContext()  // Store context in a variable
                 val notificationManager =
                     context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager  // Initialize NotificationManager once
 
-                if (pkg.hasUpdate) {
+                if (pkg.hasUpdate && !forceDelete) {
                     mangaExtensionManager.updateExtension(pkg)
                         .observeOn(AndroidSchedulers.mainThread())  // Observe on main thread
                         .subscribe(
@@ -188,7 +203,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
 
     private class MangaExtensionsAdapter(
         private val onSettingsClicked: (MangaExtension.Installed) -> Unit,
-        private val onUninstallClicked: (MangaExtension.Installed) -> Unit,
+        private val onUninstallClicked: (MangaExtension.Installed, Boolean) -> Unit,
         skipIcons: Boolean
     ) : ListAdapter<MangaExtension.Installed, MangaExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
@@ -206,6 +221,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)  // Use getItem() from ListAdapter
             val nsfw = if (extension.isNsfw) "(18+)" else ""
@@ -221,10 +237,15 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                 holder.closeTextView.setImageResource(R.drawable.ic_round_delete_24)
             }
             holder.closeTextView.setOnClickListener {
-                onUninstallClicked(extension)
+                onUninstallClicked(extension, false)
             }
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
+            }
+
+            holder.card.setOnLongClickListener {
+                onUninstallClicked(extension, true)
+                true
             }
         }
 
@@ -245,6 +266,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
+            val card: View = view.findViewById(R.id.extensionCardView)
         }
 
         companion object {

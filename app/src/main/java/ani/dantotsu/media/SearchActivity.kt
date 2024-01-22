@@ -78,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
         mediaAdaptor = MediaAdaptor(style, model.searchResults.results, this, matchParent = true)
         val headerAdaptor = SearchAdapter(this)
 
-        val gridSize = (screenWidth / 124f).toInt()
+        val gridSize = (screenWidth / 120f).toInt()
         val gridLayoutManager = GridLayoutManager(this, gridSize)
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
@@ -159,7 +159,7 @@ class SearchActivity : AppCompatActivity() {
     fun search() {
         val size = model.searchResults.results.size
         model.searchResults.results.clear()
-        runOnUiThread {
+        binding.searchRecyclerView.post {
             mediaAdaptor.notifyItemRangeRemoved(0, size)
         }
 

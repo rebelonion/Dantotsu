@@ -1,6 +1,7 @@
 package ani.dantotsu.connections.anilist
 
 import android.app.Activity
+import android.content.Context
 import ani.dantotsu.R
 import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
@@ -10,6 +11,7 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Page
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.currContext
+import ani.dantotsu.isOnline
 import ani.dantotsu.loadData
 import ani.dantotsu.logError
 import ani.dantotsu.media.Author
@@ -32,6 +34,13 @@ class AnilistQueries {
                 executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}}}""")
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
+
+        currContext()?.let {
+            it.getSharedPreferences(it.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+                .edit()
+                .putString("anilist_username", user.name)
+                .apply()
+        }
 
         Anilist.userid = user.id
         Anilist.username = user.name
@@ -239,7 +248,9 @@ class AnilistQueries {
                         else snackString(currContext()?.getString(R.string.what_did_you_open))
                     }
                 } else {
-                    snackString(currContext()?.getString(R.string.error_getting_data))
+                    if (currContext()?.let { isOnline(it) } == true) {
+                        snackString(currContext()?.getString(R.string.error_getting_data))
+                    }
                 }
             }
             val mal = async {
@@ -410,8 +421,9 @@ class AnilistQueries {
         sorted["Favourites"]?.sortWith(compareBy { it.userFavOrder })
 
         sorted["All"] = all
-
-        val sort = sortOrder ?: options?.rowOrder
+        val listsort = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getString("sort_order", "score")
+        val sort = listsort ?: sortOrder ?: options?.rowOrder
         for (i in sorted.keys) {
             when (sort) {
                 "score" -> sorted[i]?.sortWith { b, a ->

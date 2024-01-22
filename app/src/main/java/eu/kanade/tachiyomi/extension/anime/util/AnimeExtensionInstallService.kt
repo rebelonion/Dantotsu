@@ -7,8 +7,8 @@ import android.content.pm.ServiceInfo
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
-import eu.kanade.domain.base.BasePreferences
 import ani.dantotsu.R
+import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.installer.InstallerAnime
 import eu.kanade.tachiyomi.extension.anime.installer.PackageInstallerInstallerAnime
@@ -32,8 +32,12 @@ class AnimeExtensionInstallService : Service() {
             setProgress(100, 100, true)
         }.build()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(Notifications.ID_EXTENSION_INSTALLER, notification,  ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
-        }else{
+            startForeground(
+                Notifications.ID_EXTENSION_INSTALLER,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
             startForeground(Notifications.ID_EXTENSION_INSTALLER, notification)
         }
     }
@@ -51,7 +55,10 @@ class AnimeExtensionInstallService : Service() {
 
         if (installer == null) {
             installer = when (installerUsed) {
-                BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerAnime(this)
+                BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerAnime(
+                    this
+                )
+
                 else -> {
                     logcat(LogPriority.ERROR) { "Not implemented for installer $installerUsed" }
                     stopSelf()

@@ -13,7 +13,9 @@ import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.parsers.NovelSources
 import ani.dantotsu.parsers.novel.NovelExtensionManager
+import ani.dantotsu.settings.SettingsActivity
 import com.google.android.material.color.DynamicColors
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -58,6 +60,24 @@ class App : MultiDexApplication() {
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
         Firebase.crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)
+        getSharedPreferences(
+            getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        ).getBoolean("shared_user_id", true).let {
+            if (!it) return@let
+            val dUsername = getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+            ).getString("discord_username", null)
+            val aUsername = getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+            ).getString("anilist_username", null)
+            if (dUsername != null || aUsername != null) {
+                Firebase.crashlytics.setUserId("$dUsername - $aUsername")
+            }
+        }
+        FirebaseCrashlytics.getInstance().setCustomKey("device Info", SettingsActivity.getDeviceInfo())
 
         Injekt.importModule(AppModule(this))
         Injekt.importModule(PreferenceModule(this))
@@ -77,13 +97,13 @@ class App : MultiDexApplication() {
         animeScope.launch {
             animeExtensionManager.findAvailableExtensions()
             logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
-            AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
+            AnimeSources.init(animeExtensionManager.installedExtensionsFlow, this@App)
         }
         val mangaScope = CoroutineScope(Dispatchers.Default)
         mangaScope.launch {
             mangaExtensionManager.findAvailableExtensions()
             logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
-            MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
+            MangaSources.init(mangaExtensionManager.installedExtensionsFlow, this@App)
         }
         val novelScope = CoroutineScope(Dispatchers.Default)
         novelScope.launch {
@@ -91,7 +111,6 @@ class App : MultiDexApplication() {
             logger("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }
-
     }
 
 

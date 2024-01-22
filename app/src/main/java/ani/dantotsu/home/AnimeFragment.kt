@@ -47,6 +47,7 @@ import kotlin.math.min
 class AnimeFragment : Fragment() {
     private var _binding: FragmentAnimeBinding? = null
     private val binding get() = _binding!!
+    private lateinit var animePageAdapter: AnimePageAdapter
 
     private var uiSettings: UserInterfaceSettings =
         loadData("ui_settings") ?: UserInterfaceSettings()
@@ -95,7 +96,7 @@ class AnimeFragment : Fragment() {
 
         binding.animePageRecyclerView.updatePaddingRelative(bottom = navBarHeight + 160f.px)
 
-        val animePageAdapter = AnimePageAdapter()
+        animePageAdapter = AnimePageAdapter()
 
         var loading = true
         if (model.notSet) {
@@ -277,6 +278,11 @@ class AnimeFragment : Fragment() {
 
     override fun onResume() {
         if (!model.loaded) Refresh.activity[this.hashCode()]!!.postValue(true)
+        if (animePageAdapter.trendingViewPager != null) {
+            binding.root.requestApplyInsets()
+            binding.root.requestLayout()
+        }
+
         super.onResume()
     }
 }

@@ -97,7 +97,21 @@ class PlayerSettingsActivity : AppCompatActivity() {
 
 
         val speeds =
-            arrayOf(0.25f, 0.33f, 0.5f, 0.66f, 0.75f, 1f, 1.25f, 1.33f, 1.5f, 1.66f, 1.75f, 2f)
+            arrayOf(
+                0.25f,
+                0.33f,
+                0.5f,
+                0.66f,
+                0.75f,
+                1f,
+                1.15f,
+                1.25f,
+                1.33f,
+                1.5f,
+                1.66f,
+                1.75f,
+                2f
+            )
         val cursedSpeeds = arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)
         var curSpeedArr = if (settings.cursedSpeeds) cursedSpeeds else speeds
         var speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
@@ -106,13 +120,14 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.default_speed))
         binding.playerSettingsSpeed.setOnClickListener {
-            val dialog = speedDialog.setSingleChoiceItems(speedsName, settings.defaultSpeed) { dialog, i ->
-                settings.defaultSpeed = i
-                binding.playerSettingsSpeed.text =
-                    getString(R.string.default_playback_speed, speedsName[i])
-                saveData(player, settings)
-                dialog.dismiss()
-            }.show()
+            val dialog =
+                speedDialog.setSingleChoiceItems(speedsName, settings.defaultSpeed) { dialog, i ->
+                    settings.defaultSpeed = i
+                    binding.playerSettingsSpeed.text =
+                        getString(R.string.default_playback_speed, speedsName[i])
+                    saveData(player, settings)
+                    dialog.dismiss()
+                }.show()
             dialog.window?.setDimAmount(0.8f)
         }
 
@@ -256,11 +271,12 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val resizeDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.default_resize_mode))
         binding.playerResizeMode.setOnClickListener {
-            val dialog = resizeDialog.setSingleChoiceItems(resizeModes, settings.resize) { dialog, count ->
-                settings.resize = count
-                saveData(player, settings)
-                dialog.dismiss()
-            }.show()
+            val dialog =
+                resizeDialog.setSingleChoiceItems(resizeModes, settings.resize) { dialog, count ->
+                    settings.resize = count
+                    saveData(player, settings)
+                    dialog.dismiss()
+                }.show()
             dialog.window?.setDimAmount(0.8f)
         }
         fun restartApp() {
@@ -382,7 +398,10 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val outlineDialog = AlertDialog.Builder(this, R.style.DialogTheme)
             .setTitle(getString(R.string.outline_type))
         binding.videoSubOutline.setOnClickListener {
-            val dialog = outlineDialog.setSingleChoiceItems(typesOutline, settings.outline) { dialog, count ->
+            val dialog = outlineDialog.setSingleChoiceItems(
+                typesOutline,
+                settings.outline
+            ) { dialog, count ->
                 settings.outline = count
                 saveData(player, settings)
                 dialog.dismiss()

@@ -3,9 +3,7 @@ package eu.kanade.tachiyomi.extension.manga.util
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
-import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
@@ -34,8 +32,12 @@ class MangaExtensionInstallService : Service() {
             setProgress(100, 100, true)
         }.build()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(Notifications.ID_EXTENSION_INSTALLER, notification,  ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
-        }else{
+            startForeground(
+                Notifications.ID_EXTENSION_INSTALLER,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
             startForeground(Notifications.ID_EXTENSION_INSTALLER, notification)
         }
     }
@@ -53,7 +55,10 @@ class MangaExtensionInstallService : Service() {
 
         if (installer == null) {
             installer = when (installerUsed) {
-                BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerManga(this)
+                BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerManga(
+                    this
+                )
+
                 else -> {
                     logcat(LogPriority.ERROR) { "Not implemented for installer $installerUsed" }
                     stopSelf()

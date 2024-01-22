@@ -22,7 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
-import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.novel.NovelDownloaderService
 import ani.dantotsu.download.novel.NovelServiceDataSingleton
@@ -67,7 +67,7 @@ class NovelReadFragment : Fragment(),
     override fun downloadTrigger(novelDownloadPackage: NovelDownloadPackage) {
         Log.e("downloadTrigger", novelDownloadPackage.link)
         val downloadTask = NovelDownloaderService.DownloadTask(
-            title = media.nameMAL ?: media.nameRomaji,
+            title = media.mainName(),
             chapter = novelDownloadPackage.novelName,
             downloadLink = novelDownloadPackage.link,
             originalLink = novelDownloadPackage.originalLink,
@@ -92,16 +92,16 @@ class NovelReadFragment : Fragment(),
     override fun downloadedCheckWithStart(novel: ShowResponse): Boolean {
         val downloadsManager = Injekt.get<DownloadsManager>()
         if (downloadsManager.queryDownload(
-                Download(
-                    media.nameMAL ?: media.nameRomaji,
+                DownloadedType(
+                    media.mainName(),
                     novel.name,
-                    Download.Type.NOVEL
+                    DownloadedType.Type.NOVEL
                 )
             )
         ) {
             val file = File(
                 context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "${DownloadsManager.novelLocation}/${media.nameMAL ?: media.nameRomaji}/${novel.name}/0.epub"
+                "${DownloadsManager.novelLocation}/${media.mainName()}/${novel.name}/0.epub"
             )
             if (!file.exists()) return false
             val fileUri = FileProvider.getUriForFile(
@@ -124,10 +124,10 @@ class NovelReadFragment : Fragment(),
     override fun downloadedCheck(novel: ShowResponse): Boolean {
         val downloadsManager = Injekt.get<DownloadsManager>()
         return downloadsManager.queryDownload(
-            Download(
-                media.nameMAL ?: media.nameRomaji,
+            DownloadedType(
+                media.mainName(),
                 novel.name,
-                Download.Type.NOVEL
+                DownloadedType.Type.NOVEL
             )
         )
     }
@@ -135,10 +135,10 @@ class NovelReadFragment : Fragment(),
     override fun deleteDownload(novel: ShowResponse) {
         val downloadsManager = Injekt.get<DownloadsManager>()
         downloadsManager.removeDownload(
-            Download(
-                media.nameMAL ?: media.nameRomaji,
+            DownloadedType(
+                media.mainName(),
                 novel.name,
-                Download.Type.NOVEL
+                DownloadedType.Type.NOVEL
             )
         )
     }
@@ -247,8 +247,7 @@ class NovelReadFragment : Fragment(),
             headerAdapter.progress?.visibility = View.VISIBLE
             lifecycleScope.launch(Dispatchers.IO) {
                 if (auto || query == "") model.autoSearchNovels(media)
-                //else model.searchNovels(query, source)
-                else model.autoSearchNovels(media) //testing
+                else model.searchNovels(query, source)
             }
             searching = true
             if (save) {

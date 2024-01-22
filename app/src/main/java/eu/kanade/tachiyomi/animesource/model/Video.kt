@@ -38,9 +38,6 @@ open class Video(
     @Transient
     @Volatile
     var status: State = State.QUEUE
-        set(value) {
-            field = value
-        }
 
     @Transient
     private val _progressFlow = MutableStateFlow(0)

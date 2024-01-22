@@ -2,33 +2,40 @@ package ani.dantotsu.media.manga
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
-import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
+import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.media.anime.handleProgress
+import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
+import eu.kanade.tachiyomi.source.online.HttpSource
+import eu.kanade.tachiyomi.util.system.WebViewUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+
 
 class MangaReadAdapter(
     private val media: Media,
@@ -47,6 +54,8 @@ class MangaReadAdapter(
         return ViewHolder(bind)
     }
 
+    private var nestedDialog: AlertDialog? = null
+
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
@@ -60,7 +69,17 @@ class MangaReadAdapter(
                 null
             )
         }
+        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences(
+                "Dantotsu",
+                Context.MODE_PRIVATE
+            )
+                ?.getBoolean("offlineMode", false) == true
+        ) View.GONE else View.VISIBLE
 
+        binding.animeSourceNameContainer.visibility = offline
+        binding.animeSourceSettings.visibility = offline
+        binding.animeSourceSearch.visibility = offline
+        binding.animeSourceTitle.visibility = offline
         //Source Selection
         var source =
             media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
@@ -117,7 +136,7 @@ class MangaReadAdapter(
             }
         }
 
-        //Subscription
+        //Grids
         subscribe = MediaDetailsActivity.PopImageButton(
             fragment.lifecycleScope,
             binding.animeSourceSubscribe,
@@ -136,98 +155,156 @@ class MangaReadAdapter(
             openSettings(fragment.requireContext(), getChannelId(true, media.id))
         }
 
-        //Icons
-        binding.animeSourceGrid.visibility = View.GONE
-        var reversed = media.selected!!.recyclerReversed
-        var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.mangaDefaultView
-        binding.animeSourceTop.rotation = if (reversed) -90f else 90f
-        binding.animeSourceTop.setOnClickListener {
-            reversed = !reversed
-            binding.animeSourceTop.rotation = if (reversed) -90f else 90f
-            fragment.onIconPressed(style, reversed)
-        }
+        binding.animeNestedButton.setOnClickListener {
 
-        binding.animeScanlatorTop.setOnClickListener {
             val dialogView =
-                LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
-            val checkboxContainer = dialogView.findViewById<LinearLayout>(R.id.checkboxContainer)
-
-            // Dynamically add checkboxes
-
-            options.forEach { option ->
-                val checkBox = CheckBox(currContext()).apply {
-                    text = option
-                }
-                //set checked if it's already selected
-                if (media.selected!!.scanlators != null) {
-                    checkBox.isChecked = media.selected!!.scanlators?.contains(option) != true
-                    scanlatorSelectionListener?.onScanlatorsSelected()
-                } else {
-                    checkBox.isChecked = true
-                }
-                checkboxContainer.addView(checkBox)
+                LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
+            val dialogBinding = DialogLayoutBinding.bind(dialogView)
+            var refresh = false
+            var run = false
+            var reversed = media.selected!!.recyclerReversed
+            var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.mangaDefaultView
+            dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
+            dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
+            dialogBinding.animeSourceTop.setOnClickListener {
+                reversed = !reversed
+                dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
+                dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
+                run = true
             }
 
-            // Create AlertDialog
-            val dialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
-                .setView(dialogView)
-                .setPositiveButton("OK") { dialog, which ->
-                    //add unchecked to hidden
-                    hiddenScanlators.clear()
-                    for (i in 0 until checkboxContainer.childCount) {
-                        val checkBox = checkboxContainer.getChildAt(i) as CheckBox
-                        if (!checkBox.isChecked) {
-                            hiddenScanlators.add(checkBox.text.toString())
-                        }
-                    }
-                    fragment.onScanlatorChange(hiddenScanlators)
-                    scanlatorSelectionListener?.onScanlatorsSelected()
-                }
-                .setNegativeButton("Cancel", null)
-                .show()
-            dialog.window?.setDimAmount(0.8f)
-        }
-
-        binding.animeDownloadTop.setOnClickListener {
-            //Alert dialog asking for the number of chapters to download
-            val alertDialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
-            alertDialog.setTitle("Multi Chapter Downloader")
-            alertDialog.setMessage("Enter the number of chapters to download")
-            val input = NumberPicker(currContext())
-            input.minValue = 1
-            input.maxValue = 20
-            input.value = 1
-            alertDialog.setView(input)
-            alertDialog.setPositiveButton("OK") { dialog, which ->
-                fragment.multiDownload(input.value)
+            //Grids
+            dialogBinding.animeSourceGrid.visibility = View.GONE
+            var selected = when (style) {
+                0 -> dialogBinding.animeSourceList
+                1 -> dialogBinding.animeSourceCompact
+                else -> dialogBinding.animeSourceList
             }
-            alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-            val dialog = alertDialog.show()
-            dialog.window?.setDimAmount(0.8f)
-        }
-
-        var selected = when (style) {
-            0 -> binding.animeSourceList
-            1 -> binding.animeSourceCompact
-            else -> binding.animeSourceList
-        }
-        selected.alpha = 1f
-        fun selected(it: ImageView) {
-            selected.alpha = 0.33f
-            selected = it
+            when (style) {
+                0 -> dialogBinding.layoutText.text = "List"
+                1 -> dialogBinding.layoutText.text = "Compact"
+                else -> dialogBinding.animeSourceList
+            }
             selected.alpha = 1f
-        }
-        binding.animeSourceList.setOnClickListener {
-            selected(it as ImageView)
-            style = 0
-            fragment.onIconPressed(style, reversed)
-        }
-        binding.animeSourceCompact.setOnClickListener {
-            selected(it as ImageView)
-            style = 1
-            fragment.onIconPressed(style, reversed)
-        }
+            fun selected(it: ImageButton) {
+                selected.alpha = 0.33f
+                selected = it
+                selected.alpha = 1f
+            }
+            dialogBinding.animeSourceList.setOnClickListener {
+                selected(it as ImageButton)
+                style = 0
+                dialogBinding.layoutText.text = "List"
+                run = true
+            }
+            dialogBinding.animeSourceCompact.setOnClickListener {
+                selected(it as ImageButton)
+                style = 1
+                dialogBinding.layoutText.text = "Compact"
+                run = true
+            }
+            dialogBinding.animeWebviewContainer.setOnClickListener {
+                if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
+                    toast("WebView not installed")
+                }
+                //start CookieCatcher activity
+                if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
+                    val sourceAHH = mangaReadSources[source] as? DynamicMangaParser
+                    val sourceHttp = sourceAHH?.extension?.sources?.firstOrNull() as? HttpSource
+                    val url = sourceHttp?.baseUrl
+                    url?.let {
+                        refresh = true
+                        val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
+                            .putExtra("url", url)
+                        ContextCompat.startActivity(fragment.requireContext(), intent, null)
+                    }
+                }
+            }
 
+            //Multi download
+            dialogBinding.downloadNo.text = "0"
+            dialogBinding.animeDownloadTop.setOnClickListener {
+                //Alert dialog asking for the number of chapters to download
+                val alertDialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
+                alertDialog.setTitle("Multi Chapter Downloader")
+                alertDialog.setMessage("Enter the number of chapters to download")
+                val input = NumberPicker(currContext())
+                input.minValue = 1
+                input.maxValue = 20
+                input.value = 1
+                alertDialog.setView(input)
+                alertDialog.setPositiveButton("OK") { _, _ ->
+                    dialogBinding.downloadNo.text = "${input.value}"
+                }
+                alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
+                val dialog = alertDialog.show()
+                dialog.window?.setDimAmount(0.8f)
+            }
+
+            //Scanlator
+            dialogBinding.animeScanlatorContainer.visibility =
+                if (options.count() > 1) View.VISIBLE else View.GONE
+            dialogBinding.scanlatorNo.text = "${options.count()}"
+            dialogBinding.animeScanlatorTop.setOnClickListener {
+                val dialogView2 =
+                    LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+                val checkboxContainer =
+                    dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
+
+                // Dynamically add checkboxes
+                options.forEach { option ->
+                    val checkBox = CheckBox(currContext()).apply {
+                        text = option
+                    }
+                    //set checked if it's already selected
+                    if (media.selected!!.scanlators != null) {
+                        checkBox.isChecked = media.selected!!.scanlators?.contains(option) != true
+                        scanlatorSelectionListener?.onScanlatorsSelected()
+                    } else {
+                        checkBox.isChecked = true
+                    }
+                    checkboxContainer.addView(checkBox)
+                }
+
+                // Create AlertDialog
+                val dialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
+                    .setView(dialogView2)
+                    .setPositiveButton("OK") { _, _ ->
+                        //add unchecked to hidden
+                        hiddenScanlators.clear()
+                        for (i in 0 until checkboxContainer.childCount) {
+                            val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                            if (!checkBox.isChecked) {
+                                hiddenScanlators.add(checkBox.text.toString())
+                            }
+                        }
+                        fragment.onScanlatorChange(hiddenScanlators)
+                        scanlatorSelectionListener?.onScanlatorsSelected()
+                    }
+                    .setNegativeButton("Cancel", null)
+                    .show()
+                dialog.window?.setDimAmount(0.8f)
+            }
+
+            nestedDialog = AlertDialog.Builder(fragment.requireContext(), R.style.MyPopup)
+                .setTitle("Options")
+                .setView(dialogView)
+                .setPositiveButton("OK") { _, _ ->
+                    if (run) fragment.onIconPressed(style, reversed)
+                    if (dialogBinding.downloadNo.text != "0") {
+                        fragment.multiDownload(dialogBinding.downloadNo.text.toString().toInt())
+                    }
+                    if (refresh) fragment.loadChapters(source, true)
+                }
+                .setNegativeButton("Cancel") { _, _ ->
+                    if (refresh) fragment.loadChapters(source, true)
+                }
+                .setOnCancelListener {
+                    if (refresh) fragment.loadChapters(source, true)
+                }
+                .create()
+            nestedDialog?.show()
+        }
         //Chapter Handling
         handleChapters()
     }
@@ -259,6 +336,7 @@ class MangaReadAdapter(
                         0
                     )
                 }
+
                 val startChapter = MangaNameAdapter.findChapterNumber(names[limit * (position)])
                 val endChapter = MangaNameAdapter.findChapterNumber(names[last - 1])
                 val startChapterString = if (startChapter != null) {
@@ -370,7 +448,7 @@ class MangaReadAdapter(
         }
     }
 
-    fun setLanguageList(lang: Int, source: Int) {
+    private fun setLanguageList(lang: Int, source: Int) {
         val binding = _binding
         if (mangaReadSources is MangaSources) {
             val parser = mangaReadSources[source] as? DynamicMangaParser
@@ -385,12 +463,16 @@ class MangaReadAdapter(
                         parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
                     )
                 }
-                binding?.animeSourceLanguage?.setAdapter(
-                    ArrayAdapter(
-                        fragment.requireContext(),
-                        R.layout.item_dropdown,
-                        parser.extension.sources.map { it.lang })
+                val adapter = ArrayAdapter(
+                    fragment.requireContext(),
+                    R.layout.item_dropdown,
+                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
+                val items = adapter.count
+                binding?.animeSourceLanguageContainer?.visibility =
+                    if (items > 1) View.VISIBLE else View.GONE
+
+                binding?.animeSourceLanguage?.setAdapter(adapter)
 
             }
         }

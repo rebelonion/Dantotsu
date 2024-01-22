@@ -4,9 +4,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,7 +16,9 @@ import ani.dantotsu.App.Companion.context
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ActivityImageSearchBinding
+import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
@@ -49,10 +53,13 @@ class ImageSearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         LangSet.setLocale(this)
+        initActivity(this)
         ThemeManager(this).applyTheme()
         binding = ActivityImageSearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        binding.uploadImage.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
         binding.uploadImage.setOnClickListener {
             viewModel.clearResults()
             imageSelectionLauncher.launch("image/*")

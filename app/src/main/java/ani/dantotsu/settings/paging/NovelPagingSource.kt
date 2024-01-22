@@ -176,6 +176,7 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
 
         init {
             binding.closeTextView.setOnClickListener {
+                if (bindingAdapterPosition == RecyclerView.NO_POSITION) return@setOnClickListener
                 val extension = getItem(bindingAdapterPosition)
                 if (extension != null) {
                     clickListener.onInstallClick(extension)

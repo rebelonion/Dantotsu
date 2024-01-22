@@ -1,5 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools"
-    tools:locale="en-rUS">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en-rUS">
 
     <string name="repo">rebelonion/Dantotsu</string>
     <string name="preference_file_key" translatable="false">dantotsuprefs</string>
@@ -12,7 +11,7 @@
 
     <string name="discord">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github">https://github.com/rebelonion/Dantotsu</string>
-
+    <string name="telegram" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
     <string name="home">Home</string>
     <string name="anime">Anime</string>
     <string name="browse_anime">Browse Anime</string>
@@ -157,6 +156,7 @@
     <string name="anilist_settings">Anilist Settings</string>
     <string name="extension_settings">Extensions</string>
     <string name="downloads">Downloads</string>
+    <string name="offline_mode">Offline Mode</string>
     <string name="settings">Settings</string>
     <string name="extensions">Extensions</string>
     <string name="player_settings">Player Settings</string>
@@ -228,7 +228,7 @@
     <string name="sub_background_color_select">Subtitle Background Color</string>
     <string name="sub_window_color_select">Subtitle Window Color</string>
     <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn\'t)"</string>
-    <string name="sub_color_info"><b>Note:</b> Changing Subtitle formatting only works with Soft-Subbed Sources such as Zoro!</string>
+    <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
     <string name="sub_font_select">Subtitle Font</string>
     <string name="subtitle_font_size">Subtitle Size</string>
 
@@ -268,6 +268,7 @@
 
     <string name="app">App</string>
     <string name="immersive_mode">Hide Status Bar</string>
+    <string name="immersive_modelist">Hide Status Bar for list</string>
     <string name="immersive_mode_info">Requires App restart to fully apply.</string>
     <string name="home_layout_show">Show/Hide Layouts on Home</string>
     <string-array name="home_layouts">
@@ -506,9 +507,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="close">Close</string>
-    <string name= "no_chapter">No Chapter</string>
-    <string name= "content_18">Turn on 18+ Content from your Anilist Settings</string>
-    <string name= "available">Available</string>
+    <string name="no_chapter">No Chapter</string>
+    <string name="content_18">Turn on 18+ Content from your Anilist Settings</string>
+    <string name="available">Available</string>
     <string name="lets_go">Let\'s Go</string>
     <string name="cope">Cope</string>
 
@@ -569,9 +570,6 @@
 
         \n\nNote: Direct downloads are also possible without a manager but it\'s not recommended.</string>
 
-    <string name="question_8">How to download Manga Chapters?</string>
-    <string name="answer_8">It is yet not possible to download chapters in Dantotsu but this feature will be implemented soon.</string>
-
     <string name="question_9">How to enable NSFW content?</string>
     <string name="answer_9">You can enable nsfw content by enabling 18+ contents from this [link](https://anilist.co/settings/media).</string>
 
@@ -598,7 +596,7 @@
 
     <string name="question_17">Some useful tips and tricks</string>
     <string name="answer_17">The following presents some tips and tricks you may or may not know about - \n \n \n - By hold pressing the Dantotsu logo in settings, you can check if there are any new updates manually. \n \n - Hold pressing an error message/tag/synonym or title will copy it. \n \n - You can open an episode with other apps by hold pressing any server for that episode. This helps in streaming the episode using other video players or download the episode using download managers. \n \n - You can set up custom lists using this [link](https://anilist.co/settings/lists). (you need to be signed in) \n \n - If your episode/chapter is not being progressed automatically after you finish watching/reading it, then hold press the status bar(planning/repeating/watching button) of that anime/manga. The next time you start a chapter/finish an episode, you will stumble upon a popup. Press yes there. </string>
-    
+
 
     <string name="subscribed_notification">Subscribed! Receiving notifications, when new episodes are released on %1$s.</string>
 
@@ -643,5 +641,18 @@
     <string name="color_picker">Color Picker</string>
     <string name="random_selection">Random Selection</string>
     <string name="incognito_mode">Incognito Mode</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="airing_image">Airing Image</string>
+    <string name="anime_downloads">animeDownloads</string>
+    <string name="long_press_download">Long press the download button to download using the selected download manager</string>
+    <string name="purge_anime_downloads">Delete all anime downloads</string>
+    <string name="purge_manga_downloads">Delete all Manga Downloads</string>
+    <string name="purge_novel_downloads">Delete all Novel Downloads</string>
+    <string name="requires_android_12">Requires Android 12+</string>
+    <string name="share_username_in_crash_reports">Share username in crash reports</string>
+    <string name="pinned_sources">Pinned Sources</string>
 
 </resources>

@@ -6,11 +6,10 @@ import android.os.Build.VERSION.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -23,11 +22,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
 class ExtensionsActivity : AppCompatActivity() {
-    private val restartMainActivity = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = startMainActivity(this@ExtensionsActivity)
-    }
     lateinit var binding: ActivityExtensionsBinding
-
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -119,17 +114,18 @@ class ExtensionsActivity : AppCompatActivity() {
 
 
         initActivity(this)
-/* TODO
-        binding.languageselect.setOnClickListener {
-            val popup = PopupMenu(this, it)
-            popup.inflate(R.menu.launguage_selector_menu)
-            popup.setOnMenuItemClickListener { menuItem ->
-                true
-            }
-            popup.setOnDismissListener {
-            }
-            popup.show()
-        }*/
+        binding.languageselect.visibility = View.GONE
+        /* TODO
+                binding.languageselect.setOnClickListener {
+                    val popup = PopupMenu(this, it)
+                    popup.inflate(R.menu.launguage_selector_menu)
+                    popup.setOnMenuItemClickListener { menuItem ->
+                        true
+                    }
+                    popup.setOnDismissListener {
+                    }
+                    popup.show()
+                }*/
         binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
             bottomMargin = navBarHeight

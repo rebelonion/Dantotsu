@@ -1,31 +1,40 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageView
+import android.widget.ImageButton
 import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
+import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
+import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.DynamicAnimeParser
 import ani.dantotsu.parsers.WatchSources
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
+import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.util.system.WebViewUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+
 
 class AnimeWatchAdapter(
     private val media: Media,
@@ -40,6 +49,9 @@ class AnimeWatchAdapter(
         val bind = ItemAnimeWatchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(bind)
     }
+
+    private var nestedDialog: AlertDialog? = null
+
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -78,6 +90,17 @@ class AnimeWatchAdapter(
                 null
             )
         }
+        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences(
+                "Dantotsu",
+                Context.MODE_PRIVATE
+            )
+                ?.getBoolean("offlineMode", false) == true
+        ) View.GONE else View.VISIBLE
+
+        binding.animeSourceNameContainer.visibility = offline
+        binding.animeSourceSettings.visibility = offline
+        binding.animeSourceSearch.visibility = offline
+        binding.animeSourceTitle.visibility = offline
 
         //Source Selection
         var source =
@@ -147,8 +170,9 @@ class AnimeWatchAdapter(
             }
         }
 
+        //Icons
 
-        //Subscription
+        //subscribe
         subscribe = MediaDetailsActivity.PopImageButton(
             fragment.lifecycleScope,
             binding.animeSourceSubscribe,
@@ -167,44 +191,99 @@ class AnimeWatchAdapter(
             openSettings(fragment.requireContext(), getChannelId(true, media.id))
         }
 
-        //Icons
-        var reversed = media.selected!!.recyclerReversed
-        var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.animeDefaultView
-        binding.animeSourceTop.rotation = if (reversed) -90f else 90f
-        binding.animeSourceTop.setOnClickListener {
-            reversed = !reversed
-            binding.animeSourceTop.rotation = if (reversed) -90f else 90f
-            fragment.onIconPressed(style, reversed)
-        }
-        var selected = when (style) {
-            0 -> binding.animeSourceList
-            1 -> binding.animeSourceGrid
-            2 -> binding.animeSourceCompact
-            else -> binding.animeSourceList
-        }
-        selected.alpha = 1f
-        fun selected(it: ImageView) {
-            selected.alpha = 0.33f
-            selected = it
+        //Nested Button
+        binding.animeNestedButton.setOnClickListener {
+            val dialogView =
+                LayoutInflater.from(fragment.requireContext()).inflate(R.layout.dialog_layout, null)
+            val dialogBinding = DialogLayoutBinding.bind(dialogView)
+            var refresh = false
+            var run = false
+            var reversed = media.selected!!.recyclerReversed
+            var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.animeDefaultView
+            dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
+            dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
+            dialogBinding.animeSourceTop.setOnClickListener {
+                reversed = !reversed
+                dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
+                dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
+                run = true
+            }
+            //Grids
+            var selected = when (style) {
+                0 -> dialogBinding.animeSourceList
+                1 -> dialogBinding.animeSourceGrid
+                2 -> dialogBinding.animeSourceCompact
+                else -> dialogBinding.animeSourceList
+            }
+            when (style) {
+                0 -> dialogBinding.layoutText.text = "List"
+                1 -> dialogBinding.layoutText.text = "Grid"
+                2 -> dialogBinding.layoutText.text = "Compact"
+                else -> dialogBinding.animeSourceList
+            }
             selected.alpha = 1f
+            fun selected(it: ImageButton) {
+                selected.alpha = 0.33f
+                selected = it
+                selected.alpha = 1f
+            }
+            dialogBinding.animeSourceList.setOnClickListener {
+                selected(it as ImageButton)
+                style = 0
+                dialogBinding.layoutText.text = "List"
+                run = true
+            }
+            dialogBinding.animeSourceGrid.setOnClickListener {
+                selected(it as ImageButton)
+                style = 1
+                dialogBinding.layoutText.text = "Grid"
+                run = true
+            }
+            dialogBinding.animeSourceCompact.setOnClickListener {
+                selected(it as ImageButton)
+                style = 2
+                dialogBinding.layoutText.text = "Compact"
+                run = true
+            }
+            dialogBinding.animeWebviewContainer.setOnClickListener {
+                if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
+                    toast("WebView not installed")
+                }
+                //start CookieCatcher activity
+                if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
+                    val sourceAHH = watchSources[source] as? DynamicAnimeParser
+                    val sourceHttp =
+                        sourceAHH?.extension?.sources?.firstOrNull() as? AnimeHttpSource
+                    val url = sourceHttp?.baseUrl
+                    url?.let {
+                        refresh = true
+                        val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
+                            .putExtra("url", url)
+                        startActivity(fragment.requireContext(), intent, null)
+                    }
+                }
+            }
+
+            //hidden
+            dialogBinding.animeScanlatorContainer.visibility = View.GONE
+            dialogBinding.animeDownloadContainer.visibility = View.GONE
+
+            nestedDialog = AlertDialog.Builder(fragment.requireContext(), R.style.MyPopup)
+                .setTitle("Options")
+                .setView(dialogView)
+                .setPositiveButton("OK") { _, _ ->
+                    if (run) fragment.onIconPressed(style, reversed)
+                    if (refresh) fragment.loadEpisodes(source, true)
+                }
+                .setNegativeButton("Cancel") { _, _ ->
+                    if (refresh) fragment.loadEpisodes(source, true)
+                }
+                .setOnCancelListener {
+                    if (refresh) fragment.loadEpisodes(source, true)
+                }
+                .create()
+            nestedDialog?.show()
         }
-        binding.animeSourceList.setOnClickListener {
-            selected(it as ImageView)
-            style = 0
-            fragment.onIconPressed(style, reversed)
-        }
-        binding.animeSourceGrid.setOnClickListener {
-            selected(it as ImageView)
-            style = 1
-            fragment.onIconPressed(style, reversed)
-        }
-        binding.animeSourceCompact.setOnClickListener {
-            selected(it as ImageView)
-            style = 2
-            fragment.onIconPressed(style, reversed)
-        }
-        binding.animeScanlatorTop.visibility = View.GONE
-        binding.animeDownloadTop.visibility = View.GONE
         //Episode Handling
         handleEpisodes()
     }
@@ -304,12 +383,15 @@ class AnimeWatchAdapter(
                         }
                     }
                     val ep = media.anime.episodes!![continueEp]!!
+
+                    val cleanedTitle = ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
+
                     binding.itemEpisodeImage.loadImage(
                         ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
                     )
                     if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
                     binding.animeSourceContinueText.text =
-                        currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${if (ep.title != null) "\n${ep.title}" else ""}"
+                        currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${"\n$cleanedTitle"}"
                     binding.animeSourceContinue.setOnClickListener {
                         fragment.onEpisodeClick(continueEp)
                     }
@@ -322,6 +404,7 @@ class AnimeWatchAdapter(
                 } else {
                     binding.animeSourceContinue.visibility = View.GONE
                 }
+
                 binding.animeSourceProgressBar.visibility = View.GONE
                 if (media.anime.episodes!!.isNotEmpty())
                     binding.animeSourceNotFound.visibility = View.GONE
@@ -336,7 +419,7 @@ class AnimeWatchAdapter(
         }
     }
 
-    fun setLanguageList(lang: Int, source: Int) {
+    private fun setLanguageList(lang: Int, source: Int) {
         val binding = _binding
         if (watchSources is AnimeSources) {
             val parser = watchSources[source] as? DynamicAnimeParser
@@ -351,12 +434,16 @@ class AnimeWatchAdapter(
                         parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
                     )
                 }
-                binding?.animeSourceLanguage?.setAdapter(
-                    ArrayAdapter(
-                        fragment.requireContext(),
-                        R.layout.item_dropdown,
-                        parser.extension.sources.map { it.lang })
+                val adapter = ArrayAdapter(
+                    fragment.requireContext(),
+                    R.layout.item_dropdown,
+                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
+                val items = adapter.count
+
+                binding?.animeSourceLanguageContainer?.visibility =
+                    if (items > 1) View.VISIBLE else View.GONE
+                binding?.animeSourceLanguage?.setAdapter(adapter)
 
             }
         }

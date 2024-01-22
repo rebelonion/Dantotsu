@@ -258,7 +258,7 @@
             android:text="@string/dual_page_info"
             android:textSize="14sp" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerOverscroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -276,7 +276,7 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerTrueColors"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -304,7 +304,7 @@
             android:text="@string/true_colors_info"
             android:textSize="14sp" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerImageRotation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -322,7 +322,7 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerCropBorders"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -341,7 +341,7 @@
             app:thumbTint="@color/button_switch_track"
             tools:ignore="TextContrastCheck" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerPadding"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -359,7 +359,7 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerHidePageNumbers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -377,7 +377,7 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerHorizontalScrollBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -395,7 +395,7 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerKeepScreenOn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -413,7 +413,7 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerVolumeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -431,7 +431,7 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerWrapImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -458,7 +458,7 @@
             android:text="@string/wrap_images_info"
             android:textSize="14sp" />
 
-        <com.google.android.material.switchmaterial.SwitchMaterial
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/readerLongClickImage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

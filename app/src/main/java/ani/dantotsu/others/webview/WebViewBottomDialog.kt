@@ -11,6 +11,9 @@ import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.FileUrl
 import ani.dantotsu.databinding.BottomSheetWebviewBinding
 import ani.dantotsu.defaultHeaders
+import eu.kanade.tachiyomi.network.NetworkHelper
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 abstract class WebViewBottomDialog : BottomSheetDialogFragment() {
 
@@ -30,7 +33,8 @@ abstract class WebViewBottomDialog : BottomSheetDialogFragment() {
         dismiss()
     }
 
-    val cookies: CookieManager = CookieManager.getInstance()
+    val cookies: CookieManager = Injekt.get<NetworkHelper>().cookieJar.manager
+    //CookieManager.getInstance()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -56,7 +56,7 @@ abstract class BaseParser {
      * **/
     open suspend fun autoSearch(mediaObj: Media): ShowResponse? {
         var response: ShowResponse? = loadSavedShowResponse(mediaObj.id)
-        if (response != null && this !is OfflineMangaParser) {
+        if (response != null && this !is OfflineMangaParser && this !is OfflineAnimeParser) {
             saveShowResponse(mediaObj.id, response, true)
         } else {
             setUserText("Searching : ${mediaObj.mainName()}")
@@ -156,9 +156,9 @@ abstract class BaseParser {
     }
 
     fun checkIfVariablesAreEmpty() {
-        if (hostUrl.isEmpty()) throw UninitializedPropertyAccessException("Please provide a `hostUrl` for the Parser")
-        if (name.isEmpty()) throw UninitializedPropertyAccessException("Please provide a `name` for the Parser")
-        if (saveName.isEmpty()) throw UninitializedPropertyAccessException("Please provide a `saveName` for the Parser")
+        if (hostUrl.isEmpty()) throw UninitializedPropertyAccessException("Cannot find any installed extensions")
+        if (name.isEmpty()) throw UninitializedPropertyAccessException("Cannot find any installed extensions")
+        if (saveName.isEmpty()) throw UninitializedPropertyAccessException("Cannot find any installed extensions")
     }
 
     open var showUserText = ""

@@ -10,7 +10,6 @@ import ani.dantotsu.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlin.math.roundToInt
 
 fun updateProgress(media: Media, number: String) {
     val incognito = currContext()?.getSharedPreferences("Dantotsu", 0)

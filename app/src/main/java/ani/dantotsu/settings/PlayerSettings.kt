@@ -22,7 +22,7 @@ data class PlayerSettings(
 
     //TimeStamps
     var timeStampsEnabled: Boolean = true,
-    var useProxyForTimeStamps: Boolean = true,
+    var useProxyForTimeStamps: Boolean = false,
     var showTimeStampButton: Boolean = true,
 
     //Auto
@@ -45,6 +45,6 @@ data class PlayerSettings(
     var skipTime: Int = 85,
 
     //Other
-    var cast: Boolean = false,
+    var cast: Boolean = true,
     var pip: Boolean = true
 ) : Serializable

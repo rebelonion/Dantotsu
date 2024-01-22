@@ -4,8 +4,11 @@ import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
@@ -17,6 +20,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.R
 import ani.dantotsu.ZoomOutPageTransformer
 import ani.dantotsu.databinding.ActivityNoInternetBinding
+import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
@@ -25,6 +29,7 @@ import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.selectedOption
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
@@ -56,10 +61,24 @@ class NoInternet : AppCompatActivity() {
 
         }
 
+        var doubleBackToExitPressedOnce = false
+        onBackPressedDispatcher.addCallback(this) {
+            if (doubleBackToExitPressedOnce) {
+                finishAffinity()
+            }
+            doubleBackToExitPressedOnce = true
+            snackString(this@NoInternet.getString(R.string.back_to_exit))
+            Handler(Looper.getMainLooper()).postDelayed(
+                { doubleBackToExitPressedOnce = false },
+                2000
+            )
+        }
+
         binding.root.doOnAttach {
             initActivity(this)
             uiSettings = loadData("ui_settings") ?: uiSettings
             selectedOption = uiSettings.defaultStartUpTab
+
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
             }
@@ -96,12 +115,11 @@ class NoInternet : AppCompatActivity() {
         override fun getItemCount(): Int = 3
 
         override fun createFragment(position: Int): Fragment {
-            when (position) {
-                0 -> return OfflineFragment()
-                1 -> return OfflineFragment()
-                2 -> return OfflineMangaFragment()
+            return when (position) {
+                0 -> OfflineAnimeFragment()
+                2 -> OfflineMangaFragment()
+                else -> OfflineFragment()
             }
-            return LoginFragment()
         }
     }
 }

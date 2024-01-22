@@ -57,10 +57,13 @@ data class VideoServer(
     val name: String,
     val embed: FileUrl,
     val extraData: Map<String, String>? = null,
-    val video: eu.kanade.tachiyomi.animesource.model.Video? = null
+    val video: eu.kanade.tachiyomi.animesource.model.Video? = null,
+    val offline: Boolean = false
 ) : Serializable {
     constructor(name: String, embedUrl: String, extraData: Map<String, String>? = null)
             : this(name, FileUrl(embedUrl), extraData)
+    constructor(name: String, offline: Boolean, extraData: Map<String, String>?)
+            : this(name, FileUrl(""), extraData, null, offline)
 
     constructor(
         name: String,

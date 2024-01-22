@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.OptIn
 import androidx.fragment.app.activityViewModels
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.BottomSheetDialogFragment
@@ -60,6 +62,7 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                 )
             )
 
+        @OptIn(UnstableApi::class)
         override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
             val binding = holder.binding
             if (position == 0) {

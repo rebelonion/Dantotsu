@@ -16,6 +16,9 @@ abstract class WatchSources : BaseSources() {
             ?: EmptyAnimeParser()
     }
 
+    fun isDownloadedSource(i: Int): Boolean {
+        return get(i) is OfflineAnimeParser
+    }
 
     suspend fun loadEpisodesFromMedia(i: Int, media: Media): MutableMap<String, Episode> {
         return tryWithSuspend(true) {
@@ -35,6 +38,19 @@ abstract class WatchSources : BaseSources() {
         tryWithSuspend(true) {
             if (sAnime != null) {
                 parser.loadEpisodes(showLink, extra, sAnime).forEach {
+                    map[it.number] = Episode(
+                        it.number,
+                        it.link,
+                        it.title,
+                        it.description,
+                        it.thumbnail,
+                        it.isFiller,
+                        extra = it.extra,
+                        sEpisode = it.sEpisode
+                    )
+                }
+            } else if (parser is OfflineAnimeParser) {
+                parser.loadEpisodes(showLink, extra, SAnime.create()).forEach {
                     map[it.number] = Episode(
                         it.number,
                         it.link,

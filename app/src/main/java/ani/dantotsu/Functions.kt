@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -28,6 +30,7 @@ import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
@@ -44,6 +47,7 @@ import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.subcriptions.NotificationClickReceiver
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
@@ -53,6 +57,8 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import java.io.*
@@ -124,6 +130,13 @@ fun <T> loadData(fileName: String, context: Context? = null, toast: Boolean = tr
             }
     } catch (e: Exception) {
         if (toast) snackString(a?.getString(R.string.error_loading_data, fileName))
+        //try to delete the file
+        try {
+            a?.deleteFile(fileName)
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().log("Failed to delete file $fileName")
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
         e.printStackTrace()
     }
     return null
@@ -601,7 +614,7 @@ fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
         "$APPLICATION_ID.provider",
         saveImage(
             bitmap,
-            Environment.getExternalStorageDirectory().absolutePath + "/" + Environment.DIRECTORY_DOWNLOADS,
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
             title
         ) ?: return
     )
@@ -624,13 +637,16 @@ fun shareImage(title: String, bitmap: Bitmap, context: Context) {
 
 fun saveImage(image: Bitmap, path: String, imageFileName: String): File? {
     val imageFile = File(path, "$imageFileName.png")
-    return tryWith {
+    return try {
         val fOut: OutputStream = FileOutputStream(imageFile)
         image.compress(Bitmap.CompressFormat.PNG, 0, fOut)
         fOut.close()
         scanFile(imageFile.absolutePath, currContext()!!)
         toast(String.format(currContext()!!.getString(R.string.saved_to_path, path)))
         imageFile
+    } catch (e: Exception) {
+        snackString("Failed to save image: ${e.localizedMessage}")
+        null
     }
 }
 
@@ -673,7 +689,7 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
 
 @SuppressLint("SetTextI18n")
 fun countDown(media: Media, view: ViewGroup) {
-    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 7.toLong()) {
+    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
         val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
         view.addView(v.root, 0)
         v.mediaCountdownText.text =
@@ -783,35 +799,40 @@ fun toast(string: String?) {
 }
 
 fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null) {
-    if (s != null) {
-        (activity ?: currActivity())?.apply {
-            runOnUiThread {
-                val snackBar = Snackbar.make(
-                    window.decorView.findViewById(android.R.id.content),
-                    s,
-                    Snackbar.LENGTH_SHORT
-                )
-                snackBar.view.apply {
-                    updateLayoutParams<FrameLayout.LayoutParams> {
-                        gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
-                        width = WRAP_CONTENT
+    try { //I have no idea why this sometimes crashes for some people...
+        if (s != null) {
+            (activity ?: currActivity())?.apply {
+                runOnUiThread {
+                    val snackBar = Snackbar.make(
+                        window.decorView.findViewById(android.R.id.content),
+                        s,
+                        Snackbar.LENGTH_SHORT
+                    )
+                    snackBar.view.apply {
+                        updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
+                            width = WRAP_CONTENT
+                        }
+                        translationY = -(navBarHeight.dp + 32f)
+                        translationZ = 32f
+                        updatePadding(16f.px, right = 16f.px)
+                        setOnClickListener {
+                            snackBar.dismiss()
+                        }
+                        setOnLongClickListener {
+                            copyToClipboard(clipboard ?: s, false)
+                            toast(getString(R.string.copied_to_clipboard))
+                            true
+                        }
                     }
-                    translationY = -(navBarHeight.dp + 32f)
-                    translationZ = 32f
-                    updatePadding(16f.px, right = 16f.px)
-                    setOnClickListener {
-                        snackBar.dismiss()
-                    }
-                    setOnLongClickListener {
-                        copyToClipboard(clipboard ?: s, false)
-                        toast(getString(R.string.copied_to_clipboard))
-                        true
-                    }
+                    snackBar.show()
                 }
-                snackBar.show()
             }
+            logger(s)
         }
-        logger(s)
+    } catch (e: Exception) {
+        logger(e.stackTraceToString())
+        FirebaseCrashlytics.getInstance().recordException(e)
     }
 }
 
@@ -927,6 +948,33 @@ fun checkCountry(context: Context): Boolean {
         }
 
         else -> false
+    }
+}
+
+const val INCOGNITO_CHANNEL_ID = 26
+
+@SuppressLint("LaunchActivityFromNotification")
+fun incognitoNotification(context: Context) {
+    val notificationManager =
+        context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+    val incognito = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+        .getBoolean("incognito", false)
+    if (incognito) {
+        val intent = Intent(context, NotificationClickReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, 0, intent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+        val builder = NotificationCompat.Builder(context, Notifications.CHANNEL_INCOGNITO_MODE)
+            .setSmallIcon(R.drawable.ic_incognito_24)
+            .setContentTitle("Incognito Mode")
+            .setContentText("Disable Incognito Mode")
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setContentIntent(pendingIntent)
+            .setOngoing(true)
+        notificationManager.notify(INCOGNITO_CHANNEL_ID, builder.build())
+    } else {
+        notificationManager.cancel(INCOGNITO_CHANNEL_ID)
     }
 }
 

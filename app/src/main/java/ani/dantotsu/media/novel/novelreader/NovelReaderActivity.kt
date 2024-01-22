@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
+import android.webkit.WebView
 import android.widget.AdapterView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -36,7 +37,7 @@ import ani.dantotsu.saveData
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.CurrentNovelReaderSettings
 import ani.dantotsu.settings.CurrentReaderSettings
-import ani.dantotsu.settings.NovelReaderSettings
+import ani.dantotsu.settings.ReaderSettings
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
@@ -62,7 +63,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
     private lateinit var binding: ActivityNovelReaderBinding
     private val scope = lifecycleScope
 
-    lateinit var settings: NovelReaderSettings
+    lateinit var settings: ReaderSettings
     private lateinit var uiSettings: UserInterfaceSettings
 
     private var notchHeight: Int? = null
@@ -139,16 +140,31 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
     }
 
 
+    @SuppressLint("WebViewApiAvailability")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //check for supported webview
-        val webViewVersion = WebViewCompat.getCurrentWebViewPackage(this)?.versionName
+        val webViewVersion = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WebView.getCurrentWebViewPackage()?.versionName
+        } else {
+            WebViewCompat.getCurrentWebViewPackage(this)?.versionName
+        }
         val firstVersion = webViewVersion?.split(".")?.firstOrNull()?.toIntOrNull()
         if (webViewVersion == null || firstVersion == null || firstVersion < 87) {
-            Toast.makeText(this, "Please update WebView from PlayStore", Toast.LENGTH_LONG).show()
+            val text = if (webViewVersion == null) {
+                "Could not find webView installed"
+            } else if (firstVersion == null) {
+                "Could not find WebView Version Number: $webViewVersion"
+            } else if (firstVersion < 87) { //false positive?
+                "Webview Versiom: $firstVersion. PLease update"
+            } else {
+                "Please update WebView from PlayStore"
+            }
+            Toast.makeText(this, text, Toast.LENGTH_LONG).show()
             //open playstore
             val intent = Intent(Intent.ACTION_VIEW)
-            intent.data = Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")
+            intent.data =
+                Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.webview")
             startActivity(intent)
             //stop reader
             finish()
@@ -159,9 +175,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         ThemeManager(this).applyTheme()
         binding = ActivityNovelReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        settings = loadData("novel_reader_settings", this)
-            ?: NovelReaderSettings().apply { saveData("novel_reader_settings", this) }
+        settings = loadData("reader_settings", this)
+            ?: ReaderSettings().apply { saveData("reader_settings", this) }
         uiSettings = loadData("ui_settings", this)
             ?: UserInterfaceSettings().also { saveData("ui_settings", it) }
 
@@ -271,7 +286,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         binding.bookReader.getAppearance {
             currentTheme = it
             themes.add(0, it)
-            settings.default = loadData("${sanitizedBookId}_current_settings") ?: settings.default
+            settings.defaultLN =
+                loadData("${sanitizedBookId}_current_settings") ?: settings.defaultLN
             applySettings()
         }
 
@@ -323,7 +339,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         return when (event.keyCode) {
             KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_PAGE_UP -> {
                 if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP)
-                    if (!settings.default.volumeButtons)
+                    if (!settings.defaultLN.volumeButtons)
                         return false
                 if (event.action == KeyEvent.ACTION_DOWN) {
                     onVolumeUp?.invoke()
@@ -333,7 +349,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
             KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_PAGE_DOWN -> {
                 if (event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
-                    if (!settings.default.volumeButtons)
+                    if (!settings.defaultLN.volumeButtons)
                         return false
                 if (event.action == KeyEvent.ACTION_DOWN) {
                     onVolumeDown?.invoke()
@@ -349,13 +365,18 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
 
     fun applySettings() {
-        saveData("${sanitizedBookId}_current_settings", settings.default)
+        saveData("${sanitizedBookId}_current_settings", settings.defaultLN)
         hideBars()
 
+        if (settings.defaultLN.useOledTheme) {
+            themes.forEach { theme ->
+                theme.darkBg = Color.parseColor("#000000")
+            }
+        }
         currentTheme =
-            themes.first { it.name.equals(settings.default.currentThemeName, ignoreCase = true) }
+            themes.first { it.name.equals(settings.defaultLN.currentThemeName, ignoreCase = true) }
 
-        when (settings.default.layout) {
+        when (settings.defaultLN.layout) {
             CurrentNovelReaderSettings.Layouts.PAGED -> {
                 currentTheme?.flow = ReaderFlow.PAGINATED
             }
@@ -366,22 +387,22 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         }
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER
-        when (settings.default.dualPageMode) {
+        when (settings.defaultLN.dualPageMode) {
             CurrentReaderSettings.DualPageModes.No -> currentTheme?.maxColumnCount = 1
             CurrentReaderSettings.DualPageModes.Automatic -> currentTheme?.maxColumnCount = 2
             CurrentReaderSettings.DualPageModes.Force -> requestedOrientation =
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
-        currentTheme?.lineHeight = settings.default.lineHeight
-        currentTheme?.gap = settings.default.margin
-        currentTheme?.maxInlineSize = settings.default.maxInlineSize
-        currentTheme?.maxBlockSize = settings.default.maxBlockSize
-        currentTheme?.useDark = settings.default.useDarkTheme
+        currentTheme?.lineHeight = settings.defaultLN.lineHeight
+        currentTheme?.gap = settings.defaultLN.margin
+        currentTheme?.maxInlineSize = settings.defaultLN.maxInlineSize
+        currentTheme?.maxBlockSize = settings.defaultLN.maxBlockSize
+        currentTheme?.useDark = settings.defaultLN.useDarkTheme
 
         currentTheme?.let { binding.bookReader.setAppearance(it) }
 
-        if (settings.default.keepScreenOn) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (settings.defaultLN.keepScreenOn) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 

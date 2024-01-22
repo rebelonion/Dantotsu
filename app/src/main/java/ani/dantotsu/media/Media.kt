@@ -118,6 +118,19 @@ data class Media(
     fun mangaName() = if (countryOfOrigin != "JP") mainName() else nameRomaji
 }
 
+fun emptyMedia() = Media(
+    id = 0,
+    name = "No media found",
+    nameRomaji = "No media found",
+    userPreferredName = "",
+    isAdult = false,
+    isFav = false,
+    isListPrivate = false,
+    userScore = 0,
+    userStatus = "",
+    format = "",
+)
+
 object MediaSingleton {
     var media: Media? = null
     var bitmap: Bitmap? = null

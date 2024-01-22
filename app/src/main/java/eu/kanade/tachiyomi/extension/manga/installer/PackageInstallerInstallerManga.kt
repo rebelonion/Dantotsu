@@ -23,7 +23,10 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
 
     private val packageActionReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            when (intent.getIntExtra(PackageInstaller.EXTRA_STATUS, PackageInstaller.STATUS_FAILURE)) {
+            when (intent.getIntExtra(
+                PackageInstaller.EXTRA_STATUS,
+                PackageInstaller.STATUS_FAILURE
+            )) {
                 PackageInstaller.STATUS_PENDING_USER_ACTION -> {
                     val userAction = intent.getParcelableExtraCompat<Intent>(Intent.EXTRA_INTENT)
                     if (userAction == null) {
@@ -34,9 +37,11 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
                     userAction.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     service.startActivity(userAction)
                 }
+
                 PackageInstaller.STATUS_FAILURE_ABORTED -> {
                     continueQueue(InstallStep.Idle)
                 }
+
                 PackageInstaller.STATUS_SUCCESS -> continueQueue(InstallStep.Installed)
                 else -> continueQueue(InstallStep.Error)
             }
@@ -52,7 +57,8 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
         super.processEntry(entry)
         activeSession = null
         try {
-            val installParams = PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
+            val installParams =
+                PackageInstaller.SessionParams(PackageInstaller.SessionParams.MODE_FULL_INSTALL)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 installParams.setRequireUserAction(PackageInstaller.SessionParams.USER_ACTION_NOT_REQUIRED)
             }
@@ -60,7 +66,8 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
             val fileSize = service.getUriSize(entry.uri) ?: throw IllegalStateException()
             installParams.setSize(fileSize)
 
-            val inputStream = service.contentResolver.openInputStream(entry.uri) ?: throw IllegalStateException()
+            val inputStream =
+                service.contentResolver.openInputStream(entry.uri) ?: throw IllegalStateException()
             val session = packageInstaller.openSession(activeSession!!.second)
             val outputStream = session.openWrite(entry.downloadId.toString(), 0, fileSize)
             session.use {
@@ -108,7 +115,12 @@ class PackageInstallerInstallerManga(private val service: Service) : InstallerMa
     }
 
     init {
-        ContextCompat.registerReceiver(service, packageActionReceiver, IntentFilter(INSTALL_ACTION), ContextCompat.RECEIVER_EXPORTED)
+        ContextCompat.registerReceiver(
+            service,
+            packageActionReceiver,
+            IntentFilter(INSTALL_ACTION),
+            ContextCompat.RECEIVER_EXPORTED
+        )
     }
 }
 

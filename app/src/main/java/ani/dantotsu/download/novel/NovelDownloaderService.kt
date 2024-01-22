@@ -17,7 +17,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import ani.dantotsu.R
-import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
@@ -330,10 +330,10 @@ class NovelDownloaderService : Service() {
 
                 saveMediaInfo(task)
                 downloadsManager.addDownload(
-                    Download(
+                    DownloadedType(
                         task.title,
                         task.chapter,
-                        Download.Type.NOVEL
+                        DownloadedType.Type.NOVEL
                     )
                 )
                 broadcastDownloadFinished(task.originalLink)

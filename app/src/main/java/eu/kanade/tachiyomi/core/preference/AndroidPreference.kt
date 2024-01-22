@@ -69,7 +69,11 @@ sealed class AndroidPreference<T>(
         key: String,
         defaultValue: String,
     ) : AndroidPreference<String>(preferences, keyFlow, key, defaultValue) {
-        override fun read(preferences: SharedPreferences, key: String, defaultValue: String): String {
+        override fun read(
+            preferences: SharedPreferences,
+            key: String,
+            defaultValue: String
+        ): String {
             return try {
                 preferences.getString(key, defaultValue) ?: defaultValue
             } catch (e: ClassCastException) {
@@ -145,7 +149,11 @@ sealed class AndroidPreference<T>(
         key: String,
         defaultValue: Boolean,
     ) : AndroidPreference<Boolean>(preferences, keyFlow, key, defaultValue) {
-        override fun read(preferences: SharedPreferences, key: String, defaultValue: Boolean): Boolean {
+        override fun read(
+            preferences: SharedPreferences,
+            key: String,
+            defaultValue: Boolean
+        ): Boolean {
             return try {
                 preferences.getBoolean(key, defaultValue)
             } catch (e: ClassCastException) {
@@ -164,7 +172,11 @@ sealed class AndroidPreference<T>(
         key: String,
         defaultValue: Set<String>,
     ) : AndroidPreference<Set<String>>(preferences, keyFlow, key, defaultValue) {
-        override fun read(preferences: SharedPreferences, key: String, defaultValue: Set<String>): Set<String> {
+        override fun read(
+            preferences: SharedPreferences,
+            key: String,
+            defaultValue: Set<String>
+        ): Set<String> {
             return try {
                 preferences.getStringSet(key, defaultValue) ?: defaultValue
             } catch (e: ClassCastException) {

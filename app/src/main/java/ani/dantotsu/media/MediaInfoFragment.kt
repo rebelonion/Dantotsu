@@ -2,6 +2,7 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -59,6 +60,7 @@ class MediaInfoFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
+        val offline = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("offlineMode", false) || !isOnline(requireContext())
         binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.visibility = if (loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }
@@ -101,29 +103,33 @@ class MediaInfoFragment : Fragment() {
                     if (media.anime.mainStudio != null) {
                         binding.mediaInfoStudioContainer.visibility = View.VISIBLE
                         binding.mediaInfoStudio.text = media.anime.mainStudio!!.name
-                        binding.mediaInfoStudioContainer.setOnClickListener {
-                            ContextCompat.startActivity(
-                                requireActivity(),
-                                Intent(activity, StudioActivity::class.java).putExtra(
-                                    "studio",
-                                    media.anime.mainStudio!! as Serializable
-                                ),
-                                null
-                            )
+                        if (!offline) {
+                            binding.mediaInfoStudioContainer.setOnClickListener {
+                                ContextCompat.startActivity(
+                                    requireActivity(),
+                                    Intent(activity, StudioActivity::class.java).putExtra(
+                                        "studio",
+                                        media.anime.mainStudio!! as Serializable
+                                    ),
+                                    null
+                                )
+                            }
                         }
                     }
                     if (media.anime.author != null) {
                         binding.mediaInfoAuthorContainer.visibility = View.VISIBLE
                         binding.mediaInfoAuthor.text = media.anime.author!!.name
-                        binding.mediaInfoAuthorContainer.setOnClickListener {
-                            ContextCompat.startActivity(
-                                requireActivity(),
-                                Intent(activity, AuthorActivity::class.java).putExtra(
-                                    "author",
-                                    media.anime.author!! as Serializable
-                                ),
-                                null
-                            )
+                        if (!offline) {
+                            binding.mediaInfoAuthorContainer.setOnClickListener {
+                                ContextCompat.startActivity(
+                                    requireActivity(),
+                                    Intent(activity, AuthorActivity::class.java).putExtra(
+                                        "author",
+                                        media.anime.author!! as Serializable
+                                    ),
+                                    null
+                                )
+                            }
                         }
                     }
                     binding.mediaInfoTotalTitle.setText(R.string.total_eps)
@@ -137,15 +143,17 @@ class MediaInfoFragment : Fragment() {
                     if (media.manga.author != null) {
                         binding.mediaInfoAuthorContainer.visibility = View.VISIBLE
                         binding.mediaInfoAuthor.text = media.manga.author!!.name
-                        binding.mediaInfoAuthorContainer.setOnClickListener {
-                            ContextCompat.startActivity(
-                                requireActivity(),
-                                Intent(activity, AuthorActivity::class.java).putExtra(
-                                    "author",
-                                    media.manga.author!! as Serializable
-                                ),
-                                null
-                            )
+                        if (!offline) {
+                            binding.mediaInfoAuthorContainer.setOnClickListener {
+                                ContextCompat.startActivity(
+                                    requireActivity(),
+                                    Intent(activity, AuthorActivity::class.java).putExtra(
+                                        "author",
+                                        media.manga.author!! as Serializable
+                                    ),
+                                    null
+                                )
+                            }
                         }
                     }
                 }
@@ -189,7 +197,7 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bind.root)
                 }
 
-                if (media.trailer != null) {
+                if (media.trailer != null && !offline) {
                     @Suppress("DEPRECATION")
                     class MyChrome : WebChromeClient() {
                         private var mCustomView: View? = null
@@ -243,7 +251,7 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bind.root)
                 }
 
-                if (media.anime != null && (media.anime.op.isNotEmpty() || media.anime.ed.isNotEmpty())) {
+                if (media.anime != null && (media.anime.op.isNotEmpty() || media.anime.ed.isNotEmpty()) && !offline) {
                     val markWon = Markwon.builder(requireContext())
                         .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
 
@@ -304,7 +312,7 @@ class MediaInfoFragment : Fragment() {
                     }
                 }
 
-                if (media.genres.isNotEmpty()) {
+                if (media.genres.isNotEmpty() && !offline) {
                     val bind = ActivityGenreBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
@@ -335,7 +343,7 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bind.root)
                 }
 
-                if (media.tags.isNotEmpty()) {
+                if (media.tags.isNotEmpty() && !offline) {
                     val bind = ItemTitleChipgroupBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
@@ -376,7 +384,7 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bind.root)
                 }
 
-                if (!media.characters.isNullOrEmpty()) {
+                if (!media.characters.isNullOrEmpty() && !offline) {
                     val bind = ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
@@ -393,7 +401,7 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bind.root)
                 }
 
-                if (!media.relations.isNullOrEmpty()) {
+                if (!media.relations.isNullOrEmpty() && !offline) {
                     if (media.sequel != null || media.prequel != null) {
                         val bind = ItemQuelsBinding.inflate(
                             LayoutInflater.from(context),
@@ -456,7 +464,7 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bindi.root)
                 }
 
-                if (!media.recommendations.isNullOrEmpty()) {
+                if (!media.recommendations.isNullOrEmpty() && !offline ) {
                     val bind = ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,

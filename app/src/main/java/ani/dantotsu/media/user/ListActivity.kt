@@ -1,23 +1,29 @@
 package ani.dantotsu.media.user
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityListBinding
 import ani.dantotsu.loadData
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -74,13 +80,16 @@ class ListActivity : AppCompatActivity() {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
+            binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = statusBarHeight
+                bottomMargin = navBarHeight
+            }
         }
         setContentView(binding.root)
 
         val anime = intent.getBooleanExtra("anime", true)
         binding.listTitle.text =
             intent.getStringExtra("username") + "'s " + (if (anime) "Anime" else "Manga") + " List"
-
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@ListActivity.selectedTabIdx = tab?.position ?: 0
@@ -145,7 +154,8 @@ class ListActivity : AppCompatActivity() {
                     R.id.release -> "release"
                     else -> null
                 }
-
+                currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                    ?.putString("sort_order", sort)?.apply()
                 binding.listProgressBar.visibility = View.VISIBLE
                 binding.listViewPager.adapter = null
                 scope.launch {

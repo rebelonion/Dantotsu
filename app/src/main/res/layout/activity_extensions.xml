@@ -80,26 +80,7 @@
             app:tabPaddingEnd="16dp"
             app:tabPaddingStart="16dp"
             app:tabTextAppearance="@style/NavBarText"
-            app:tabGravity="fill">
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/installed_anime"/>
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/available_anime"/>
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/installed_manga"/>
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Available Manga"
-                tools:ignore="HardcodedText" />
-        </com.google.android.material.tabs.TabLayout>
-
+            app:tabGravity="fill"/>
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/searchView"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -134,7 +115,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
+            android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />

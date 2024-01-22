@@ -73,7 +73,10 @@ internal class AnimeExtensionGithubApi {
         }
     }
 
-    suspend fun checkForUpdates(context: Context, fromAvailableExtensionList: Boolean = false): List<AnimeExtension.Installed>? {
+    suspend fun checkForUpdates(
+        context: Context,
+        fromAvailableExtensionList: Boolean = false
+    ): List<AnimeExtension.Installed>? {
         // Limit checks to once a day at most
         if (fromAvailableExtensionList && Date().time < lastExtCheck.get() + 1.days.inWholeMilliseconds) {
             return null
@@ -161,8 +164,10 @@ private fun AnimeExtensionJsonObject.extractLibVersion(): Double {
     return version.substringBeforeLast('.').toDouble()
 }
 
-private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo/"
-private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/aniyomiorg/aniyomi-extensions@repo/"
+private const val REPO_URL_PREFIX =
+    "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo/"
+private const val FALLBACK_REPO_URL_PREFIX =
+    "https://gcore.jsdelivr.net/gh/aniyomiorg/aniyomi-extensions@repo/"
 
 @Serializable
 private data class AnimeExtensionJsonObject(

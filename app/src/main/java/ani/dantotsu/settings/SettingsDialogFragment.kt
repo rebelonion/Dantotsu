@@ -1,41 +1,43 @@
 package ani.dantotsu.settings
 
-import android.app.DownloadManager
-import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import ani.dantotsu.BottomSheetDialogFragment
+import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
-import ani.dantotsu.download.DownloadContainerActivity
+import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
-import ani.dantotsu.loadData
+import ani.dantotsu.home.AnimeFragment
+import ani.dantotsu.home.HomeFragment
+import ani.dantotsu.home.LoginFragment
+import ani.dantotsu.home.MangaFragment
+import ani.dantotsu.home.NoInternet
+import ani.dantotsu.incognitoNotification
 import ani.dantotsu.loadImage
+import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.startMainActivity
-import ani.dantotsu.toast
 
-
-class SettingsDialogFragment() : BottomSheetDialogFragment() {
+class SettingsDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSettingsBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var pageType: PageType
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         pageType = arguments?.getSerializable("pageType") as? PageType ?: PageType.HOME
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -72,6 +74,17 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
             }
         }
 
+        binding.settingsIncognito.isChecked =
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean(
+                "incognito",
+                false
+            ) ?: false
+
+        binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                ?.putBoolean("incognito", isChecked)?.apply()
+            incognitoNotification(requireContext())
+        }
         binding.settingsExtensionSettings.setSafeOnClickListener {
             startActivity(Intent(activity, ExtensionsActivity::class.java))
             dismiss()
@@ -88,48 +101,61 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
             startActivity(Intent(activity, ImageSearchActivity::class.java))
             dismiss()
         }
-        binding.settingsDownloads.setSafeOnClickListener {
+
+        binding.settingsDownloads.isChecked =
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("offlineMode", false) ?: false
+        binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
             when (pageType) {
                 PageType.MANGA -> {
-                    val intent = Intent(activity, DownloadContainerActivity::class.java)
-                    intent.putExtra("FRAGMENT_CLASS_NAME", OfflineMangaFragment::class.java.name)
+                    val intent = Intent(activity, NoInternet::class.java)
+                    intent.putExtra(
+                        "FRAGMENT_CLASS_NAME",
+                        OfflineMangaFragment::class.java.name
+                    )
                     startActivity(intent)
                 }
 
                 PageType.ANIME -> {
-                    try {
-                        val arrayOfFiles =
-                            ContextCompat.getExternalFilesDirs(requireContext(), null)
-                        startActivity(
-                            if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
-                                val parentDirectory = arrayOfFiles[1].toString()
-                                val intent = Intent(Intent.ACTION_VIEW)
-                                intent.setDataAndType(Uri.parse(parentDirectory), "resource/folder")
-                            } else Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
-                        )
-                    } catch (e: ActivityNotFoundException) {
-                        toast(getString(R.string.file_manager_not_found))
-                    }
+                    val intent = Intent(activity, NoInternet::class.java)
+                    intent.putExtra(
+                        "FRAGMENT_CLASS_NAME",
+                        OfflineAnimeFragment::class.java.name
+                    )
+                    startActivity(intent)
                 }
 
                 PageType.HOME -> {
-                    try {
-                        val arrayOfFiles =
-                            ContextCompat.getExternalFilesDirs(requireContext(), null)
-                        startActivity(
-                            if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
-                                val parentDirectory = arrayOfFiles[1].toString()
-                                val intent = Intent(Intent.ACTION_VIEW)
-                                intent.setDataAndType(Uri.parse(parentDirectory), "resource/folder")
-                            } else Intent(DownloadManager.ACTION_VIEW_DOWNLOADS)
-                        )
-                    } catch (e: ActivityNotFoundException) {
-                        toast(getString(R.string.file_manager_not_found))
-                    }
+                    val intent = Intent(activity, NoInternet::class.java)
+                    intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
+                    startActivity(intent)
+                }
+
+                PageType.OfflineMANGA -> {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    intent.putExtra("FRAGMENT_CLASS_NAME", MangaFragment::class.java.name)
+                    startActivity(intent)
+                }
+
+                PageType.OfflineHOME -> {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    intent.putExtra(
+                        "FRAGMENT_CLASS_NAME",
+                        if (Anilist.token != null) HomeFragment::class.java.name else LoginFragment::class.java.name
+                    )
+                    startActivity(intent)
+                }
+
+                PageType.OfflineANIME -> {
+                    val intent = Intent(activity, MainActivity::class.java)
+                    intent.putExtra("FRAGMENT_CLASS_NAME", AnimeFragment::class.java.name)
+                    startActivity(intent)
                 }
             }
 
             dismiss()
+            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
+                ?.putBoolean("offlineMode", isChecked)?.apply()
         }
     }
 
@@ -140,7 +166,7 @@ class SettingsDialogFragment() : BottomSheetDialogFragment() {
 
     companion object {
         enum class PageType {
-            MANGA, ANIME, HOME
+            MANGA, ANIME, HOME, OfflineMANGA, OfflineANIME, OfflineHOME
         }
 
         fun newInstance(pageType: PageType): SettingsDialogFragment {

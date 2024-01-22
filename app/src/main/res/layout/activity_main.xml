@@ -23,9 +23,34 @@
         android:id="@+id/included_navbar"
         layout="@layout/item_navbar" />
 
-    <FrameLayout
-        android:id="@+id/fragmentContainer"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/incognito"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="start"
+            android:layout_margin="16dp"
+            android:translationZ="7dp"
+            app:cardBackgroundColor="@color/bg_opp"
+            app:cardCornerRadius="16dp">
+
+            <androidx.constraintlayout.utils.widget.ImageFilterView
+                android:id="@+id/incognitoImage"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                app:tint="@color/bg"
+                android:src="@drawable/ic_incognito_24"
+                tools:ignore="ContentDescription" />
+        </androidx.cardview.widget.CardView>
+
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
 </FrameLayout>

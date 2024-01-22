@@ -10,6 +10,7 @@ import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.forEach
 import androidx.preference.getOnBindEditTextListener
+import ani.dantotsu.snackString
 import eu.kanade.tachiyomi.PreferenceScreen
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
@@ -21,7 +22,12 @@ import uy.kohesive.injekt.api.get
 
 class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        preferenceScreen = populateAnimePreferenceScreen()
+        preferenceScreen = try {
+            populateAnimePreferenceScreen()
+        } catch (e: Exception) {
+            snackString(e.message ?: "Unknown error")
+            preferenceManager.createPreferenceScreen(requireContext())
+        }
         //set background color
         val color = TypedValue()
         requireContext().theme.resolveAttribute(
@@ -42,8 +48,8 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
 
     private fun populateAnimePreferenceScreen(): PreferenceScreen {
         val sourceId = requireArguments().getLong(SOURCE_ID)
-        val source = Injekt.get<AnimeSourceManager>().get(sourceId)!!
-        check(source is ConfigurableAnimeSource)
+        val source = Injekt.get<AnimeSourceManager>().get(sourceId) as? ConfigurableAnimeSource
+            ?: error("Source with id: $sourceId not found!")
         val sharedPreferences =
             requireContext().getSharedPreferences(source.getPreferenceKey(), Context.MODE_PRIVATE)
         val dataStore = SharedPreferencesDataStore(sharedPreferences)

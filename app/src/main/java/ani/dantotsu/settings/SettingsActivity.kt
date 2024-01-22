@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.drawable.Animatable
 import android.os.Build.*
 import android.os.Build.VERSION.*
@@ -11,19 +12,24 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.databinding.ActivitySettingsBinding
+import ani.dantotsu.download.DownloadedType
+import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.others.LangSet
@@ -37,7 +43,9 @@ import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.skydoves.colorpickerview.listeners.ColorListener
+import eltos.simpledialogfragment.SimpleDialog
+import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
+import eltos.simpledialogfragment.color.SimpleColorDialog
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
@@ -50,7 +58,7 @@ import uy.kohesive.injekt.api.get
 import kotlin.random.Random
 
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListener {
     private val restartMainActivity = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() = startMainActivity(this@SettingsActivity)
     }
@@ -59,6 +67,7 @@ class SettingsActivity : AppCompatActivity() {
     private val networkPreferences = Injekt.get<NetworkPreferences>()
     private var cursedCounter = 0
 
+    @OptIn(UnstableApi::class)
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,26 +80,7 @@ class SettingsActivity : AppCompatActivity() {
 
         binding.settingsVersion.text = getString(R.string.version_current, BuildConfig.VERSION_NAME)
         binding.settingsVersion.setOnLongClickListener {
-            fun getArch(): String {
-                SUPPORTED_ABIS.forEach {
-                    when (it) {
-                        "arm64-v8a" -> return "aarch64"
-                        "armeabi-v7a" -> return "arm"
-                        "x86_64" -> return "x86_64"
-                        "x86" -> return "i686"
-                    }
-                }
-                return System.getProperty("os.arch") ?: System.getProperty("os.product.cpu.abi")
-                ?: "Unknown Architecture"
-            }
-
-            val info = """
-                dantotsu Version: ${BuildConfig.VERSION_NAME}
-                Device: $BRAND $DEVICE
-                Architecture: ${getArch()}
-                OS Version: $CODENAME $RELEASE ($SDK_INT)
-            """.trimIndent()
-            copyToClipboard(info, false)
+            copyToClipboard(getDeviceInfo(), false)
             toast(getString(R.string.copied_device_info))
             return@setOnLongClickListener true
         }
@@ -176,34 +166,30 @@ class SettingsActivity : AppCompatActivity() {
 
 
         binding.customTheme.setOnClickListener {
-            var passedColor: Int = 0
-            val dialogView = layoutInflater.inflate(R.layout.dialog_color_picker, null)
-            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Custom Theme")
-                .setView(dialogView)
-                .setPositiveButton("OK") { dialog, _ ->
-                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                        .putInt("custom_theme_int", passedColor).apply()
-                    logger("Custom Theme: $passedColor")
-                    dialog.dismiss()
+            val originalColor = getSharedPreferences("Dantotsu", MODE_PRIVATE).getInt(
+                "custom_theme_int",
+                Color.parseColor("#6200EE")
+            )
+
+            class CustomColorDialog : SimpleColorDialog() { //idk where to put it
+                override fun onPositiveButtonClick() {
                     restartApp()
+                    super.onPositiveButtonClick()
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
-                    dialog.dismiss()
-                }
-                .create()
-            val colorPickerView =
-                dialogView.findViewById<com.skydoves.colorpickerview.ColorPickerView>(R.id.colorPickerView)
-            colorPickerView.setColorListener(ColorListener { color, fromUser ->
-                val linearLayout = dialogView.findViewById<LinearLayout>(R.id.linear)
-                passedColor = color
-                linearLayout.setBackgroundColor(color)
-            })
-            alertDialog.show()
-            alertDialog.window?.setDimAmount(0.8f)
+            }
+
+            val tag = "colorPicker"
+            CustomColorDialog().title("Custom Theme")
+                .colorPreset(originalColor)
+                .colors(this, SimpleColorDialog.BEIGE_COLOR_PALLET)
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this, tag)
         }
 
-        //val animeSource = loadData<Int>("settings_def_anime_source_s")?.let { if (it >= AnimeSources.names.size) 0 else it } ?: 0
         val animeSource = getSharedPreferences(
             "Dantotsu",
             Context.MODE_PRIVATE
@@ -228,6 +214,47 @@ class SettingsActivity : AppCompatActivity() {
             binding.animeSource.clearFocus()
         }
 
+        binding.settingsPinnedAnimeSources.setOnClickListener {
+            val animeSourcesWithoutDownloadsSource = AnimeSources.list.filter { it.name != "Downloaded" }
+            val names = animeSourcesWithoutDownloadsSource.map { it.name }
+            val pinnedSourcesBoolean = animeSourcesWithoutDownloadsSource.map { it.name in AnimeSources.pinnedAnimeSources }
+            val pinnedSourcesOriginal  = getSharedPreferences(
+                "Dantotsu",
+                Context.MODE_PRIVATE
+            ).getStringSet("pinned_anime_sources", null)
+            val pinnedSources = pinnedSourcesOriginal?.toMutableSet() ?: mutableSetOf()
+            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Pinned Anime Sources")
+                .setMultiChoiceItems(
+                    names.toTypedArray(),
+                    pinnedSourcesBoolean.toBooleanArray()
+                ) { _, which, isChecked ->
+                    if (isChecked) {
+                        pinnedSources.add(AnimeSources.names[which])
+                    } else {
+                        pinnedSources.remove(AnimeSources.names[which])
+                    }
+                }
+                .setPositiveButton("OK") { dialog, _ ->
+                    val oldDefaultSourceIndex = getSharedPreferences(
+                        "Dantotsu",
+                        Context.MODE_PRIVATE
+                    ).getInt("settings_def_anime_source_s_r", 0)
+                    val oldName = AnimeSources.names[oldDefaultSourceIndex]
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putStringSet("pinned_anime_sources", pinnedSources).apply()
+                    AnimeSources.pinnedAnimeSources = pinnedSources
+                    AnimeSources.performReorderAnimeSources()
+                    val newDefaultSourceIndex = AnimeSources.names.indexOf(oldName)
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putInt("settings_def_anime_source_s_r", newDefaultSourceIndex).apply()
+                    dialog.dismiss()
+                }
+                .create()
+            alertDialog.show()
+            alertDialog.window?.setDimAmount(0.8f)
+        }
+
         binding.settingsPlayer.setOnClickListener {
             startActivity(Intent(this, PlayerSettingsActivity::class.java))
         }
@@ -237,12 +264,71 @@ class SettingsActivity : AppCompatActivity() {
             AlertDialog.Builder(this, R.style.DialogTheme).setTitle("Download Manager")
         var downloadManager = loadData<Int>("settings_download_manager") ?: 0
         binding.settingsDownloadManager.setOnClickListener {
-            val dialog = downloadManagerDialog.setSingleChoiceItems(managers, downloadManager) { dialog, count ->
+            val dialog = downloadManagerDialog.setSingleChoiceItems(
+                managers,
+                downloadManager
+            ) { dialog, count ->
                 downloadManager = count
                 saveData("settings_download_manager", downloadManager)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
+        }
+
+        binding.purgeAnimeDownloads.setOnClickListener {
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Purge Anime Downloads")
+                .setMessage("Are you sure you want to purge all anime downloads?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    val downloadsManager = Injekt.get<DownloadsManager>()
+                    downloadsManager.purgeDownloads(DownloadedType.Type.ANIME)
+                    DownloadService.sendRemoveAllDownloads(
+                        this,
+                        ExoplayerDownloadService::class.java,
+                        false
+                    )
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
+        }
+
+        binding.purgeMangaDownloads.setOnClickListener {
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Purge Manga Downloads")
+                .setMessage("Are you sure you want to purge all manga downloads?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    val downloadsManager = Injekt.get<DownloadsManager>()
+                    downloadsManager.purgeDownloads(DownloadedType.Type.MANGA)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
+        }
+
+        binding.purgeNovelDownloads.setOnClickListener {
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Purge Novel Downloads")
+                .setMessage("Are you sure you want to purge all novel downloads?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    val downloadsManager = Injekt.get<DownloadsManager>()
+                    downloadsManager.purgeDownloads(DownloadedType.Type.NOVEL)
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
         }
 
         binding.settingsForceLegacyInstall.isChecked =
@@ -259,9 +345,9 @@ class SettingsActivity : AppCompatActivity() {
         binding.skipExtensionIcons.setOnCheckedChangeListener { _, isChecked ->
             saveData("skip_extension_icons", isChecked)
         }
-        binding.NSFWExtension.isChecked = loadData("NFSWExtension") ?: true
+        binding.NSFWExtension.isChecked = loadData("NSFWExtension") ?: true
         binding.NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
-            saveData("NFSWExtension", isChecked)
+            saveData("NSFWExtension", isChecked)
 
         }
 
@@ -278,7 +364,7 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 .setNeutralButton("Reset") { dialog, _ ->
                     networkPreferences.defaultUserAgent()
-                        .set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0") // Reset to default or empty
+                        .set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0")
                     editText.setText("")
                     dialog.dismiss()
                 }
@@ -339,6 +425,17 @@ class SettingsActivity : AppCompatActivity() {
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
             saveData("recently_list_only", isChecked)
         }
+        binding.settingsShareUsername.isChecked = getSharedPreferences(
+            getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        ).getBoolean("shared_user_id", true)
+        binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences(
+                getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+            ).edit().putBoolean("shared_user_id", isChecked).apply()
+        }
+
         binding.settingsPreferDub.isChecked = loadData("settings_prefer_dub") ?: false
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
             saveData("settings_prefer_dub", isChecked)
@@ -368,6 +465,47 @@ class SettingsActivity : AppCompatActivity() {
             getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                 .putInt("settings_def_manga_source_s_r", i).apply()
             binding.mangaSource.clearFocus()
+        }
+
+        binding.settingsPinnedMangaSources.setOnClickListener {
+            val mangaSourcesWithoutDownloadsSource = MangaSources.list.filter { it.name != "Downloaded" }
+            val names = mangaSourcesWithoutDownloadsSource.map { it.name }
+            val pinnedSourcesBoolean = mangaSourcesWithoutDownloadsSource.map { it.name in MangaSources.pinnedMangaSources }
+            val pinnedSourcesOriginal  = getSharedPreferences(
+                "Dantotsu",
+                Context.MODE_PRIVATE
+            ).getStringSet("pinned_manga_sources", null)
+            val pinnedSources = pinnedSourcesOriginal?.toMutableSet() ?: mutableSetOf()
+            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Pinned Manga Sources")
+                .setMultiChoiceItems(
+                    names.toTypedArray(),
+                    pinnedSourcesBoolean.toBooleanArray()
+                ) { _, which, isChecked ->
+                    if (isChecked) {
+                        pinnedSources.add(MangaSources.names[which])
+                    } else {
+                        pinnedSources.remove(MangaSources.names[which])
+                    }
+                }
+                .setPositiveButton("OK") { dialog, _ ->
+                    val oldDefaultSourceIndex = getSharedPreferences(
+                        "Dantotsu",
+                        Context.MODE_PRIVATE
+                    ).getInt("settings_def_manga_source_s_r", 0)
+                    val oldName = MangaSources.names[oldDefaultSourceIndex]
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putStringSet("pinned_manga_sources", pinnedSources).apply()
+                    MangaSources.pinnedMangaSources = pinnedSources
+                    MangaSources.performReorderMangaSources()
+                    val newDefaultSourceIndex = MangaSources.names.indexOf(oldName)
+                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                        .putInt("settings_def_manga_source_s_r", newDefaultSourceIndex).apply()
+                    dialog.dismiss()
+                }
+                .create()
+            alertDialog.show()
+            alertDialog.window?.setDimAmount(0.8f)
         }
 
         binding.settingsReader.setOnClickListener {
@@ -408,16 +546,6 @@ class SettingsActivity : AppCompatActivity() {
             uiTheme(true, it)
         }
 
-        binding.settingsIncognito.isChecked =
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
-                "incognito",
-                false
-            )
-        binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putBoolean("incognito", isChecked).apply()
-        }
-
         var previousStart: View = when (uiSettings.defaultStartUpTab) {
             0 -> binding.uiSettingsAnime
             1 -> binding.uiSettingsHome
@@ -433,6 +561,7 @@ class SettingsActivity : AppCompatActivity() {
             saveData("ui_settings", uiSettings)
             initActivity(this)
         }
+
 
         binding.uiSettingsAnime.setOnClickListener {
             uiTheme(0, it)
@@ -510,10 +639,6 @@ class SettingsActivity : AppCompatActivity() {
         lifecycleScope.launch {
             binding.settingBuyMeCoffee.pop()
         }
-        binding.settingUPI.visibility = if (checkCountry(this)) View.VISIBLE else View.GONE
-        lifecycleScope.launch {
-            binding.settingUPI.pop()
-        }
 
         binding.loginDiscord.setOnClickListener {
             openLinkInBrowser(getString(R.string.discord))
@@ -521,7 +646,9 @@ class SettingsActivity : AppCompatActivity() {
         binding.loginGithub.setOnClickListener {
             openLinkInBrowser(getString(R.string.github))
         }
-
+        binding.loginTelegram.setOnClickListener {
+            openLinkInBrowser(getString(R.string.telegram))
+        }
         binding.settingsUi.setOnClickListener {
             startActivity(Intent(this, UserInterfaceSettingsActivity::class.java))
         }
@@ -759,8 +886,7 @@ class SettingsActivity : AppCompatActivity() {
                         }
 
                         setPositiveButton("denote :)") {
-                            if (binding.settingUPI.visibility == View.VISIBLE) binding.settingUPI.performClick()
-                            else binding.settingBuyMeCoffee.performClick()
+                            binding.settingBuyMeCoffee.performClick()
                             dismiss()
                         }
                         show(supportFragmentManager, "dialog")
@@ -768,6 +894,18 @@ class SettingsActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
+        if (which == BUTTON_POSITIVE) {
+            if (dialogTag == "colorPicker") {
+                val color = extras.getInt(SimpleColorDialog.COLOR)
+                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
+                    .putInt("custom_theme_int", color).apply()
+                logger("Custom Theme: $color")
+            }
+        }
+        return true
     }
 
     private fun restartApp() {
@@ -786,6 +924,30 @@ class SettingsActivity : AppCompatActivity() {
                 Runtime.getRuntime().exit(0)
             }
             show()
+        }
+    }
+
+    companion object {
+        fun getDeviceInfo(): String {
+            return """
+                dantotsu Version: ${BuildConfig.VERSION_NAME}
+                Device: $BRAND $DEVICE
+                Architecture: ${getArch()}
+                OS Version: $CODENAME $RELEASE ($SDK_INT)
+            """.trimIndent()
+        }
+
+        private fun getArch(): String {
+            SUPPORTED_ABIS.forEach {
+                when (it) {
+                    "arm64-v8a" -> return "aarch64"
+                    "armeabi-v7a" -> return "arm"
+                    "x86_64" -> return "x86_64"
+                    "x86" -> return "i686"
+                }
+            }
+            return System.getProperty("os.arch") ?: System.getProperty("os.product.cpu.abi")
+            ?: "Unknown Architecture"
         }
     }
 }

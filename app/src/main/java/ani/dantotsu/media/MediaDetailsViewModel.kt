@@ -242,7 +242,8 @@ class MediaDetailsViewModel : ViewModel() {
         i: String,
         manager: FragmentManager,
         launch: Boolean = true,
-        prevEp: String? = null
+        prevEp: String? = null,
+        isDownload: Boolean = false
     ) {
         Handler(Looper.getMainLooper()).post {
             if (manager.findFragmentByTag("dialog") == null && !manager.isDestroyed) {
@@ -254,12 +255,16 @@ class MediaDetailsViewModel : ViewModel() {
                 }
                 media.selected = this.loadSelected(media)
                 val selector =
-                    SelectorDialogFragment.newInstance(media.selected!!.server, launch, prevEp)
+                    SelectorDialogFragment.newInstance(
+                        media.selected!!.server,
+                        launch,
+                        prevEp,
+                        isDownload
+                    )
                 selector.show(manager, "dialog")
             }
         }
     }
-
 
     //Manga
     var mangaReadSources: MangaReadSources? = null
@@ -314,7 +319,8 @@ class MediaDetailsViewModel : ViewModel() {
     val novelSources = NovelSources
     val novelResponses = MutableLiveData<List<ShowResponse>>(null)
     suspend fun searchNovels(query: String, i: Int) {
-        val source = novelSources[i]
+        val position = if (i >= novelSources.list.size) 0 else i
+        val source = novelSources[position]
         tryWithSuspend(post = true) {
             if (source != null) {
                 novelResponses.postValue(source.search(query))

@@ -18,7 +18,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import ani.dantotsu.R
-import ani.dantotsu.download.Download
+import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
@@ -187,7 +187,8 @@ class MangaDownloaderService : Service() {
                     true
                 }
 
-                val deferredList = mutableListOf<Deferred<Bitmap?>>()
+                //val deferredList = mutableListOf<Deferred<Bitmap?>>()
+                val deferredMap = mutableMapOf<Int, Deferred<Bitmap?>>()
                 builder.setContentText("Downloading ${task.title} - ${task.chapter}")
                 if (notifi) {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
@@ -196,15 +197,12 @@ class MangaDownloaderService : Service() {
                 // Loop through each ImageData object from the task
                 var farthest = 0
                 for ((index, image) in task.imageData.withIndex()) {
-                    // Limit the number of simultaneous downloads from the task
-                    if (deferredList.size >= task.simultaneousDownloads) {
-                        // Wait for all deferred to complete and clear the list
-                        deferredList.awaitAll()
-                        deferredList.clear()
+                    if (deferredMap.size >= task.simultaneousDownloads) {
+                        deferredMap.values.awaitAll()
+                        deferredMap.clear()
                     }
 
-                    // Download the image and add to deferred list
-                    val deferred = async(Dispatchers.IO) {
+                    deferredMap[index] = async(Dispatchers.IO) {
                         var bitmap: Bitmap? = null
                         var retryCount = 0
 
@@ -217,7 +215,6 @@ class MangaDownloaderService : Service() {
                             retryCount++
                         }
 
-                        // Cache the image if successful
                         if (bitmap != null) {
                             saveToDisk("$index.jpg", bitmap, task.title, task.chapter)
                         }
@@ -233,12 +230,10 @@ class MangaDownloaderService : Service() {
 
                         bitmap
                     }
-
-                    deferredList.add(deferred)
                 }
 
                 // Wait for any remaining deferred to complete
-                deferredList.awaitAll()
+                deferredMap.values.awaitAll()
 
                 builder.setContentText("${task.title} - ${task.chapter} Download complete")
                     .setProgress(0, 0, false)
@@ -246,10 +241,10 @@ class MangaDownloaderService : Service() {
 
                 saveMediaInfo(task)
                 downloadsManager.addDownload(
-                    Download(
+                    DownloadedType(
                         task.title,
                         task.chapter,
-                        Download.Type.MANGA
+                        DownloadedType.Type.MANGA
                     )
                 )
                 broadcastDownloadFinished(task.chapter)
@@ -314,7 +309,16 @@ class MangaDownloaderService : Service() {
 
                 val jsonString = gson.toJson(media)
                 withContext(Dispatchers.Main) {
-                    file.writeText(jsonString)
+                    try {
+                        file.writeText(jsonString)
+                    } catch (e: android.system.ErrnoException) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            this@MangaDownloaderService,
+                            "Error while saving: ${e.localizedMessage}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }

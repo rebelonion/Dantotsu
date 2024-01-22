@@ -6,26 +6,38 @@ import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.tryWithSuspend
+import com.google.gson.Gson
+import com.lagradost.nicehttp.NiceResponse
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.io.InputStreamReader
+import java.util.zip.GZIPInputStream
 
 object Kitsu {
     private suspend fun getKitsuData(query: String): KitsuResponse? {
         val headers = mapOf(
             "Content-Type" to "application/json",
             "Accept" to "application/json",
+            "Accept-Encoding" to "gzip, deflate",
+            "Accept-Language" to "en-US,en;q=0.5",
+            "Host" to "kitsu.io",
             "Connection" to "keep-alive",
-            "DNT" to "1",
-            "Origin" to "https://kitsu.io"
+            "Origin" to "https://kitsu.io",
+            "Sec-Fetch-Dest" to "empty",
+            "Sec-Fetch-Mode" to "cors",
+            "Sec-Fetch-Site" to "cross-site",
         )
-        val json = tryWithSuspend {
-            client.post(
+        val response = tryWithSuspend {
+            val res = client.post(
                 "https://kitsu.io/api/graphql",
                 headers,
                 data = mapOf("query" to query)
             )
+            res
         }
-        return json?.parsed()
+        val json = decodeToString(response)
+        val gson = Gson()
+        return gson.fromJson(json, KitsuResponse::class.java)
     }
 
     suspend fun getKitsuEpisodesDetails(media: Media): Map<String, Episode>? {
@@ -54,14 +66,14 @@ query {
       }
     }
   }
-}"""
+}""".trimIndent()
 
 
         val result = getKitsuData(query) ?: return null
         logger("Kitsu : result=$result", print)
         media.idKitsu = result.data?.lookupMapping?.id
-        return (result.data?.lookupMapping?.episodes?.nodes ?: return null).mapNotNull { ep ->
-            val num = ep?.num?.toString() ?: return@mapNotNull null
+        val a = (result.data?.lookupMapping?.episodes?.nodes ?: return null).mapNotNull { ep ->
+            val num = ep?.number?.toString() ?: return@mapNotNull null
             num to Episode(
                 number = num,
                 title = ep.titles?.canonical,
@@ -69,6 +81,25 @@ query {
                 thumb = FileUrl[ep.thumbnail?.original?.url],
             )
         }.toMap()
+        logger("Kitsu : a=$a", print)
+        return a
+    }
+
+    private fun decodeToString(res: NiceResponse?): String? {
+        return when (res?.headers?.get("Content-Encoding")) {
+            "gzip" -> {
+                res.body.byteStream().use { inputStream ->
+                    GZIPInputStream(inputStream).use { gzipInputStream ->
+                        InputStreamReader(gzipInputStream).use { reader ->
+                            reader.readText()
+                        }
+                    }
+                }
+            }
+            else -> {
+                res?.body?.string()
+            }
+        }
     }
 
     @Serializable
@@ -93,7 +124,7 @@ query {
 
         @Serializable
         data class Node(
-            @SerialName("number") val num: Long? = null,
+            @SerialName("number") val number: Int? = null,
             @SerialName("titles") val titles: Titles? = null,
             @SerialName("description") val description: Description? = null,
             @SerialName("thumbnail") val thumbnail: Thumbnail? = null

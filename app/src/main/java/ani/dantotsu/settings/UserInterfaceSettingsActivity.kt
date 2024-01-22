@@ -44,14 +44,14 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         binding.uiSettingsHomeLayout.setOnClickListener {
             val dialog = AlertDialog.Builder(this, R.style.DialogTheme)
                 .setTitle(getString(R.string.home_layout_show)).apply {
-                setMultiChoiceItems(
-                    views,
-                    settings.homeLayoutShow.toBooleanArray()
-                ) { _, i, value ->
-                    settings.homeLayoutShow[i] = value
-                    saveData(ui, settings)
-                }
-            }.show()
+                    setMultiChoiceItems(
+                        views,
+                        settings.homeLayoutShow.toBooleanArray()
+                    ) { _, i, value ->
+                        settings.homeLayoutShow[i] = value
+                        saveData(ui, settings)
+                    }
+                }.show()
             dialog.window?.setDimAmount(0.8f)
         }
 
@@ -68,7 +68,6 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             saveData(ui, settings)
             restartApp()
         }
-
         binding.uiSettingsBannerAnimation.isChecked = settings.bannerAnimations
         binding.uiSettingsBannerAnimation.setOnCheckedChangeListener { _, isChecked ->
             settings.bannerAnimations = isChecked

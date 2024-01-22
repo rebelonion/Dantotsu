@@ -43,6 +43,7 @@ import kotlin.math.min
 class MangaFragment : Fragment() {
     private var _binding: FragmentMangaBinding? = null
     private val binding get() = _binding!!
+    private lateinit var mangaPageAdapter: MangaPageAdapter
 
     private var uiSettings: UserInterfaceSettings =
         loadData("ui_settings") ?: UserInterfaceSettings()
@@ -90,7 +91,7 @@ class MangaFragment : Fragment() {
 
         binding.mangaPageRecyclerView.updatePaddingRelative(bottom = navBarHeight + 160f.px)
 
-        val mangaPageAdapter = MangaPageAdapter()
+        mangaPageAdapter = MangaPageAdapter()
         var loading = true
         if (model.notSet) {
             model.notSet = false
@@ -251,6 +252,11 @@ class MangaFragment : Fragment() {
 
     override fun onResume() {
         if (!model.loaded) Refresh.activity[this.hashCode()]!!.postValue(true)
+        //make sure mangaPageAdapter is initialized
+        if (mangaPageAdapter.trendingViewPager != null) {
+            binding.root.requestApplyInsets()
+            binding.root.requestLayout()
+        }
         super.onResume()
     }
 

@@ -14,7 +14,6 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.graphics.Color
 import android.graphics.drawable.Animatable
-import android.hardware.Sensor
 import android.hardware.SensorManager
 import android.media.AudioManager
 import android.media.AudioManager.*
@@ -43,11 +42,15 @@ import androidx.core.math.MathUtils.clamp
 import androidx.core.view.WindowCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.cast.CastPlayer
+import androidx.media3.cast.SessionAvailabilityListener
 import androidx.media3.common.*
 import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MOVIE
 import androidx.media3.common.C.TRACK_TYPE_VIDEO
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.common.util.Util
 import androidx.media3.datasource.DataSource
+import androidx.media3.datasource.DefaultDataSourceFactory
 import androidx.media3.datasource.HttpDataSource
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
@@ -58,6 +61,7 @@ import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.*
 import androidx.media3.ui.CaptionStyleCompat.*
+import androidx.mediarouter.app.MediaRouteButton
 import ani.dantotsu.*
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
@@ -67,12 +71,12 @@ import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
+import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
-import ani.dantotsu.others.Download.download
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.ResettableTimer
 import ani.dantotsu.others.getSerialized
@@ -82,6 +86,10 @@ import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
+import com.google.android.gms.cast.framework.CastButtonFactory
+import com.google.android.gms.cast.framework.CastContext
+import com.google.android.gms.common.ConnectionResult
+import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.slider.Slider
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.lagradost.nicehttp.ignoreAllSSLErrors
@@ -97,10 +105,9 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-
 @UnstableApi
 @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
-class ExoplayerView : AppCompatActivity(), Player.Listener {
+class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityListener {
 
     private val resumeWindow = "resumeWindow"
     private val resumePosition = "resumePosition"
@@ -108,6 +115,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     private val playerOnPlay = "playerOnPlay"
 
     private lateinit var exoPlayer: ExoPlayer
+    private var castPlayer: CastPlayer? = null
+    private var castContext: CastContext? = null
+    private var isCastApiAvailable = false
     private lateinit var trackSelector: DefaultTrackSelector
     private lateinit var cacheFactory: CacheDataSource.Factory
     private lateinit var playbackParameters: PlaybackParameters
@@ -144,6 +154,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     private lateinit var episodeTitle: Spinner
 
     private var orientationListener: OrientationEventListener? = null
+
+    private var downloadId: String? = null
 
     companion object {
         var initialized = false
@@ -328,6 +340,16 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         setContentView(binding.root)
 
         //Initialize
+        isCastApiAvailable = GoogleApiAvailability.getInstance()
+            .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
+        try {
+            castContext = CastContext.getSharedInstance(this)
+            castPlayer = CastPlayer(castContext!!)
+            castPlayer!!.setSessionAvailabilityListener(this)
+        } catch (e: Exception) {
+            isCastApiAvailable = false
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         hideSystemBars()
 
@@ -387,7 +409,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             orientationListener =
                 object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
                     override fun onOrientationChanged(orientation: Int) {
-                        println(orientation)
                         if (orientation in 45..135) {
                             if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) exoRotate.visibility =
                                 View.VISIBLE
@@ -466,12 +487,18 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             if (isInitialized) {
                 isPlayerPlaying = exoPlayer.isPlaying
                 (exoPlay.drawable as Animatable?)?.start()
-                if (isPlayerPlaying) {
+                if (isPlayerPlaying || castPlayer?.isPlaying == true) {
                     Glide.with(this).load(R.drawable.anim_play_to_pause).into(exoPlay)
                     exoPlayer.pause()
+                    castPlayer?.pause()
                 } else {
-                    Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
-                    exoPlayer.play()
+                    if (castPlayer?.isPlaying == false && castPlayer?.currentMediaItem != null) {
+                        Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
+                        castPlayer?.play()
+                    } else if (!isPlayerPlaying) {
+                        Glide.with(this).load(R.drawable.anim_pause_to_play).into(exoPlay)
+                        exoPlayer.play()
+                    }
                 }
             }
         }
@@ -812,18 +839,19 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 audioManager.setStreamVolume(STREAM_MUSIC, volume, 0)
                 volumeHide()
             }
-
+            val fastForward = playerView.findViewById<TextView>(R.id.exo_fast_forward_text)
             fun fastForward() {
                 isFastForwarding = true
                 exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
-                snackString("Playing at ${exoPlayer.playbackParameters.speed}x speed")
+                fastForward.visibility = View.VISIBLE
+                fastForward.text = ("${exoPlayer.playbackParameters.speed}x")
             }
 
             fun stopFastForward() {
                 if (isFastForwarding) {
                     isFastForwarding = false
                     exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed / 2)
-                    snackString("Playing at default speed: ${exoPlayer.playbackParameters.speed}x")
+                    fastForward.visibility = View.GONE
                 }
             }
 
@@ -925,10 +953,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         episodeArr = episodes.keys.toList()
         currentEpisodeIndex = episodeArr.indexOf(media.anime!!.selectedEpisode!!)
 
-        episodeTitleArr = arrayListOf()
+        episodeTitleArr = arrayListOf<String>()
         episodes.forEach {
             val episode = it.value
-            episodeTitleArr.add("${if (!episode.title.isNullOrEmpty() && episode.title != "null") "" else "Episode "}${episode.number}${if (episode.filler) " [Filler]" else ""}${if (!episode.title.isNullOrEmpty() && episode.title != "null") " : " + episode.title else ""}")
+            val cleanedTitle = AnimeNameAdapter.removeEpisodeNumberCompletely(episode.title ?: "")
+            episodeTitleArr.add("Episode ${episode.number}${if (episode.filler) " [Filler]" else ""}${if (cleanedTitle.isNotBlank() && cleanedTitle != "null") ": $cleanedTitle" else ""}")
         }
 
         //Episode Change
@@ -1074,10 +1103,17 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
         //Cast
         if (settings.cast) {
-            playerView.findViewById<ImageButton>(R.id.exo_cast).apply {
+            playerView.findViewById<MediaRouteButton>(R.id.exo_cast).apply {
                 visibility = View.VISIBLE
-                setSafeOnClickListener {
+                try {
+                    CastButtonFactory.setUpMediaRouteButton(context, this)
+                    dialogFactory = CustomCastThemeFactory()
+                } catch (e: Exception) {
+                    isCastApiAvailable = false
+                }
+                setOnLongClickListener {
                     cast()
+                    true
                 }
             }
         }
@@ -1101,7 +1137,21 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             if (settings.cursedSpeeds)
                 arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)
             else
-                arrayOf(0.25f, 0.33f, 0.5f, 0.66f, 0.75f, 1f, 1.25f, 1.33f, 1.5f, 1.66f, 1.75f, 2f)
+                arrayOf(
+                    0.25f,
+                    0.33f,
+                    0.5f,
+                    0.66f,
+                    0.75f,
+                    1f,
+                    1.15f,
+                    1.25f,
+                    1.33f,
+                    1.5f,
+                    1.66f,
+                    1.75f,
+                    2f
+                )
 
         val speedsName = speeds.map { "${it}x" }.toTypedArray()
         var curSpeed = loadData("${media.id}_speed", this) ?: settings.defaultSpeed
@@ -1156,14 +1206,18 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         }
 
         preloading = false
+        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            ?.getBoolean("incognito", false) ?: false
         val showProgressDialog =
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                 ?: true else false
         if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
-                .setMessage(getString(R.string.incognito_will_not_update))
                 .apply {
+                    if (incognito) {
+                        setMessage(getString(R.string.incognito_will_not_update))
+                    }
                     setOnCancelListener { hideSystemBars() }
                     setCancelable(false)
                     setPositiveButton(getString(R.string.yes)) { dialog, _ ->
@@ -1232,7 +1286,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             if (subtitle?.type == SubtitleType.UNKNOWN) {
                 val context = this
                 runBlocking {
-                    val type = SubtitleDownloader.downloadSubtitles(context, subtitle!!.file.url)
+                    val type = SubtitleDownloader.loadSubtitleType(context, subtitle!!.file.url)
                     val fileUri = Uri.parse(subtitle!!.file.url)
                     sub = MediaItem.SubtitleConfiguration
                         .Builder(fileUri)
@@ -1250,8 +1304,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
                 }
                 println("sub: $sub")
             } else {
+                val subUri = Uri.parse((subtitle!!.file.url))
                 sub = MediaItem.SubtitleConfiguration
-                    .Builder(Uri.parse(subtitle!!.file.url))
+                    .Builder(subUri)
                     .setSelectionFlags(C.SELECTION_FLAG_FORCED)
                     .setMimeType(
                         when (subtitle?.type) {
@@ -1270,18 +1325,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             ext.onVideoPlayed(video)
         }
 
-        val but = playerView.findViewById<ImageButton>(R.id.exo_download)
-        if (video?.format == VideoType.CONTAINER || (loadData<Int>("settings_download_manager")
-                ?: 0) != 0
-        ) {
-            but.visibility = View.VISIBLE
-            but.setOnClickListener {
-                download(this, episode, animeTitle.text.toString())
-            }
-        } else {
-            but.visibility = View.GONE
-        }
-
         val simpleCache = VideoCache.getInstance(this)
         val httpClient = okHttpClient.newBuilder().apply {
             ignoreAllSSLErrors()
@@ -1298,9 +1341,15 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             }
             dataSource
         }
+        val dafuckDataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, R.string.app_name.toString()))
         cacheFactory = CacheDataSource.Factory().apply {
-            setCache(simpleCache)
-            setUpstreamDataSourceFactory(dataSourceFactory)
+            setCache(Helper.getSimpleCache(this@ExoplayerView))
+            if (ext.server.offline) {
+                setUpstreamDataSourceFactory(dafuckDataSourceFactory)
+            } else {
+                setUpstreamDataSourceFactory(dataSourceFactory)
+            }
+            setCacheWriteDataSinkFactory(null)
         }
 
         val mimeType = when (video?.format) {
@@ -1309,15 +1358,40 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             else -> MimeTypes.APPLICATION_MP4
         }
 
-        val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
-        logger("url: ${video!!.file.url}")
-        logger("mimeType: $mimeType")
+        val downloadedMediaItem = if (ext.server.offline) {
+            val key = ext.server.name
+            downloadId = getSharedPreferences(getString(R.string.anime_downloads), MODE_PRIVATE)
+                .getString(key, null)
+            if (downloadId != null) {
+                Helper.downloadManager(this)
+                    .downloadIndex.getDownload(downloadId!!)?.request?.toMediaItem()
+            } else {
+                snackString("Download not found")
+                null
+            }
+        } else null
 
-        if (sub != null) {
-            val listofnotnullsubs = immutableListOf(sub).filterNotNull()
-            builder.setSubtitleConfigurations(listofnotnullsubs)
+        mediaItem = if (downloadedMediaItem == null) {
+            val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
+            logger("url: ${video!!.file.url}")
+            logger("mimeType: $mimeType")
+
+            if (sub != null) {
+                val listofnotnullsubs = immutableListOf(sub).filterNotNull()
+                builder.setSubtitleConfigurations(listofnotnullsubs)
+            }
+            builder.build()
+        } else {
+            val addedSubsDownloadedMediaItem = downloadedMediaItem.buildUpon()
+            if (sub != null) {
+                val listofnotnullsubs = immutableListOf(sub).filterNotNull()
+                val addLanguage = listofnotnullsubs[0].buildUpon().setLanguage("en").build()
+                addedSubsDownloadedMediaItem.setSubtitleConfigurations(immutableListOf(addLanguage))
+                episode.selectedSubtitle = 0
+            }
+            addedSubsDownloadedMediaItem.build()
         }
-        mediaItem = builder.build()
+
 
         //Source
         exoSource.setOnClickListener {
@@ -1439,7 +1513,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         exoPlayer.release()
         VideoCache.release()
         mediaSession?.release()
-        if(DiscordServiceRunningSingleton.running) {
+        if (DiscordServiceRunningSingleton.running) {
             val stopIntent = Intent(this, DiscordService::class.java)
             DiscordServiceRunningSingleton.running = false
             stopService(stopIntent)
@@ -1479,7 +1553,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
         super.onPause()
         orientationListener?.disable()
         if (isInitialized) {
-            playerView.player?.pause()
+            if (castPlayer?.isPlaying == false) {
+                playerView.player?.pause()
+            }
             saveData(
                 "${media.id}_${media.anime!!.selectedEpisode}",
                 exoPlayer.currentPosition,
@@ -1500,7 +1576,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
     }
 
     override fun onStop() {
-        playerView.player?.pause()
+        if (castPlayer?.isPlaying == false) {
+            playerView.player?.pause()
+        }
         super.onStop()
     }
 
@@ -1793,7 +1871,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
 
     // Enter PiP Mode
     @Suppress("DEPRECATION")
-    @RequiresApi(Build.VERSION_CODES.N)
     private fun enterPipMode() {
         wasPlaying = isPlayerPlaying
         if (!pipEnabled) return
@@ -1865,6 +1942,55 @@ class ExoplayerView : AppCompatActivity(), Player.Listener {
             super.dispatchKeyEvent(event)
         }
     }
+
+
+    private fun startCastPlayer() {
+        if (!isCastApiAvailable) {
+            snackString("Cast API not available")
+            return
+        }
+        //make sure mediaItem is initialized and castPlayer is not null
+        if (!this::mediaItem.isInitialized || castPlayer == null) return
+        castPlayer?.setMediaItem(mediaItem)
+        castPlayer?.prepare()
+        playerView.player = castPlayer
+        exoPlayer.stop()
+        castPlayer?.addListener(object : Player.Listener {
+            //if the player is paused changed, we want to update the UI
+            override fun onPlayWhenReadyChanged(playWhenReady: Boolean, reason: Int) {
+                super.onPlayWhenReadyChanged(playWhenReady, reason)
+                if (playWhenReady) {
+                    (exoPlay.drawable as Animatable?)?.start()
+                    Glide.with(this@ExoplayerView)
+                        .load(R.drawable.anim_play_to_pause)
+                        .into(exoPlay)
+                } else {
+                    (exoPlay.drawable as Animatable?)?.start()
+                    Glide.with(this@ExoplayerView)
+                        .load(R.drawable.anim_pause_to_play)
+                        .into(exoPlay)
+                }
+            }
+        })
+    }
+
+    private fun startExoPlayer() {
+        exoPlayer.setMediaItem(mediaItem)
+        exoPlayer.prepare()
+        playerView.player = exoPlayer
+        castPlayer?.stop()
+    }
+
+    override fun onCastSessionAvailable() {
+        if (isCastApiAvailable) {
+            startCastPlayer()
+        }
+    }
+
+    override fun onCastSessionUnavailable() {
+        startExoPlayer()
+    }
+
 
     @SuppressLint("ViewConstructor")
     class ExtendedTimeBar(

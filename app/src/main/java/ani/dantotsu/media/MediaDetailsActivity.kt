@@ -2,6 +2,7 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
@@ -42,7 +43,6 @@ import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.saveData
 import ani.dantotsu.settings.UserInterfaceSettings
@@ -72,11 +72,17 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        LangSet.setLocale(this)
-        var media: Media = intent.getSerialized("media") ?: return
+        super.onCreate(savedInstanceState)
+        var media: Media = intent.getSerialized("media") ?: mediaSingleton ?: emptyMedia()
+        if (media.name == "No media found") {
+            snackString(media.name)
+            onBackPressedDispatcher.onBackPressed()
+            return
+        }
+        mediaSingleton = null
         ThemeManager(this).applyTheme(MediaSingleton.bitmap)
         MediaSingleton.bitmap = null
-        super.onCreate(savedInstanceState)
+
         binding = ActivityMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
@@ -85,12 +91,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         initActivity(this)
         uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-        if (!uiSettings.immersiveMode) this.window.statusBarColor =
-            ContextCompat.getColor(this, R.color.nav_bg_inv)
 
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
         binding.mediaClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+        binding.incognito.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
         binding.mediaCollapsing.minimumHeight = statusBarHeight
 
         if (binding.mediaTab is CustomBottomNavBar) binding.mediaTab.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -154,7 +159,13 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
         })
         banner.setOnTouchListener { _, motionEvent -> gestureDetector.onTouchEvent(motionEvent);true }
-        binding.mediaTitle.text = media.userPreferredName
+        if (this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                .getBoolean("incognito", false)) {
+            binding.mediaTitle.text = "    ${media.userPreferredName}"
+            binding.incognito.visibility = View.VISIBLE
+        }else {
+            binding.mediaTitle.text = media.userPreferredName
+        }
         binding.mediaTitle.setOnLongClickListener {
             copyToClipboard(media.userPreferredName)
             true
@@ -305,7 +316,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         }
 
         adult = media.isAdult
-
         tabLayout.menu.clear()
         if (media.anime != null) {
             viewPager.adapter =
@@ -317,7 +327,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 lifecycle,
                 if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA
             )
-            tabLayout.inflateMenu(R.menu.manga_menu_detail)
+            if (media.format == "NOVEL") {
+                tabLayout.inflateMenu(R.menu.novel_menu_detail)
+            } else {
+                tabLayout.inflateMenu(R.menu.manga_menu_detail)
+            }
             anime = false
         }
 
@@ -442,7 +456,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", screenWidth)
                 .setDuration(duration).start()
             binding.mediaBanner.pause()
-            if (!uiSettings.immersiveMode) this.window.statusBarColor = color
         }
         if (percentage <= percent && isCollapsed) {
             isCollapsed = false
@@ -455,7 +468,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", 0f)
                 .setDuration(duration).start()
             if (uiSettings.bannerAnimations) binding.mediaBanner.resume()
-            if (!uiSettings.immersiveMode) this.window.statusBarColor = color
         }
         if (percentage == 1 && model.scrolledToTop.value != false) model.scrolledToTop.postValue(
             false
@@ -531,6 +543,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             disabled = !enabled
             image.alpha = if (disabled) 0.33f else 1f
         }
+    }
+
+    companion object {
+        var mediaSingleton: Media? = null
     }
 }
 

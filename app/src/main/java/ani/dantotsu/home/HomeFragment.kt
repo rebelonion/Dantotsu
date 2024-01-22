@@ -111,7 +111,6 @@ class HomeFragment : Fragment() {
                 snackString(currContext()?.getString(R.string.please_reload))
             }
         }
-
         binding.homeUserAvatarContainer.setSafeOnClickListener {
             val dialogFragment =
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.HOME)

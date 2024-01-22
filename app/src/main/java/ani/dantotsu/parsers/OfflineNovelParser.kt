@@ -3,16 +3,13 @@ package ani.dantotsu.parsers
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.logger
 import ani.dantotsu.media.manga.MangaNameAdapter
-import eu.kanade.tachiyomi.source.model.SChapter
-import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 
-class OfflineNovelParser: NovelParser() {
+class OfflineNovelParser : NovelParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()
 
     override val hostUrl: String = "Offline"
@@ -34,7 +31,7 @@ class OfflineNovelParser: NovelParser() {
                 if (it.isDirectory) {
                     val chapter = Book(
                         it.name,
-                        it.absolutePath +  "/cover.jpg",
+                        it.absolutePath + "/cover.jpg",
                         null,
                         listOf(it.absolutePath + "/0.epub")
                     )
@@ -53,7 +50,7 @@ class OfflineNovelParser: NovelParser() {
     }
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val titles = downloadManager.novelDownloads.map { it.title }.distinct()
+        val titles = downloadManager.novelDownloadedTypes.map { it.title }.distinct()
         val returnTitles: MutableList<String> = mutableListOf()
         for (title in titles) {
             if (FuzzySearch.ratio(title.lowercase(), query.lowercase()) > 80) {
@@ -75,7 +72,8 @@ class OfflineNovelParser: NovelParser() {
                     }
                 }
             }
-            val cover = currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Dantotsu/Novel/$title/cover.jpg"
+            val cover =
+                currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath + "/Dantotsu/Novel/$title/cover.jpg"
             names.forEach {
                 returnList.add(ShowResponse(it, it, cover))
             }

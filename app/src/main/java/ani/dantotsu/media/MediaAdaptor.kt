@@ -13,7 +13,10 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
+import androidx.core.view.ViewCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -136,7 +139,7 @@ class MediaAdaptor(
                 val media = mediaList?.get(position)
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
-                    b.itemCompactBanner.loadImage(media.banner ?: media.cover, 400)
+                    b.itemCompactBanner.loadImage(media.banner ?: media.cover)
                     b.itemCompactOngoing.visibility =
                         if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName
@@ -319,6 +322,7 @@ class MediaAdaptor(
             itemView.setSafeOnClickListener {
                 clicked(
                     bindingAdapterPosition,
+                    binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
             }
@@ -332,6 +336,7 @@ class MediaAdaptor(
             itemView.setSafeOnClickListener {
                 clicked(
                     bindingAdapterPosition,
+                    binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
             }
@@ -346,6 +351,7 @@ class MediaAdaptor(
             binding.itemCompactImage.setSafeOnClickListener {
                 clicked(
                     bindingAdapterPosition,
+                    binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
             }
@@ -361,12 +367,14 @@ class MediaAdaptor(
             binding.itemCompactImage.setSafeOnClickListener {
                 clicked(
                     bindingAdapterPosition,
+                    binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
             }
             binding.itemCompactTitleContainer.setSafeOnClickListener {
                 clicked(
                     bindingAdapterPosition,
+                    binding.itemCompactImage,
                     resizeBitmap(getBitmapFromImageView(binding.itemCompactImage), 100)
                 )
             }
@@ -375,7 +383,7 @@ class MediaAdaptor(
         }
     }
 
-    fun clicked(position: Int, bitmap: Bitmap? = null) {
+    fun clicked(position: Int, itemCompactImage: ImageView?, bitmap: Bitmap? = null) {
         if ((mediaList?.size ?: 0) > position && position != -1) {
             val media = mediaList?.get(position)
             if (bitmap != null) MediaSingleton.bitmap = bitmap
@@ -384,7 +392,13 @@ class MediaAdaptor(
                 Intent(activity, MediaDetailsActivity::class.java).putExtra(
                     "media",
                     media as Serializable
-                ), null
+                ), ActivityOptionsCompat.makeSceneTransitionAnimation(
+                    activity,
+                    Pair.create(
+                        itemCompactImage,
+                        ViewCompat.getTransitionName(activity.findViewById(R.id.itemCompactImage))!!
+                    ),
+                ).toBundle()
             )
         }
     }

@@ -65,32 +65,32 @@
     </style>
 
     <style name="Theme.Dantotsu.Purple" parent="Theme.Base">
-        <item name="colorPrimary">@color/mdmd_theme_dark_3_primary</item>
-        <item name="colorOnPrimary">@color/mdmd_theme_dark_3_onPrimary</item>
-        <item name="colorPrimaryContainer">@color/mdmd_theme_dark_3_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/mdmd_theme_dark_3_onPrimaryContainer</item>
-        <item name="colorSecondary">@color/mdmd_theme_dark_3_secondary</item>
-        <item name="colorOnSecondary">@color/mdmd_theme_dark_3_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/mdmd_theme_dark_3_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/mdmd_theme_dark_3_onSecondaryContainer</item>
-        <item name="colorTertiary">@color/mdmd_theme_dark_3_tertiary</item>
-        <item name="colorOnTertiary">@color/mdmd_theme_dark_3_onTertiary</item>
-        <item name="colorTertiaryContainer">@color/mdmd_theme_dark_3_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/mdmd_theme_dark_3_onTertiaryContainer</item>
-        <item name="colorError">@color/mdmd_theme_dark_3_error</item>
-        <item name="colorErrorContainer">@color/mdmd_theme_dark_3_errorContainer</item>
-        <item name="colorOnError">@color/mdmd_theme_dark_3_onError</item>
-        <item name="colorOnErrorContainer">@color/mdmd_theme_dark_3_onErrorContainer</item>
-        <item name="android:colorBackground">@color/mdmd_theme_dark_3_background</item>
-        <item name="colorOnBackground">@color/mdmd_theme_dark_3_onBackground</item>
-        <item name="colorSurface">@color/mdmd_theme_dark_3_surface</item>
-        <item name="colorOnSurface">@color/mdmd_theme_dark_3_onSurface</item>
-        <item name="colorSurfaceVariant">@color/mdmd_theme_dark_3_surfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/mdmd_theme_dark_3_onSurfaceVariant</item>
-        <item name="colorOutline">@color/mdmd_theme_dark_3_outline</item>
-        <item name="colorOnSurfaceInverse">@color/mdmd_theme_dark_3_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/mdmd_theme_dark_3_inverseSurface</item>
-        <item name="colorPrimaryInverse">@color/mdmd_theme_dark_3_inversePrimary</item>
+        <item name="colorPrimary">@color/md_theme_dark_3_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_3_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_3_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_3_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_3_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_3_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_3_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_3_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_3_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_3_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_3_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_3_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_3_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_3_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_3_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_3_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_dark_3_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_3_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_3_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_3_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_3_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_3_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_3_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_3_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_3_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_3_inversePrimary</item>
     </style>
 
     <style name="Theme.Dantotsu.Pink" parent="Theme.Base">
@@ -122,6 +122,122 @@
         <item name="colorPrimaryInverse">@color/md_theme_dark_4_inversePrimary</item>
     </style>
 
+    <style name="Theme.Dantotsu.Saikou" parent="Theme.Base">
+        <item name="colorPrimary">@color/md_theme_dark_5_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_5_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_5_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_5_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_5_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_5_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_5_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_5_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_5_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_5_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_5_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_5_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_5_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_5_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_5_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_5_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_dark_5_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_5_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_5_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_5_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_5_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_5_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_5_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_5_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_5_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_5_inversePrimary</item>
+    </style>
+
+    <style name="Theme.Dantotsu.Red" parent="Theme.Base">
+        <item name="colorPrimary">@color/md_theme_dark_6_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_6_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_6_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_6_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_6_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_6_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_6_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_6_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_6_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_6_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_6_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_6_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_6_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_6_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_6_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_6_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_dark_6_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_6_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_6_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_6_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_6_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_6_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_6_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_6_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_6_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_6_inversePrimary</item>
+    </style>
+
+    <style name="Theme.Dantotsu.Lavender" parent="Theme.Base">
+        <item name="colorPrimary">@color/md_theme_dark_7_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_7_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_7_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_7_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_7_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_7_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_7_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_7_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_7_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_7_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_7_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_7_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_7_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_7_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_7_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_7_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_dark_7_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_7_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_7_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_7_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_7_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_7_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_7_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_7_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_7_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_7_inversePrimary</item>
+    </style>
+
+    <style name="Theme.Dantotsu.Ocean" parent="Theme.Base">
+        <item name="colorPrimary">@color/md_theme_dark_8_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_8_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_8_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_8_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_8_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_8_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_8_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_8_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_8_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_8_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_8_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_8_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_8_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_8_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_8_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_8_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_dark_8_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_8_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_8_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_8_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_8_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_8_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_8_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_8_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_8_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_8_inversePrimary</item>
+    </style>
+
     <style name="Theme.Dantotsu.Monochrome" parent="Theme.Base">
         <item name="colorPrimary">@color/bg_white</item>
         <item name="colorOnPrimary">@color/bg_black</item>
@@ -149,93 +265,6 @@
         <item name="colorOnSurfaceInverse">@color/bg_white</item>
         <item name="colorSurfaceInverse">@color/bg_black</item>
         <item name="colorPrimaryInverse">@color/bg_black</item>
-    </style>
-
-    <style name="Theme.Dantotsu.Red" parent="Theme.Base">
-        <item name="colorPrimary">@color/md_0_theme_dark_primary</item>
-        <item name="colorOnPrimary">@color/md_0_theme_dark_onPrimary</item>
-        <item name="colorPrimaryContainer">@color/md_0_theme_dark_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/md_0_theme_dark_onPrimaryContainer</item>
-        <item name="colorSecondary">@color/md_0_theme_dark_secondary</item>
-        <item name="colorOnSecondary">@color/md_0_theme_dark_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/md_0_theme_dark_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/md_0_theme_dark_onSecondaryContainer</item>
-        <item name="colorTertiary">@color/md_0_theme_dark_tertiary</item>
-        <item name="colorOnTertiary">@color/md_0_theme_dark_onTertiary</item>
-        <item name="colorTertiaryContainer">@color/md_0_theme_dark_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/md_0_theme_dark_onTertiaryContainer</item>
-        <item name="colorError">@color/md_0_theme_dark_error</item>
-        <item name="colorErrorContainer">@color/md_0_theme_dark_errorContainer</item>
-        <item name="colorOnError">@color/md_0_theme_dark_onError</item>
-        <item name="colorOnErrorContainer">@color/md_0_theme_dark_onErrorContainer</item>
-        <item name="android:colorBackground">@color/md_0_theme_dark_background</item>
-        <item name="colorOnBackground">@color/md_0_theme_dark_onBackground</item>
-        <item name="colorSurface">@color/md_0_theme_dark_surface</item>
-        <item name="colorOnSurface">@color/md_0_theme_dark_onSurface</item>
-        <item name="colorSurfaceVariant">@color/md_0_theme_dark_surfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/md_0_theme_dark_onSurfaceVariant</item>
-        <item name="colorOutline">@color/md_0_theme_dark_outline</item>
-        <item name="colorOnSurfaceInverse">@color/md_0_theme_dark_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/md_0_theme_dark_inverseSurface</item>
-        <item name="colorPrimaryInverse">@color/md_0_theme_dark_inversePrimary</item>
-    </style>
-
-    <style name="Theme.Dantotsu.Lavender" parent="Theme.Base">
-        <item name="colorPrimary">@color/md_1_theme_dark_primary</item>
-        <item name="colorOnPrimary">@color/md_1_theme_dark_onPrimary</item>
-        <item name="colorPrimaryContainer">@color/md_1_theme_dark_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/md_1_theme_dark_onPrimaryContainer</item>
-        <item name="colorSecondary">@color/md_1_theme_dark_secondary</item>
-        <item name="colorOnSecondary">@color/md_1_theme_dark_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/md_1_theme_dark_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/md_1_theme_dark_onSecondaryContainer</item>
-        <item name="colorTertiary">@color/md_1_theme_dark_tertiary</item>
-        <item name="colorOnTertiary">@color/md_1_theme_dark_onTertiary</item>
-        <item name="colorTertiaryContainer">@color/md_1_theme_dark_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/md_1_theme_dark_onTertiaryContainer</item>
-        <item name="colorError">@color/md_1_theme_dark_error</item>
-        <item name="colorErrorContainer">@color/md_1_theme_dark_errorContainer</item>
-        <item name="colorOnError">@color/md_1_theme_dark_onError</item>
-        <item name="colorOnErrorContainer">@color/md_1_theme_dark_onErrorContainer</item>
-        <item name="android:colorBackground">@color/md_1_theme_dark_background</item>
-        <item name="colorOnBackground">@color/md_1_theme_dark_onBackground</item>
-        <item name="colorSurface">@color/md_1_theme_dark_surface</item>
-        <item name="colorOnSurface">@color/md_1_theme_dark_onSurface</item>
-        <item name="colorSurfaceVariant">@color/md_1_theme_dark_surfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/md_1_theme_dark_onSurfaceVariant</item>
-        <item name="colorOutline">@color/md_1_theme_dark_outline</item>
-        <item name="colorOnSurfaceInverse">@color/md_1_theme_dark_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/md_1_theme_dark_inverseSurface</item>
-        <item name="colorPrimaryInverse">@color/md_1_theme_dark_inversePrimary</item>
-    </style>
-
-    <style name="Theme.Dantotsu.Saikou" parent="Theme.Base">
-        <item name="colorPrimary">@color/md_theme_dark_5_primary</item>
-        <item name="colorOnPrimary">@color/md_theme_dark_5_onPrimary</item>
-        <item name="colorPrimaryContainer">@color/md_theme_dark_5_primaryContainer</item>
-        <item name="colorOnPrimaryContainer">@color/md_theme_dark_5_onPrimaryContainer</item>
-        <item name="colorSecondary">@color/md_theme_dark_5_secondary</item>
-        <item name="colorOnSecondary">@color/md_theme_dark_5_onSecondary</item>
-        <item name="colorSecondaryContainer">@color/md_theme_dark_5_secondaryContainer</item>
-        <item name="colorOnSecondaryContainer">@color/md_theme_dark_5_onSecondaryContainer</item>
-        <item name="colorTertiary">@color/md_theme_dark_5_tertiary</item>
-        <item name="colorOnTertiary">@color/md_theme_dark_5_onTertiary</item>
-        <item name="colorTertiaryContainer">@color/md_theme_dark_5_tertiaryContainer</item>
-        <item name="colorOnTertiaryContainer">@color/md_theme_dark_5_onTertiaryContainer</item>
-        <item name="colorError">@color/md_theme_dark_5_error</item>
-        <item name="colorErrorContainer">@color/md_theme_dark_5_errorContainer</item>
-        <item name="colorOnError">@color/md_theme_dark_5_onError</item>
-        <item name="colorOnErrorContainer">@color/md_theme_dark_5_onErrorContainer</item>
-        <item name="android:colorBackground">@color/md_1_theme_dark_background</item>
-        <item name="colorOnBackground">@color/md_theme_dark_5_onBackground</item>
-        <item name="colorSurface">@color/md_theme_dark_5_surface</item>
-        <item name="colorOnSurface">@color/md_theme_dark_5_onSurface</item>
-        <item name="colorSurfaceVariant">@color/md_theme_dark_5_surfaceVariant</item>
-        <item name="colorOnSurfaceVariant">@color/md_theme_dark_5_onSurfaceVariant</item>
-        <item name="colorOutline">@color/md_theme_dark_5_outline</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_dark_5_inverseOnSurface</item>
-        <item name="colorSurfaceInverse">@color/md_theme_dark_5_inverseSurface</item>
-        <item name="colorPrimaryInverse">@color/md_theme_dark_5_inversePrimary</item>
     </style>
 
     <style name="Theme.Dantotsu.BlueOLED" parent="Theme.Dantotsu.Blue">
@@ -274,6 +303,11 @@
     </style>
 
     <style name="Theme.Dantotsu.SaikouOLED" parent="Theme.Dantotsu.Saikou">
+        <item name="android:colorBackground">@color/darkest_Black</item>
+        <item name="colorSurface">@color/darkest_Black</item>
+    </style>
+
+    <style name="Theme.Dantotsu.OceanOLED" parent="Theme.Dantotsu.Ocean">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
     </style>

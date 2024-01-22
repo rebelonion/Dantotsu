@@ -50,7 +50,7 @@ class ChapterLoaderDialog : BottomSheetDialogFragment() {
                     if (model.loadMangaChapterImages(
                             chp,
                             m.selected!!,
-                            m.nameMAL ?: m.nameRomaji
+                            m.mainName()
                         )
                     ) {
                         val activity = currActivity()

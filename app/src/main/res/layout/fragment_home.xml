@@ -12,7 +12,6 @@
         android:id="@+id/homeScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
         <LinearLayout
             android:id="@+id/homeContainer"
             android:layout_width="match_parent"
@@ -22,7 +21,6 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
                 <com.flaviofaria.kenburnsview.KenBurnsView
                     android:id="@+id/homeUserBg"
                     android:layout_width="match_parent"
