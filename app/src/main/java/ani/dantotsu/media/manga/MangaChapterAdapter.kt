@@ -218,7 +218,16 @@ class MangaChapterAdapter(
                         fragment.onMangaChapterStopDownloadClick(chapterNumber)
                         return@setOnClickListener
                     } else if (downloadedChapters.contains(chapterNumber)) {
-                        fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
+                        val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
+                        builder.setTitle("Delete Chapter")
+                        builder.setMessage("Are you sure you want to delete ${chapterNumber}?")
+                        builder.setPositiveButton("Yes") { _, _ ->
+                            fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
+                        }
+                        builder.setNegativeButton("No") { _, _ ->
+                        }
+                        val dialog = builder.show()
+                        dialog.window?.setDimAmount(0.8f)
                         return@setOnClickListener
                     } else {
                         fragment.onMangaChapterDownloadClick(chapterNumber)

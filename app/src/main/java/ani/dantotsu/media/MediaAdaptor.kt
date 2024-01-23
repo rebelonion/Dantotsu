@@ -392,16 +392,22 @@ class MediaAdaptor(
                 Intent(activity, MediaDetailsActivity::class.java).putExtra(
                     "media",
                     media as Serializable
-                ), ActivityOptionsCompat.makeSceneTransitionAnimation(
-                    activity,
-                    Pair.create(
-                        itemCompactImage,
-                        ViewCompat.getTransitionName(activity.findViewById(R.id.itemCompactImage))!!
-                    ),
-                ).toBundle()
+                ),
+                if (itemCompactImage != null) {
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        activity,
+                        Pair.create(
+                            itemCompactImage,
+                            ViewCompat.getTransitionName(activity.findViewById(R.id.itemCompactImage))!!
+                        ),
+                    ).toBundle()
+                } else {
+                    null
+                }
             )
         }
     }
+
 
     fun longClicked(position: Int): Boolean {
         if ((mediaList?.size ?: 0) > position && position != -1) {

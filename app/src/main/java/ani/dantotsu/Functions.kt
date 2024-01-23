@@ -15,6 +15,7 @@ import android.content.res.Configuration
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
@@ -25,6 +26,7 @@ import android.telephony.TelephonyManager
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.*
@@ -48,6 +50,7 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.NotificationClickReceiver
+import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
@@ -211,6 +214,10 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
             val behavior = BottomSheetBehavior.from(requireView().parent as View)
             behavior.state = BottomSheetBehavior.STATE_EXPANDED
         }
+        val typedValue = TypedValue()
+        val theme = requireContext().theme
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceInverse, typedValue, true)
+        window.navigationBarColor = typedValue.data
     }
 
     override fun show(manager: FragmentManager, tag: String?) {

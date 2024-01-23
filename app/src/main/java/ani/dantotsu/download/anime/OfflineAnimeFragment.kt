@@ -25,6 +25,10 @@ import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
+import androidx.core.util.Pair
+import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.media3.common.util.UnstableApi
@@ -187,9 +191,17 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                     return@let
                 }
                 MediaDetailsActivity.mediaSingleton = mediaModel
-                startActivity(
+                ContextCompat.startActivity(
+                    requireActivity(),
                     Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("download", true)
+                        .putExtra("download", true),
+                    ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        requireActivity(),
+                        Pair.create(
+                            requireActivity().findViewById<ImageView>(R.id.itemCompactImage),
+                            ViewCompat.getTransitionName(requireActivity().findViewById(R.id.itemCompactImage))
+                        ),
+                    ).toBundle()
                 )
             } ?: run {
                 snackString("no media found")

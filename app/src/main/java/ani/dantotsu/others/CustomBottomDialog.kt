@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ani.dantotsu.BottomSheetDialogFragment
+import ani.dantotsu.R
 import ani.dantotsu.databinding.BottomSheetCustomBinding
 
 open class CustomBottomDialog : BottomSheetDialogFragment() {
@@ -55,10 +56,6 @@ open class CustomBottomDialog : BottomSheetDialogFragment() {
         _binding = BottomSheetCustomBinding.inflate(inflater, container, false)
         val window = dialog?.window
         window?.statusBarColor = Color.TRANSPARENT
-        val typedValue = TypedValue()
-        val theme = requireContext().theme
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
-        window?.navigationBarColor = typedValue.data
         return binding.root
     }
 
