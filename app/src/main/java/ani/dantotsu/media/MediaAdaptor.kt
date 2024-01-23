@@ -387,19 +387,29 @@ class MediaAdaptor(
         if ((mediaList?.size ?: 0) > position && position != -1) {
             val media = mediaList?.get(position)
             if (bitmap != null) MediaSingleton.bitmap = bitmap
-            ContextCompat.startActivity(
-                activity,
-                Intent(activity, MediaDetailsActivity::class.java).putExtra(
-                    "media",
-                    media as Serializable
-                ), ActivityOptionsCompat.makeSceneTransitionAnimation(
+            if (itemCompactImage != null) {
+                ContextCompat.startActivity(
                     activity,
-                    Pair.create(
-                        itemCompactImage,
-                        ViewCompat.getTransitionName(activity.findViewById(R.id.itemCompactImage))!!
-                    ),
-                ).toBundle()
-            )
+                    Intent(activity, MediaDetailsActivity::class.java).putExtra(
+                        "media",
+                        media as Serializable
+                    ), ActivityOptionsCompat.makeSceneTransitionAnimation(
+                        activity,
+                        Pair.create(
+                            itemCompactImage,
+                            ViewCompat.getTransitionName(activity.findViewById(R.id.itemCompactImage))!!
+                        ),
+                    ).toBundle()
+                )
+            } else {
+                ContextCompat.startActivity(
+                    activity,
+                    Intent(activity, MediaDetailsActivity::class.java).putExtra(
+                        "media",
+                        media as Serializable
+                    ), null
+                )
+            }
         }
     }
 
