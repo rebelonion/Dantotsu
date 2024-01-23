@@ -128,17 +128,6 @@
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
                     <ImageButton
-                        android:id="@+id/exo_quality"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:backgroundTint="#00FFFFFF"
-                        android:src="@drawable/ic_round_high_quality_24"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
-
-                    <ImageButton
                         android:id="@+id/exo_sub"
                         android:layout_width="48dp"
                         android:layout_height="48dp"

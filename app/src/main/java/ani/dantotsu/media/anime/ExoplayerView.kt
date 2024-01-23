@@ -132,7 +132,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private lateinit var exoSubtitle: ImageButton
     private lateinit var exoSubtitleView: SubtitleView
     private lateinit var exoRotate: ImageButton
-    private lateinit var exoQuality: ImageButton
     private lateinit var exoSpeed: ImageButton
     private lateinit var exoScreen: ImageButton
     private lateinit var exoNext: ImageButton
@@ -371,7 +370,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         playerView = findViewById(R.id.player_view)
-        exoQuality = playerView.findViewById(R.id.exo_quality)
         exoPlay = playerView.findViewById(androidx.media3.ui.R.id.exo_play)
         exoSource = playerView.findViewById(R.id.exo_source)
         exoSettings = playerView.findViewById(R.id.exo_settings)
@@ -1736,13 +1734,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
         }
         println("Track: ${tracks.groups.size}")
-        if (tracks.groups.size <= 2) exoQuality.visibility = View.GONE
-        else {
-            exoQuality.visibility = View.VISIBLE
-            exoQuality.setOnClickListener {
-                initPopupQuality().show()
-            }
-        }
     }
 
     override fun onPlayerError(error: PlaybackException) {
@@ -1828,20 +1819,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         super.onDestroy()
         finishAndRemoveTask()
-    }
-
-    // QUALITY SELECTOR
-    private fun initPopupQuality(): Dialog {
-
-        val trackSelectionDialogBuilder =
-            TrackSelectionDialogBuilder(this, "Available Qualities", exoPlayer, TRACK_TYPE_VIDEO)
-        trackSelectionDialogBuilder.setTheme(R.style.DialogTheme)
-        trackSelectionDialogBuilder.setTrackNameProvider {
-            if (it.frameRate > 0f) it.height.toString() + "p" else it.height.toString() + "p (fps : N/A)"
-        }
-        val trackDialog = trackSelectionDialogBuilder.build()
-        trackDialog.setOnDismissListener { hideSystemBars() }
-        return trackDialog
     }
 
     // Cast
