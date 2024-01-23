@@ -268,14 +268,19 @@ class AnimeFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending(1)
                         model.loadUpdated()
-                        model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                            .getBoolean("popular_list", false))
                     }
-                    live.postValue(false)
-                    _binding?.animeRefresh?.isRefreshing = false
+                    withContext(Dispatchers.Main) {
+                        if (isAdded) { // Check if the fragment is still attached
+                            model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                                .getBoolean("popular_list", false))
+                        }
+                        live.postValue(false)
+                        _binding?.animeRefresh?.isRefreshing = false
+                    }
                 }
             }
         }
+
     }
 
     override fun onResume() {
