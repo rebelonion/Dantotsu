@@ -719,14 +719,6 @@
                     app:iconPadding="16dp"
                     app:iconSize="24dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:alpha="0.58"
-                    android:fontFamily="@font/poppins_family"
-                    android:text="@string/long_press_download"
-                    android:textSize="14sp" />
 
                 <!--TODO: Add support for SD card-->
                 <com.google.android.material.materialswitch.MaterialSwitch
