@@ -12,8 +12,7 @@
         android:id="@+id/listAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorSurfaceVariant"
-        android:theme="@style/Theme.Dantotsu.AppBarOverlay">
+        android:background="?attr/colorSurfaceVariant">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -12,6 +12,7 @@
         <item name="android:colorBackground">@color/darkest_Black</item>
         <!-- set colorSurface to black -->
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
 
