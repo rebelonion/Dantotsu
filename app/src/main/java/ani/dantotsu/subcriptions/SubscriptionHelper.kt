@@ -36,6 +36,7 @@ class SubscriptionHelper {
                     } else {
                         sharedPreferences.getInt("settings_def_manga_source_s_r", 0)
                     }
+                it.preferDub = loadData("settings_prefer_dub", context) ?: false
                 it
             }
             return data
