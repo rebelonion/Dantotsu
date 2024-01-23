@@ -65,6 +65,7 @@ import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.Serializable
+import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
@@ -163,11 +164,13 @@ class MainActivity : AppCompatActivity() {
 
         val preferences: SourcePreferences = Injekt.get()
         if (preferences.animeExtensionUpdatesCount().get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0) {
-            Toast.makeText(
-                this,
-                "You have extension updates available!",
-                Toast.LENGTH_LONG
-            ).show()
+            if (Random.nextInt(0, 4) == 1){
+                Toast.makeText(
+                    this,
+                    "You have extension updates available!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
 
         binding.root.isMotionEventSplittingEnabled = false
