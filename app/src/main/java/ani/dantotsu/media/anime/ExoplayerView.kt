@@ -1965,7 +1965,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     }
 
     override fun onCastSessionAvailable() {
-        if (isCastApiAvailable) {
+        if (isCastApiAvailable && !this.isDestroyed) {
             startCastPlayer()
         }
     }
