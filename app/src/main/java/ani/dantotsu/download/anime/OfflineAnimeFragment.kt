@@ -198,7 +198,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         requireActivity(),
                         Pair.create(
-                            requireActivity().findViewById<ImageView>(R.id.itemCompactImage),
+                            gridView.getChildAt(position).findViewById<ImageView>(R.id.itemCompactImage),
                             ViewCompat.getTransitionName(requireActivity().findViewById(R.id.itemCompactImage))
                         ),
                     ).toBundle()
@@ -252,41 +252,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var height = statusBarHeight
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val displayCutout = activity?.window?.decorView?.rootWindowInsets?.displayCutout
-            if (displayCutout != null) {
-                if (displayCutout.boundingRects.size > 0) {
-                    height = max(
-                        statusBarHeight,
-                        min(
-                            displayCutout.boundingRects[0].width(),
-                            displayCutout.boundingRects[0].height()
-                        )
-                    )
-                }
-            }
-        }
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
-        scrollTop.translationY =
-            -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
-        val visible = false
-
-        fun animate() {
-            val start = if (visible) 0f else 1f
-            val end = if (!visible) 0f else 1f
-            ObjectAnimator.ofFloat(scrollTop, "scaleX", start, end).apply {
-                duration = 300
-                interpolator = OvershootInterpolator(2f)
-                start()
-            }
-            ObjectAnimator.ofFloat(scrollTop, "scaleY", start, end).apply {
-                duration = 300
-                interpolator = OvershootInterpolator(2f)
-                start()
-            }
-        }
-
         scrollTop.setOnClickListener {
             gridView.smoothScrollToPositionFromTop(0, 0)
         }
@@ -306,7 +272,9 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 totalItemCount: Int
             ) {
                 val first = view.getChildAt(0)
-                val visibility = first != null && first.top < -height
+                val visibility = first != null && first.top < 0
+                scrollTop.translationY =
+                    -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
                 scrollTop.visibility = if (visibility) View.VISIBLE else View.GONE
             }
         })
