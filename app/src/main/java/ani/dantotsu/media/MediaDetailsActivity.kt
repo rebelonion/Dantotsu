@@ -395,7 +395,9 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     }
 
     override fun onResume() {
-        tabLayout.selectedItemId = idFromSelect()
+        if (this::tabLayout.isInitialized) {
+            tabLayout.selectedItemId = idFromSelect()
+        }
         super.onResume()
     }
 
