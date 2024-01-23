@@ -969,6 +969,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     exoPlayer.currentPosition,
                     this
                 )
+                exoPlayer.seekTo(0)
                 val prev = episodeArr[currentEpisodeIndex]
                 isTimeStampsLoaded = false
                 episodeLength = 0f
@@ -1472,7 +1473,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
 
         try {
-            mediaSession = MediaSession.Builder(this, exoPlayer).build()
+            val rightNow = Calendar.getInstance()
+            mediaSession = MediaSession.Builder(this, exoPlayer)
+                .setId(rightNow.timeInMillis.toString())
+                .build()
         } catch (e: Exception) {
             toast(e.toString())
         }
@@ -1556,11 +1560,13 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             if (castPlayer?.isPlaying == false) {
                 playerView.player?.pause()
             }
-            saveData(
-                "${media.id}_${media.anime!!.selectedEpisode}",
-                exoPlayer.currentPosition,
-                this
-            )
+            if (exoPlayer.currentPosition > 5000) {
+                saveData(
+                    "${media.id}_${media.anime!!.selectedEpisode}",
+                    exoPlayer.currentPosition,
+                    this
+                )
+            }
         }
     }
 

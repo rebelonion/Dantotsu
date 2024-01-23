@@ -223,7 +223,7 @@
         <item name="colorSurfaceVariant">@color/md_theme_light_5_surfaceVariant</item>
         <item name="colorOnSurfaceVariant">@color/md_theme_light_5_onSurfaceVariant</item>
         <item name="colorOutline">@color/md_theme_light_5_outline</item>
-        <item name="colorOnSurfaceInverse">@color/md_theme_light_5_inverseOnSurface</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_light_5_surface</item>
         <item name="colorSurfaceInverse">@color/md_theme_light_5_inverseSurface</item>
         <item name="colorPrimaryInverse">@color/md_theme_light_5_inversePrimary</item>
     </style>

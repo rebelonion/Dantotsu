@@ -213,13 +213,13 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-        val offline = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+        val offlineMode = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             .getBoolean("offlineMode", false)
         if (!isOnline(this)) {
             snackString(this@MainActivity.getString(R.string.no_internet_connection))
             startActivity(Intent(this, NoInternet::class.java))
         } else {
-            if (offline) {
+            if (offlineMode) {
                 snackString(this@MainActivity.getString(R.string.no_internet_connection))
                 startActivity(Intent(this, NoInternet::class.java))
             } else {
