@@ -163,14 +163,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         val preferences: SourcePreferences = Injekt.get()
-        if (preferences.animeExtensionUpdatesCount().get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0) {
-            if (Random.nextInt(0, 4) == 1){
-                Toast.makeText(
-                    this,
-                    "You have extension updates available!",
-                    Toast.LENGTH_LONG
-                ).show()
-            }
+        if (preferences.animeExtensionUpdatesCount()
+                .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
+        ) {
+            Toast.makeText(
+                this,
+                "You have extension updates available!",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         binding.root.isMotionEventSplittingEnabled = false
