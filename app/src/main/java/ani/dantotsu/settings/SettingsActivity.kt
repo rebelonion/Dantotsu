@@ -436,11 +436,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             ).edit().putBoolean("shared_user_id", isChecked).apply()
         }
 
-        binding.settingsPreferDub.isChecked = loadData("settings_prefer_dub") ?: false
-        binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
-            saveData("settings_prefer_dub", isChecked)
-        }
-
         //val mangaSource = loadData<Int>("settings_def_manga_source_s")?.let { if (it >= MangaSources.names.size) 0 else it } ?: 0
         val mangaSource = getSharedPreferences(
             "Dantotsu",
