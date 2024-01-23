@@ -392,7 +392,8 @@ class MediaAdaptor(
                 Intent(activity, MediaDetailsActivity::class.java).putExtra(
                     "media",
                     media as Serializable
-                ), if (itemCompactImage != null) {
+                ),
+                if (itemCompactImage != null) {
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity,
                         Pair.create(
