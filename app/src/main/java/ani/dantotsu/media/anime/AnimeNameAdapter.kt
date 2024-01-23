@@ -1,5 +1,6 @@
 package ani.dantotsu.media.anime
 
+import java.util.Locale
 import java.util.regex.Matcher
 import java.util.regex.Pattern
 
@@ -10,7 +11,39 @@ class AnimeNameAdapter {
         const val failedEpisodeNumberRegex =
             "(?<!part\\s)\\b(\\d+)\\b"
         const val seasonRegex = "\\s+(season|s)[\\s:.\\-]*(\\d+)[\\s:.\\-]*"
-        const val subdubRegex = "(sub|dub|softsub)(bed){0,1}\\s*"
+        const val subdubRegex = "^(soft)?[\\s-]*(sub|dub|mixed)(bed)?\\s*$"
+
+        fun setSubDub(text: String, typeToSetTo: SubDubType): String? {
+            val subdubPattern: Pattern = Pattern.compile(subdubRegex, Pattern.CASE_INSENSITIVE)
+            val subdubMatcher: Matcher = subdubPattern.matcher(text)
+
+            return if (subdubMatcher.find()) {
+                val soft = subdubMatcher.group(1)
+                val subdub = subdubMatcher.group(2)
+                val bed = subdubMatcher.group(3) ?: ""
+
+                val toggled = when (typeToSetTo) {
+                    SubDubType.SUB -> "sub"
+                    SubDubType.DUB -> "dub"
+                }
+                val toggledCasePreserved =
+                    if (subdub?.get(0)?.isUpperCase() == true || soft?.get(0)
+                            ?.isUpperCase() == true
+                    ) toggled.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.ROOT
+                        ) else it.toString()
+                    } else toggled
+
+                subdubMatcher.replaceFirst(toggledCasePreserved + bed)
+            } else {
+                null
+            }
+        }
+
+        enum class SubDubType {
+            SUB, DUB
+        }
 
         fun findSeasonNumber(text: String): Int? {
             val seasonPattern: Pattern = Pattern.compile(seasonRegex, Pattern.CASE_INSENSITIVE)
