@@ -17,6 +17,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
@@ -46,9 +47,13 @@ import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.SharedPreferenceBooleanLiveData
+import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
+import eu.kanade.domain.source.service.SourcePreferences
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -57,6 +62,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.Serializable
 
 
@@ -152,6 +159,15 @@ class MainActivity : AppCompatActivity() {
                 { doubleBackToExitPressedOnce = false },
                 2000
             )
+        }
+
+        val preferences: SourcePreferences = Injekt.get()
+        if (preferences.animeExtensionUpdatesCount().get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0) {
+            Toast.makeText(
+                this,
+                "You have extension updates available!",
+                Toast.LENGTH_LONG
+            ).show()
         }
 
         binding.root.isMotionEventSplittingEnabled = false
