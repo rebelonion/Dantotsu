@@ -1,25 +1,29 @@
-# 2.0.0
+# 2.1.0
 
-- **New Features:**
-  - Novel Support
-  - Offline support for manga and novels
-  - Filter anime/manga by language
-  - Filter manga by scanlator
-  - Many new theme options
-  - Saikou theme
-  - Random anime/manga selector from lists
-  - Incognito mode (sus)
-  - Various UI uplifts
-  - Many small features (see beta changelogs)
-  - New easter egg :3
+## Update?????
+
+- **IMPORTANT PLEASE READ**
+  - Manga extensions installed will need to be uninstalled before they can be updated. You can do this in your phone settings, or long press the extension in Dantotsu settings.
+  - If you used a pretest from discord, PLEASE DELETE ALL ANIME DOWNLOADS. you can do this in settings.
+  - This also could break previous manga downloads.
 
 - **Bugfixes:**
-  - Discord RPC fix
-  - Many source fixes
-  - Various bug/crash fixes
+  - Source fixes
+  - Manga extension fix
   - General theme tweaks
-  - Ability to disable hold-to-fast-forward in videos (caused issues for some users)
-  - Many small bug fixes (see beta changelogs)
+  - Various bugs/crashes
+  - Many others
+
+- **New Features:**
+  - Anime Downloads
+  - Tap to scroll in manga (paged mode)
+  - Webview to set cookies
+  - New theme
+  - Internal casting (long press cast to use old method)
+  - Manga page ui rework  
+  - Video source ui cleanup
+  - Offline mode declutter
+  - Better incognito awareness
 
 - **Like what you see?**
   - Consider supporting me on [Github](https://github.com/sponsors/rebelonion) or [Buy Me a Coffee](https://www.buymeacoffee.com/rebelonion)!
