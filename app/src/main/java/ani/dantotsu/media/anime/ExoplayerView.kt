@@ -1210,13 +1210,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val showProgressDialog =
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                 ?: true else false
-        if (showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
+        if (!incognito && showProgressDialog && Anilist.userid != null && if (media.isAdult) settings.updateForH else true)
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
                 .apply {
-                    if (incognito) {
-                        setMessage(getString(R.string.incognito_will_not_update))
-                    }
                     setOnCancelListener { hideSystemBars() }
                     setCancelable(false)
                     setPositiveButton(getString(R.string.yes)) { dialog, _ ->
@@ -1771,7 +1768,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     }
 
     private fun updateAniProgress() {
-        if (exoPlayer.currentPosition / episodeLength > settings.watchPercentage && Anilist.userid != null)
+        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("incognito", false) ?: false
+        if (!incognito && exoPlayer.currentPosition / episodeLength > settings.watchPercentage && Anilist.userid != null)
             if (loadData<Boolean>("${media.id}_save_progress") != false && if (media.isAdult) settings.updateForH else true) {
                 media.anime!!.selectedEpisode?.apply {
                     updateProgress(media, this)

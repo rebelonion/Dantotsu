@@ -142,7 +142,6 @@ class MangaReaderActivity : AppCompatActivity() {
         ThemeManager(this).applyTheme()
         binding = ActivityMangaReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         binding.mangaReaderBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -853,7 +852,10 @@ class MangaReaderActivity : AppCompatActivity() {
             showProgressDialog =
                 if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                     ?: true else false
-            if (showProgressDialog) {
+            val incognito =
+                currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                    ?.getBoolean("incognito", false) ?: false
+            if (showProgressDialog && !incognito) {
 
                 val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)
                 val checkbox = dialogView.findViewById<CheckBox>(R.id.dialog_checkbox)
@@ -862,16 +864,8 @@ class MangaReaderActivity : AppCompatActivity() {
                     saveData("${media.id}_progressDialog", !isChecked)
                     showProgressDialog = !isChecked
                 }
-                val incognito =
-                    currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                        ?.getBoolean("incognito", false) ?: false
                 AlertDialog.Builder(this, R.style.MyPopup)
                     .setTitle(getString(R.string.title_update_progress))
-                    .apply {
-                        if (incognito) {
-                            setMessage(getString(R.string.incognito_will_not_update))
-                        }
-                    }
                     .setView(dialogView)
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.yes)) { dialog, _ ->
@@ -893,7 +887,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     .create()
                     .show()
             } else {
-                if (loadData<Boolean>("${media.id}_save_progress") != false && if (media.isAdult) settings.updateForH else true)
+                if (!incognito && loadData<Boolean>("${media.id}_save_progress") != false && if (media.isAdult) settings.updateForH else true)
                     updateProgress(
                         media,
                         MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
