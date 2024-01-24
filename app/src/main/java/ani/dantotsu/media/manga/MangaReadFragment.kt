@@ -26,6 +26,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
@@ -139,6 +140,22 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
 
         binding.animeSourceRecycler.layoutManager = gridLayoutManager
 
+        binding.ScrollTop.setOnClickListener {
+            binding.animeSourceRecycler.scrollToPosition(10)
+            binding.animeSourceRecycler.smoothScrollToPosition(0)
+        }
+        binding.animeSourceRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val position = gridLayoutManager.findFirstVisibleItemPosition()
+                if (position > 2) {
+                    binding.ScrollTop.visibility = View.VISIBLE
+                } else {
+                    binding.ScrollTop.visibility = View.GONE
+                }
+            }
+        })
         model.scrolledToTop.observe(viewLifecycleOwner) {
             if (it) binding.animeSourceRecycler.scrollToPosition(0)
         }
