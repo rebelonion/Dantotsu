@@ -9,6 +9,7 @@
     android:backgroundTintMode="src_atop"
     android:longClickable="true"
     android:background="@drawable/card_outline"
+    android:backgroundTint="?attr/colorSurfaceVariant"
     app:cardCornerRadius="16dp">
 
     <View
@@ -21,7 +22,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="?attr/colorSurfaceVariant"
         android:orientation="vertical">
 
         <LinearLayout
