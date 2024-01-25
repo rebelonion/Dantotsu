@@ -99,13 +99,12 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                 )
             )
 
-            val currentYear = Calendar.getInstance().get(Calendar.YEAR)
             binding.searchYear.setText(activity.result.seasonYear?.toString())
             binding.searchYear.setAdapter(
                 ArrayAdapter(
                     binding.root.context,
                     R.layout.item_dropdown,
-                    (1970 until currentYear + 2).map { it.toString() }.reversed().toTypedArray()
+                    (1970 until Calendar.getInstance().get(Calendar.YEAR) + 2).map { it.toString() }.reversed().toTypedArray()
                 )
             )
         }
