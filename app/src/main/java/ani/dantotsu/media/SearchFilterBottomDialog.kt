@@ -17,6 +17,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSearchFilterBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import com.google.android.material.chip.Chip
+import java.util.*
 
 class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSearchFilterBinding? = null
