@@ -1323,7 +1323,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
             dataSource
         }
-        val dafuckDataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, R.string.app_name.toString()))
+        val dafuckDataSourceFactory =
+            DefaultDataSourceFactory(this, Util.getUserAgent(this, R.string.app_name.toString()))
         cacheFactory = CacheDataSource.Factory().apply {
             setCache(Helper.getSimpleCache(this@ExoplayerView))
             if (ext.server.offline) {
@@ -1745,7 +1746,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     private fun updateAniProgress() {
         val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                ?.getBoolean("incognito", false) ?: false
+            ?.getBoolean("incognito", false) ?: false
         if (!incognito && exoPlayer.currentPosition / episodeLength > settings.watchPercentage && Anilist.userid != null)
             if (loadData<Boolean>("${media.id}_save_progress") != false && if (media.isAdult) settings.updateForH else true) {
                 media.anime!!.selectedEpisode?.apply {

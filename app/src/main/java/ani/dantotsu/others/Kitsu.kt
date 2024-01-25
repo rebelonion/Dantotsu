@@ -96,6 +96,7 @@ query {
                     }
                 }
             }
+
             else -> {
                 res?.body?.string()
             }

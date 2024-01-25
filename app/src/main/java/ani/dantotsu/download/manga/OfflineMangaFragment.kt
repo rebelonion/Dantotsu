@@ -1,10 +1,8 @@
 package ani.dantotsu.download.manga
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -15,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.LayoutAnimationController
-import android.view.animation.OvershootInterpolator
 import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
 import android.widget.GridView
@@ -45,7 +42,6 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
-import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
@@ -57,8 +53,6 @@ import eu.kanade.tachiyomi.source.model.SChapterImpl
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
 
 class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
 

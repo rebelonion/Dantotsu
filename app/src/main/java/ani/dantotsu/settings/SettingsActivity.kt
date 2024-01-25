@@ -215,10 +215,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         binding.settingsPinnedAnimeSources.setOnClickListener {
-            val animeSourcesWithoutDownloadsSource = AnimeSources.list.filter { it.name != "Downloaded" }
+            val animeSourcesWithoutDownloadsSource =
+                AnimeSources.list.filter { it.name != "Downloaded" }
             val names = animeSourcesWithoutDownloadsSource.map { it.name }
-            val pinnedSourcesBoolean = animeSourcesWithoutDownloadsSource.map { it.name in AnimeSources.pinnedAnimeSources }
-            val pinnedSourcesOriginal  = getSharedPreferences(
+            val pinnedSourcesBoolean =
+                animeSourcesWithoutDownloadsSource.map { it.name in AnimeSources.pinnedAnimeSources }
+            val pinnedSourcesOriginal = getSharedPreferences(
                 "Dantotsu",
                 Context.MODE_PRIVATE
             ).getStringSet("pinned_anime_sources", null)
@@ -240,12 +242,14 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         "Dantotsu",
                         Context.MODE_PRIVATE
                     ).getInt("settings_def_anime_source_s_r", 0)
-                    val oldName = if (oldDefaultSourceIndex >= AnimeSources.names.size) "" else AnimeSources.names[oldDefaultSourceIndex]
+                    val oldName =
+                        if (oldDefaultSourceIndex >= AnimeSources.names.size) "" else AnimeSources.names[oldDefaultSourceIndex]
                     getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                         .putStringSet("pinned_anime_sources", pinnedSources).apply()
                     AnimeSources.pinnedAnimeSources = pinnedSources
                     AnimeSources.performReorderAnimeSources()
-                    val newDefaultSourceIndex = if (oldName == "") 0 else AnimeSources.names.indexOf(oldName)
+                    val newDefaultSourceIndex =
+                        if (oldName == "") 0 else AnimeSources.names.indexOf(oldName)
                     getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                         .putInt("settings_def_anime_source_s_r", newDefaultSourceIndex).apply()
                     dialog.dismiss()
@@ -468,10 +472,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         binding.settingsPinnedMangaSources.setOnClickListener {
-            val mangaSourcesWithoutDownloadsSource = MangaSources.list.filter { it.name != "Downloaded" }
+            val mangaSourcesWithoutDownloadsSource =
+                MangaSources.list.filter { it.name != "Downloaded" }
             val names = mangaSourcesWithoutDownloadsSource.map { it.name }
-            val pinnedSourcesBoolean = mangaSourcesWithoutDownloadsSource.map { it.name in MangaSources.pinnedMangaSources }
-            val pinnedSourcesOriginal  = getSharedPreferences(
+            val pinnedSourcesBoolean =
+                mangaSourcesWithoutDownloadsSource.map { it.name in MangaSources.pinnedMangaSources }
+            val pinnedSourcesOriginal = getSharedPreferences(
                 "Dantotsu",
                 Context.MODE_PRIVATE
             ).getStringSet("pinned_manga_sources", null)
@@ -493,12 +499,14 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         "Dantotsu",
                         Context.MODE_PRIVATE
                     ).getInt("settings_def_manga_source_s_r", 0)
-                    val oldName = if (oldDefaultSourceIndex >= MangaSources.names.size) "" else MangaSources.names[oldDefaultSourceIndex]
+                    val oldName =
+                        if (oldDefaultSourceIndex >= MangaSources.names.size) "" else MangaSources.names[oldDefaultSourceIndex]
                     getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                         .putStringSet("pinned_manga_sources", pinnedSources).apply()
                     MangaSources.pinnedMangaSources = pinnedSources
                     MangaSources.performReorderMangaSources()
-                    val newDefaultSourceIndex = if (oldName == "") 0 else MangaSources.names.indexOf(oldName)
+                    val newDefaultSourceIndex =
+                        if (oldName == "") 0 else MangaSources.names.indexOf(oldName)
                     getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                         .putInt("settings_def_manga_source_s_r", newDefaultSourceIndex).apply()
                     dialog.dismiss()

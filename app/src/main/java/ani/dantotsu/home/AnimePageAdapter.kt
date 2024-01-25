@@ -133,8 +133,9 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         binding.animeIncludeList.visibility =
             if (Anilist.userid != null) View.VISIBLE else View.GONE
 
-        binding.animeIncludeList.isChecked = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("popular_list", true) ?: true
+        binding.animeIncludeList.isChecked =
+            currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("popular_list", true) ?: true
 
         binding.animeIncludeList.setOnCheckedChangeListener { _, isChecked ->
             onIncludeListClick.invoke(isChecked)

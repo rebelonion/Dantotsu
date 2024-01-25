@@ -75,9 +75,11 @@ class DownloadsManager(private val context: Context) {
             DownloadedType.Type.MANGA -> {
                 downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.MANGA }
             }
+
             DownloadedType.Type.ANIME -> {
                 downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.ANIME }
             }
+
             DownloadedType.Type.NOVEL -> {
                 downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.NOVEL }
             }
@@ -252,7 +254,12 @@ class DownloadsManager(private val context: Context) {
         const val mangaLocation = "Dantotsu/Manga"
         const val animeLocation = "Dantotsu/Anime"
 
-        fun getDirectory(context: Context, type: DownloadedType.Type, title: String, chapter: String? = null): File {
+        fun getDirectory(
+            context: Context,
+            type: DownloadedType.Type,
+            title: String,
+            chapter: String? = null
+        ): File {
             return if (type == DownloadedType.Type.MANGA) {
                 if (chapter != null) {
                     File(

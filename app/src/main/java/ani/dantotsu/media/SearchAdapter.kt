@@ -61,7 +61,8 @@ class SearchAdapter(private val activity: SearchActivity) :
 
         binding.searchBar.hint = activity.result.type
         if (currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false ) == true){
+                ?.getBoolean("incognito", false) == true
+        ) {
             val startIconDrawableRes = R.drawable.ic_incognito_24
             val startIconDrawable: Drawable? =
                 context?.let { AppCompatResources.getDrawable(it, startIconDrawableRes) }

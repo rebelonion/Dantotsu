@@ -47,13 +47,10 @@ import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.SharedPreferenceBooleanLiveData
-import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
-import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -65,7 +62,6 @@ import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.Serializable
-import kotlin.random.Random
 
 
 class MainActivity : AppCompatActivity() {
