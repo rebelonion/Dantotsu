@@ -155,6 +155,7 @@ class AnimeWatchFragment : Fragment() {
 
                 val position = gridLayoutManager.findFirstVisibleItemPosition()
                 if (position > 2) {
+                    binding.ScrollTop.translationY = -navBarHeight.toFloat()
                     binding.ScrollTop.visibility = View.VISIBLE
                 } else {
                     binding.ScrollTop.visibility = View.GONE
