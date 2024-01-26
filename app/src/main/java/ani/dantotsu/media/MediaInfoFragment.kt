@@ -95,8 +95,30 @@ class MediaInfoFragment : Fragment() {
                 binding.mediaInfoStart.text = media.startDate?.toString() ?: "??"
                 binding.mediaInfoEnd.text = media.endDate?.toString() ?: "??"
                 if (media.anime != null) {
-                    binding.mediaInfoDuration.text =
-                        if (media.anime.episodeDuration != null) media.anime.episodeDuration.toString() else "??"
+                    val episodeDuration = media.anime.episodeDuration
+
+binding.mediaInfoDuration.text = when {
+    episodeDuration != null -> {
+        val hours = episodeDuration / 60
+        val minutes = episodeDuration % 60
+
+        val formattedDuration = buildString {
+            if (hours > 0) {
+                append("$hours hour")
+                if (hours > 1) append("s")
+            }
+
+            if (minutes > 0) {
+                if (hours > 0) append(", ")
+                append("$minutes min")
+                if (minutes > 1) append("s")
+            }
+        }
+
+        formattedDuration
+    }
+    else -> "??"
+}
                     binding.mediaInfoDurationContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeasonContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeason.text =
