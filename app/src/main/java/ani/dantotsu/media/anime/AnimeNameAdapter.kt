@@ -10,8 +10,8 @@ class AnimeNameAdapter {
             "(episode|ep|e)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*\\(?\\s*(sub|subbed|dub|dubbed)*\\s*\\)?\\s*"
         const val failedEpisodeNumberRegex =
             "(?<!part\\s)\\b(\\d+)\\b"
-        const val seasonRegex = "\\s+(season|s)[\\s:.\\-]*(\\d+)[\\s:.\\-]*"
-        const val subdubRegex = "^(soft)?[\\s-]*(sub|dub|mixed)(bed)?\\s*$"
+        const val seasonRegex = "(season|s)[\\s:.\\-]*(\\d+)[\\s:.\\-]*"
+        const val subdubRegex = "^(soft)?[\\s-]*(sub|dub|mixed)(bed|s)?\\s*$"
 
         fun setSubDub(text: String, typeToSetTo: SubDubType): String? {
             val subdubPattern: Pattern = Pattern.compile(subdubRegex, Pattern.CASE_INSENSITIVE)
@@ -25,6 +25,7 @@ class AnimeNameAdapter {
                 val toggled = when (typeToSetTo) {
                     SubDubType.SUB -> "sub"
                     SubDubType.DUB -> "dub"
+                    SubDubType.NULL -> ""
                 }
                 val toggledCasePreserved =
                     if (subdub?.get(0)?.isUpperCase() == true || soft?.get(0)
@@ -41,8 +42,24 @@ class AnimeNameAdapter {
             }
         }
 
+        fun getSubDub(text: String): SubDubType {
+            val subdubPattern: Pattern = Pattern.compile(subdubRegex, Pattern.CASE_INSENSITIVE)
+            val subdubMatcher: Matcher = subdubPattern.matcher(text)
+
+            return if (subdubMatcher.find()) {
+                val subdub = subdubMatcher.group(2)?.lowercase(Locale.ROOT)
+                when (subdub) {
+                    "sub" -> SubDubType.SUB
+                    "dub" -> SubDubType.DUB
+                    else -> SubDubType.NULL
+                }
+            } else {
+                SubDubType.NULL
+            }
+        }
+
         enum class SubDubType {
-            SUB, DUB
+            SUB, DUB, NULL
         }
 
         fun findSeasonNumber(text: String): Int? {

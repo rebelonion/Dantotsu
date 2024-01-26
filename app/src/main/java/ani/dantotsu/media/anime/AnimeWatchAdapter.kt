@@ -113,7 +113,7 @@ class AnimeWatchAdapter(
                 binding.animeSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
                 binding.animeSourceDubbedCont.visibility =
-                    if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                    if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
             }
         }
 
@@ -133,7 +133,7 @@ class AnimeWatchAdapter(
                 binding.animeSourceDubbed.isChecked = selectDub
                 changing = false
                 binding.animeSourceDubbedCont.visibility =
-                    if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                    if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
                 source = i
                 setLanguageList(0, i)
             }
@@ -154,7 +154,7 @@ class AnimeWatchAdapter(
                     binding.animeSourceDubbed.isChecked = selectDub
                     changing = false
                     binding.animeSourceDubbedCont.visibility =
-                        if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                        if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
                     setLanguageList(i, source)
                 }
                 subscribeButton(false)

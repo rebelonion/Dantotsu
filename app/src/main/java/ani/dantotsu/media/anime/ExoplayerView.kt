@@ -840,7 +840,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 isFastForwarding = true
                 exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
                 fastForward.visibility = View.VISIBLE
-                fastForward.text = ("${exoPlayer.playbackParameters.speed}x")
+                fastForward.text = "${exoPlayer.playbackParameters.speed}x"
             }
 
             fun stopFastForward() {
@@ -1286,7 +1286,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
                 println("sub: $sub")
             } else {
-                val subUri = Uri.parse((subtitle!!.file.url))
+                val subUri = Uri.parse(subtitle!!.file.url)
                 sub = MediaItem.SubtitleConfiguration
                     .Builder(subUri)
                     .setSelectionFlags(C.SELECTION_FLAG_FORCED)

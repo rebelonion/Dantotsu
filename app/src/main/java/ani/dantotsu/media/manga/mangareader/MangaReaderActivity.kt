@@ -716,7 +716,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 val y = event.rawY.toInt()
                 val screenWidth = Resources.getSystem().displayMetrics.widthPixels
                 //if in the 1st 1/5th of the screen width, left and lower than 1/5th of the screen height, left
-                if (screenWidth / 5 in (x + 1)..<y) {
+                if (screenWidth / 5 in x + 1..<y) {
                     pressLocation = if (settings.default.direction == RIGHT_TO_LEFT) {
                         pressPos.RIGHT
                     } else {

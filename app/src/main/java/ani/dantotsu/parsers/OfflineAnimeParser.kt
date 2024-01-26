@@ -21,7 +21,6 @@ class OfflineAnimeParser : AnimeParser() {
     override val name = "Offline"
     override val saveName = "Offline"
     override val hostUrl = "Offline"
-    override val isDubAvailableSeparately = false
     override val isNSFW = false
 
     override suspend fun loadEpisodes(
