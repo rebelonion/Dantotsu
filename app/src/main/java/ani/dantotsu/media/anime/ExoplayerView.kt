@@ -147,9 +147,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private lateinit var skipTimeText: TextView
     private lateinit var timeStampText: TextView
     private lateinit var animeTitle: TextView
-    private lateinit var videoName: TextView
     private lateinit var videoInfo: TextView
-    private lateinit var serverInfo: TextView
     private lateinit var episodeTitle: Spinner
 
     private var orientationListener: OrientationEventListener? = null
@@ -924,21 +922,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         title = media.userPreferredName
         episodes = media.anime?.episodes ?: return startMainActivity(this)
 
-        videoName = playerView.findViewById(R.id.exo_video_name)
         videoInfo = playerView.findViewById(R.id.exo_video_info)
-        serverInfo = playerView.findViewById(R.id.exo_server_info)
-
-        if (!settings.videoInfo) {
-            videoName.visibility = View.GONE
-            videoInfo.visibility = View.GONE
-            serverInfo.visibility = View.GONE
-        } else {
-            videoName.isSelected = true
-        }
 
         model.watchSources = if (media.isAdult) HAnimeSources else AnimeSources
-        serverInfo.text = model.watchSources!!.names.getOrNull(media.selected!!.sourceIndex)
-            ?: model.watchSources!!.names[0]
 
         model.epChanged.observe(this) {
             epChanging = !it
@@ -1408,10 +1394,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 .setRendererDisabled(TRACK_TYPE_VIDEO, false)
                 .setRendererDisabled(C.TRACK_TYPE_AUDIO, false)
                 .setRendererDisabled(C.TRACK_TYPE_TEXT, false)
-                .setMinVideoSize(
-                    loadData("maxWidth", this) ?: 720,
-                    loadData("maxHeight", this) ?: 480
-                )
                 .setMaxVideoSize(1, 1)
             //.setOverrideForType(
             //     TrackSelectionOverride(trackSelector, 2))
@@ -1613,14 +1595,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val height = (exoPlayer.videoFormat ?: return).height
         val width = (exoPlayer.videoFormat ?: return).width
 
-        if (video?.format != VideoType.CONTAINER) {
-            saveData("maxHeight", height)
-            saveData("maxWidth", width)
-        }
-
         aspectRatio = Rational(width, height)
 
-        videoName.text = episode.selectedExtractor
         videoInfo.text = "$width x $height"
 
         if (exoPlayer.duration < playbackPosition)

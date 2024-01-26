@@ -384,34 +384,6 @@
                 </LinearLayout>
 
                 <TextView
-                    android:id="@+id/exo_video_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:alpha="0.58"
-                    android:maxLength="15"
-                    android:ellipsize="marquee"
-                    android:singleLine="true"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/bg_white"
-                    android:textSize="12sp"
-                    tools:ignore="TextContrastCheck"
-                    tools:text="720x1080" />
-
-                <TextView
-                    android:id="@+id/exo_server_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:alpha="0.58"
-                    android:fontFamily="@font/poppins_bold"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/bg_white"
-                    android:textSize="12sp"
-                    tools:ignore="TextContrastCheck"
-                    tools:text="@string/server_selector" />
-
-                <TextView
                     android:id="@+id/exo_video_info"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

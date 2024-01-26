@@ -74,27 +74,6 @@ class PlayerSettingsActivity : AppCompatActivity() {
         }
 
         //Video
-        binding.playerSettingsVideoInfo.isChecked = settings.videoInfo
-        binding.playerSettingsVideoInfo.setOnCheckedChangeListener { _, isChecked ->
-            settings.videoInfo = isChecked
-            saveData(player, settings)
-        }
-
-        binding.playerSettingsQualityHeight.setText(
-            (loadData<Int>("maxHeight", toast = false) ?: 480).toString()
-        )
-        binding.playerSettingsQualityHeight.addTextChangedListener {
-            val height = binding.playerSettingsQualityHeight.text.toString().toIntOrNull()
-            saveData("maxHeight", height)
-        }
-        binding.playerSettingsQualityWidth.setText(
-            (loadData<Int>("maxWidth", toast = false) ?: 720).toString()
-        )
-        binding.playerSettingsQualityWidth.addTextChangedListener {
-            val height = binding.playerSettingsQualityWidth.text.toString().toIntOrNull()
-            saveData("maxWidth", height)
-        }
-
 
         val speeds =
             arrayOf(

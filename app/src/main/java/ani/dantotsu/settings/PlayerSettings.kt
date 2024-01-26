@@ -3,8 +3,6 @@ package ani.dantotsu.settings
 import java.io.Serializable
 
 data class PlayerSettings(
-    //Video
-    var videoInfo: Boolean = true,
     var defaultSpeed: Int = 5,
     var cursedSpeeds: Boolean = false,
     var resize: Int = 0,
