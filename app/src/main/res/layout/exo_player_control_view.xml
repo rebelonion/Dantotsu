@@ -180,16 +180,6 @@
                         app:tint="#fff"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
-
-                    <ImageButton
-                        android:id="@id/exo_playback_speed"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:backgroundTint="#00FFFFFF"
-                        android:src="@drawable/ic_round_slow_motion_video_24"
-                        app:tint="#fff"
-                        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
-
                     <ImageButton
                         android:id="@+id/exo_screen"
                         android:layout_width="48dp"
@@ -319,18 +309,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:clipToPadding="false"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:padding="8dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
 
                     <ImageButton
                         android:id="@+id/exo_back"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        android:layout_width="43dp"
+                        android:layout_height="match_parent"
                         android:backgroundTint="#00FFFFFF"
                         android:src="@drawable/ic_round_arrow_back_ios_new_24"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -362,7 +347,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="48dp"
-                            android:alpha="0.66"
+                            android:alpha="0.75"
                             android:fontFamily="@font/poppins"
                             android:singleLine="false"
                             android:textColor="@color/bg_white"
@@ -372,31 +357,52 @@
 
                     </LinearLayout>
 
-                    <ImageButton
-                        android:id="@+id/exo_lock"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:backgroundTint="#00FFFFFF"
-                        app:tint="@color/bg_white"
-                        app:srcCompat="@drawable/ic_round_lock_open_24"
-                        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
-                </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="-6dp">
 
-                <TextView
-                    android:id="@+id/exo_video_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:alpha="0.58"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/bg_white"
-                    android:textSize="12sp"
-                    tools:ignore="TextContrastCheck"
-                    tools:text="720x1080" />
+                            <ImageButton
+                                android:id="@id/exo_playback_speed"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:backgroundTint="#00FFFFFF"
+                                android:src="@drawable/ic_round_slow_motion_video_24"
+                                app:tint="#fff"
+                                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
+                            <ImageButton
+                                android:id="@+id/exo_lock"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:backgroundTint="#00FFFFFF"
+                                app:tint="@color/bg_white"
+                                app:srcCompat="@drawable/ic_round_lock_open_24"
+                                tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/exo_video_info"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="16dp"
+                            android:alpha="0.75"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/bg_white"
+                            android:textSize="12sp"
+                            tools:ignore="TextContrastCheck"
+                            tools:text="720x1080" />
+                    </LinearLayout>
             </LinearLayout>
-
         </FrameLayout>
 
         <LinearLayout

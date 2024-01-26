@@ -1598,7 +1598,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         aspectRatio = Rational(width, height)
 
-        videoInfo.text = "$width x $height"
+        videoInfo.text = "Quality: ${height}p"
 
         if (exoPlayer.duration < playbackPosition)
             exoPlayer.seekTo(0)
