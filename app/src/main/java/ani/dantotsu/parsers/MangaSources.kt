@@ -13,7 +13,8 @@ object MangaSources : MangaReadSources() {
 
     suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>, context: Context) {
         val sharedPrefs = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        pinnedMangaSources = sharedPrefs.getStringSet("pinned_manga_sources", emptySet()) ?: emptySet()
+        pinnedMangaSources =
+            sharedPrefs.getStringSet("pinned_manga_sources", emptySet()) ?: emptySet()
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()
@@ -24,7 +25,10 @@ object MangaSources : MangaReadSources() {
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->
-            list = sortPinnedMangaSources(createParsersFromExtensions(extensions), pinnedMangaSources) + Lazier(
+            list = sortPinnedMangaSources(
+                createParsersFromExtensions(extensions),
+                pinnedMangaSources
+            ) + Lazier(
                 { OfflineMangaParser() },
                 "Downloaded"
             )
@@ -47,7 +51,10 @@ object MangaSources : MangaReadSources() {
         }
     }
 
-    private fun sortPinnedMangaSources(Sources: List<Lazier<BaseParser>>, pinnedMangaSources: Set<String>): List<Lazier<BaseParser>> {
+    private fun sortPinnedMangaSources(
+        Sources: List<Lazier<BaseParser>>,
+        pinnedMangaSources: Set<String>
+    ): List<Lazier<BaseParser>> {
         //find the pinned sources
         val pinnedSources = Sources.filter { pinnedMangaSources.contains(it.name) }
         //find the unpinned sources

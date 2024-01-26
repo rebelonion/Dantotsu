@@ -36,7 +36,10 @@ class AnilistQueries {
         val user = response?.data?.user ?: return false
 
         currContext()?.let {
-            it.getSharedPreferences(it.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
+            it.getSharedPreferences(
+                it.getString(R.string.preference_file_key),
+                Context.MODE_PRIVATE
+            )
                 .edit()
                 .putString("anilist_username", user.name)
                 .apply()

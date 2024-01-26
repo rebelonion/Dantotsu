@@ -17,7 +17,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSearchFilterBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import com.google.android.material.chip.Chip
-import java.util.*
+import java.util.Calendar
 
 class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSearchFilterBinding? = null
@@ -104,7 +104,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                 ArrayAdapter(
                     binding.root.context,
                     R.layout.item_dropdown,
-                    (1970 until Calendar.getInstance().get(Calendar.YEAR) + 2).map { it.toString() }.reversed().toTypedArray()
+                    (1970 until Calendar.getInstance().get(Calendar.YEAR) + 2).map { it.toString() }
+                        .reversed().toTypedArray()
                 )
             )
         }

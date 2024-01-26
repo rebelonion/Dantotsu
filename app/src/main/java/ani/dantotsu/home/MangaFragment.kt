@@ -245,9 +245,16 @@ class MangaFragment : Fragment() {
                     }
                     withContext(Dispatchers.Main) {
                         if (isAdded) {
-                            val sharedPrefs = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                            val sharedPrefs = requireContext().getSharedPreferences(
+                                "Dantotsu",
+                                Context.MODE_PRIVATE
+                            )
                             val isPopularList = sharedPrefs.getBoolean("popular_list", false)
-                            model.loadPopular("MANGA", sort = Anilist.sortBy[1], onList = isPopularList)
+                            model.loadPopular(
+                                "MANGA",
+                                sort = Anilist.sortBy[1],
+                                onList = isPopularList
+                            )
                         }
                         live.postValue(false)
                         _binding?.mangaRefresh?.isRefreshing = false

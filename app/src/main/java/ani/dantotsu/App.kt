@@ -77,7 +77,8 @@ class App : MultiDexApplication() {
                 Firebase.crashlytics.setUserId("$dUsername - $aUsername")
             }
         }
-        FirebaseCrashlytics.getInstance().setCustomKey("device Info", SettingsActivity.getDeviceInfo())
+        FirebaseCrashlytics.getInstance()
+            .setCustomKey("device Info", SettingsActivity.getDeviceInfo())
 
         Injekt.importModule(AppModule(this))
         Injekt.importModule(PreferenceModule(this))

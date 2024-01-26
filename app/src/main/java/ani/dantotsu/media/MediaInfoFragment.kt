@@ -60,7 +60,8 @@ class MediaInfoFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
-        val offline = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("offlineMode", false) || !isOnline(requireContext())
+        val offline = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+            .getBoolean("offlineMode", false) || !isOnline(requireContext())
         binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.visibility = if (loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }
@@ -464,7 +465,7 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bindi.root)
                 }
 
-                if (!media.recommendations.isNullOrEmpty() && !offline ) {
+                if (!media.recommendations.isNullOrEmpty() && !offline) {
                     val bind = ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,

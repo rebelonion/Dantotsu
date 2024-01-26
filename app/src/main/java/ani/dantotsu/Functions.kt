@@ -15,7 +15,6 @@ import android.content.res.Configuration
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
@@ -50,7 +49,6 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.subcriptions.NotificationClickReceiver
-import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
@@ -216,7 +214,11 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
         }
         val typedValue = TypedValue()
         val theme = requireContext().theme
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceInverse, typedValue, true)
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOnSurfaceInverse,
+            typedValue,
+            true
+        )
         window.navigationBarColor = typedValue.data
     }
 

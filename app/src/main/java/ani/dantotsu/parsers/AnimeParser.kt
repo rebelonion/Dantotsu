@@ -11,7 +11,6 @@ import ani.dantotsu.saveData
 import ani.dantotsu.tryWithSuspend
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import kotlin.properties.Delegates
 
 /**
  * An abstract class for creating a new Source

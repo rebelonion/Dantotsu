@@ -45,9 +45,18 @@ class SubtitleDownloader {
             }
 
         //actually downloads lol
-        suspend fun downloadSubtitle(context: Context, url: String, downloadedType: DownloadedType) {
+        suspend fun downloadSubtitle(
+            context: Context,
+            url: String,
+            downloadedType: DownloadedType
+        ) {
             try {
-                val directory = DownloadsManager.getDirectory(context, downloadedType.type, downloadedType.title, downloadedType.chapter)
+                val directory = DownloadsManager.getDirectory(
+                    context,
+                    downloadedType.type,
+                    downloadedType.title,
+                    downloadedType.chapter
+                )
                 if (!directory.exists()) { //just in case
                     directory.mkdirs()
                 }

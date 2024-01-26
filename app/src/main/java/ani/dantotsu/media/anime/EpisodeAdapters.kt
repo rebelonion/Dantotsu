@@ -129,7 +129,7 @@ class EpisodeAdapter(
                 binding.itemEpisodeDesc.visibility =
                     if (ep.desc != null && ep.desc?.trim(' ') != "") View.VISIBLE else View.GONE
                 binding.itemEpisodeDesc.text = ep.desc ?: ""
-                holder.bind(ep.number, ep.downloadProgress , ep.desc)
+                holder.bind(ep.number, ep.downloadProgress, ep.desc)
 
                 if (media.userProgress != null) {
                     if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat()) {
@@ -391,7 +391,8 @@ class EpisodeAdapter(
                 }, 1000)
             } else {
                 binding.itemDownloadStatus.visibility = View.GONE
-                binding.itemEpisodeDesc.visibility = if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
+                binding.itemEpisodeDesc.visibility =
+                    if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
                 // Show download icon
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
                 binding.itemDownload.rotation = 0f

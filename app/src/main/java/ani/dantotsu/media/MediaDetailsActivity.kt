@@ -160,10 +160,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         })
         banner.setOnTouchListener { _, motionEvent -> gestureDetector.onTouchEvent(motionEvent);true }
         if (this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                .getBoolean("incognito", false)) {
+                .getBoolean("incognito", false)
+        ) {
             binding.mediaTitle.text = "    ${media.userPreferredName}"
             binding.incognito.visibility = View.VISIBLE
-        }else {
+        } else {
             binding.mediaTitle.text = media.userPreferredName
         }
         binding.mediaTitle.setOnLongClickListener {

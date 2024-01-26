@@ -126,8 +126,9 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         binding.mangaIncludeList.visibility =
             if (Anilist.userid != null) View.VISIBLE else View.GONE
 
-        binding.mangaIncludeList.isChecked = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("popular_list", true) ?: true
+        binding.mangaIncludeList.isChecked =
+            currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
+                ?.getBoolean("popular_list", true) ?: true
 
         binding.mangaIncludeList.setOnCheckedChangeListener { _, isChecked ->
             onIncludeListClick.invoke(isChecked)

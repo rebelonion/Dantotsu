@@ -13,7 +13,8 @@ object AnimeSources : WatchSources() {
 
     suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>, context: Context) {
         val sharedPrefs = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        pinnedAnimeSources = sharedPrefs.getStringSet("pinned_anime_sources", emptySet()) ?: emptySet()
+        pinnedAnimeSources =
+            sharedPrefs.getStringSet("pinned_anime_sources", emptySet()) ?: emptySet()
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()
@@ -24,7 +25,10 @@ object AnimeSources : WatchSources() {
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->
-            list = sortPinnedAnimeSources(createParsersFromExtensions(extensions), pinnedAnimeSources)  + Lazier(
+            list = sortPinnedAnimeSources(
+                createParsersFromExtensions(extensions),
+                pinnedAnimeSources
+            ) + Lazier(
                 { OfflineAnimeParser() },
                 "Downloaded"
             )
@@ -34,7 +38,7 @@ object AnimeSources : WatchSources() {
     fun performReorderAnimeSources() {
         //remove the downloaded source from the list to avoid duplicates
         list = list.filter { it.name != "Downloaded" }
-        list = sortPinnedAnimeSources(list, pinnedAnimeSources)  + Lazier(
+        list = sortPinnedAnimeSources(list, pinnedAnimeSources) + Lazier(
             { OfflineAnimeParser() },
             "Downloaded"
         )
@@ -47,7 +51,10 @@ object AnimeSources : WatchSources() {
         }
     }
 
-    private fun sortPinnedAnimeSources(Sources: List<Lazier<BaseParser>>, pinnedAnimeSources: Set<String>): List<Lazier<BaseParser>> {
+    private fun sortPinnedAnimeSources(
+        Sources: List<Lazier<BaseParser>>,
+        pinnedAnimeSources: Set<String>
+    ): List<Lazier<BaseParser>> {
         //find the pinned sources
         val pinnedSources = Sources.filter { pinnedAnimeSources.contains(it.name) }
         //find the unpinned sources

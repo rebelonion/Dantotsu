@@ -1,11 +1,9 @@
 package ani.dantotsu.download.anime
 
 
-import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -16,7 +14,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.LayoutAnimationController
-import android.view.animation.OvershootInterpolator
 import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
 import android.widget.GridView
@@ -48,7 +45,6 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
-import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
@@ -64,8 +60,6 @@ import eu.kanade.tachiyomi.source.model.SChapterImpl
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
 
 class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
 
@@ -73,7 +67,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     private var downloads: List<OfflineAnimeModel> = listOf()
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineAnimeAdapter
-    private lateinit var total : TextView
+    private lateinit var total: TextView
     private var uiSettings: UserInterfaceSettings =
         loadData("ui_settings") ?: UserInterfaceSettings()
 
@@ -162,7 +156,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             grid()
         }
 
-        gridView = if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
+        gridView =
+            if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
         total = view.findViewById(R.id.total)
         grid()
         return view
@@ -198,7 +193,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         requireActivity(),
                         Pair.create(
-                            gridView.getChildAt(position).findViewById<ImageView>(R.id.itemCompactImage),
+                            gridView.getChildAt(position)
+                                .findViewById<ImageView>(R.id.itemCompactImage),
                             ViewCompat.getTransitionName(requireActivity().findViewById(R.id.itemCompactImage))
                         ),
                     ).toBundle()

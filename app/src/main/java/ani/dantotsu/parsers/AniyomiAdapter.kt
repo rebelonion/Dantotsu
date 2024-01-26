@@ -86,7 +86,10 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             ?: return false
         currContext()?.let { context ->
             val sharedPreferences =
-                context.getSharedPreferences(configurableSource.getPreferenceKey(), Context.MODE_PRIVATE)
+                context.getSharedPreferences(
+                    configurableSource.getPreferenceKey(),
+                    Context.MODE_PRIVATE
+                )
             sharedPreferences.all.filterValues { AnimeNameAdapter.getSubDub(it.toString()) != AnimeNameAdapter.Companion.SubDubType.NULL }
                 .forEach { value ->
                     return when (AnimeNameAdapter.getSubDub(value.value.toString())) {
@@ -108,7 +111,10 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         }
         currContext()?.let { context ->
             val sharedPreferences =
-                context.getSharedPreferences(configurableSource.getPreferenceKey(), Context.MODE_PRIVATE)
+                context.getSharedPreferences(
+                    configurableSource.getPreferenceKey(),
+                    Context.MODE_PRIVATE
+                )
             sharedPreferences.all.filterValues { AnimeNameAdapter.getSubDub(it.toString()) != AnimeNameAdapter.Companion.SubDubType.NULL }
                 .forEach { value ->
                     val setValue = AnimeNameAdapter.setSubDub(value.value.toString(), type)
@@ -118,14 +124,23 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                 }
         }
     }
+
     override fun isDubAvailableSeparately(sourceLang: Int?): Boolean {
         val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
             ?: return false
         currContext()?.let { context ->
             logger("isDubAvailableSeparately: ${configurableSource.getPreferenceKey()}")
             val sharedPreferences =
-                context.getSharedPreferences(configurableSource.getPreferenceKey(), Context.MODE_PRIVATE)
-            sharedPreferences.all.filterValues { AnimeNameAdapter.setSubDub(it.toString(), AnimeNameAdapter.Companion.SubDubType.NULL) != null }
+                context.getSharedPreferences(
+                    configurableSource.getPreferenceKey(),
+                    Context.MODE_PRIVATE
+                )
+            sharedPreferences.all.filterValues {
+                AnimeNameAdapter.setSubDub(
+                    it.toString(),
+                    AnimeNameAdapter.Companion.SubDubType.NULL
+                ) != null
+            }
                 .forEach { _ -> return true }
         }
         return false
@@ -173,20 +188,20 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
                 seasonGroups.keys.sortedBy { it.toInt() }
                     .flatMap { season ->
-                    seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
-                        if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
-                            val potentialNumber =
-                                AnimeNameAdapter.findEpisodeNumber(episode.name)
-                            if (potentialNumber != null) {
-                                episode.episode_number = potentialNumber
-                            } else {
-                                episode.episode_number = episodeCounter
+                        seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
+                            if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
+                                val potentialNumber =
+                                    AnimeNameAdapter.findEpisodeNumber(episode.name)
+                                if (potentialNumber != null) {
+                                    episode.episode_number = potentialNumber
+                                } else {
+                                    episode.episode_number = episodeCounter
+                                }
+                                episodeCounter++
                             }
-                            episodeCounter++
-                        }
-                        episode
-                    } ?: emptyList()
-                }
+                            episode
+                        } ?: emptyList()
+                    }
             }
             return sortedEpisodes.map { SEpisodeToEpisode(it) }
         } catch (e: Exception) {
@@ -250,7 +265,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } catch (e: CloudflareBypassException) {
             logger("Exception in search: $e")
             withContext(Dispatchers.Main) {
-                snackString( "Failed to bypass Cloudflare")
+                snackString("Failed to bypass Cloudflare")
             }
             emptyList()
         } catch (e: Exception) {
