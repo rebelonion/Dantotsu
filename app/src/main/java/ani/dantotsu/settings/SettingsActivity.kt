@@ -190,30 +190,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 .show(this, tag)
         }
 
-        val animeSource = getSharedPreferences(
-            "Dantotsu",
-            Context.MODE_PRIVATE
-        ).getInt("settings_def_anime_source_s_r", 0)
-        if (AnimeSources.names.isNotEmpty() && animeSource in 0 until AnimeSources.names.size) {
-            binding.animeSource.setText(AnimeSources.names[animeSource], false)
-
-        }
-
-        binding.animeSource.setAdapter(
-            ArrayAdapter(
-                this,
-                R.layout.item_dropdown,
-                AnimeSources.names
-            )
-        )
-
-        binding.animeSource.setOnItemClickListener { _, _, i, _ ->
-            //saveData("settings_def_anime_source_s", i)
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putInt("settings_def_anime_source_s_r", i).apply()
-            binding.animeSource.clearFocus()
-        }
-
         binding.settingsPinnedAnimeSources.setOnClickListener {
             val animeSourcesWithoutDownloadsSource =
                 AnimeSources.list.filter { it.name != "Downloaded" }
@@ -238,20 +214,10 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     }
                 }
                 .setPositiveButton("OK") { dialog, _ ->
-                    val oldDefaultSourceIndex = getSharedPreferences(
-                        "Dantotsu",
-                        Context.MODE_PRIVATE
-                    ).getInt("settings_def_anime_source_s_r", 0)
-                    val oldName =
-                        if (oldDefaultSourceIndex >= AnimeSources.names.size) "" else AnimeSources.names[oldDefaultSourceIndex]
                     getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                         .putStringSet("pinned_anime_sources", pinnedSources).apply()
                     AnimeSources.pinnedAnimeSources = pinnedSources
                     AnimeSources.performReorderAnimeSources()
-                    val newDefaultSourceIndex =
-                        if (oldName == "") 0 else AnimeSources.names.indexOf(oldName)
-                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                        .putInt("settings_def_anime_source_s_r", newDefaultSourceIndex).apply()
                     dialog.dismiss()
                 }
                 .create()
@@ -445,32 +411,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             saveData("settings_prefer_dub", isChecked)
         }
 
-        //val mangaSource = loadData<Int>("settings_def_manga_source_s")?.let { if (it >= MangaSources.names.size) 0 else it } ?: 0
-        val mangaSource = getSharedPreferences(
-            "Dantotsu",
-            Context.MODE_PRIVATE
-        ).getInt("settings_def_manga_source_s_r", 0)
-        if (MangaSources.names.isNotEmpty() && mangaSource in 0 until MangaSources.names.size) {
-            binding.mangaSource.setText(MangaSources.names[mangaSource], false)
-        }
-
-        // Set up the dropdown adapter.
-        binding.mangaSource.setAdapter(
-            ArrayAdapter(
-                this,
-                R.layout.item_dropdown,
-                MangaSources.names
-            )
-        )
-
-        // Set up the item click listener for the dropdown.
-        binding.mangaSource.setOnItemClickListener { _, _, i, _ ->
-            //saveData("settings_def_manga_source_s", i)
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putInt("settings_def_manga_source_s_r", i).apply()
-            binding.mangaSource.clearFocus()
-        }
-
         binding.settingsPinnedMangaSources.setOnClickListener {
             val mangaSourcesWithoutDownloadsSource =
                 MangaSources.list.filter { it.name != "Downloaded" }
@@ -495,20 +435,10 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     }
                 }
                 .setPositiveButton("OK") { dialog, _ ->
-                    val oldDefaultSourceIndex = getSharedPreferences(
-                        "Dantotsu",
-                        Context.MODE_PRIVATE
-                    ).getInt("settings_def_manga_source_s_r", 0)
-                    val oldName =
-                        if (oldDefaultSourceIndex >= MangaSources.names.size) "" else MangaSources.names[oldDefaultSourceIndex]
                     getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
                         .putStringSet("pinned_manga_sources", pinnedSources).apply()
                     MangaSources.pinnedMangaSources = pinnedSources
                     MangaSources.performReorderMangaSources()
-                    val newDefaultSourceIndex =
-                        if (oldName == "") 0 else MangaSources.names.indexOf(oldName)
-                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                        .putInt("settings_def_manga_source_s_r", newDefaultSourceIndex).apply()
                     dialog.dismiss()
                 }
                 .create()

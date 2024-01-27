@@ -3,6 +3,7 @@ package ani.dantotsu.home
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -38,6 +39,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import kotlin.math.max
 import kotlin.math.min
 
@@ -242,23 +245,11 @@ class MangaFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending()
                         model.loadTrendingNovel()
+                        model.loadPopular("MANGA", sort = Anilist.sortBy[1], onList = Injekt.get<SharedPreferences>()
+                            .getBoolean("popular_list", false) )
                     }
-                    withContext(Dispatchers.Main) {
-                        if (isAdded) {
-                            val sharedPrefs = requireContext().getSharedPreferences(
-                                "Dantotsu",
-                                Context.MODE_PRIVATE
-                            )
-                            val isPopularList = sharedPrefs.getBoolean("popular_list", false)
-                            model.loadPopular(
-                                "MANGA",
-                                sort = Anilist.sortBy[1],
-                                onList = isPopularList
-                            )
-                        }
-                        live.postValue(false)
-                        _binding?.mangaRefresh?.isRefreshing = false
-                    }
+                    live.postValue(false)
+                    _binding?.mangaRefresh?.isRefreshing = false
                 }
             }
         }

@@ -1134,40 +1134,6 @@
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.58"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="@string/default_source" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:hintAnimationEnabled="true"
-                    app:startIconDrawable="@drawable/ic_round_source_24">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/animeSource"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_bold"
-                        android:freezesText="false"
-                        android:inputType="none"
-                        android:padding="8dp"
-                        android:text="@string/watch"
-                        android:textAllCaps="true"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="14sp"
-                        tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-                </com.google.android.material.textfield.TextInputLayout>
-
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -1373,40 +1339,6 @@
                     android:textColor="?attr/colorSecondary"
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.58"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="@string/default_source" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:hintAnimationEnabled="true"
-                    app:startIconDrawable="@drawable/ic_round_source_24">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/mangaSource"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_bold"
-                        android:freezesText="false"
-                        android:inputType="none"
-                        android:padding="8dp"
-                        android:text="@string/read"
-                        android:textAllCaps="true"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="14sp"
-                        tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-                </com.google.android.material.textfield.TextInputLayout>
 
                 <View
                     android:layout_width="match_parent"

@@ -27,15 +27,8 @@ class SubscriptionHelper {
             isAdult: Boolean,
             isAnime: Boolean
         ): Selected {
-            val sharedPreferences = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
             val data = loadData<Selected>("${mediaId}-select", context) ?: Selected().let {
-                it.sourceIndex =
-                    if (isAdult) 0
-                    else if (isAnime) {
-                        sharedPreferences.getInt("settings_def_anime_source_s_r", 0)
-                    } else {
-                        sharedPreferences.getInt("settings_def_manga_source_s_r", 0)
-                    }
+                it.sourceIndex = 0
                 it.preferDub = loadData("settings_prefer_dub", context) ?: false
                 it
             }
