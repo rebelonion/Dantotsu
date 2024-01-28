@@ -153,7 +153,7 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/animeSourceDubbed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -168,8 +168,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginStart="-8dp"
+                    android:layout_marginStart="-10dp"
                     android:elegantTextHeight="true"
+                    android:textSize="14sp"
+                    android:paddingLeft="7dp"
                     android:ellipsize="marquee"
                     android:fontFamily="@font/poppins_bold"
                     android:marqueeRepeatLimit="marquee_forever"
