@@ -56,7 +56,9 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
     override fun onBindViewHolder(holder: SearchHeaderViewHolder, position: Int) {
         binding = holder.binding
 
-        searchHistoryAdapter = SearchHistoryAdapter(type) { s -> logger(s) }
+        searchHistoryAdapter = SearchHistoryAdapter(type) {
+            binding.searchBarText.setText(it)
+        }
         binding.searchHistoryList.layoutManager = LinearLayoutManager(binding.root.context)
         binding.searchHistoryList.adapter = searchHistoryAdapter
 
