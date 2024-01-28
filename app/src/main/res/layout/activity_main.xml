@@ -36,6 +36,7 @@
             android:layout_margin="16dp"
             android:translationZ="7dp"
             app:cardBackgroundColor="@color/bg_opp"
+            android:visibility="gone"
             app:cardCornerRadius="16dp">
 
             <androidx.constraintlayout.utils.widget.ImageFilterView

@@ -2,6 +2,7 @@ package ani.dantotsu.media
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
@@ -22,16 +25,26 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemSearchHeaderBinding
+import ani.dantotsu.logger
+import ani.dantotsu.others.SharedPreferenceStringSetLiveData
 import ani.dantotsu.saveData
 import com.google.android.material.checkbox.MaterialCheckBox.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 
 
-class SearchAdapter(private val activity: SearchActivity) :
+class SearchAdapter(private val activity: SearchActivity, private val type: String) :
     RecyclerView.Adapter<SearchAdapter.SearchHeaderViewHolder>() {
     private val itemViewType = 6969
     var search: Runnable? = null
     var requestFocus: Runnable? = null
     private var textWatcher: TextWatcher? = null
+    private lateinit var searchHistoryAdapter: SearchHistoryAdapter
+    private lateinit var binding: ItemSearchHeaderBinding
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHeaderViewHolder {
         val binding =
@@ -41,8 +54,11 @@ class SearchAdapter(private val activity: SearchActivity) :
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: SearchHeaderViewHolder, position: Int) {
-        val binding = holder.binding
+        binding = holder.binding
 
+        searchHistoryAdapter = SearchHistoryAdapter(type) { s -> logger(s) }
+        binding.searchHistoryList.layoutManager = LinearLayoutManager(binding.root.context)
+        binding.searchHistoryList.adapter = searchHistoryAdapter
 
         val imm: InputMethodManager =
             activity.getSystemService(AppCompatActivity.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -104,7 +120,18 @@ class SearchAdapter(private val activity: SearchActivity) :
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                searchTitle()
+                if (s.toString().isBlank()) {
+                    activity.emptyMediaAdapter()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        delay(200)
+                        activity.runOnUiThread {
+                            setHistoryVisibility(true)
+                        }
+                    }
+                } else {
+                    setHistoryVisibility(false)
+                    searchTitle()
+                }
             }
         }
         binding.searchBarText.addTextChangedListener(textWatcher)
@@ -177,6 +204,40 @@ class SearchAdapter(private val activity: SearchActivity) :
         requestFocus = Runnable { binding.searchBarText.requestFocus() }
     }
 
+    fun setHistoryVisibility(visible: Boolean) {
+        if (visible) {
+            binding.searchResultLayout.startAnimation(fadeOutAnimation())
+            binding.searchHistoryList.startAnimation(fadeInAnimation())
+            binding.searchResultLayout.visibility = View.GONE
+            binding.searchHistoryList.visibility = View.VISIBLE
+        } else {
+            if (binding.searchResultLayout.visibility != View.VISIBLE) {
+                binding.searchResultLayout.startAnimation(fadeInAnimation())
+                binding.searchHistoryList.startAnimation(fadeOutAnimation())
+            }
+            binding.searchResultLayout.visibility = View.VISIBLE
+            binding.searchHistoryList.visibility = View.GONE
+        }
+    }
+
+    private fun fadeInAnimation(): Animation {
+        return AlphaAnimation(0f, 1f).apply {
+            duration = 150
+            fillAfter = true
+        }
+    }
+
+    private fun fadeOutAnimation(): Animation {
+        return AlphaAnimation(1f, 0f).apply {
+            duration = 150
+            fillAfter = true
+        }
+    }
+
+
+    fun addHistory() {
+        searchHistoryAdapter.add(binding.searchBarText.text.toString())
+    }
 
     override fun getItemCount(): Int = 1
 
