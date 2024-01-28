@@ -156,8 +156,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     fun emptyMediaAdapter() {
+        searchTimer.cancel()
+        searchTimer.purge()
         mediaAdaptor.notifyItemRangeRemoved(0, model.searchResults.results.size)
         model.searchResults.results.clear()
+        progressAdapter.bar?.visibility = View.GONE
     }
 
     private var searchTimer = Timer()
