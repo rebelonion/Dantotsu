@@ -161,7 +161,7 @@
                     android:padding="12dp"
                     app:cornerRadius="0dp"
                     app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
+                    app:useMaterialThemeColors="true" />
 
                 <TextView
                     android:id="@+id/animeSourceDubbedText"
