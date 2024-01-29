@@ -54,7 +54,7 @@ jobs:
       shell: bash
       run: |
         contentbody=$( jq -Rsa . <<< "${{ github.event.head_commit.message }}" )
-        curl -F "payload_json={\"content\":\" Debug-Build: <@719439449423085569> **${{ env.VERSION }}**\n\n${contentbody:1:-1}\"}" -F "dantotsu_debug=@app/build/outputs/apk/debug/app-debug.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "payload_json={\"content\":\" Debug-Build: **${{ env.VERSION }}**\n\n${contentbody:1:-1}\"}" -F "dantotsu_debug=@app/build/outputs/apk/debug/app-debug.apk" ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Delete Old Pre-Releases
       id: delete-pre-releases
