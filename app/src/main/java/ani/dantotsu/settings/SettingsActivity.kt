@@ -208,14 +208,14 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         val managers = arrayOf("Default", "1DM", "ADM")
         val downloadManagerDialog =
             AlertDialog.Builder(this, R.style.DialogTheme).setTitle("Download Manager")
-        var downloadManager = loadData<Int>("settings_download_manager") ?: 0
+        var downloadManager = PrefWrapper.getVal(PrefName.DownloadManager, 0)
         binding.settingsDownloadManager.setOnClickListener {
             val dialog = downloadManagerDialog.setSingleChoiceItems(
                 managers,
                 downloadManager
             ) { dialog, count ->
                 downloadManager = count
-                saveData("settings_download_manager", downloadManager)
+                PrefWrapper.setVal(PrefName.DownloadManager, downloadManager)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
@@ -287,13 +287,13 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
         }
 
-        binding.skipExtensionIcons.isChecked = loadData("skip_extension_icons") ?: false
+        binding.skipExtensionIcons.isChecked = PrefWrapper.getVal(PrefName.SkipExtensionIcons, false)
         binding.skipExtensionIcons.setOnCheckedChangeListener { _, isChecked ->
-            saveData("skip_extension_icons", isChecked)
+            PrefWrapper.getVal(PrefName.SkipExtensionIcons, isChecked)
         }
-        binding.NSFWExtension.isChecked = loadData("NSFWExtension") ?: true
+        binding.NSFWExtension.isChecked = PrefWrapper.getVal(PrefName.NSFWExtension, true)
         binding.NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
-            saveData("NSFWExtension", isChecked)
+            PrefWrapper.setVal(PrefName.NSFWExtension,isChecked)
 
         }
 
@@ -348,37 +348,37 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             Toast.makeText(this, "Restart app to apply changes", Toast.LENGTH_LONG).show()
         }
 
-        binding.settingsDownloadInSd.isChecked = loadData("sd_dl") ?: false
+        binding.settingsDownloadInSd.isChecked = PrefWrapper.getVal(PrefName.SdDl, false)
         binding.settingsDownloadInSd.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 val arrayOfFiles = ContextCompat.getExternalFilesDirs(this, null)
                 if (arrayOfFiles.size > 1 && arrayOfFiles[1] != null) {
-                    saveData("sd_dl", true)
+                    PrefWrapper.setVal(PrefName.SdDl, true)
                 } else {
                     binding.settingsDownloadInSd.isChecked = false
-                    saveData("sd_dl", false)
+                    PrefWrapper.setVal(PrefName.SdDl, true)
                     snackString(getString(R.string.noSdFound))
                 }
-            } else saveData("sd_dl", false)
+            } else PrefWrapper.setVal(PrefName.SdDl, true)
         }
 
-        binding.settingsContinueMedia.isChecked = loadData("continue_media") ?: true
+        binding.settingsContinueMedia.isChecked = PrefWrapper.getVal(PrefName.ContinueMedia, true)
         binding.settingsContinueMedia.setOnCheckedChangeListener { _, isChecked ->
-            saveData("continue_media", isChecked)
+            PrefWrapper.setVal(PrefName.ContinueMedia, isChecked)
         }
 
-        binding.settingsRecentlyListOnly.isChecked = loadData("recently_list_only") ?: false
+        binding.settingsRecentlyListOnly.isChecked = PrefWrapper.getVal(PrefName.RecentlyListOnly, false)
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
-            saveData("recently_list_only", isChecked)
+            PrefWrapper.setVal(PrefName.RecentlyListOnly, isChecked)
         }
         binding.settingsShareUsername.isChecked = PrefWrapper.getVal(PrefName.SharedUserID, true)
         binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
             PrefWrapper.setVal(PrefName.SharedUserID, isChecked)
         }
 
-        binding.settingsPreferDub.isChecked = loadData("settings_prefer_dub") ?: false
+        binding.settingsPreferDub.isChecked = PrefWrapper.getVal(PrefName.SettingsPreferDub, false)
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
-            saveData("settings_prefer_dub", isChecked)
+            PrefWrapper.setVal(PrefName.SettingsPreferDub, isChecked)
         }
 
         binding.settingsPinnedMangaSources.setOnClickListener {
@@ -599,7 +599,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
         }
 
-        var curTime = loadData<Int>("subscriptions_time_s") ?: defaultTime
+        var curTime = PrefWrapper.getVal(PrefName.SubscriptionsTimeS, defaultTime)
         val timeNames = timeMinutes.map {
             val mins = it % 60
             val hours = it / 60
@@ -615,7 +615,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 curTime = i
                 binding.settingsSubscriptionsTime.text =
                     getString(R.string.subscriptions_checking_time_s, timeNames[i])
-                saveData("subscriptions_time_s", curTime)
+                PrefWrapper.setVal(PrefName.SubscriptionsTimeS, curTime)
                 dialog.dismiss()
                 startSubscription(true)
             }.show()
@@ -628,9 +628,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         binding.settingsNotificationsCheckingSubscriptions.isChecked =
-            loadData("subscription_checking_notifications") ?: true
+            PrefWrapper.getVal(PrefName.SubscriptionCheckingNotifications, true)
         binding.settingsNotificationsCheckingSubscriptions.setOnCheckedChangeListener { _, isChecked ->
-            saveData("subscription_checking_notifications", isChecked)
+            PrefWrapper.setVal(PrefName.SubscriptionCheckingNotifications, isChecked)
             if (isChecked)
                 Notifications.createChannel(
                     this,
@@ -648,9 +648,10 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
 
-        binding.settingsCheckUpdate.isChecked = loadData("check_update") ?: true
+        binding.settingsCheckUpdate.isChecked = PrefWrapper.getVal(PrefName.CheckUpdate, true)
         binding.settingsCheckUpdate.setOnCheckedChangeListener { _, isChecked ->
             saveData("check_update", isChecked)
+            PrefWrapper.setVal(PrefName.CheckUpdate, isChecked)
             if (!isChecked) {
                 snackString(getString(R.string.long_click_to_check_update))
             }

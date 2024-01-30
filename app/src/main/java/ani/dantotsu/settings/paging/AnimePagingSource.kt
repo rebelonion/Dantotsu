@@ -19,8 +19,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemExtensionAllBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -92,7 +93,7 @@ class AnimeExtensionPagingSource(
         val availableExtensions =
             availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
         val query = searchQuery
-        val isNsfwEnabled: Boolean = loadData("NSFWExtension") ?: true
+        val isNsfwEnabled: Boolean = PrefWrapper.getVal(PrefName.NSFWExtension,true)
 
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
@@ -126,7 +127,7 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
         DIFF_CALLBACK
     ) {
 
-    private val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons = PrefWrapper.getVal(PrefName.SkipExtensionIcons, false)
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<AnimeExtension.Available>() {

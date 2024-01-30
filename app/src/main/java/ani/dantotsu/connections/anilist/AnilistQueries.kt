@@ -719,7 +719,7 @@ Page(page:$page,perPage:50) {
         if (smaller) {
             val response = execute()?.airingSchedules ?: return null
             val idArr = mutableListOf<Int>()
-            val listOnly = loadData("recently_list_only") ?: false
+            val listOnly = PrefWrapper.getVal(PrefName.RecentlyListOnly, false)
             return response.mapNotNull { i ->
                 i.media?.let {
                     if (!idArr.contains(it.id))

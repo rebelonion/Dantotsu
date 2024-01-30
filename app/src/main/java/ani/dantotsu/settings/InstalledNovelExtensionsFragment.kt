@@ -24,6 +24,8 @@ import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.parsers.novel.NovelExtensionManager
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -37,7 +39,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentNovelExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
-    val skipIcons = loadData("skip_extension_icons") ?: false
+    val skipIcons = PrefWrapper.getVal(PrefName.SkipExtensionIcons, false)
     private val novelExtensionManager: NovelExtensionManager = Injekt.get()
     private val extensionsAdapter = NovelExtensionsAdapter(
         { pkg ->

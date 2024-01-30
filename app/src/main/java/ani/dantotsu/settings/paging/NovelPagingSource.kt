@@ -22,6 +22,8 @@ import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.parsers.novel.NovelExtensionManager
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -93,7 +95,7 @@ class NovelExtensionPagingSource(
         val availableExtensions =
             availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
         val query = searchQuery
-        val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
+        val isNsfwEnabled: Boolean = PrefWrapper.getVal(PrefName.NSFWExtension,true)
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
@@ -130,7 +132,7 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
         DIFF_CALLBACK
     ) {
 
-    private val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons = PrefWrapper.getVal(PrefName.SkipExtensionIcons, false)
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NovelExtension.Available>() {

@@ -299,7 +299,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (loadData<Boolean>("allow_opening_links", this) != true) {
+                    if (!PrefWrapper.getVal(PrefName.AllowOpeningLinks, true)) {
                         CustomBottomDialog.newInstance().apply {
                             title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
                             val md = "Open settings & click +Add Links & select Anilist & Mal urls"
@@ -311,18 +311,19 @@ class MainActivity : AppCompatActivity() {
                             })
 
                             setNegativeButton(this@MainActivity.getString(R.string.no)) {
-                                saveData("allow_opening_links", true, this@MainActivity)
+                                PrefWrapper.setVal(PrefName.AllowOpeningLinks, true)
                                 dismiss()
                             }
 
                             setPositiveButton(this@MainActivity.getString(R.string.yes)) {
-                                saveData("allow_opening_links", true, this@MainActivity)
+                                PrefWrapper.setVal(PrefName.AllowOpeningLinks, true)
                                 tryWith(true) {
                                     startActivity(
                                         Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
                                             .setData(Uri.parse("package:$packageName"))
                                     )
                                 }
+                                dismiss()
                             }
                         }.show(supportFragmentManager, "dialog")
                     }

@@ -13,6 +13,16 @@ enum class PrefName(val data: Pref) {
     UseSourceTheme(Pref(Location.General, Boolean::class)),
     UseMaterialYou(Pref(Location.General, Boolean::class)),
     Theme(Pref(Location.General, String::class)),
+    DownloadManager(Pref(Location.General, Int::class)),
+    NSFWExtension(Pref(Location.General, Boolean::class)),
+    SkipExtensionIcons(Pref(Location.General, Boolean::class)),
+    SdDl(Pref(Location.General, Boolean::class)),
+    ContinueMedia(Pref(Location.General, Boolean::class)),
+    RecentlyListOnly(Pref(Location.General, Boolean::class)),
+    SettingsPreferDub(Pref(Location.General, Boolean::class)),
+    SubscriptionsTimeS(Pref(Location.General, Int::class)),
+    SubscriptionCheckingNotifications(Pref(Location.General, Boolean::class)),
+    CheckUpdate(Pref(Location.General, Boolean::class)),
 
     //Anime
     AnimeListSortOrder(Pref(Location.Anime, String::class)),
@@ -26,13 +36,14 @@ enum class PrefName(val data: Pref) {
     PopularMangaList(Pref(Location.Manga, Boolean::class)),
     MangaSearchHistory(Pref(Location.Manga, Set::class)),
 
-
     //Irrelevant
     Incognito(Pref(Location.Irrelevant, Boolean::class)),
     OfflineMode(Pref(Location.Irrelevant, Boolean::class)),
     DownloadsKeys(Pref(Location.Irrelevant, String::class)),
     NovelLastExtCheck(Pref(Location.Irrelevant, Long::class)),
     SomethingSpecial(Pref(Location.Irrelevant, Boolean::class)),
+    AllowOpeningLinks(Pref(Location.Irrelevant, Boolean::class)),
+    SearchStyle(Pref(Location.Irrelevant, Int::class)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class)),

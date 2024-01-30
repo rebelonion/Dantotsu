@@ -7,8 +7,9 @@ import android.content.Context
 import android.content.Intent
 import ani.dantotsu.currContext
 import ani.dantotsu.isOnline
-import ani.dantotsu.loadData
 import ani.dantotsu.logger
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
@@ -43,7 +44,7 @@ class AlarmReceiver : BroadcastReceiver() {
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val curTime = loadData<Int>("subscriptions_time_s", context) ?: defaultTime
+            val curTime = PrefWrapper.getVal(PrefName.SubscriptionsTimeS, defaultTime)
 
             if (timeMinutes[curTime] > 0)
                 alarmManager.setRepeating(
