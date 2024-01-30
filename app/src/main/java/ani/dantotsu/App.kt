@@ -14,6 +14,8 @@ import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.parsers.NovelSources
 import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.SettingsActivity
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.crashlytics.ktx.crashlytics
@@ -51,8 +53,10 @@ class App : MultiDexApplication() {
 
     override fun onCreate() {
         super.onCreate()
-        val sharedPreferences = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        val useMaterialYou = sharedPreferences.getBoolean("use_material_you", false)
+
+        PrefWrapper.init(this)
+
+        val useMaterialYou = PrefWrapper.getVal(PrefName.UseMaterialYou, false)
         if (useMaterialYou) {
             DynamicColors.applyToActivitiesIfAvailable(this)
             //TODO: HarmonizedColors
@@ -60,19 +64,10 @@ class App : MultiDexApplication() {
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
         Firebase.crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)
-        getSharedPreferences(
-            getString(R.string.preference_file_key),
-            Context.MODE_PRIVATE
-        ).getBoolean("shared_user_id", true).let {
+        PrefWrapper.getVal(PrefName.SharedUserID, true).let {
             if (!it) return@let
-            val dUsername = getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE
-            ).getString("discord_username", null)
-            val aUsername = getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE
-            ).getString("anilist_username", null)
+            val dUsername = PrefWrapper.getVal(PrefName.DiscordUserName, null as String?)
+            val aUsername = PrefWrapper.getVal(PrefName.AnilistUserName, null as String?)
             if (dUsername != null || aUsername != null) {
                 Firebase.crashlytics.setUserId("$dUsername - $aUsername")
             }
@@ -104,7 +99,7 @@ class App : MultiDexApplication() {
         mangaScope.launch {
             mangaExtensionManager.findAvailableExtensions()
             logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
-            MangaSources.init(mangaExtensionManager.installedExtensionsFlow, this@App)
+            MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
         val novelScope = CoroutineScope(Dispatchers.Default)
         novelScope.launch {

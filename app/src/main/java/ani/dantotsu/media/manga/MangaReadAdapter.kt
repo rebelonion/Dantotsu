@@ -28,6 +28,8 @@ import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
@@ -69,11 +71,7 @@ class MangaReadAdapter(
                 null
             )
         }
-        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences(
-                "Dantotsu",
-                Context.MODE_PRIVATE
-            )
-                ?.getBoolean("offlineMode", false) == true
+        val offline = if (!isOnline(binding.root.context) || PrefWrapper.getVal(PrefName.OfflineMode, false)
         ) View.GONE else View.VISIBLE
 
         binding.animeSourceNameContainer.visibility = offline

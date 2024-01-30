@@ -17,7 +17,6 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.saveData
@@ -39,7 +38,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityPlayerSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)

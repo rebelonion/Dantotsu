@@ -1,7 +1,6 @@
 package ani.dantotsu.connections.anilist
 
 import android.app.Activity
-import android.content.Context
 import ani.dantotsu.R
 import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
@@ -20,6 +19,8 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.Studio
 import ani.dantotsu.others.MalScraper
 import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.snackString
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -35,15 +36,7 @@ class AnilistQueries {
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
-        currContext()?.let {
-            it.getSharedPreferences(
-                it.getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE
-            )
-                .edit()
-                .putString("anilist_username", user.name)
-                .apply()
-        }
+        PrefWrapper.setVal(PrefName.AnilistUserName, user.name)
 
         Anilist.userid = user.id
         Anilist.username = user.name
@@ -424,9 +417,9 @@ class AnilistQueries {
         sorted["Favourites"]?.sortWith(compareBy { it.userFavOrder })
 
         sorted["All"] = all
-        val listsort = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getString("sort_order", "score")
-        val sort = listsort ?: sortOrder ?: options?.rowOrder
+        val listSort = if (anime) PrefWrapper.getVal(PrefName.AnimeListSortOrder, "score")
+        else PrefWrapper.getVal(PrefName.MangaListSortOrder, "score")
+        val sort = listSort ?: sortOrder ?: options?.rowOrder
         for (i in sorted.keys) {
             when (sort) {
                 "score" -> sorted[i]?.sortWith { b, a ->

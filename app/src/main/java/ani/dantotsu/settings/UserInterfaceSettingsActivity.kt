@@ -11,7 +11,6 @@ import ani.dantotsu.databinding.ActivityUserInterfaceSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.saveData
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -22,7 +21,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
     private val ui = "ui_settings"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityUserInterfaceSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)

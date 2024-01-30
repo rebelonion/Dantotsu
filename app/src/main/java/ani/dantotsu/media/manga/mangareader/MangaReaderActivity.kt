@@ -3,7 +3,6 @@ package ani.dantotsu.media.manga.mangareader
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -41,7 +40,6 @@ import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.media.manga.MangaNameAdapter
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaImage
 import ani.dantotsu.parsers.MangaSources
@@ -51,6 +49,8 @@ import ani.dantotsu.settings.CurrentReaderSettings.DualPageModes.*
 import ani.dantotsu.settings.CurrentReaderSettings.Layouts.*
 import ani.dantotsu.settings.ReaderSettings
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.themes.ThemeManager
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
@@ -138,7 +138,7 @@ class MangaReaderActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityMangaReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -220,8 +220,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     val scope = lifecycleScope
                     scope.launch(Dispatchers.IO) {
                         mangaSources.init(
-                            Injekt.get<MangaExtensionManager>().installedExtensionsFlow,
-                            this@MangaReaderActivity
+                            Injekt.get<MangaExtensionManager>().installedExtensionsFlow
                         )
                     }
                     model.mangaReadSources = mangaSources
@@ -321,8 +320,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 applySettings()
                 val context = this
-                val incognito = context.getSharedPreferences("Dantotsu", 0)
-                    ?.getBoolean("incognito", false) ?: false
+                val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
                 if (isOnline(context) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
                         val presence = RPC.createPresence(
@@ -855,9 +853,7 @@ class MangaReaderActivity : AppCompatActivity() {
             showProgressDialog =
                 if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                     ?: true else false
-            val incognito =
-                currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                    ?.getBoolean("incognito", false) ?: false
+            val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
             if (showProgressDialog && !incognito) {
 
                 val dialogView = layoutInflater.inflate(R.layout.item_custom_dialog, null)

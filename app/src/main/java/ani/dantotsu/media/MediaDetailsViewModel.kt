@@ -1,7 +1,6 @@
 package ani.dantotsu.media
 
 import android.app.Activity
-import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentManager

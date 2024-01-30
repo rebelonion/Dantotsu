@@ -7,22 +7,19 @@ import android.graphics.Bitmap
 import android.view.Window
 import android.view.WindowManager
 import ani.dantotsu.R
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 
 
 class ThemeManager(private val context: Activity) {
     fun applyTheme(fromImage: Bitmap? = null) {
-        val useOLED = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("use_oled", false) && isDarkThemeActive(context)
-        val useCustomTheme = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("use_custom_theme", false)
-        val customTheme = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getInt("custom_theme_int", 16712221)
-        val useSource = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("use_source_theme", false)
-        val useMaterial = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("use_material_you", false)
+        val useOLED = PrefWrapper.getVal(PrefName.UseOLED, false) && isDarkThemeActive(context)
+        val useCustomTheme = PrefWrapper.getVal(PrefName.UseCustomTheme, false)
+        val customTheme = PrefWrapper.getVal(PrefName.CustomThemeInt, 16712221)
+        val useSource = PrefWrapper.getVal(PrefName.UseSourceTheme, false)
+        val useMaterial = PrefWrapper.getVal(PrefName.UseMaterialYou, false)
         if (useSource) {
             val returnedEarly = applyDynamicColors(
                 useMaterial,
@@ -40,8 +37,7 @@ class ThemeManager(private val context: Activity) {
             val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = null)
             if (!returnedEarly) return
         }
-        val theme = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getString("theme", "PURPLE")!!
+        val theme = PrefWrapper.getVal(PrefName.Theme, "PURPLE")
 
         val themeToApply = when (theme) {
             "BLUE" -> if (useOLED) R.style.Theme_Dantotsu_BlueOLED else R.style.Theme_Dantotsu_Blue

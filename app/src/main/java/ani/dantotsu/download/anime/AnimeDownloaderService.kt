@@ -32,6 +32,7 @@ import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.media.anime.AnimeWatchFragment
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.Video
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
@@ -294,10 +295,7 @@ class AnimeDownloaderService : Service() {
                             builder.setContentText("${task.title} - ${task.episode} Download completed")
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download completed")
-                            getSharedPreferences(
-                                getString(R.string.anime_downloads),
-                                Context.MODE_PRIVATE
-                            ).edit().putString(
+                            PrefWrapper.getAnimeDownloadPreferences().edit().putString(
                                 task.getTaskName(),
                                 task.video.file.url
                             ).apply()

@@ -14,7 +14,6 @@ import ani.dantotsu.databinding.ActivityGenreBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
@@ -27,7 +26,7 @@ class GenreActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityGenreBinding.inflate(layoutInflater)
         setContentView(binding.root)

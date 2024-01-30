@@ -3,6 +3,8 @@ package ani.dantotsu.parsers
 import android.content.Context
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -11,10 +13,8 @@ object MangaSources : MangaReadSources() {
     override var list: List<Lazier<BaseParser>> = emptyList()
     var pinnedMangaSources: Set<String> = emptySet()
 
-    suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>, context: Context) {
-        val sharedPrefs = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        pinnedMangaSources =
-            sharedPrefs.getStringSet("pinned_manga_sources", emptySet()) ?: emptySet()
+    suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
+        pinnedMangaSources = PrefWrapper.getVal(PrefName.PinnedMangaSources, emptySet())
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()

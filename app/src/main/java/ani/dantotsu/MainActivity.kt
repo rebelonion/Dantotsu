@@ -2,7 +2,6 @@ package ani.dantotsu
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.GradientDrawable
@@ -45,9 +44,11 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.others.LangSet
-import ani.dantotsu.others.SharedPreferenceBooleanLiveData
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefWrapper.asLiveBool
+import ani.dantotsu.settings.saving.SharedPreferenceBooleanLiveData
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
 import eu.kanade.domain.source.service.SourcePreferences
@@ -77,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
-        LangSet.setLocale(this)
+        
         super.onCreate(savedInstanceState)
 
         //get FRAGMENT_CLASS_NAME from intent
@@ -95,12 +96,8 @@ class MainActivity : AppCompatActivity() {
             backgroundDrawable.setColor(semiTransparentColor)
             _bottomBar.background = backgroundDrawable
         }
-        val sharedPreferences = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        val colorOverflow = sharedPreferences.getBoolean("colorOverflow", false)
-        if (!colorOverflow) {
-            _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
-        }
 
         val offset = try {
             val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -111,11 +108,10 @@ class MainActivity : AppCompatActivity() {
         val layoutParams = binding.incognito.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.topMargin = 11 * offset / 12
         binding.incognito.layoutParams = layoutParams
-        incognitoLiveData = SharedPreferenceBooleanLiveData(
-            sharedPreferences,
-            "incognito",
+        incognitoLiveData = PrefWrapper.getLiveVal(
+            PrefName.Incognito,
             false
-        )
+        ).asLiveBool()
         incognitoLiveData.observe(this) {
             if (it) {
                 val slideDownAnim = ObjectAnimator.ofFloat(
@@ -228,8 +224,7 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-        val offlineMode = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("offlineMode", false)
+        val offlineMode = PrefWrapper.getVal(PrefName.OfflineMode, false)
         if (!isOnline(this)) {
             snackString(this@MainActivity.getString(R.string.no_internet_connection))
             startActivity(Intent(this, NoInternet::class.java))

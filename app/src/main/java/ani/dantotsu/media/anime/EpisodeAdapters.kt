@@ -2,14 +2,12 @@ package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import androidx.annotation.OptIn
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.coroutineScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadIndex
@@ -22,6 +20,7 @@ import ani.dantotsu.databinding.ItemEpisodeListBinding
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
+import ani.dantotsu.settings.saving.PrefWrapper
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import kotlinx.coroutines.delay
@@ -253,10 +252,7 @@ class EpisodeAdapter(
                 media.mainName(),
                 episodeNumber
             )
-            val id = fragment.requireContext().getSharedPreferences(
-                ContextCompat.getString(fragment.requireContext(), R.string.anime_downloads),
-                Context.MODE_PRIVATE
-            ).getString(
+            val id = PrefWrapper.getAnimeDownloadPreferences().getString(
                 taskName,
                 ""
             ) ?: ""

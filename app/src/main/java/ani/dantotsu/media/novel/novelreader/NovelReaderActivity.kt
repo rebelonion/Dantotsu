@@ -32,7 +32,6 @@ import ani.dantotsu.databinding.ActivityNovelReaderBinding
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.loadData
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.saveData
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.CurrentNovelReaderSettings
@@ -171,7 +170,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
             return
         }
 
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityNovelReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -48,6 +48,8 @@ import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.subcriptions.NotificationClickReceiver
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
@@ -966,8 +968,7 @@ const val INCOGNITO_CHANNEL_ID = 26
 fun incognitoNotification(context: Context) {
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val incognito = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        .getBoolean("incognito", false)
+    val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
     if (incognito) {
         val intent = Intent(context, NotificationClickReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(

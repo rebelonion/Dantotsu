@@ -41,6 +41,8 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.snackString
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
@@ -91,12 +93,9 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         if (!uiSettings.immersiveMode) {
             view.rootView.fitsSystemWindows = true
         }
-        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("colorOverflow", false) ?: false
-        if (!colorOverflow) {
-            textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
-            materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
-        }
+
+        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
+        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
 
         val searchView = view.findViewById<AutoCompleteTextView>(R.id.animeSearchBarText)
         searchView.addTextChangedListener(object : TextWatcher {
@@ -110,8 +109,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 onSearchQuery(s.toString())
             }
         })
-        var style = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getInt("offline_view", 0)
+        var style = PrefWrapper.getVal(PrefName.OfflineView, 0)
         val layoutList = view.findViewById<ImageView>(R.id.downloadedList)
         val layoutcompact = view.findViewById<ImageView>(R.id.downloadedGrid)
         var selected = when (style) {
@@ -130,8 +128,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         layoutList.setOnClickListener {
             selected(it as ImageView)
             style = 0
-            requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putInt("offline_view", style!!).apply()
+            PrefWrapper.setVal(PrefName.OfflineView, style)
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView)
             adapter.notifyNewGrid()
@@ -142,8 +139,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         layoutcompact.setOnClickListener {
             selected(it as ImageView)
             style = 1
-            requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putInt("offline_view", style!!).apply()
+            PrefWrapper.setVal(PrefName.OfflineView, style)
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView1)
             adapter.notifyNewGrid()

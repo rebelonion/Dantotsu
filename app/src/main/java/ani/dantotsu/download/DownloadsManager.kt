@@ -1,17 +1,16 @@
 package ani.dantotsu.download
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Environment
 import android.widget.Toast
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.Serializable
 
 class DownloadsManager(private val context: Context) {
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("downloads_pref", Context.MODE_PRIVATE)
     private val gson = Gson()
     private val downloadsList = loadDownloads().toMutableList()
 
@@ -24,11 +23,11 @@ class DownloadsManager(private val context: Context) {
 
     private fun saveDownloads() {
         val jsonString = gson.toJson(downloadsList)
-        prefs.edit().putString("downloads_key", jsonString).apply()
+        PrefWrapper.setVal(PrefName.DownloadsKeys, jsonString)
     }
 
     private fun loadDownloads(): List<DownloadedType> {
-        val jsonString = prefs.getString("downloads_key", null)
+        val jsonString = PrefWrapper.getVal(PrefName.DownloadsKeys, null as String?)
         return if (jsonString != null) {
             val type = object : TypeToken<List<DownloadedType>>() {}.type
             gson.fromJson(jsonString, type)

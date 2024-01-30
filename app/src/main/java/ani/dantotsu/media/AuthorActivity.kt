@@ -18,7 +18,6 @@ import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityAuthorBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.px
 import ani.dantotsu.statusBarHeight
@@ -36,7 +35,7 @@ class AuthorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityAuthorBinding.inflate(layoutInflater)
         setContentView(binding.root)

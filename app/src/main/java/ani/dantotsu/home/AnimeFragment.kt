@@ -2,9 +2,7 @@ package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -36,6 +34,8 @@ import ani.dantotsu.media.SearchActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.Dispatchers
@@ -271,8 +271,8 @@ class AnimeFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending(1)
                         model.loadUpdated()
-                        model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = Injekt.get<SharedPreferences>()
-                            .getBoolean("popular_list", false))
+                        model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = PrefWrapper.getVal(
+                            PrefName.PopularAnimeList, false))
                     }
                     live.postValue(false)
                     _binding?.animeRefresh?.isRefreshing = false

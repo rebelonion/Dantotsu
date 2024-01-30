@@ -9,7 +9,6 @@ import ani.dantotsu.databinding.ActivityReaderSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.saveData
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
@@ -20,7 +19,7 @@ class ReaderSettingsActivity : AppCompatActivity() {
     private val reader = "reader_settings"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityReaderSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)

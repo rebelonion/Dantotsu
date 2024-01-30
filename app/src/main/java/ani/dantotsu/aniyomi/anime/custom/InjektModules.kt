@@ -45,9 +45,6 @@ class AppModule(val app: Application) : InjektModule {
         addSingletonFactory<AnimeSourceManager> { AndroidAnimeSourceManager(app, get()) }
         addSingletonFactory<MangaSourceManager> { AndroidMangaSourceManager(app, get()) }
 
-        val sharedPreferences = app.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        addSingleton(sharedPreferences)
-
         addSingletonFactory {
             Json {
                 ignoreUnknownKeys = true

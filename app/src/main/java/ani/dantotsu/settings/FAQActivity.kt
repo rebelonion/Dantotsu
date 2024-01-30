@@ -7,7 +7,6 @@ import ani.dantotsu.R
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityFaqBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.themes.ThemeManager
 
 class FAQActivity : AppCompatActivity() {
@@ -101,7 +100,7 @@ class FAQActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityFaqBinding.inflate(layoutInflater)
         setContentView(binding.root)

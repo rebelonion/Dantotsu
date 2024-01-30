@@ -6,14 +6,15 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.currContext
 import ani.dantotsu.media.Media
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 fun updateProgress(media: Media, number: String) {
-    val incognito = currContext()?.getSharedPreferences("Dantotsu", 0)
-        ?.getBoolean("incognito", false) ?: false
+    val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
     if (!incognito) {
         if (Anilist.userid != null) {
             CoroutineScope(Dispatchers.IO).launch {

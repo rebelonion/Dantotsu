@@ -1,6 +1,5 @@
 package ani.dantotsu.home
 
-import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
@@ -26,7 +25,6 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.offline.OfflineFragment
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.selectedOption
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.snackString
@@ -39,7 +37,7 @@ class NoInternet : AppCompatActivity() {
     private var uiSettings = UserInterfaceSettings()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
 
         binding = ActivityNoInternetBinding.inflate(layoutInflater)
@@ -54,12 +52,8 @@ class NoInternet : AppCompatActivity() {
             backgroundDrawable.setColor(semiTransparentColor)
             _bottomBar.background = backgroundDrawable
         }
-        val colorOverflow = this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("colorOverflow", false)
-        if (!colorOverflow) {
-            _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
-        }
 
         var doubleBackToExitPressedOnce = false
         onBackPressedDispatcher.addCallback(this) {

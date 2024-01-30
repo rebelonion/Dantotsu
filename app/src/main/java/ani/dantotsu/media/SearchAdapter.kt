@@ -1,8 +1,6 @@
 package ani.dantotsu.media
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.SharedPreferences
 import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
@@ -22,19 +20,16 @@ import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
 import ani.dantotsu.App.Companion.context
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemSearchHeaderBinding
-import ani.dantotsu.logger
-import ani.dantotsu.others.SharedPreferenceStringSetLiveData
 import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import com.google.android.material.checkbox.MaterialCheckBox.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 
 
 class SearchAdapter(private val activity: SearchActivity, private val type: String) :
@@ -78,9 +73,7 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         }
 
         binding.searchBar.hint = activity.result.type
-        if (currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                ?.getBoolean("incognito", false) == true
-        ) {
+        if (PrefWrapper.getVal(PrefName.Incognito, false)) {
             val startIconDrawableRes = R.drawable.ic_incognito_24
             val startIconDrawable: Drawable? =
                 context?.let { AppCompatResources.getDrawable(it, startIconDrawableRes) }

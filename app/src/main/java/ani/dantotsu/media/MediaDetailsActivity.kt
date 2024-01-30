@@ -46,6 +46,8 @@ import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.saveData
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -159,9 +161,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
         })
         banner.setOnTouchListener { _, motionEvent -> gestureDetector.onTouchEvent(motionEvent);true }
-        if (this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                .getBoolean("incognito", false)
-        ) {
+        if (PrefWrapper.getVal(PrefName.Incognito, false)) {
             binding.mediaTitle.text = "    ${media.userPreferredName}"
             binding.incognito.visibility = View.VISIBLE
         } else {

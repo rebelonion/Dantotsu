@@ -43,6 +43,7 @@ import ani.dantotsu.parsers.HAnimeSources
 import ani.dantotsu.settings.PlayerSettings
 import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Group.ANIME_GROUP
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
@@ -476,17 +477,11 @@ class AnimeWatchFragment : Fragment() {
             )
         )
         val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
-        val id = requireContext().getSharedPreferences(
-            ContextCompat.getString(requireContext(), R.string.anime_downloads),
-            Context.MODE_PRIVATE
-        ).getString(
+        val id = PrefWrapper.getAnimeDownloadPreferences().getString(
             taskName,
             ""
         ) ?: ""
-        requireContext().getSharedPreferences(
-            ContextCompat.getString(requireContext(), R.string.anime_downloads),
-            Context.MODE_PRIVATE
-        ).edit().remove(taskName).apply()
+        PrefWrapper.getAnimeDownloadPreferences().edit().remove(taskName).apply()
         DownloadService.sendRemoveDownload(
             requireContext(),
             ExoplayerDownloadService::class.java,

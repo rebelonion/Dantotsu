@@ -3,6 +3,8 @@ package ani.dantotsu.parsers
 import android.content.Context
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -12,9 +14,7 @@ object AnimeSources : WatchSources() {
     var pinnedAnimeSources: Set<String> = emptySet()
 
     suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>, context: Context) {
-        val sharedPrefs = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        pinnedAnimeSources =
-            sharedPrefs.getStringSet("pinned_anime_sources", emptySet()) ?: emptySet()
+        pinnedAnimeSources = PrefWrapper.getVal(PrefName.PinnedAnimeSources, emptySet())
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()

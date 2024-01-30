@@ -32,9 +32,10 @@ import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
@@ -71,7 +72,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -96,26 +97,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.settingsUseMaterialYou.isChecked =
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
-                "use_material_you",
-                false
-            )
+        binding.settingsUseMaterialYou.isChecked = PrefWrapper.getVal(PrefName.UseMaterialYou, false)
         binding.settingsUseMaterialYou.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putBoolean("use_material_you", isChecked).apply()
+            PrefWrapper.setVal(PrefName.UseMaterialYou, isChecked)
             if (isChecked) binding.settingsUseCustomTheme.isChecked = false
             restartApp()
         }
 
-        binding.settingsUseCustomTheme.isChecked =
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
-                "use_custom_theme",
-                false
-            )
+        binding.settingsUseCustomTheme.isChecked = PrefWrapper.getVal(PrefName.UseCustomTheme, false)
         binding.settingsUseCustomTheme.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putBoolean("use_custom_theme", isChecked).apply()
+            PrefWrapper.setVal(PrefName.UseCustomTheme, isChecked)
             if (isChecked) {
                 binding.settingsUseMaterialYou.isChecked = false
             }
@@ -123,26 +114,19 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             restartApp()
         }
 
-        binding.settingsUseSourceTheme.isChecked =
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean(
-                "use_source_theme",
-                false
-            )
+        binding.settingsUseSourceTheme.isChecked = PrefWrapper.getVal(PrefName.UseSourceTheme, false)
         binding.settingsUseSourceTheme.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putBoolean("use_source_theme", isChecked).apply()
-        }
-
-        binding.settingsUseOLED.isChecked =
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("use_oled", false)
-        binding.settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putBoolean("use_oled", isChecked).apply()
+            PrefWrapper.setVal(PrefName.UseSourceTheme, isChecked)
             restartApp()
         }
 
-        val themeString =
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getString("theme", "PURPLE")!!
+        binding.settingsUseOLED.isChecked = PrefWrapper.getVal(PrefName.UseOLED, false)
+        binding.settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
+            PrefWrapper.setVal(PrefName.UseOLED, isChecked)
+            restartApp()
+        }
+
+        val themeString = PrefWrapper.getVal(PrefName.Theme, "PURPLE")
         binding.themeSwitcher.setText(
             themeString.substring(0, 1) + themeString.substring(1).lowercase()
         )
@@ -151,13 +135,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             ArrayAdapter(
                 this,
                 R.layout.item_dropdown,
-                ThemeManager.Companion.Theme.values()
+                ThemeManager.Companion.Theme.entries
                     .map { it.theme.substring(0, 1) + it.theme.substring(1).lowercase() })
         )
 
         binding.themeSwitcher.setOnItemClickListener { _, _, i, _ ->
-            getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                .putString("theme", ThemeManager.Companion.Theme.values()[i].theme).apply()
+            PrefWrapper.setVal(PrefName.Theme, ThemeManager.Companion.Theme.entries[i].theme)
             //ActivityHelper.shouldRefreshMainActivity = true
             binding.themeSwitcher.clearFocus()
             restartApp()
@@ -166,10 +149,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
 
         binding.customTheme.setOnClickListener {
-            val originalColor = getSharedPreferences("Dantotsu", MODE_PRIVATE).getInt(
-                "custom_theme_int",
-                Color.parseColor("#6200EE")
-            )
+            val originalColor = PrefWrapper.getVal(PrefName.CustomThemeInt, Color.parseColor("#6200EE"))
 
             class CustomColorDialog : SimpleColorDialog() { //idk where to put it
                 override fun onPositiveButtonClick() {
@@ -196,11 +176,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val names = animeSourcesWithoutDownloadsSource.map { it.name }
             val pinnedSourcesBoolean =
                 animeSourcesWithoutDownloadsSource.map { it.name in AnimeSources.pinnedAnimeSources }
-            val pinnedSourcesOriginal = getSharedPreferences(
-                "Dantotsu",
-                Context.MODE_PRIVATE
-            ).getStringSet("pinned_anime_sources", null)
-            val pinnedSources = pinnedSourcesOriginal?.toMutableSet() ?: mutableSetOf()
+            val pinnedSourcesOriginal = PrefWrapper.getVal(PrefName.PinnedAnimeSources, setOf<String>())
+            val pinnedSources = pinnedSourcesOriginal.toMutableSet() ?: mutableSetOf()
             val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Pinned Anime Sources")
                 .setMultiChoiceItems(
@@ -214,8 +191,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     }
                 }
                 .setPositiveButton("OK") { dialog, _ ->
-                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                        .putStringSet("pinned_anime_sources", pinnedSources).apply()
+                    PrefWrapper.setVal(PrefName.PinnedAnimeSources, pinnedSources)
                     AnimeSources.pinnedAnimeSources = pinnedSources
                     AnimeSources.performReorderAnimeSources()
                     dialog.dismiss()
@@ -395,15 +371,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
             saveData("recently_list_only", isChecked)
         }
-        binding.settingsShareUsername.isChecked = getSharedPreferences(
-            getString(R.string.preference_file_key),
-            Context.MODE_PRIVATE
-        ).getBoolean("shared_user_id", true)
+        binding.settingsShareUsername.isChecked = PrefWrapper.getVal(PrefName.SharedUserID, true)
         binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
-            getSharedPreferences(
-                getString(R.string.preference_file_key),
-                Context.MODE_PRIVATE
-            ).edit().putBoolean("shared_user_id", isChecked).apply()
+            PrefWrapper.setVal(PrefName.SharedUserID, isChecked)
         }
 
         binding.settingsPreferDub.isChecked = loadData("settings_prefer_dub") ?: false
@@ -417,11 +387,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val names = mangaSourcesWithoutDownloadsSource.map { it.name }
             val pinnedSourcesBoolean =
                 mangaSourcesWithoutDownloadsSource.map { it.name in MangaSources.pinnedMangaSources }
-            val pinnedSourcesOriginal = getSharedPreferences(
-                "Dantotsu",
-                Context.MODE_PRIVATE
-            ).getStringSet("pinned_manga_sources", null)
-            val pinnedSources = pinnedSourcesOriginal?.toMutableSet() ?: mutableSetOf()
+            val pinnedSourcesOriginal = PrefWrapper.getVal(PrefName.PinnedMangaSources, setOf<String>())
+            val pinnedSources = pinnedSourcesOriginal.toMutableSet()
             val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Pinned Manga Sources")
                 .setMultiChoiceItems(
@@ -435,8 +402,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     }
                 }
                 .setPositiveButton("OK") { dialog, _ ->
-                    getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                        .putStringSet("pinned_manga_sources", pinnedSources).apply()
+                    PrefWrapper.setVal(PrefName.PinnedMangaSources, pinnedSources)
                     MangaSources.pinnedMangaSources = pinnedSources
                     MangaSources.performReorderMangaSources()
                     dialog.dismiss()
@@ -605,13 +571,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 Toast.makeText(this, "youwu have been cuwsed :pwayge:", Toast.LENGTH_LONG).show()
                 val url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                 openLinkInBrowser(url)
-                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit().putBoolean(
-                    "use_cursed_lang",
-                    getSharedPreferences(
-                        "Dantotsu",
-                        Context.MODE_PRIVATE
-                    ).getBoolean("use_cursed_lang", false).not()
-                ).apply()
+                //PrefWrapper.setVal(PrefName.SomethingSpecial, !PrefWrapper.getVal(PrefName.SomethingSpecial, false))
             } else {
                 snackString(array[(Math.random() * array.size).toInt()], this)
             }
@@ -772,18 +732,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             if (Discord.token != null) {
-                val id = getSharedPreferences(
-                    getString(R.string.preference_file_key),
-                    Context.MODE_PRIVATE
-                ).getString("discord_id", null)
-                val avatar = getSharedPreferences(
-                    getString(R.string.preference_file_key),
-                    Context.MODE_PRIVATE
-                ).getString("discord_avatar", null)
-                val username = getSharedPreferences(
-                    getString(R.string.preference_file_key),
-                    Context.MODE_PRIVATE
-                ).getString("discord_username", null)
+                val id = PrefWrapper.getVal(PrefName.DiscordId, null as String?)
+                val avatar = PrefWrapper.getVal(PrefName.DiscordAvatar, null as String?)
+                val username = PrefWrapper.getVal(PrefName.DiscordUserName, null as String?)
                 if (id != null && avatar != null) {
                     binding.settingsDiscordAvatar.loadImage("https://cdn.discordapp.com/avatars/$id/$avatar.png")
                 }
@@ -838,8 +789,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         if (which == BUTTON_POSITIVE) {
             if (dialogTag == "colorPicker") {
                 val color = extras.getInt(SimpleColorDialog.COLOR)
-                getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).edit()
-                    .putInt("custom_theme_int", color).apply()
+                PrefWrapper.setVal(PrefName.CustomThemeInt, color)
                 logger("Custom Theme: $color")
             }
         }

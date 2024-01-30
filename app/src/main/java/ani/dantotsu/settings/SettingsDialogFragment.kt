@@ -1,6 +1,5 @@
 package ani.dantotsu.settings
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -26,6 +25,8 @@ import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.setSafeOnClickListener
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.startMainActivity
 
 class SettingsDialogFragment : BottomSheetDialogFragment() {
@@ -75,14 +76,10 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         }
 
         binding.settingsIncognito.isChecked =
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean(
-                "incognito",
-                false
-            ) ?: false
+            PrefWrapper.getVal(PrefName.Incognito, false)
 
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putBoolean("incognito", isChecked)?.apply()
+            PrefWrapper.setVal(PrefName.Incognito, isChecked)
             incognitoNotification(requireContext())
         }
         binding.settingsExtensionSettings.setSafeOnClickListener {
@@ -102,9 +99,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        binding.settingsDownloads.isChecked =
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                ?.getBoolean("offlineMode", false) ?: false
+        binding.settingsDownloads.isChecked = PrefWrapper.getVal(PrefName.OfflineMode, false)
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
             when (pageType) {
                 PageType.MANGA -> {
@@ -154,8 +149,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             }
 
             dismiss()
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putBoolean("offlineMode", isChecked)?.apply()
+            PrefWrapper.setVal(PrefName.OfflineMode, isChecked)
         }
     }
 

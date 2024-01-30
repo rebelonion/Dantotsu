@@ -10,7 +10,6 @@ import ani.dantotsu.connections.mal.MAL.clientId
 import ani.dantotsu.connections.mal.MAL.saveResponse
 import ani.dantotsu.loadData
 import ani.dantotsu.logError
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.themes.ThemeManager
@@ -21,7 +20,7 @@ import kotlinx.coroutines.launch
 class Login : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         try {
             val data: Uri = intent?.data

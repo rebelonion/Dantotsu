@@ -21,7 +21,6 @@ import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.px
 import ani.dantotsu.settings.UserInterfaceSettings
@@ -42,7 +41,7 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityCharacterBinding.inflate(layoutInflater)
         setContentView(binding.root)

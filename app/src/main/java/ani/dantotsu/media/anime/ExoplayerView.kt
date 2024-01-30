@@ -77,13 +77,14 @@ import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.ResettableTimer
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.*
 import ani.dantotsu.settings.PlayerSettings
 import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.cast.framework.CastButtonFactory
@@ -331,7 +332,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+        
         ThemeManager(this).applyTheme()
         binding = ActivityExoplayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -1013,8 +1014,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 preloading = false
                 val context = this
 
-                val incognito = baseContext.getSharedPreferences("Dantotsu", MODE_PRIVATE)
-                    .getBoolean("incognito", false)
+                val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
                 if (isOnline(context) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
                         val presence = RPC.createPresence(RPC.Companion.RPCData(
@@ -1191,8 +1191,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         preloading = false
-        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false) ?: false
+        val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
         val showProgressDialog =
             if (settings.askIndividual) loadData<Boolean>("${media.id}_progressDialog")
                 ?: true else false
@@ -1343,7 +1342,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         val downloadedMediaItem = if (ext.server.offline) {
             val key = ext.server.name
-            downloadId = getSharedPreferences(getString(R.string.anime_downloads), MODE_PRIVATE)
+            downloadId = PrefWrapper.getAnimeDownloadPreferences()
                 .getString(key, null)
             if (downloadId != null) {
                 Helper.downloadManager(this)
@@ -1550,7 +1549,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     override fun onResume() {
         super.onResume()
-        LangSet.setLocale(this)
         orientationListener?.enable()
         hideSystemBars()
         if (isInitialized) {
@@ -1745,8 +1743,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     }
 
     private fun updateAniProgress() {
-        val incognito = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("incognito", false) ?: false
+        val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
         if (!incognito && exoPlayer.currentPosition / episodeLength > settings.watchPercentage && Anilist.userid != null)
             if (loadData<Boolean>("${media.id}_save_progress") != false && if (media.isAdult) settings.updateForH else true) {
                 media.anime!!.selectedEpisode?.apply {

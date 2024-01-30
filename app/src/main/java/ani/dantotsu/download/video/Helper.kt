@@ -43,6 +43,7 @@ import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoType
+import ani.dantotsu.settings.saving.PrefWrapper
 import eu.kanade.tachiyomi.network.NetworkHelper
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -229,19 +230,13 @@ object Helper {
                     DownloadService.sendRemoveDownload(
                         context,
                         ExoplayerDownloadService::class.java,
-                        context.getSharedPreferences(
-                            getString(context, R.string.anime_downloads),
-                            Context.MODE_PRIVATE
-                        ).getString(
+                        PrefWrapper.getAnimeDownloadPreferences().getString(
                             animeDownloadTask.getTaskName(),
                             ""
                         ) ?: "",
                         false
                     )
-                    context.getSharedPreferences(
-                        getString(context, R.string.anime_downloads),
-                        Context.MODE_PRIVATE
-                    ).edit()
+                    PrefWrapper.getAnimeDownloadPreferences().edit()
                         .remove(animeDownloadTask.getTaskName())
                         .apply()
                     downloadsManger.removeDownload(

@@ -34,6 +34,8 @@ import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputLayout
@@ -68,13 +70,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         currContext()?.theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         val color = typedValue.data
 
-
-        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("colorOverflow", false) ?: false
-        if (!colorOverflow) {
-            textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
-            materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
-        }
+        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
+        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
 
         binding.animeTitleContainer.updatePadding(top = statusBarHeight)
 
@@ -133,15 +130,12 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         binding.animeIncludeList.visibility =
             if (Anilist.userid != null) View.VISIBLE else View.GONE
 
-        binding.animeIncludeList.isChecked =
-            currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                ?.getBoolean("popular_list", true) ?: true
+        binding.animeIncludeList.isChecked = PrefWrapper.getVal(PrefName.PopularAnimeList, true)
 
         binding.animeIncludeList.setOnCheckedChangeListener { _, isChecked ->
             onIncludeListClick.invoke(isChecked)
 
-            currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putBoolean("popular_list", isChecked)?.apply()
+            PrefWrapper.setVal(PrefName.PopularAnimeList, isChecked)
         }
         if (ready.value == false)
             ready.postValue(true)

@@ -6,6 +6,8 @@ import android.widget.TextView
 import androidx.core.content.edit
 import ani.dantotsu.R
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.toast
 import ani.dantotsu.tryWith
 import io.noties.markwon.Markwon
@@ -18,37 +20,19 @@ object Discord {
     var userid: String? = null
     var avatar: String? = null
 
-    const val TOKEN = "discord_token"
 
     fun getSavedToken(context: Context): Boolean {
-        val sharedPref = context.getSharedPreferences(
-            context.getString(R.string.preference_file_key),
-            Context.MODE_PRIVATE
-        )
-        token = sharedPref.getString(TOKEN, null)
+        token = PrefWrapper.getVal(
+            PrefName.DiscordToken, null as String?)
         return token != null
     }
 
     fun saveToken(context: Context, token: String) {
-        val sharedPref = context.getSharedPreferences(
-            context.getString(R.string.preference_file_key),
-            Context.MODE_PRIVATE
-        )
-        sharedPref.edit {
-            putString(TOKEN, token)
-            commit()
-        }
+        PrefWrapper.setVal(PrefName.DiscordToken, token)
     }
 
     fun removeSavedToken(context: Context) {
-        val sharedPref = context.getSharedPreferences(
-            context.getString(R.string.preference_file_key),
-            Context.MODE_PRIVATE
-        )
-        sharedPref.edit {
-            remove(TOKEN)
-            commit()
-        }
+        PrefWrapper.removeVal(PrefName.DiscordToken)
 
         tryWith(true) {
             val dir = File(context.filesDir?.parentFile, "app_webview")

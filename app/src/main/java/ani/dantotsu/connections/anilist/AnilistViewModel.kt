@@ -11,6 +11,8 @@ import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
 import ani.dantotsu.others.AppUpdater
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
 import kotlinx.coroutines.CoroutineScope
@@ -19,12 +21,8 @@ import kotlinx.coroutines.launch
 
 suspend fun getUserId(context: Context, block: () -> Unit) {
     CoroutineScope(Dispatchers.IO).launch {
-        val sharedPref = context.getSharedPreferences(
-            context.getString(R.string.preference_file_key),
-            Context.MODE_PRIVATE
-        )
-        val token = sharedPref.getString("discord_token", null)
-        val userid = sharedPref.getString("discord_id", null)
+        val token = PrefWrapper.getVal(PrefName.DiscordToken, null as String?)
+        val userid = PrefWrapper.getVal(PrefName.DiscordId, null as String?)
         if (userid == null && token != null) {
             /*if (!Discord.getUserData())
                 snackString(context.getString(R.string.error_loading_discord_user_data))*/
