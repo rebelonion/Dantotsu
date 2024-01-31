@@ -3,6 +3,7 @@ package ani.dantotsu.settings.saving
 import android.content.Context
 import android.content.SharedPreferences
 import ani.dantotsu.settings.saving.internal.Location
+import ani.dantotsu.snackString
 
 object PrefWrapper {
 
@@ -44,7 +45,7 @@ object PrefWrapper {
                 Int::class -> putInt(prefName.name, value as Int)
                 Float::class -> putFloat(prefName.name, value as Float)
                 Long::class -> putLong(prefName.name, value as Long)
-                String::class -> putString(prefName.name, value as String)
+                String::class -> putString(prefName.name, value as String?)
                 Set::class -> putStringSet(prefName.name, value as Set<String>)
                 else -> throw IllegalArgumentException("Type not supported")
             }
@@ -55,42 +56,25 @@ object PrefWrapper {
     @Suppress("UNCHECKED_CAST")
     fun <T> getVal(prefName: PrefName, default: T) : T {
         return try {
-            val pref = when (prefName.data.prefLocation) {
-                Location.General -> generalPreferences
-                Location.Anime -> animePreferences
-                Location.Manga -> mangaPreferences
-                Location.Player -> playerPreferences
-                Location.Reader -> readerPreferences
-                Location.Irrelevant -> irrelevantPreferences
-                Location.AnimeDownloads -> animeDownloadsPreferences
-                Location.Protected -> protectedPreferences
-            }
+            val pref = getPrefLocation(prefName)
             when (prefName.data.type) {
                 Boolean::class -> pref!!.getBoolean(prefName.name, default as Boolean) as T
                 Int::class -> pref!!.getInt(prefName.name, default as Int) as T
                 Float::class -> pref!!.getFloat(prefName.name, default as Float) as T
                 Long::class -> pref!!.getLong(prefName.name, default as Long) as T
-                String::class -> pref!!.getString(prefName.name, default as String) as T
+                String::class -> pref!!.getString(prefName.name, default as String?) as T
                 Set::class -> pref!!.getStringSet(prefName.name, default as Set<String>) as T
                 else -> throw IllegalArgumentException("Type not supported")
             }
         } catch (e: Exception) {
+            snackString("Error getting preference: ${e.message}")
             default
         }
     }
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getLiveVal(prefName: PrefName, default: T) : SharedPreferenceLiveData<T> {
-        val pref = when (prefName.data.prefLocation) {
-            Location.General -> generalPreferences
-            Location.Anime -> animePreferences
-            Location.Manga -> mangaPreferences
-            Location.Player -> playerPreferences
-            Location.Reader -> readerPreferences
-            Location.Irrelevant -> irrelevantPreferences
-            Location.AnimeDownloads -> animeDownloadsPreferences
-            Location.Protected -> protectedPreferences
-        }
+        val pref = getPrefLocation(prefName)
         return when (prefName.data.type) {
             Boolean::class -> SharedPreferenceBooleanLiveData(
                 pref!!,
@@ -127,16 +111,7 @@ object PrefWrapper {
     }
 
     fun removeVal(prefName: PrefName) {
-        val pref = when (prefName.data.prefLocation) {
-            Location.General -> generalPreferences
-            Location.Anime -> animePreferences
-            Location.Manga -> mangaPreferences
-            Location.Player -> playerPreferences
-            Location.Reader -> readerPreferences
-            Location.Irrelevant -> irrelevantPreferences
-            Location.AnimeDownloads -> animeDownloadsPreferences
-            Location.Protected -> protectedPreferences
-        }
+        val pref = getPrefLocation(prefName)
         with(pref!!.edit()) {
             remove(prefName.name)
             apply()
@@ -168,4 +143,17 @@ object PrefWrapper {
             ?: throw ClassCastException("Cannot cast to SharedPreferenceLiveData<Set<String>>")
 
     fun getAnimeDownloadPreferences(): SharedPreferences = animeDownloadsPreferences!!  //needs to be used externally
+
+    private fun getPrefLocation(prefName: PrefName): SharedPreferences? {
+        return when (prefName.data.prefLocation) {
+            Location.General -> generalPreferences
+            Location.Anime -> animePreferences
+            Location.Manga -> mangaPreferences
+            Location.Player -> playerPreferences
+            Location.Reader -> readerPreferences
+            Location.Irrelevant -> irrelevantPreferences
+            Location.AnimeDownloads -> animeDownloadsPreferences
+            Location.Protected -> protectedPreferences
+        }
+    }
 }
