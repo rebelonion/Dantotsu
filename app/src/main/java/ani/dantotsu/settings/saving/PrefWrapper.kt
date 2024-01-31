@@ -1,5 +1,6 @@
 package ani.dantotsu.settings.saving
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import ani.dantotsu.settings.saving.internal.Location
@@ -16,7 +17,7 @@ object PrefWrapper {
     private var animeDownloadsPreferences: SharedPreferences? = null
     private var protectedPreferences: SharedPreferences? = null
 
-    fun init(context: Context) {
+    fun init(context: Context) {  //must be called in Application class or will crash
         generalPreferences = context.getSharedPreferences(Location.General.location, Context.MODE_PRIVATE)
         animePreferences = context.getSharedPreferences(Location.Anime.location, Context.MODE_PRIVATE)
         mangaPreferences = context.getSharedPreferences(Location.Manga.location, Context.MODE_PRIVATE)
@@ -29,17 +30,8 @@ object PrefWrapper {
 
     @Suppress("UNCHECKED_CAST")
     fun <T> setVal(prefName: PrefName, value: T) {
-        val pref = when (prefName.data.prefLocation) {
-            Location.General -> generalPreferences
-            Location.Anime -> animePreferences
-            Location.Manga -> mangaPreferences
-            Location.Player -> playerPreferences
-            Location.Reader -> readerPreferences
-            Location.Irrelevant -> irrelevantPreferences
-            Location.AnimeDownloads -> animeDownloadsPreferences
-            Location.Protected -> protectedPreferences
-        }
-        with(pref!!.edit()) {
+        val pref = getPrefLocation(prefName)
+        with(pref.edit()) {
             when (prefName.data.type) {
                 Boolean::class -> putBoolean(prefName.name, value as Boolean)
                 Int::class -> putInt(prefName.name, value as Int)
@@ -58,12 +50,12 @@ object PrefWrapper {
         return try {
             val pref = getPrefLocation(prefName)
             when (prefName.data.type) {
-                Boolean::class -> pref!!.getBoolean(prefName.name, default as Boolean) as T
-                Int::class -> pref!!.getInt(prefName.name, default as Int) as T
-                Float::class -> pref!!.getFloat(prefName.name, default as Float) as T
-                Long::class -> pref!!.getLong(prefName.name, default as Long) as T
-                String::class -> pref!!.getString(prefName.name, default as String?) as T
-                Set::class -> pref!!.getStringSet(prefName.name, default as Set<String>) as T
+                Boolean::class -> pref.getBoolean(prefName.name, default as Boolean) as T
+                Int::class -> pref.getInt(prefName.name, default as Int) as T
+                Float::class -> pref.getFloat(prefName.name, default as Float) as T
+                Long::class -> pref.getLong(prefName.name, default as Long) as T
+                String::class -> pref.getString(prefName.name, default as String?) as T
+                Set::class -> pref.getStringSet(prefName.name, default as Set<String>) as T
                 else -> throw IllegalArgumentException("Type not supported")
             }
         } catch (e: Exception) {
@@ -77,32 +69,32 @@ object PrefWrapper {
         val pref = getPrefLocation(prefName)
         return when (prefName.data.type) {
             Boolean::class -> SharedPreferenceBooleanLiveData(
-                pref!!,
+                pref,
                 prefName.name,
                 default as Boolean
             ) as SharedPreferenceLiveData<T>
             Int::class -> SharedPreferenceIntLiveData(
-                pref!!,
+                pref,
                 prefName.name,
                 default as Int
             ) as SharedPreferenceLiveData<T>
             Float::class -> SharedPreferenceFloatLiveData(
-                pref!!,
+                pref,
                 prefName.name,
                 default as Float
             ) as SharedPreferenceLiveData<T>
             Long::class -> SharedPreferenceLongLiveData(
-                pref!!,
+                pref,
                 prefName.name,
                 default as Long
             ) as SharedPreferenceLiveData<T>
             String::class -> SharedPreferenceStringLiveData(
-                pref!!,
+                pref,
                 prefName.name,
                 default as String
             ) as SharedPreferenceLiveData<T>
             Set::class -> SharedPreferenceStringSetLiveData(
-                pref!!,
+                pref,
                 prefName.name,
                 default as Set<String>
             ) as SharedPreferenceLiveData<T>
@@ -112,7 +104,7 @@ object PrefWrapper {
 
     fun removeVal(prefName: PrefName) {
         val pref = getPrefLocation(prefName)
-        with(pref!!.edit()) {
+        with(pref.edit()) {
             remove(prefName.name)
             apply()
         }
@@ -144,7 +136,7 @@ object PrefWrapper {
 
     fun getAnimeDownloadPreferences(): SharedPreferences = animeDownloadsPreferences!!  //needs to be used externally
 
-    private fun getPrefLocation(prefName: PrefName): SharedPreferences? {
+    private fun getPrefLocation(prefName: PrefName): SharedPreferences {
         return when (prefName.data.prefLocation) {
             Location.General -> generalPreferences
             Location.Anime -> animePreferences
@@ -154,6 +146,6 @@ object PrefWrapper {
             Location.Irrelevant -> irrelevantPreferences
             Location.AnimeDownloads -> animeDownloadsPreferences
             Location.Protected -> protectedPreferences
-        }
+        }!!
     }
 }
