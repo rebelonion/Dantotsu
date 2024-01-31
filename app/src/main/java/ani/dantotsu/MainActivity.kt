@@ -54,7 +54,6 @@ import ani.dantotsu.themes.ThemeManager
 import eu.kanade.domain.source.service.SourcePreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -71,14 +70,15 @@ class MainActivity : AppCompatActivity() {
     private lateinit var incognitoLiveData: SharedPreferenceBooleanLiveData
     private val scope = lifecycleScope
     private var load = false
+
     private var uiSettings = UserInterfaceSettings()
 
-    @kotlin.OptIn(DelicateCoroutinesApi::class)
+
     @SuppressLint("InternalInsetResource", "DiscouragedApi")
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
-        
+
         super.onCreate(savedInstanceState)
 
         //get FRAGMENT_CLASS_NAME from intent
@@ -87,16 +87,16 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
+        val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-            val backgroundDrawable = bottomBar.background as GradientDrawable
+            val backgroundDrawable = _bottomBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
             val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xF9000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
-            bottomBar.background = backgroundDrawable
+            _bottomBar.background = backgroundDrawable
         }
-        bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
 
         val offset = try {
@@ -234,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, NoInternet::class.java))
             } else {
                 val model: AnilistHomeViewModel by viewModels()
-                model.genres.observe(this) {
+                model.genres.observe(this) { it ->
                     if (it != null) {
                         if (it) {
                             val navbar = binding.includedNavbar.navbar
