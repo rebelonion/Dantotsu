@@ -44,6 +44,7 @@ enum class PrefName(val data: Pref) {
     SomethingSpecial(Pref(Location.Irrelevant, Boolean::class)),
     AllowOpeningLinks(Pref(Location.Irrelevant, Boolean::class)),
     SearchStyle(Pref(Location.Irrelevant, Int::class)),
+    HasUpdatedPrefs(Pref(Location.Irrelevant, Boolean::class)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class)),

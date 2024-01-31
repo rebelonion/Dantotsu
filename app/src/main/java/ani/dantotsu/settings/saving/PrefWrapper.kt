@@ -3,6 +3,7 @@ package ani.dantotsu.settings.saving
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import ani.dantotsu.settings.saving.internal.Compat
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.snackString
 
@@ -26,6 +27,7 @@ object PrefWrapper {
         irrelevantPreferences = context.getSharedPreferences(Location.Irrelevant.location, Context.MODE_PRIVATE)
         animeDownloadsPreferences = context.getSharedPreferences(Location.AnimeDownloads.location, Context.MODE_PRIVATE)
         protectedPreferences = context.getSharedPreferences(Location.Protected.location, Context.MODE_PRIVATE)
+        Compat.importOldPrefs(context)
     }
 
     @Suppress("UNCHECKED_CAST")
