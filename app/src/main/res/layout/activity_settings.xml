@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="31dp"
                 app:cardBackgroundColor="@color/nav_bg_inv"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="0dp">
@@ -46,7 +46,7 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_margin="32dp"
+                    android:layout_margin="31dp"
                     android:layout_weight="1"
                     android:text="@string/settings"
                     android:textSize="28sp" />
@@ -71,254 +71,8 @@
             android:animateLayoutChanges="true"
             android:clipToPadding="false"
             android:orientation="vertical"
-            android:paddingStart="32dp"
-            android:paddingEnd="32dp">
-
-            <ani.dantotsu.others.Xpandable
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="center_vertical"
-                    android:text="@string/theme"
-                    android:textColor="?attr/colorSecondary"
-                    app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
-                    tools:ignore="TextContrastCheck" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardBackgroundColor="@color/nav_bg_inv"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp">
-
-                        <ImageButton
-                            android:id="@+id/settingsUiLight"
-                            android:layout_width="48dp"
-                            android:layout_height="64dp"
-                            android:alpha="0.33"
-                            android:background="?android:attr/selectableItemBackground"
-                            android:src="@drawable/ic_round_brightness_high_24"
-                            app:tint="?attr/colorOnBackground"
-                            tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardBackgroundColor="@color/nav_bg_inv"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp">
-
-                        <ImageButton
-                            android:id="@+id/settingsUiDark"
-                            android:layout_width="48dp"
-                            android:layout_height="64dp"
-                            android:alpha="0.33"
-                            android:background="?android:attr/selectableItemBackground"
-                            android:scaleX="-1"
-                            android:src="@drawable/ic_round_brightness_4_24"
-                            app:tint="?attr/colorOnBackground"
-                            tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:cardBackgroundColor="@color/nav_bg_inv"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="0dp">
-
-                        <ImageButton
-                            android:id="@+id/settingsUiAuto"
-                            android:layout_width="48dp"
-                            android:layout_height="64dp"
-                            android:alpha="0.33"
-                            android:background="?android:attr/selectableItemBackground"
-                            android:src="@drawable/ic_round_brightness_auto_24"
-                            app:tint="?attr/colorOnBackground"
-                            tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/settingsUseOLED"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawableStart="@drawable/ic_round_brightness_4_24"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/oled_theme_variant"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.58"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="@string/theme_" />
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:boxCornerRadiusBottomEnd="8dp"
-                    app:boxCornerRadiusBottomStart="8dp"
-                    app:boxCornerRadiusTopEnd="8dp"
-                    app:boxCornerRadiusTopStart="8dp"
-                    app:hintAnimationEnabled="true"
-                    app:startIconDrawable="@drawable/ic_round_source_24">
-
-                    <AutoCompleteTextView
-                        android:id="@+id/themeSwitcher"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_bold"
-                        android:freezesText="false"
-                        android:inputType="none"
-                        android:padding="8dp"
-                        android:text="@string/watch"
-                        android:textAllCaps="true"
-                        android:textColor="?android:attr/textColorSecondary"
-                        android:textSize="14sp"
-                        tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <View
-                    android:id="@+id/themeDivider1"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:background="?android:attr/listDivider" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="center"
-                    android:padding="16dp"
-                    android:text="@string/requires_android_12"
-                    android:textColor="?attr/colorSecondary" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/settingsUseMaterialYou"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawableStart="@drawable/ic_round_new_releases_24"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/use_material_you"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/settingsUseSourceTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawableStart="@drawable/ic_palette"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/use_unique_theme_for_each_item"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.58"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="@string/custom_theme" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/settingsUseCustomTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawableStart="@drawable/ic_palette"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/use_custom_theme"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
-                <Button
-                    android:id="@+id/customTheme"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
-                    android:background="@drawable/ui_bg"
-                    android:backgroundTint="?attr/colorSecondary"
-                    android:backgroundTintMode="src_atop"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/color_picker"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_round_color_picker_24"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp"
-                    app:iconTint="?attr/colorPrimary" />
-
-                <View
-                    android:id="@+id/themeDivider2"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?android:attr/listDivider" />
-
-            </ani.dantotsu.others.Xpandable>
+            android:paddingStart="31dp"
+            android:paddingEnd="31dp">
 
             <ani.dantotsu.others.Xpandable
                 android:layout_width="match_parent"
@@ -385,16 +139,16 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/settingsAnilistAvatarContainer"
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
+                        android:layout_width="51dp"
+                        android:layout_height="51dp"
                         android:layout_marginTop="4dp"
                         android:backgroundTint="@color/nav_bg_inv"
                         app:cardCornerRadius="26dp">
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/settingsAnilistAvatar"
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
+                            android:layout_width="51dp"
+                            android:layout_height="51dp"
                             android:scaleType="center"
                             app:srcCompat="@drawable/ic_round_person_24"
                             tools:ignore="ContentDescription,ImageContrastCheck" />
@@ -410,7 +164,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="32dp"
+                        android:layout_width="31dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="16dp"
                         android:contentDescription="@string/myanimelist"
@@ -462,16 +216,16 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/settingsMALAvatarContainer"
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
+                        android:layout_width="51dp"
+                        android:layout_height="51dp"
                         android:layout_marginTop="4dp"
                         android:backgroundTint="@color/nav_bg_inv"
                         app:cardCornerRadius="26dp">
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/settingsMALAvatar"
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
+                            android:layout_width="51dp"
+                            android:layout_height="51dp"
                             android:scaleType="center"
                             app:srcCompat="@drawable/ic_round_person_24"
                             tools:ignore="ContentDescription,ImageContrastCheck" />
@@ -487,7 +241,7 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:layout_width="32dp"
+                        android:layout_width="31dp"
                         android:layout_height="match_parent"
                         android:layout_marginEnd="16dp"
                         android:src="@drawable/ic_discord"
@@ -530,16 +284,16 @@
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/settingsDiscordAvatarContainer"
-                        android:layout_width="52dp"
-                        android:layout_height="52dp"
+                        android:layout_width="51dp"
+                        android:layout_height="51dp"
                         android:layout_marginTop="4dp"
                         android:backgroundTint="@color/nav_bg_inv"
                         app:cardCornerRadius="26dp">
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/settingsDiscordAvatar"
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
+                            android:layout_width="51dp"
+                            android:layout_height="51dp"
                             android:scaleType="center"
                             app:srcCompat="@drawable/ic_round_person_24"
                             tools:ignore="ContentDescription,ImageContrastCheck" />
@@ -552,22 +306,270 @@
                     android:id="@+id/settingsAccountHelp"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
                     android:background="?android:colorBackground"
                     android:drawablePadding="16dp"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center_vertical"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
                     android:text="@string/account_help"
                     android:textAllCaps="false"
                     android:textColor="?attr/colorOnBackground"
                     app:cornerRadius="0dp"
                     app:drawableStartCompat="@drawable/ic_round_help_24"
                     app:drawableTint="?attr/colorPrimary" />
+
+            </ani.dantotsu.others.Xpandable>
+
+
+            <ani.dantotsu.others.Xpandable
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center_vertical"
+                    android:text="@string/theme"
+                    android:textColor="?attr/colorSecondary"
+                    app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
+                    tools:ignore="TextContrastCheck" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:alpha="0.58"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/theme" />
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/nav_bg_inv"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
+
+                        <ImageButton
+                            android:id="@+id/settingsUiLight"
+                            android:layout_width="48dp"
+                            android:layout_height="64dp"
+                            android:alpha="0.33"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:src="@drawable/ic_round_brightness_high_24"
+                            app:tint="?attr/colorOnBackground"
+                            tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/nav_bg_inv"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
+
+                        <ImageButton
+                            android:id="@+id/settingsUiDark"
+                            android:layout_width="48dp"
+                            android:layout_height="64dp"
+                            android:alpha="0.33"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:scaleX="-1"
+                            android:src="@drawable/ic_round_brightness_4_24"
+                            app:tint="?attr/colorOnBackground"
+                            tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+                    </androidx.cardview.widget.CardView>
+
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:cardBackgroundColor="@color/nav_bg_inv"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="0dp">
+
+                        <ImageButton
+                            android:id="@+id/settingsUiAuto"
+                            android:layout_width="48dp"
+                            android:layout_height="64dp"
+                            android:alpha="0.33"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:src="@drawable/ic_round_brightness_auto_24"
+                            app:tint="?attr/colorOnBackground"
+                            tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:hintAnimationEnabled="true"
+                    app:startIconDrawable="@drawable/ic_round_source_24">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/themeSwitcher"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/poppins_bold"
+                        android:freezesText="false"
+                        android:inputType="none"
+                        android:padding="8dp"
+                        android:text="@string/watch"
+                        android:textAllCaps="true"
+                        android:textColor="?android:attr/textColorSecondary"
+                        android:textSize="14sp"
+                        tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingsUseOLED"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_round_brightness_4_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/oled_theme_variant"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <View
+                    android:id="@+id/themeDivider1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="@string/requires_android_12"
+                    android:textColor="?attr/colorSecondary" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingsUseMaterialYou"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_round_new_releases_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/use_material_you"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingsUseSourceTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_palette"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/use_unique_theme_for_each_item"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    android:layout_marginBottom="16dp"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:layout_marginBottom="-11dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/custom_theme" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingsUseCustomTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_palette"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/use_custom_theme"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <Button
+                    android:id="@+id/customTheme"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
+                    android:text="@string/color_picker"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_color_picker_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:id="@+id/themeDivider2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="?android:attr/listDivider" />
 
             </ani.dantotsu.others.Xpandable>
 
@@ -585,6 +587,46 @@
                     android:textColor="?attr/colorSecondary"
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <Button
+                    android:id="@+id/userAgent"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
+                    android:text="@string/user_agent"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_video_settings_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="?android:attr/listDivider" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/settingsForceLegacyInstall"
@@ -639,205 +681,7 @@
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:background="?android:attr/listDivider" />
-
-                <Button
-                    android:id="@+id/userAgent"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
-                    android:background="@drawable/ui_bg"
-                    android:backgroundTint="?attr/colorSecondary"
-                    android:backgroundTintMode="src_atop"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/user_agent"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_round_video_settings_24"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp"
-                    app:iconTint="?attr/colorPrimary" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?android:attr/listDivider" />
-
-            </ani.dantotsu.others.Xpandable>
-
-            <ani.dantotsu.others.Xpandable
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="center_vertical"
-                    android:text="@string/downloads"
-                    android:textColor="?attr/colorSecondary"
-                    app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
-                    tools:ignore="TextContrastCheck" />
-
-                <Button
-                    android:id="@+id/settingsDownloadManager"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/download_manager_select"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_round_download_24"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp" />
-
-
-                <!--TODO: Add support for SD card-->
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/settingsDownloadInSd"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawableStart="@drawable/ic_round_sd_card_24"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/downloadInSd"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    android:visibility="gone"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:background="?android:attr/listDivider" />
-
-                <Button
-                    android:id="@+id/purgeAnimeDownloads"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
-                    android:background="@drawable/ui_bg"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/purge_anime_downloads"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_round_new_releases_24"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp"
-                    app:iconTint="?attr/colorPrimary" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?android:attr/listDivider" />
-
-                <Button
-                    android:id="@+id/purgeMangaDownloads"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
-                    android:background="@drawable/ui_bg"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/purge_manga_downloads"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_round_new_releases_24"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp"
-                    app:iconTint="?attr/colorPrimary" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?android:attr/listDivider" />
-
-                <Button
-                    android:id="@+id/purgeNovelDownloads"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
-                    android:background="@drawable/ui_bg"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/purge_novel_downloads"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_round_new_releases_24"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp"
-                    app:iconTint="?attr/colorPrimary" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?android:attr/listDivider" />
-
+                
             </ani.dantotsu.others.Xpandable>
 
             <ani.dantotsu.others.Xpandable
@@ -925,7 +769,6 @@
                             app:tint="?attr/colorOnBackground"
                             tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
                     </androidx.cardview.widget.CardView>
-
                 </LinearLayout>
 
                 <View
@@ -940,14 +783,14 @@
                     android:id="@+id/settingsUi"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
                     android:background="@drawable/ui_bg"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
                     android:text="@string/ui_settings"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
@@ -963,8 +806,59 @@
                     android:layout_height="1dp"
                     android:layout_marginStart="-16dp"
                     android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <Button
+                    android:id="@+id/settingsDownloadManager"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
+                    android:text="@string/download_manager_select"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_download_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
                     android:layout_marginBottom="16dp"
                     android:background="?android:attr/listDivider" />
+
+                <!--TODO: Add support for SD card-->
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingsDownloadInSd"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_round_sd_card_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/downloadInSd"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    android:visibility="gone"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -1066,151 +960,11 @@
                     android:layout_height="64dp"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center_vertical"
-                    android:text="@string/notifications"
-                    android:textColor="?attr/colorSecondary"
-                    app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
-                    tools:ignore="TextContrastCheck" />
-
-                <Button
-                    android:id="@+id/settingsSubscriptionsTime"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-12dp"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:text="@string/subscriptions_checking_time_s"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_round_notifications_none_24"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:alpha="0.58"
-                    android:fontFamily="@font/poppins_family"
-                    android:text="@string/subscriptions_info"
-                    android:textSize="14sp" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/settingsNotificationsCheckingSubscriptions"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawableStart="@drawable/ic_round_smart_button_24"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/notification_for_checking_subscriptions"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
-            </ani.dantotsu.others.Xpandable>
-
-            <ani.dantotsu.others.Xpandable
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="center_vertical"
                     android:text="@string/anime"
                     android:textColor="?attr/colorSecondary"
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:background="?android:attr/listDivider" />
-
-                <Button
-                    android:id="@+id/settingsPinnedAnimeSources"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
-                    android:background="@drawable/ui_bg"
-                    android:backgroundTint="?attr/colorSecondary"
-                    android:backgroundTintMode="src_atop"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/pinned_sources"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_pin"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp"
-                    app:iconTint="?attr/colorPrimary" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?android:attr/listDivider" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/settingsPreferDub"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:checked="false"
-                    android:drawableStart="@drawable/ic_round_audiotrack_24"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/prefer_dub"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
-                <com.google.android.material.materialswitch.MaterialSwitch
-                    android:id="@+id/settingsShowYt"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:checked="true"
-                    android:drawableStart="@drawable/ic_round_play_circle_24"
-                    android:drawablePadding="16dp"
-                    android:elegantTextHeight="true"
-                    android:fontFamily="@font/poppins_bold"
-                    android:minHeight="64dp"
-                    android:text="@string/show_yt"
-                    android:textAlignment="viewStart"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:drawableTint="?attr/colorPrimary"
-                    app:showText="false"
-                    app:thumbTint="@color/button_switch_track" />
-
+                
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -1295,16 +1049,16 @@
                     android:id="@+id/settingsPlayer"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
                     android:background="@drawable/ui_bg"
                     android:backgroundTint="?attr/colorSecondary"
                     android:backgroundTintMode="src_atop"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
                     android:text="@string/player_settings"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
@@ -1320,9 +1074,104 @@
                     android:layout_height="1dp"
                     android:layout_marginStart="-16dp"
                     android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
                     android:background="?android:attr/listDivider" />
 
+                <Button
+                    android:id="@+id/settingsPinnedAnimeSources"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
+                    android:text="@string/pinned_sources"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_pin"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+                <Button
+                    android:id="@+id/purgeAnimeDownloads"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
+                    android:background="@drawable/ui_bg"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
+                    android:text="@string/purge_anime_downloads"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_delete_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingsPreferDub"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_round_audiotrack_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/prefer_dub"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingsShowYt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:checked="true"
+                    android:drawableStart="@drawable/ic_round_play_circle_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/show_yt"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
             </ani.dantotsu.others.Xpandable>
 
             <ani.dantotsu.others.Xpandable
@@ -1339,46 +1188,6 @@
                     android:textColor="?attr/colorSecondary"
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:background="?android:attr/listDivider" />
-
-                <Button
-                    android:id="@+id/settingsPinnedMangaSources"
-                    android:layout_width="match_parent"
-                    android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
-                    android:background="@drawable/ui_bg"
-                    android:backgroundTint="?attr/colorSecondary"
-                    android:backgroundTintMode="src_atop"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/pinned_sources"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="false"
-                    android:textColor="?attr/colorOnBackground"
-                    app:cornerRadius="0dp"
-                    app:icon="@drawable/ic_pin"
-                    app:iconPadding="16dp"
-                    app:iconSize="24dp"
-                    app:iconTint="?attr/colorPrimary" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginStart="-16dp"
-                    android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
-                    android:background="?android:attr/listDivider" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1434,7 +1243,6 @@
                 </LinearLayout>
 
                 <View
-                    android:id="@+id/view3"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginStart="-16dp"
@@ -1446,14 +1254,14 @@
                     android:id="@+id/settingsReader"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
                     android:background="@drawable/ui_bg"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
                     android:text="@string/reader_settings"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
@@ -1469,8 +1277,160 @@
                     android:layout_height="1dp"
                     android:layout_marginStart="-16dp"
                     android:layout_marginEnd="-16dp"
-                    android:layout_marginBottom="8dp"
                     android:background="?android:attr/listDivider" />
+
+                <Button
+                    android:id="@+id/settingsPinnedMangaSources"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
+                    android:background="@drawable/ui_bg"
+                    android:backgroundTint="?attr/colorSecondary"
+                    android:backgroundTintMode="src_atop"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
+                    android:text="@string/pinned_sources"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_pin"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <Button
+                    android:id="@+id/purgeMangaDownloads"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
+                    android:background="@drawable/ui_bg"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
+                    android:text="@string/purge_manga_downloads"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_delete_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:background="?android:attr/listDivider" />
+
+                <Button
+                    android:id="@+id/purgeNovelDownloads"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
+                    android:background="@drawable/ui_bg"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
+                    android:text="@string/purge_novel_downloads"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_delete_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    app:iconTint="?attr/colorPrimary" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginStart="-16dp"
+                    android:layout_marginEnd="-16dp"
+                    android:layout_marginBottom="16dp"
+                    android:background="?android:attr/listDivider" />
+
+            </ani.dantotsu.others.Xpandable>
+
+            <ani.dantotsu.others.Xpandable
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:gravity="center_vertical"
+                    android:text="@string/notifications"
+                    android:textColor="?attr/colorSecondary"
+                    app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
+                    tools:ignore="TextContrastCheck" />
+
+                <Button
+                    android:id="@+id/settingsSubscriptionsTime"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginStart="-11dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:text="@string/subscriptions_checking_time_s"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_notifications_none_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:alpha="0.58"
+                    android:fontFamily="@font/poppins_family"
+                    android:text="@string/subscriptions_info"
+                    android:textSize="14sp" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/settingsNotificationsCheckingSubscriptions"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    android:drawableStart="@drawable/ic_round_smart_button_24"
+                    android:drawablePadding="16dp"
+                    android:elegantTextHeight="true"
+                    android:fontFamily="@font/poppins_bold"
+                    android:minHeight="64dp"
+                    android:text="@string/notification_for_checking_subscriptions"
+                    android:textAlignment="viewStart"
+                    android:textColor="?attr/colorOnBackground"
+                    app:cornerRadius="0dp"
+                    app:drawableTint="?attr/colorPrimary"
+                    app:showText="false"
+                    app:thumbTint="@color/button_switch_track" />
 
             </ani.dantotsu.others.Xpandable>
 
@@ -1494,16 +1454,16 @@
                     android:id="@+id/settingsFAQ"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
                     android:background="@drawable/ui_bg"
                     android:backgroundTint="?attr/colorOnBackground"
                     android:backgroundTintMode="src_atop"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
                     android:text="@string/faq"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
@@ -1537,13 +1497,13 @@
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
                     android:text="@string/devs"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
@@ -1558,13 +1518,13 @@
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
                     android:text="@string/forks"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
@@ -1579,13 +1539,13 @@
                     style="@style/Widget.Material3.Button.TextButton"
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
-                    android:layout_marginStart="-32dp"
-                    android:layout_marginEnd="-32dp"
+                    android:layout_marginStart="-31dp"
+                    android:layout_marginEnd="-31dp"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
+                    android:paddingStart="31dp"
+                    android:paddingEnd="31dp"
                     android:text="@string/disclaimer"
                     android:textAlignment="viewStart"
                     android:textAllCaps="false"
@@ -1601,7 +1561,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
+                android:layout_marginTop="31dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_bold"
                 android:maxLines="3"
