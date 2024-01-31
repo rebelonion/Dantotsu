@@ -1013,9 +1013,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 initPlayer()
                 preloading = false
                 val context = this
-
+                val offline = PrefWrapper.getVal(PrefName.OfflineMode, false)
                 val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
-                if (isOnline(context) && Discord.token != null && !incognito) {
+                if ((isOnline(context) && !offline) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
                         val presence = RPC.createPresence(RPC.Companion.RPCData(
                             applicationId = Discord.application_Id,

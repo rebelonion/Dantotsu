@@ -54,6 +54,7 @@ import ani.dantotsu.themes.ThemeManager
 import eu.kanade.domain.source.service.SourcePreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -70,10 +71,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var incognitoLiveData: SharedPreferenceBooleanLiveData
     private val scope = lifecycleScope
     private var load = false
-
     private var uiSettings = UserInterfaceSettings()
 
-
+    @kotlin.OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("InternalInsetResource", "DiscouragedApi")
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,21 +82,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         //get FRAGMENT_CLASS_NAME from intent
-        val FRAGMENT_CLASS_NAME = intent.getStringExtra("FRAGMENT_CLASS_NAME")
+        val fragment = intent.getStringExtra("FRAGMENT_CLASS_NAME")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
+        var bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-            val backgroundDrawable = _bottomBar.background as GradientDrawable
+            val backgroundDrawable = bottomBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
             val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xF9000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
-            _bottomBar.background = backgroundDrawable
+            bottomBar.background = backgroundDrawable
         }
-        _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
 
         val offset = try {
@@ -209,8 +209,8 @@ class MainActivity : AppCompatActivity() {
         binding.root.doOnAttach {
             initActivity(this)
             uiSettings = loadData("ui_settings") ?: uiSettings
-            selectedOption = if (FRAGMENT_CLASS_NAME != null) {
-                when (FRAGMENT_CLASS_NAME) {
+            selectedOption = if (fragment != null) {
+                when (fragment) {
                     AnimeFragment::class.java.name -> 0
                     HomeFragment::class.java.name -> 1
                     MangaFragment::class.java.name -> 2
@@ -234,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, NoInternet::class.java))
             } else {
                 val model: AnilistHomeViewModel by viewModels()
-                model.genres.observe(this) { it ->
+                model.genres.observe(this) {
                     if (it != null) {
                         if (it) {
                             val navbar = binding.includedNavbar.navbar
@@ -299,7 +299,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (!PrefWrapper.getVal(PrefName.AllowOpeningLinks, true)) {
+                    if (!PrefWrapper.getVal(PrefName.AllowOpeningLinks, false)) {
                         CustomBottomDialog.newInstance().apply {
                             title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
                             val md = "Open settings & click +Add Links & select Anilist & Mal urls"
@@ -337,7 +337,7 @@ class MainActivity : AppCompatActivity() {
             while (downloadCursor.moveToNext()) {
                 val download = downloadCursor.download
                 Log.e("Downloader", download.request.uri.toString())
-                Log.e("Downloader", download.request.id.toString())
+                Log.e("Downloader", download.request.id)
                 Log.e("Downloader", download.request.mimeType.toString())
                 Log.e("Downloader", download.request.data.size.toString())
                 Log.e("Downloader", download.bytesDownloaded.toString())
