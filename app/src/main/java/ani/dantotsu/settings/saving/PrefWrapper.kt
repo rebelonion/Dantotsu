@@ -143,6 +143,49 @@ object PrefWrapper {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun <T> setCustomVal(key: String, value: T) {
+        //for custom force irrelevant
+        with(irrelevantPreferences!!.edit()) {
+            when (value) {
+                is Boolean -> putBoolean(key, value as Boolean)
+                is Int -> putInt(key, value as Int)
+                is Float -> putFloat(key, value as Float)
+                is Long -> putLong(key, value as Long)
+                is String -> putString(key, value as String)
+                is Set<*> -> putStringSet(key, value as Set<String>)
+                else -> throw IllegalArgumentException("Type not supported")
+            }
+            apply()
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getCustomVal(key: String, default: T): T {
+        //for custom force irrelevant
+        return try {
+            when (default) {
+                is Boolean -> irrelevantPreferences!!.getBoolean(key, default) as T
+                is Int -> irrelevantPreferences!!.getInt(key, default) as T
+                is Float -> irrelevantPreferences!!.getFloat(key, default) as T
+                is Long -> irrelevantPreferences!!.getLong(key, default) as T
+                is String -> irrelevantPreferences!!.getString(key, default) as T
+                is Set<*> -> irrelevantPreferences!!.getStringSet(key, default as Set<String>) as T
+                else -> throw IllegalArgumentException("Type not supported")
+            }
+        } catch (e: Exception) {
+            default
+        }
+    }
+
+    fun removeCustomVal(key: String) {
+        //for custom force irrelevant
+        with(irrelevantPreferences!!.edit()) {
+            remove(key)
+            apply()
+        }
+    }
+
     fun SharedPreferenceLiveData<*>.asLiveBool(): SharedPreferenceBooleanLiveData =
         this as? SharedPreferenceBooleanLiveData
             ?: throw ClassCastException("Cannot cast to SharedPreferenceLiveData<Boolean>")

@@ -105,45 +105,6 @@ fun logger(e: Any?, print: Boolean = true) {
         println(e)
 }
 
-fun saveData(fileName: String, data: Any?, context: Context? = null) {
-    tryWith {
-        val a = context ?: currContext()
-        if (a != null) {
-            val fos: FileOutputStream = a.openFileOutput(fileName, Context.MODE_PRIVATE)
-            val os = ObjectOutputStream(fos)
-            os.writeObject(data)
-            os.close()
-            fos.close()
-        }
-    }
-}
-
-@Suppress("UNCHECKED_CAST")
-fun <T> loadData(fileName: String, context: Context? = null, toast: Boolean = true): T? {
-    val a = context ?: currContext()
-    try {
-        if (a?.fileList() != null)
-            if (fileName in a.fileList()) {
-                val fileIS: FileInputStream = a.openFileInput(fileName)
-                val objIS = ObjectInputStream(fileIS)
-                val data = objIS.readObject() as T
-                objIS.close()
-                fileIS.close()
-                return data
-            }
-    } catch (e: Exception) {
-        if (toast) snackString(a?.getString(R.string.error_loading_data, fileName))
-        //try to delete the file
-        try {
-            a?.deleteFile(fileName)
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().log("Failed to delete file $fileName")
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-        e.printStackTrace()
-    }
-    return null
-}
 
 fun initActivity(a: Activity) {
     val window = a.window
