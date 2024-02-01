@@ -100,8 +100,9 @@ class MangaExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw =
-            if (isNsfwEnabled) filteredExtensions else filteredExtensions.filterNot { it.isNsfw }
+        val lang = PrefWrapper.getVal(PrefName.LangSort, "all")
+        val langFilter = if (lang != "all") filteredExtensions.filter { it.lang == lang } else filteredExtensions
+        val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot { it.isNsfw }
         return try {
             val sublist = filternfsw.subList(
                 fromIndex = position,

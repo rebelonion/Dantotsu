@@ -1,12 +1,12 @@
 package ani.dantotsu.settings
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.os.Build.*
 import android.os.Build.VERSION.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +16,9 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityExtensionsBinding
+import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -111,20 +114,20 @@ class ExtensionsActivity : AppCompatActivity() {
             }
         })
 
-
         initActivity(this)
-        binding.languageselect.visibility = View.GONE
-        /* TODO
-                binding.languageselect.setOnClickListener {
-                    val popup = PopupMenu(this, it)
-                    popup.inflate(R.menu.launguage_selector_menu)
-                    popup.setOnMenuItemClickListener { menuItem ->
-                        true
-                    }
-                    popup.setOnDismissListener {
-                    }
-                    popup.show()
-                }*/
+        binding.languageselect.setOnClickListener {
+            val languageOptions = LanguageMapper.Companion.Language.entries.map{ it.name }.toTypedArray()
+            val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
+            val listOrder = PrefWrapper.getVal(PrefName.LangSort,"all")
+            val index = LanguageMapper.Companion.Language.entries.toTypedArray().indexOfFirst{it.code == listOrder}
+            builder.setTitle("Language")
+            builder.setSingleChoiceItems(languageOptions, index){ dialog, i ->
+                PrefWrapper.setVal(PrefName.LangSort, LanguageMapper.Companion.Language.entries[i].code)
+                dialog.dismiss()
+            }
+            val dialog = builder.show()
+            dialog.window?.setDimAmount(0.8f)
+        }
         binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
             bottomMargin = navBarHeight

@@ -45,6 +45,7 @@ enum class PrefName(val data: Pref) {
     AllowOpeningLinks(Pref(Location.Irrelevant, Boolean::class)),
     SearchStyle(Pref(Location.Irrelevant, Int::class)),
     HasUpdatedPrefs(Pref(Location.Irrelevant, Boolean::class)),
+    LangSort(Pref(Location.Irrelevant, String::class)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class)),

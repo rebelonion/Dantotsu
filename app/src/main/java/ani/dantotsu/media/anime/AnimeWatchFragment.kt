@@ -383,12 +383,10 @@ class AnimeWatchFragment : Fragment() {
             if (allSettings.size > 1) {
                 val names =
                     allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
-                var selectedIndex = 0
                 val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                     .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
-                        selectedIndex = which
-                        selectedSetting = allSettings[selectedIndex]
+                    .setSingleChoiceItems(names, -1) { dialog, which ->
+                        selectedSetting = allSettings[which]
                         itemSelected = true
                         dialog.dismiss()
 

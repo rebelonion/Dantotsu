@@ -207,7 +207,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         val managers = arrayOf("Default", "1DM", "ADM")
         val downloadManagerDialog =
-            AlertDialog.Builder(this, R.style.DialogTheme).setTitle("Download Manager")
+            AlertDialog.Builder(this, R.style.MyPopup).setTitle("Download Manager")
         var downloadManager = PrefWrapper.getVal(PrefName.DownloadManager, 0)
         binding.settingsDownloadManager.setOnClickListener {
             val dialog = downloadManagerDialog.setSingleChoiceItems(
@@ -608,7 +608,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }.toTypedArray()
         binding.settingsSubscriptionsTime.text =
             getString(R.string.subscriptions_checking_time_s, timeNames[curTime])
-        val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val speedDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(R.string.subscriptions_checking_time)
         binding.settingsSubscriptionsTime.setOnClickListener {
             val dialog = speedDialog.setSingleChoiceItems(timeNames, curTime) { dialog, i ->

@@ -95,7 +95,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         var speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
         binding.playerSettingsSpeed.text =
             getString(R.string.default_playback_speed, speedsName[settings.defaultSpeed])
-        val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val speedDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.default_speed))
         binding.playerSettingsSpeed.setOnClickListener {
             val dialog =
@@ -246,7 +246,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         }
 
         val resizeModes = arrayOf("Original", "Zoom", "Stretch")
-        val resizeDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val resizeDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.default_resize_mode))
         binding.playerResizeMode.setOnClickListener {
             val dialog =
@@ -332,7 +332,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 "Blue",
                 "Magenta"
             )
-        val primaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val primaryColorDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.primary_sub_color))
         binding.videoSubColorPrimary.setOnClickListener {
             val dialog = primaryColorDialog.setSingleChoiceItems(
@@ -359,7 +359,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Magenta",
             "Transparent"
         )
-        val secondaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val secondaryColorDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorSecondary.setOnClickListener {
             val dialog = secondaryColorDialog.setSingleChoiceItems(
@@ -373,7 +373,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             dialog.window?.setDimAmount(0.8f)
         }
         val typesOutline = arrayOf("Outline", "Shine", "Drop Shadow", "None")
-        val outlineDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val outlineDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.outline_type))
         binding.videoSubOutline.setOnClickListener {
             val dialog = outlineDialog.setSingleChoiceItems(
@@ -400,7 +400,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Blue",
             "Magenta"
         )
-        val subBackgroundDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val subBackgroundDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorBackground.setOnClickListener {
             val dialog = subBackgroundDialog.setSingleChoiceItems(
@@ -428,7 +428,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Blue",
             "Magenta"
         )
-        val subWindowDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val subWindowDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorWindow.setOnClickListener {
             val dialog = subWindowDialog.setSingleChoiceItems(
@@ -449,7 +449,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Century Gothic",
             "Century Gothic Bold"
         )
-        val fontDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val fontDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.subtitle_font))
         binding.videoSubFont.setOnClickListener {
             val dialog = fontDialog.setSingleChoiceItems(fonts, settings.font) { dialog, count ->

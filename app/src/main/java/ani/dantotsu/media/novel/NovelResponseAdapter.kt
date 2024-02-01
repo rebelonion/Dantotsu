@@ -104,7 +104,7 @@ class NovelResponseAdapter(
         binding.root.setOnLongClickListener {
             val builder = androidx.appcompat.app.AlertDialog.Builder(
                 fragment.requireContext(),
-                R.style.DialogTheme
+                R.style.MyPopup
             )
             builder.setTitle("Delete ${novel.name}?")
             builder.setMessage("Are you sure you want to delete ${novel.name}?")
