@@ -101,7 +101,7 @@ class AnilistHomeViewModel : ViewModel() {
         Anilist.getSavedToken(context)
         MAL.getSavedToken(context)
         Discord.getSavedToken(context)
-        if (loadData<Boolean>("check_update") != false) AppUpdater.check(context)
+        if (PrefWrapper.getVal(PrefName.CheckUpdate, false)) AppUpdater.check(context)
         genres.postValue(Anilist.query.getGenresAndTags(context))
     }
 

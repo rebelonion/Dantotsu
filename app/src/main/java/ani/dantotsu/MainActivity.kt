@@ -78,11 +78,11 @@ class MainActivity : AppCompatActivity() {
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
-        
+
         super.onCreate(savedInstanceState)
 
         //get FRAGMENT_CLASS_NAME from intent
-        val FRAGMENT_CLASS_NAME = intent.getStringExtra("FRAGMENT_CLASS_NAME")
+        val fragment = intent.getStringExtra("FRAGMENT_CLASS_NAME")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -209,8 +209,8 @@ class MainActivity : AppCompatActivity() {
         binding.root.doOnAttach {
             initActivity(this)
             uiSettings = loadData("ui_settings") ?: uiSettings
-            selectedOption = if (FRAGMENT_CLASS_NAME != null) {
-                when (FRAGMENT_CLASS_NAME) {
+            selectedOption = if (fragment != null) {
+                when (fragment) {
                     AnimeFragment::class.java.name -> 0
                     HomeFragment::class.java.name -> 1
                     MangaFragment::class.java.name -> 2
@@ -299,7 +299,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (loadData<Boolean>("allow_opening_links", this) != true) {
+                    if (!PrefWrapper.getVal(PrefName.AllowOpeningLinks, false)) {
                         CustomBottomDialog.newInstance().apply {
                             title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
                             val md = "Open settings & click +Add Links & select Anilist & Mal urls"
@@ -311,18 +311,19 @@ class MainActivity : AppCompatActivity() {
                             })
 
                             setNegativeButton(this@MainActivity.getString(R.string.no)) {
-                                saveData("allow_opening_links", true, this@MainActivity)
+                                PrefWrapper.setVal(PrefName.AllowOpeningLinks, true)
                                 dismiss()
                             }
 
                             setPositiveButton(this@MainActivity.getString(R.string.yes)) {
-                                saveData("allow_opening_links", true, this@MainActivity)
+                                PrefWrapper.setVal(PrefName.AllowOpeningLinks, true)
                                 tryWith(true) {
                                     startActivity(
                                         Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
                                             .setData(Uri.parse("package:$packageName"))
                                     )
                                 }
+                                dismiss()
                             }
                         }.show(supportFragmentManager, "dialog")
                     }
@@ -336,7 +337,7 @@ class MainActivity : AppCompatActivity() {
             while (downloadCursor.moveToNext()) {
                 val download = downloadCursor.download
                 Log.e("Downloader", download.request.uri.toString())
-                Log.e("Downloader", download.request.id.toString())
+                Log.e("Downloader", download.request.id)
                 Log.e("Downloader", download.request.mimeType.toString())
                 Log.e("Downloader", download.request.data.size.toString())
                 Log.e("Downloader", download.bytesDownloaded.toString())

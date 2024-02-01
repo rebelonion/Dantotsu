@@ -355,7 +355,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         viewPager.setCurrentItem(selected, false)
 
         if (model.continueMedia == null && media.cameFromContinue) {
-            model.continueMedia = loadData("continue_media") ?: true
+            model.continueMedia = PrefWrapper.getVal(PrefName.ContinueMedia, true)
             selected = 1
         }
 

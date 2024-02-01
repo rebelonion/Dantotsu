@@ -98,8 +98,6 @@ class MangaReaderActivity : AppCompatActivity() {
     var sliding = false
     var isAnimating = false
 
-    private var rpc: RPC? = null
-
     override fun onAttachedToWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !settings.showSystemBars) {
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
@@ -320,8 +318,9 @@ class MangaReaderActivity : AppCompatActivity() {
                     chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 applySettings()
                 val context = this
+                val offline = PrefWrapper.getVal(PrefName.OfflineMode, false)
                 val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
-                if (isOnline(context) && Discord.token != null && !incognito) {
+                if ((isOnline(context) && !offline) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
                         val presence = RPC.createPresence(
                             RPC.Companion.RPCData(

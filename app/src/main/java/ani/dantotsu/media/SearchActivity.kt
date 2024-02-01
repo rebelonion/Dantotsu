@@ -16,6 +16,8 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistSearch
 import ani.dantotsu.connections.anilist.SearchResults
 import ani.dantotsu.databinding.ActivitySearchBinding
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,7 +53,7 @@ class SearchActivity : AppCompatActivity() {
             bottom = navBarHeight + 80f.px
         )
 
-        style = loadData<Int>("searchStyle") ?: 0
+        style = PrefWrapper.getVal(PrefName.SearchStyle,0)
         var listOnly: Boolean? = intent.getBooleanExtra("listOnly", false)
         if (!listOnly!!) listOnly = null
 

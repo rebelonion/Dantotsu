@@ -8,6 +8,8 @@ import androidx.core.app.NotificationManagerCompat
 import ani.dantotsu.*
 import ani.dantotsu.parsers.Episode
 import ani.dantotsu.parsers.MangaChapter
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -41,7 +43,7 @@ class Subscription {
                 val notificationManager = NotificationManagerCompat.from(context)
 
                 val progressEnabled =
-                    loadData("subscription_checking_notifications", context) ?: true
+                    PrefWrapper.getVal(PrefName.SubscriptionCheckingNotifications, true)
                 val progressNotification = if (progressEnabled) getProgressNotification(
                     context,
                     subscriptions.size

@@ -28,6 +28,8 @@ import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.WatchSources
 import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
@@ -48,7 +50,7 @@ class MediaDetailsViewModel : ViewModel() {
     fun loadSelected(media: Media, isDownload: Boolean = false): Selected {
         val data = loadData<Selected>("${media.id}-select") ?: Selected().let {
             it.sourceIndex = 0
-            it.preferDub = loadData("settings_prefer_dub") ?: false
+            it.preferDub = PrefWrapper.getVal(PrefName.SettingsPreferDub, false)
             saveSelected(media.id, it)
             it
         }

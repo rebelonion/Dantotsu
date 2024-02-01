@@ -21,6 +21,8 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -92,14 +94,15 @@ class MangaExtensionPagingSource(
         val availableExtensions =
             availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
         val query = searchQuery
-        val isNsfwEnabled: Boolean = loadData("NSFWExtension") ?: true
+        val isNsfwEnabled: Boolean = PrefWrapper.getVal(PrefName.NSFWExtension,true)
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw =
-            if (isNsfwEnabled) filteredExtensions else filteredExtensions.filterNot { it.isNsfw }
+        val lang = PrefWrapper.getVal(PrefName.LangSort, "all")
+        val langFilter = if (lang != "all") filteredExtensions.filter { it.lang == lang } else filteredExtensions
+        val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot { it.isNsfw }
         return try {
             val sublist = filternfsw.subList(
                 fromIndex = position,
@@ -125,7 +128,7 @@ class MangaExtensionAdapter(private val clickListener: OnMangaInstallClickListen
         DIFF_CALLBACK
     ) {
 
-    private val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons = PrefWrapper.getVal(PrefName.SkipExtensionIcons, false)
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<MangaExtension.Available>() {

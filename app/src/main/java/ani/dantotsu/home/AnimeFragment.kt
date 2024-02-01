@@ -272,7 +272,7 @@ class AnimeFragment : Fragment() {
                         model.loadTrending(1)
                         model.loadUpdated()
                         model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = PrefWrapper.getVal(
-                            PrefName.PopularAnimeList, false))
+                            PrefName.PopularAnimeList, true))
                     }
                     live.postValue(false)
                     _binding?.animeRefresh?.isRefreshing = false

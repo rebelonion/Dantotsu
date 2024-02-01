@@ -16,6 +16,8 @@ import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefWrapper
 import ani.dantotsu.tryWithSuspend
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -29,7 +31,7 @@ class SubscriptionHelper {
         ): Selected {
             val data = loadData<Selected>("${mediaId}-select", context) ?: Selected().let {
                 it.sourceIndex = 0
-                it.preferDub = loadData("settings_prefer_dub", context) ?: false
+                it.preferDub = PrefWrapper.getVal(PrefName.SettingsPreferDub, false)
                 it
             }
             return data

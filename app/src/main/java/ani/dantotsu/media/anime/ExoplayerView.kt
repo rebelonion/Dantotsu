@@ -543,7 +543,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     exoPlayer.seekTo(exoPlayer.currentPosition + settings.skipTime * 1000)
             }
             exoSkip.setOnLongClickListener {
-                val dialog = Dialog(this, R.style.DialogTheme)
+                val dialog = Dialog(this, R.style.MyPopup)
                 dialog.setContentView(R.layout.item_seekbar_dialog)
                 dialog.setCancelable(true)
                 dialog.setCanceledOnTouchOutside(true)
@@ -1013,9 +1013,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 initPlayer()
                 preloading = false
                 val context = this
-
+                val offline = PrefWrapper.getVal(PrefName.OfflineMode, false)
                 val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
-                if (isOnline(context) && Discord.token != null && !incognito) {
+                if ((isOnline(context) && !offline) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
                         val presence = RPC.createPresence(RPC.Companion.RPCData(
                             applicationId = Discord.application_Id,
@@ -1144,7 +1144,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         playbackParameters = PlaybackParameters(speeds[curSpeed])
         var speed: Float
         val speedDialog =
-            AlertDialog.Builder(this, R.style.DialogTheme).setTitle(getString(R.string.speed))
+            AlertDialog.Builder(this, R.style.MyPopup).setTitle(getString(R.string.speed))
         exoSpeed.setOnClickListener {
             val dialog = speedDialog.setSingleChoiceItems(speedsName, curSpeed) { dialog, i ->
                 if (isInitialized) {
@@ -1413,7 +1413,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     )
                 )
             )
-            val dialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.continue_from, time)).apply {
                     setCancelable(false)
                     setPositiveButton(getString(R.string.yes)) { d, _ ->

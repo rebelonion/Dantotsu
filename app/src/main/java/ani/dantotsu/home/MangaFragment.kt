@@ -246,8 +246,7 @@ class MangaFragment : Fragment() {
                         model.loadTrending()
                         model.loadTrendingNovel()
                         model.loadPopular("MANGA", sort = Anilist.sortBy[1], onList = PrefWrapper.getVal(
-                            PrefName.PopularMangaList, false
-                        ))
+                            PrefName.PopularMangaList, true))
                     }
                     live.postValue(false)
                     _binding?.mangaRefresh?.isRefreshing = false

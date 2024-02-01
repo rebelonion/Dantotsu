@@ -22,7 +22,6 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemSearchHeaderBinding
-import ani.dantotsu.saveData
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefWrapper
 import com.google.android.material.checkbox.MaterialCheckBox.*
@@ -149,14 +148,14 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
             it.alpha = 1f
             binding.searchResultList.alpha = 0.33f
             activity.style = 0
-            saveData("searchStyle", 0)
+            PrefWrapper.setVal(PrefName.SearchStyle, 0)
             activity.recycler()
         }
         binding.searchResultList.setOnClickListener {
             it.alpha = 1f
             binding.searchResultGrid.alpha = 0.33f
             activity.style = 1
-            saveData("searchStyle", 1)
+            PrefWrapper.setVal(PrefName.SearchStyle, 1)
             activity.recycler()
         }
 
