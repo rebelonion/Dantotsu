@@ -8,15 +8,15 @@ data class Pref(
     val type: KClass<*>,
     val default: Any
 )
-enum class Location(val location: String) {
-    General("ani.dantotsu.general"),
-    UI("ani.dantotsu.ui"),
-    Anime("ani.dantotsu.anime"),
-    Manga("ani.dantotsu.manga"),
-    Player("ani.dantotsu.player"),
-    Reader("ani.dantotsu.reader"),
-    NovelReader("ani.dantotsu.novelReader"),
-    Irrelevant("ani.dantotsu.irrelevant"),
-    AnimeDownloads("animeDownloads"),  //different for legacy reasons
-    Protected("ani.dantotsu.protected")
+enum class Location(val location: String, val exportable: Boolean) {
+    General("ani.dantotsu.general", true),
+    UI("ani.dantotsu.ui", true),
+    Anime("ani.dantotsu.anime", true),
+    Manga("ani.dantotsu.manga", true),
+    Player("ani.dantotsu.player", true),
+    Reader("ani.dantotsu.reader", true),
+    NovelReader("ani.dantotsu.novelReader", true),
+    Irrelevant("ani.dantotsu.irrelevant", false),
+    AnimeDownloads("animeDownloads", false),  //different for legacy reasons
+    Protected("ani.dantotsu.protected", false),
 }

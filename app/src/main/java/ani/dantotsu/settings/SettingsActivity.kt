@@ -72,7 +72,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     private var cursedCounter = 0
 
     @OptIn(UnstableApi::class)
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "Recycle")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -267,7 +267,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             selectedImpExp = Location.entries[i].name
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Import/Export Settings")
-                .setSingleChoiceItems(Location.entries.map { it.name }.toTypedArray(), 0) { dialog, which ->
+                .setSingleChoiceItems(Location.entries
+                    .filter { it.exportable }
+                    .map { it.name }.toTypedArray(), 0) { dialog, which ->
                     selectedImpExp = Location.entries[which].name
                     i = which
                 }
