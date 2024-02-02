@@ -47,9 +47,8 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.subcriptions.NotificationClickReceiver
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
@@ -61,6 +60,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.gson.Gson
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
@@ -109,11 +109,9 @@ fun logger(e: Any?, print: Boolean = true) {
 fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
-    val uiSettings = loadData<UserInterfaceSettings>("ui_settings", toast = false)
-        ?: UserInterfaceSettings().apply {
-            saveData("ui_settings", this)
-        }
-    uiSettings.darkMode.apply {
+    val darkMode = PrefManager.getNullableVal(PrefName.DarkMode, null as Boolean?)
+    val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
+    darkMode.apply {
         AppCompatDelegate.setDefaultNightMode(
             when (this) {
                 true -> AppCompatDelegate.MODE_NIGHT_YES
@@ -122,7 +120,7 @@ fun initActivity(a: Activity) {
             }
         )
     }
-    if (uiSettings.immersiveMode) {
+    if (immersiveMode) {
         if (navBarHeight == 0) {
             ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
                 ?.apply {
@@ -290,20 +288,19 @@ class InputFilterMinMax(
 }
 
 
-class ZoomOutPageTransformer(private val uiSettings: UserInterfaceSettings) :
+class ZoomOutPageTransformer() :
     ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
-        if (position == 0.0f && uiSettings.layoutAnimations) {
+        if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {
             setAnimation(
                 view.context,
                 view,
-                uiSettings,
                 300,
                 floatArrayOf(1.3f, 1f, 1.3f, 1f),
                 0.5f to 0f
             )
             ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f)
-                .setDuration((200 * uiSettings.animationSpeed).toLong()).start()
+                .setDuration((200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()).start()
         }
     }
 }
@@ -311,12 +308,11 @@ class ZoomOutPageTransformer(private val uiSettings: UserInterfaceSettings) :
 fun setAnimation(
     context: Context,
     viewToAnimate: View,
-    uiSettings: UserInterfaceSettings,
     duration: Long = 150,
     list: FloatArray = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f),
     pivot: Pair<Float, Float> = 0.5f to 0.5f
 ) {
-    if (uiSettings.layoutAnimations) {
+    if (PrefManager.getVal(PrefName.LayoutAnimations)) {
         val anim = ScaleAnimation(
             list[0],
             list[1],
@@ -327,7 +323,7 @@ fun setAnimation(
             Animation.RELATIVE_TO_SELF,
             pivot.second
         )
-        anim.duration = (duration * uiSettings.animationSpeed).toLong()
+        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
         anim.setInterpolator(context, R.anim.over_shoot)
         viewToAnimate.startAnimation(anim)
     }
@@ -592,6 +588,34 @@ fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
     )
 }
 
+fun savePrefsToDownloads(title: String, map: Map<String, *>, context: Context) {
+    FileProvider.getUriForFile(
+        context,
+        "$APPLICATION_ID.provider",
+        savePrefs(
+            map,
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
+            title,
+            context
+        ) ?: return
+    )
+}
+
+fun savePrefs(map: Map<String, *>, path: String, title: String, context: Context): File? {
+    val file = File(path, "$title.ani")
+    return try {
+        val gson = Gson()
+        val json = gson.toJson(map)
+        file.writeText(json)
+        scanFile(file.absolutePath, context)
+        toast(String.format(context.getString(R.string.saved_to_path, path)))
+        file
+    } catch (e: Exception) {
+        snackString("Failed to save settings: ${e.localizedMessage}")
+        null
+    }
+}
+
 fun shareImage(title: String, bitmap: Bitmap, context: Context) {
 
     val contentUri = FileProvider.getUriForFile(
@@ -708,10 +732,11 @@ fun MutableMap<String, Genre>.checkGenreTime(genre: String): Boolean {
     return true
 }
 
-fun setSlideIn(uiSettings: UserInterfaceSettings) = AnimationSet(false).apply {
-    if (uiSettings.layoutAnimations) {
+fun setSlideIn() = AnimationSet(false).apply {
+    if (PrefManager.getVal(PrefName.LayoutAnimations)) {
         var animation: Animation = AlphaAnimation(0.0f, 1.0f)
-        animation.duration = (500 * uiSettings.animationSpeed).toLong()
+        val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)
+        animation.duration = (500 * animationSpeed).toLong()
         animation.interpolator = AccelerateDecelerateInterpolator()
         addAnimation(animation)
 
@@ -722,16 +747,17 @@ fun setSlideIn(uiSettings: UserInterfaceSettings) = AnimationSet(false).apply {
             Animation.RELATIVE_TO_SELF, 0f
         )
 
-        animation.duration = (750 * uiSettings.animationSpeed).toLong()
+        animation.duration = (750 * animationSpeed).toLong()
         animation.interpolator = OvershootInterpolator(1.1f)
         addAnimation(animation)
     }
 }
 
-fun setSlideUp(uiSettings: UserInterfaceSettings) = AnimationSet(false).apply {
-    if (uiSettings.layoutAnimations) {
+fun setSlideUp() = AnimationSet(false).apply {
+    if (PrefManager.getVal(PrefName.LayoutAnimations)) {
         var animation: Animation = AlphaAnimation(0.0f, 1.0f)
-        animation.duration = (500 * uiSettings.animationSpeed).toLong()
+        val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)
+        animation.duration = (500 * animationSpeed).toLong()
         animation.interpolator = AccelerateDecelerateInterpolator()
         addAnimation(animation)
 
@@ -742,7 +768,7 @@ fun setSlideUp(uiSettings: UserInterfaceSettings) = AnimationSet(false).apply {
             Animation.RELATIVE_TO_SELF, 0f
         )
 
-        animation.duration = (750 * uiSettings.animationSpeed).toLong()
+        animation.duration = (750 * animationSpeed).toLong()
         animation.interpolator = OvershootInterpolator(1.1f)
         addAnimation(animation)
     }
@@ -929,7 +955,7 @@ const val INCOGNITO_CHANNEL_ID = 26
 fun incognitoNotification(context: Context) {
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
+    val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
     if (incognito) {
         val intent = Intent(context, NotificationClickReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(

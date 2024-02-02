@@ -2,7 +2,6 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.SpannableStringBuilder
@@ -35,7 +34,6 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityMediaBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.anime.AnimeWatchFragment
 import ani.dantotsu.media.manga.MangaReadFragment
@@ -44,10 +42,8 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
-import ani.dantotsu.saveData
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -67,7 +63,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     private val scope = lifecycleScope
     private val model: MediaDetailsViewModel by viewModels()
     private lateinit var tabLayout: NavigationBarView
-    private lateinit var uiSettings: UserInterfaceSettings
     var selected = 0
     var anime = true
     private var adult = false
@@ -92,7 +87,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         //Ui init
 
         initActivity(this)
-        uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
 
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
@@ -113,20 +107,21 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             onBackPressedDispatcher.onBackPressed()
         }
 
-        if (uiSettings.bannerAnimations) {
+        val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+        if (bannerAnimations) {
             val adi = AccelerateDecelerateInterpolator()
             val generator = RandomTransitionGenerator(
-                (10000 + 15000 * (uiSettings.animationSpeed)).toLong(),
+                (10000 + 15000 * ((PrefManager.getVal(PrefName.AnimationSpeed) as Float))).toLong(),
                 adi
             )
             binding.mediaBanner.setTransitionGenerator(generator)
         }
         val banner =
-            if (uiSettings.bannerAnimations) binding.mediaBanner else binding.mediaBannerNoKen
+            if (bannerAnimations) binding.mediaBanner else binding.mediaBannerNoKen
         val viewPager = binding.mediaViewPager
         tabLayout = binding.mediaTab as NavigationBarView
         viewPager.isUserInputEnabled = false
-        viewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
+        viewPager.setPageTransformer(ZoomOutPageTransformer())
 
 
         val isDownload = intent.getBooleanExtra("download", false)
@@ -143,7 +138,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         banner.loadImage(media.banner ?: media.cover, 400)
         val gestureDetector = GestureDetector(this, object : GesturesListener() {
             override fun onDoubleClick(event: MotionEvent) {
-                if (!uiSettings.bannerAnimations)
+                if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean))
                     snackString(getString(R.string.enable_banner_animations))
                 else {
                     binding.mediaBanner.restart()
@@ -161,7 +156,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
         })
         banner.setOnTouchListener { _, motionEvent -> gestureDetector.onTouchEvent(motionEvent);true }
-        if (PrefWrapper.getVal(PrefName.Incognito, false)) {
+        if (PrefManager.getVal(PrefName.Incognito)) {
             binding.mediaTitle.text = "    ${media.userPreferredName}"
             binding.incognito.visibility = View.VISIBLE
         } else {
@@ -285,7 +280,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 } else snackString(getString(R.string.please_login_anilist))
             }
             binding.mediaAddToList.setOnLongClickListener {
-                saveData("${media.id}_progressDialog", true)
+                PrefManager.setCustomVal(
+                    "${media.id}_progressDialog",
+                    true,
+                )
                 snackString(getString(R.string.auto_update_reset))
                 true
             }
@@ -346,7 +344,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             viewPager.setCurrentItem(selected, false)
             val sel = model.loadSelected(media, isDownload)
             sel.window = selected
-            model.saveSelected(media.id, sel, this)
+            model.saveSelected(media.id, sel)
             true
         }
 
@@ -355,7 +353,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         viewPager.setCurrentItem(selected, false)
 
         if (model.continueMedia == null && media.cameFromContinue) {
-            model.continueMedia = PrefWrapper.getVal(PrefName.ContinueMedia, true)
+            model.continueMedia = PrefManager.getVal(PrefName.ContinueMedia)
             selected = 1
         }
 
@@ -440,7 +438,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         binding.mediaCover.visibility =
             if (binding.mediaCover.scaleX == 0f) View.GONE else View.VISIBLE
-        val duration = (200 * uiSettings.animationSpeed).toLong()
+        val duration = (200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
         val typedValue = TypedValue()
         this@MediaDetailsActivity.theme.resolveAttribute(
             com.google.android.material.R.attr.colorSecondary,
@@ -470,7 +468,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 .start()
             ObjectAnimator.ofFloat(binding.mediaCollapseContainer, "translationX", 0f)
                 .setDuration(duration).start()
-            if (uiSettings.bannerAnimations) binding.mediaBanner.resume()
+            if (PrefManager.getVal(PrefName.BannerAnimations)) binding.mediaBanner.resume()
         }
         if (percentage == 1 && model.scrolledToTop.value != false) model.scrolledToTop.postValue(
             false

@@ -3,6 +3,8 @@ package eu.kanade.tachiyomi.network
 import android.content.Context
 import android.os.Build
 import ani.dantotsu.Mapper
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.interceptor.CloudflareInterceptor
 import eu.kanade.tachiyomi.network.interceptor.UncaughtExceptionInterceptor
@@ -14,8 +16,7 @@ import java.io.File
 import java.util.concurrent.TimeUnit
 
 class NetworkHelper(
-    context: Context,
-    private val preferences: NetworkPreferences,
+    context: Context
 ) {
 
     private val cacheDir = File(context.cacheDir, "network_cache")
@@ -39,14 +40,14 @@ class NetworkHelper(
             .addInterceptor(UncaughtExceptionInterceptor())
             .addInterceptor(userAgentInterceptor)
 
-        if (preferences.verboseLogging().get()) {
+        if (PrefManager.getVal(PrefName.VerboseLogging)) {
             val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.HEADERS
             }
             builder.addNetworkInterceptor(httpLoggingInterceptor)
         }
 
-        when (preferences.dohProvider().get()) {
+        when (PrefManager.getVal<Int>(PrefName.DohProvider)) {
             PREF_DOH_CLOUDFLARE -> builder.dohCloudflare()
             PREF_DOH_GOOGLE -> builder.dohGoogle()
             PREF_DOH_ADGUARD -> builder.dohAdGuard()
@@ -88,5 +89,5 @@ class NetworkHelper(
         responseParser = Mapper
     )
 
-    fun defaultUserAgentProvider() = preferences.defaultUserAgent().get().trim()
+    fun defaultUserAgentProvider() = PrefManager.getVal<String>(PrefName.DefaultUserAgent)
 }

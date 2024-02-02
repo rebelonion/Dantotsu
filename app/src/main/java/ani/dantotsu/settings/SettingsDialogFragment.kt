@@ -26,7 +26,7 @@ import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.startMainActivity
 
 class SettingsDialogFragment : BottomSheetDialogFragment() {
@@ -76,10 +76,10 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         }
 
         binding.settingsIncognito.isChecked =
-            PrefWrapper.getVal(PrefName.Incognito, false)
+            PrefManager.getVal(PrefName.Incognito)
 
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.Incognito, isChecked)
+            PrefManager.setVal(PrefName.Incognito, isChecked)
             incognitoNotification(requireContext())
         }
         binding.settingsExtensionSettings.setSafeOnClickListener {
@@ -99,7 +99,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        binding.settingsDownloads.isChecked = PrefWrapper.getVal(PrefName.OfflineMode, false)
+        binding.settingsDownloads.isChecked = PrefManager.getVal(PrefName.OfflineMode)
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
             when (pageType) {
                 PageType.MANGA -> {
@@ -149,7 +149,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             }
 
             dismiss()
-            PrefWrapper.setVal(PrefName.OfflineMode, isChecked)
+            PrefManager.setVal(PrefName.OfflineMode, isChecked)
         }
     }
 

@@ -33,8 +33,7 @@ abstract class BaseImageAdapter(
     val activity: MangaReaderActivity,
     chapter: MangaChapter
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    val settings = activity.settings.default
-    val uiSettings = activity.uiSettings
+    val settings = activity.defaultSettings
     val images = chapter.images()
 
     @SuppressLint("ClickableViewAccessibility")

@@ -1,6 +1,5 @@
 package ani.dantotsu.media
 
-import android.app.Activity
 import android.os.Handler
 import android.os.Looper
 import androidx.fragment.app.FragmentManager
@@ -10,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.currContext
-import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.anime.SelectorDialogFragment
@@ -27,30 +25,28 @@ import ani.dantotsu.parsers.NovelSources
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.WatchSources
-import ani.dantotsu.saveData
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 
 class MediaDetailsViewModel : ViewModel() {
     val scrolledToTop = MutableLiveData(true)
 
-    fun saveSelected(id: Int, data: Selected, activity: Activity? = null) {
-        saveData("$id-select", data, activity)
+    fun saveSelected(id: Int, data: Selected) {
+        PrefManager.setCustomVal("Selected-$id", data)
     }
 
 
     fun loadSelected(media: Media, isDownload: Boolean = false): Selected {
-        val data = loadData<Selected>("${media.id}-select") ?: Selected().let {
+        val data = PrefManager.getNullableCustomVal<Selected?>("Selected-${media.id}", null)
+            ?: Selected().let {
             it.sourceIndex = 0
-            it.preferDub = PrefWrapper.getVal(PrefName.SettingsPreferDub, false)
+            it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)
             saveSelected(media.id, it)
             it
         }

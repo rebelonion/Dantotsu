@@ -3,10 +3,9 @@ package ani.dantotsu.parsers
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.currContext
-import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefManager
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -135,7 +134,7 @@ abstract class BaseParser {
      * **/
     open suspend fun loadSavedShowResponse(mediaId: Int): ShowResponse? {
         checkIfVariablesAreEmpty()
-        return loadData("${saveName}_$mediaId")
+        return PrefManager.getNullableCustomVal<ShowResponse?>("${saveName}_$mediaId", null)
     }
 
     /**
@@ -151,7 +150,7 @@ abstract class BaseParser {
                     )
                 } : ${response.name}"
             )
-            saveData("${saveName}_$mediaId", response)
+            PrefManager.setCustomVal("${saveName}_$mediaId", response)
         }
     }
 

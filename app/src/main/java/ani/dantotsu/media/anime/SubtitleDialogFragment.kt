@@ -15,10 +15,9 @@ import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.R
 import ani.dantotsu.databinding.BottomSheetSubtitlesBinding
 import ani.dantotsu.databinding.ItemSubtitleTextBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.parsers.Subtitle
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefManager
 
 class SubtitleDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSubtitlesBinding? = null
@@ -69,7 +68,7 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                 binding.subtitleTitle.setText(R.string.none)
                 model.getMedia().observe(viewLifecycleOwner) { media ->
                     val mediaID: Int = media.id
-                    val selSubs: String? = loadData("subLang_${mediaID}", activity)
+                    val selSubs = PrefManager.getCustomVal<String?>("subLang_${mediaID}", null)
                     if (episode.selectedSubtitle != null && selSubs != "None") {
                         binding.root.setCardBackgroundColor(TRANSPARENT)
                     }
@@ -79,7 +78,7 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                     model.setEpisode(episode, "Subtitle")
                     model.getMedia().observe(viewLifecycleOwner) { media ->
                         val mediaID: Int = media.id
-                        saveData("subLang_${mediaID}", "None", activity)
+                        PrefManager.setCustomVal("subLang_${mediaID}", "None")
                     }
                     dismiss()
                 }
@@ -108,7 +107,7 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                 }
                 model.getMedia().observe(viewLifecycleOwner) { media ->
                     val mediaID: Int = media.id
-                    val selSubs: String? = loadData("subLang_${mediaID}", activity)
+                    val selSubs: String? = PrefManager.getCustomVal<String?>("subLang_${mediaID}", null)
                     if (episode.selectedSubtitle != position - 1 && selSubs != subtitles[position - 1].language) {
                         binding.root.setCardBackgroundColor(TRANSPARENT)
                     }
@@ -119,7 +118,7 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                     model.setEpisode(episode, "Subtitle")
                     model.getMedia().observe(viewLifecycleOwner) { media ->
                         val mediaID: Int = media.id
-                        saveData("subLang_${mediaID}", subtitles[position - 1].language, activity)
+                        PrefManager.setCustomVal("subLang_${mediaID}", subtitles[position - 1].language)
                     }
                     dismiss()
                 }

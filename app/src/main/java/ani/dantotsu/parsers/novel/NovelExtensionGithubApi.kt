@@ -2,10 +2,9 @@ package ani.dantotsu.parsers.novel
 
 
 import android.content.Context
-import ani.dantotsu.currContext
 import ani.dantotsu.logger
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
@@ -28,7 +27,7 @@ class NovelExtensionGithubApi {
     private val novelExtensionManager: NovelExtensionManager by injectLazy()
     private val json: Json by injectLazy()
 
-    private val lastExtCheck: Long = PrefWrapper.getVal(PrefName.NovelLastExtCheck, 0L)
+    private val lastExtCheck: Long = PrefManager.getVal(PrefName.NovelLastExtCheck)
 
     private var requiresFallbackSource = false
 
@@ -86,7 +85,7 @@ class NovelExtensionGithubApi {
             novelExtensionManager.availableExtensionsFlow.value
         } else {
             findExtensions().also {
-                PrefWrapper.setVal(PrefName.NovelLastExtCheck, Date().time)
+                PrefManager.setVal(PrefName.NovelLastExtCheck, Date().time)
             }
         }
 

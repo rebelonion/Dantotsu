@@ -26,7 +26,8 @@ import ani.dantotsu.databinding.ItemMediaCompactBinding
 import ani.dantotsu.databinding.ItemMediaLargeBinding
 import ani.dantotsu.databinding.ItemMediaPageBinding
 import ani.dantotsu.databinding.ItemMediaPageSmallBinding
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
@@ -43,9 +44,6 @@ class MediaAdaptor(
     private val matchParent: Boolean = false,
     private val viewPager: ViewPager2? = null,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private val uiSettings =
-        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (type) {
@@ -91,7 +89,7 @@ class MediaAdaptor(
         when (type) {
             0 -> {
                 val b = (holder as MediaViewHolder).binding
-                setAnimation(activity, b.root, uiSettings)
+                setAnimation(activity, b.root)
                 val media = mediaList?.getOrNull(position)
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
@@ -135,7 +133,7 @@ class MediaAdaptor(
 
             1 -> {
                 val b = (holder as MediaLargeViewHolder).binding
-                setAnimation(activity, b.root, uiSettings)
+                setAnimation(activity, b.root)
                 val media = mediaList?.get(position)
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
@@ -178,16 +176,17 @@ class MediaAdaptor(
                 val b = (holder as MediaPageViewHolder).binding
                 val media = mediaList?.get(position)
                 if (media != null) {
+                    val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
                     b.itemCompactImage.loadImage(media.cover)
-                    if (uiSettings.bannerAnimations)
+                    if (bannerAnimations)
                         b.itemCompactBanner.setTransitionGenerator(
                             RandomTransitionGenerator(
-                                (10000 + 15000 * (uiSettings.animationSpeed)).toLong(),
+                                (10000 + 15000 * ((PrefManager.getVal(PrefName.AnimationSpeed)) as Float)).toLong(),
                                 AccelerateDecelerateInterpolator()
                             )
                         )
                     val banner =
-                        if (uiSettings.bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
+                        if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
                     val context = b.itemCompactBanner.context
                     if (!(context as Activity).isDestroyed)
                         Glide.with(context as Context)
@@ -234,16 +233,17 @@ class MediaAdaptor(
                 val b = (holder as MediaPageSmallViewHolder).binding
                 val media = mediaList?.get(position)
                 if (media != null) {
+                    val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
                     b.itemCompactImage.loadImage(media.cover)
-                    if (uiSettings.bannerAnimations)
+                    if (bannerAnimations)
                         b.itemCompactBanner.setTransitionGenerator(
                             RandomTransitionGenerator(
-                                (10000 + 15000 * (uiSettings.animationSpeed)).toLong(),
+                                (10000 + 15000 * ((PrefManager.getVal(PrefName.AnimationSpeed) as Float))).toLong(),
                                 AccelerateDecelerateInterpolator()
                             )
                         )
                     val banner =
-                        if (uiSettings.bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
+                        if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
                     val context = b.itemCompactBanner.context
                     if (!(context as Activity).isDestroyed)
                         Glide.with(context as Context)

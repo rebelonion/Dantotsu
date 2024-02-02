@@ -16,7 +16,6 @@ import eu.kanade.tachiyomi.core.preference.AndroidPreferenceStore
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.source.anime.AndroidAnimeSourceManager
 import eu.kanade.tachiyomi.source.manga.AndroidMangaSourceManager
 import kotlinx.serialization.json.Json
@@ -36,7 +35,7 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { DownloadsManager(app) }
 
-        addSingletonFactory { NetworkHelper(app, get()) }
+        addSingletonFactory { NetworkHelper(app) }
 
         addSingletonFactory { AnimeExtensionManager(app) }
         addSingletonFactory { MangaExtensionManager(app) }
@@ -67,13 +66,6 @@ class PreferenceModule(val application: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingletonFactory<PreferenceStore> {
             AndroidPreferenceStore(application)
-        }
-
-        addSingletonFactory {
-            NetworkPreferences(
-                preferenceStore = get(),
-                verboseLogging = false,
-            )
         }
 
         addSingletonFactory {

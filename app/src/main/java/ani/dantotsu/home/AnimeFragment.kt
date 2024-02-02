@@ -27,23 +27,19 @@ import ani.dantotsu.connections.anilist.AnilistAnimeViewModel
 import ani.dantotsu.connections.anilist.SearchResults
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.databinding.FragmentAnimeBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.ProgressAdapter
 import ani.dantotsu.media.SearchActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 import kotlin.math.max
 import kotlin.math.min
 
@@ -52,9 +48,6 @@ class AnimeFragment : Fragment() {
     private var _binding: FragmentAnimeBinding? = null
     private val binding get() = _binding!!
     private lateinit var animePageAdapter: AnimePageAdapter
-
-    private var uiSettings: UserInterfaceSettings =
-        loadData("ui_settings") ?: UserInterfaceSettings()
 
     val model: AnilistAnimeViewModel by activityViewModels()
 
@@ -220,7 +213,7 @@ class AnimeFragment : Fragment() {
                         if (it != null) {
                             animePageAdapter.updateTrending(
                                 MediaAdaptor(
-                                    if (uiSettings.smallView) 3 else 2,
+                                    if (PrefManager.getVal(PrefName.SmallView)) 3 else 2,
                                     it,
                                     requireActivity(),
                                     viewPager = animePageAdapter.trendingViewPager
@@ -271,8 +264,8 @@ class AnimeFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending(1)
                         model.loadUpdated()
-                        model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = PrefWrapper.getVal(
-                            PrefName.PopularAnimeList, true))
+                        model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
+                            PrefName.PopularAnimeList))
                     }
                     live.postValue(false)
                     _binding?.animeRefresh?.isRefreshing = false

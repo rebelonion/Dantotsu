@@ -4,7 +4,7 @@ import android.content.Context
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -14,7 +14,7 @@ object AnimeSources : WatchSources() {
     var pinnedAnimeSources: Set<String> = emptySet()
 
     suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>, context: Context) {
-        pinnedAnimeSources = PrefWrapper.getVal(PrefName.PinnedAnimeSources, emptySet())
+        pinnedAnimeSources = PrefManager.getVal(PrefName.PinnedAnimeSources)
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()

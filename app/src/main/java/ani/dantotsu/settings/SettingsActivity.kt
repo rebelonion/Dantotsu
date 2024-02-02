@@ -2,9 +2,7 @@ package ani.dantotsu.settings
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.drawable.Animatable
 import android.os.Build.*
 import android.os.Build.VERSION.*
@@ -15,6 +13,9 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -23,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.*
+import ani.dantotsu.Mapper.json
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
@@ -35,7 +37,8 @@ import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
@@ -44,11 +47,12 @@ import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
 import eltos.simpledialogfragment.color.SimpleColorDialog
 import eu.kanade.domain.base.BasePreferences
-import eu.kanade.tachiyomi.network.NetworkPreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -65,19 +69,57 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     }
     lateinit var binding: ActivitySettingsBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
-    private val networkPreferences = Injekt.get<NetworkPreferences>()
     private var cursedCounter = 0
+    private lateinit var openDocumentLauncher: ActivityResultLauncher<String>
 
     @OptIn(UnstableApi::class)
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
         ThemeManager(this).applyTheme()
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         initActivity(this)
+
+        var selectedImpExp = ""
+        openDocumentLauncher = registerForActivityResult(CreateDocument("*/*")) { uri ->
+            if (uri != null) {
+                try {
+                    val jsonString = contentResolver.openInputStream(uri)?.bufferedReader()
+                        .use { it?.readText() }
+                    val location: Location =
+                        Location.entries.find { it.name.lowercase() == selectedImpExp.lowercase() }
+                            ?: return@registerForActivityResult
+
+                    val gson = Gson()
+                    val type = object : TypeToken<Map<String, Map<String, Any>>>() {}.type
+                    val rawMap: Map<String, Map<String, Any>> = gson.fromJson(jsonString, type)
+
+                    val deserializedMap = mutableMapOf<String, Any?>()
+
+                    rawMap.forEach { (key, typeValueMap) ->
+                        val typeName = typeValueMap["type"] as? String
+                        val value = typeValueMap["value"]
+
+                        deserializedMap[key] = when (typeName) {  //wierdly null sometimes so cast to string
+                            "kotlin.Int" -> (value as? Double)?.toInt()
+                            "kotlin.String" -> value.toString()
+                            "kotlin.Boolean" -> value as? Boolean
+                            "kotlin.Float" -> value.toString().toFloatOrNull()
+                            "kotlin.Long" -> (value as? Double)?.toLong()
+                            "java.util.HashSet" -> value as? ArrayList<*>
+                            else -> null
+                        }
+                    }
+
+                    PrefManager.importAllPrefs(deserializedMap, location)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    toast("Error importing settings")
+                }
+            }
+        }
 
         binding.settingsVersion.text = getString(R.string.version_current, BuildConfig.VERSION_NAME)
         binding.settingsVersion.setOnLongClickListener {
@@ -97,16 +139,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.settingsUseMaterialYou.isChecked = PrefWrapper.getVal(PrefName.UseMaterialYou, false)
+        binding.settingsUseMaterialYou.isChecked = PrefManager.getVal(PrefName.UseMaterialYou)
         binding.settingsUseMaterialYou.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.UseMaterialYou, isChecked)
+            PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
             if (isChecked) binding.settingsUseCustomTheme.isChecked = false
             restartApp()
         }
 
-        binding.settingsUseCustomTheme.isChecked = PrefWrapper.getVal(PrefName.UseCustomTheme, false)
+        binding.settingsUseCustomTheme.isChecked = PrefManager.getVal(PrefName.UseCustomTheme)
         binding.settingsUseCustomTheme.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.UseCustomTheme, isChecked)
+            PrefManager.setVal(PrefName.UseCustomTheme, isChecked)
             if (isChecked) {
                 binding.settingsUseMaterialYou.isChecked = false
             }
@@ -114,19 +156,19 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             restartApp()
         }
 
-        binding.settingsUseSourceTheme.isChecked = PrefWrapper.getVal(PrefName.UseSourceTheme, false)
+        binding.settingsUseSourceTheme.isChecked = PrefManager.getVal(PrefName.UseSourceTheme)
         binding.settingsUseSourceTheme.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.UseSourceTheme, isChecked)
+            PrefManager.setVal(PrefName.UseSourceTheme, isChecked)
             restartApp()
         }
 
-        binding.settingsUseOLED.isChecked = PrefWrapper.getVal(PrefName.UseOLED, false)
+        binding.settingsUseOLED.isChecked = PrefManager.getVal(PrefName.UseOLED)
         binding.settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.UseOLED, isChecked)
+            PrefManager.setVal(PrefName.UseOLED, isChecked)
             restartApp()
         }
 
-        val themeString = PrefWrapper.getVal(PrefName.Theme, "PURPLE")
+        val themeString: String = PrefManager.getVal(PrefName.Theme)
         binding.themeSwitcher.setText(
             themeString.substring(0, 1) + themeString.substring(1).lowercase()
         )
@@ -140,7 +182,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         )
 
         binding.themeSwitcher.setOnItemClickListener { _, _, i, _ ->
-            PrefWrapper.setVal(PrefName.Theme, ThemeManager.Companion.Theme.entries[i].theme)
+            PrefManager.setVal(PrefName.Theme, ThemeManager.Companion.Theme.entries[i].theme)
             //ActivityHelper.shouldRefreshMainActivity = true
             binding.themeSwitcher.clearFocus()
             restartApp()
@@ -149,7 +191,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
 
         binding.customTheme.setOnClickListener {
-            val originalColor = PrefWrapper.getVal(PrefName.CustomThemeInt, Color.parseColor("#6200EE"))
+            val originalColor: Int = PrefManager.getVal(PrefName.CustomThemeInt)
 
             class CustomColorDialog : SimpleColorDialog() { //idk where to put it
                 override fun onPositiveButtonClick() {
@@ -176,7 +218,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val names = animeSourcesWithoutDownloadsSource.map { it.name }
             val pinnedSourcesBoolean =
                 animeSourcesWithoutDownloadsSource.map { it.name in AnimeSources.pinnedAnimeSources }
-            val pinnedSourcesOriginal = PrefWrapper.getVal(PrefName.PinnedAnimeSources, setOf<String>())
+            val pinnedSourcesOriginal: Set<String> = PrefManager.getVal(PrefName.PinnedAnimeSources)
             val pinnedSources = pinnedSourcesOriginal.toMutableSet() ?: mutableSetOf()
             val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Pinned Anime Sources")
@@ -191,7 +233,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     }
                 }
                 .setPositiveButton("OK") { dialog, _ ->
-                    PrefWrapper.setVal(PrefName.PinnedAnimeSources, pinnedSources)
+                    PrefManager.setVal(PrefName.PinnedAnimeSources, pinnedSources)
                     AnimeSources.pinnedAnimeSources = pinnedSources
                     AnimeSources.performReorderAnimeSources()
                     dialog.dismiss()
@@ -208,17 +250,41 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         val managers = arrayOf("Default", "1DM", "ADM")
         val downloadManagerDialog =
             AlertDialog.Builder(this, R.style.MyPopup).setTitle("Download Manager")
-        var downloadManager = PrefWrapper.getVal(PrefName.DownloadManager, 0)
+        var downloadManager: Int = PrefManager.getVal(PrefName.DownloadManager)
         binding.settingsDownloadManager.setOnClickListener {
             val dialog = downloadManagerDialog.setSingleChoiceItems(
                 managers,
                 downloadManager
             ) { dialog, count ->
                 downloadManager = count
-                PrefWrapper.setVal(PrefName.DownloadManager, downloadManager)
+                PrefManager.setVal(PrefName.DownloadManager, downloadManager)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
+        }
+
+        binding.importExportSettings.setOnClickListener {
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle("Import/Export Settings")
+                .setSingleChoiceItems(Location.entries.map { it.name }.toTypedArray(), 0) { dialog, which ->
+                    selectedImpExp = Location.entries[which].name
+                }
+                .setPositiveButton("Import...") { dialog, _ ->
+                    openDocumentLauncher.launch("Select a file")
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Export...") { dialog, which ->
+                    savePrefsToDownloads(Location.entries[which].name,
+                        PrefManager.exportAllPrefs(Location.entries[which]),
+                        this@SettingsActivity)
+                    dialog.dismiss()
+                }
+                .setNeutralButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
         }
 
         binding.purgeAnimeDownloads.setOnClickListener {
@@ -287,30 +353,29 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
         }
 
-        binding.skipExtensionIcons.isChecked = PrefWrapper.getVal(PrefName.SkipExtensionIcons, false)
+        binding.skipExtensionIcons.isChecked = PrefManager.getVal(PrefName.SkipExtensionIcons)
         binding.skipExtensionIcons.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.getVal(PrefName.SkipExtensionIcons, isChecked)
+            PrefManager.getVal(PrefName.SkipExtensionIcons, isChecked)
         }
-        binding.NSFWExtension.isChecked = PrefWrapper.getVal(PrefName.NSFWExtension, true)
+        binding.NSFWExtension.isChecked = PrefManager.getVal(PrefName.NSFWExtension)
         binding.NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.NSFWExtension,isChecked)
+            PrefManager.setVal(PrefName.NSFWExtension,isChecked)
 
         }
 
         binding.userAgent.setOnClickListener {
             val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
             val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
-            editText.setText(networkPreferences.defaultUserAgent().get())
+            editText.setText(PrefManager.getVal<String>(PrefName.DefaultUserAgent))
             val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("User Agent")
                 .setView(dialogView)
                 .setPositiveButton("OK") { dialog, _ ->
-                    networkPreferences.defaultUserAgent().set(editText.text.toString())
+                    PrefManager.setVal(PrefName.DefaultUserAgent, editText.text.toString())
                     dialog.dismiss()
                 }
                 .setNeutralButton("Reset") { dialog, _ ->
-                    networkPreferences.defaultUserAgent()
-                        .set("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0")
+                    PrefManager.removeVal(PrefName.DefaultUserAgent)
                     editText.setText("")
                     dialog.dismiss()
                 }
@@ -340,45 +405,45 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             "Shecan",
             "Libre"
         )
-        binding.settingsExtensionDns.setText(exDns[networkPreferences.dohProvider().get()], false)
+        binding.settingsExtensionDns.setText(exDns[PrefManager.getVal(PrefName.DohProvider)])
         binding.settingsExtensionDns.setAdapter(ArrayAdapter(this, R.layout.item_dropdown, exDns))
         binding.settingsExtensionDns.setOnItemClickListener { _, _, i, _ ->
-            networkPreferences.dohProvider().set(i)
+            PrefManager.setVal(PrefName.DohProvider, i)
             binding.settingsExtensionDns.clearFocus()
             Toast.makeText(this, "Restart app to apply changes", Toast.LENGTH_LONG).show()
         }
 
-        binding.settingsDownloadInSd.isChecked = PrefWrapper.getVal(PrefName.SdDl, false)
+        binding.settingsDownloadInSd.isChecked = PrefManager.getVal(PrefName.SdDl)
         binding.settingsDownloadInSd.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 val arrayOfFiles = ContextCompat.getExternalFilesDirs(this, null)
                 if (arrayOfFiles.size > 1 && arrayOfFiles[1] != null) {
-                    PrefWrapper.setVal(PrefName.SdDl, true)
+                    PrefManager.setVal(PrefName.SdDl, true)
                 } else {
                     binding.settingsDownloadInSd.isChecked = false
-                    PrefWrapper.setVal(PrefName.SdDl, true)
+                    PrefManager.setVal(PrefName.SdDl, true)
                     snackString(getString(R.string.noSdFound))
                 }
-            } else PrefWrapper.setVal(PrefName.SdDl, true)
+            } else PrefManager.setVal(PrefName.SdDl, true)
         }
 
-        binding.settingsContinueMedia.isChecked = PrefWrapper.getVal(PrefName.ContinueMedia, true)
+        binding.settingsContinueMedia.isChecked = PrefManager.getVal(PrefName.ContinueMedia)
         binding.settingsContinueMedia.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.ContinueMedia, isChecked)
+            PrefManager.setVal(PrefName.ContinueMedia, isChecked)
         }
 
-        binding.settingsRecentlyListOnly.isChecked = PrefWrapper.getVal(PrefName.RecentlyListOnly, false)
+        binding.settingsRecentlyListOnly.isChecked = PrefManager.getVal(PrefName.RecentlyListOnly)
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.RecentlyListOnly, isChecked)
+            PrefManager.setVal(PrefName.RecentlyListOnly, isChecked)
         }
-        binding.settingsShareUsername.isChecked = PrefWrapper.getVal(PrefName.SharedUserID, true)
+        binding.settingsShareUsername.isChecked = PrefManager.getVal(PrefName.SharedUserID)
         binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.SharedUserID, isChecked)
+            PrefManager.setVal(PrefName.SharedUserID, isChecked)
         }
 
-        binding.settingsPreferDub.isChecked = PrefWrapper.getVal(PrefName.SettingsPreferDub, false)
+        binding.settingsPreferDub.isChecked = PrefManager.getVal(PrefName.SettingsPreferDub)
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.SettingsPreferDub, isChecked)
+            PrefManager.setVal(PrefName.SettingsPreferDub, isChecked)
         }
 
         binding.settingsPinnedMangaSources.setOnClickListener {
@@ -387,7 +452,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val names = mangaSourcesWithoutDownloadsSource.map { it.name }
             val pinnedSourcesBoolean =
                 mangaSourcesWithoutDownloadsSource.map { it.name in MangaSources.pinnedMangaSources }
-            val pinnedSourcesOriginal = PrefWrapper.getVal(PrefName.PinnedMangaSources, setOf<String>())
+            val pinnedSourcesOriginal: Set<String> = PrefManager.getVal(PrefName.PinnedMangaSources)
             val pinnedSources = pinnedSourcesOriginal.toMutableSet()
             val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Pinned Manga Sources")
@@ -402,7 +467,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     }
                 }
                 .setPositiveButton("OK") { dialog, _ ->
-                    PrefWrapper.setVal(PrefName.PinnedMangaSources, pinnedSources)
+                    PrefManager.setVal(PrefName.PinnedMangaSources, pinnedSources)
                     MangaSources.pinnedMangaSources = pinnedSources
                     MangaSources.performReorderMangaSources()
                     dialog.dismiss()
@@ -416,10 +481,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             startActivity(Intent(this, ReaderSettingsActivity::class.java))
         }
 
-        val uiSettings: UserInterfaceSettings =
-            loadData("ui_settings", toast = false)
-                ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
-        var previous: View = when (uiSettings.darkMode) {
+        var previous: View = when (PrefManager.getNullableVal(PrefName.DarkMode, null as Boolean?)) {
             null -> binding.settingsUiAuto
             true -> binding.settingsUiDark
             false -> binding.settingsUiLight
@@ -429,8 +491,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             previous.alpha = 0.33f
             previous = current
             current.alpha = 1f
-            uiSettings.darkMode = mode
-            saveData("ui_settings", uiSettings)
+            if (mode == null) {
+                PrefManager.removeVal(PrefName.DarkMode)
+            } else {
+                PrefManager.setVal(PrefName.DarkMode, mode)
+            }
             Refresh.all()
             finish()
             startActivity(Intent(this, SettingsActivity::class.java))
@@ -450,7 +515,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             uiTheme(true, it)
         }
 
-        var previousStart: View = when (uiSettings.defaultStartUpTab) {
+        var previousStart: View = when (PrefManager.getVal<Int>(PrefName.DefaultStartUpTab)) {
             0 -> binding.uiSettingsAnime
             1 -> binding.uiSettingsHome
             2 -> binding.uiSettingsManga
@@ -461,8 +526,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             previousStart.alpha = 0.33f
             previousStart = current
             current.alpha = 1f
-            uiSettings.defaultStartUpTab = mode
-            saveData("ui_settings", uiSettings)
+            PrefManager.setVal(PrefName.DefaultStartUpTab, mode)
             initActivity(this)
         }
 
@@ -479,13 +543,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             uiTheme(2, it)
         }
 
-        binding.settingsShowYt.isChecked = uiSettings.showYtButton
+        binding.settingsShowYt.isChecked = PrefManager.getVal(PrefName.ShowYtButton)
         binding.settingsShowYt.setOnCheckedChangeListener { _, isChecked ->
-            uiSettings.showYtButton = isChecked
-            saveData("ui_settings", uiSettings)
+            PrefManager.setVal(PrefName.ShowYtButton, isChecked)
         }
 
-        var previousEp: View = when (uiSettings.animeDefaultView) {
+        var previousEp: View = when (PrefManager.getVal<Int>(PrefName.AnimeDefaultView)) {
             0 -> binding.settingsEpList
             1 -> binding.settingsEpGrid
             2 -> binding.settingsEpCompact
@@ -496,8 +559,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             previousEp.alpha = 0.33f
             previousEp = current
             current.alpha = 1f
-            uiSettings.animeDefaultView = mode
-            saveData("ui_settings", uiSettings)
+            PrefManager.setVal(PrefName.AnimeDefaultView, mode)
         }
 
         binding.settingsEpList.setOnClickListener {
@@ -512,7 +574,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             uiEp(2, it)
         }
 
-        var previousChp: View = when (uiSettings.mangaDefaultView) {
+        var previousChp: View = when (PrefManager.getVal<Int>(PrefName.MangaDefaultView)) {
             0 -> binding.settingsChpList
             1 -> binding.settingsChpCompact
             else -> binding.settingsChpList
@@ -522,8 +584,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             previousChp.alpha = 0.33f
             previousChp = current
             current.alpha = 1f
-            uiSettings.mangaDefaultView = mode
-            saveData("ui_settings", uiSettings)
+            PrefManager.setVal(PrefName.MangaDefaultView, mode)
         }
 
         binding.settingsChpList.setOnClickListener {
@@ -571,7 +632,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 Toast.makeText(this, "youwu have been cuwsed :pwayge:", Toast.LENGTH_LONG).show()
                 val url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                 openLinkInBrowser(url)
-                //PrefWrapper.setVal(PrefName.SomethingSpecial, !PrefWrapper.getVal(PrefName.SomethingSpecial, false))
+                //PrefManager.setVal(PrefName.SomethingSpecial, !PrefManager.getVal(PrefName.SomethingSpecial, false))
             } else {
                 snackString(array[(Math.random() * array.size).toInt()], this)
             }
@@ -599,7 +660,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
         }
 
-        var curTime = PrefWrapper.getVal(PrefName.SubscriptionsTimeS, defaultTime)
+        var curTime = PrefManager.getVal(PrefName.SubscriptionsTimeS, defaultTime)
         val timeNames = timeMinutes.map {
             val mins = it % 60
             val hours = it / 60
@@ -615,7 +676,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 curTime = i
                 binding.settingsSubscriptionsTime.text =
                     getString(R.string.subscriptions_checking_time_s, timeNames[i])
-                PrefWrapper.setVal(PrefName.SubscriptionsTimeS, curTime)
+                PrefManager.setVal(PrefName.SubscriptionsTimeS, curTime)
                 dialog.dismiss()
                 startSubscription(true)
             }.show()
@@ -628,9 +689,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         binding.settingsNotificationsCheckingSubscriptions.isChecked =
-            PrefWrapper.getVal(PrefName.SubscriptionCheckingNotifications, true)
+            PrefManager.getVal(PrefName.SubscriptionCheckingNotifications)
         binding.settingsNotificationsCheckingSubscriptions.setOnCheckedChangeListener { _, isChecked ->
-            PrefWrapper.setVal(PrefName.SubscriptionCheckingNotifications, isChecked)
+            PrefManager.setVal(PrefName.SubscriptionCheckingNotifications, isChecked)
             if (isChecked)
                 Notifications.createChannel(
                     this,
@@ -648,10 +709,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
 
-        binding.settingsCheckUpdate.isChecked = PrefWrapper.getVal(PrefName.CheckUpdate, true)
+        binding.settingsCheckUpdate.isChecked = PrefManager.getVal(PrefName.CheckUpdate)
         binding.settingsCheckUpdate.setOnCheckedChangeListener { _, isChecked ->
-            saveData("check_update", isChecked)
-            PrefWrapper.setVal(PrefName.CheckUpdate, isChecked)
+            PrefManager.setVal(PrefName.CheckUpdate, isChecked)
             if (!isChecked) {
                 snackString(getString(R.string.long_click_to_check_update))
             }
@@ -733,9 +793,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             if (Discord.token != null) {
-                val id = PrefWrapper.getVal(PrefName.DiscordId, null as String?)
-                val avatar = PrefWrapper.getVal(PrefName.DiscordAvatar, null as String?)
-                val username = PrefWrapper.getVal(PrefName.DiscordUserName, null as String?)
+                val id = PrefManager.getVal(PrefName.DiscordId, null as String?)
+                val avatar = PrefManager.getVal(PrefName.DiscordAvatar, null as String?)
+                val username = PrefManager.getVal(PrefName.DiscordUserName, null as String?)
                 if (id != null && avatar != null) {
                     binding.settingsDiscordAvatar.loadImage("https://cdn.discordapp.com/avatars/$id/$avatar.png")
                 }
@@ -790,7 +850,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         if (which == BUTTON_POSITIVE) {
             if (dialogTag == "colorPicker") {
                 val color = extras.getInt(SimpleColorDialog.COLOR)
-                PrefWrapper.setVal(PrefName.CustomThemeInt, color)
+                PrefManager.setVal(PrefName.CustomThemeInt, color)
                 logger("Custom Theme: $color")
             }
         }

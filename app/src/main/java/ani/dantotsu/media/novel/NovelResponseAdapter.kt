@@ -35,7 +35,7 @@ class NovelResponseAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         val novel = list[position]
-        setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+        setAnimation(fragment.requireContext(), holder.binding.root)
 
         val cover = GlideUrl(novel.coverUrl.url) { novel.coverUrl.headers }
         Glide.with(binding.itemEpisodeImage).load(cover).override(400, 0)

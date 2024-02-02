@@ -27,7 +27,6 @@ import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentHomeBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
@@ -37,7 +36,8 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.Dispatchers
@@ -70,14 +70,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val scope = lifecycleScope
-        var uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
         fun load() {
             if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
                 binding.homeUserName.text = Anilist.username
                 binding.homeUserEpisodesWatched.text = Anilist.episodesWatched.toString()
                 binding.homeUserChaptersRead.text = Anilist.chapterRead.toString()
                 binding.homeUserAvatar.loadImage(Anilist.avatar)
-                if (!uiSettings.bannerAnimations) binding.homeUserBg.pause()
+                if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.homeUserBg.pause()
                 binding.homeUserBg.loadImage(Anilist.bg)
                 binding.homeUserDataProgressBar.visibility = View.GONE
 
@@ -98,14 +97,14 @@ class HomeFragment : Fragment() {
                     )
                 }
 
-                binding.homeUserAvatarContainer.startAnimation(setSlideUp(uiSettings))
+                binding.homeUserAvatarContainer.startAnimation(setSlideUp())
                 binding.homeUserDataContainer.visibility = View.VISIBLE
                 binding.homeUserDataContainer.layoutAnimation =
-                    LayoutAnimationController(setSlideUp(uiSettings), 0.25f)
+                    LayoutAnimationController(setSlideUp(), 0.25f)
                 binding.homeAnimeList.visibility = View.VISIBLE
                 binding.homeMangaList.visibility = View.VISIBLE
                 binding.homeListContainer.layoutAnimation =
-                    LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+                    LayoutAnimationController(setSlideIn(), 0.25f)
             }
             else {
                 snackString(currContext()?.getString(R.string.please_reload))
@@ -127,7 +126,7 @@ class HomeFragment : Fragment() {
         binding.homeTopContainer.updatePadding(top = statusBarHeight)
 
         var reached = false
-        val duration = (uiSettings.animationSpeed * 200).toLong()
+        val duration = ((PrefManager.getVal(PrefName.AnimationSpeed) as Float) * 200).toLong()
         binding.homeScroll.setOnScrollChangeListener { _, _, _, _, _ ->
             if (!binding.homeScroll.canScrollVertically(1)) {
                 reached = true
@@ -206,13 +205,13 @@ class HomeFragment : Fragment() {
                         )
                         recyclerView.visibility = View.VISIBLE
                         recyclerView.layoutAnimation =
-                            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+                            LayoutAnimationController(setSlideIn(), 0.25f)
 
                     } else {
                         empty.visibility = View.VISIBLE
                     }
                     title.visibility = View.VISIBLE
-                    title.startAnimation(setSlideUp(uiSettings))
+                    title.startAnimation(setSlideUp())
                     progress.visibility = View.GONE
                 }
             }
@@ -295,12 +294,12 @@ class HomeFragment : Fragment() {
             binding.homeRecommended
         )
 
-        binding.homeUserAvatarContainer.startAnimation(setSlideUp(uiSettings))
+        binding.homeUserAvatarContainer.startAnimation(setSlideUp())
 
         model.empty.observe(viewLifecycleOwner) {
             binding.homeDantotsuContainer.visibility = if (it == true) View.VISIBLE else View.GONE
             (binding.homeDantotsuIcon.drawable as Animatable).start()
-            binding.homeDantotsuContainer.startAnimation(setSlideUp(uiSettings))
+            binding.homeDantotsuContainer.startAnimation(setSlideUp())
             binding.homeDantotsuIcon.setSafeOnClickListener {
                 (binding.homeDantotsuIcon.drawable as Animatable).start()
             }
@@ -330,8 +329,6 @@ class HomeFragment : Fragment() {
         live.observe(viewLifecycleOwner) {
             if (it) {
                 scope.launch {
-                    uiSettings =
-                        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
                     withContext(Dispatchers.IO) {
                         //Get userData First
                         getUserId(requireContext()) {
@@ -340,8 +337,9 @@ class HomeFragment : Fragment() {
                         model.loaded = true
                         model.setListImages()
                         var empty = true
+                        val homeLayoutShow: List<Boolean> = PrefManager.getVal(PrefName.HomeLayoutShow)
                         (array.indices).forEach { i ->
-                            if (uiSettings.homeLayoutShow[i]) {
+                            if (homeLayoutShow.elementAt(i)) {
                                 array[i].run()
                                 empty = false
                             } else withContext(Dispatchers.Main) {

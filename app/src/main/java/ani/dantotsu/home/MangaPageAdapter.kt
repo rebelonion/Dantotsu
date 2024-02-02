@@ -1,6 +1,5 @@
 package ani.dantotsu.home
 
-import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -22,7 +21,6 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemMangaPageBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.media.MediaAdaptor
@@ -32,9 +30,8 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputLayout
@@ -45,8 +42,6 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
     private var trendHandler: Handler? = null
     private lateinit var trendRun: Runnable
     var trendingViewPager: ViewPager2? = null
-    private var uiSettings: UserInterfaceSettings =
-        loadData("ui_settings") ?: UserInterfaceSettings()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MangaPageViewHolder {
         val binding =
@@ -74,7 +69,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
 
         binding.mangaTitleContainer.updatePadding(top = statusBarHeight)
 
-        if (uiSettings.smallView) binding.mangaTrendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        if (PrefManager.getVal(PrefName.SmallView)) binding.mangaTrendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = (-108f).px
         }
 
@@ -123,12 +118,12 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         binding.mangaIncludeList.visibility =
             if (Anilist.userid != null) View.VISIBLE else View.GONE
 
-        binding.mangaIncludeList.isChecked = PrefWrapper.getVal(PrefName.PopularMangaList, true)
+        binding.mangaIncludeList.isChecked = PrefManager.getVal(PrefName.PopularMangaList)
 
         binding.mangaIncludeList.setOnCheckedChangeListener { _, isChecked ->
             onIncludeListClick.invoke(isChecked)
 
-            PrefWrapper.setVal(PrefName.PopularMangaList, isChecked)
+            PrefManager.setVal(PrefName.PopularMangaList, isChecked)
         }
         if (ready.value == false)
             ready.postValue(true)
@@ -164,10 +159,10 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         )
 
         binding.mangaTrendingViewPager.layoutAnimation =
-            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
-        binding.mangaTitleContainer.startAnimation(setSlideUp(uiSettings))
+            LayoutAnimationController(setSlideIn(), 0.25f)
+        binding.mangaTitleContainer.startAnimation(setSlideUp())
         binding.mangaListContainer.layoutAnimation =
-            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+            LayoutAnimationController(setSlideIn(), 0.25f)
     }
 
     fun updateNovel(adaptor: MediaAdaptor) {
@@ -182,11 +177,11 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         binding.mangaNovelRecyclerView.visibility = View.VISIBLE
 
         binding.mangaNovel.visibility = View.VISIBLE
-        binding.mangaNovel.startAnimation(setSlideUp(uiSettings))
+        binding.mangaNovel.startAnimation(setSlideUp())
         binding.mangaNovelRecyclerView.layoutAnimation =
-            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+            LayoutAnimationController(setSlideIn(), 0.25f)
         binding.mangaPopular.visibility = View.VISIBLE
-        binding.mangaPopular.startAnimation(setSlideUp(uiSettings))
+        binding.mangaPopular.startAnimation(setSlideUp())
     }
 
     fun updateAvatar() {

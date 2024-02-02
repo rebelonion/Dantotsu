@@ -3,11 +3,10 @@ package ani.dantotsu.connections.discord
 import android.content.Context
 import android.content.Intent
 import android.widget.TextView
-import androidx.core.content.edit
 import ani.dantotsu.R
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.toast
 import ani.dantotsu.tryWith
 import io.noties.markwon.Markwon
@@ -22,17 +21,17 @@ object Discord {
 
 
     fun getSavedToken(context: Context): Boolean {
-        token = PrefWrapper.getVal(
+        token = PrefManager.getVal(
             PrefName.DiscordToken, null as String?)
         return token != null
     }
 
     fun saveToken(context: Context, token: String) {
-        PrefWrapper.setVal(PrefName.DiscordToken, token)
+        PrefManager.setVal(PrefName.DiscordToken, token)
     }
 
     fun removeSavedToken(context: Context) {
-        PrefWrapper.removeVal(PrefName.DiscordToken)
+        PrefManager.removeVal(PrefName.DiscordToken)
 
         tryWith(true) {
             val dir = File(context.filesDir?.parentFile, "app_webview")

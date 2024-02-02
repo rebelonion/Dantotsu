@@ -1,23 +1,27 @@
 package ani.dantotsu.settings
 
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import java.io.Serializable
 
 data class CurrentNovelReaderSettings(
-    var currentThemeName: String = "Default",
-    var layout: Layouts = Layouts.PAGED,
-    var dualPageMode: CurrentReaderSettings.DualPageModes = CurrentReaderSettings.DualPageModes.Automatic,
-    var lineHeight: Float = 1.4f,
-    var margin: Float = 0.06f,
-    var justify: Boolean = true,
-    var hyphenation: Boolean = true,
-    var useDarkTheme: Boolean = false,
-    var useOledTheme: Boolean = false,
-    var invert: Boolean = false,
-    var maxInlineSize: Int = 720,
-    var maxBlockSize: Int = 1440,
-    var horizontalScrollBar: Boolean = true,
-    var keepScreenOn: Boolean = false,
-    var volumeButtons: Boolean = false,
+    var currentThemeName: String = PrefManager.getVal(PrefName.CurrentThemeName),
+    var layout: Layouts = Layouts[PrefManager.getVal(PrefName.LayoutNovel)]
+        ?: Layouts.PAGED,
+    var dualPageMode: CurrentReaderSettings.DualPageModes = CurrentReaderSettings.DualPageModes[PrefManager.getVal(PrefName.DualPageModeNovel)]
+        ?: CurrentReaderSettings.DualPageModes.Automatic,
+    var lineHeight: Float = PrefManager.getVal(PrefName.LineHeight),
+    var margin: Float = PrefManager.getVal(PrefName.Margin),
+    var justify: Boolean = PrefManager.getVal(PrefName.Justify),
+    var hyphenation: Boolean = PrefManager.getVal(PrefName.Hyphenation),
+    var useDarkTheme: Boolean = PrefManager.getVal(PrefName.UseDarkThemeNovel),
+    var useOledTheme: Boolean = PrefManager.getVal(PrefName.UseOledThemeNovel),
+    var invert: Boolean = PrefManager.getVal(PrefName.Invert),
+    var maxInlineSize: Int = PrefManager.getVal(PrefName.MaxInlineSize),
+    var maxBlockSize: Int = PrefManager.getVal(PrefName.MaxBlockSize),
+    var horizontalScrollBar: Boolean = PrefManager.getVal(PrefName.HorizontalScrollBarNovel),
+    var keepScreenOn: Boolean = PrefManager.getVal(PrefName.KeepScreenOnNovel),
+    var volumeButtons: Boolean = PrefManager.getVal(PrefName.VolumeButtonsNovel)
 ) : Serializable {
 
     enum class Layouts(val string: String) {

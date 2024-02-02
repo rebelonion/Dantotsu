@@ -26,14 +26,11 @@ import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.novel.NovelDownloaderService
 import ani.dantotsu.download.novel.NovelServiceDataSingleton
-import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.novel.novelreader.NovelReaderActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.parsers.ShowResponse
-import ani.dantotsu.saveData
-import ani.dantotsu.settings.UserInterfaceSettings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -60,9 +57,6 @@ class NovelReadFragment : Fragment(),
 
     private var continueEp: Boolean = false
     var loaded = false
-
-    val uiSettings = loadData("ui_settings", toast = false)
-        ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
 
     override fun downloadTrigger(novelDownloadPackage: NovelDownloadPackage) {
         Log.e("downloadTrigger", novelDownloadPackage.link)
@@ -253,7 +247,7 @@ class NovelReadFragment : Fragment(),
             if (save) {
                 val selected = model.loadSelected(media)
                 selected.server = query
-                model.saveSelected(media.id, selected, requireActivity())
+                model.saveSelected(media.id, selected)
             }
         }
     }
@@ -263,7 +257,7 @@ class NovelReadFragment : Fragment(),
         selected.sourceIndex = i
         source = i
         selected.server = null
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
     }
 

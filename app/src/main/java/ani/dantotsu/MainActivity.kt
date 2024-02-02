@@ -44,11 +44,11 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
-import ani.dantotsu.settings.saving.PrefWrapper.asLiveBool
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.SharedPreferenceBooleanLiveData
+import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
 import eu.kanade.domain.source.service.SourcePreferences
@@ -70,8 +70,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var incognitoLiveData: SharedPreferenceBooleanLiveData
     private val scope = lifecycleScope
     private var load = false
-
-    private var uiSettings = UserInterfaceSettings()
 
 
     @SuppressLint("InternalInsetResource", "DiscouragedApi")
@@ -108,7 +106,7 @@ class MainActivity : AppCompatActivity() {
         val layoutParams = binding.incognito.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.topMargin = 11 * offset / 12
         binding.incognito.layoutParams = layoutParams
-        incognitoLiveData = PrefWrapper.getLiveVal(
+        incognitoLiveData = PrefManager.getLiveVal(
             PrefName.Incognito,
             false
         ).asLiveBool()
@@ -208,7 +206,6 @@ class MainActivity : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
-            uiSettings = loadData("ui_settings") ?: uiSettings
             selectedOption = if (fragment != null) {
                 when (fragment) {
                     AnimeFragment::class.java.name -> 0
@@ -217,14 +214,14 @@ class MainActivity : AppCompatActivity() {
                     else -> 1
                 }
             } else {
-                uiSettings.defaultStartUpTab
+                PrefManager.getVal(PrefName.DefaultStartUpTab)
             }
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
 
             }
         }
-        val offlineMode = PrefWrapper.getVal(PrefName.OfflineMode, false)
+        val offlineMode: Boolean = PrefManager.getVal(PrefName.OfflineMode)
         if (!isOnline(this)) {
             snackString(this@MainActivity.getString(R.string.no_internet_connection))
             startActivity(Intent(this, NoInternet::class.java))
@@ -245,7 +242,7 @@ class MainActivity : AppCompatActivity() {
                             mainViewPager.isUserInputEnabled = false
                             mainViewPager.adapter =
                                 ViewPagerAdapter(supportFragmentManager, lifecycle)
-                            mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
+                            mainViewPager.setPageTransformer(ZoomOutPageTransformer())
                             navbar.setOnTabSelectListener(object :
                                 AnimatedBottomBar.OnTabSelectListener {
                                 override fun onTabSelected(
@@ -299,7 +296,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (!PrefWrapper.getVal(PrefName.AllowOpeningLinks, false)) {
+                    if (!(PrefManager.getVal(PrefName.AllowOpeningLinks) as Boolean)) {
                         CustomBottomDialog.newInstance().apply {
                             title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
                             val md = "Open settings & click +Add Links & select Anilist & Mal urls"
@@ -311,12 +308,12 @@ class MainActivity : AppCompatActivity() {
                             })
 
                             setNegativeButton(this@MainActivity.getString(R.string.no)) {
-                                PrefWrapper.setVal(PrefName.AllowOpeningLinks, true)
+                                PrefManager.setVal(PrefName.AllowOpeningLinks, true)
                                 dismiss()
                             }
 
                             setPositiveButton(this@MainActivity.getString(R.string.yes)) {
-                                PrefWrapper.setVal(PrefName.AllowOpeningLinks, true)
+                                PrefManager.setVal(PrefName.AllowOpeningLinks, true)
                                 tryWith(true) {
                                     startActivity(
                                         Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)

@@ -23,11 +23,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
@@ -48,7 +47,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentAnimeExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
-    private val skipIcons = PrefWrapper.getVal(PrefName.SkipExtensionIcons, false)
+    private val skipIcons: Boolean = PrefManager.getVal(PrefName.SkipExtensionIcons)
     private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
     private val extensionsAdapter = AnimeExtensionsAdapter(
         { pkg ->

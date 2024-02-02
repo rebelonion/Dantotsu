@@ -9,7 +9,7 @@ import ani.dantotsu.*
 import ani.dantotsu.parsers.Episode
 import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -37,13 +37,13 @@ class Subscription {
                 currentlyPerforming = true
                 App.context = context
 
-                val subscriptions = SubscriptionHelper.getSubscriptions(context)
+                val subscriptions = SubscriptionHelper.getSubscriptions()
                 var i = 0
                 val index = subscriptions.map { i++; it.key to i }.toMap()
                 val notificationManager = NotificationManagerCompat.from(context)
 
-                val progressEnabled =
-                    PrefWrapper.getVal(PrefName.SubscriptionCheckingNotifications, true)
+                val progressEnabled: Boolean =
+                    PrefManager.getVal(PrefName.SubscriptionCheckingNotifications)
                 val progressNotification = if (progressEnabled) getProgressNotification(
                     context,
                     subscriptions.size

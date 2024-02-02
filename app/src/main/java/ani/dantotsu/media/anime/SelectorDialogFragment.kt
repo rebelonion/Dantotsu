@@ -28,7 +28,7 @@ import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -94,7 +94,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         binding.selectorAutoText.text = selected
                         binding.selectorCancel.setOnClickListener {
                             media!!.selected!!.server = null
-                            model.saveSelected(media!!.id, media!!.selected!!, requireActivity())
+                            model.saveSelected(media!!.id, media!!.selected!!)
                             tryWith {
                                 dismiss()
                             }
@@ -143,11 +143,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         }
                         binding.selectorRecyclerView.adapter = null
                         binding.selectorProgressBar.visibility = View.VISIBLE
-                        makeDefault = loadData("make_default") ?: true
+                        makeDefault = PrefManager.getVal(PrefName.MakeDefault)
                         binding.selectorMakeDefault.isChecked = makeDefault
                         binding.selectorMakeDefault.setOnClickListener {
                             makeDefault = binding.selectorMakeDefault.isChecked
-                            saveData("make_default", makeDefault)
+                            PrefManager.setVal(PrefName.MakeDefault, makeDefault)
                         }
                         binding.selectorRecyclerView.layoutManager =
                             LinearLayoutManager(
@@ -301,7 +301,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     extractor.server.name
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedVideo =
                     position
-                if (PrefWrapper.getVal(PrefName.DownloadManager, 0)  != 0) {
+                if ((PrefManager.getVal(PrefName.DownloadManager) as Int)  != 0) {
                     download(
                         requireActivity(),
                         media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!,
@@ -412,7 +412,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         if (makeDefault) {
                             media!!.selected!!.server = extractor.server.name
                             media!!.selected!!.video = bindingAdapterPosition
-                            model.saveSelected(media!!.id, media!!.selected!!, requireActivity())
+                            model.saveSelected(media!!.id, media!!.selected!!)
                         }
                         startExoplayer(media!!)
                     }

@@ -43,8 +43,9 @@ import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Group.MANGA_GROUP
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
@@ -86,9 +87,6 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
 
     var continueEp: Boolean = false
     var loaded = false
-
-    val uiSettings = loadData("ui_settings", toast = false)
-        ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -172,7 +170,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                     media.selected = model.loadSelected(media)
 
                     subscribed =
-                        SubscriptionHelper.getSubscriptions(requireContext()).containsKey(media.id)
+                        SubscriptionHelper.getSubscriptions().containsKey(media.id)
 
                     style = media.selected!!.recyclerStyle
                     reverse = media.selected!!.recyclerReversed
@@ -183,7 +181,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                         headerAdapter = MangaReadAdapter(it, this, model.mangaReadSources!!)
                         headerAdapter.scanlatorSelectionListener = this
                         chapterAdapter =
-                            MangaChapterAdapter(style ?: uiSettings.mangaDefaultView, media, this)
+                            MangaChapterAdapter(style ?: PrefManager.getVal(PrefName.MangaDefaultView), media, this)
 
                         for (download in downloadManager.mangaDownloadedTypes) {
                             chapterAdapter.stopDownload(download.chapter)
@@ -302,7 +300,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         model.mangaReadSources?.get(selected.sourceIndex)?.showUserTextListener = null
         selected.sourceIndex = i
         selected.server = null
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
         return model.mangaReadSources?.get(i)!!
     }
@@ -310,14 +308,14 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     fun onLangChange(i: Int) {
         val selected = model.loadSelected(media)
         selected.langIndex = i
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
     }
 
     fun onScanlatorChange(list: List<String>) {
         val selected = model.loadSelected(media)
         selected.scanlators = list
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
     }
 
@@ -330,7 +328,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         reverse = rev
         media.selected!!.recyclerStyle = style
         media.selected!!.recyclerReversed = reverse
-        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.saveSelected(media.id, media.selected!!)
         reload()
     }
 
@@ -338,7 +336,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         media.selected!!.chip = i
         start = s
         end = e
-        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.saveSelected(media.id, media.selected!!)
         reload()
     }
 
@@ -436,7 +434,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         model.continueMedia = false
         media.manga?.chapters?.get(i)?.let {
             media.manga?.selectedChapter = i
-            model.saveSelected(media.id, media.selected!!, requireActivity())
+            model.saveSelected(media.id, media.selected!!)
             ChapterLoaderDialog.newInstance(it, true)
                 .show(requireActivity().supportFragmentManager, "dialog")
         }
@@ -574,7 +572,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         selected.latest =
             media.userProgress?.toFloat()?.takeIf { selected.latest < it } ?: selected.latest
 
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         headerAdapter.handleChapters()
         chapterAdapter.notifyItemRangeRemoved(0, chapterAdapter.arr.size)
         var arr: ArrayList<MangaChapter> = arrayListOf()
@@ -588,7 +586,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                 arr = (arr.reversed() as? ArrayList<MangaChapter>) ?: arr
         }
         chapterAdapter.arr = arr
-        chapterAdapter.updateType(style ?: uiSettings.mangaDefaultView)
+        chapterAdapter.updateType(style ?: PrefManager.getVal(PrefName.MangaDefaultView))
         chapterAdapter.notifyItemRangeInserted(0, arr.size)
     }
 

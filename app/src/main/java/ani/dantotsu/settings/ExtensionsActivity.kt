@@ -18,7 +18,7 @@ import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityExtensionsBinding
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -118,11 +118,11 @@ class ExtensionsActivity : AppCompatActivity() {
         binding.languageselect.setOnClickListener {
             val languageOptions = LanguageMapper.Companion.Language.entries.map{ it.name }.toTypedArray()
             val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
-            val listOrder = PrefWrapper.getVal(PrefName.LangSort,"all")
+            val listOrder: String = PrefManager.getVal(PrefName.LangSort)
             val index = LanguageMapper.Companion.Language.entries.toTypedArray().indexOfFirst{it.code == listOrder}
             builder.setTitle("Language")
             builder.setSingleChoiceItems(languageOptions, index){ dialog, i ->
-                PrefWrapper.setVal(PrefName.LangSort, LanguageMapper.Companion.Language.entries[i].code)
+                PrefManager.setVal(PrefName.LangSort, LanguageMapper.Companion.Language.entries[i].code)
                 dialog.dismiss()
             }
             val dialog = builder.show()

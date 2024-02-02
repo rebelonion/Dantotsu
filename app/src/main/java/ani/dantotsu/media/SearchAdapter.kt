@@ -23,7 +23,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemSearchHeaderBinding
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import com.google.android.material.checkbox.MaterialCheckBox.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +72,7 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         }
 
         binding.searchBar.hint = activity.result.type
-        if (PrefWrapper.getVal(PrefName.Incognito, false)) {
+        if (PrefManager.getVal(PrefName.Incognito)) {
             val startIconDrawableRes = R.drawable.ic_incognito_24
             val startIconDrawable: Drawable? =
                 context?.let { AppCompatResources.getDrawable(it, startIconDrawableRes) }
@@ -148,14 +148,14 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
             it.alpha = 1f
             binding.searchResultList.alpha = 0.33f
             activity.style = 0
-            PrefWrapper.setVal(PrefName.SearchStyle, 0)
+            PrefManager.setVal(PrefName.SearchStyle, 0)
             activity.recycler()
         }
         binding.searchResultList.setOnClickListener {
             it.alpha = 1f
             binding.searchResultGrid.alpha = 0.33f
             activity.style = 1
-            PrefWrapper.setVal(PrefName.SearchStyle, 1)
+            PrefManager.setVal(PrefName.SearchStyle, 1)
             activity.recycler()
         }
 

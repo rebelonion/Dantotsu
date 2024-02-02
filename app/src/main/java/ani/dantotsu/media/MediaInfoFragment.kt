@@ -2,7 +2,6 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -27,7 +26,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.GenresViewModel
 import ani.dantotsu.databinding.*
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -62,7 +61,7 @@ class MediaInfoFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
-        val offline = PrefWrapper.getVal(PrefName.OfflineMode, false)
+        val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
         binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.visibility = if (loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }

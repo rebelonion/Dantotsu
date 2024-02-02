@@ -25,7 +25,7 @@ import ani.dantotsu.connections.discord.serializers.Presence
 import ani.dantotsu.connections.discord.serializers.User
 import ani.dantotsu.isOnline
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -153,9 +153,9 @@ class DiscordService : Service() {
     fun saveProfile(response: String) {
         val user = json.decodeFromString<User.Response>(response).d.user
         log("User data: $user")
-        PrefWrapper.setVal(PrefName.DiscordUserName, user.username)
-        PrefWrapper.setVal(PrefName.DiscordId, user.id)
-        PrefWrapper.setVal(PrefName.DiscordAvatar, user.avatar)
+        PrefManager.setVal(PrefName.DiscordUserName, user.username)
+        PrefManager.setVal(PrefName.DiscordId, user.id)
+        PrefManager.setVal(PrefName.DiscordAvatar, user.avatar)
     }
 
     override fun onBind(p0: Intent?): IBinder? = null
@@ -312,7 +312,7 @@ class DiscordService : Service() {
     }
 
     fun getToken(context: Context): String {
-        val token = PrefWrapper.getVal(PrefName.DiscordToken, null as String?)
+        val token = PrefManager.getVal(PrefName.DiscordToken, null as String?)
         return if (token == null) {
             log("WebSocket: Token not found")
             errorNotification("Could not set the presence", "token not found")

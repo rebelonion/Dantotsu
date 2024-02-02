@@ -17,11 +17,9 @@ import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
@@ -66,8 +64,7 @@ class ListActivity : AppCompatActivity() {
         binding.listTitle.setTextColor(primaryTextColor)
         binding.listTabLayout.setTabTextColors(secondaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
-        val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-        if (!uiSettings.immersiveMode) {
+        if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
             this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.nav_bg_inv)
             binding.root.fitsSystemWindows = true
@@ -153,7 +150,7 @@ class ListActivity : AppCompatActivity() {
                     R.id.release -> "release"
                     else -> null
                 }
-                PrefWrapper.setVal(
+                PrefManager.setVal(
                     if (anime) PrefName.AnimeListSortOrder else PrefName.MangaListSortOrder,
                     sort ?: ""
                 )

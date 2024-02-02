@@ -1,7 +1,6 @@
 package ani.dantotsu.download.anime
 
 
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -36,16 +35,14 @@ import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
-import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
@@ -70,8 +67,6 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineAnimeAdapter
     private lateinit var total: TextView
-    private var uiSettings: UserInterfaceSettings =
-        loadData("ui_settings") ?: UserInterfaceSettings()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -97,7 +92,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.OfflineANIME)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
-        if (!uiSettings.immersiveMode) {
+        if (!(PrefManager.getVal(PrefName.ImmersiveMode) as Boolean)) {
             view.rootView.fitsSystemWindows = true
         }
 
@@ -116,7 +111,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 onSearchQuery(s.toString())
             }
         })
-        var style = PrefWrapper.getVal(PrefName.OfflineView, 0)
+        var style: Int = PrefManager.getVal(PrefName.OfflineView)
         val layoutList = view.findViewById<ImageView>(R.id.downloadedList)
         val layoutcompact = view.findViewById<ImageView>(R.id.downloadedGrid)
         var selected = when (style) {
@@ -135,7 +130,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         layoutList.setOnClickListener {
             selected(it as ImageView)
             style = 0
-            PrefWrapper.setVal(PrefName.OfflineView, style)
+            PrefManager.setVal(PrefName.OfflineView, style)
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView)
             adapter.notifyNewGrid()
@@ -145,7 +140,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         layoutcompact.setOnClickListener {
             selected(it as ImageView)
             style = 1
-            PrefWrapper.setVal(PrefName.OfflineView, style)
+            PrefManager.setVal(PrefName.OfflineView, style)
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView1)
             adapter.notifyNewGrid()
@@ -212,7 +207,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             builder.setMessage("Are you sure you want to delete ${item.title}?")
             builder.setPositiveButton("Yes") { _, _ ->
                 downloadManager.removeMedia(item.title, type)
-                val mediaIds = PrefWrapper.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values ?: emptySet()
+                val mediaIds = PrefManager.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values ?: emptySet()
                 if (mediaIds.isEmpty()) {
                     snackString("No media found")  // if this happens, terrible things have happened
                 }

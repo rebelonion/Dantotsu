@@ -653,5 +653,6 @@
     <string name="requires_android_12">Requires Android 12+</string>
     <string name="share_username_in_crash_reports">Share username in crash reports</string>
     <string name="pinned_sources">Pinned Sources</string>
+    <string name="import_export_settings">Import/Export Settings</string>
 
 </resources>

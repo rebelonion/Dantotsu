@@ -20,12 +20,11 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentNovelExtensionsBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -39,7 +38,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentNovelExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
-    val skipIcons = PrefWrapper.getVal(PrefName.SkipExtensionIcons, false)
+    private val skipIcons: Boolean = PrefManager.getVal(PrefName.SkipExtensionIcons)
     private val novelExtensionManager: NovelExtensionManager = Injekt.get()
     private val extensionsAdapter = NovelExtensionsAdapter(
         { pkg ->

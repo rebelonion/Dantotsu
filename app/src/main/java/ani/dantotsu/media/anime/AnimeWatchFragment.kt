@@ -40,10 +40,9 @@ import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
-import ani.dantotsu.settings.PlayerSettings
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Group.ANIME_GROUP
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
@@ -86,8 +85,6 @@ class AnimeWatchFragment : Fragment() {
     var continueEp: Boolean = false
     var loaded = false
 
-    lateinit var playerSettings: PlayerSettings
-    lateinit var uiSettings: UserInterfaceSettings
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -119,12 +116,6 @@ class AnimeWatchFragment : Fragment() {
 
         var maxGridSize = (screenWidth / 100f).roundToInt()
         maxGridSize = max(4, maxGridSize - (maxGridSize % 2))
-
-        playerSettings =
-            loadData("player_settings", toast = false)
-                ?: PlayerSettings().apply { saveData("player_settings", this) }
-        uiSettings = loadData("ui_settings", toast = false)
-            ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
 
         val gridLayoutManager = GridLayoutManager(requireContext(), maxGridSize)
 
@@ -174,7 +165,7 @@ class AnimeWatchFragment : Fragment() {
                 media.selected = model.loadSelected(media)
 
                 subscribed =
-                    SubscriptionHelper.getSubscriptions(requireContext()).containsKey(media.id)
+                    SubscriptionHelper.getSubscriptions().containsKey(media.id)
 
                 style = media.selected!!.recyclerStyle
                 reverse = media.selected!!.recyclerReversed
@@ -191,7 +182,7 @@ class AnimeWatchFragment : Fragment() {
                     headerAdapter = AnimeWatchAdapter(it, this, model.watchSources!!)
                     episodeAdapter =
                         EpisodeAdapter(
-                            style ?: uiSettings.animeDefaultView,
+                            style ?: PrefManager.getVal(PrefName.AnimeDefaultView),
                             media,
                             this,
                             offlineMode = offlineMode
@@ -292,7 +283,7 @@ class AnimeWatchFragment : Fragment() {
         model.watchSources?.get(selected.sourceIndex)?.showUserTextListener = null
         selected.sourceIndex = i
         selected.server = null
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
         return model.watchSources?.get(i)!!
     }
@@ -300,7 +291,7 @@ class AnimeWatchFragment : Fragment() {
     fun onLangChange(i: Int) {
         val selected = model.loadSelected(media)
         selected.langIndex = i
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
     }
 
@@ -308,7 +299,7 @@ class AnimeWatchFragment : Fragment() {
         val selected = model.loadSelected(media)
         model.watchSources?.get(selected.sourceIndex)?.selectDub = checked
         selected.preferDub = checked
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
         lifecycleScope.launch(Dispatchers.IO) {
             model.forceLoadEpisode(
@@ -327,7 +318,7 @@ class AnimeWatchFragment : Fragment() {
         reverse = rev
         media.selected!!.recyclerStyle = style
         media.selected!!.recyclerReversed = reverse
-        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.saveSelected(media.id, media.selected!!)
         reload()
     }
 
@@ -335,7 +326,7 @@ class AnimeWatchFragment : Fragment() {
         media.selected!!.chip = i
         start = s
         end = e
-        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.saveSelected(media.id, media.selected!!)
         reload()
     }
 
@@ -436,7 +427,7 @@ class AnimeWatchFragment : Fragment() {
 
     fun onEpisodeClick(i: String) {
         model.continueMedia = false
-        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.saveSelected(media.id, media.selected!!)
         model.onEpisodeClick(media, i, requireActivity().supportFragmentManager)
     }
 
@@ -475,11 +466,11 @@ class AnimeWatchFragment : Fragment() {
             )
         )
         val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
-        val id = PrefWrapper.getAnimeDownloadPreferences().getString(
+        val id = PrefManager.getAnimeDownloadPreferences().getString(
             taskName,
             ""
         ) ?: ""
-        PrefWrapper.getAnimeDownloadPreferences().edit().remove(taskName).apply()
+        PrefManager.getAnimeDownloadPreferences().edit().remove(taskName).apply()
         DownloadService.sendRemoveDownload(
             requireContext(),
             ExoplayerDownloadService::class.java,
@@ -531,7 +522,7 @@ class AnimeWatchFragment : Fragment() {
         selected.latest =
             media.userProgress?.toFloat()?.takeIf { selected.latest < it } ?: selected.latest
 
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         headerAdapter.handleEpisodes()
         val isDownloaded = model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)
         episodeAdapter.offlineMode = isDownloaded
@@ -547,7 +538,7 @@ class AnimeWatchFragment : Fragment() {
                 arr = (arr.reversed() as? ArrayList<Episode>) ?: arr
         }
         episodeAdapter.arr = arr
-        episodeAdapter.updateType(style ?: uiSettings.animeDefaultView)
+        episodeAdapter.updateType(style ?: PrefManager.getVal(PrefName.AnimeDefaultView))
         episodeAdapter.notifyItemRangeInserted(0, arr.size)
         for (download in downloadManager.animeDownloadedTypes) {
             if (download.title == media.mainName()) {

@@ -2,6 +2,7 @@ package ani.dantotsu.media.novel.novelreader
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.graphics.Color
@@ -28,20 +29,20 @@ import androidx.webkit.WebViewCompat
 import ani.dantotsu.GesturesListener
 import ani.dantotsu.NoPaddingArrayAdapter
 import ani.dantotsu.R
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityNovelReaderBinding
 import ani.dantotsu.hideSystemBars
-import ani.dantotsu.loadData
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.saveData
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.CurrentNovelReaderSettings
 import ani.dantotsu.settings.CurrentReaderSettings
-import ani.dantotsu.settings.ReaderSettings
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.tryWith
 import com.google.android.material.slider.Slider
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.vipulog.ebookreader.Book
 import com.vipulog.ebookreader.EbookReaderEventListener
 import com.vipulog.ebookreader.ReaderError
@@ -52,7 +53,10 @@ import com.vipulog.ebookreader.TocItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
 import java.util.*
 import kotlin.math.min
 import kotlin.properties.Delegates
@@ -61,9 +65,6 @@ import kotlin.properties.Delegates
 class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
     private lateinit var binding: ActivityNovelReaderBinding
     private val scope = lifecycleScope
-
-    lateinit var settings: ReaderSettings
-    private lateinit var uiSettings: UserInterfaceSettings
 
     private var notchHeight: Int? = null
 
@@ -76,6 +77,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
     private var currentCfi: String? = null
 
     val themes = ArrayList<ReaderTheme>()
+
+    var defaultSettings = CurrentNovelReaderSettings()
 
 
     init {
@@ -174,12 +177,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         ThemeManager(this).applyTheme()
         binding = ActivityNovelReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        settings = loadData("reader_settings", this)
-            ?: ReaderSettings().apply { saveData("reader_settings", this) }
-        uiSettings = loadData("ui_settings", this)
-            ?: UserInterfaceSettings().also { saveData("ui_settings", it) }
 
-        controllerDuration = (uiSettings.animationSpeed * 200).toLong()
+        controllerDuration = (PrefManager.getVal<Float>(PrefName.AnimationSpeed) * 200).toLong()
 
         setupViews()
         setupBackPressedHandler()
@@ -285,12 +284,11 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         binding.bookReader.getAppearance {
             currentTheme = it
             themes.add(0, it)
-            settings.defaultLN =
-                loadData("${sanitizedBookId}_current_settings") ?: settings.defaultLN
+            defaultSettings = loadReaderSettings("${sanitizedBookId}_current_settings") ?: defaultSettings
             applySettings()
         }
 
-        val cfi = loadData<String>("${sanitizedBookId}_progress")
+        val cfi = PrefManager.getCustomVal("${sanitizedBookId}_progress", null as String?)
 
         cfi?.let { binding.bookReader.goto(it) }
         binding.progress.visibility = View.GONE
@@ -303,7 +301,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         binding.novelReaderSlider.value = info.fraction.toFloat()
         val pos = info.tocItem?.let { item -> toc.indexOfFirst { it == item } }
         if (pos != null) binding.novelReaderChapterSelect.setSelection(pos)
-        saveData("${sanitizedBookId}_progress", info.cfi)
+        PrefManager.setCustomVal("${sanitizedBookId}_progress", info.cfi)
     }
 
 
@@ -338,7 +336,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         return when (event.keyCode) {
             KeyEvent.KEYCODE_VOLUME_UP, KeyEvent.KEYCODE_DPAD_UP, KeyEvent.KEYCODE_PAGE_UP -> {
                 if (event.keyCode == KeyEvent.KEYCODE_VOLUME_UP)
-                    if (!settings.defaultLN.volumeButtons)
+                    if (!defaultSettings.volumeButtons)
                         return false
                 if (event.action == KeyEvent.ACTION_DOWN) {
                     onVolumeUp?.invoke()
@@ -348,7 +346,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
             KeyEvent.KEYCODE_VOLUME_DOWN, KeyEvent.KEYCODE_DPAD_DOWN, KeyEvent.KEYCODE_PAGE_DOWN -> {
                 if (event.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
-                    if (!settings.defaultLN.volumeButtons)
+                    if (!defaultSettings.volumeButtons)
                         return false
                 if (event.action == KeyEvent.ACTION_DOWN) {
                     onVolumeDown?.invoke()
@@ -364,18 +362,18 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
 
     fun applySettings() {
-        saveData("${sanitizedBookId}_current_settings", settings.defaultLN)
+        saveReaderSettings("${sanitizedBookId}_current_settings", defaultSettings)
         hideBars()
 
-        if (settings.defaultLN.useOledTheme) {
+        if (defaultSettings.useOledTheme) {
             themes.forEach { theme ->
                 theme.darkBg = Color.parseColor("#000000")
             }
         }
         currentTheme =
-            themes.first { it.name.equals(settings.defaultLN.currentThemeName, ignoreCase = true) }
+            themes.first { it.name.equals(defaultSettings.currentThemeName, ignoreCase = true) }
 
-        when (settings.defaultLN.layout) {
+        when (defaultSettings.layout) {
             CurrentNovelReaderSettings.Layouts.PAGED -> {
                 currentTheme?.flow = ReaderFlow.PAGINATED
             }
@@ -386,22 +384,22 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         }
 
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_USER
-        when (settings.defaultLN.dualPageMode) {
+        when (defaultSettings.dualPageMode) {
             CurrentReaderSettings.DualPageModes.No -> currentTheme?.maxColumnCount = 1
             CurrentReaderSettings.DualPageModes.Automatic -> currentTheme?.maxColumnCount = 2
             CurrentReaderSettings.DualPageModes.Force -> requestedOrientation =
                 ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         }
 
-        currentTheme?.lineHeight = settings.defaultLN.lineHeight
-        currentTheme?.gap = settings.defaultLN.margin
-        currentTheme?.maxInlineSize = settings.defaultLN.maxInlineSize
-        currentTheme?.maxBlockSize = settings.defaultLN.maxBlockSize
-        currentTheme?.useDark = settings.defaultLN.useDarkTheme
+        currentTheme?.lineHeight = defaultSettings.lineHeight
+        currentTheme?.gap = defaultSettings.margin
+        currentTheme?.maxInlineSize = defaultSettings.maxInlineSize
+        currentTheme?.maxBlockSize = defaultSettings.maxBlockSize
+        currentTheme?.useDark = defaultSettings.useDarkTheme
 
         currentTheme?.let { binding.bookReader.setAppearance(it) }
 
-        if (settings.defaultLN.keepScreenOn) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+        if (defaultSettings.keepScreenOn) window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         else window.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
@@ -431,7 +429,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
     fun handleController(shouldShow: Boolean? = null) {
         if (!loaded) return
 
-        if (!settings.showSystemBars) {
+        if (!PrefManager.getVal<Boolean>(PrefName.ShowSystemBars)) {
             hideBars()
             applyNotchMargin()
         }
@@ -464,7 +462,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
 
 
     private fun checkNotch() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !settings.showSystemBars) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !PrefManager.getVal<Boolean>(PrefName.ShowSystemBars)) {
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
             if (displayCutout != null) {
                 if (displayCutout.boundingRects.size > 0) {
@@ -485,8 +483,49 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    private fun <T> loadReaderSettings(fileName: String, context: Context? = null, toast: Boolean = true): T? {
+        val a = context ?: currContext()
+        try {
+            if (a?.fileList() != null)
+                if (fileName in a.fileList()) {
+                    val fileIS: FileInputStream = a.openFileInput(fileName)
+                    val objIS = ObjectInputStream(fileIS)
+                    val data = objIS.readObject() as T
+                    objIS.close()
+                    fileIS.close()
+                    return data
+                }
+        } catch (e: Exception) {
+            if (toast) snackString(a?.getString(R.string.error_loading_data, fileName))
+            //try to delete the file
+            try {
+                a?.deleteFile(fileName)
+            } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().log("Failed to delete file $fileName")
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
+            e.printStackTrace()
+        }
+        return null
+    }
+
+    private fun saveReaderSettings(fileName: String, data: Any?, context: Context? = null) {
+        tryWith {
+            val a = context ?: currContext()
+            if (a != null) {
+                val fos: FileOutputStream = a.openFileOutput(fileName, Context.MODE_PRIVATE)
+                val os = ObjectOutputStream(fos)
+                os.writeObject(data)
+                os.close()
+                fos.close()
+            }
+        }
+    }
 
     private fun hideBars() {
-        if (!settings.showSystemBars) hideSystemBars()
+        if (!PrefManager.getVal<Boolean>(PrefName.ShowSystemBars)) {
+            hideSystemBars()
+        }
     }
 }

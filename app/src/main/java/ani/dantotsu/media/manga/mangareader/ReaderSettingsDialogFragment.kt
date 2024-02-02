@@ -26,7 +26,7 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val activity = requireActivity() as MangaReaderActivity
-        val settings = activity.settings.default
+        val settings = activity.defaultSettings
 
         binding.readerDirectionText.text =
             resources.getStringArray(R.array.manga_directions)[settings.direction.ordinal]

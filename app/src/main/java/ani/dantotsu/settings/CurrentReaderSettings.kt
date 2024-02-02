@@ -1,23 +1,28 @@
 package ani.dantotsu.settings
 
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import java.io.Serializable
 
 data class CurrentReaderSettings(
-    var direction: Directions = Directions.TOP_TO_BOTTOM,
-    var layout: Layouts = Layouts.CONTINUOUS,
-    var dualPageMode: DualPageModes = DualPageModes.Automatic,
-    var overScrollMode: Boolean = true,
-    var trueColors: Boolean = false,
-    var rotation: Boolean = true,
-    var padding: Boolean = true,
-    var hidePageNumbers: Boolean = false,
-    var horizontalScrollBar: Boolean = true,
-    var keepScreenOn: Boolean = false,
-    var volumeButtons: Boolean = false,
-    var wrapImages: Boolean = false,
-    var longClickImage: Boolean = true,
-    var cropBorders: Boolean = false,
-    var cropBorderThreshold: Int = 10,
+    var direction: Directions = Directions[PrefManager.getVal(PrefName.Direction)]
+        ?: Directions.TOP_TO_BOTTOM,
+    var layout: Layouts = Layouts[PrefManager.getVal(PrefName.LayoutReader)]
+        ?: Layouts.CONTINUOUS,
+    var dualPageMode: DualPageModes = DualPageModes[PrefManager.getVal(PrefName.DualPageModeReader)]
+        ?: DualPageModes.Automatic,
+    var overScrollMode: Boolean = PrefManager.getVal(PrefName.OverScrollMode),
+    var trueColors: Boolean = PrefManager.getVal(PrefName.TrueColors),
+    var rotation: Boolean = PrefManager.getVal(PrefName.Rotation),
+    var padding: Boolean = PrefManager.getVal(PrefName.Padding),
+    var hidePageNumbers: Boolean = PrefManager.getVal(PrefName.HidePageNumbers),
+    var horizontalScrollBar: Boolean = PrefManager.getVal(PrefName.HorizontalScrollBar),
+    var keepScreenOn: Boolean = PrefManager.getVal(PrefName.KeepScreenOn),
+    var volumeButtons: Boolean = PrefManager.getVal(PrefName.VolumeButtonsReader),
+    var wrapImages: Boolean = PrefManager.getVal(PrefName.WrapImages),
+    var longClickImage: Boolean = PrefManager.getVal(PrefName.LongClickImage),
+    var cropBorders: Boolean = PrefManager.getVal(PrefName.CropBorders),
+    var cropBorderThreshold: Int = PrefManager.getVal(PrefName.CropBorderThreshold)
 ) : Serializable {
 
     enum class Directions {

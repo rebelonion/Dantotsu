@@ -1,6 +1,5 @@
 package ani.dantotsu.home
 
-import android.content.Context
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
@@ -22,7 +21,6 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemAnimePageBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.CalendarActivity
 import ani.dantotsu.media.GenreActivity
@@ -33,9 +31,8 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textfield.TextInputLayout
@@ -46,8 +43,6 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
     private var trendHandler: Handler? = null
     private lateinit var trendRun: Runnable
     var trendingViewPager: ViewPager2? = null
-    private var uiSettings: UserInterfaceSettings =
-        loadData("ui_settings") ?: UserInterfaceSettings()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnimePageViewHolder {
         val binding =
@@ -75,7 +70,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
         binding.animeTitleContainer.updatePadding(top = statusBarHeight)
 
-        if (uiSettings.smallView) binding.animeTrendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        if (PrefManager.getVal(PrefName.SmallView)) binding.animeTrendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = (-108f).px
         }
 
@@ -130,12 +125,12 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         binding.animeIncludeList.visibility =
             if (Anilist.userid != null) View.VISIBLE else View.GONE
 
-        binding.animeIncludeList.isChecked = PrefWrapper.getVal(PrefName.PopularAnimeList, true)
+        binding.animeIncludeList.isChecked = PrefManager.getVal(PrefName.PopularAnimeList)
 
         binding.animeIncludeList.setOnCheckedChangeListener { _, isChecked ->
             onIncludeListClick.invoke(isChecked)
 
-            PrefWrapper.setVal(PrefName.PopularAnimeList, isChecked)
+            PrefManager.setVal(PrefName.PopularAnimeList, isChecked)
         }
         if (ready.value == false)
             ready.postValue(true)
@@ -174,12 +169,12 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         )
 
         binding.animeTrendingViewPager.layoutAnimation =
-            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
-        binding.animeTitleContainer.startAnimation(setSlideUp(uiSettings))
+            LayoutAnimationController(setSlideIn(), 0.25f)
+        binding.animeTitleContainer.startAnimation(setSlideUp())
         binding.animeListContainer.layoutAnimation =
-            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+            LayoutAnimationController(setSlideIn(), 0.25f)
         binding.animeSeasonsCont.layoutAnimation =
-            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+            LayoutAnimationController(setSlideIn(), 0.25f)
     }
 
     fun updateRecent(adaptor: MediaAdaptor) {
@@ -194,11 +189,11 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         binding.animeUpdatedRecyclerView.visibility = View.VISIBLE
 
         binding.animeRecently.visibility = View.VISIBLE
-        binding.animeRecently.startAnimation(setSlideUp(uiSettings))
+        binding.animeRecently.startAnimation(setSlideUp())
         binding.animeUpdatedRecyclerView.layoutAnimation =
-            LayoutAnimationController(setSlideIn(uiSettings), 0.25f)
+            LayoutAnimationController(setSlideIn(), 0.25f)
         binding.animePopular.visibility = View.VISIBLE
-        binding.animePopular.startAnimation(setSlideUp(uiSettings))
+        binding.animePopular.startAnimation(setSlideUp())
     }
 
     fun updateAvatar() {

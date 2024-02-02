@@ -9,9 +9,9 @@ import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityUserInterfaceSettingsBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
@@ -32,9 +32,6 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             bottomMargin = navBarHeight
         }
 
-        val settings = loadData<UserInterfaceSettings>(ui, toast = false)
-            ?: UserInterfaceSettings().apply { saveData(ui, this) }
-
         binding.uiSettingsBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -45,39 +42,36 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                 .setTitle(getString(R.string.home_layout_show)).apply {
                     setMultiChoiceItems(
                         views,
-                        settings.homeLayoutShow.toBooleanArray()
+                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toBooleanArray()
                     ) { _, i, value ->
-                        settings.homeLayoutShow[i] = value
-                        saveData(ui, settings)
+                        val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toMutableList()
+                        set[i] = value
+                        PrefManager.setVal(PrefName.HomeLayoutShow, set)
                     }
                 }.show()
             dialog.window?.setDimAmount(0.8f)
         }
 
-        binding.uiSettingsSmallView.isChecked = settings.smallView
+        binding.uiSettingsSmallView.isChecked = PrefManager.getVal(PrefName.SmallView)
         binding.uiSettingsSmallView.setOnCheckedChangeListener { _, isChecked ->
-            settings.smallView = isChecked
-            saveData(ui, settings)
+            PrefManager.setVal(PrefName.SmallView, isChecked)
             restartApp()
         }
 
-        binding.uiSettingsImmersive.isChecked = settings.immersiveMode
+        binding.uiSettingsImmersive.isChecked = PrefManager.getVal(PrefName.ImmersiveMode)
         binding.uiSettingsImmersive.setOnCheckedChangeListener { _, isChecked ->
-            settings.immersiveMode = isChecked
-            saveData(ui, settings)
+            PrefManager.setVal(PrefName.ImmersiveMode, isChecked)
             restartApp()
         }
-        binding.uiSettingsBannerAnimation.isChecked = settings.bannerAnimations
+        binding.uiSettingsBannerAnimation.isChecked = PrefManager.getVal(PrefName.BannerAnimations)
         binding.uiSettingsBannerAnimation.setOnCheckedChangeListener { _, isChecked ->
-            settings.bannerAnimations = isChecked
-            saveData(ui, settings)
+            PrefManager.setVal(PrefName.BannerAnimations, isChecked)
             restartApp()
         }
 
-        binding.uiSettingsLayoutAnimation.isChecked = settings.layoutAnimations
+        binding.uiSettingsLayoutAnimation.isChecked = PrefManager.getVal(PrefName.LayoutAnimations)
         binding.uiSettingsLayoutAnimation.setOnCheckedChangeListener { _, isChecked ->
-            settings.layoutAnimations = isChecked
-            saveData(ui, settings)
+            PrefManager.setVal(PrefName.LayoutAnimations, isChecked)
             restartApp()
         }
 
@@ -93,10 +87,9 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             0f to 0f
         )
         val mapReverse = map.map { it.value to it.key }.toMap()
-        binding.uiSettingsAnimationSpeed.value = mapReverse[settings.animationSpeed] ?: 1f
+        binding.uiSettingsAnimationSpeed.value = mapReverse[PrefManager.getVal(PrefName.AnimationSpeed)] ?: 1f
         binding.uiSettingsAnimationSpeed.addOnChangeListener { _, value, _ ->
-            settings.animationSpeed = map[value] ?: 1f
-            saveData(ui, settings)
+            PrefManager.setVal(PrefName.AnimationSpeed, map[value] ?: 1f)
             restartApp()
         }
 

@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Environment
 import android.widget.Toast
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
@@ -23,11 +23,11 @@ class DownloadsManager(private val context: Context) {
 
     private fun saveDownloads() {
         val jsonString = gson.toJson(downloadsList)
-        PrefWrapper.setVal(PrefName.DownloadsKeys, jsonString)
+        PrefManager.setVal(PrefName.DownloadsKeys, jsonString)
     }
 
     private fun loadDownloads(): List<DownloadedType> {
-        val jsonString = PrefWrapper.getVal(PrefName.DownloadsKeys, null as String?)
+        val jsonString = PrefManager.getVal(PrefName.DownloadsKeys, null as String?)
         return if (jsonString != null) {
             val type = object : TypeToken<List<DownloadedType>>() {}.type
             gson.fromJson(jsonString, type)

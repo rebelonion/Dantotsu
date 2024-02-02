@@ -8,11 +8,10 @@ import androidx.lifecycle.ViewModel
 import ani.dantotsu.R
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
-import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
 import kotlinx.coroutines.CoroutineScope
@@ -21,8 +20,8 @@ import kotlinx.coroutines.launch
 
 suspend fun getUserId(context: Context, block: () -> Unit) {
     CoroutineScope(Dispatchers.IO).launch {
-        val token = PrefWrapper.getVal(PrefName.DiscordToken, null as String?)
-        val userid = PrefWrapper.getVal(PrefName.DiscordId, null as String?)
+        val token = PrefManager.getVal(PrefName.DiscordToken, null as String?)
+        val userid = PrefManager.getVal(PrefName.DiscordId, null as String?)
         if (userid == null && token != null) {
             /*if (!Discord.getUserData())
                 snackString(context.getString(R.string.error_loading_discord_user_data))*/
@@ -101,7 +100,7 @@ class AnilistHomeViewModel : ViewModel() {
         Anilist.getSavedToken(context)
         MAL.getSavedToken(context)
         Discord.getSavedToken(context)
-        if (PrefWrapper.getVal(PrefName.CheckUpdate, false)) AppUpdater.check(context)
+        if (PrefManager.getVal(PrefName.CheckUpdate)) AppUpdater.check(context)
         genres.postValue(Anilist.query.getGenresAndTags(context))
     }
 

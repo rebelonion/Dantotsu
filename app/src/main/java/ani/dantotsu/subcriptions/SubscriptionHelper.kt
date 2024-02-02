@@ -3,7 +3,6 @@ package ani.dantotsu.subcriptions
 import android.content.Context
 import ani.dantotsu.R
 import ani.dantotsu.currContext
-import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.Selected
 import ani.dantotsu.media.manga.MangaNameAdapter
@@ -15,9 +14,8 @@ import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
-import ani.dantotsu.saveData
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.tryWithSuspend
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -29,16 +27,16 @@ class SubscriptionHelper {
             isAdult: Boolean,
             isAnime: Boolean
         ): Selected {
-            val data = loadData<Selected>("${mediaId}-select", context) ?: Selected().let {
+            val data = PrefManager.getNullableCustomVal<Selected?>("${mediaId}-select", null) ?: Selected().let {
                 it.sourceIndex = 0
-                it.preferDub = PrefWrapper.getVal(PrefName.SettingsPreferDub, false)
+                it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)
                 it
             }
             return data
         }
 
         private fun saveSelected(context: Context, mediaId: Int, data: Selected) {
-            saveData("$mediaId-select", data, context)
+            PrefManager.setCustomVal("${mediaId}-select", data)
         }
 
         fun getAnimeParser(context: Context, isAdult: Boolean, id: Int): AnimeParser {
@@ -125,12 +123,12 @@ class SubscriptionHelper {
         ) : java.io.Serializable
 
         private const val subscriptions = "subscriptions"
-        fun getSubscriptions(context: Context): Map<Int, SubscribeMedia> =
-            loadData(subscriptions, context)
-                ?: mapOf<Int, SubscribeMedia>().also { saveData(subscriptions, it, context) }
+        fun getSubscriptions(): Map<Int, SubscribeMedia> =
+            PrefManager.getNullableCustomVal<Map<Int, SubscribeMedia>?>(subscriptions, null)
+                ?: mapOf<Int, SubscribeMedia>().also { PrefManager.setCustomVal(subscriptions, it) }
 
         fun saveSubscription(context: Context, media: Media, subscribed: Boolean) {
-            val data = loadData<Map<Int, SubscribeMedia>>(subscriptions, context)!!.toMutableMap()
+            val data = PrefManager.getNullableCustomVal<Map<Int, SubscribeMedia>?>(subscriptions, null)!!.toMutableMap()
             if (subscribed) {
                 if (!data.containsKey(media.id)) {
                     val new = SubscribeMedia(
@@ -145,7 +143,7 @@ class SubscriptionHelper {
             } else {
                 data.remove(media.id)
             }
-            saveData(subscriptions, data, context)
+            PrefManager.setCustomVal(subscriptions, data)
         }
     }
 }

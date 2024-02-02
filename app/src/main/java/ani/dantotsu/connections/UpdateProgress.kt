@@ -7,14 +7,14 @@ import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.currContext
 import ani.dantotsu.media.Media
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 fun updateProgress(media: Media, number: String) {
-    val incognito = PrefWrapper.getVal(PrefName.Incognito, false)
+    val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
     if (!incognito) {
         if (Anilist.userid != null) {
             CoroutineScope(Dispatchers.IO).launch {

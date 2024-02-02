@@ -9,8 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemSearchHistoryBinding
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
-import ani.dantotsu.settings.saving.PrefWrapper.asLiveStringSet
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefManager.asLiveStringSet
 import ani.dantotsu.settings.saving.SharedPreferenceStringSetLiveData
 import java.util.Locale
 
@@ -26,7 +26,7 @@ class SearchHistoryAdapter(private val type: String, private val searchClicked: 
     }
 
     init {
-        searchHistoryLiveData = PrefWrapper.getLiveVal(historyType, mutableSetOf<String>()).asLiveStringSet()
+        searchHistoryLiveData = PrefManager.getLiveVal(historyType, mutableSetOf<String>()).asLiveStringSet()
         searchHistoryLiveData?.observeForever {
             searchHistory = it.toMutableSet()
             submitList(searchHistory?.reversed())
@@ -35,14 +35,14 @@ class SearchHistoryAdapter(private val type: String, private val searchClicked: 
 
     fun remove(item: String) {
         searchHistory?.remove(item)
-        PrefWrapper.setVal(historyType, searchHistory)
+        PrefManager.setVal(historyType, searchHistory)
     }
 
     fun add(item: String) {
         if (searchHistory?.contains(item) == true || item.isBlank()) return
-        if (PrefWrapper.getVal(PrefName.Incognito, false)) return
+        if (PrefManager.getVal(PrefName.Incognito)) return
         searchHistory?.add(item)
-        PrefWrapper.setVal(historyType, searchHistory)
+        PrefManager.setVal(historyType, searchHistory)
     }
 
     override fun onCreateViewHolder(

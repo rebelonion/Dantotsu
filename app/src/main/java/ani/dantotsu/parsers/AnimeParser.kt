@@ -5,9 +5,8 @@ import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.asyncMap
 import ani.dantotsu.currContext
-import ani.dantotsu.loadData
 import ani.dantotsu.others.MalSyncBackup
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.tryWithSuspend
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
@@ -182,7 +181,7 @@ abstract class AnimeParser : BaseParser() {
     override suspend fun loadSavedShowResponse(mediaId: Int): ShowResponse? {
         checkIfVariablesAreEmpty()
         val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""
-        var loaded = loadData<ShowResponse>("${saveName}${dub}_$mediaId")
+        var loaded = PrefManager.getNullableCustomVal<ShowResponse?>("${saveName}${dub}_$mediaId", null)
         if (loaded == null && malSyncBackupName.isNotEmpty())
             loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)
                 ?.also { saveShowResponse(mediaId, it, true) }
@@ -200,7 +199,7 @@ abstract class AnimeParser : BaseParser() {
                 } : ${response.name}"
             )
             val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""
-            saveData("${saveName}${dub}_$mediaId", response)
+            PrefManager.setCustomVal("${saveName}${dub}_$mediaId", response)
         }
     }
 }

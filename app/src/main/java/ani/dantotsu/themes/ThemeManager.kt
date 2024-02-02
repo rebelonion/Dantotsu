@@ -8,18 +8,18 @@ import android.view.Window
 import android.view.WindowManager
 import ani.dantotsu.R
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 
 
 class ThemeManager(private val context: Activity) {
     fun applyTheme(fromImage: Bitmap? = null) {
-        val useOLED = PrefWrapper.getVal(PrefName.UseOLED, false) && isDarkThemeActive(context)
-        val useCustomTheme = PrefWrapper.getVal(PrefName.UseCustomTheme, false)
-        val customTheme = PrefWrapper.getVal(PrefName.CustomThemeInt, 16712221)
-        val useSource = PrefWrapper.getVal(PrefName.UseSourceTheme, false)
-        val useMaterial = PrefWrapper.getVal(PrefName.UseMaterialYou, false)
+        val useOLED = PrefManager.getVal(PrefName.UseOLED) && isDarkThemeActive(context)
+        val useCustomTheme: Boolean = PrefManager.getVal(PrefName.UseCustomTheme)
+        val customTheme: Int = PrefManager.getVal(PrefName.CustomThemeInt)
+        val useSource: Boolean = PrefManager.getVal(PrefName.UseSourceTheme)
+        val useMaterial: Boolean = PrefManager.getVal(PrefName.UseMaterialYou)
         if (useSource) {
             val returnedEarly = applyDynamicColors(
                 useMaterial,
@@ -37,7 +37,7 @@ class ThemeManager(private val context: Activity) {
             val returnedEarly = applyDynamicColors(useMaterial, context, useOLED, useCustom = null)
             if (!returnedEarly) return
         }
-        val theme = PrefWrapper.getVal(PrefName.Theme, "PURPLE")
+        val theme: String = PrefManager.getVal(PrefName.Theme)
 
         val themeToApply = when (theme) {
             "BLUE" -> if (useOLED) R.style.Theme_Dantotsu_BlueOLED else R.style.Theme_Dantotsu_Blue

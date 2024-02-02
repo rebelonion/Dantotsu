@@ -15,7 +15,7 @@ import ani.dantotsu.parsers.NovelSources
 import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import com.google.android.material.color.DynamicColors
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.crashlytics.ktx.crashlytics
@@ -54,9 +54,9 @@ class App : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        PrefWrapper.init(this)
+        PrefManager.init(this)
 
-        val useMaterialYou = PrefWrapper.getVal(PrefName.UseMaterialYou, false)
+        val useMaterialYou: Boolean = PrefManager.getVal(PrefName.UseMaterialYou)
         if (useMaterialYou) {
             DynamicColors.applyToActivitiesIfAvailable(this)
             //TODO: HarmonizedColors
@@ -64,10 +64,10 @@ class App : MultiDexApplication() {
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
         Firebase.crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)
-        PrefWrapper.getVal(PrefName.SharedUserID, true).let {
+        (PrefManager.getVal(PrefName.SharedUserID) as Boolean).let {
             if (!it) return@let
-            val dUsername = PrefWrapper.getVal(PrefName.DiscordUserName, null as String?)
-            val aUsername = PrefWrapper.getVal(PrefName.AnilistUserName, null as String?)
+            val dUsername = PrefManager.getVal(PrefName.DiscordUserName, null as String?)
+            val aUsername = PrefManager.getVal(PrefName.AnilistUserName, null as String?)
             if (dUsername != null || aUsername != null) {
                 Firebase.crashlytics.setUserId("$dUsername - $aUsername")
             }

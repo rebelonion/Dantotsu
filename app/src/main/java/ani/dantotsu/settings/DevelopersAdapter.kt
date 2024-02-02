@@ -4,15 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.databinding.ItemDeveloperBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.setAnimation
 
 class DevelopersAdapter(private val developers: Array<Developer>) :
     RecyclerView.Adapter<DevelopersAdapter.DeveloperViewHolder>() {
-    private val uiSettings =
-        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
 
     inner class DeveloperViewHolder(val binding: ItemDeveloperBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -35,7 +32,7 @@ class DevelopersAdapter(private val developers: Array<Developer>) :
 
     override fun onBindViewHolder(holder: DeveloperViewHolder, position: Int) {
         val b = holder.binding
-        setAnimation(b.root.context, b.root, uiSettings)
+        setAnimation(b.root.context, b.root)
         val dev = developers[position]
         b.devName.text = dev.name
         b.devProfile.loadImage(dev.pfp)

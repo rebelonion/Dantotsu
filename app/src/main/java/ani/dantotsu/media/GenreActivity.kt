@@ -12,8 +12,9 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.GenresViewModel
 import ani.dantotsu.databinding.ActivityGenreBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
@@ -53,12 +54,22 @@ class GenreActivity : AppCompatActivity() {
                 GridLayoutManager(this, (screenWidth / 156f).toInt())
 
             lifecycleScope.launch(Dispatchers.IO) {
-                model.loadGenres(Anilist.genres ?: loadData("genres_list") ?: arrayListOf()) {
+                model.loadGenres(Anilist.genres ?:
+                loadLocalGenres() ?: arrayListOf()) {
                     MainScope().launch {
                         adapter.addGenre(it)
                     }
                 }
             }
+        }
+    }
+
+    private fun loadLocalGenres(): ArrayList<String>? {
+        val genres = PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableList() as ArrayList<String>?
+        return if (genres.isNullOrEmpty()) {
+            null
+        } else {
+            genres
         }
     }
 }

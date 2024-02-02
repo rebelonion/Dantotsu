@@ -261,7 +261,7 @@ class MangaChapterAdapter(
         when (holder) {
             is ChapterCompactViewHolder -> {
                 val binding = holder.binding
-                setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+                setAnimation(fragment.requireContext(), holder.binding.root)
                 val ep = arr[position]
                 val parsedNumber = MangaNameAdapter.findChapterNumber(ep.number)?.toInt()
                 binding.itemEpisodeNumber.text = parsedNumber?.toString() ?: ep.number
@@ -287,7 +287,7 @@ class MangaChapterAdapter(
                 val binding = holder.binding
                 val ep = arr[position]
                 holder.bind(ep.number, ep.progress)
-                setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+                setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemChapterNumber.text = ep.number
                 if (ep.progress.isNullOrEmpty()) {
                     binding.itemChapterTitle.visibility = View.GONE

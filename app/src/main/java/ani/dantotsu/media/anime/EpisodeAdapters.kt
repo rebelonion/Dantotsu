@@ -20,7 +20,7 @@ import ani.dantotsu.databinding.ItemEpisodeListBinding
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
-import ani.dantotsu.settings.saving.PrefWrapper
+import ani.dantotsu.settings.saving.PrefManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import kotlinx.coroutines.delay
@@ -29,8 +29,8 @@ import kotlin.math.ln
 import kotlin.math.pow
 
 fun handleProgress(cont: LinearLayout, bar: View, empty: View, mediaId: Int, ep: String) {
-    val curr = loadData<Long>("${mediaId}_${ep}")
-    val max = loadData<Long>("${mediaId}_${ep}_max")
+    val curr = PrefManager.getNullableCustomVal("${mediaId}_${ep}", null as Long?)
+    val max = PrefManager.getNullableCustomVal("${mediaId}_${ep}_max", null as Long?)
     if (curr != null && max != null) {
         cont.visibility = View.VISIBLE
         val div = curr.toFloat() / max.toFloat()
@@ -109,7 +109,7 @@ class EpisodeAdapter(
         when (holder) {
             is EpisodeListViewHolder -> {
                 val binding = holder.binding
-                setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+                setAnimation(fragment.requireContext(), holder.binding.root)
 
                 val thumb =
                     ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
@@ -158,7 +158,7 @@ class EpisodeAdapter(
 
             is EpisodeGridViewHolder -> {
                 val binding = holder.binding
-                setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+                setAnimation(fragment.requireContext(), holder.binding.root)
 
                 val thumb =
                     ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
@@ -201,7 +201,7 @@ class EpisodeAdapter(
 
             is EpisodeCompactViewHolder -> {
                 val binding = holder.binding
-                setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+                setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeFillerView.visibility =
                     if (ep.filler) View.VISIBLE else View.GONE
@@ -252,7 +252,7 @@ class EpisodeAdapter(
                 media.mainName(),
                 episodeNumber
             )
-            val id = PrefWrapper.getAnimeDownloadPreferences().getString(
+            val id = PrefManager.getAnimeDownloadPreferences().getString(
                 taskName,
                 ""
             ) ?: ""

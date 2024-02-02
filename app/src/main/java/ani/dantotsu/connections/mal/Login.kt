@@ -8,8 +8,9 @@ import ani.dantotsu.R
 import ani.dantotsu.client
 import ani.dantotsu.connections.mal.MAL.clientId
 import ani.dantotsu.connections.mal.MAL.saveResponse
-import ani.dantotsu.loadData
 import ani.dantotsu.logError
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.themes.ThemeManager
@@ -25,7 +26,7 @@ class Login : AppCompatActivity() {
         try {
             val data: Uri = intent?.data
                 ?: throw Exception(getString(R.string.mal_login_uri_not_found))
-            val codeChallenge: String = loadData("malCodeChallenge", this)
+            val codeChallenge = PrefManager.getVal(PrefName.MALCodeChallenge, null as String?)
                 ?: throw Exception(getString(R.string.mal_login_code_challenge_not_found))
             val code = data.getQueryParameter("code")
                 ?: throw Exception(getString(R.string.mal_login_code_not_present))
