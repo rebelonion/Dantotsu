@@ -45,7 +45,7 @@ object PrefManager {
                 is String -> putString(prefName.name, value)
                 is Set<*> -> convertAndPutStringSet(prefName.name, value)
                 null -> remove(prefName.name)
-                else -> serialzeClass(prefName.name, value)
+                else -> serializeClass(prefName.name, value, prefName.data.prefLocation)
             }
             apply()
         }
@@ -62,7 +62,7 @@ object PrefManager {
                 Long::class -> pref.getLong(prefName.name, default as Long) as T
                 String::class -> pref.getString(prefName.name, default as String?) as T
                 Set::class -> convertFromStringSet(pref.getStringSet(prefName.name, null), default) as T
-                List::class -> deserialzeClass(prefName.name, default) as T
+                List::class -> deserializeClass(prefName.name, default, prefName.data.prefLocation) as T
                 else -> throw IllegalArgumentException("Type not supported")
             }
         } catch (e: Exception) {
@@ -81,7 +81,7 @@ object PrefManager {
                 Long::class -> pref.getLong(prefName.name, prefName.data.default as Long) as T
                 String::class -> pref.getString(prefName.name, prefName.data.default as String?) as T
                 Set::class -> convertFromStringSet(pref.getStringSet(prefName.name, null), prefName.data.default) as T
-                List::class -> deserialzeClass(prefName.name, prefName.data.default) as T
+                List::class -> deserializeClass(prefName.name, prefName.data.default, prefName.data.prefLocation) as T
                 else -> throw IllegalArgumentException("Type not supported")
             }
         } catch (e: Exception) {
@@ -100,7 +100,7 @@ object PrefManager {
                 Long::class -> pref.getLong(prefName.name, default as Long) as T?
                 String::class -> pref.getString(prefName.name, default as String?) as T?
                 Set::class -> convertFromStringSet(pref.getStringSet(prefName.name, null), default) as T?
-                else -> deserialzeClass(prefName.name, default)
+                else -> deserializeClass(prefName.name, default, prefName.data.prefLocation)
             }
         } catch (e: Exception) {
             default
@@ -134,7 +134,7 @@ object PrefManager {
                 is Long -> irrelevantPreferences!!.getLong(key, default) as T?
                 is String -> irrelevantPreferences!!.getString(key, default) as T?
                 is Set<*> -> convertFromStringSet(irrelevantPreferences!!.getStringSet(key, null), default) as T?
-                else -> deserialzeClass(key, default)
+                else -> deserializeClass(key, default, Location.Irrelevant)
             }
         } catch (e: Exception) {
             default
@@ -160,7 +160,7 @@ object PrefManager {
                 is String -> putString(key, value as String)
                 is Set<*> -> convertAndPutStringSet(key, value)
                 null -> remove(key)
-                else -> serialzeClass(key, value)
+                else -> serializeClass(key, value, Location.Irrelevant)
             }
             apply()
         }
@@ -255,6 +255,7 @@ object PrefManager {
     @Suppress("UNCHECKED_CAST")
     fun importAllPrefs(prefs: Map<String, *>, prefLocation: Location) {
         val pref = getPrefLocation(prefLocation)
+        var hadError = false
         with(pref.edit()) {
             prefs.forEach { (key, value) ->
                 when (value) {
@@ -266,10 +267,12 @@ object PrefManager {
                     is HashSet<*> -> putStringSet(key, value as Set<String>)
                     is ArrayList<*> -> putStringSet(key, arrayListToSet(value))
                     is Set<*> -> putStringSet(key, value as Set<String>)
-                    else -> snackString("Error importing preference: Type not supported")
+                    else -> hadError = true
                 }
             }
             apply()
+            if (hadError) snackString("Error importing preferences")
+            else snackString("Preferences imported")
         }
     }
 
@@ -327,7 +330,8 @@ object PrefManager {
     }
 
 
-    private fun <T> serialzeClass(key: String, value: T){
+    private fun <T> serializeClass(key: String, value: T, location: Location){
+        val pref = getPrefLocation(location)
         try {
             val bos = ByteArrayOutputStream()
             ObjectOutputStream(bos).use { oos ->
@@ -335,16 +339,17 @@ object PrefManager {
             }
 
             val serialized = Base64.encodeToString(bos.toByteArray(), Base64.DEFAULT)
-            irrelevantPreferences!!.edit().putString(key, serialized).apply()
+            pref.edit().putString(key, serialized).apply()
         } catch (e: Exception) {
             snackString("Error serializing preference: ${e.message}")
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> deserialzeClass(key: String, default: T?): T? {
+    private fun <T> deserializeClass(key: String, default: T?, location: Location): T? {
         return try {
-            val serialized = irrelevantPreferences!!.getString(key, null)
+            val pref = getPrefLocation(location)
+            val serialized = pref.getString(key, null)
             if (serialized != null) {
                 val data = Base64.decode(serialized, Base64.DEFAULT)
                 val bis = ByteArrayInputStream(data)
