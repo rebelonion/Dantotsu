@@ -3,6 +3,8 @@ package ani.dantotsu.settings
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import java.util.*
+import kotlin.concurrent.schedule
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -101,6 +103,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
 
         binding.settingsDownloads.isChecked = PrefManager.getVal(PrefName.OfflineMode)
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
+        Timer().schedule(300){
             when (pageType) {
                 PageType.MANGA -> {
                     val intent = Intent(activity, NoInternet::class.java)
@@ -151,6 +154,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             dismiss()
             PrefManager.setVal(PrefName.OfflineMode, isChecked)
         }
+      }
     }
 
     override fun onDestroyView() {
