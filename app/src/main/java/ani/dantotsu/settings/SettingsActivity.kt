@@ -70,7 +70,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     lateinit var binding: ActivitySettingsBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private var cursedCounter = 0
-    private lateinit var openDocumentLauncher: ActivityResultLauncher<String>
 
     @OptIn(UnstableApi::class)
     @SuppressLint("SetTextI18n")
@@ -83,11 +82,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         initActivity(this)
 
         var selectedImpExp = ""
-        openDocumentLauncher = registerForActivityResult(CreateDocument("*/*")) { uri ->
+        val openDocumentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             if (uri != null) {
                 try {
                     val jsonString = contentResolver.openInputStream(uri)?.bufferedReader()
-                        .use { it?.readText() }
+                        .use { it?.readText()}
                     val location: Location =
                         Location.entries.find { it.name.lowercase() == selectedImpExp.lowercase() }
                             ?: return@registerForActivityResult
@@ -273,7 +272,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     i = which
                 }
                 .setPositiveButton("Import...") { dialog, _ ->
-                    openDocumentLauncher.launch("Select a file")
+                    openDocumentLauncher.launch(arrayOf("*/*"))
                     dialog.dismiss()
                 }
                 .setNegativeButton("Export...") { dialog, _ ->
