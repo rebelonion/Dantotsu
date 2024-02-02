@@ -109,13 +109,13 @@ fun logger(e: Any?, print: Boolean = true) {
 fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
-    val darkMode = PrefManager.getNullableVal(PrefName.DarkMode, null as Boolean?)
+    val darkMode = PrefManager.getVal<Int>(PrefName.DarkMode)
     val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
     darkMode.apply {
         AppCompatDelegate.setDefaultNightMode(
             when (this) {
-                true -> AppCompatDelegate.MODE_NIGHT_YES
-                false -> AppCompatDelegate.MODE_NIGHT_NO
+                2 -> AppCompatDelegate.MODE_NIGHT_YES
+                1 -> AppCompatDelegate.MODE_NIGHT_NO
                 else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             }
         )

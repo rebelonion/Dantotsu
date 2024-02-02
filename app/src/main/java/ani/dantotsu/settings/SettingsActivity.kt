@@ -485,21 +485,18 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             startActivity(Intent(this, ReaderSettingsActivity::class.java))
         }
 
-        var previous: View = when (PrefManager.getNullableVal(PrefName.DarkMode, null as Boolean?)) {
-            null -> binding.settingsUiAuto
-            true -> binding.settingsUiDark
-            false -> binding.settingsUiLight
+        var previous: View = when (PrefManager.getVal<Int>(PrefName.DarkMode)) {
+            0 -> binding.settingsUiAuto
+            1 -> binding.settingsUiLight
+            2 -> binding.settingsUiDark
+            else -> binding.settingsUiAuto
         }
         previous.alpha = 1f
-        fun uiTheme(mode: Boolean?, current: View) {
+        fun uiTheme(mode: Int, current: View) {
             previous.alpha = 0.33f
             previous = current
             current.alpha = 1f
-            if (mode == null) {
-                PrefManager.removeVal(PrefName.DarkMode)
-            } else {
-                PrefManager.setVal(PrefName.DarkMode, mode)
-            }
+            PrefManager.setVal(PrefName.DarkMode, mode)
             Refresh.all()
             finish()
             startActivity(Intent(this, SettingsActivity::class.java))
@@ -507,16 +504,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         binding.settingsUiAuto.setOnClickListener {
-            uiTheme(null, it)
+            uiTheme(0, it)
         }
 
         binding.settingsUiLight.setOnClickListener {
             binding.settingsUseOLED.isChecked = false
-            uiTheme(false, it)
+            uiTheme(1, it)
         }
 
         binding.settingsUiDark.setOnClickListener {
-            uiTheme(true, it)
+            uiTheme(2, it)
         }
 
         var previousStart: View = when (PrefManager.getVal<Int>(PrefName.DefaultStartUpTab)) {
@@ -526,7 +523,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             else -> binding.uiSettingsHome
         }
         previousStart.alpha = 1f
-        fun uiTheme(mode: Int, current: View) {
+        fun uiDefault(mode: Int, current: View) {
             previousStart.alpha = 0.33f
             previousStart = current
             current.alpha = 1f
@@ -536,15 +533,15 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
 
         binding.uiSettingsAnime.setOnClickListener {
-            uiTheme(0, it)
+            uiDefault(0, it)
         }
 
         binding.uiSettingsHome.setOnClickListener {
-            uiTheme(1, it)
+            uiDefault(1, it)
         }
 
         binding.uiSettingsManga.setOnClickListener {
-            uiTheme(2, it)
+            uiDefault(2, it)
         }
 
         binding.settingsShowYt.isChecked = PrefManager.getVal(PrefName.ShowYtButton)
