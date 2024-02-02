@@ -265,6 +265,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.importExportSettings.setOnClickListener {
             var i = 0
+            selectedImpExp = Location.entries[i].name
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Import/Export Settings")
                 .setSingleChoiceItems(Location.entries.map { it.name }.toTypedArray(), 0) { dialog, which ->
