@@ -8,6 +8,8 @@ import ani.dantotsu.R
 import ani.dantotsu.client
 import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.tryWithSuspend
 import java.io.File
 import java.util.Calendar
@@ -94,15 +96,12 @@ object Anilist {
         }
     }
 
-    fun getSavedToken(context: Context): Boolean {
-        if ("anilistToken" in context.fileList()) {
-            token = File(context.filesDir, "anilistToken").readText()
-            return true
-        }
-        return false
+    fun getSavedToken(): Boolean {
+        token = PrefManager.getVal(PrefName.AnilistToken, null as String?)
+        return !token.isNullOrEmpty()
     }
 
-    fun removeSavedToken(context: Context) {
+    fun removeSavedToken() {
         token = null
         username = null
         adult = false
@@ -111,9 +110,7 @@ object Anilist {
         bg = null
         episodesWatched = null
         chapterRead = null
-        if ("anilistToken" in context.fileList()) {
-            File(context.filesDir, "anilistToken").delete()
-        }
+        PrefManager.removeVal(PrefName.AnilistToken)
     }
 
     suspend inline fun <reified T : Any> executeQuery(
