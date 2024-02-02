@@ -11,8 +11,6 @@ data class Pref(
 enum class Location(val location: String, val exportable: Boolean) {
     General("ani.dantotsu.general", true),
     UI("ani.dantotsu.ui", true),
-    Anime("ani.dantotsu.anime", true),
-    Manga("ani.dantotsu.manga", true),
     Player("ani.dantotsu.player", true),
     Reader("ani.dantotsu.reader", true),
     NovelReader("ani.dantotsu.novelReader", true),

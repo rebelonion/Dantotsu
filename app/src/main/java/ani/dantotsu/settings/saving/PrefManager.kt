@@ -24,8 +24,6 @@ object PrefManager {
 
     fun init(context: Context) {  //must be called in Application class or will crash
         generalPreferences = context.getSharedPreferences(Location.General.location, Context.MODE_PRIVATE)
-        animePreferences = context.getSharedPreferences(Location.Anime.location, Context.MODE_PRIVATE)
-        mangaPreferences = context.getSharedPreferences(Location.Manga.location, Context.MODE_PRIVATE)
         playerPreferences = context.getSharedPreferences(Location.Player.location, Context.MODE_PRIVATE)
         readerPreferences = context.getSharedPreferences(Location.Reader.location, Context.MODE_PRIVATE)
         irrelevantPreferences = context.getSharedPreferences(Location.Irrelevant.location, Context.MODE_PRIVATE)
@@ -291,8 +289,6 @@ object PrefManager {
         return when (prefLoc) {
             Location.General -> generalPreferences
             Location.UI -> generalPreferences
-            Location.Anime -> animePreferences
-            Location.Manga -> mangaPreferences
             Location.Player -> playerPreferences
             Location.Reader -> readerPreferences
             Location.NovelReader -> readerPreferences

@@ -21,6 +21,10 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     VerboseLogging(Pref(Location.General, Boolean::class, false)),
     DohProvider(Pref(Location.General, Int::class, 0)),
     DefaultUserAgent(Pref(Location.General, String::class, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0")),
+    PinnedAnimeSources(Pref(Location.General, Set::class, setOf<String>())),
+    AnimeSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
+    PinnedMangaSources(Pref(Location.General, Set::class, setOf<String>())),
+    MangaSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),
@@ -42,18 +46,10 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     LayoutAnimations(Pref(Location.UI, Boolean::class, true)),
     AnimationSpeed(Pref(Location.UI, Float::class, 1f)),
     ListGrid(Pref(Location.UI, Boolean::class, true)),
-
-    //Anime
-    AnimeListSortOrder(Pref(Location.Anime, String::class, "score")),
-    PinnedAnimeSources(Pref(Location.Anime, Set::class, setOf<String>())),
-    PopularAnimeList(Pref(Location.Anime, Boolean::class, true)),
-    AnimeSearchHistory(Pref(Location.Anime, Set::class, setOf<String>())),
-
-    //Manga
-    MangaListSortOrder(Pref(Location.Manga, String::class, "score")),
-    PinnedMangaSources(Pref(Location.Manga, Set::class, setOf<String>())),
-    PopularMangaList(Pref(Location.Manga, Boolean::class, true)),
-    MangaSearchHistory(Pref(Location.Manga, Set::class, setOf<String>())),
+    PopularMangaList(Pref(Location.UI, Boolean::class, true)),
+    PopularAnimeList(Pref(Location.UI, Boolean::class, true)),
+    AnimeListSortOrder(Pref(Location.UI, String::class, "score")),
+    MangaListSortOrder(Pref(Location.UI, String::class, "score")),
 
     //Player
     DefaultSpeed(Pref(Location.Player, Int::class, 5)),
