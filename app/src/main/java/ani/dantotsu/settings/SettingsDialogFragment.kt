@@ -60,7 +60,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         if (Anilist.token != null) {
             binding.settingsLogin.setText(R.string.logout)
             binding.settingsLogin.setOnClickListener {
-                Anilist.removeSavedToken(it.context)
+                Anilist.removeSavedToken()
                 dismiss()
                 startMainActivity(requireActivity())
             }

@@ -29,8 +29,8 @@ import kotlin.math.ln
 import kotlin.math.pow
 
 fun handleProgress(cont: LinearLayout, bar: View, empty: View, mediaId: Int, ep: String) {
-    val curr = PrefManager.getNullableCustomVal("${mediaId}_${ep}", null as Long?)
-    val max = PrefManager.getNullableCustomVal("${mediaId}_${ep}_max", null as Long?)
+    val curr = PrefManager.getNullableCustomVal("${mediaId}_${ep}", null, Long::class.java)
+    val max = PrefManager.getNullableCustomVal("${mediaId}_${ep}_max", null, Long::class.java)
     if (curr != null && max != null) {
         cont.visibility = View.VISIBLE
         val div = curr.toFloat() / max.toFloat()

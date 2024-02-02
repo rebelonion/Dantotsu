@@ -752,7 +752,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             if (Anilist.token != null) {
                 binding.settingsAnilistLogin.setText(R.string.logout)
                 binding.settingsAnilistLogin.setOnClickListener {
-                    Anilist.removeSavedToken(it.context)
+                    Anilist.removeSavedToken()
                     restartMainActivity.isEnabled = true
                     reload()
                 }

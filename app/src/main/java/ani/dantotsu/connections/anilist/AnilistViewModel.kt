@@ -97,7 +97,7 @@ class AnilistHomeViewModel : ViewModel() {
     suspend fun setRecommendation() = recommendation.postValue(Anilist.query.recommendations())
 
     suspend fun loadMain(context: FragmentActivity) {
-        Anilist.getSavedToken(context)
+        Anilist.getSavedToken()
         MAL.getSavedToken(context)
         Discord.getSavedToken(context)
         if (PrefManager.getVal(PrefName.CheckUpdate)) AppUpdater.check(context)

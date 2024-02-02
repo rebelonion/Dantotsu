@@ -43,7 +43,7 @@ class MediaDetailsViewModel : ViewModel() {
 
 
     fun loadSelected(media: Media, isDownload: Boolean = false): Selected {
-        val data = PrefManager.getNullableCustomVal<Selected?>("Selected-${media.id}", null)
+        val data = PrefManager.getNullableCustomVal("Selected-${media.id}", null, Selected::class.java)
             ?: Selected().let {
             it.sourceIndex = 0
             it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)

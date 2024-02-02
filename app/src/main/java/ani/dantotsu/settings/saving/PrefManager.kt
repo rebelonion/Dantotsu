@@ -125,21 +125,22 @@ object PrefManager {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getNullableCustomVal(key: String, default: T): T? {
+    fun <T> getNullableCustomVal(key: String, default: T?, clazz: Class<T>): T? {
         return try {
-            when (default) {
-                is Boolean -> irrelevantPreferences!!.getBoolean(key, default) as T?
-                is Int -> irrelevantPreferences!!.getInt(key, default) as T?
-                is Float -> irrelevantPreferences!!.getFloat(key, default) as T?
-                is Long -> irrelevantPreferences!!.getLong(key, default) as T?
-                is String -> irrelevantPreferences!!.getString(key, default) as T?
-                is Set<*> -> convertFromStringSet(irrelevantPreferences!!.getStringSet(key, null), default) as T?
+            when {
+                clazz.isAssignableFrom(Boolean::class.java) -> irrelevantPreferences!!.getBoolean(key, default as? Boolean ?: false) as T?
+                clazz.isAssignableFrom(Int::class.java) -> irrelevantPreferences!!.getInt(key, default as? Int ?: 0) as T?
+                clazz.isAssignableFrom(Float::class.java) -> irrelevantPreferences!!.getFloat(key, default as? Float ?: 0f) as T?
+                clazz.isAssignableFrom(Long::class.java) -> irrelevantPreferences!!.getLong(key, default as? Long ?: 0L) as T?
+                clazz.isAssignableFrom(String::class.java) -> irrelevantPreferences!!.getString(key, default as? String) as T?
+                clazz.isAssignableFrom(Set::class.java) -> convertFromStringSet(irrelevantPreferences!!.getStringSet(key, null), default) as T?
                 else -> deserializeClass(key, default, Location.Irrelevant)
             }
         } catch (e: Exception) {
             default
         }
     }
+
 
     fun removeVal(prefName: PrefName) {
         val pref = getPrefLocation(prefName.data.prefLocation)
@@ -256,6 +257,7 @@ object PrefManager {
     fun importAllPrefs(prefs: Map<String, *>, prefLocation: Location) {
         val pref = getPrefLocation(prefLocation)
         var hadError = false
+        pref.edit().clear().apply()
         with(pref.edit()) {
             prefs.forEach { (key, value) ->
                 when (value) {
@@ -361,6 +363,7 @@ object PrefManager {
             }
         } catch (e: Exception) {
             snackString("Error deserializing preference: ${e.message}")
+            e.printStackTrace()
             default
         }
     }

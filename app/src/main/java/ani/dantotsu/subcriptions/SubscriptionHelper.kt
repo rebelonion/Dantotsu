@@ -27,7 +27,7 @@ class SubscriptionHelper {
             isAdult: Boolean,
             isAnime: Boolean
         ): Selected {
-            val data = PrefManager.getNullableCustomVal<Selected?>("${mediaId}-select", null) ?: Selected().let {
+            val data = PrefManager.getNullableCustomVal("${mediaId}-select", null, Selected::class.java) ?: Selected().let {
                 it.sourceIndex = 0
                 it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)
                 it
@@ -124,7 +124,7 @@ class SubscriptionHelper {
 
         private const val subscriptions = "subscriptions"
         fun getSubscriptions(): Map<Int, SubscribeMedia> =
-            PrefManager.getNullableCustomVal<Map<Int, SubscribeMedia>?>(subscriptions, null)
+            PrefManager.getNullableCustomVal<Map<Int, SubscribeMedia>>(subscriptions, null, Map::class.java)!!
                 ?: mapOf<Int, SubscribeMedia>().also { PrefManager.setCustomVal(subscriptions, it) }
 
         fun saveSubscription(context: Context, media: Media, subscribed: Boolean) {
