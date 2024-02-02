@@ -602,13 +602,19 @@ fun savePrefsToDownloads(title: String, map: Map<String, *>, context: Context) {
 }
 
 fun savePrefs(map: Map<String, *>, path: String, title: String, context: Context): File? {
-    val file = File(path, "$title.ani")
+    var file = File(path, "$title.ani")
+    var counter = 1
+    while (file.exists()) {
+        file = File(path, "${title}_${counter}.ani")
+        counter++
+    }
+
     return try {
         val gson = Gson()
         val json = gson.toJson(map)
         file.writeText(json)
         scanFile(file.absolutePath, context)
-        toast(String.format(context.getString(R.string.saved_to_path, path)))
+        toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
         file
     } catch (e: Exception) {
         snackString("Failed to save settings: ${e.localizedMessage}")
