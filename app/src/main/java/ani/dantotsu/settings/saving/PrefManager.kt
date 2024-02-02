@@ -90,7 +90,7 @@ object PrefManager {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getNullableVal(prefName: PrefName, default: T?) : T? {
+    fun <T> getNullableVal(prefName: PrefName, default: T?) : T? {  //Strings don't necessarily need to use this one
         return try {
             val pref = getPrefLocation(prefName.data.prefLocation)
             when (prefName.data.type) {
@@ -254,7 +254,7 @@ object PrefManager {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun importAllPrefs(prefs: Map<String, *>, prefLocation: Location) {
+    fun importAllPrefs(prefs: Map<String, *>, prefLocation: Location): Boolean {
         val pref = getPrefLocation(prefLocation)
         var hadError = false
         pref.edit().clear().apply()
@@ -273,8 +273,13 @@ object PrefManager {
                 }
             }
             apply()
-            if (hadError) snackString("Error importing preferences")
-            else snackString("Preferences imported")
+            return if (hadError) {
+                snackString("Error importing preferences")
+                false
+            }  else {
+                snackString("Preferences imported")
+                true
+            }
         }
     }
 

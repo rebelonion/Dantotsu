@@ -49,6 +49,8 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.internal.PreferenceKeystore
+import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
 import ani.dantotsu.subcriptions.NotificationClickReceiver
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
@@ -588,16 +590,26 @@ fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
     )
 }
 
-fun savePrefsToDownloads(title: String, map: Map<String, *>, context: Context) {
+fun savePrefsToDownloads(title: String, map: Map<String, *>, context: Context, password: CharArray? = null) {
     FileProvider.getUriForFile(
         context,
         "$APPLICATION_ID.provider",
-        savePrefs(
-            map,
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
-            title,
-            context
-        ) ?: return
+        if (password != null) {
+            savePrefs(
+                map,
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
+                title,
+                context,
+                password
+            ) ?: return
+        } else {
+            savePrefs(
+                map,
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
+                title,
+                context
+            ) ?: return
+        }
     )
 }
 
@@ -613,6 +625,34 @@ fun savePrefs(map: Map<String, *>, path: String, title: String, context: Context
         val gson = Gson()
         val json = gson.toJson(map)
         file.writeText(json)
+        scanFile(file.absolutePath, context)
+        toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
+        file
+    } catch (e: Exception) {
+        snackString("Failed to save settings: ${e.localizedMessage}")
+        null
+    }
+}
+
+fun savePrefs(map: Map<String, *>, path: String, title: String, context: Context, password: CharArray): File? {
+    var file = File(path, "$title.ani")
+    var counter = 1
+    while (file.exists()) {
+        file = File(path, "${title}_${counter}.ani")
+        counter++
+    }
+
+    val salt = generateSalt()
+
+    return try {
+        val gson = Gson()
+        val json = gson.toJson(map)
+        val encryptedData = PreferenceKeystore.encryptWithPassword(password, json, salt)
+
+        // Combine salt and encrypted data
+        val dataToSave = salt + encryptedData
+
+        file.writeBytes(dataToSave)
         scanFile(file.absolutePath, context)
         toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
         file

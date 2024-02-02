@@ -123,12 +123,16 @@ class SubscriptionHelper {
         ) : java.io.Serializable
 
         private const val subscriptions = "subscriptions"
+
+        @Suppress("UNCHECKED_CAST")
         fun getSubscriptions(): Map<Int, SubscribeMedia> =
-            PrefManager.getNullableCustomVal<Map<Int, SubscribeMedia>>(subscriptions, null, Map::class.java)!!
+            (PrefManager.getNullableCustomVal(subscriptions, null, Map::class.java) as? Map<Int, SubscribeMedia>)
                 ?: mapOf<Int, SubscribeMedia>().also { PrefManager.setCustomVal(subscriptions, it) }
 
+        @Suppress("UNCHECKED_CAST")
         fun saveSubscription(context: Context, media: Media, subscribed: Boolean) {
-            val data = PrefManager.getNullableCustomVal<Map<Int, SubscribeMedia>?>(subscriptions, null)!!.toMutableMap()
+            val data = PrefManager.getNullableCustomVal(subscriptions, null, Map::class.java) as? MutableMap<Int, SubscribeMedia>
+                ?: mutableMapOf()
             if (subscribed) {
                 if (!data.containsKey(media.id)) {
                     val new = SubscribeMedia(

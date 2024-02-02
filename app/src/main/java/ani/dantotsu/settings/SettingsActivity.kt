@@ -7,6 +7,7 @@ import android.graphics.drawable.Animatable
 import android.os.Build.*
 import android.os.Build.VERSION.*
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -39,6 +40,7 @@ import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.internal.Location
+import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
@@ -70,6 +72,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     lateinit var binding: ActivitySettingsBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private var cursedCounter = 0
+    private var tempPassword: CharArray? = null
 
     @OptIn(UnstableApi::class)
     @SuppressLint("SetTextI18n", "Recycle")
@@ -85,15 +88,28 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         val openDocumentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             if (uri != null) {
                 try {
-                    val jsonString = contentResolver.openInputStream(uri)?.bufferedReader()
-                        .use { it?.readText()}
+                    val jsonString = contentResolver.openInputStream(uri)?.readBytes()
+                        ?: throw Exception("Error reading file")
                     val location: Location =
                         Location.entries.find { it.name.lowercase() == selectedImpExp.lowercase() }
                             ?: return@registerForActivityResult
+                    val decryptedJson = if (location == Location.Protected) {
+                        val password = tempPassword ?: return@registerForActivityResult
+                        tempPassword = null
+                        val salt = jsonString.copyOfRange(0, 16)
+                        val encrypted = jsonString.copyOfRange(16, jsonString.size)
+                        PreferenceKeystore.decryptWithPassword(
+                            password,
+                            encrypted,
+                            salt
+                        )
+                    } else {
+                        jsonString.toString(Charsets.UTF_8)
+                    }
 
                     val gson = Gson()
                     val type = object : TypeToken<Map<String, Map<String, Any>>>() {}.type
-                    val rawMap: Map<String, Map<String, Any>> = gson.fromJson(jsonString, type)
+                    val rawMap: Map<String, Map<String, Any>> = gson.fromJson(decryptedJson, type)
 
                     val deserializedMap = mutableMapOf<String, Any?>()
 
@@ -112,7 +128,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         }
                     }
 
-                    PrefManager.importAllPrefs(deserializedMap, location)
+                    if(PrefManager.importAllPrefs(deserializedMap, location))
+                        restartApp()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     toast("Error importing settings")
@@ -218,7 +235,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val pinnedSourcesBoolean =
                 animeSourcesWithoutDownloadsSource.map { it.name in AnimeSources.pinnedAnimeSources }
             val pinnedSourcesOriginal: Set<String> = PrefManager.getVal(PrefName.PinnedAnimeSources)
-            val pinnedSources = pinnedSourcesOriginal.toMutableSet() ?: mutableSetOf()
+            val pinnedSources = pinnedSourcesOriginal.toMutableSet()
             val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Pinned Anime Sources")
                 .setMultiChoiceItems(
@@ -265,24 +282,52 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         binding.importExportSettings.setOnClickListener {
             var i = 0
             selectedImpExp = Location.entries[i].name
+            val filteredLocations = Location.entries.filter { it.exportable }
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Import/Export Settings")
-                .setSingleChoiceItems(Location.entries
-                    .filter { it.exportable }
-                    .map { it.name }.toTypedArray(), 0) { dialog, which ->
-                    selectedImpExp = Location.entries[which].name
+                .setSingleChoiceItems( filteredLocations.map { it.name }.toTypedArray(), i) { dialog, which ->
+                    selectedImpExp = filteredLocations[which].name
                     i = which
                 }
                 .setPositiveButton("Import...") { dialog, _ ->
-                    openDocumentLauncher.launch(arrayOf("*/*"))
+                    if (filteredLocations[i] == Location.Protected) {
+                        passwordAlertDialog(false) { password ->
+                            if (password != null) {
+                                tempPassword = password
+                                openDocumentLauncher.launch(arrayOf("*/*"))
+                            } else {
+                                toast("Password cannot be empty")
+                            }
+                        }
+                    } else {
+                        openDocumentLauncher.launch(arrayOf("*/*"))
+                    }
                     dialog.dismiss()
                 }
                 .setNegativeButton("Export...") { dialog, _ ->
                     if (i < 0) return@setNegativeButton
-                    savePrefsToDownloads(Location.entries[i].name,
-                        PrefManager.exportAllPrefs(Location.entries[i]),
-                        this@SettingsActivity)
                     dialog.dismiss()
+                    if (filteredLocations[i] == Location.Protected) {
+                        passwordAlertDialog(true) { password ->
+                            if (password != null) {
+                                savePrefsToDownloads(
+                                    filteredLocations[i].name,
+                                    PrefManager.exportAllPrefs(filteredLocations[i]),
+                                    this@SettingsActivity,
+                                    password
+                                )
+                            } else {
+                                toast("Password cannot be empty")
+                            }
+                        }
+                    } else {
+                        savePrefsToDownloads(
+                            filteredLocations[i].name,
+                            PrefManager.exportAllPrefs(filteredLocations[i]),
+                            this@SettingsActivity,
+                            null
+                        )
+                    }
                 }
                 .setNeutralButton("Cancel") { dialog, _ ->
                     dialog.dismiss()
@@ -877,6 +922,44 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             show()
         }
     }
+    private fun passwordAlertDialog(isExporting:Boolean, callback: (CharArray?) -> Unit) {
+        val password = CharArray(16).apply { fill('0') }
+
+        // Inflate the dialog layout
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_user_agent, null)
+        dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)?.hint = "Password"
+        val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
+        subtitleTextView?.visibility = View.VISIBLE
+        if (!isExporting)
+            subtitleTextView?.text = "Enter your password to decrypt the file"
+
+        val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+            .setTitle("Enter Password")
+            .setView(dialogView)
+            .setPositiveButton("OK", null)
+            .setNegativeButton("Cancel") { dialog, _ ->
+                password.fill('0')
+                dialog.dismiss()
+                callback(null)
+            }
+            .create()
+
+        dialog.window?.setDimAmount(0.8f)
+        dialog.show()
+
+        // Override the positive button here
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val editText = dialog.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+            if (editText?.text?.isNotBlank() == true) {
+                editText.text?.toString()?.trim()?.toCharArray(password)
+                dialog.dismiss()
+                callback(password)
+            } else {
+                toast("Password cannot be empty")
+            }
+        }
+    }
+
 
     companion object {
         fun getDeviceInfo(): String {
