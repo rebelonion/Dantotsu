@@ -94,12 +94,12 @@ object PrefManager {
         return try {
             val pref = getPrefLocation(prefName.data.prefLocation)
             when (prefName.data.type) {
-                Boolean::class -> pref.getBoolean(prefName.name, prefName.data.default as Boolean) as T?
-                Int::class -> pref.getInt(prefName.name, prefName.data.default as Int) as T?
-                Float::class -> pref.getFloat(prefName.name, prefName.data.default as Float) as T?
-                Long::class -> pref.getLong(prefName.name, prefName.data.default as Long) as T?
-                String::class -> pref.getString(prefName.name, prefName.data.default as String?) as T?
-                Set::class -> convertFromStringSet(pref.getStringSet(prefName.name, null), prefName.data.default) as T?
+                Boolean::class -> pref.getBoolean(prefName.name, default as Boolean) as T?
+                Int::class -> pref.getInt(prefName.name, default as Int) as T?
+                Float::class -> pref.getFloat(prefName.name, default as Float) as T?
+                Long::class -> pref.getLong(prefName.name, default as Long) as T?
+                String::class -> pref.getString(prefName.name, default as String?) as T?
+                Set::class -> convertFromStringSet(pref.getStringSet(prefName.name, null), default) as T?
                 else -> deserialzeClass(prefName.name, default)
             }
         } catch (e: Exception) {

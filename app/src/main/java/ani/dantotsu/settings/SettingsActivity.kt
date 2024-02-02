@@ -264,18 +264,21 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         binding.importExportSettings.setOnClickListener {
+            var i = 0
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Import/Export Settings")
                 .setSingleChoiceItems(Location.entries.map { it.name }.toTypedArray(), 0) { dialog, which ->
                     selectedImpExp = Location.entries[which].name
+                    i = which
                 }
                 .setPositiveButton("Import...") { dialog, _ ->
                     openDocumentLauncher.launch("Select a file")
                     dialog.dismiss()
                 }
-                .setNegativeButton("Export...") { dialog, which ->
-                    savePrefsToDownloads(Location.entries[which].name,
-                        PrefManager.exportAllPrefs(Location.entries[which]),
+                .setNegativeButton("Export...") { dialog, _ ->
+                    if (i < 0) return@setNegativeButton
+                    savePrefsToDownloads(Location.entries[i].name,
+                        PrefManager.exportAllPrefs(Location.entries[i]),
                         this@SettingsActivity)
                     dialog.dismiss()
                 }
