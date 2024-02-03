@@ -6,7 +6,9 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -17,16 +19,19 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
+import ani.dantotsu.logger
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
@@ -39,7 +44,9 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Collections
 import java.util.Locale
+
 
 class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
@@ -174,6 +181,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         }, skipIcons
     )
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -185,14 +193,51 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         extensionsRecyclerView.adapter = extensionsAdapter
 
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                extensionsAdapter.onMove(viewHolder.adapterPosition, target.adapterPosition)
+                return true
+            }
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                super.onSelectedChanged(viewHolder, actionState)
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                    viewHolder?.itemView?.elevation = 8f
+                    viewHolder?.itemView?.translationZ = 8f
+                }
+            }
+
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+                viewHolder.itemView.elevation = 0f
+                viewHolder.itemView.translationZ = 0f
+            }
+        }
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(extensionsRecyclerView)
+
 
         lifecycleScope.launch {
             animeExtensionManager.installedExtensionsFlow.collect { extensions ->
-                extensionsAdapter.updateData(extensions)
+                extensionsAdapter.updateData(sortToAnimeSourcesList(extensions))
             }
         }
         val extensionsRecyclerView: RecyclerView = binding.allAnimeExtensionsRecyclerView
         return binding.root
+    }
+
+
+    private fun sortToAnimeSourcesList(inpt: List<AnimeExtension.Installed>): List<AnimeExtension.Installed> {
+        val sourcesMap = inpt.associateBy { it.name }
+        val orderedSources = AnimeSources.pinnedAnimeSources.mapNotNull { name ->
+            sourcesMap[name]
+        }
+        return orderedSources + inpt.filter { !AnimeSources.pinnedAnimeSources.contains(it.name) }
     }
 
     override fun onDestroyView() {
@@ -211,8 +256,21 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         DIFF_CALLBACK_INSTALLED
     ) {
 
+        private val data: MutableList<AnimeExtension.Installed> = mutableListOf()
+
         fun updateData(newExtensions: List<AnimeExtension.Installed>) {
-            submitList(newExtensions)  // Use submitList instead of manual list handling
+            submitList(newExtensions)
+            data.clear()
+            data.addAll(newExtensions)
+        }
+
+        fun onMove(fromPosition: Int, toPosition: Int) {
+            Collections.swap(data, fromPosition, toPosition)
+            val map = data.map { it.name }.toList()
+            PrefManager.setVal(PrefName.AnimeSourcesOrder, map)
+            AnimeSources.pinnedAnimeSources = map
+            AnimeSources.performReorderAnimeSources()
+            notifyItemMoved(fromPosition, toPosition)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -221,7 +279,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
-        @SuppressLint("SetTextI18n")
+        @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position) // Use getItem() from ListAdapter
             val nsfw = if (extension.isNsfw) "(18+)" else ""
@@ -242,7 +300,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
             }
-            holder.card.setOnLongClickListener {
+            holder.closeTextView.setOnLongClickListener {
                 onUninstallClicked(extension, true)
                 true
             }

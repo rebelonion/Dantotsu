@@ -8,6 +8,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -18,6 +19,7 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
@@ -33,6 +36,7 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
@@ -40,6 +44,7 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Collections
 import java.util.Locale
 
 class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
@@ -184,14 +189,50 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         extensionsRecyclerView.adapter = extensionsAdapter
 
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                extensionsAdapter.onMove(viewHolder.adapterPosition, target.adapterPosition)
+                return true
+            }
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                super.onSelectedChanged(viewHolder, actionState)
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                    viewHolder?.itemView?.elevation = 8f
+                    viewHolder?.itemView?.translationZ = 8f
+                }
+            }
+
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+                viewHolder.itemView.elevation = 0f
+                viewHolder.itemView.translationZ = 0f
+            }
+        }
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(extensionsRecyclerView)
+
 
         lifecycleScope.launch {
             mangaExtensionManager.installedExtensionsFlow.collect { extensions ->
-                extensionsAdapter.updateData(extensions)
+                extensionsAdapter.updateData(sortToMangaSourcesList(extensions))
             }
         }
         val extensionsRecyclerView: RecyclerView = binding.allMangaExtensionsRecyclerView
         return binding.root
+    }
+
+    private fun sortToMangaSourcesList(inpt: List<MangaExtension.Installed>): List<MangaExtension.Installed> {
+        val sourcesMap = inpt.associateBy { it.name }
+        val orderedSources = MangaSources.pinnedMangaSources.mapNotNull { name ->
+            sourcesMap[name]
+        }
+        return orderedSources + inpt.filter { !MangaSources.pinnedMangaSources.contains(it.name) }
     }
 
     override fun onDestroyView() {
@@ -205,15 +246,17 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
     private class MangaExtensionsAdapter(
         private val onSettingsClicked: (MangaExtension.Installed) -> Unit,
         private val onUninstallClicked: (MangaExtension.Installed, Boolean) -> Unit,
-        skipIcons: Boolean
+        val skipIcons: Boolean
     ) : ListAdapter<MangaExtension.Installed, MangaExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
     ) {
 
-        val skipIcons = skipIcons
+        private val data: MutableList<MangaExtension.Installed> = mutableListOf()
 
         fun updateData(newExtensions: List<MangaExtension.Installed>) {
-            submitList(newExtensions)  // Use submitList instead of manual list handling
+            submitList(newExtensions)
+            data.clear()
+            data.addAll(newExtensions)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -222,7 +265,16 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
-        @SuppressLint("SetTextI18n")
+        fun onMove(fromPosition: Int, toPosition: Int) {
+            Collections.swap(data, fromPosition, toPosition)
+            val map = data.map { it.name }.toList()
+            PrefManager.setVal(PrefName.MangaSourcesOrder, map)
+            MangaSources.pinnedMangaSources = map
+            MangaSources.performReorderMangaSources()
+            notifyItemMoved(fromPosition, toPosition)
+        }
+
+        @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)  // Use getItem() from ListAdapter
             val nsfw = if (extension.isNsfw) "(18+)" else ""
@@ -242,11 +294,6 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             }
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
-            }
-
-            holder.card.setOnLongClickListener {
-                onUninstallClicked(extension, true)
-                true
             }
         }
 

@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+    android:background="?attr/colorSurface"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
@@ -13,7 +14,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_pin"
+        android:src="@drawable/ic_round_filter_24"
         android:layout_marginEnd="3dp" />
 
     <ImageView

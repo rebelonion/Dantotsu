@@ -10,10 +10,11 @@ import kotlinx.coroutines.flow.first
 
 object MangaSources : MangaReadSources() {
     override var list: List<Lazier<BaseParser>> = emptyList()
-    var pinnedMangaSources: Set<String> = emptySet()
+    var pinnedMangaSources: List<String> = emptyList()
 
     suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
-        pinnedMangaSources = PrefManager.getVal(PrefName.PinnedMangaSources)
+        pinnedMangaSources = PrefManager.getNullableVal<List<String>>(PrefName.MangaSourcesOrder, null)
+            ?: emptyList()
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()
@@ -52,14 +53,17 @@ object MangaSources : MangaReadSources() {
 
     private fun sortPinnedMangaSources(
         Sources: List<Lazier<BaseParser>>,
-        pinnedMangaSources: Set<String>
+        pinnedMangaSources: List<String>
     ): List<Lazier<BaseParser>> {
-        //find the pinned sources
-        val pinnedSources = Sources.filter { pinnedMangaSources.contains(it.name) }
+        val pinnedSourcesMap = Sources.filter { pinnedMangaSources.contains(it.name) }
+            .associateBy { it.name }
+        val orderedPinnedSources = pinnedMangaSources.mapNotNull { name ->
+            pinnedSourcesMap[name]
+        }
         //find the unpinned sources
         val unpinnedSources = Sources.filter { !pinnedMangaSources.contains(it.name) }
         //put the pinned sources at the top of the list
-        return pinnedSources + unpinnedSources
+        return orderedPinnedSources + unpinnedSources
     }
 }
 

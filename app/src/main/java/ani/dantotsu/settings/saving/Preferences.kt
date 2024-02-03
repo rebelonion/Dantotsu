@@ -21,9 +21,9 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     VerboseLogging(Pref(Location.General, Boolean::class, false)),
     DohProvider(Pref(Location.General, Int::class, 0)),
     DefaultUserAgent(Pref(Location.General, String::class, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0")),
-    PinnedAnimeSources(Pref(Location.General, Set::class, setOf<String>())),
+    AnimeSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
     AnimeSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
-    PinnedMangaSources(Pref(Location.General, Set::class, setOf<String>())),
+    MangaSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
     MangaSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
 
     //User Interface

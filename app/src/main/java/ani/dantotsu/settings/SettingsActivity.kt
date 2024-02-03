@@ -212,37 +212,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 .show(this, tag)
         }
 
-        binding.settingsPinnedAnimeSources.setOnClickListener {
-            val animeSourcesWithoutDownloadsSource =
-                AnimeSources.list.filter { it.name != "Downloaded" }
-            val names = animeSourcesWithoutDownloadsSource.map { it.name }
-            val pinnedSourcesBoolean =
-                animeSourcesWithoutDownloadsSource.map { it.name in AnimeSources.pinnedAnimeSources }
-            val pinnedSourcesOriginal: Set<String> = PrefManager.getVal(PrefName.PinnedAnimeSources)
-            val pinnedSources = pinnedSourcesOriginal.toMutableSet()
-            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Pinned Anime Sources")
-                .setMultiChoiceItems(
-                    names.toTypedArray(),
-                    pinnedSourcesBoolean.toBooleanArray()
-                ) { _, which, isChecked ->
-                    if (isChecked) {
-                        pinnedSources.add(AnimeSources.names[which])
-                    } else {
-                        pinnedSources.remove(AnimeSources.names[which])
-                    }
-                }
-                .setPositiveButton("OK") { dialog, _ ->
-                    PrefManager.setVal(PrefName.PinnedAnimeSources, pinnedSources)
-                    AnimeSources.pinnedAnimeSources = pinnedSources
-                    AnimeSources.performReorderAnimeSources()
-                    dialog.dismiss()
-                }
-                .create()
-            alertDialog.show()
-            alertDialog.window?.setDimAmount(0.8f)
-        }
-
         binding.settingsPlayer.setOnClickListener {
             startActivity(Intent(this, PlayerSettingsActivity::class.java))
         }
@@ -470,37 +439,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         binding.settingsPreferDub.isChecked = PrefManager.getVal(PrefName.SettingsPreferDub)
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.SettingsPreferDub, isChecked)
-        }
-
-        binding.settingsPinnedMangaSources.setOnClickListener {
-            val mangaSourcesWithoutDownloadsSource =
-                MangaSources.list.filter { it.name != "Downloaded" }
-            val names = mangaSourcesWithoutDownloadsSource.map { it.name }
-            val pinnedSourcesBoolean =
-                mangaSourcesWithoutDownloadsSource.map { it.name in MangaSources.pinnedMangaSources }
-            val pinnedSourcesOriginal: Set<String> = PrefManager.getVal(PrefName.PinnedMangaSources)
-            val pinnedSources = pinnedSourcesOriginal.toMutableSet()
-            val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Pinned Manga Sources")
-                .setMultiChoiceItems(
-                    names.toTypedArray(),
-                    pinnedSourcesBoolean.toBooleanArray()
-                ) { _, which, isChecked ->
-                    if (isChecked) {
-                        pinnedSources.add(MangaSources.names[which])
-                    } else {
-                        pinnedSources.remove(MangaSources.names[which])
-                    }
-                }
-                .setPositiveButton("OK") { dialog, _ ->
-                    PrefManager.setVal(PrefName.PinnedMangaSources, pinnedSources)
-                    MangaSources.pinnedMangaSources = pinnedSources
-                    MangaSources.performReorderMangaSources()
-                    dialog.dismiss()
-                }
-                .create()
-            alertDialog.show()
-            alertDialog.window?.setDimAmount(0.8f)
         }
 
         binding.settingsReader.setOnClickListener {
