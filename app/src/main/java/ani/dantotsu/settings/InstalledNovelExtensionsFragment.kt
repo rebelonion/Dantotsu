@@ -130,6 +130,9 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsAdapter.filter(query ?: "", novelExtensionManager.installedExtensionsFlow.value)
     }
 
+    override fun notifyDataChanged() { // do nothing
+    }
+
     private class NovelExtensionsAdapter(
         private val onSettingsClicked: (NovelExtension.Installed) -> Unit,
         private val onUninstallClicked: (NovelExtension.Installed, Boolean) -> Unit,

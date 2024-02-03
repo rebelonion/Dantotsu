@@ -248,6 +248,9 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsAdapter.filter(query ?: "", animeExtensionManager.installedExtensionsFlow.value)
     }
 
+    override fun notifyDataChanged() { // Do nothing
+    }
+
     private class AnimeExtensionsAdapter(
         private val onSettingsClicked: (AnimeExtension.Installed) -> Unit,
         private val onUninstallClicked: (AnimeExtension.Installed, Boolean) -> Unit,

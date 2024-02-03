@@ -73,6 +73,10 @@ class NovelExtensionsFragment : Fragment(),
         viewModel.setSearchQuery(query ?: "")
     }
 
+    override fun notifyDataChanged() {
+        viewModel.invalidatePager()
+    }
+
     override fun onInstallClick(pkg: NovelExtension.Available) {
         if (isAdded) {  // Check if the fragment is currently added to its activity
             val context = requireContext()

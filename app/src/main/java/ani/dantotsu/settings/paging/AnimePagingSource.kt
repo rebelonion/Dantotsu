@@ -76,7 +76,9 @@ class AnimeExtensionsViewModel(
                 prefetchDistance = 15
             )
         ) {
-            AnimeExtensionPagingSource(available, installed, query)
+            val aEPS = AnimeExtensionPagingSource(available, installed, query)
+            currentPagingSource = aEPS
+            aEPS
         }.flow
     }.cachedIn(viewModelScope)
 }

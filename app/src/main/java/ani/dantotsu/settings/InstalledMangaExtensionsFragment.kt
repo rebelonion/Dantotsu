@@ -243,6 +243,9 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsAdapter.filter(query ?: "", mangaExtensionManager.installedExtensionsFlow.value)
     }
 
+    override fun notifyDataChanged() { // Do nothing
+    }
+
     private class MangaExtensionsAdapter(
         private val onSettingsClicked: (MangaExtension.Installed) -> Unit,
         private val onUninstallClicked: (MangaExtension.Installed, Boolean) -> Unit,

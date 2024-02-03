@@ -76,7 +76,9 @@ class NovelExtensionsViewModel(
                 prefetchDistance = 15
             )
         ) {
-            NovelExtensionPagingSource(available, installed, query)
+            val nEPS = NovelExtensionPagingSource(available, installed, query)
+            currentPagingSource = nEPS
+            nEPS
         }.flow
     }.cachedIn(viewModelScope)
 }

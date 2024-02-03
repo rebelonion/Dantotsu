@@ -7,6 +7,7 @@ import android.os.Build.VERSION.*
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
@@ -64,6 +65,8 @@ class ExtensionsActivity : AppCompatActivity() {
                     searchView.setText("")
                     searchView.clearFocus()
                     tabLayout.clearFocus()
+                    if (tab.text?.contains("Installed") == true) binding.languageselect.visibility = View.GONE
+                    else binding.languageselect.visibility = View.VISIBLE
                     viewPager.updateLayoutParams<ViewGroup.LayoutParams> {
                         height = ViewGroup.LayoutParams.MATCH_PARENT
                     }
@@ -123,6 +126,11 @@ class ExtensionsActivity : AppCompatActivity() {
             builder.setTitle("Language")
             builder.setSingleChoiceItems(languageOptions, index){ dialog, i ->
                 PrefManager.setVal(PrefName.LangSort, LanguageMapper.Companion.Language.entries[i].code)
+                val currentFragment =
+                    supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
+                if (currentFragment is SearchQueryHandler) {
+                    currentFragment.notifyDataChanged()
+                }
                 dialog.dismiss()
             }
             val dialog = builder.show()
@@ -140,4 +148,5 @@ class ExtensionsActivity : AppCompatActivity() {
 
 interface SearchQueryHandler {
     fun updateContentBasedOnQuery(query: String?)
+    fun notifyDataChanged()
 }

@@ -71,6 +71,10 @@ class AnimeExtensionsFragment : Fragment(),
         viewModel.setSearchQuery(query ?: "")
     }
 
+    override fun notifyDataChanged() {
+        viewModel.invalidatePager()
+    }
+
     override fun onInstallClick(pkg: AnimeExtension.Available) {
         val context = requireContext()
         if (isAdded) {

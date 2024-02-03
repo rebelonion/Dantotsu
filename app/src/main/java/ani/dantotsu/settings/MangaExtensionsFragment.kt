@@ -72,6 +72,10 @@ class MangaExtensionsFragment : Fragment(),
         viewModel.setSearchQuery(query ?: "")
     }
 
+    override fun notifyDataChanged() {
+        viewModel.invalidatePager()
+    }
+
     override fun onInstallClick(pkg: MangaExtension.Available) {
         if (isAdded) {  // Check if the fragment is currently added to its activity
             val context = requireContext()
