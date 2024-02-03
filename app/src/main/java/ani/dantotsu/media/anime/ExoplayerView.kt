@@ -81,8 +81,8 @@ import ani.dantotsu.others.ResettableTimer
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.*
 import ani.dantotsu.settings.PlayerSettingsActivity
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.cast.framework.CastButtonFactory
@@ -1185,13 +1185,13 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
         val showProgressDialog =
             if (PrefManager.getVal(PrefName.AskIndividualPlayer)) PrefManager.getCustomVal(
-                "${media.id}_progressDialog",
+                "${media.id}_ProgressDialog",
                 true
             ) else false
-        if (!incognito && showProgressDialog && Anilist.userid != null && if (media.isAdult) PrefManager.getVal<Boolean>(
+        if (!incognito && showProgressDialog && Anilist.userid != null && if (media.isAdult) PrefManager.getVal(
                 PrefName.UpdateForHPlayer
             ) else true
-        )
+        ) {
             AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.auto_update, media.userPreferredName))
                 .apply {
@@ -1224,7 +1224,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     }
                     show()
                 }
-        else model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "invoke")
+        } else model.setEpisode(episodes[media.anime!!.selectedEpisode!!]!!, "invoke")
 
         //Start the recursive Fun
         if (PrefManager.getVal(PrefName.TimeStampsEnabled))
