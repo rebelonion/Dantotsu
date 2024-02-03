@@ -21,6 +21,7 @@ import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
+import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
@@ -41,6 +42,7 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
+import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
@@ -84,52 +86,34 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         initActivity(this)
 
-        var selectedImpExp = ""
         val openDocumentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
             if (uri != null) {
                 try {
                     val jsonString = contentResolver.openInputStream(uri)?.readBytes()
                         ?: throw Exception("Error reading file")
-                    val location: Location =
-                        Location.entries.find { it.name.lowercase() == selectedImpExp.lowercase() }
-                            ?: return@registerForActivityResult
-                    val decryptedJson = if (location == Location.Protected) {
-                        val password = tempPassword ?: return@registerForActivityResult
-                        tempPassword = null
-                        val salt = jsonString.copyOfRange(0, 16)
-                        val encrypted = jsonString.copyOfRange(16, jsonString.size)
-                        PreferenceKeystore.decryptWithPassword(
-                            password,
-                            encrypted,
-                            salt
-                        )
-                    } else {
-                        jsonString.toString(Charsets.UTF_8)
-                    }
-
-                    val gson = Gson()
-                    val type = object : TypeToken<Map<String, Map<String, Any>>>() {}.type
-                    val rawMap: Map<String, Map<String, Any>> = gson.fromJson(decryptedJson, type)
-
-                    val deserializedMap = mutableMapOf<String, Any?>()
-
-                    rawMap.forEach { (key, typeValueMap) ->
-                        val typeName = typeValueMap["type"] as? String
-                        val value = typeValueMap["value"]
-
-                        deserializedMap[key] = when (typeName) {  //wierdly null sometimes so cast to string
-                            "kotlin.Int" -> (value as? Double)?.toInt()
-                            "kotlin.String" -> value.toString()
-                            "kotlin.Boolean" -> value as? Boolean
-                            "kotlin.Float" -> value.toString().toFloatOrNull()
-                            "kotlin.Long" -> (value as? Double)?.toLong()
-                            "java.util.HashSet" -> value as? ArrayList<*>
-                            else -> null
+                    val name = DocumentFile.fromSingleUri(this, uri)?.name ?: "settings"
+                    //.sani is encrypted, .ani is not
+                    if (name.endsWith(".sani")) {
+                        passwordAlertDialog(false) { password ->
+                            if (password != null) {
+                                val salt = jsonString.copyOfRange(0, 16)
+                                val encrypted = jsonString.copyOfRange(16, jsonString.size)
+                                val decryptedJson = PreferenceKeystore.decryptWithPassword(
+                                        password,
+                                        encrypted,
+                                        salt
+                                )
+                                if(PreferencePackager.unpack(decryptedJson))
+                                    restartApp()
+                            } else {
+                                toast("Password cannot be empty")
+                            }
                         }
+                    } else {
+                        val decryptedJson = jsonString.toString(Charsets.UTF_8)
+                        if(PreferencePackager.unpack(decryptedJson))
+                            restartApp()
                     }
-
-                    if(PrefManager.importAllPrefs(deserializedMap, location))
-                        restartApp()
                 } catch (e: Exception) {
                     e.printStackTrace()
                     toast("Error importing settings")
@@ -280,39 +264,31 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         binding.importExportSettings.setOnClickListener {
-            var i = 0
-            selectedImpExp = Location.entries[i].name
+            val selectedArray = mutableListOf(false)
             val filteredLocations = Location.entries.filter { it.exportable }
+            selectedArray.addAll(List(filteredLocations.size - 1) { false })
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Import/Export Settings")
-                .setSingleChoiceItems( filteredLocations.map { it.name }.toTypedArray(), i) { dialog, which ->
-                    selectedImpExp = filteredLocations[which].name
-                    i = which
+                .setMultiChoiceItems( filteredLocations.map { it.name }.toTypedArray(), selectedArray.toBooleanArray()) { _, which, isChecked ->
+                    selectedArray[which] = isChecked
                 }
                 .setPositiveButton("Import...") { dialog, _ ->
-                    if (filteredLocations[i] == Location.Protected) {
-                        passwordAlertDialog(false) { password ->
-                            if (password != null) {
-                                tempPassword = password
-                                openDocumentLauncher.launch(arrayOf("*/*"))
-                            } else {
-                                toast("Password cannot be empty")
-                            }
-                        }
-                    } else {
-                        openDocumentLauncher.launch(arrayOf("*/*"))
-                    }
+                    openDocumentLauncher.launch(arrayOf("*/*"))
                     dialog.dismiss()
                 }
                 .setNegativeButton("Export...") { dialog, _ ->
-                    if (i < 0) return@setNegativeButton
+                    if (!selectedArray.contains(true)) {
+                        toast("No location selected")
+                        return@setNegativeButton
+                    }
                     dialog.dismiss()
-                    if (filteredLocations[i] == Location.Protected) {
+                    val selected = filteredLocations.filterIndexed { index, _ -> selectedArray[index] }
+                    if (selected.contains(Location.Protected)) {
                         passwordAlertDialog(true) { password ->
                             if (password != null) {
                                 savePrefsToDownloads(
-                                    filteredLocations[i].name,
-                                    PrefManager.exportAllPrefs(filteredLocations[i]),
+                                    "DantotsuSettings",
+                                    PrefManager.exportAllPrefs(selected),
                                     this@SettingsActivity,
                                     password
                                 )
@@ -322,8 +298,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         }
                     } else {
                         savePrefsToDownloads(
-                            filteredLocations[i].name,
-                            PrefManager.exportAllPrefs(filteredLocations[i]),
+                            "DantotsuSettings",
+                            PrefManager.exportAllPrefs(selected),
                             this@SettingsActivity,
                             null
                         )

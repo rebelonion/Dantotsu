@@ -590,13 +590,13 @@ fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
     )
 }
 
-fun savePrefsToDownloads(title: String, map: Map<String, *>, context: Context, password: CharArray? = null) {
+fun savePrefsToDownloads(title: String, serialized: String, context: Context, password: CharArray? = null) {
     FileProvider.getUriForFile(
         context,
         "$APPLICATION_ID.provider",
         if (password != null) {
             savePrefs(
-                map,
+                serialized,
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
                 title,
                 context,
@@ -604,7 +604,7 @@ fun savePrefsToDownloads(title: String, map: Map<String, *>, context: Context, p
             ) ?: return
         } else {
             savePrefs(
-                map,
+                serialized,
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
                 title,
                 context
@@ -613,7 +613,7 @@ fun savePrefsToDownloads(title: String, map: Map<String, *>, context: Context, p
     )
 }
 
-fun savePrefs(map: Map<String, *>, path: String, title: String, context: Context): File? {
+fun savePrefs(serialized: String, path: String, title: String, context: Context): File? {
     var file = File(path, "$title.ani")
     var counter = 1
     while (file.exists()) {
@@ -622,9 +622,7 @@ fun savePrefs(map: Map<String, *>, path: String, title: String, context: Context
     }
 
     return try {
-        val gson = Gson()
-        val json = gson.toJson(map)
-        file.writeText(json)
+        file.writeText(serialized)
         scanFile(file.absolutePath, context)
         toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
         file
@@ -634,20 +632,18 @@ fun savePrefs(map: Map<String, *>, path: String, title: String, context: Context
     }
 }
 
-fun savePrefs(map: Map<String, *>, path: String, title: String, context: Context, password: CharArray): File? {
+fun savePrefs(serialized: String, path: String, title: String, context: Context, password: CharArray): File? {
     var file = File(path, "$title.ani")
     var counter = 1
     while (file.exists()) {
-        file = File(path, "${title}_${counter}.ani")
+        file = File(path, "${title}_${counter}.sani")
         counter++
     }
 
     val salt = generateSalt()
 
     return try {
-        val gson = Gson()
-        val json = gson.toJson(map)
-        val encryptedData = PreferenceKeystore.encryptWithPassword(password, json, salt)
+        val encryptedData = PreferenceKeystore.encryptWithPassword(password, serialized, salt)
 
         // Combine salt and encrypted data
         val dataToSave = salt + encryptedData

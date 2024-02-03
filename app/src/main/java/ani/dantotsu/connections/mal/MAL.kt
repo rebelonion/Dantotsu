@@ -48,7 +48,7 @@ object MAL {
 
     private suspend fun refreshToken(): ResponseToken? {
         return tryWithSuspend {
-            val token = PrefManager.getNullableVal<ResponseToken?>(PrefName.MALToken, null)
+            val token = PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)
                 ?: throw Exception(currContext()?.getString(R.string.refresh_token_load_failed))
             val res = client.post(
                 "https://myanimelist.net/v1/oauth2/token",
@@ -66,7 +66,7 @@ object MAL {
 
     suspend fun getSavedToken(context: FragmentActivity): Boolean {
         return tryWithSuspend(false) {
-            var res: ResponseToken = PrefManager.getNullableVal<ResponseToken?>(PrefName.MALToken, null)
+            var res: ResponseToken = PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)
                 ?: return@tryWithSuspend false
             if (System.currentTimeMillis() > res.expiresIn)
                 res = refreshToken()
