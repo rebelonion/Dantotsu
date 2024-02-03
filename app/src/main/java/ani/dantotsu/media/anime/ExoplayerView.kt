@@ -390,11 +390,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     override fun onOrientationChanged(orientation: Int) {
                         if (orientation in 45..135) {
                             if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) exoRotate.visibility =
-                                View.VISIBLE
+                                View.GONE
                             rotation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
                         } else if (orientation in 225..315) {
                             if (rotation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) exoRotate.visibility =
-                                View.VISIBLE
+                                View.GONE
                             rotation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                         }
                     }
