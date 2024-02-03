@@ -77,7 +77,7 @@
     <style name="HeadingText">
         <item name="android:fontFamily">@font/poppins_bold</item>
         <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="android:textSize">58sp</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="BottomNavBar" parent="">
