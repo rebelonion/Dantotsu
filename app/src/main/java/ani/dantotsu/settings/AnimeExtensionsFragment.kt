@@ -114,7 +114,7 @@ class AnimeExtensionsFragment : Fragment(),
                             context,
                             Notifications.CHANNEL_DOWNLOADER_PROGRESS
                         )
-                            .setSmallIcon(R.drawable.ic_round_download_24)
+                            .setSmallIcon(R.drawable.ic_download_24)
                             .setContentTitle("Installation complete")
                             .setContentText("The extension has been successfully installed.")
                             .setPriority(NotificationCompat.PRIORITY_LOW)

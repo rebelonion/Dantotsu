@@ -85,7 +85,7 @@ class AnimeDownloaderService : Service() {
         builder =
             NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
                 setContentTitle("Anime Download Progress")
-                setSmallIcon(R.drawable.ic_round_download_24)
+                setSmallIcon(R.drawable.ic_download_24)
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 setOnlyAlertOnce(true)
             }

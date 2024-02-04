@@ -390,7 +390,7 @@ class EpisodeAdapter(
                 binding.itemEpisodeDesc.visibility =
                     if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
                 // Show download icon
-                binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
+                binding.itemDownload.setImageResource(R.drawable.ic_download_24)
                 binding.itemDownload.rotation = 0f
             }
 

@@ -105,7 +105,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:backgroundTint="#00FFFFFF"
-                            android:src="@drawable/ic_round_download_24"
+                            android:src="@drawable/ic_download_24"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"

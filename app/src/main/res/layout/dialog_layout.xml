@@ -193,7 +193,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="?android:attr/selectableItemBackground"
-                    app:srcCompat="@drawable/ic_round_download_24"
+                    app:srcCompat="@drawable/ic_download_24"
                     app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,ImageContrastCheck" />
             </androidx.cardview.widget.CardView>

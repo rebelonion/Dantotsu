@@ -24,7 +24,7 @@ class MangaExtensionInstallService : Service() {
 
     override fun onCreate() {
         val notification = notificationBuilder(Notifications.CHANNEL_EXTENSIONS_UPDATE) {
-            setSmallIcon(R.drawable.ic_round_download_24)
+            setSmallIcon(R.drawable.ic_download_24)
             setAutoCancel(false)
             setOngoing(true)
             setShowWhen(false)

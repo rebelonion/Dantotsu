@@ -31,7 +31,7 @@ class FAQActivity : AppCompatActivity() {
                 currContext()?.getString(R.string.answer_17) ?: ""
             ),
             Triple(
-                R.drawable.ic_round_download_24,
+                R.drawable.ic_download_24,
                 currContext()?.getString(R.string.question_3) ?: "",
                 currContext()?.getString(R.string.answer_3) ?: ""
             ),

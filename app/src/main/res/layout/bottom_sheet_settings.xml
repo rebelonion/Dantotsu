@@ -109,7 +109,7 @@
             android:textAllCaps="false"
             android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
-            android:drawableStart="@drawable/ic_round_download_24"
+            android:drawableStart="@drawable/ic_download_24"
             android:drawablePadding="16dp"
             android:layout_marginBottom="8dp"
             app:drawableTint="?attr/colorPrimary"

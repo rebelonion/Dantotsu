@@ -76,7 +76,7 @@ class MangaDownloaderService : Service() {
         notificationManager = NotificationManagerCompat.from(this)
         builder = NotificationCompat.Builder(this, CHANNEL_DOWNLOADER_PROGRESS).apply {
             setContentTitle("Manga Download Progress")
-            setSmallIcon(R.drawable.ic_round_download_24)
+            setSmallIcon(R.drawable.ic_download_24)
             priority = NotificationCompat.PRIORITY_DEFAULT
             setOnlyAlertOnce(true)
             setProgress(0, 0, false)
