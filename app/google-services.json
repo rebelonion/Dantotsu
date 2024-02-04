@@ -47,6 +47,25 @@
       "client_info": {
         "mobilesdk_app_id": "1:1039200814590:android:40e14720ee97917e1aacaf",
         "android_client_info": {
+          "package_name": "ani.dantotsu.alpha"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCiXo_q4S2ofA5oCztsoLnlDqJi3GtTJjY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039200814590:android:40e14720ee97917e1aacaf",
+        "android_client_info": {
           "package_name": "ani.dantotsu"
         }
       },

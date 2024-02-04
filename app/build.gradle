@@ -21,13 +21,20 @@ android {
         minSdk 23
         targetSdk 34
         versionCode ((System.currentTimeMillis() / 60000).toInteger())
-        versionName "2.1.0-beta01-iv1"
+        versionName "2.1.0"
         signingConfig signingConfigs.debug
     }
 
     buildTypes {
+        alpha {
+            applicationIdSuffix ".alpha"
+            versionNameSuffix "-alpha01"
+            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_alpha", icon_placeholder_round: "@mipmap/ic_launcher_alpha_round"]
+            debuggable System.getenv("CI") == null
+        }
         debug {
             applicationIdSuffix ".beta"
+            versionNameSuffix "-beta01"
             manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta", icon_placeholder_round: "@mipmap/ic_launcher_beta_round"]
             debuggable System.getenv("CI") == null
         }
