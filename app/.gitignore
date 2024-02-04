@@ -1,4 +1,6 @@
 /build
 /debug
 /debug/output-metadata.json
+/alpha
+/alpha/output-metadata.json
 /release
