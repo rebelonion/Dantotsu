@@ -242,6 +242,13 @@ object PrefManager {
         )
     }
 
+
+    /**
+     * @param prefs Map of preferences to import
+     * @param prefLocation Location to import to
+     * @return true if successful, false if error
+     */
+
     @Suppress("UNCHECKED_CAST")
     fun importAllPrefs(prefs: Map<String, *>, prefLocation: Location): Boolean {
         val pref = getPrefLocation(prefLocation)

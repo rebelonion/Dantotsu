@@ -74,7 +74,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     lateinit var binding: ActivitySettingsBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private var cursedCounter = 0
-    private var tempPassword: CharArray? = null
 
     @OptIn(UnstableApi::class)
     @SuppressLint("SetTextI18n", "Recycle")

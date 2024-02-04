@@ -64,14 +64,17 @@ class PreferencePackager {
         }
 
 
+        /**
+         * @return true if successful, false if error
+         */
         private fun unpackagePreferences(map: Map<String, Map<String, *>>): Boolean {
-            var failed = false
+            var success = true
             map.forEach { (location, prefMap) ->
                 val locationEnum = locationFromString(location)
                 if (!PrefManager.importAllPrefs(prefMap, locationEnum))
-                    failed = true
+                    success = false
             }
-            return failed
+            return success
         }
 
         private fun locationFromString(location: String): Location {
