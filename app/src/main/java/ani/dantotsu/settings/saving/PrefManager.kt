@@ -15,8 +15,6 @@ import java.io.ObjectOutputStream
 object PrefManager {
 
     private var generalPreferences: SharedPreferences? = null
-    private var animePreferences: SharedPreferences? = null
-    private var mangaPreferences: SharedPreferences? = null
     private var playerPreferences: SharedPreferences? = null
     private var readerPreferences: SharedPreferences? = null
     private var irrelevantPreferences: SharedPreferences? = null

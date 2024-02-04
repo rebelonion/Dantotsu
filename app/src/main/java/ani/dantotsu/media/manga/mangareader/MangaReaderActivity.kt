@@ -49,8 +49,8 @@ import ani.dantotsu.settings.CurrentReaderSettings.Companion.applyWebtoon
 import ani.dantotsu.settings.CurrentReaderSettings.Directions.*
 import ani.dantotsu.settings.CurrentReaderSettings.DualPageModes.*
 import ani.dantotsu.settings.CurrentReaderSettings.Layouts.*
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.themes.ThemeManager
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
@@ -207,27 +207,19 @@ class MangaReaderActivity : AppCompatActivity() {
         chapter = chapters[media.manga!!.selectedChapter] ?: return
 
         model.mangaReadSources = if (media.isAdult) HMangaSources else MangaSources
-        binding.mangaReaderSource.visibility = if (PrefManager.getVal(PrefName.ShowSource)) View.VISIBLE else View.GONE
+        binding.mangaReaderSource.visibility =
+            if (PrefManager.getVal(PrefName.ShowSource)) View.VISIBLE else View.GONE
         if (model.mangaReadSources!!.names.isEmpty()) {
             //try to reload sources
             try {
-                if (media.isAdult) {
-                    val mangaSources = MangaSources
-                    val scope = lifecycleScope
-                    scope.launch(Dispatchers.IO) {
-                        mangaSources.init(
-                            Injekt.get<MangaExtensionManager>().installedExtensionsFlow
-                        )
-                    }
-                    model.mangaReadSources = mangaSources
-                } else {
-                    val mangaSources = HMangaSources
-                    val scope = lifecycleScope
-                    scope.launch(Dispatchers.IO) {
-                        mangaSources.init(Injekt.get<MangaExtensionManager>().installedExtensionsFlow)
-                    }
-                    model.mangaReadSources = mangaSources
+                val mangaSources = MangaSources
+                val scope = lifecycleScope
+                scope.launch(Dispatchers.IO) {
+                    mangaSources.init(
+                        Injekt.get<MangaExtensionManager>().installedExtensionsFlow
+                    )
                 }
+                model.mangaReadSources = mangaSources
             } catch (e: Exception) {
                 Firebase.crashlytics.recordException(e)
                 logError(e)
@@ -260,7 +252,10 @@ class MangaReaderActivity : AppCompatActivity() {
         //Chapter Change
         fun change(index: Int) {
             mangaCache.clear()
-            PrefManager.setCustomVal("${media.id}_${chaptersArr[currentChapterIndex]}", currentChapterPage)
+            PrefManager.setCustomVal(
+                "${media.id}_${chaptersArr[currentChapterIndex]}",
+                currentChapterPage
+            )
             ChapterLoaderDialog.newInstance(chapters[chaptersArr[index]]!!)
                 .show(supportFragmentManager, "dialog")
         }
@@ -850,8 +845,11 @@ class MangaReaderActivity : AppCompatActivity() {
     private fun progress(runnable: Runnable) {
         if (maxChapterPage - currentChapterPage <= 1 && Anilist.userid != null) {
             showProgressDialog =
-            if (PrefManager.getVal(PrefName.AskIndividualReader)) PrefManager.getCustomVal("${media.id}_progressDialog", true)
-            else false
+                if (PrefManager.getVal(PrefName.AskIndividualReader)) PrefManager.getCustomVal(
+                    "${media.id}_progressDialog",
+                    true
+                )
+                else false
             val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
             if (showProgressDialog && !incognito) {
 
@@ -885,9 +883,13 @@ class MangaReaderActivity : AppCompatActivity() {
                     .create()
                     .show()
             } else {
-                if (!incognito && PrefManager.getCustomVal("${media.id}_save_progress", true) && if (media.isAdult) PrefManager.getVal<Boolean>(PrefName.UpdateForHReader) else true)
-                            updateProgress(
-                            media,
+                if (!incognito && PrefManager.getCustomVal(
+                        "${media.id}_save_progress",
+                        true
+                    ) && if (media.isAdult) PrefManager.getVal<Boolean>(PrefName.UpdateForHReader) else true
+                )
+                    updateProgress(
+                        media,
                         MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
                             .toString()
                     )
@@ -900,7 +902,11 @@ class MangaReaderActivity : AppCompatActivity() {
 
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> loadReaderSettings(fileName: String, context: Context? = null, toast: Boolean = true): T? {
+    private fun <T> loadReaderSettings(
+        fileName: String,
+        context: Context? = null,
+        toast: Boolean = true
+    ): T? {
         val a = context ?: currContext()
         try {
             if (a?.fileList() != null)

@@ -6,9 +6,7 @@ import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -200,7 +198,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                extensionsAdapter.onMove(viewHolder.adapterPosition, target.adapterPosition)
+                extensionsAdapter.onMove(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
                 return true
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
@@ -224,10 +222,10 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
         lifecycleScope.launch {
             animeExtensionManager.installedExtensionsFlow.collect { extensions ->
+                logger("asdfg: Extensions updated")
                 extensionsAdapter.updateData(sortToAnimeSourcesList(extensions))
             }
         }
-        val extensionsRecyclerView: RecyclerView = binding.allAnimeExtensionsRecyclerView
         return binding.root
     }
 
@@ -245,7 +243,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
     override fun updateContentBasedOnQuery(query: String?) {
-        extensionsAdapter.filter(query ?: "", animeExtensionManager.installedExtensionsFlow.value)
+        extensionsAdapter.filter(query ?: "", sortToAnimeSourcesList(animeExtensionManager.installedExtensionsFlow.value))
     }
 
     override fun notifyDataChanged() { // Do nothing
@@ -258,7 +256,6 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     ) : ListAdapter<AnimeExtension.Installed, AnimeExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
     ) {
-
         private val data: MutableList<AnimeExtension.Installed> = mutableListOf()
 
         fun updateData(newExtensions: List<AnimeExtension.Installed>) {
@@ -282,7 +279,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
-        @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position) // Use getItem() from ListAdapter
             val nsfw = if (extension.isNsfw) "(18+)" else ""
@@ -326,7 +323,6 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
-            val card = view.findViewById<View>(R.id.extensionCardView)
         }
 
         companion object {

@@ -8,7 +8,6 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
@@ -36,7 +35,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
@@ -162,7 +160,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_PROGRESS
                                 )
-                                    .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
+                                    .setSmallIcon(R.drawable.ic_check)
                                     .setContentTitle("Update complete")
                                     .setContentText("The extension has been successfully updated.")
                                     .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -196,7 +194,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                extensionsAdapter.onMove(viewHolder.adapterPosition, target.adapterPosition)
+                extensionsAdapter.onMove(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
                 return true
             }
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
@@ -223,7 +221,6 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                 extensionsAdapter.updateData(sortToMangaSourcesList(extensions))
             }
         }
-        val extensionsRecyclerView: RecyclerView = binding.allMangaExtensionsRecyclerView
         return binding.root
     }
 
@@ -240,7 +237,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
     override fun updateContentBasedOnQuery(query: String?) {
-        extensionsAdapter.filter(query ?: "", mangaExtensionManager.installedExtensionsFlow.value)
+        extensionsAdapter.filter(query ?: "", sortToMangaSourcesList(mangaExtensionManager.installedExtensionsFlow.value))
     }
 
     override fun notifyDataChanged() { // Do nothing
@@ -317,7 +314,6 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
-            val card: View = view.findViewById(R.id.extensionCardView)
         }
 
         companion object {

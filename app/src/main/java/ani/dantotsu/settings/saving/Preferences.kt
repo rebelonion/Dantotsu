@@ -25,6 +25,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AnimeSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
     MangaSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
     MangaSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
+    NovelSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),

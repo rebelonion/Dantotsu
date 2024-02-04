@@ -4,21 +4,16 @@ import android.content.Context
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
 import ani.dantotsu.settings.saving.PrefManager
-import ani.dantotsu.settings.saving.PrefManager.asLiveString
-import ani.dantotsu.settings.saving.PrefManager.asLiveStringSet
 import ani.dantotsu.settings.saving.PrefName
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 
 object AnimeSources : WatchSources() {
     override var list: List<Lazier<BaseParser>> = emptyList()
     var pinnedAnimeSources: List<String> = emptyList()
 
-    suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>, context: Context) {
+    suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>) {
         pinnedAnimeSources = PrefManager.getNullableVal<List<String>>(PrefName.AnimeSourcesOrder, null)
             ?: emptyList()
 
@@ -58,17 +53,15 @@ object AnimeSources : WatchSources() {
     }
 
     private fun sortPinnedAnimeSources(
-        Sources: List<Lazier<BaseParser>>,
+        sources: List<Lazier<BaseParser>>,
         pinnedAnimeSources: List<String>
     ): List<Lazier<BaseParser>> {
-        val pinnedSourcesMap = Sources.filter { pinnedAnimeSources.contains(it.name) }
+        val pinnedSourcesMap = sources.filter { pinnedAnimeSources.contains(it.name) }
             .associateBy { it.name }
         val orderedPinnedSources = pinnedAnimeSources.mapNotNull { name ->
             pinnedSourcesMap[name]
         }
-        //find the unpinned sources
-        val unpinnedSources = Sources.filter { !pinnedAnimeSources.contains(it.name) }
-        //put the pinned sources at the top of the list
+        val unpinnedSources = sources.filterNot { pinnedAnimeSources.contains(it.name) }
         return orderedPinnedSources + unpinnedSources
     }
 }

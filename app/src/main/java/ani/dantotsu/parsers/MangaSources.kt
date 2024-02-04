@@ -52,26 +52,20 @@ object MangaSources : MangaReadSources() {
     }
 
     private fun sortPinnedMangaSources(
-        Sources: List<Lazier<BaseParser>>,
+        sources: List<Lazier<BaseParser>>,
         pinnedMangaSources: List<String>
     ): List<Lazier<BaseParser>> {
-        val pinnedSourcesMap = Sources.filter { pinnedMangaSources.contains(it.name) }
+        val pinnedSourcesMap = sources.filter { pinnedMangaSources.contains(it.name) }
             .associateBy { it.name }
         val orderedPinnedSources = pinnedMangaSources.mapNotNull { name ->
             pinnedSourcesMap[name]
         }
-        //find the unpinned sources
-        val unpinnedSources = Sources.filter { !pinnedMangaSources.contains(it.name) }
-        //put the pinned sources at the top of the list
+        val unpinnedSources = sources.filterNot { pinnedMangaSources.contains(it.name) }
         return orderedPinnedSources + unpinnedSources
     }
 }
 
 object HMangaSources : MangaReadSources() {
-    val aList: List<Lazier<BaseParser>> = lazyList()
-    suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
-        //todo
-    }
-
+    private val aList: List<Lazier<BaseParser>> = lazyList()
     override val list = listOf(aList, MangaSources.list).flatten()
 }

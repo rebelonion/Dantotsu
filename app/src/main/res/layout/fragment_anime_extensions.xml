@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:paddingStart="32dp"
-    android:paddingEnd="32dp">
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/allAnimeExtensionsRecyclerView"
