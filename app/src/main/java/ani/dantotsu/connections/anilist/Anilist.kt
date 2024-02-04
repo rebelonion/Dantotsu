@@ -10,6 +10,7 @@ import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.toast
 import ani.dantotsu.tryWithSuspend
 import java.io.File
 import java.util.Calendar
@@ -29,6 +30,8 @@ object Anilist {
 
     var genres: ArrayList<String>? = null
     var tags: Map<Boolean, List<String>>? = null
+
+    var rateLimitReset: Long = 0
 
     val sortBy = listOf(
         "SCORE_DESC",
@@ -122,6 +125,11 @@ object Anilist {
         cache: Int? = null
     ): T? {
         return tryWithSuspend {
+            if (rateLimitReset > System.currentTimeMillis() / 1000) {
+                toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
+                throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
+            }
+
             val data = mapOf(
                 "query" to query,
                 "variables" to variables
@@ -140,6 +148,16 @@ object Anilist {
                     data = data,
                     cacheTime = cache ?: 10
                 )
+                if (json.code == 429) {
+                    val retry = json.headers["Retry-After"]?.toIntOrNull() ?: -1
+                    val passedLimitReset = json.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0
+                    if (retry > 0) {
+                        rateLimitReset = passedLimitReset
+                    }
+
+                    toast("Rate limited. Try after $retry seconds")
+                    throw Exception("Rate limited after $retry seconds")
+                }
                 if (!json.text.startsWith("{")) throw Exception(currContext()?.getString(R.string.anilist_down))
                 if (show) println("Response : ${json.text}")
                 json.parsed()
