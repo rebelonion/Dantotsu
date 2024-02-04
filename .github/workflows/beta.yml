@@ -21,7 +21,7 @@ jobs:
       run: |
         VER=$(grep -E -o "versionName \".*\"" app/build.gradle | sed -e 's/versionName //g' | tr -d '"')
         SHA=${{ github.sha }}
-        VERSION="$VER.${SHA:0:7}"
+        VERSION="$VER+${SHA:0:7}"
         echo "Version $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
