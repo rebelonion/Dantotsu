@@ -21,7 +21,7 @@ jobs:
       run: |
         VER=$(grep -E -o "versionName \".*\"" app/build.gradle | sed -e 's/versionName //g' | tr -d '"')
         SHA=${{ github.sha }}
-        VERSION="$VER.${SHA:0:7}"
+        VERSION="$VER+${SHA:0:7}"
         echo "Version $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
@@ -42,19 +42,19 @@ jobs:
       run: chmod +x ./gradlew
 
     - name: Build with Gradle
-      run: ./gradlew assembleDebug -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      run: ./gradlew assembleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
           name: Dantotsu
-          path: "app/build/outputs/apk/debug/app-debug.apk"   
+          path: "app/build/outputs/apk/alpha/app-alpha.apk"
           
     - name: Upload APK to Discord
       shell: bash
       run: |
         contentbody=$( jq -Rsa . <<< "${{ github.event.head_commit.message }}" )
-        curl -F "payload_json={\"content\":\" Debug-Build: <@659107544597266465> **${{ env.VERSION }}**\n\n${contentbody:1:-1}\"}" -F "dantotsu_debug=@app/build/outputs/apk/debug/app-debug.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "payload_json={\"content\":\" Alpha-Build: <@659107544597266465> **${{ env.VERSION }}**\n\n${contentbody:1:-1}\"}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Delete Old Pre-Releases
       id: delete-pre-releases
