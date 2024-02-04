@@ -19,10 +19,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.util.Pair
-import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
@@ -89,8 +86,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             view.rootView.fitsSystemWindows = true
         }
 
-        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
-        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
+        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000
+        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000)
 
         val searchView = view.findViewById<AutoCompleteTextView>(R.id.animeSearchBarText)
         searchView.addTextChangedListener(object : TextWatcher {
@@ -165,19 +162,13 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 downloadManager.mangaDownloadedTypes.firstOrNull { it.title == item.title }
                     ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title == item.title }
             media?.let {
+
                 ContextCompat.startActivity(
                     requireActivity(),
                     Intent(requireContext(), MediaDetailsActivity::class.java)
                         .putExtra("media", getMedia(it))
                         .putExtra("download", true),
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        requireActivity(),
-                        Pair.create(
-                            gridView.getChildAt(position)
-                                .findViewById<ImageView>(R.id.itemCompactImage),
-                            ViewCompat.getTransitionName(requireActivity().findViewById(R.id.itemCompactImage))
-                        )
-                    ).toBundle()
+                    null
                 )
             } ?: run {
                 snackString("no media found")
@@ -278,8 +269,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         val mangaTitles = downloadManager.mangaDownloadedTypes.map { it.title }.distinct()
         val newMangaDownloads = mutableListOf<OfflineMangaModel>()
         for (title in mangaTitles) {
-            val _downloads = downloadManager.mangaDownloadedTypes.filter { it.title == title }
-            val download = _downloads.first()
+            val tDownloads = downloadManager.mangaDownloadedTypes.filter { it.title == title }
+            val download = tDownloads.first()
             val offlineMangaModel = loadOfflineMangaModel(download)
             newMangaDownloads += offlineMangaModel
         }
@@ -287,8 +278,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         val novelTitles = downloadManager.novelDownloadedTypes.map { it.title }.distinct()
         val newNovelDownloads = mutableListOf<OfflineMangaModel>()
         for (title in novelTitles) {
-            val _downloads = downloadManager.novelDownloadedTypes.filter { it.title == title }
-            val download = _downloads.first()
+            val tDownloads = downloadManager.novelDownloadedTypes.filter { it.title == title }
+            val download = tDownloads.first()
             val offlineMangaModel = loadOfflineMangaModel(download)
             newNovelDownloads += offlineMangaModel
         }
@@ -297,12 +288,10 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
     }
 
     private fun getMedia(downloadedType: DownloadedType): Media? {
-        val type = if (downloadedType.type == DownloadedType.Type.MANGA) {
-            "Manga"
-        } else if (downloadedType.type == DownloadedType.Type.ANIME) {
-            "Anime"
-        } else {
-            "Novel"
+        val type = when (downloadedType.type) {
+            DownloadedType.Type.MANGA -> "Manga"
+            DownloadedType.Type.ANIME -> "Anime"
+            else -> "Novel"
         }
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
@@ -327,12 +316,10 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
     }
 
     private fun loadOfflineMangaModel(downloadedType: DownloadedType): OfflineMangaModel {
-        val type = if (downloadedType.type == DownloadedType.Type.MANGA) {
-            "Manga"
-        } else if (downloadedType.type == DownloadedType.Type.ANIME) {
-            "Anime"
-        } else {
-            "Novel"
+        val type = when (downloadedType.type) {
+            DownloadedType.Type.MANGA -> "Manga"
+            DownloadedType.Type.ANIME -> "Anime"
+            else -> "Novel"
         }
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
@@ -340,8 +327,6 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         )
         //load media.json and convert to media class with gson
         try {
-            val media = File(directory, "media.json")
-            val mediaJson = media.readText()
             val mediaModel = getMedia(downloadedType)!!
             val cover = File(directory, "cover.jpg")
             val coverUri: Uri? = if (cover.exists()) {
@@ -383,8 +368,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 "??",
                 "movie",
                 "hmm",
-                false,
-                false,
+                isOngoing = false,
+                isUserScored = false,
                 null,
                 null
             )

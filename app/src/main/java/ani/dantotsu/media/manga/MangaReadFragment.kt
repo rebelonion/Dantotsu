@@ -184,7 +184,9 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                             MangaChapterAdapter(style ?: PrefManager.getVal(PrefName.MangaDefaultView), media, this)
 
                         for (download in downloadManager.mangaDownloadedTypes) {
-                            chapterAdapter.stopDownload(download.chapter)
+                            if (download.title == media.mainName()) {
+                                chapterAdapter.stopDownload(download.chapter)
+                            }
                         }
 
                         binding.animeSourceRecycler.adapter =
