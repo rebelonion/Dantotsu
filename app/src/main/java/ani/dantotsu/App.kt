@@ -93,7 +93,7 @@ class App : MultiDexApplication() {
         animeScope.launch {
             animeExtensionManager.findAvailableExtensions()
             logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
-            AnimeSources.init(animeExtensionManager.installedExtensionsFlow, this@App)
+            AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
         }
         val mangaScope = CoroutineScope(Dispatchers.Default)
         mangaScope.launch {
