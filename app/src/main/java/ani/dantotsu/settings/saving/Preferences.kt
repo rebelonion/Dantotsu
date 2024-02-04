@@ -83,6 +83,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     SkipTime(Pref(Location.Player, Int::class, 85)),
     Cast(Pref(Location.Player, Boolean::class, true)),
     Pip(Pref(Location.Player, Boolean::class, true)),
+    RotationPlayer(Pref(Location.Player, Boolean::class, true)),
     ContinueAnime(Pref(Location.Player, Set::class, setOf<Int>())),
 
     //Reader

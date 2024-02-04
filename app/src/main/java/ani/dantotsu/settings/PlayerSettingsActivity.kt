@@ -221,6 +221,11 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.Cast, isChecked)
         }
 
+        binding.playerSettingsRotate.isChecked = PrefManager.getVal(PrefName.RotationPlayer)
+        binding.playerSettingsRotate.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.RotationPlayer, isChecked)
+        }
+
         val resizeModes = arrayOf("Original", "Zoom", "Stretch")
         val resizeDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.default_resize_mode))
