@@ -95,6 +95,10 @@ object MAL {
         @SerialName("expires_in") var expiresIn: Long,
         @SerialName("access_token") val accessToken: String,
         @SerialName("refresh_token") val refreshToken: String,
-    ) : java.io.Serializable
+    ) : java.io.Serializable {
+        companion object {
+            private const val serialVersionUID = 1L
+        }
+    }
 
 }

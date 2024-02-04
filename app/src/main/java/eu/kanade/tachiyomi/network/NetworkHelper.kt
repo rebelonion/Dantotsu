@@ -31,12 +31,12 @@ class NetworkHelper(
         CloudflareInterceptor(context, cookieJar, ::defaultUserAgentProvider)
     }
 
-    private fun baseClientBuilder(callTimout: Int = 2): OkHttpClient.Builder {
+    private fun baseClientBuilder(callTimeout: Int = 2): OkHttpClient.Builder {
         val builder = OkHttpClient.Builder()
             .cookieJar(cookieJar)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
-            .callTimeout(callTimout.toLong(), TimeUnit.MINUTES)
+            .callTimeout(callTimeout.toLong(), TimeUnit.MINUTES)
             .addInterceptor(UncaughtExceptionInterceptor())
             .addInterceptor(userAgentInterceptor)
 
