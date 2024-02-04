@@ -23,7 +23,9 @@ jobs:
       id: get_commits
       run: |
         echo 'COMMIT_LOG<<EOF' >> $GITHUB_ENV
-        git log ${{ github.event.before }}..${{ github.sha }} --pretty=format:"%s" -10 >> $GITHUB_ENV
+        git log ${{ github.event.before }}..${{ github.sha }} --pretty=format:"%s" -10 | while IFS= read -r line; do
+          echo "$line" >> $GITHUB_ENV
+        done
         echo 'EOF' >> $GITHUB_ENV
 
     - name: Set variables
