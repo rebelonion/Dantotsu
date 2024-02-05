@@ -53,9 +53,6 @@ jobs:
     - name: Upload APK to Discord
       shell: bash
       run: |
-        curl -F "chat_id=-1001674531617" \
-             -F "document=@app/build/outputs/apk/debug/app-debug.apk" \
-             https://api.telegram.org/bot6865812760:AAFWJjZDzZ4fjtKGBh2H-BlzkNvyrAgcnZ8/sendDocument
              
     - name: Delete Old Pre-Releases
       id: delete-pre-releases
