@@ -108,10 +108,10 @@ jobs:
         curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         
         #Telegram
-        #curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          #-F "document=@app/build/outputs/apk/alpha/app-alpha.apk" \
-          #-F "caption=Alpha-Build: ${VERSION} / ${commit_messages}" \
-         #https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/alpha/app-alpha.apk" \
+          -F "caption=[Alpha-Build: ${VERSION}] Change logs :${commit_messages}" \
+         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
