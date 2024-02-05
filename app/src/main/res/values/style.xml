@@ -83,7 +83,7 @@
     <style name="PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
         <item name="android:fontFamily">@font/poppins_bold</item>
         <item name="android:textColor">?attr/colorPrimary</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="BottomNavBar" parent="">

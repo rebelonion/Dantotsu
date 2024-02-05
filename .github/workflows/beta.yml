@@ -65,7 +65,7 @@ jobs:
       shell: bash
       run: |
         commit_messages=$(echo "$COMMIT_LOG")
-        contentbody=$( jq -Rsa . <<< "Alpha-Build: <@659107544597266465> **${{ env.VERSION }}**\n\n$commit_messages" )
+        contentbody=$( jq -Rsa . <<< "Alpha-Build: <@719439449423085569> **${{ env.VERSION }}**\n\n$commit_messages" )
         curl -F "payload_json={\"content\":${contentbody}}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
 
     - name: Delete Old Pre-Releases
