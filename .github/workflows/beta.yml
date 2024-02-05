@@ -16,56 +16,12 @@ jobs:
     steps:
     - name: Checkout repo
       uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-
-        
-    - name: Download last SHA artifact
-      uses: dawidd6/action-download-artifact@v3
-      with:
-        workflow: beta.yml
-        name: last-sha
-        path: .
-      
-      continue-on-error: true
-
-    - name: Get Commits Since Last Run
-      run: |
-        if [ -f last_sha.txt ]; then
-          LAST_SHA=$(cat last_sha.txt)
-        else
-          # Fallback to first commit if no previous SHA available
-          LAST_SHA=$(git rev-list --max-parents=0 HEAD)
-        fi
-        echo "Commits since $LAST_SHA:"
-        # Accumulate commit logs in a shell variable
-        COMMIT_LOGS=$(git log $LAST_SHA..HEAD --pretty=format:"%h - %s")
-        # URL-encode the newline characters for GitHub Actions
-        COMMIT_LOGS="${COMMIT_LOGS//'%'/'%25'}"
-        COMMIT_LOGS="${COMMIT_LOGS//$'\n'/'%0A'}"
-        COMMIT_LOGS="${COMMIT_LOGS//$'\r'/'%0D'}"
-        # Append the encoded commit logs to the COMMIT_LOG environment variable
-        echo "COMMIT_LOG=${COMMIT_LOGS}" >> $GITHUB_ENV
-        # Debugging: Print the variable to check its content
-        echo "$COMMIT_LOGS"
-      shell: /usr/bin/bash -e {0}
-      env:
-        CI: true
-
-    - name: Save Current SHA for Next Run
-      run: echo ${{ github.sha }} > last_sha.txt
-
-    - name: Upload Current SHA as Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: last-sha
-        path: last_sha.txt
 
     - name: Set variables
       run: |
         VER=$(grep -E -o "versionName \".*\"" app/build.gradle | sed -e 's/versionName //g' | tr -d '"')
         SHA=${{ github.sha }}
-        VERSION="$VER+${SHA:0:7}"
+        VERSION="$VER.${SHA:0:7}"
         echo "Version $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
@@ -75,50 +31,32 @@ jobs:
         distribution: 'temurin'
         java-version: 17
         cache: gradle
-  
+
     - name: Decode Keystore File
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
-  
+
     - name: List files in the directory
       run: ls -l
-  
+
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-  
-    - name: Build with Gradle
-      run: ./gradlew assembleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug
+      
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
           name: Dantotsu
-          path: "app/build/outputs/apk/alpha/app-alpha.apk"
-            
-    - name: Upload APK to Discord and Telegram
+          path: "app/build/outputs/apk/debug/app-debug.apk"   
+          
+    - name: Upload APK to Discord
       shell: bash
       run: |
-        #Discord
-        commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g')
-        #  Truncate commit messages if they are too long
-        max_length=1900 # Adjust this value as needed
-        if [ ${#commit_messages} -gt $max_length ]; then
-          commit_messages="${commit_messages:0:$max_length}... (truncated)"
-        fi
-        contentbody=$( jq -nc --arg msg "Alpha-Build: <@719439449423085569> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
-        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
-        
-        #Telegram
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/alpha/app-alpha.apk" \
-          -F "caption=[Alpha-Build: ${VERSION}] Change logs :${commit_messages}" \
-         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
-
-      env:
-        COMMIT_LOG: ${{ env.COMMIT_LOG }}
-        VERSION: ${{ env.VERSION }}
-
-        
-  
+        curl -F "chat_id=-1001674531617" \
+             -F "document=@app/build/outputs/apk/debug/app-debug.apk" \
+             https://api.telegram.org/bot6865812760:AAFWJjZDzZ4fjtKGBh2H-BlzkNvyrAgcnZ8/sendDocument
+             
     - name: Delete Old Pre-Releases
       id: delete-pre-releases
       uses: sgpublic/delete-release-action@master
