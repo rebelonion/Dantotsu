@@ -103,8 +103,9 @@ jobs:
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
-        contentbody=$( jq -Rsa . <<< "Alpha-Build: <@719439449423085569> **$VERSION**: $commit_messages" )
-        curl -F "payload_json={\"content\":${contentbody}}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        contentbody=$( jq -nc --arg msg "Alpha-Build: <@719439449423085569> **$VERSION**:\n$commit_messages" '{"content": $msg}' )
+        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
         VERSION: ${{ env.VERSION }}
