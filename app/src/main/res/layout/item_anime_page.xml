@@ -91,22 +91,19 @@
 
     </FrameLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/horizontalScrollView9"
-        android:layout_width="1949dp"
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
-        android:scrollbarSize="0dp"
-        tools:layout_editor_absoluteX="1dp">
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:scrollbarSize="0dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/animeSeasonsCont"
-            android:layout_width="417dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent">
+            android:orientation="horizontal">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/animeThisSeason"
@@ -114,10 +111,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/this_season"
-                android:textAppearance="@style/Suffix"
                 app:chipStrokeColor="?attr/colorPrimaryContainer"
-                app:layout_constraintBaseline_toBaselineOf="@+id/animeNextSeason"
-                app:layout_constraintEnd_toStartOf="@+id/animeNextSeason" />
+                android:textAppearance="@style/Suffix" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/animeNextSeason"
@@ -125,25 +120,20 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/next_season"
-                android:textAppearance="@style/Suffix"
                 app:chipStrokeColor="?attr/colorPrimaryContainer"
-                app:layout_constraintBaseline_toBaselineOf="@+id/animePreviousSeason"
-                app:layout_constraintEnd_toStartOf="@+id/animePreviousSeason" />
+                android:textAppearance="@style/Suffix" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/animePreviousSeason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:text="@string/previous_season"
-                android:textAppearance="@style/Suffix"
                 app:chipStrokeColor="?attr/colorPrimaryContainer"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:textAppearance="@style/Suffix" />
 
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
