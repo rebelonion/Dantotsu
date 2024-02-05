@@ -97,7 +97,28 @@ jobs:
     - name: Upload APK to Discord and Telegram
       shell: bash
       run: |
-      
+        #Discord
+        commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g')
+        #  Truncate commit messages if they are too long
+        max_length=1900 # Adjust this value as needed
+        if [ ${#commit_messages} -gt $max_length ]; then
+          commit_messages="${commit_messages:0:$max_length}... (truncated)"
+        fi
+        contentbody=$( jq -nc --arg msg "Alpha-Build: <@719439449423085569> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
+        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        
+        #Telegram
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/alpha/app-alpha.apk" \
+          -F "caption=[Alpha-Build: ${VERSION}] Change logs :${commit_messages}" \
+         https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+
+      env:
+        COMMIT_LOG: ${{ env.COMMIT_LOG }}
+        VERSION: ${{ env.VERSION }}
+
+        
+  
     - name: Delete Old Pre-Releases
       id: delete-pre-releases
       uses: sgpublic/delete-release-action@master
