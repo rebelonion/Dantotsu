@@ -1,322 +1,335 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/animeContainer"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="-16dp"
-    android:layout_marginEnd="-16dp"
-    android:orientation="vertical">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
-        android:id="@+id/animeTrendingContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/animeTrendingViewPager"
-            android:layout_width="match_parent"
-            android:layout_height="464dp" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"
+        tools:ignore="LeanbackUsesWifi" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" /> <!-- For background jobs -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /> <!-- For managing extensions -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
+    <uses-permission android:name="android.permission.UPDATE_PACKAGES_WITHOUT_USER_ACTION" /> <!-- To view extension packages in API 30+ -->
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission
+        android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
+        tools:ignore="ProtectedPermissions" />
 
-        <LinearLayout
-            android:id="@+id/animeTitleContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
-            android:orientation="horizontal">
+    <queries>
+        <package android:name="idm.internet.download.manager.plus" />
+        <package android:name="idm.internet.download.manager" />
+        <package android:name="idm.internet.download.manager.adm.lite" />
+        <package android:name="com.dv.adm" />
+    </queries>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/animeSearchBar"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="0dp"
-                android:layout_height="56dp"
-                android:layout_marginEnd="8dp"
-                android:layout_weight="1"
-                android:hint="@string/anime"
-                android:textColorHint="@color/bg_opp"
-                android:transitionName="@string/search"
-                app:boxBackgroundColor="?attr/colorPrimaryContainer"
-                app:boxCornerRadiusBottomEnd="28dp"
-                app:boxCornerRadiusBottomStart="28dp"
-                app:boxCornerRadiusTopEnd="28dp"
-                app:boxCornerRadiusTopStart="28dp"
-                app:endIconDrawable="@drawable/ic_round_search_24"
-                app:endIconTint="@color/bg_opp"
-                app:boxStrokeColor="@color/text_input_layout_stroke_color"
-                app:hintAnimationEnabled="true">
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:banner="@mipmap/ic_banner_foreground"
+        android:icon="${icon_placeholder}"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="${icon_placeholder_round}"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Dantotsu"
+        android:usesCleartextTraffic="true"
+        tools:ignore="AllowBackup">
+        <receiver
+            android:name=".widgets.CurrentlyAiringWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
 
-                <AutoCompleteTextView
-                    android:id="@+id/animeSearchBarText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:focusable="false"
-                    android:fontFamily="@font/poppins_bold"
-                    android:inputType="none"
-                    android:padding="8dp"
-                    android:textSize="14sp"
-                    tools:ignore="LabelFor,TextContrastCheck" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/animeUserAvatarContainer"
-                android:layout_width="52dp"
-                android:layout_height="match_parent"
-                android:layout_marginTop="4dp"
-                app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                app:strokeColor="@color/text_input_layout_stroke_color"
-                app:cardCornerRadius="26dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/animeUserAvatar"
-                    android:layout_width="52dp"
-                    android:layout_height="52dp"
-                    android:scaleType="center"
-                    android:tint="@color/bg_opp"
-                    app:srcCompat="@drawable/ic_round_settings_24"
-                    tools:ignore="ContentDescription,ImageContrastCheck" />
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
-        <ProgressBar
-            android:id="@+id/animeTrendingProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="64dp" />
-
-    </FrameLayout>
-
-    <HorizontalScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:scrollbarSize="0dp">
-
-        <LinearLayout
-            android:id="@+id/animeSeasonsCont"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/animeThisSeason"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/this_season"
-                app:chipStrokeColor="?attr/colorPrimaryContainer"
-                android:textAppearance="@style/Suffix" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/animeNextSeason"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:text="@string/next_season"
-                app:chipStrokeColor="?attr/colorPrimaryContainer"
-                android:textAppearance="@style/Suffix" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/animePreviousSeason"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/previous_season"
-                app:chipStrokeColor="?attr/colorPrimaryContainer"
-                android:textAppearance="@style/Suffix" />
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/currently_airing_widget_info" />
+        </receiver>
+        <receiver android:name=".subcriptions.NotificationClickReceiver" />
 
 
-        </LinearLayout>
-    </HorizontalScrollView>
+        <activity
+            android:name=".media.novel.novelreader.NovelReaderActivity"
+            android:configChanges="orientation|screenSize"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
+                <category android:name="android.intent.category.DEFAULT" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/animeListContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp">
+                <data android:mimeType="application/epub+zip" />
+                <data android:mimeType="application/x-mobipocket-ebook" />
+                <data android:mimeType="application/vnd.amazon.ebook" />
+                <data android:mimeType="application/fb2+zip" />
+                <data android:mimeType="application/vnd.comicbook+zip" />
+                <data android:pathPattern=".*\\.epub" />
+                <data android:pathPattern=".*\\.mobi" />
+                <data android:pathPattern=".*\\.kf8" />
+                <data android:pathPattern=".*\\.fb2" />
+                <data android:pathPattern=".*\\.cbz" />
+                <data android:scheme="content" />
+                <data android:scheme="file" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".settings.FAQActivity" />
+        <activity android:name=".settings.ReaderSettingsActivity" />
+        <activity android:name=".settings.UserInterfaceSettingsActivity" />
+        <activity android:name=".settings.PlayerSettingsActivity" />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.ExtensionsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".others.imagesearch.ImageSearchActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".media.SearchActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".media.StudioActivity" />
+        <activity android:name=".media.AuthorActivity" />
+        <activity
+            android:name=".media.CalendarActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".media.user.ListActivity" />
+        <activity
+            android:name=".media.manga.mangareader.MangaReaderActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/manga"
+            android:launchMode="singleTask" />
+        <activity android:name=".media.GenreActivity" />
+        <activity
+            android:name=".media.MediaDetailsActivity"
+            android:parentActivityName=".MainActivity"
+            android:theme="@style/Theme.Dantotsu.NeverCutout" />
+        <activity android:name=".media.CharacterDetailsActivity" />
+        <activity android:name=".home.NoInternet" />
+        <activity
+            android:name=".media.anime.ExoplayerView"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|navigation"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label="@string/video"
+            android:launchMode="singleTask"
+            android:supportsPictureInPicture="true"
+            tools:targetApi="n" />
+        <activity
+            android:name=".connections.anilist.Login"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter android:label="Anilist Login for Dantotsu">
+                <action android:name="android.intent.action.VIEW" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/animeGenre"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="8dp"
-            app:cardCornerRadius="16dp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/animeCalendar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_max="256dp">
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-            <ImageView
-                android:id="@+id/animeGenreImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                tools:ignore="ContentDescription"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                <data
+                    android:host="anilist"
+                    android:scheme="dantotsu" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".connections.mal.Login"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter android:label="Myanimelist Login for Dantotsu">
+                <action android:name="android.intent.action.VIEW" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.75"
-                android:background="@color/bg_black" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                <data
+                    android:host="mal"
+                    android:scheme="dantotsu" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".connections.discord.Login"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter android:label="Discord Login for Dantotsu">
+                <action android:name="android.intent.action.VIEW" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="@string/genres"
-                    android:textAllCaps="true"
-                    android:textColor="@color/bg_white"
-                    android:textSize="16sp" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <View
-                    android:layout_width="64dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center"
-                    android:background="?attr/colorPrimary" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                <data android:scheme="dantotsu" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="discord.dantotsu.com" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".others.webview.CookieCatcher"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter android:label="Discord Login for Dantotsu">
+                <action android:name="android.intent.action.VIEW" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/animeCalendar"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="8dp"
-            android:layout_marginBottom="16dp"
-            app:cardCornerRadius="16dp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/animeGenre"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_max="256dp">
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-            <ImageView
-                android:id="@+id/animeCalendarImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                tools:ignore="ContentDescription"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                <data android:scheme="dantotsu" />
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="discord.dantotsu.com" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".connections.anilist.UrlMedia"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter android:label="@string/read_on_dantotsu">
+                <action android:name="android.intent.action.VIEW" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.75"
-                android:background="@color/bg_black" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="anilist.co" />
+                <data android:host="myanimelist.net" />
+                <data android:pathPrefix="/manga" />
+            </intent-filter>
+            <intent-filter android:label="@string/watch_on_dantotsu">
+                <action android:name="android.intent.action.VIEW" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_bold"
-                    android:text="@string/release_calendar"
-                    android:textAllCaps="true"
-                    android:textColor="@color/bg_white"
-                    android:textSize="16sp" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
-                <View
-                    android:layout_width="64dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center"
-                    android:background="?attr/colorPrimary" />
-            </LinearLayout>
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="anilist.co" />
+                <data android:host="myanimelist.net" />
+                <data android:pathPrefix="/anime" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|layoutDirection"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-        </com.google.android.material.card.MaterialCardView>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.Main" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallActivity"
+            android:exported="false"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-    <TextView
-        android:id="@+id/animeRecently"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="8dp"
-        android:text="@string/updated"
-        android:textSize="16sp"
-        android:visibility="invisible"
-        tools:visibility="visible" />
+        <receiver
+            android:name=".subcriptions.AlarmReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="Aani.dantotsu.ACTION_ALARM" />
+            </intent-filter>
+        </receiver>
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="250dp">
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
 
-        <ProgressBar
-            android:id="@+id/animeUpdatedProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="center" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:enabled="true"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
-        <ani.dantotsu.FadingEdgeRecyclerView
-            android:id="@+id/animeUpdatedRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="true"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:requiresFadingEdge="horizontal"
-            tools:itemCount="4"
-            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_media_compact"
-            tools:orientation="horizontal" />
+        <service
+            android:name=".widgets.CurrentlyAiringRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="true" />
+        <service
+            android:name=".download.video.ExoplayerDownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync">
+        <intent-filter>
+                <action android:name="androidx.media3.exoplayer.downloadService.action.RESTART" />
 
-    </FrameLayout>
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+        <service
+            android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service
+            android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".download.manga.MangaDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".download.novel.NovelDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service android:name=".download.anime.AnimeDownloaderService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service
+            android:name=".connections.discord.DiscordService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <service android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
 
-    <LinearLayout
-        android:id="@+id/animePopular"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginEnd="24dp"
-        android:orientation="horizontal"
-        android:visibility="invisible">
+        <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+            android:value="androidx.media3.cast.DefaultCastOptionsProvider"/>
+    </application>
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/poppins_bold"
-            android:padding="8dp"
-            android:text="@string/popular_anime"
-            android:textSize="16sp" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/animeIncludeList"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:textSize="12sp"
-            android:fontFamily="@font/poppins_bold"
-            android:text="@string/include_media_in_list" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</manifest>
