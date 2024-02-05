@@ -105,7 +105,9 @@ jobs:
         fi
         contentbody=$( jq -nc --arg msg "Alpha-Build: <@719439449423085569> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
         curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
-
+        
+        telegram_message="Alpha-Build: $VERSION\n$commit_messages"
+        curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" -d "text=$telegram_message" 
 
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
