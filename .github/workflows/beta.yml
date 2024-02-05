@@ -86,7 +86,7 @@ jobs:
       run: chmod +x ./gradlew
   
     - name: Build with Gradle
-      run: ./gradlew assembleAlpha
+      run: ./gradlew assembleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
@@ -94,9 +94,10 @@ jobs:
           name: Dantotsu
           path: "app/build/outputs/apk/alpha/app-alpha.apk"
             
-    - name: Upload APK to Discord
+    - name: Upload APK to Discord and Telegram
       shell: bash
       run: |
+        #Discord
         commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g')
         #  Truncate commit messages if they are too long
         max_length=1900 # Adjust this value as needed
@@ -106,8 +107,11 @@ jobs:
         contentbody=$( jq -nc --arg msg "Alpha-Build: <@719439449423085569> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
         curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         
-        telegram_message="Alpha-Build: $VERSION\n$commit_messages"
-        curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" -d "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" -d "text=$telegram_message" 
+        #Telegram
+        #curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          #-F "document=@app/build/outputs/apk/alpha/app-alpha.apk" \
+          #-F "caption=Alpha-Build: ${VERSION} / ${commit_messages}" \
+         #https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
