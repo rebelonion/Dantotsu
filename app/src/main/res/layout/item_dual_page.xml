@@ -33,8 +33,8 @@
                     android:layout_gravity="center"
                     android:focusable="false"
                     android:visibility="gone"
-                    app:zoomEnabled="false"
                     app:panEnabled="false"
+                    app:zoomEnabled="false"
                     tools:ignore="ContentDescription,ImageContrastCheck"
                     tools:src="@tools:sample/backgrounds/scenic[0]" />
 
@@ -62,8 +62,8 @@
                     android:layout_gravity="center"
                     android:focusable="false"
                     android:visibility="gone"
-                    app:zoomEnabled="false"
                     app:panEnabled="false"
+                    app:zoomEnabled="false"
                     tools:ignore="ContentDescription,ImageContrastCheck"
                     tools:src="@tools:sample/backgrounds/scenic[0]" />
 

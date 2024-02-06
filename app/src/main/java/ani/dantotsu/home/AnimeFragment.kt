@@ -32,8 +32,8 @@ import ani.dantotsu.media.ProgressAdapter
 import ani.dantotsu.media.SearchActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.Dispatchers
@@ -264,8 +264,11 @@ class AnimeFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending(1)
                         model.loadUpdated()
-                        model.loadPopular("ANIME", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
-                            PrefName.PopularAnimeList))
+                        model.loadPopular(
+                            "ANIME", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
+                                PrefName.PopularAnimeList
+                            )
+                        )
                     }
                     live.postValue(false)
                     _binding?.animeRefresh?.isRefreshing = false

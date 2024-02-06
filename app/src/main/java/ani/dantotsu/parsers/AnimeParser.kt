@@ -181,7 +181,11 @@ abstract class AnimeParser : BaseParser() {
     override suspend fun loadSavedShowResponse(mediaId: Int): ShowResponse? {
         checkIfVariablesAreEmpty()
         val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""
-        var loaded = PrefManager.getNullableCustomVal("${saveName}${dub}_$mediaId", null, ShowResponse::class.java)
+        var loaded = PrefManager.getNullableCustomVal(
+            "${saveName}${dub}_$mediaId",
+            null,
+            ShowResponse::class.java
+        )
         if (loaded == null && malSyncBackupName.isNotEmpty())
             loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)
                 ?.also { saveShowResponse(mediaId, it, true) }

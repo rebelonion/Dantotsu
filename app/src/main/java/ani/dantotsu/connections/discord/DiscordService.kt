@@ -24,8 +24,8 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.discord.serializers.Presence
 import ani.dantotsu.connections.discord.serializers.User
 import ani.dantotsu.isOnline
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser

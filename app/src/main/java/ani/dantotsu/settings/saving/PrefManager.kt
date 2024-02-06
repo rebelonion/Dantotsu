@@ -22,12 +22,18 @@ object PrefManager {
     private var protectedPreferences: SharedPreferences? = null
 
     fun init(context: Context) {  //must be called in Application class or will crash
-        generalPreferences = context.getSharedPreferences(Location.General.location, Context.MODE_PRIVATE)
-        playerPreferences = context.getSharedPreferences(Location.Player.location, Context.MODE_PRIVATE)
-        readerPreferences = context.getSharedPreferences(Location.Reader.location, Context.MODE_PRIVATE)
-        irrelevantPreferences = context.getSharedPreferences(Location.Irrelevant.location, Context.MODE_PRIVATE)
-        animeDownloadsPreferences = context.getSharedPreferences(Location.AnimeDownloads.location, Context.MODE_PRIVATE)
-        protectedPreferences = context.getSharedPreferences(Location.Protected.location, Context.MODE_PRIVATE)
+        generalPreferences =
+            context.getSharedPreferences(Location.General.location, Context.MODE_PRIVATE)
+        playerPreferences =
+            context.getSharedPreferences(Location.Player.location, Context.MODE_PRIVATE)
+        readerPreferences =
+            context.getSharedPreferences(Location.Reader.location, Context.MODE_PRIVATE)
+        irrelevantPreferences =
+            context.getSharedPreferences(Location.Irrelevant.location, Context.MODE_PRIVATE)
+        animeDownloadsPreferences =
+            context.getSharedPreferences(Location.AnimeDownloads.location, Context.MODE_PRIVATE)
+        protectedPreferences =
+            context.getSharedPreferences(Location.Protected.location, Context.MODE_PRIVATE)
         Compat.importOldPrefs(context)
     }
 
@@ -49,7 +55,7 @@ object PrefManager {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getVal(prefName: PrefName, default: T) : T {
+    fun <T> getVal(prefName: PrefName, default: T): T {
         return try {
             val pref = getPrefLocation(prefName.data.prefLocation)
             when (prefName.data.type) {
@@ -58,8 +64,17 @@ object PrefManager {
                 Float::class -> pref.getFloat(prefName.name, default as Float) as T
                 Long::class -> pref.getLong(prefName.name, default as Long) as T
                 String::class -> pref.getString(prefName.name, default as String?) as T
-                Set::class -> convertFromStringSet(pref.getStringSet(prefName.name, null), default) as T
-                List::class -> deserializeClass(prefName.name, default, prefName.data.prefLocation) as T
+                Set::class -> convertFromStringSet(
+                    pref.getStringSet(prefName.name, null),
+                    default
+                ) as T
+
+                List::class -> deserializeClass(
+                    prefName.name,
+                    default,
+                    prefName.data.prefLocation
+                ) as T
+
                 else -> throw IllegalArgumentException("Type not supported")
             }
         } catch (e: Exception) {
@@ -68,17 +83,34 @@ object PrefManager {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getVal(prefName: PrefName) : T {
+    fun <T> getVal(prefName: PrefName): T {
         return try {
             val pref = getPrefLocation(prefName.data.prefLocation)
             when (prefName.data.type) {
-                Boolean::class -> pref.getBoolean(prefName.name, prefName.data.default as Boolean) as T
+                Boolean::class -> pref.getBoolean(
+                    prefName.name,
+                    prefName.data.default as Boolean
+                ) as T
+
                 Int::class -> pref.getInt(prefName.name, prefName.data.default as Int) as T
                 Float::class -> pref.getFloat(prefName.name, prefName.data.default as Float) as T
                 Long::class -> pref.getLong(prefName.name, prefName.data.default as Long) as T
-                String::class -> pref.getString(prefName.name, prefName.data.default as String?) as T
-                Set::class -> convertFromStringSet(pref.getStringSet(prefName.name, null), prefName.data.default) as T
-                List::class -> deserializeClass(prefName.name, prefName.data.default, prefName.data.prefLocation) as T
+                String::class -> pref.getString(
+                    prefName.name,
+                    prefName.data.default as String?
+                ) as T
+
+                Set::class -> convertFromStringSet(
+                    pref.getStringSet(prefName.name, null),
+                    prefName.data.default
+                ) as T
+
+                List::class -> deserializeClass(
+                    prefName.name,
+                    prefName.data.default,
+                    prefName.data.prefLocation
+                ) as T
+
                 else -> throw IllegalArgumentException("Type not supported")
             }
         } catch (e: Exception) {
@@ -87,7 +119,10 @@ object PrefManager {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getNullableVal(prefName: PrefName, default: T?) : T? {  //Strings don't necessarily need to use this one
+    fun <T> getNullableVal(
+        prefName: PrefName,
+        default: T?
+    ): T? {  //Strings don't necessarily need to use this one
         return try {
             val pref = getPrefLocation(prefName.data.prefLocation)
             when (prefName.data.type) {
@@ -96,7 +131,11 @@ object PrefManager {
                 Float::class -> pref.getFloat(prefName.name, default as Float) as T?
                 Long::class -> pref.getLong(prefName.name, default as Long) as T?
                 String::class -> pref.getString(prefName.name, default as String?) as T?
-                Set::class -> convertFromStringSet(pref.getStringSet(prefName.name, null), default) as T?
+                Set::class -> convertFromStringSet(
+                    pref.getStringSet(prefName.name, null),
+                    default
+                ) as T?
+
                 else -> deserializeClass(prefName.name, default, prefName.data.prefLocation)
             }
         } catch (e: Exception) {
@@ -113,7 +152,11 @@ object PrefManager {
                 is Float -> irrelevantPreferences!!.getFloat(key, default) as T
                 is Long -> irrelevantPreferences!!.getLong(key, default) as T
                 is String -> irrelevantPreferences!!.getString(key, default) as T
-                is Set<*> -> convertFromStringSet(irrelevantPreferences!!.getStringSet(key, null), default) as T
+                is Set<*> -> convertFromStringSet(
+                    irrelevantPreferences!!.getStringSet(key, null),
+                    default
+                ) as T
+
                 else -> throw IllegalArgumentException("Type not supported")
             }
         } catch (e: Exception) {
@@ -125,12 +168,36 @@ object PrefManager {
     fun <T> getNullableCustomVal(key: String, default: T?, clazz: Class<T>): T? {
         return try {
             when {
-                clazz.isAssignableFrom(Boolean::class.java) -> irrelevantPreferences!!.getBoolean(key, default as? Boolean ?: false) as T?
-                clazz.isAssignableFrom(Int::class.java) -> irrelevantPreferences!!.getInt(key, default as? Int ?: 0) as T?
-                clazz.isAssignableFrom(Float::class.java) -> irrelevantPreferences!!.getFloat(key, default as? Float ?: 0f) as T?
-                clazz.isAssignableFrom(Long::class.java) -> irrelevantPreferences!!.getLong(key, default as? Long ?: 0L) as T?
-                clazz.isAssignableFrom(String::class.java) -> irrelevantPreferences!!.getString(key, default as? String) as T?
-                clazz.isAssignableFrom(Set::class.java) -> convertFromStringSet(irrelevantPreferences!!.getStringSet(key, null), default) as T?
+                clazz.isAssignableFrom(Boolean::class.java) -> irrelevantPreferences!!.getBoolean(
+                    key,
+                    default as? Boolean ?: false
+                ) as T?
+
+                clazz.isAssignableFrom(Int::class.java) -> irrelevantPreferences!!.getInt(
+                    key,
+                    default as? Int ?: 0
+                ) as T?
+
+                clazz.isAssignableFrom(Float::class.java) -> irrelevantPreferences!!.getFloat(
+                    key,
+                    default as? Float ?: 0f
+                ) as T?
+
+                clazz.isAssignableFrom(Long::class.java) -> irrelevantPreferences!!.getLong(
+                    key,
+                    default as? Long ?: 0L
+                ) as T?
+
+                clazz.isAssignableFrom(String::class.java) -> irrelevantPreferences!!.getString(
+                    key,
+                    default as? String
+                ) as T?
+
+                clazz.isAssignableFrom(Set::class.java) -> convertFromStringSet(
+                    irrelevantPreferences!!.getStringSet(key, null),
+                    default
+                ) as T?
+
                 else -> deserializeClass(key, default, Location.Irrelevant)
             }
         } catch (e: Exception) {
@@ -173,7 +240,7 @@ object PrefManager {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getLiveVal(prefName: PrefName, default: T) : SharedPreferenceLiveData<T> {
+    fun <T> getLiveVal(prefName: PrefName, default: T): SharedPreferenceLiveData<T> {
         val pref = getPrefLocation(prefName.data.prefLocation)
         return when (prefName.data.type) {
             Boolean::class -> SharedPreferenceBooleanLiveData(
@@ -181,31 +248,37 @@ object PrefManager {
                 prefName.name,
                 default as Boolean
             ) as SharedPreferenceLiveData<T>
+
             Int::class -> SharedPreferenceIntLiveData(
                 pref,
                 prefName.name,
                 default as Int
             ) as SharedPreferenceLiveData<T>
+
             Float::class -> SharedPreferenceFloatLiveData(
                 pref,
                 prefName.name,
                 default as Float
             ) as SharedPreferenceLiveData<T>
+
             Long::class -> SharedPreferenceLongLiveData(
                 pref,
                 prefName.name,
                 default as Long
             ) as SharedPreferenceLiveData<T>
+
             String::class -> SharedPreferenceStringLiveData(
                 pref,
                 prefName.name,
                 default as String
             ) as SharedPreferenceLiveData<T>
+
             Set::class -> SharedPreferenceStringSetLiveData(
                 pref,
                 prefName.name,
                 default as Set<String>
             ) as SharedPreferenceLiveData<T>
+
             else -> throw IllegalArgumentException("Type not supported")
         }
     }
@@ -234,7 +307,8 @@ object PrefManager {
         this as? SharedPreferenceStringSetLiveData
             ?: throw ClassCastException("Cannot cast to SharedPreferenceLiveData<Set<String>>")
 
-    fun getAnimeDownloadPreferences(): SharedPreferences = animeDownloadsPreferences!!  //needs to be used externally
+    fun getAnimeDownloadPreferences(): SharedPreferences =
+        animeDownloadsPreferences!!  //needs to be used externally
 
     fun exportAllPrefs(prefLocation: List<Location>): String {
         return PreferencePackager.pack(
@@ -272,7 +346,7 @@ object PrefManager {
             return if (hadError) {
                 snackString("Error importing preferences")
                 false
-            }  else {
+            } else {
                 snackString("Preferences imported")
                 true
             }
@@ -331,7 +405,7 @@ object PrefManager {
     }
 
 
-    private fun <T> serializeClass(key: String, value: T, location: Location){
+    private fun <T> serializeClass(key: String, value: T, location: Location) {
         val pref = getPrefLocation(location)
         try {
             val bos = ByteArrayOutputStream()

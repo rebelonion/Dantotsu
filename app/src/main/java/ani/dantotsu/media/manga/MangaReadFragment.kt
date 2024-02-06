@@ -44,8 +44,8 @@ import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Group.MANGA_GROUP
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
@@ -181,7 +181,9 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                         headerAdapter = MangaReadAdapter(it, this, model.mangaReadSources!!)
                         headerAdapter.scanlatorSelectionListener = this
                         chapterAdapter =
-                            MangaChapterAdapter(style ?: PrefManager.getVal(PrefName.MangaDefaultView), media, this)
+                            MangaChapterAdapter(
+                                style ?: PrefManager.getVal(PrefName.MangaDefaultView), media, this
+                            )
 
                         for (download in downloadManager.mangaDownloadedTypes) {
                             if (download.title == media.mainName()) {

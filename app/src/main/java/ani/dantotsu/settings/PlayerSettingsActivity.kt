@@ -18,8 +18,8 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -38,7 +38,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         ThemeManager(this).applyTheme()
         binding = ActivityPlayerSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -88,12 +88,18 @@ class PlayerSettingsActivity : AppCompatActivity() {
         var curSpeedArr = if (PrefManager.getVal(PrefName.CursedSpeeds)) cursedSpeeds else speeds
         var speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
         binding.playerSettingsSpeed.text =
-            getString(R.string.default_playback_speed, speedsName[PrefManager.getVal(PrefName.DefaultSpeed)])
+            getString(
+                R.string.default_playback_speed,
+                speedsName[PrefManager.getVal(PrefName.DefaultSpeed)]
+            )
         val speedDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.default_speed))
         binding.playerSettingsSpeed.setOnClickListener {
             val dialog =
-                speedDialog.setSingleChoiceItems(speedsName, PrefManager.getVal(PrefName.DefaultSpeed)) { dialog, i ->
+                speedDialog.setSingleChoiceItems(
+                    speedsName,
+                    PrefManager.getVal(PrefName.DefaultSpeed)
+                ) { dialog, i ->
                     PrefManager.setVal(PrefName.DefaultSpeed, i)
                     binding.playerSettingsSpeed.text =
                         getString(R.string.default_playback_speed, speedsName[i])
@@ -110,7 +116,10 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.DefaultSpeed, newDefaultSpeed)
             speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
             binding.playerSettingsSpeed.text =
-                getString(R.string.default_playback_speed, speedsName[PrefManager.getVal(PrefName.DefaultSpeed)])
+                getString(
+                    R.string.default_playback_speed,
+                    speedsName[PrefManager.getVal(PrefName.DefaultSpeed)]
+                )
         }
 
 
@@ -120,12 +129,14 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.TimeStampsEnabled, isChecked)
         }
 
-        binding.playerSettingsTimeStampsProxy.isChecked = PrefManager.getVal(PrefName.UseProxyForTimeStamps)
+        binding.playerSettingsTimeStampsProxy.isChecked =
+            PrefManager.getVal(PrefName.UseProxyForTimeStamps)
         binding.playerSettingsTimeStampsProxy.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.UseProxyForTimeStamps, isChecked)
         }
 
-        binding.playerSettingsShowTimeStamp.isChecked = PrefManager.getVal(PrefName.ShowTimeStampButton)
+        binding.playerSettingsShowTimeStamp.isChecked =
+            PrefManager.getVal(PrefName.ShowTimeStampButton)
         binding.playerSettingsShowTimeStamp.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.ShowTimeStampButton, isChecked)
         }
@@ -147,16 +158,19 @@ class PlayerSettingsActivity : AppCompatActivity() {
         }
 
         //Update Progress
-        binding.playerSettingsAskUpdateProgress.isChecked = PrefManager.getVal(PrefName.AskIndividualPlayer)
+        binding.playerSettingsAskUpdateProgress.isChecked =
+            PrefManager.getVal(PrefName.AskIndividualPlayer)
         binding.playerSettingsAskUpdateProgress.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.AskIndividualPlayer, isChecked)
         }
-        binding.playerSettingsAskUpdateHentai.isChecked = PrefManager.getVal(PrefName.UpdateForHPlayer)
+        binding.playerSettingsAskUpdateHentai.isChecked =
+            PrefManager.getVal(PrefName.UpdateForHPlayer)
         binding.playerSettingsAskUpdateHentai.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.UpdateForHPlayer, isChecked)
             if (isChecked) snackString(getString(R.string.very_bold))
         }
-        binding.playerSettingsCompletePercentage.value = (PrefManager.getVal<Float>(PrefName.WatchPercentage) * 100).roundToInt().toFloat()
+        binding.playerSettingsCompletePercentage.value =
+            (PrefManager.getVal<Float>(PrefName.WatchPercentage) * 100).roundToInt().toFloat()
         binding.playerSettingsCompletePercentage.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.WatchPercentage, value / 100)
         }
@@ -229,7 +243,10 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val resizeDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.default_resize_mode))
         binding.playerResizeMode.setOnClickListener {
-            val dialog = resizeDialog.setSingleChoiceItems(resizeModes, PrefManager.getVal<Int>(PrefName.Resize)) { dialog, count ->
+            val dialog = resizeDialog.setSingleChoiceItems(
+                resizeModes,
+                PrefManager.getVal<Int>(PrefName.Resize)
+            ) { dialog, count ->
                 PrefManager.setVal(PrefName.Resize, count)
                 dialog.dismiss()
             }.show()
@@ -425,7 +442,10 @@ class PlayerSettingsActivity : AppCompatActivity() {
         val fontDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.subtitle_font))
         binding.videoSubFont.setOnClickListener {
-            val dialog = fontDialog.setSingleChoiceItems(fonts, PrefManager.getVal(PrefName.Font)) { dialog, count ->
+            val dialog = fontDialog.setSingleChoiceItems(
+                fonts,
+                PrefManager.getVal(PrefName.Font)
+            ) { dialog, count ->
                 PrefManager.setVal(PrefName.Font, count)
                 dialog.dismiss()
             }.show()

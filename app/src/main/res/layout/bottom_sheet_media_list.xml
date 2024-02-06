@@ -58,8 +58,8 @@
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
-                app:hintAnimationEnabled="true"
                 app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/ic_round_playlist_play_24">
 
                 <AutoCompleteTextView
@@ -96,9 +96,9 @@
                     app:boxCornerRadiusBottomStart="16dp"
                     app:boxCornerRadiusTopEnd="16dp"
                     app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
                     app:endIconMode="none"
                     app:hintAnimationEnabled="true"
-                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
                     app:startIconDrawable="@drawable/ic_round_add_circle_outline_24"
                     app:suffixTextAppearance="@style/Suffix">
 
@@ -127,7 +127,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:layout_marginTop="-2dp"
-                    app:strokeColor="?attr/colorPrimaryContainer"
                     android:elevation="0dp"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
@@ -139,6 +138,7 @@
                     android:text="+1\u0020"
                     android:textSize="16sp"
                     app:cornerRadius="16dp"
+                    app:strokeColor="?attr/colorPrimaryContainer"
                     tools:ignore="HardcodedText" />
 
             </LinearLayout>
@@ -154,10 +154,10 @@
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:endIconMode="none"
                 app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/ic_round_star_24"
-                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:suffixText="@string/score_suffix"
                 app:suffixTextAppearance="@style/Suffix">
 
@@ -194,10 +194,10 @@
                     app:boxCornerRadiusBottomStart="16dp"
                     app:boxCornerRadiusTopEnd="16dp"
                     app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
                     app:endIconMode="none"
                     app:hintAnimationEnabled="true"
                     app:startIconDrawable="@drawable/ic_round_date_range_24"
-                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
                     app:suffixTextAppearance="@style/Suffix">
 
                     <AutoCompleteTextView
@@ -230,9 +230,9 @@
                     app:boxCornerRadiusBottomStart="16dp"
                     app:boxCornerRadiusTopEnd="16dp"
                     app:boxCornerRadiusTopStart="16dp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
                     app:endIconMode="none"
                     app:hintAnimationEnabled="true"
-                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
                     app:suffixTextAppearance="@style/Suffix">
 
                     <AutoCompleteTextView
@@ -304,8 +304,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/note"
                     android:layout_marginTop="16dp"
+                    android:hint="@string/note"
                     app:boxCornerRadiusBottomEnd="16dp"
                     app:boxCornerRadiusBottomStart="16dp"
                     app:boxCornerRadiusTopEnd="16dp"
@@ -330,10 +330,10 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.materialswitch.MaterialSwitch
-                    android:layout_marginTop="16dp"
                     android:id="@+id/mediaListPrivate"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
                     android:fontFamily="@font/poppins_bold"
                     android:text="@string/list_private" />
 
@@ -368,14 +368,14 @@
                     android:layout_width="128dp"
                     android:layout_height="56dp"
                     android:layout_gravity="center"
-                    app:strokeColor="?attr/colorPrimaryContainer"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:padding="8dp"
                     android:text="@string/delete"
                     android:textSize="16sp"
-                    app:cornerRadius="16dp" />
+                    app:cornerRadius="16dp"
+                    app:strokeColor="?attr/colorPrimaryContainer" />
 
                 <Button
                     android:id="@+id/mediaListSave"
@@ -385,13 +385,13 @@
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
-                    app:strokeColor="?attr/colorPrimaryContainer"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
                     android:padding="8dp"
                     android:text="@string/save"
                     android:textSize="16sp"
-                    app:cornerRadius="16dp" />
+                    app:cornerRadius="16dp"
+                    app:strokeColor="?attr/colorPrimaryContainer" />
             </LinearLayout>
         </LinearLayout>
 

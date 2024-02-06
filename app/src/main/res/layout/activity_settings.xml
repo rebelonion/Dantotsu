@@ -497,6 +497,7 @@
                     android:id="@+id/settingsUseSourceTheme"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:checked="false"
                     android:drawableStart="@drawable/ic_palette"
                     android:drawablePadding="16dp"
@@ -506,7 +507,6 @@
                     android:text="@string/use_unique_theme_for_each_item"
                     android:textAlignment="viewStart"
                     android:textColor="?attr/colorOnBackground"
-                    android:layout_marginBottom="16dp"
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
@@ -515,8 +515,8 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:alpha="0.58"
                     android:layout_marginBottom="-11dp"
+                    android:alpha="0.58"
                     android:fontFamily="@font/poppins_bold"
                     android:text="@string/custom_theme" />
 
@@ -681,7 +681,7 @@
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
                     app:thumbTint="@color/button_switch_track" />
-                
+
             </ani.dantotsu.others.Xpandable>
 
             <ani.dantotsu.others.Xpandable
@@ -880,6 +880,7 @@
                     android:drawableStart="@drawable/ic_round_sd_card_24"
                     android:drawablePadding="16dp"
                     android:elegantTextHeight="true"
+                    android:enabled="false"
                     android:fontFamily="@font/poppins_bold"
                     android:minHeight="64dp"
                     android:text="@string/downloadInSd"
@@ -889,7 +890,6 @@
                     app:cornerRadius="0dp"
                     app:drawableTint="?attr/colorPrimary"
                     app:showText="false"
-                    android:enabled="false"
                     app:thumbTint="@color/button_switch_track" />
 
                 <TextView
@@ -996,7 +996,7 @@
                     android:textColor="?attr/colorSecondary"
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
-                
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -1107,6 +1107,7 @@
                     android:layout_marginStart="-16dp"
                     android:layout_marginEnd="-16dp"
                     android:background="?android:attr/listDivider" />
+
                 <Button
                     android:id="@+id/purgeAnimeDownloads"
                     android:layout_width="match_parent"

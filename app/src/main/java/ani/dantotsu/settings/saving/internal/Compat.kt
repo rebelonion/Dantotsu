@@ -1,8 +1,8 @@
 package ani.dantotsu.settings.saving.internal
 
 import android.content.Context
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 
 class Compat {
     companion object {

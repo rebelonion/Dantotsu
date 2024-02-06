@@ -26,8 +26,8 @@ import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.DynamicAnimeParser
 import ani.dantotsu.parsers.WatchSources
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
@@ -198,7 +198,8 @@ class AnimeWatchAdapter(
             var refresh = false
             var run = false
             var reversed = media.selected!!.recyclerReversed
-            var style = media.selected!!.recyclerStyle ?: PrefManager.getVal(PrefName.AnimeDefaultView)
+            var style =
+                media.selected!!.recyclerStyle ?: PrefManager.getVal(PrefName.AnimeDefaultView)
             dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
             dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
             dialogBinding.animeSourceTop.setOnClickListener {
@@ -356,7 +357,9 @@ class AnimeWatchAdapter(
                 val episodes = media.anime.episodes!!.keys.toTypedArray()
 
                 val anilistEp = (media.userProgress ?: 0).plus(1)
-                val appEp = PrefManager.getCustomVal<String?>("${media.id}_current_ep", "")?.toIntOrNull() ?: 1
+                val appEp =
+                    PrefManager.getCustomVal<String?>("${media.id}_current_ep", "")?.toIntOrNull()
+                        ?: 1
 
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
                 if (episodes.contains(continueEp)) {
@@ -368,7 +371,10 @@ class AnimeWatchAdapter(
                         media.id,
                         continueEp
                     )
-                    if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight > PrefManager.getVal<Float>(PrefName.WatchPercentage)) {
+                    if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight > PrefManager.getVal<Float>(
+                            PrefName.WatchPercentage
+                        )
+                    ) {
                         val e = episodes.indexOf(continueEp)
                         if (e != -1 && e + 1 < episodes.size) {
                             continueEp = episodes[e + 1]
@@ -395,7 +401,10 @@ class AnimeWatchAdapter(
                         fragment.onEpisodeClick(continueEp)
                     }
                     if (fragment.continueEp) {
-                        if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight < PrefManager.getVal<Float>(PrefName.WatchPercentage)) {
+                        if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight < PrefManager.getVal<Float>(
+                                PrefName.WatchPercentage
+                            )
+                        ) {
                             binding.animeSourceContinue.performClick()
                             fragment.continueEp = false
                         }

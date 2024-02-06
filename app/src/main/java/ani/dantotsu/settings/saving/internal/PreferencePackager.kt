@@ -1,11 +1,7 @@
 package ani.dantotsu.settings.saving.internal
 
 import android.content.SharedPreferences
-import android.net.Uri
-import androidx.documentfile.provider.DocumentFile
-import ani.dantotsu.connections.discord.serializers.Activity
 import ani.dantotsu.settings.saving.PrefManager
-import ani.dantotsu.toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -28,8 +24,10 @@ class PreferencePackager {
          */
         fun unpack(decryptedJson: String): Boolean {
             val gson = Gson()
-            val type = object : TypeToken<Map<String, Map<String, Map<String, Any>>>>() {}.type  //oh god...
-            val rawPrefsMap: Map<String, Map<String, Map<String, Any>>> = gson.fromJson(decryptedJson, type)
+            val type = object :
+                TypeToken<Map<String, Map<String, Map<String, Any>>>>() {}.type  //oh god...
+            val rawPrefsMap: Map<String, Map<String, Map<String, Any>>> =
+                gson.fromJson(decryptedJson, type)
 
 
             val deserializedMap = mutableMapOf<String, Map<String, Any?>>()

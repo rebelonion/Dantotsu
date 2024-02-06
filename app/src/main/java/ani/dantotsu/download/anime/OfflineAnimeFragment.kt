@@ -39,8 +39,8 @@ import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
@@ -197,7 +197,9 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             builder.setMessage("Are you sure you want to delete ${item.title}?")
             builder.setPositiveButton("Yes") { _, _ ->
                 downloadManager.removeMedia(item.title, type)
-                val mediaIds = PrefManager.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values ?: emptySet()
+                val mediaIds =
+                    PrefManager.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values
+                        ?: emptySet()
                 if (mediaIds.isEmpty()) {
                     snackString("No media found")  // if this happens, terrible things have happened
                 }

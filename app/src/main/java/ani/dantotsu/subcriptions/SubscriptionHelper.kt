@@ -14,8 +14,8 @@ import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.tryWithSuspend
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -27,11 +27,13 @@ class SubscriptionHelper {
             isAdult: Boolean,
             isAnime: Boolean
         ): Selected {
-            val data = PrefManager.getNullableCustomVal("${mediaId}-select", null, Selected::class.java) ?: Selected().let {
-                it.sourceIndex = 0
-                it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)
-                it
-            }
+            val data =
+                PrefManager.getNullableCustomVal("${mediaId}-select", null, Selected::class.java)
+                    ?: Selected().let {
+                        it.sourceIndex = 0
+                        it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)
+                        it
+                    }
             return data
         }
 
@@ -126,12 +128,20 @@ class SubscriptionHelper {
 
         @Suppress("UNCHECKED_CAST")
         fun getSubscriptions(): Map<Int, SubscribeMedia> =
-            (PrefManager.getNullableCustomVal(subscriptions, null, Map::class.java) as? Map<Int, SubscribeMedia>)
+            (PrefManager.getNullableCustomVal(
+                subscriptions,
+                null,
+                Map::class.java
+            ) as? Map<Int, SubscribeMedia>)
                 ?: mapOf<Int, SubscribeMedia>().also { PrefManager.setCustomVal(subscriptions, it) }
 
         @Suppress("UNCHECKED_CAST")
         fun saveSubscription(context: Context, media: Media, subscribed: Boolean) {
-            val data = PrefManager.getNullableCustomVal(subscriptions, null, Map::class.java) as? MutableMap<Int, SubscribeMedia>
+            val data = PrefManager.getNullableCustomVal(
+                subscriptions,
+                null,
+                Map::class.java
+            ) as? MutableMap<Int, SubscribeMedia>
                 ?: mutableMapOf()
             if (subscribed) {
                 if (!data.containsKey(media.id)) {

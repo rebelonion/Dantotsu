@@ -25,8 +25,8 @@ import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.GenresViewModel
 import ani.dantotsu.databinding.*
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -97,28 +97,29 @@ class MediaInfoFragment : Fragment() {
                 if (media.anime != null) {
                     val episodeDuration = media.anime.episodeDuration
 
-binding.mediaInfoDuration.text = when {
-    episodeDuration != null -> {
-        val hours = episodeDuration / 60
-        val minutes = episodeDuration % 60
+                    binding.mediaInfoDuration.text = when {
+                        episodeDuration != null -> {
+                            val hours = episodeDuration / 60
+                            val minutes = episodeDuration % 60
 
-        val formattedDuration = buildString {
-            if (hours > 0) {
-                append("$hours hour")
-                if (hours > 1) append("s")
-            }
+                            val formattedDuration = buildString {
+                                if (hours > 0) {
+                                    append("$hours hour")
+                                    if (hours > 1) append("s")
+                                }
 
-            if (minutes > 0) {
-                if (hours > 0) append(", ")
-                append("$minutes min")
-                if (minutes > 1) append("s")
-            }
-        }
+                                if (minutes > 0) {
+                                    if (hours > 0) append(", ")
+                                    append("$minutes min")
+                                    if (minutes > 1) append("s")
+                                }
+                            }
 
-        formattedDuration
-    }
-    else -> "??"
-}
+                            formattedDuration
+                        }
+
+                        else -> "??"
+                    }
                     binding.mediaInfoDurationContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeasonContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeason.text =

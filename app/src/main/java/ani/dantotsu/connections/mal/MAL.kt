@@ -10,8 +10,8 @@ import ani.dantotsu.R
 import ani.dantotsu.client
 import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.tryWithSuspend
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -66,8 +66,9 @@ object MAL {
 
     suspend fun getSavedToken(context: FragmentActivity): Boolean {
         return tryWithSuspend(false) {
-            var res: ResponseToken = PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)
-                ?: return@tryWithSuspend false
+            var res: ResponseToken =
+                PrefManager.getNullableVal<ResponseToken>(PrefName.MALToken, null)
+                    ?: return@tryWithSuspend false
             if (System.currentTimeMillis() > res.expiresIn)
                 res = refreshToken()
                     ?: throw Exception(currContext()?.getString(R.string.refreshing_token_failed))

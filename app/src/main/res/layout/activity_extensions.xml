@@ -27,8 +27,7 @@
                     android:layout_height="wrap_content"
                     app:cardBackgroundColor="@color/nav_bg_inv"
                     app:cardCornerRadius="16dp"
-                    app:cardElevation="0dp"
-                    >
+                    app:cardElevation="0dp">
 
                 </androidx.cardview.widget.CardView>
 
@@ -47,7 +46,7 @@
                 <Space
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"  />
+                    android:layout_weight="1" />
 
                 <ImageButton
                     android:id="@+id/languageselect"
@@ -57,8 +56,8 @@
                     android:layout_marginRight="16dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/sort_by"
-                    app:tint="?attr/colorOnBackground"
-                    app:srcCompat="@drawable/ic_round_translate_24" />
+                    app:srcCompat="@drawable/ic_round_translate_24"
+                    app:tint="?attr/colorOnBackground" />
             </LinearLayout>
 
             <LinearLayout
@@ -66,8 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                tools:ignore="UseCompoundDrawables">
-            </LinearLayout>
+                tools:ignore="UseCompoundDrawables"></LinearLayout>
 
         </LinearLayout>
 
@@ -76,11 +74,12 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             app:tabContentStart="32dp"
+            app:tabGravity="fill"
             app:tabMode="scrollable"
             app:tabPaddingEnd="16dp"
             app:tabPaddingStart="16dp"
-            app:tabTextAppearance="@style/NavBarText"
-            app:tabGravity="fill"/>
+            app:tabTextAppearance="@style/NavBarText" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/searchView"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -124,10 +123,9 @@
             android:id="@+id/fragmentExtensionsContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
             android:layout_gravity="bottom"
-            android:layout_weight="1">
-        </FrameLayout>
+            android:layout_weight="1"
+            android:visibility="gone"></FrameLayout>
 
     </LinearLayout>
 </LinearLayout>

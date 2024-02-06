@@ -8,6 +8,7 @@ data class Pref(
     val type: KClass<*>,
     val default: Any
 )
+
 enum class Location(val location: String, val exportable: Boolean) {
     General("ani.dantotsu.general", true),
     UI("ani.dantotsu.ui", true),

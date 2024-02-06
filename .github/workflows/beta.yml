@@ -55,12 +55,6 @@ jobs:
     - name: Save Current SHA for Next Run
       run: echo ${{ github.sha }} > last_sha.txt
 
-    - name: Upload Current SHA as Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: last-sha
-        path: last_sha.txt
-
     - name: Set variables
       run: |
         VER=$(grep -E -o "versionName \".*\"" app/build.gradle | sed -e 's/versionName //g' | tr -d '"')
@@ -86,13 +80,13 @@ jobs:
       run: chmod +x ./gradlew
   
     - name: Build with Gradle
-      run: ./gradlew assembleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
+      run: ./gradlew assembleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }} -Pcustom.filename="app-alpha.apk"
 
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.0.0
       with:
           name: Dantotsu
-          path: "app/build/outputs/apk/alpha/app-alpha.apk"
+          path: "app/build/outputs/apk/google/alpha/app-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
       shell: bash
@@ -105,11 +99,11 @@ jobs:
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
         contentbody=$( jq -nc --arg msg "Alpha-Build: <@719439449423085569> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
-        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         
         #Telegram
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/alpha/app-alpha.apk" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-alpha.apk" \
           -F "caption=[Alpha-Build: ${VERSION}] Change logs :${commit_messages}" \
          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
@@ -117,8 +111,13 @@ jobs:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
         VERSION: ${{ env.VERSION }}
 
-        
-  
+    - name: Upload Current SHA as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: last-sha
+        path: last_sha.txt
+
+
     - name: Delete Old Pre-Releases
       id: delete-pre-releases
       uses: sgpublic/delete-release-action@master

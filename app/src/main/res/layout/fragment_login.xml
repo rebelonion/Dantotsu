@@ -49,6 +49,7 @@
             app:cornerRadius="16dp"
             app:icon="@drawable/ic_anilist"
             app:iconTint="?attr/colorOnPrimary" />
+
         <Button
             android:id="@+id/importSettingsButton"
             android:layout_width="156dp"
@@ -58,10 +59,10 @@
             android:backgroundTint="?attr/colorPrimaryContainer"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/import_settings"
-            app:icon="@drawable/ic_download_24"
-            app:iconTint="?attr/colorOnPrimaryContainer"
             android:textColor="?attr/colorOnPrimaryContainer"
-            app:cornerRadius="16dp" />
+            app:cornerRadius="16dp"
+            app:icon="@drawable/ic_download_24"
+            app:iconTint="?attr/colorOnPrimaryContainer" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -90,6 +91,7 @@
                 android:src="@drawable/ic_github"
                 app:tint="?attr/colorOutline"
                 tools:ignore="ContentDescription" />
+
             <ImageView
                 android:id="@+id/loginTelegram"
                 android:layout_width="48dp"

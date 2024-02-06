@@ -51,7 +51,7 @@
         android:textColor="?attr/colorOnPrimary"
         app:cornerRadius="16dp"
         app:icon="@drawable/ic_round_image_search_24"
-        app:iconTint="?attr/colorOnPrimary"/>
+        app:iconTint="?attr/colorOnPrimary" />
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -16,10 +16,8 @@ import ani.dantotsu.databinding.FragmentLoginBinding
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferencePackager
-import ani.dantotsu.statusBarHeight
 import ani.dantotsu.toast
 import com.google.android.material.textfield.TextInputEditText
-import eltos.simpledialogfragment.SimpleDialog
 
 class LoginFragment : Fragment() {
 
@@ -41,47 +39,50 @@ class LoginFragment : Fragment() {
         binding.loginGithub.setOnClickListener { openLinkInBrowser(getString(R.string.github)) }
         binding.loginTelegram.setOnClickListener { openLinkInBrowser(getString(R.string.telegram)) }
 
-        val openDocumentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            if (uri != null) {
-                try {
-                    val jsonString = requireActivity().contentResolver.openInputStream(uri)?.readBytes()
-                        ?: throw Exception("Error reading file")
-                    val name = DocumentFile.fromSingleUri(requireActivity(), uri)?.name ?: "settings"
-                    //.sani is encrypted, .ani is not
-                    if (name.endsWith(".sani")) {
-                        passwordAlertDialog() { password ->
-                            if (password != null) {
-                                val salt = jsonString.copyOfRange(0, 16)
-                                val encrypted = jsonString.copyOfRange(16, jsonString.size)
-                                val decryptedJson = try {
-                                    PreferenceKeystore.decryptWithPassword(
-                                        password,
-                                        encrypted,
-                                        salt
-                                    )
-                                } catch (e: Exception) {
-                                    toast("Incorrect password")
-                                    return@passwordAlertDialog
+        val openDocumentLauncher =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                if (uri != null) {
+                    try {
+                        val jsonString =
+                            requireActivity().contentResolver.openInputStream(uri)?.readBytes()
+                                ?: throw Exception("Error reading file")
+                        val name =
+                            DocumentFile.fromSingleUri(requireActivity(), uri)?.name ?: "settings"
+                        //.sani is encrypted, .ani is not
+                        if (name.endsWith(".sani")) {
+                            passwordAlertDialog() { password ->
+                                if (password != null) {
+                                    val salt = jsonString.copyOfRange(0, 16)
+                                    val encrypted = jsonString.copyOfRange(16, jsonString.size)
+                                    val decryptedJson = try {
+                                        PreferenceKeystore.decryptWithPassword(
+                                            password,
+                                            encrypted,
+                                            salt
+                                        )
+                                    } catch (e: Exception) {
+                                        toast("Incorrect password")
+                                        return@passwordAlertDialog
+                                    }
+                                    if (PreferencePackager.unpack(decryptedJson))
+                                        restartApp()
+                                } else {
+                                    toast("Password cannot be empty")
                                 }
-                                if(PreferencePackager.unpack(decryptedJson))
-                                    restartApp()
-                            } else {
-                                toast("Password cannot be empty")
                             }
+                        } else if (name.endsWith(".ani")) {
+                            val decryptedJson = jsonString.toString(Charsets.UTF_8)
+                            if (PreferencePackager.unpack(decryptedJson))
+                                restartApp()
+                        } else {
+                            toast("Invalid file type")
                         }
-                    } else if (name.endsWith(".ani")) {
-                        val decryptedJson = jsonString.toString(Charsets.UTF_8)
-                        if(PreferencePackager.unpack(decryptedJson))
-                            restartApp()
-                    } else {
-                        toast("Invalid file type")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        toast("Error importing settings")
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    toast("Error importing settings")
                 }
             }
-        }
 
         binding.importSettingsButton.setOnClickListener {
             openDocumentLauncher.launch(arrayOf("*/*"))
@@ -92,7 +93,8 @@ class LoginFragment : Fragment() {
         val password = CharArray(16).apply { fill('0') }
 
         // Inflate the dialog layout
-        val dialogView = LayoutInflater.from(requireActivity()).inflate(R.layout.dialog_user_agent, null)
+        val dialogView =
+            LayoutInflater.from(requireActivity()).inflate(R.layout.dialog_user_agent, null)
         dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)?.hint = "Password"
         val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
         subtitleTextView?.visibility = View.VISIBLE

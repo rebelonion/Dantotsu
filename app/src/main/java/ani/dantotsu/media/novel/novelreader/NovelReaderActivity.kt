@@ -37,8 +37,8 @@ import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.CurrentNovelReaderSettings
 import ani.dantotsu.settings.CurrentReaderSettings
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.tryWith
@@ -175,7 +175,7 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
             return
         }
 
-        
+
         ThemeManager(this).applyTheme()
         binding = ActivityNovelReaderBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -286,7 +286,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
         binding.bookReader.getAppearance {
             currentTheme = it
             themes.add(0, it)
-            defaultSettings = loadReaderSettings("${sanitizedBookId}_current_settings") ?: defaultSettings
+            defaultSettings =
+                loadReaderSettings("${sanitizedBookId}_current_settings") ?: defaultSettings
             applySettings()
         }
 
@@ -486,7 +487,11 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
     }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> loadReaderSettings(fileName: String, context: Context? = null, toast: Boolean = true): T? {
+    private fun <T> loadReaderSettings(
+        fileName: String,
+        context: Context? = null,
+        toast: Boolean = true
+    ): T? {
         val a = context ?: currContext()
         try {
             if (a?.fileList() != null)

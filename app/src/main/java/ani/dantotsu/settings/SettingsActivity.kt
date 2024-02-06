@@ -4,8 +4,12 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.drawable.Animatable
-import android.os.Build.*
-import android.os.Build.VERSION.*
+import android.os.Build.BRAND
+import android.os.Build.DEVICE
+import android.os.Build.SUPPORTED_ABIS
+import android.os.Build.VERSION.CODENAME
+import android.os.Build.VERSION.RELEASE
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,9 +18,7 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -25,34 +27,45 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
-import ani.dantotsu.*
-import ani.dantotsu.Mapper.json
+import ani.dantotsu.BuildConfig
+import ani.dantotsu.R
+import ani.dantotsu.Refresh
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
+import ani.dantotsu.copyToClipboard
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivitySettingsBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
+import ani.dantotsu.initActivity
+import ani.dantotsu.loadImage
+import ani.dantotsu.logger
+import ani.dantotsu.navBarHeight
+import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.parsers.AnimeSources
-import ani.dantotsu.parsers.MangaSources
-import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.pop
+import ani.dantotsu.savePrefsToDownloads
+import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferencePackager
+import ani.dantotsu.snackString
+import ani.dantotsu.startMainActivity
+import ani.dantotsu.statusBarHeight
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.toast
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
 import eltos.simpledialogfragment.color.SimpleColorDialog
@@ -85,47 +98,48 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         initActivity(this)
 
-        val openDocumentLauncher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
-            if (uri != null) {
-                try {
-                    val jsonString = contentResolver.openInputStream(uri)?.readBytes()
-                        ?: throw Exception("Error reading file")
-                    val name = DocumentFile.fromSingleUri(this, uri)?.name ?: "settings"
-                    //.sani is encrypted, .ani is not
-                    if (name.endsWith(".sani")) {
-                        passwordAlertDialog(false) { password ->
-                            if (password != null) {
-                                val salt = jsonString.copyOfRange(0, 16)
-                                val encrypted = jsonString.copyOfRange(16, jsonString.size)
-                                val decryptedJson = try {
-                                    PreferenceKeystore.decryptWithPassword(
-                                        password,
-                                        encrypted,
-                                        salt
-                                    )
-                                } catch (e: Exception) {
-                                    toast("Incorrect password")
-                                    return@passwordAlertDialog
+        val openDocumentLauncher =
+            registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                if (uri != null) {
+                    try {
+                        val jsonString = contentResolver.openInputStream(uri)?.readBytes()
+                            ?: throw Exception("Error reading file")
+                        val name = DocumentFile.fromSingleUri(this, uri)?.name ?: "settings"
+                        //.sani is encrypted, .ani is not
+                        if (name.endsWith(".sani")) {
+                            passwordAlertDialog(false) { password ->
+                                if (password != null) {
+                                    val salt = jsonString.copyOfRange(0, 16)
+                                    val encrypted = jsonString.copyOfRange(16, jsonString.size)
+                                    val decryptedJson = try {
+                                        PreferenceKeystore.decryptWithPassword(
+                                            password,
+                                            encrypted,
+                                            salt
+                                        )
+                                    } catch (e: Exception) {
+                                        toast("Incorrect password")
+                                        return@passwordAlertDialog
+                                    }
+                                    if (PreferencePackager.unpack(decryptedJson))
+                                        restartApp()
+                                } else {
+                                    toast("Password cannot be empty")
                                 }
-                                if(PreferencePackager.unpack(decryptedJson))
-                                    restartApp()
-                            } else {
-                                toast("Password cannot be empty")
                             }
+                        } else if (name.endsWith(".ani")) {
+                            val decryptedJson = jsonString.toString(Charsets.UTF_8)
+                            if (PreferencePackager.unpack(decryptedJson))
+                                restartApp()
+                        } else {
+                            toast("Unknown file type")
                         }
-                    } else if (name.endsWith(".ani")) {
-                        val decryptedJson = jsonString.toString(Charsets.UTF_8)
-                        if(PreferencePackager.unpack(decryptedJson))
-                            restartApp()
-                    } else {
-                        toast("Unknown file type")
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        toast("Error importing settings")
                     }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    toast("Error importing settings")
                 }
             }
-        }
 
         binding.settingsVersion.text = getString(R.string.version_current, BuildConfig.VERSION_NAME)
         binding.settingsVersion.setOnLongClickListener {
@@ -244,7 +258,10 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             selectedArray.addAll(List(filteredLocations.size - 1) { false })
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("Import/Export Settings")
-                .setMultiChoiceItems( filteredLocations.map { it.name }.toTypedArray(), selectedArray.toBooleanArray()) { _, which, isChecked ->
+                .setMultiChoiceItems(
+                    filteredLocations.map { it.name }.toTypedArray(),
+                    selectedArray.toBooleanArray()
+                ) { _, which, isChecked ->
                     selectedArray[which] = isChecked
                 }
                 .setPositiveButton("Import...") { dialog, _ ->
@@ -257,7 +274,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         return@setNegativeButton
                     }
                     dialog.dismiss()
-                    val selected = filteredLocations.filterIndexed { index, _ -> selectedArray[index] }
+                    val selected =
+                        filteredLocations.filterIndexed { index, _ -> selectedArray[index] }
                     if (selected.contains(Location.Protected)) {
                         passwordAlertDialog(true) { password ->
                             if (password != null) {
@@ -360,7 +378,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
         binding.NSFWExtension.isChecked = PrefManager.getVal(PrefName.NSFWExtension)
         binding.NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.NSFWExtension,isChecked)
+            PrefManager.setVal(PrefName.NSFWExtension, isChecked)
 
         }
 
@@ -847,7 +865,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             show()
         }
     }
-    private fun passwordAlertDialog(isExporting:Boolean, callback: (CharArray?) -> Unit) {
+
+    private fun passwordAlertDialog(isExporting: Boolean, callback: (CharArray?) -> Unit) {
         val password = CharArray(16).apply { fill('0') }
 
         // Inflate the dialog layout

@@ -20,8 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemExtensionAllBinding
 import ani.dantotsu.others.LanguageMapper
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -102,7 +102,8 @@ class MangaExtensionPagingSource(
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
         val lang: String = PrefManager.getVal(PrefName.LangSort)
-        val langFilter = if (lang != "all") filteredExtensions.filter { it.lang == lang } else filteredExtensions
+        val langFilter =
+            if (lang != "all") filteredExtensions.filter { it.lang == lang } else filteredExtensions
         val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot { it.isNsfw }
         return try {
             val sublist = filternfsw.subList(

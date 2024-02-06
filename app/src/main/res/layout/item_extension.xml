@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/extensionCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
     android:background="?attr/colorSurface"
+    android:orientation="horizontal"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
 
@@ -13,10 +13,10 @@
         android:id="@+id/extensionPinImageView"
         android:layout_width="40dp"
         android:layout_height="24dp"
-        android:layout_marginStart="-10dp"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_round_equal_24"
-        android:layout_marginEnd="3dp" />
+        android:layout_marginStart="-10dp"
+        android:layout_marginEnd="3dp"
+        android:src="@drawable/ic_round_equal_24" />
 
     <ImageView
         android:id="@+id/extensionIconImageView"

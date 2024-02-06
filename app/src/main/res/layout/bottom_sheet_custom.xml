@@ -47,8 +47,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="@font/poppins_bold"
             android:buttonTint="?attr/colorPrimary"
+            android:fontFamily="@font/poppins_bold"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -70,9 +70,9 @@
                 android:insetBottom="0dp"
                 android:padding="8dp"
                 android:textSize="16sp"
-                app:strokeColor="?attr/colorPrimaryContainer"
                 android:visibility="gone"
                 app:cornerRadius="16dp"
+                app:strokeColor="?attr/colorPrimaryContainer"
                 tools:ignore="SpeakableTextPresentCheck"
                 tools:visibility="visible" />
 
@@ -88,9 +88,9 @@
                 android:insetBottom="0dp"
                 android:padding="8dp"
                 android:textSize="16sp"
-                app:strokeColor="?attr/colorPrimaryContainer"
                 android:visibility="gone"
                 app:cornerRadius="16dp"
+                app:strokeColor="?attr/colorPrimaryContainer"
                 tools:ignore="SpeakableTextPresentCheck"
                 tools:visibility="visible" />
         </LinearLayout>

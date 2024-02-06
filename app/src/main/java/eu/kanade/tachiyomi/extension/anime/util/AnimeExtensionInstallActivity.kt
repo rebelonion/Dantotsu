@@ -25,7 +25,7 @@ class AnimeExtensionInstallActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         ThemeManager(this).applyTheme()
 
         val installIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)

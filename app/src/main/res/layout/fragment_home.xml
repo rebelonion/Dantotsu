@@ -12,6 +12,7 @@
         android:id="@+id/homeScroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:id="@+id/homeContainer"
             android:layout_width="match_parent"
@@ -21,6 +22,7 @@
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
+
                 <com.flaviofaria.kenburnsview.KenBurnsView
                     android:id="@+id/homeUserBg"
                     android:layout_width="match_parent"
@@ -167,6 +169,7 @@
                             android:layout_height="72dp"
                             android:layout_margin="8dp"
                             android:visibility="invisible"
+                            app:boxStrokeColor="@color/text_input_layout_stroke_color"
                             app:cardCornerRadius="16dp"
                             app:layout_constrainedWidth="true"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -174,7 +177,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintWidth_max="256dp"
-                            app:boxStrokeColor="@color/text_input_layout_stroke_color"
                             tools:visibility="visible">
 
                             <ImageView
@@ -222,6 +224,7 @@
                             android:layout_margin="8dp"
                             android:layout_marginBottom="16dp"
                             android:visibility="invisible"
+                            app:boxStrokeColor="@color/text_input_layout_stroke_color"
                             app:cardCornerRadius="16dp"
                             app:layout_constrainedWidth="true"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -229,7 +232,6 @@
                             app:layout_constraintStart_toEndOf="@+id/homeAnimeList"
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintWidth_max="256dp"
-                            app:boxStrokeColor="@color/text_input_layout_stroke_color"
                             tools:visibility="visible">
 
                             <ImageView
@@ -352,7 +354,7 @@
                         tools:orientation="horizontal" />
                 </FrameLayout>
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/homeFavAnimeContainer"
                 android:layout_width="match_parent"
@@ -728,7 +730,7 @@
                         tools:orientation="horizontal" />
                 </FrameLayout>
             </LinearLayout>
-            
+
             <LinearLayout
                 android:id="@+id/homeRecommendedContainer"
                 android:layout_width="match_parent"

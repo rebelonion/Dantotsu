@@ -54,8 +54,8 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
-            app:hintAnimationEnabled="true"
             app:boxStrokeColor="@color/text_input_layout_stroke_color"
+            app:hintAnimationEnabled="true"
             app:startIconDrawable="@drawable/ic_round_playlist_play_24">
 
             <AutoCompleteTextView
@@ -91,9 +91,9 @@
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
                 app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:endIconMode="none"
                 app:hintAnimationEnabled="true"
-                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:startIconDrawable="@drawable/ic_round_add_circle_outline_24"
                 app:suffixTextAppearance="@style/Suffix">
 
@@ -124,7 +124,6 @@
                 android:layout_marginTop="-2dp"
                 android:elevation="0dp"
                 android:fontFamily="@font/poppins_bold"
-                app:strokeColor="?attr/colorPrimaryContainer"
                 android:insetTop="0dp"
                 android:insetBottom="0dp"
                 android:minWidth="@null"
@@ -134,6 +133,7 @@
                 android:text="+1\u0020"
                 android:textSize="16sp"
                 app:cornerRadius="16dp"
+                app:strokeColor="?attr/colorPrimaryContainer"
                 tools:ignore="HardcodedText" />
 
         </LinearLayout>
@@ -149,11 +149,11 @@
             app:boxCornerRadiusBottomStart="16dp"
             app:boxCornerRadiusTopEnd="16dp"
             app:boxCornerRadiusTopStart="16dp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:endIconMode="none"
             app:hintAnimationEnabled="true"
             app:startIconDrawable="@drawable/ic_round_star_24"
             app:suffixText="@string/score_suffix"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:suffixTextAppearance="@style/Suffix">
 
             <AutoCompleteTextView
@@ -184,13 +184,13 @@
             android:layout_height="56dp"
             android:layout_marginTop="24dp"
             android:fontFamily="@font/poppins_bold"
-            app:strokeColor="?attr/colorPrimaryContainer"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:padding="8dp"
             android:text="@string/save"
             android:textSize="16sp"
-            app:cornerRadius="16dp" />
+            app:cornerRadius="16dp"
+            app:strokeColor="?attr/colorPrimaryContainer" />
 
 
     </LinearLayout>
@@ -202,10 +202,9 @@
         android:layout_marginTop="14dp"
         app:cardBackgroundColor="?attr/colorPrimary"
         app:cardCornerRadius="2dp"
-        app:cardElevation="0dp" >
+        app:cardElevation="0dp">
 
     </androidx.cardview.widget.CardView>
-
 
 
 </FrameLayout>

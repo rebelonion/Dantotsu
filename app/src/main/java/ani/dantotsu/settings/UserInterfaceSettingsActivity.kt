@@ -10,8 +10,8 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityUserInterfaceSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.snackbar.Snackbar
@@ -21,7 +21,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
     private val ui = "ui_settings"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         ThemeManager(this).applyTheme()
         binding = ActivityUserInterfaceSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -44,7 +44,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                         views,
                         PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toBooleanArray()
                     ) { _, i, value ->
-                        val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toMutableList()
+                        val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow)
+                            .toMutableList()
                         set[i] = value
                         PrefManager.setVal(PrefName.HomeLayoutShow, set)
                     }
@@ -87,7 +88,8 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             0f to 0f
         )
         val mapReverse = map.map { it.value to it.key }.toMap()
-        binding.uiSettingsAnimationSpeed.value = mapReverse[PrefManager.getVal(PrefName.AnimationSpeed)] ?: 1f
+        binding.uiSettingsAnimationSpeed.value =
+            mapReverse[PrefManager.getVal(PrefName.AnimationSpeed)] ?: 1f
         binding.uiSettingsAnimationSpeed.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.AnimationSpeed, map[value] ?: 1f)
             restartApp()

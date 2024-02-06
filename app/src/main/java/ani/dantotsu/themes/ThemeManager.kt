@@ -7,8 +7,8 @@ import android.graphics.Bitmap
 import android.view.Window
 import android.view.WindowManager
 import ani.dantotsu.R
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import com.google.android.material.color.DynamicColors
 import com.google.android.material.color.DynamicColorsOptions
 

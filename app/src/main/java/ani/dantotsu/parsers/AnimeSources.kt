@@ -1,6 +1,5 @@
 package ani.dantotsu.parsers
 
-import android.content.Context
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
 import ani.dantotsu.settings.saving.PrefManager
@@ -14,8 +13,9 @@ object AnimeSources : WatchSources() {
     var pinnedAnimeSources: List<String> = emptyList()
 
     suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>) {
-        pinnedAnimeSources = PrefManager.getNullableVal<List<String>>(PrefName.AnimeSourcesOrder, null)
-            ?: emptyList()
+        pinnedAnimeSources =
+            PrefManager.getNullableVal<List<String>>(PrefName.AnimeSourcesOrder, null)
+                ?: emptyList()
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()

@@ -14,8 +14,9 @@ object NovelSources : NovelReadSources() {
     var pinnedNovelSources: List<String> = emptyList()
 
     suspend fun init(fromExtensions: StateFlow<List<NovelExtension.Installed>>) {
-        pinnedNovelSources = PrefManager.getNullableVal<List<String>>(PrefName.NovelSourcesOrder, null)
-            ?: emptyList()
+        pinnedNovelSources =
+            PrefManager.getNullableVal<List<String>>(PrefName.NovelSourcesOrder, null)
+                ?: emptyList()
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()

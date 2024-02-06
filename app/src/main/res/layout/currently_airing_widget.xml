@@ -42,16 +42,16 @@
             android:id="@+id/widgetListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/widgetTitle"/>
+            android:layout_below="@id/widgetTitle" />
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textColor="#ffffff"
-            android:textStyle="bold"
             android:text="No shows to display"
-            android:textSize="20sp" />
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
     </RelativeLayout>
 </RelativeLayout>

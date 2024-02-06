@@ -25,8 +25,8 @@ import ani.dantotsu.parsers.NovelSources
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.WatchSources
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
@@ -43,13 +43,14 @@ class MediaDetailsViewModel : ViewModel() {
 
 
     fun loadSelected(media: Media, isDownload: Boolean = false): Selected {
-        val data = PrefManager.getNullableCustomVal("Selected-${media.id}", null, Selected::class.java)
-            ?: Selected().let {
-            it.sourceIndex = 0
-            it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)
-            saveSelected(media.id, it)
-            it
-        }
+        val data =
+            PrefManager.getNullableCustomVal("Selected-${media.id}", null, Selected::class.java)
+                ?: Selected().let {
+                    it.sourceIndex = 0
+                    it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)
+                    saveSelected(media.id, it)
+                    it
+                }
         if (isDownload) {
             data.sourceIndex = if (media.anime != null) {
                 AnimeSources.list.size - 1

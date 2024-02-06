@@ -41,9 +41,9 @@
                 app:boxCornerRadiusBottomStart="28dp"
                 app:boxCornerRadiusTopEnd="28dp"
                 app:boxCornerRadiusTopStart="28dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:endIconDrawable="@drawable/ic_round_search_24"
                 app:endIconTint="@color/bg_opp"
-                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:hintAnimationEnabled="true">
 
                 <AutoCompleteTextView
@@ -65,8 +65,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
                 app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                app:strokeColor="@color/text_input_layout_stroke_color"
-                app:cardCornerRadius="26dp">
+                app:cardCornerRadius="26dp"
+                app:strokeColor="@color/text_input_layout_stroke_color">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/animeUserAvatar"
@@ -95,8 +95,8 @@
         android:id="@+id/animeSeasons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
         android:layout_gravity="center_horizontal"
+        android:clipToPadding="false"
         android:fillViewport="true"
         android:paddingStart="2dp"
         android:paddingEnd="2dp"
@@ -321,9 +321,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:textSize="12sp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/include_media_in_list" />
+            android:text="@string/include_media_in_list"
+            android:textSize="12sp" />
 
     </LinearLayout>
 

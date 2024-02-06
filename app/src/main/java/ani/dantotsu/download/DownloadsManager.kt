@@ -3,8 +3,8 @@ package ani.dantotsu.download
 import android.content.Context
 import android.os.Environment
 import android.widget.Toast
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File

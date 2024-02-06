@@ -20,8 +20,8 @@
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusTopEnd="8dp"
         app:boxCornerRadiusTopStart="8dp"
-        app:hintAnimationEnabled="true"
         app:boxStrokeColor="@color/text_input_layout_stroke_color"
+        app:hintAnimationEnabled="true"
         app:startIconDrawable="@drawable/ic_round_source_24">
 
         <AutoCompleteTextView
@@ -62,8 +62,8 @@
         app:boxCornerRadiusBottomStart="28dp"
         app:boxCornerRadiusTopEnd="28dp"
         app:boxCornerRadiusTopStart="28dp"
-        app:endIconDrawable="@drawable/ic_round_search_24"
         app:boxStrokeColor="@color/text_input_layout_stroke_color"
+        app:endIconDrawable="@drawable/ic_round_search_24"
         app:hintAnimationEnabled="true">
 
         <AutoCompleteTextView

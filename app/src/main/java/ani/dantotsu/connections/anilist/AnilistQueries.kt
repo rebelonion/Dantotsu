@@ -1,6 +1,7 @@
 package ani.dantotsu.connections.anilist
 
 import android.app.Activity
+import android.util.Base64
 import ani.dantotsu.R
 import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
@@ -17,18 +18,17 @@ import ani.dantotsu.media.Character
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.Studio
 import ani.dantotsu.others.MalScraper
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.Serializable
-import android.util.Base64
-import java.io.ByteArrayInputStream
-import java.io.ObjectInputStream
 import kotlin.system.measureTimeMillis
 
 class AnilistQueries {
@@ -357,9 +357,9 @@ class AnilistQueries {
     private suspend fun bannerImage(type: String): String? {
         //var image = loadData<BannerImage>("banner_$type")
         val image: BannerImage? = BannerImage(
-                PrefManager.getCustomVal("banner_${type}_url", null),
-                PrefManager.getCustomVal("banner_${type}_time", 0L)
-                )
+            PrefManager.getCustomVal("banner_${type}_url", null),
+            PrefManager.getCustomVal("banner_${type}_time", 0L)
+        )
         if (image == null || image.checkTime()) {
             val response =
                 executeQuery<Query.MediaListCollection>("""{ MediaListCollection(userId: ${Anilist.userid}, type: $type, chunk:1,perChunk:25, sort: [SCORE_DESC,UPDATED_TIME_DESC]) { lists { entries{ media { id bannerImage } } } } } """)
@@ -445,14 +445,16 @@ class AnilistQueries {
 
 
     suspend fun getGenresAndTags(activity: Activity): Boolean {
-        var genres: ArrayList<String>? = PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableList() as ArrayList<String>?
+        var genres: ArrayList<String>? = PrefManager.getVal<Set<String>>(PrefName.GenresList)
+            .toMutableList() as ArrayList<String>?
         val adultTags = PrefManager.getVal<Set<String>>(PrefName.TagsListIsAdult).toMutableList()
-        val nonAdultTags = PrefManager.getVal<Set<String>>(PrefName.TagsListNonAdult).toMutableList()
+        val nonAdultTags =
+            PrefManager.getVal<Set<String>>(PrefName.TagsListNonAdult).toMutableList()
         var tags = if (adultTags.isEmpty() || nonAdultTags.isEmpty()) null else
             mapOf(
-            true to adultTags,
-            false to nonAdultTags
-        )
+                true to adultTags,
+                false to nonAdultTags
+            )
 
         if (genres.isNullOrEmpty()) {
             executeQuery<Query.GenreCollection>(
@@ -530,9 +532,10 @@ class AnilistQueries {
         }
     }
 
-        private suspend fun getGenreThumbnail(genre: String): Genre? {
-        val genres: MutableMap<String, Genre> = loadSerializableMap<String, Genre>("genre_thumb")?.toMutableMap()
-            ?: mutableMapOf()
+    private suspend fun getGenreThumbnail(genre: String): Genre? {
+        val genres: MutableMap<String, Genre> =
+            loadSerializableMap<String, Genre>("genre_thumb")?.toMutableMap()
+                ?: mutableMapOf()
         if (genres.checkGenreTime(genre)) {
             try {
                 val genreQuery =

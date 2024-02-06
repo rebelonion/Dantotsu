@@ -10,8 +10,8 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentOfflineBinding
 import ani.dantotsu.isOnline
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
 

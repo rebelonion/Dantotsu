@@ -134,7 +134,11 @@ abstract class BaseParser {
      * **/
     open suspend fun loadSavedShowResponse(mediaId: Int): ShowResponse? {
         checkIfVariablesAreEmpty()
-        return PrefManager.getNullableCustomVal("${saveName}_$mediaId", null, ShowResponse::class.java)
+        return PrefManager.getNullableCustomVal(
+            "${saveName}_$mediaId",
+            null,
+            ShowResponse::class.java
+        )
     }
 
     /**

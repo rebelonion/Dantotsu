@@ -16,8 +16,8 @@ import ani.dantotsu.currContext
 import ani.dantotsu.defaultHeaders
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.parsers.Book
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

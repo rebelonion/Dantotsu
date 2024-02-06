@@ -5,8 +5,8 @@ import android.content.Intent
 import android.widget.TextView
 import ani.dantotsu.R
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toast
 import ani.dantotsu.tryWith
 import io.noties.markwon.Markwon
@@ -22,7 +22,8 @@ object Discord {
 
     fun getSavedToken(context: Context): Boolean {
         token = PrefManager.getVal(
-            PrefName.DiscordToken, null as String?)
+            PrefName.DiscordToken, null as String?
+        )
         return token != null
     }
 

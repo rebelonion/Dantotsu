@@ -8,8 +8,8 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityReaderSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -20,7 +20,7 @@ class ReaderSettingsActivity : AppCompatActivity() {
     private var defaultSettingsLN = CurrentNovelReaderSettings()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         ThemeManager(this).applyTheme()
         binding = ActivityReaderSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -107,7 +107,10 @@ class ReaderSettingsActivity : AppCompatActivity() {
                 defaultSettings.dualPageMode = CurrentReaderSettings.DualPageModes[index]
                     ?: CurrentReaderSettings.DualPageModes.Automatic
                 binding.readerSettingsDualPageText.text = defaultSettings.dualPageMode.toString()
-                PrefManager.setVal(PrefName.DualPageModeReader, defaultSettings.dualPageMode.ordinal)
+                PrefManager.setVal(
+                    PrefName.DualPageModeReader,
+                    defaultSettings.dualPageMode.ordinal
+                )
             }
         }
         binding.readerSettingsTrueColors.isChecked = defaultSettings.trueColors
@@ -215,7 +218,10 @@ class ReaderSettingsActivity : AppCompatActivity() {
                 defaultSettingsLN.dualPageMode = CurrentReaderSettings.DualPageModes[index]
                     ?: CurrentReaderSettings.DualPageModes.Automatic
                 binding.LNdualPageText.text = defaultSettingsLN.dualPageMode.toString()
-                PrefManager.setVal(PrefName.DualPageModeNovel, defaultSettingsLN.dualPageMode.ordinal)
+                PrefManager.setVal(
+                    PrefName.DualPageModeNovel,
+                    defaultSettingsLN.dualPageMode.ordinal
+                )
             }
         }
 
@@ -339,11 +345,13 @@ class ReaderSettingsActivity : AppCompatActivity() {
         }
 
         //Update Progress
-        binding.readerSettingsAskUpdateProgress.isChecked = PrefManager.getVal(PrefName.AskIndividualReader)
+        binding.readerSettingsAskUpdateProgress.isChecked =
+            PrefManager.getVal(PrefName.AskIndividualReader)
         binding.readerSettingsAskUpdateProgress.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.AskIndividualReader, isChecked)
         }
-        binding.readerSettingsAskUpdateDoujins.isChecked = PrefManager.getVal(PrefName.UpdateForHReader)
+        binding.readerSettingsAskUpdateDoujins.isChecked =
+            PrefManager.getVal(PrefName.UpdateForHReader)
         binding.readerSettingsAskUpdateDoujins.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.UpdateForHReader, isChecked)
             if (isChecked) snackString(getString(R.string.very_bold))

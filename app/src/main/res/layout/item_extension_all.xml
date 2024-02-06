@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/extensionCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
     android:paddingTop="10dp"
     android:paddingBottom="10dp">
@@ -26,9 +26,9 @@
             android:id="@+id/extensionNameTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semi_bold"
             android:text="Extension Name"
-            android:textSize="15sp"
-            android:fontFamily="@font/poppins_semi_bold"/>
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/extensionVersionTextView"
@@ -46,5 +46,5 @@
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_download_24"
         android:textSize="14sp"
-        app:tint="?attr/colorOnBackground"/>
+        app:tint="?attr/colorOnBackground" />
 </LinearLayout>

@@ -6,6 +6,6 @@
     </declare-styleable>
 
     <declare-styleable name="Xpandable">
-        <attr name="isExpanded" format="boolean"/>
+        <attr name="isExpanded" format="boolean" />
     </declare-styleable>
 </resources>

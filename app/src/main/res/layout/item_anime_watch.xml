@@ -25,12 +25,12 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
             android:backgroundTint="@color/yt_red"
-            android:visibility="gone"
+            android:fontFamily="@font/poppins_bold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/play_yt"
             android:textColor="@color/bg_white"
-            android:fontFamily="@font/poppins_bold"
+            android:visibility="gone"
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_round_play_circle_24"
             app:iconTint="@color/bg_white"
@@ -56,8 +56,8 @@
             android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:id="@+id/animeSourceNameContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
@@ -66,8 +66,8 @@
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusTopStart="8dp"
-                app:hintAnimationEnabled="true"
                 app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/ic_round_source_24">
 
                 <AutoCompleteTextView
@@ -75,16 +75,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:ellipsize="end"
                     android:fontFamily="@font/poppins_bold"
                     android:freezesText="false"
                     android:inputType="none"
+                    android:maxLines="1"
                     android:padding="8dp"
                     android:text="@string/watch"
                     android:textAllCaps="true"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="14sp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
                     tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -93,8 +93,8 @@
                 android:id="@+id/animeSourceSettings"
                 android:layout_width="48dp"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
                 android:layout_gravity="center_vertical"
+                android:padding="8dp"
                 app:srcCompat="@drawable/ic_round_settings_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
@@ -105,19 +105,19 @@
             android:layout_height="match_parent">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/animeSourceLanguageContainer"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="0dp"
-                android:id="@+id/animeSourceLanguageContainer"
-                android:visibility="gone"
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:hint="Language"
+                android:visibility="gone"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
                 app:boxCornerRadiusTopEnd="8dp"
                 app:boxCornerRadiusTopStart="8dp"
-                app:hintAnimationEnabled="true"
                 app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true"
                 app:startIconDrawable="@drawable/ic_round_source_24">
 
                 <AutoCompleteTextView
@@ -170,12 +170,12 @@
                     android:layout_gravity="center"
                     android:layout_marginStart="-10dp"
                     android:elegantTextHeight="true"
-                    android:textSize="14sp"
-                    android:paddingLeft="7dp"
                     android:ellipsize="marquee"
                     android:fontFamily="@font/poppins_bold"
                     android:marqueeRepeatLimit="marquee_forever"
+                    android:paddingLeft="7dp"
                     android:singleLine="true"
+                    android:textSize="14sp"
                     tools:text="Dubbed" />
 
             </LinearLayout>
@@ -185,6 +185,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
                 android:orientation="horizontal">
+
                 <TextView
 
                     android:id="@+id/animeSourceSearch"
@@ -216,13 +217,14 @@
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/eps"
                 android:textSize="16sp" />
+
             <ImageView
                 android:id="@+id/animeSourceSubscribe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:alpha="0.33"
                 android:padding="8dp"
-                android:layout_gravity="center_vertical"
                 app:srcCompat="@drawable/ic_round_notifications_none_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />
@@ -232,8 +234,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:padding="8dp"
                 android:alpha="1"
+                android:padding="8dp"
                 app:srcCompat="@drawable/ic_round_filter_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription,ImageContrastCheck" />

@@ -48,8 +48,8 @@ import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
 import ani.dantotsu.subcriptions.NotificationClickReceiver
@@ -62,7 +62,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
-import com.google.gson.Gson
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
@@ -304,7 +303,8 @@ class ZoomOutPageTransformer() :
                 0.5f to 0f
             )
             ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f)
-                .setDuration((200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()).start()
+                .setDuration((200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong())
+                .start()
         }
     }
 }
@@ -592,7 +592,12 @@ fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
     )
 }
 
-fun savePrefsToDownloads(title: String, serialized: String, context: Context, password: CharArray? = null) {
+fun savePrefsToDownloads(
+    title: String,
+    serialized: String,
+    context: Context,
+    password: CharArray? = null
+) {
     FileProvider.getUriForFile(
         context,
         "$APPLICATION_ID.provider",
@@ -634,7 +639,13 @@ fun savePrefs(serialized: String, path: String, title: String, context: Context)
     }
 }
 
-fun savePrefs(serialized: String, path: String, title: String, context: Context, password: CharArray): File? {
+fun savePrefs(
+    serialized: String,
+    path: String,
+    title: String,
+    context: Context,
+    password: CharArray
+): File? {
     var file = File(path, "$title.ani")
     var counter = 1
     while (file.exists()) {

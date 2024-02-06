@@ -22,10 +22,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/subtitlesRecycler"
             android:layout_width="match_parent"
-            android:layout_marginEnd="8dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="8dp"
-            tools:listitem="@layout/item_subtitle_text"
-            android:layout_height="match_parent" />
+            android:layout_marginEnd="8dp"
+            tools:listitem="@layout/item_subtitle_text" />
 
 
     </LinearLayout>

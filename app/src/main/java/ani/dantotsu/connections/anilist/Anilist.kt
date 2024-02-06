@@ -12,7 +12,6 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toast
 import ani.dantotsu.tryWithSuspend
-import java.io.File
 import java.util.Calendar
 
 object Anilist {

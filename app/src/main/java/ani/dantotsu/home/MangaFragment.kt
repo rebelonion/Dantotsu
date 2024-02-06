@@ -29,8 +29,8 @@ import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.ProgressAdapter
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.Dispatchers
@@ -238,8 +238,11 @@ class MangaFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending()
                         model.loadTrendingNovel()
-                        model.loadPopular("MANGA", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
-                            PrefName.PopularMangaList))
+                        model.loadPopular(
+                            "MANGA", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
+                                PrefName.PopularMangaList
+                            )
+                        )
                     }
                     live.postValue(false)
                     _binding?.mangaRefresh?.isRefreshing = false

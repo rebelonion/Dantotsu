@@ -36,8 +36,8 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.settings.SettingsDialogFragment
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.Dispatchers
@@ -337,7 +337,8 @@ class HomeFragment : Fragment() {
                         model.loaded = true
                         model.setListImages()
                         var empty = true
-                        val homeLayoutShow: List<Boolean> = PrefManager.getVal(PrefName.HomeLayoutShow)
+                        val homeLayoutShow: List<Boolean> =
+                            PrefManager.getVal(PrefName.HomeLayoutShow)
                         (array.indices).forEach { i ->
                             if (homeLayoutShow.elementAt(i)) {
                                 array[i].run()

@@ -47,8 +47,8 @@
             app:boxCornerRadiusBottomStart="28dp"
             app:boxCornerRadiusTopEnd="28dp"
             app:boxCornerRadiusTopStart="28dp"
-            app:endIconDrawable="@drawable/ic_round_search_24"
             app:boxStrokeColor="@color/text_input_layout_stroke_color"
+            app:endIconDrawable="@drawable/ic_round_search_24"
             app:hintAnimationEnabled="true">
 
             <AutoCompleteTextView

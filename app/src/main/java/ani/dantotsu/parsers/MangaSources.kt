@@ -2,8 +2,8 @@ package ani.dantotsu.parsers
 
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -13,8 +13,9 @@ object MangaSources : MangaReadSources() {
     var pinnedMangaSources: List<String> = emptyList()
 
     suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
-        pinnedMangaSources = PrefManager.getNullableVal<List<String>>(PrefName.MangaSourcesOrder, null)
-            ?: emptyList()
+        pinnedMangaSources =
+            PrefManager.getNullableVal<List<String>>(PrefName.MangaSourcesOrder, null)
+                ?: emptyList()
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()

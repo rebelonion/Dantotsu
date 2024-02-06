@@ -12,6 +12,5 @@
         android:gravity="center"
         app:animation_enabled="false"
         app:resize_mode="fit"
-        app:show_buffering="when_playing">
-    </androidx.media3.ui.PlayerView>
+        app:show_buffering="when_playing"></androidx.media3.ui.PlayerView>
 </LinearLayout>

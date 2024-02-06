@@ -35,7 +35,7 @@ class AuthorActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         ThemeManager(this).applyTheme()
         binding = ActivityAuthorBinding.inflate(layoutInflater)
         setContentView(binding.root)

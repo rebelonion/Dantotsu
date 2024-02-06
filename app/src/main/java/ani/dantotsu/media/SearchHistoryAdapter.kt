@@ -8,15 +8,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemSearchHistoryBinding
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveStringSet
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.SharedPreferenceStringSetLiveData
 import java.util.Locale
 
-class SearchHistoryAdapter(private val type: String, private val searchClicked: (String) -> Unit) : ListAdapter<String, SearchHistoryAdapter.SearchHistoryViewHolder>(
-    DIFF_CALLBACK_INSTALLED
-) {
+class SearchHistoryAdapter(private val type: String, private val searchClicked: (String) -> Unit) :
+    ListAdapter<String, SearchHistoryAdapter.SearchHistoryViewHolder>(
+        DIFF_CALLBACK_INSTALLED
+    ) {
     private var searchHistoryLiveData: SharedPreferenceStringSetLiveData? = null
     private var searchHistory: MutableSet<String>? = null
     private var historyType: PrefName = when (type.lowercase(Locale.ROOT)) {
@@ -26,7 +27,8 @@ class SearchHistoryAdapter(private val type: String, private val searchClicked: 
     }
 
     init {
-        searchHistoryLiveData = PrefManager.getLiveVal(historyType, mutableSetOf<String>()).asLiveStringSet()
+        searchHistoryLiveData =
+            PrefManager.getLiveVal(historyType, mutableSetOf<String>()).asLiveStringSet()
         searchHistoryLiveData?.observeForever {
             searchHistory = it.toMutableSet()
             submitList(searchHistory?.reversed())

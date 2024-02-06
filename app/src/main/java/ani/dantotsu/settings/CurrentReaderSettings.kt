@@ -1,7 +1,7 @@
 package ani.dantotsu.settings
 
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import java.io.Serializable
 
 data class CurrentReaderSettings(

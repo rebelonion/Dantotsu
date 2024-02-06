@@ -1,14 +1,16 @@
 package ani.dantotsu.settings
 
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import java.io.Serializable
 
 data class CurrentNovelReaderSettings(
     var currentThemeName: String = PrefManager.getVal(PrefName.CurrentThemeName),
     var layout: Layouts = Layouts[PrefManager.getVal(PrefName.LayoutNovel)]
         ?: Layouts.PAGED,
-    var dualPageMode: CurrentReaderSettings.DualPageModes = CurrentReaderSettings.DualPageModes[PrefManager.getVal(PrefName.DualPageModeNovel)]
+    var dualPageMode: CurrentReaderSettings.DualPageModes = CurrentReaderSettings.DualPageModes[PrefManager.getVal(
+        PrefName.DualPageModeNovel
+    )]
         ?: CurrentReaderSettings.DualPageModes.Automatic,
     var lineHeight: Float = PrefManager.getVal(PrefName.LineHeight),
     var margin: Float = PrefManager.getVal(PrefName.Margin),

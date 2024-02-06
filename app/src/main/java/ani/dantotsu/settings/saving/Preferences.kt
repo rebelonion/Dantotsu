@@ -2,8 +2,8 @@ package ani.dantotsu.settings.saving
 
 import android.graphics.Color
 import ani.dantotsu.connections.mal.MAL
-import ani.dantotsu.settings.saving.internal.Pref
 import ani.dantotsu.settings.saving.internal.Location
+import ani.dantotsu.settings.saving.internal.Pref
 
 enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     //General
@@ -20,7 +20,13 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CheckUpdate(Pref(Location.General, Boolean::class, true)),
     VerboseLogging(Pref(Location.General, Boolean::class, false)),
     DohProvider(Pref(Location.General, Int::class, 0)),
-    DefaultUserAgent(Pref(Location.General, String::class, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0")),
+    DefaultUserAgent(
+        Pref(
+            Location.General,
+            String::class,
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0"
+        )
+    ),
     AnimeSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
     AnimeSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
     MangaSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
@@ -42,7 +48,13 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     ImmersiveMode(Pref(Location.UI, Boolean::class, false)),
     SmallView(Pref(Location.UI, Boolean::class, true)),
     DefaultStartUpTab(Pref(Location.UI, Int::class, 1)),
-    HomeLayoutShow(Pref(Location.UI, List::class, listOf(true, false, false, true, false, false, true))),
+    HomeLayoutShow(
+        Pref(
+            Location.UI,
+            List::class,
+            listOf(true, false, false, true, false, false, true)
+        )
+    ),
     BannerAnimations(Pref(Location.UI, Boolean::class, true)),
     LayoutAnimations(Pref(Location.UI, Boolean::class, true)),
     AnimationSpeed(Pref(Location.UI, Float::class, 1f)),

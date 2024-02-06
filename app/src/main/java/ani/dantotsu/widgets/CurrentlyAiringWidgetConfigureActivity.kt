@@ -45,7 +45,7 @@ class CurrentlyAiringWidgetConfigureActivity : Activity() {
     private lateinit var binding: CurrentlyAiringWidgetConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
-        
+
         ThemeManager(this).applyTheme()
         super.onCreate(icicle)
 

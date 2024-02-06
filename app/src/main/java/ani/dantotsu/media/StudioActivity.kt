@@ -35,7 +35,7 @@ class StudioActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         ThemeManager(this).applyTheme()
         binding = ActivityStudioBinding.inflate(layoutInflater)
         setContentView(binding.root)

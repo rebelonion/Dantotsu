@@ -192,15 +192,20 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsRecyclerView.adapter = extensionsAdapter
 
         val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0
+        ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                extensionsAdapter.onMove(viewHolder.absoluteAdapterPosition, target.absoluteAdapterPosition)
+                extensionsAdapter.onMove(
+                    viewHolder.absoluteAdapterPosition,
+                    target.absoluteAdapterPosition
+                )
                 return true
             }
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
 
             override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
@@ -211,7 +216,10 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                 }
             }
 
-            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
                 super.clearView(recyclerView, viewHolder)
                 viewHolder.itemView.elevation = 0f
                 viewHolder.itemView.translationZ = 0f
@@ -243,7 +251,10 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
     override fun updateContentBasedOnQuery(query: String?) {
-        extensionsAdapter.filter(query ?: "", sortToAnimeSourcesList(animeExtensionManager.installedExtensionsFlow.value))
+        extensionsAdapter.filter(
+            query ?: "",
+            sortToAnimeSourcesList(animeExtensionManager.installedExtensionsFlow.value)
+        )
     }
 
     override fun notifyDataChanged() { // Do nothing

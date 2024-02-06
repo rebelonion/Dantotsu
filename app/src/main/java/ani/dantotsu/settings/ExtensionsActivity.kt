@@ -18,8 +18,8 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityExtensionsBinding
 import ani.dantotsu.others.LanguageMapper
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
@@ -30,7 +30,7 @@ class ExtensionsActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
+
         ThemeManager(this).applyTheme()
         binding = ActivityExtensionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -65,7 +65,8 @@ class ExtensionsActivity : AppCompatActivity() {
                     searchView.setText("")
                     searchView.clearFocus()
                     tabLayout.clearFocus()
-                    if (tab.text?.contains("Installed") == true) binding.languageselect.visibility = View.GONE
+                    if (tab.text?.contains("Installed") == true) binding.languageselect.visibility =
+                        View.GONE
                     else binding.languageselect.visibility = View.VISIBLE
                     viewPager.updateLayoutParams<ViewGroup.LayoutParams> {
                         height = ViewGroup.LayoutParams.MATCH_PARENT
@@ -119,13 +120,18 @@ class ExtensionsActivity : AppCompatActivity() {
 
         initActivity(this)
         binding.languageselect.setOnClickListener {
-            val languageOptions = LanguageMapper.Companion.Language.entries.map{ it.name }.toTypedArray()
+            val languageOptions =
+                LanguageMapper.Companion.Language.entries.map { it.name }.toTypedArray()
             val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
             val listOrder: String = PrefManager.getVal(PrefName.LangSort)
-            val index = LanguageMapper.Companion.Language.entries.toTypedArray().indexOfFirst{it.code == listOrder}
+            val index = LanguageMapper.Companion.Language.entries.toTypedArray()
+                .indexOfFirst { it.code == listOrder }
             builder.setTitle("Language")
-            builder.setSingleChoiceItems(languageOptions, index){ dialog, i ->
-                PrefManager.setVal(PrefName.LangSort, LanguageMapper.Companion.Language.entries[i].code)
+            builder.setSingleChoiceItems(languageOptions, index) { dialog, i ->
+                PrefManager.setVal(
+                    PrefName.LangSort,
+                    LanguageMapper.Companion.Language.entries[i].code
+                )
                 val currentFragment =
                     supportFragmentManager.findFragmentByTag("f${viewPager.currentItem}")
                 if (currentFragment is SearchQueryHandler) {

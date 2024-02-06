@@ -14,8 +14,8 @@ import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.settings.CurrentReaderSettings.Directions.LEFT_TO_RIGHT
 import ani.dantotsu.settings.CurrentReaderSettings.Directions.RIGHT_TO_LEFT
 import ani.dantotsu.settings.CurrentReaderSettings.Layouts.PAGED
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView

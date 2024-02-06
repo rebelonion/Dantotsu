@@ -19,11 +19,13 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorSurface"
         android:theme="@style/Theme.Dantotsu.AppBarOverlay">
+
         <LinearLayout
             android:id="@+id/settingsContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -32,16 +34,16 @@
                 <TextView
                     android:id="@+id/listTitle"
                     android:layout_width="0dp"
-                    android:layout_weight="1"
                     android:layout_height="48dp"
                     android:layout_marginStart="32dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center|start"
-                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                    android:textSize="16sp"
                     android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                     android:textColor="?attr/colorOnBackground"
-                    android:ellipsize="end"
+                    android:textSize="16sp"
                     tools:text="@string/app_name" />
 
                 <ImageButton
@@ -50,8 +52,8 @@
                     android:layout_height="48dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/random_selection"
-                    app:tint="?attr/colorOnBackground"
-                    app:srcCompat="@drawable/ic_shuffle_24" />
+                    app:srcCompat="@drawable/ic_shuffle_24"
+                    app:tint="?attr/colorOnBackground" />
 
                 <ImageButton
                     android:id="@+id/listSort"
@@ -60,11 +62,12 @@
                     android:layout_marginEnd="8dp"
                     android:background="?android:attr/selectableItemBackground"
                     android:contentDescription="@string/sort_by"
-                    app:tint="?attr/colorOnBackground"
-                    app:srcCompat="@drawable/ic_round_sort_24" />
+                    app:srcCompat="@drawable/ic_round_sort_24"
+                    app:tint="?attr/colorOnBackground" />
 
             </LinearLayout>
         </LinearLayout>
+
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/listTabLayout"
             android:layout_width="match_parent"
@@ -74,7 +77,7 @@
             app:tabPaddingEnd="16dp"
             app:tabPaddingStart="16dp"
             app:tabTextAppearance="@style/NavBarText"
-            tools:ignore="SpeakableTextPresentCheck"/>
+            tools:ignore="SpeakableTextPresentCheck" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
