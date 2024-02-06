@@ -42,13 +42,13 @@
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp"
-            android:backgroundTint="?attr/colorPrimaryContainer"
+            android:backgroundTint="?attr/colorPrimary"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/login"
-            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textColor="?attr/colorOnPrimary"
             app:cornerRadius="16dp"
             app:icon="@drawable/ic_anilist"
-            app:iconTint="?attr/colorOnPrimaryContainer" />
+            app:iconTint="?attr/colorOnPrimary" />
         <Button
             android:id="@+id/importSettingsButton"
             android:layout_width="156dp"

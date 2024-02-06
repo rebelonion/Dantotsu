@@ -1,7 +1,11 @@
 package ani.dantotsu.settings.saving.internal
 
 import android.content.SharedPreferences
+import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
+import ani.dantotsu.connections.discord.serializers.Activity
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
@@ -10,11 +14,18 @@ class PreferencePackager {
 
     companion object {
 
+        /**
+         * @return a json string of the packed preferences
+         */
         fun pack(map: Map<Location, SharedPreferences>): String {
             val prefsMap = packagePreferences(map)
             val gson = Gson()
             return gson.toJson(prefsMap)
         }
+
+        /**
+         * @return true if successful, false if error
+         */
         fun unpack(decryptedJson: String): Boolean {
             val gson = Gson()
             val type = object : TypeToken<Map<String, Map<String, Map<String, Any>>>>() {}.type  //oh god...
@@ -47,6 +58,9 @@ class PreferencePackager {
             return unpackagePreferences(deserializedMap)
         }
 
+        /**
+         * @return a map of location names to a map of preference names to their values
+         */
         private fun packagePreferences(map: Map<Location, SharedPreferences>): Map<String, Map<String, *>> {
             val result = mutableMapOf<String, Map<String, *>>()
             for ((location, preferences) in map) {
@@ -62,7 +76,6 @@ class PreferencePackager {
             }
             return result
         }
-
 
         /**
          * @return true if successful, false if error

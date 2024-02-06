@@ -53,22 +53,28 @@ class LoginFragment : Fragment() {
                             if (password != null) {
                                 val salt = jsonString.copyOfRange(0, 16)
                                 val encrypted = jsonString.copyOfRange(16, jsonString.size)
-                                val decryptedJson = PreferenceKeystore.decryptWithPassword(
-                                    password,
-                                    encrypted,
-                                    salt
-                                )
+                                val decryptedJson = try {
+                                    PreferenceKeystore.decryptWithPassword(
+                                        password,
+                                        encrypted,
+                                        salt
+                                    )
+                                } catch (e: Exception) {
+                                    toast("Incorrect password")
+                                    return@passwordAlertDialog
+                                }
                                 if(PreferencePackager.unpack(decryptedJson))
-                                    println("Settings imported")
                                     restartApp()
                             } else {
                                 toast("Password cannot be empty")
                             }
                         }
-                    } else {
+                    } else if (name.endsWith(".ani")) {
                         val decryptedJson = jsonString.toString(Charsets.UTF_8)
                         if(PreferencePackager.unpack(decryptedJson))
                             restartApp()
+                    } else {
+                        toast("Invalid file type")
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
