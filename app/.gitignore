@@ -3,4 +3,6 @@
 /debug/output-metadata.json
 /alpha
 /alpha/output-metadata.json
+/google/*
+/fdroid/*
 /release
