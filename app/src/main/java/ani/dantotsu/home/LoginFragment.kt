@@ -32,9 +32,6 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentLoginBinding.inflate(layoutInflater, container, false)
-        val layoutParams = binding.importSettingsButton.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.topMargin += statusBarHeight
-        binding.importSettingsButton.layoutParams = layoutParams
         return binding.root
     }
 

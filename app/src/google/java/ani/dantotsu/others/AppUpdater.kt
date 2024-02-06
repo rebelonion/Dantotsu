@@ -187,7 +187,7 @@ object AppUpdater {
         return true
     }
 
-    fun openApk(context: Context, uri: Uri) {
+    private fun openApk(context: Context, uri: Uri) {
         try {
             uri.path?.let {
                 val contentUri = FileProvider.getUriForFile(

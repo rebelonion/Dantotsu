@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentNovelExtensionsBinding
 import ani.dantotsu.others.LanguageMapper
@@ -29,7 +30,6 @@ import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
@@ -71,7 +71,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                                 notificationManager.notify(1, builder.build())
                             },
                             { error ->
-                                FirebaseCrashlytics.getInstance().recordException(error)
+                                Injekt.get<CrashlyticsInterface>().logException(error)
                                 Log.e("NovelExtensionsAdapter", "Error: ", error)  // Log the error
                                 val builder = NotificationCompat.Builder(
                                     context,

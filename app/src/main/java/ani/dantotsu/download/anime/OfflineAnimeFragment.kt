@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.media3.common.util.UnstableApi
 import ani.dantotsu.R
 import ani.dantotsu.bottomBar
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
@@ -44,7 +45,6 @@ import ani.dantotsu.snackString
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -318,7 +318,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Injekt.get<CrashlyticsInterface>().logException(e)
             null
         }
     }
@@ -374,7 +374,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Injekt.get<CrashlyticsInterface>().logException(e)
             return OfflineAnimeModel(
                 "unknown",
                 "0",

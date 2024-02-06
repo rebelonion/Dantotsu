@@ -714,8 +714,6 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         // If the format is still undetermined, log an error
         if (format == null) {
             logger("Unknown video format: $videoUrl")
-            //FirebaseCrashlytics.getInstance()
-            //   .recordException(Exception("Unknown video format: $videoUrl"))
             format = VideoType.CONTAINER
         }
         val headersMap: Map<String, String> =

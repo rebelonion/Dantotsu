@@ -44,6 +44,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
@@ -61,11 +62,12 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.Gson
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.*
 import java.lang.Runnable
 import java.lang.reflect.Field
@@ -872,7 +874,7 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
         }
     } catch (e: Exception) {
         logger(e.stackTraceToString())
-        FirebaseCrashlytics.getInstance().recordException(e)
+        Injekt.get<CrashlyticsInterface>().logException(e)
     }
 }
 

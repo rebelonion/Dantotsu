@@ -6,12 +6,14 @@ import android.content.pm.PackageManager.GET_SIGNATURES
 import android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES
 import android.os.Build
 import android.util.Log
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.logger
 import ani.dantotsu.parsers.NovelInterface
 import ani.dantotsu.snackString
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import dalvik.system.PathClassLoader
 import eu.kanade.tachiyomi.util.lang.Hash
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import java.util.Locale
 
@@ -141,7 +143,7 @@ internal object NovelExtensionLoader {
             listOfNotNull(novelInterfaceInstance)
         } catch (e: Exception) {
             e.printStackTrace()
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Injekt.get<CrashlyticsInterface>().logException(e)
             emptyList()
         }
     }

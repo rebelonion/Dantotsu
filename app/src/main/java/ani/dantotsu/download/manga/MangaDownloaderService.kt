@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.logger
@@ -29,7 +30,6 @@ import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_PROG
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_STARTED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.EXTRA_CHAPTER_NUMBER
 import ani.dantotsu.snackString
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_DOWNLOADER_PROGRESS
@@ -253,7 +253,7 @@ class MangaDownloaderService : Service() {
         } catch (e: Exception) {
             logger("Exception while downloading file: ${e.message}")
             snackString("Exception while downloading file: ${e.message}")
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Injekt.get<CrashlyticsInterface>().logException(e)
             broadcastDownloadFailed(task.chapter)
         }
     }
@@ -283,7 +283,7 @@ class MangaDownloaderService : Service() {
         } catch (e: Exception) {
             println("Exception while saving image: ${e.message}")
             snackString("Exception while saving image: ${e.message}")
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Injekt.get<CrashlyticsInterface>().logException(e)
         }
     }
 

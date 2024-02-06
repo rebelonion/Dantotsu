@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
@@ -100,7 +101,9 @@ class AnilistHomeViewModel : ViewModel() {
         Anilist.getSavedToken()
         MAL.getSavedToken(context)
         Discord.getSavedToken(context)
-        if (PrefManager.getVal(PrefName.CheckUpdate)) AppUpdater.check(context)
+        if (!BuildConfig.FLAVOR.contains("fdroid")) {
+            if (PrefManager.getVal(PrefName.CheckUpdate)) AppUpdater.check(context)
+        }
         genres.postValue(Anilist.query.getGenresAndTags(context))
     }
 

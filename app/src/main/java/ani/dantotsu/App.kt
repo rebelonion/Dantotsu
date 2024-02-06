@@ -8,6 +8,7 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
@@ -17,9 +18,6 @@ import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.PrefManager
 import com.google.android.material.color.DynamicColors
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -55,28 +53,32 @@ class App : MultiDexApplication() {
         super.onCreate()
 
         PrefManager.init(this)
+        Injekt.importModule(AppModule(this))
+        Injekt.importModule(PreferenceModule(this))
+
+        val crashlytics = Injekt.get<CrashlyticsInterface>()
 
         val useMaterialYou: Boolean = PrefManager.getVal(PrefName.UseMaterialYou)
         if (useMaterialYou) {
             DynamicColors.applyToActivitiesIfAvailable(this)
-            //TODO: HarmonizedColors
         }
         registerActivityLifecycleCallbacks(mFTActivityLifecycleCallbacks)
 
-        Firebase.crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)
+        crashlytics.setCrashlyticsCollectionEnabled(!DisabledReports)
         (PrefManager.getVal(PrefName.SharedUserID) as Boolean).let {
             if (!it) return@let
             val dUsername = PrefManager.getVal(PrefName.DiscordUserName, null as String?)
             val aUsername = PrefManager.getVal(PrefName.AnilistUserName, null as String?)
-            if (dUsername != null || aUsername != null) {
-                Firebase.crashlytics.setUserId("$dUsername - $aUsername")
+            if (dUsername != null) {
+                crashlytics.setCustomKey("dUsername", dUsername)
+            }
+            if (aUsername != null) {
+                crashlytics.setCustomKey("aUsername", aUsername)
             }
         }
-        FirebaseCrashlytics.getInstance()
-            .setCustomKey("device Info", SettingsActivity.getDeviceInfo())
+        crashlytics.setCustomKey("device Info", SettingsActivity.getDeviceInfo())
 
-        Injekt.importModule(AppModule(this))
-        Injekt.importModule(PreferenceModule(this))
+
 
         initializeNetwork(baseContext)
 

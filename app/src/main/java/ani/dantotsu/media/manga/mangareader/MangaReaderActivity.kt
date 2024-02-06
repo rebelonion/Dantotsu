@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.discord.DiscordService
 import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
@@ -55,9 +56,6 @@ import ani.dantotsu.themes.ThemeManager
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.crashlytics.ktx.crashlytics
-import com.google.firebase.ktx.Firebase
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -221,7 +219,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 }
                 model.mangaReadSources = mangaSources
             } catch (e: Exception) {
-                Firebase.crashlytics.recordException(e)
+                Injekt.get<CrashlyticsInterface>().logException(e)
                 logError(e)
             }
         }
@@ -924,8 +922,8 @@ class MangaReaderActivity : AppCompatActivity() {
             try {
                 a?.deleteFile(fileName)
             } catch (e: Exception) {
-                FirebaseCrashlytics.getInstance().log("Failed to delete file $fileName")
-                FirebaseCrashlytics.getInstance().recordException(e)
+                Injekt.get<CrashlyticsInterface>().log("Failed to delete file $fileName")
+                Injekt.get<CrashlyticsInterface>().logException(e)
             }
             e.printStackTrace()
         }

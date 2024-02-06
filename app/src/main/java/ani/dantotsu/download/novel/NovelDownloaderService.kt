@@ -17,13 +17,13 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.snackString
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -342,7 +342,7 @@ class NovelDownloaderService : Service() {
         } catch (e: Exception) {
             logger("Exception while downloading .epub: ${e.message}")
             snackString("Exception while downloading .epub: ${e.message}")
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Injekt.get<CrashlyticsInterface>().logException(e)
             broadcastDownloadFailed(task.originalLink)
         }
     }

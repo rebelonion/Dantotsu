@@ -29,6 +29,7 @@ import androidx.webkit.WebViewCompat
 import ani.dantotsu.GesturesListener
 import ani.dantotsu.NoPaddingArrayAdapter
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityNovelReaderBinding
 import ani.dantotsu.hideSystemBars
@@ -42,7 +43,6 @@ import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.tryWith
 import com.google.android.material.slider.Slider
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.vipulog.ebookreader.Book
 import com.vipulog.ebookreader.EbookReaderEventListener
 import com.vipulog.ebookreader.ReaderError
@@ -52,6 +52,8 @@ import com.vipulog.ebookreader.RelocationInfo
 import com.vipulog.ebookreader.TocItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -502,8 +504,8 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
             try {
                 a?.deleteFile(fileName)
             } catch (e: Exception) {
-                FirebaseCrashlytics.getInstance().log("Failed to delete file $fileName")
-                FirebaseCrashlytics.getInstance().recordException(e)
+                Injekt.get<CrashlyticsInterface>().log("Failed to delete file $fileName")
+                Injekt.get<CrashlyticsInterface>().logException(e)
             }
             e.printStackTrace()
         }

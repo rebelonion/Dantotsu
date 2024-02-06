@@ -85,7 +85,6 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 2f
             )
         val cursedSpeeds = arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)
-        //var curSpeedArr = if (settings.cursedSpeeds) cursedSpeeds else speeds
         var curSpeedArr = if (PrefManager.getVal(PrefName.CursedSpeeds)) cursedSpeeds else speeds
         var speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
         binding.playerSettingsSpeed.text =

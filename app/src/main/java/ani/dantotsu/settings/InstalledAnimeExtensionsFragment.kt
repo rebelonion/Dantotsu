@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
 import ani.dantotsu.logger
 import ani.dantotsu.others.LanguageMapper
@@ -33,7 +34,6 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -145,7 +145,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                                 notificationManager.notify(1, builder.build())
                             },
                             { error ->
-                                FirebaseCrashlytics.getInstance().recordException(error)
+                                Injekt.get<CrashlyticsInterface>().logException(error)
                                 Log.e("AnimeExtensionsAdapter", "Error: ", error)  // Log the error
                                 val builder = NotificationCompat.Builder(
                                     context,

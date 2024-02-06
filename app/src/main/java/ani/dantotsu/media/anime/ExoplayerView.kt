@@ -65,6 +65,7 @@ import androidx.mediarouter.app.MediaRouteButton
 import ani.dantotsu.*
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.discord.DiscordService
 import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
@@ -90,7 +91,6 @@ import com.google.android.gms.cast.framework.CastContext
 import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.slider.Slider
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.lagradost.nicehttp.ignoreAllSSLErrors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -98,6 +98,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import okhttp3.internal.immutableListOf
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.util.*
 import java.util.concurrent.*
 import kotlin.math.max
@@ -1747,7 +1749,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             else
             -> {
                 toast("Player Error ${error.errorCode} (${error.errorCodeName}) : ${error.message}")
-                FirebaseCrashlytics.getInstance().recordException(error)
+                Injekt.get<CrashlyticsInterface>().logException(error)
             }
         }
     }

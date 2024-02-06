@@ -677,18 +677,23 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
         }
 
-        binding.settingsLogo.setOnLongClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                AppUpdater.check(this@SettingsActivity, true)
+        if (!BuildConfig.FLAVOR.contains("fdroid")) {
+            binding.settingsLogo.setOnLongClickListener {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    AppUpdater.check(this@SettingsActivity, true)
+                }
+                true
             }
-            true
-        }
 
-        binding.settingsCheckUpdate.setOnLongClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
-                AppUpdater.check(this@SettingsActivity, true)
+            binding.settingsCheckUpdate.setOnLongClickListener {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    AppUpdater.check(this@SettingsActivity, true)
+                }
+                true
             }
-            true
+        } else {
+            binding.settingsCheckUpdate.visibility = View.GONE
+            binding.settingsShareUsername.visibility = View.GONE
         }
 
         binding.settingsAccountHelp.setOnClickListener {

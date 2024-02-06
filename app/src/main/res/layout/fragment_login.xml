@@ -12,17 +12,6 @@
         android:visibility="gone"
         tools:ignore="ContentDescription" />
 
-    <Button
-        android:id="@+id/importSettingsButton"
-        android:layout_width="111dp"
-        android:layout_height="64dp"
-        android:layout_gravity="top|end"
-        android:backgroundTint="?attr/colorPrimaryContainer"
-        android:fontFamily="@font/poppins_bold"
-        android:text="@string/import_settings"
-        android:textColor="?attr/colorOnPrimaryContainer"
-        app:cornerRadius="16dp" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,7 +40,8 @@
             android:layout_width="156dp"
             android:layout_height="64dp"
             android:layout_gravity="bottom|center_horizontal"
-            android:layout_margin="32dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorPrimaryContainer"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/login"
@@ -59,6 +49,19 @@
             app:cornerRadius="16dp"
             app:icon="@drawable/ic_anilist"
             app:iconTint="?attr/colorOnPrimaryContainer" />
+        <Button
+            android:id="@+id/importSettingsButton"
+            android:layout_width="156dp"
+            android:layout_height="64dp"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:backgroundTint="?attr/colorPrimaryContainer"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/import_settings"
+            app:icon="@drawable/ic_download_24"
+            app:iconTint="?attr/colorOnPrimaryContainer"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            app:cornerRadius="16dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
