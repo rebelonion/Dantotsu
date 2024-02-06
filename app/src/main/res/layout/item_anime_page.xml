@@ -91,23 +91,22 @@
 
     </FrameLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/horizontalScrollView20"
-        android:layout_width="match_parent"
+    <HorizontalScrollView
+        android:id="@+id/animeSeasons"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clipToPadding="false"
+        android:layout_gravity="center_horizontal"
+        android:fillViewport="true"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
         android:scrollbarSize="0dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:id="@+id/animeSeasonsCont"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.5">
+            android:orientation="horizontal">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/animeThisSeason"
@@ -128,10 +127,7 @@
                 android:layout_marginEnd="8dp"
                 android:text="@string/next_season"
                 android:textAppearance="@style/Suffix"
-                app:chipStrokeColor="?attr/colorPrimaryContainer"
-                app:layout_constraintBaseline_toBaselineOf="@+id/animePreviousSeason"
-                app:layout_constraintEnd_toStartOf="@+id/animePreviousSeason"
-                app:layout_constraintStart_toEndOf="@+id/animeThisSeason" />
+                app:chipStrokeColor="?attr/colorPrimaryContainer" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/animePreviousSeason"
@@ -142,14 +138,10 @@
                 android:textAppearance="@style/Suffix"
                 app:chipStrokeColor="?attr/colorPrimaryContainer"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/animeNextSeason"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.5" />
+                app:layout_constraintEnd_toEndOf="parent" />
+        </LinearLayout>
 
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </HorizontalScrollView>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
