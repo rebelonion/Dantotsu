@@ -1,6 +1,11 @@
 package ani.dantotsu.connections.crashlytics
 
+import android.content.Context
+
 class CrashlyticsStub : CrashlyticsInterface {
+    override fun initialize(context: Context) {
+        //no-op
+    }
     override fun logException(e: Throwable) {
         //no-op
     }

@@ -57,6 +57,7 @@ class App : MultiDexApplication() {
         Injekt.importModule(PreferenceModule(this))
 
         val crashlytics = Injekt.get<CrashlyticsInterface>()
+        crashlytics.initialize(this)
 
         val useMaterialYou: Boolean = PrefManager.getVal(PrefName.UseMaterialYou)
         if (useMaterialYou) {
