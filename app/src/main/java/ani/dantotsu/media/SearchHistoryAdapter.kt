@@ -38,12 +38,14 @@ class SearchHistoryAdapter(private val type: String, private val searchClicked: 
     fun remove(item: String) {
         searchHistory?.remove(item)
         PrefManager.setVal(historyType, searchHistory)
+        submitList(searchHistory?.toList())
     }
 
     fun add(item: String) {
         if (searchHistory?.contains(item) == true || item.isBlank()) return
         if (PrefManager.getVal(PrefName.Incognito)) return
         searchHistory?.add(item)
+        submitList(searchHistory?.toList())
         PrefManager.setVal(historyType, searchHistory)
     }
 
@@ -60,14 +62,17 @@ class SearchHistoryAdapter(private val type: String, private val searchClicked: 
         holder: SearchHistoryAdapter.SearchHistoryViewHolder,
         position: Int
     ) {
-        holder.binding.searchHistoryTextView.text = getItem(position)
+        val item = getItem(position)
+        holder.binding.searchHistoryTextView.text = item
         holder.binding.closeTextView.setOnClickListener {
-            if (position >= itemCount || position < 0) return@setOnClickListener
-            remove(getItem(position))
+            val currentPosition = holder.bindingAdapterPosition
+            if (currentPosition >= itemCount || currentPosition < 0) return@setOnClickListener
+            remove(getItem(currentPosition))
         }
         holder.binding.searchHistoryTextView.setOnClickListener {
-            if (position >= itemCount || position < 0) return@setOnClickListener
-            searchClicked(getItem(position))
+            val currentPosition = holder.bindingAdapterPosition
+            if (currentPosition >= itemCount || currentPosition < 0) return@setOnClickListener
+            searchClicked(getItem(currentPosition))
         }
     }
 
