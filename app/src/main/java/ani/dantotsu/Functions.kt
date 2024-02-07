@@ -184,7 +184,7 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
         val typedValue = TypedValue()
         val theme = requireContext().theme
         theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOnSurfaceInverse,
+            com.google.android.material.R.attr.colorSurface,
             typedValue,
             true
         )
