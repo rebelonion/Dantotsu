@@ -11,10 +11,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.Manifest
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
@@ -30,8 +32,11 @@ import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
@@ -580,7 +585,7 @@ fun openLinkInBrowser(link: String?) {
     }
 }
 
-fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
+fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Activity) {
     FileProvider.getUriForFile(
         context,
         "$APPLICATION_ID.provider",
@@ -595,7 +600,7 @@ fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
 fun savePrefsToDownloads(
     title: String,
     serialized: String,
-    context: Context,
+    context: Activity,
     password: CharArray? = null
 ) {
     FileProvider.getUriForFile(
@@ -670,6 +675,26 @@ fun savePrefs(
         null
     }
 }
+
+fun downloadsPermission(activity: AppCompatActivity): Boolean {
+    val permissions = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+
+    val requiredPermissions = permissions.filter {
+        ContextCompat.checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
+    }.toTypedArray()
+
+    return if (requiredPermissions.isNotEmpty()) {
+        ActivityCompat.requestPermissions(activity, requiredPermissions, DOWNLOADS_PERMISSION_REQUEST_CODE)
+        false
+    } else {
+        true
+    }
+}
+
+private const val DOWNLOADS_PERMISSION_REQUEST_CODE = 100
 
 fun shareImage(title: String, bitmap: Bitmap, context: Context) {
 

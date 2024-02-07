@@ -5,12 +5,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.databinding.BottomSheetImageBinding
+import ani.dantotsu.downloadsPermission
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmap
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmap_old
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.mergeBitmap
@@ -98,7 +100,8 @@ class ImageViewDialog : BottomSheetDialogFragment() {
                 binding.bottomImageShare.isEnabled = true
                 binding.bottomImageSave.isEnabled = true
                 binding.bottomImageSave.setOnClickListener {
-                    saveImageToDownloads(title, bitmap, requireActivity())
+                    if (downloadsPermission(context as AppCompatActivity))
+                        saveImageToDownloads(title, bitmap, requireActivity())
                 }
                 binding.bottomImageShare.setOnClickListener {
                     shareImage(title, bitmap, requireContext())

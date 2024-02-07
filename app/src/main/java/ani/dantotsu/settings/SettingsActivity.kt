@@ -39,6 +39,7 @@ import ani.dantotsu.databinding.ActivitySettingsBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
+import ani.dantotsu.downloadsPermission
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.logger
@@ -253,6 +254,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         binding.importExportSettings.setOnClickListener {
+            downloadsPermission(this)
             val selectedArray = mutableListOf(false)
             val filteredLocations = Location.entries.filter { it.exportable }
             selectedArray.addAll(List(filteredLocations.size - 1) { false })
