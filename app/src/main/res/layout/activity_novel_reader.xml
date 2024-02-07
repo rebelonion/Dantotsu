@@ -105,7 +105,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:backgroundTint="#00FFFFFF"
-                            android:src="@drawable/ic_round_download_24"
+                            android:src="@drawable/ic_download_24"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -176,8 +176,8 @@
                     app:labelStyle="@style/fontTooltip"
                     app:thumbRadius="8dp"
                     app:tickColor="#0000"
-                    app:trackColorInactive="@color/grey_60"
                     app:trackColorActive="?attr/colorPrimary"
+                    app:trackColorInactive="@color/grey_60"
                     app:trackHeight="2dp" />
 
             </FrameLayout>
@@ -301,7 +301,7 @@
 
     <ProgressBar
         android:id="@+id/progress"
-        android:layout_gravity="center"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 </FrameLayout>

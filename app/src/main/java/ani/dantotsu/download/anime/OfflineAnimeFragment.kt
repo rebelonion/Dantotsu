@@ -1,11 +1,8 @@
 package ani.dantotsu.download.anime
 
 
-import android.animation.ObjectAnimator
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.text.Editable
@@ -16,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
 import android.view.animation.LayoutAnimationController
-import android.view.animation.OvershootInterpolator
 import android.widget.AbsListView
 import android.widget.AutoCompleteTextView
 import android.widget.GridView
@@ -25,34 +21,30 @@ import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.util.Pair
-import androidx.core.view.ViewCompat
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.media3.common.util.UnstableApi
 import ani.dantotsu.R
 import ani.dantotsu.bottomBar
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
-import ani.dantotsu.loadData
 import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
-import ani.dantotsu.statusBarHeight
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -64,8 +56,6 @@ import eu.kanade.tachiyomi.source.model.SChapterImpl
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
-import kotlin.math.max
-import kotlin.math.min
 
 class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
 
@@ -73,9 +63,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     private var downloads: List<OfflineAnimeModel> = listOf()
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineAnimeAdapter
-    private lateinit var total : TextView
-    private var uiSettings: UserInterfaceSettings =
-        loadData("ui_settings") ?: UserInterfaceSettings()
+    private lateinit var total: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,15 +89,12 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.OfflineANIME)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
-        if (!uiSettings.immersiveMode) {
+        if (!(PrefManager.getVal(PrefName.ImmersiveMode) as Boolean)) {
             view.rootView.fitsSystemWindows = true
         }
-        val colorOverflow = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getBoolean("colorOverflow", false) ?: false
-        if (!colorOverflow) {
-            textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
-            materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
-        }
+
+        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000
+        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000)
 
         val searchView = view.findViewById<AutoCompleteTextView>(R.id.animeSearchBarText)
         searchView.addTextChangedListener(object : TextWatcher {
@@ -123,8 +108,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 onSearchQuery(s.toString())
             }
         })
-        var style = context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getInt("offline_view", 0)
+        var style: Int = PrefManager.getVal(PrefName.OfflineView)
         val layoutList = view.findViewById<ImageView>(R.id.downloadedList)
         val layoutcompact = view.findViewById<ImageView>(R.id.downloadedGrid)
         var selected = when (style) {
@@ -143,8 +127,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         layoutList.setOnClickListener {
             selected(it as ImageView)
             style = 0
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putInt("offline_view", style!!)?.apply()
+            PrefManager.setVal(PrefName.OfflineView, style)
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView)
             adapter.notifyNewGrid()
@@ -154,15 +137,15 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         layoutcompact.setOnClickListener {
             selected(it as ImageView)
             style = 1
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putInt("offline_view", style!!)?.apply()
+            PrefManager.setVal(PrefName.OfflineView, style)
             gridView.visibility = View.GONE
             gridView = view.findViewById(R.id.gridView1)
             adapter.notifyNewGrid()
             grid()
         }
 
-        gridView = if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
+        gridView =
+            if (style == 0) view.findViewById(R.id.gridView) else view.findViewById(R.id.gridView1)
         total = view.findViewById(R.id.total)
         grid()
         return view
@@ -195,13 +178,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                     requireActivity(),
                     Intent(requireContext(), MediaDetailsActivity::class.java)
                         .putExtra("download", true),
-                    ActivityOptionsCompat.makeSceneTransitionAnimation(
-                        requireActivity(),
-                        Pair.create(
-                            requireActivity().findViewById<ImageView>(R.id.itemCompactImage),
-                            ViewCompat.getTransitionName(requireActivity().findViewById(R.id.itemCompactImage))
-                        ),
-                    ).toBundle()
+                    null
                 )
             } ?: run {
                 snackString("no media found")
@@ -220,11 +197,9 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             builder.setMessage("Are you sure you want to delete ${item.title}?")
             builder.setPositiveButton("Yes") { _, _ ->
                 downloadManager.removeMedia(item.title, type)
-                val mediaIds = requireContext().getSharedPreferences(
-                    getString(R.string.anime_downloads),
-                    Context.MODE_PRIVATE
-                )
-                    ?.all?.filter { it.key.contains(item.title) }?.values ?: emptySet()
+                val mediaIds =
+                    PrefManager.getAnimeDownloadPreferences().all?.filter { it.key.contains(item.title) }?.values
+                        ?: emptySet()
                 if (mediaIds.isEmpty()) {
                     snackString("No media found")  // if this happens, terrible things have happened
                 }
@@ -252,41 +227,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var height = statusBarHeight
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val displayCutout = activity?.window?.decorView?.rootWindowInsets?.displayCutout
-            if (displayCutout != null) {
-                if (displayCutout.boundingRects.size > 0) {
-                    height = max(
-                        statusBarHeight,
-                        min(
-                            displayCutout.boundingRects[0].width(),
-                            displayCutout.boundingRects[0].height()
-                        )
-                    )
-                }
-            }
-        }
         val scrollTop = view.findViewById<CardView>(R.id.mangaPageScrollTop)
-        scrollTop.translationY =
-            -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
-        val visible = false
-
-        fun animate() {
-            val start = if (visible) 0f else 1f
-            val end = if (!visible) 0f else 1f
-            ObjectAnimator.ofFloat(scrollTop, "scaleX", start, end).apply {
-                duration = 300
-                interpolator = OvershootInterpolator(2f)
-                start()
-            }
-            ObjectAnimator.ofFloat(scrollTop, "scaleY", start, end).apply {
-                duration = 300
-                interpolator = OvershootInterpolator(2f)
-                start()
-            }
-        }
-
         scrollTop.setOnClickListener {
             gridView.smoothScrollToPositionFromTop(0, 0)
         }
@@ -306,7 +247,9 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 totalItemCount: Int
             ) {
                 val first = view.getChildAt(0)
-                val visibility = first != null && first.top < -height
+                val visibility = first != null && first.top < 0
+                scrollTop.translationY =
+                    -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
                 scrollTop.visibility = if (visibility) View.VISIBLE else View.GONE
             }
         })
@@ -340,8 +283,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         val animeTitles = downloadManager.animeDownloadedTypes.map { it.title }.distinct()
         val newAnimeDownloads = mutableListOf<OfflineAnimeModel>()
         for (title in animeTitles) {
-            val _downloads = downloadManager.animeDownloadedTypes.filter { it.title == title }
-            val download = _downloads.first()
+            val tDownloads = downloadManager.animeDownloadedTypes.filter { it.title == title }
+            val download = tDownloads.first()
             val offlineAnimeModel = loadOfflineAnimeModel(download)
             newAnimeDownloads += offlineAnimeModel
         }
@@ -349,12 +292,10 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     }
 
     private fun getMedia(downloadedType: DownloadedType): Media? {
-        val type = if (downloadedType.type == DownloadedType.Type.ANIME) {
-            "Anime"
-        } else if (downloadedType.type == DownloadedType.Type.MANGA) {
-            "Manga"
-        } else {
-            "Novel"
+        val type = when (downloadedType.type) {
+            DownloadedType.Type.MANGA -> "Manga"
+            DownloadedType.Type.ANIME -> "Anime"
+            else -> "Novel"
         }
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
@@ -379,18 +320,16 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Injekt.get<CrashlyticsInterface>().logException(e)
             null
         }
     }
 
     private fun loadOfflineAnimeModel(downloadedType: DownloadedType): OfflineAnimeModel {
-        val type = if (downloadedType.type == DownloadedType.Type.MANGA) {
-            "Manga"
-        } else if (downloadedType.type == DownloadedType.Type.ANIME) {
-            "Anime"
-        } else {
-            "Novel"
+        val type = when (downloadedType.type) {
+            DownloadedType.Type.MANGA -> "Manga"
+            DownloadedType.Type.ANIME -> "Anime"
+            else -> "Novel"
         }
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
@@ -398,8 +337,6 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         )
         //load media.json and convert to media class with gson
         try {
-            val media = File(directory, "media.json")
-            val mediaJson = media.readText()
             val mediaModel = getMedia(downloadedType)!!
             val cover = File(directory, "cover.jpg")
             val coverUri: Uri? = if (cover.exists()) {
@@ -439,7 +376,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         } catch (e: Exception) {
             logger("Error loading media.json: ${e.message}")
             logger(e.printStackTrace())
-            FirebaseCrashlytics.getInstance().recordException(e)
+            Injekt.get<CrashlyticsInterface>().logException(e)
             return OfflineAnimeModel(
                 "unknown",
                 "0",
@@ -448,8 +385,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 "??",
                 "movie",
                 "hmm",
-                false,
-                false,
+                isOngoing = false,
+                isUserScored = false,
                 null,
                 null
             )

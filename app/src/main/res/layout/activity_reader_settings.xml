@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".settings.ReaderSettingsActivity"
     tools:ignore="SpeakableTextPresentCheck">
 
@@ -83,9 +83,9 @@
                     android:layout_height="64dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/poppins_bold"
+                    android:gravity="center_vertical"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:gravity="center_vertical"
                     android:text="Default Manga Settings"
                     android:textColor="?attr/colorSecondary"
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
@@ -618,6 +618,7 @@
                     app:thumbTint="@color/button_switch_track" />
 
             </ani.dantotsu.others.Xpandable>
+
             <ani.dantotsu.others.Xpandable
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -628,9 +629,9 @@
                     android:layout_height="64dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/poppins_bold"
+                    android:gravity="center_vertical"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:gravity="center_vertical"
                     android:text="Default Novel Settings"
                     android:textColor="?attr/colorSecondary"
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
@@ -1015,10 +1016,10 @@
                     android:layout_marginBottom="8dp"
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins_family"
-                    android:text="Maximum column width (horizontal writing) or height (vertical writing)"
-                    android:textSize="14sp"
                     android:paddingStart="32dp"
-                    android:paddingEnd="32dp"/>
+                    android:paddingEnd="32dp"
+                    android:text="Maximum column width (horizontal writing) or height (vertical writing)"
+                    android:textSize="14sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -1096,10 +1097,10 @@
                     android:layout_marginBottom="8dp"
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins_family"
-                    android:text="Maximum height (horizontal writing) or width (vertical writing)"
-                    android:textSize="14sp"
                     android:paddingStart="32dp"
-                    android:paddingEnd="32dp"/>
+                    android:paddingEnd="32dp"
+                    android:text="Maximum height (horizontal writing) or width (vertical writing)"
+                    android:textSize="14sp" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/LNuseDarkTheme"
@@ -1186,14 +1187,15 @@
                     app:thumbTint="@color/button_switch_track"
                     tools:ignore="VisualLintButtonSize" />
             </ani.dantotsu.others.Xpandable>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/poppins_bold"
                 android:paddingStart="32dp"
-                android:paddingEnd="32dp"
                 android:paddingTop="20dp"
+                android:paddingEnd="32dp"
                 android:text="@string/general"
                 android:textColor="?attr/colorSecondary"
                 tools:ignore="TextContrastCheck" />
@@ -1206,7 +1208,6 @@
                 android:checked="true"
                 android:drawableStart="@drawable/ic_round_info_24"
                 android:drawablePadding="16dp"
-                app:drawableTint="?attr/colorPrimary"
                 android:elegantTextHeight="true"
                 android:fontFamily="@font/poppins_bold"
                 android:minHeight="64dp"
@@ -1216,6 +1217,7 @@
                 android:textAlignment="viewStart"
                 android:textColor="?attr/colorOnBackground"
                 app:cornerRadius="0dp"
+                app:drawableTint="?attr/colorPrimary"
                 app:showText="false"
                 app:thumbTint="@color/button_switch_track">
 

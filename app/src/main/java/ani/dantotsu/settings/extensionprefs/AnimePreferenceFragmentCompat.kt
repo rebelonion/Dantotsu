@@ -1,6 +1,7 @@
 package ani.dantotsu.settings.extensionprefs
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.TypedValue
 import androidx.core.os.bundleOf
@@ -46,7 +47,7 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
         onCloseAction?.invoke()
     }
 
-    private fun populateAnimePreferenceScreen(): PreferenceScreen {
+    fun populateAnimePreferenceScreen(): PreferenceScreen {
         val sourceId = requireArguments().getLong(SOURCE_ID)
         val source = Injekt.get<AnimeSourceManager>().get(sourceId) as? ConfigurableAnimeSource
             ?: error("Source with id: $sourceId not found!")
@@ -91,5 +92,37 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
 
     companion object { //idk why it needs both
         private const val SOURCE_ID = "source_id"
+    }
+}
+
+class InitialAnimeSourcePreferencesFragment(
+    val sharedPreferences: SharedPreferences,
+    val source: ConfigurableAnimeSource,
+    val currContext: Context
+) : PreferenceFragmentCompat() {
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+        preferenceScreen = try {
+            populateAnimePreferenceScreen()
+        } catch (e: Exception) {
+            snackString(e.message ?: "Unknown error")
+            preferenceManager.createPreferenceScreen(requireContext())
+        }
+        //set background color
+        val color = TypedValue()
+        requireContext().theme.resolveAttribute(
+            com.google.android.material.R.attr.backgroundColor,
+            color,
+            true
+        )
+        view?.setBackgroundColor(color.data)
+    }
+
+
+    fun populateAnimePreferenceScreen(): PreferenceScreen {
+        val dataStore = SharedPreferencesDataStore(sharedPreferences)
+        preferenceManager.preferenceDataStore = dataStore
+        val sourceScreen = preferenceManager.createPreferenceScreen(requireContext())
+        source.setupPreferenceScreen(sourceScreen)
+        return sourceScreen
     }
 }

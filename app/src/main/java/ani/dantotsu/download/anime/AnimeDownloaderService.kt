@@ -21,6 +21,7 @@ import androidx.media3.exoplayer.offline.DownloadManager
 import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currActivity
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
@@ -32,8 +33,8 @@ import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.media.anime.AnimeWatchFragment
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.Video
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -84,7 +85,7 @@ class AnimeDownloaderService : Service() {
         builder =
             NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
                 setContentTitle("Anime Download Progress")
-                setSmallIcon(R.drawable.ic_round_download_24)
+                setSmallIcon(R.drawable.ic_download_24)
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 setOnlyAlertOnce(true)
             }
@@ -224,8 +225,6 @@ class AnimeDownloaderService : Service() {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                 }
 
-                broadcastDownloadStarted(task.episode)
-
                 currActivity()?.let {
                     Helper.downloadVideo(
                         it,
@@ -276,7 +275,7 @@ class AnimeDownloaderService : Service() {
                                     DownloadedType.Type.ANIME,
                                 )
                             )
-                            FirebaseCrashlytics.getInstance().recordException(
+                            Injekt.get<CrashlyticsInterface>().logException(
                                 Exception(
                                     "Anime Download failed:" +
                                             " ${download.failureReason}" +
@@ -294,10 +293,7 @@ class AnimeDownloaderService : Service() {
                             builder.setContentText("${task.title} - ${task.episode} Download completed")
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download completed")
-                            getSharedPreferences(
-                                getString(R.string.anime_downloads),
-                                Context.MODE_PRIVATE
-                            ).edit().putString(
+                            PrefManager.getAnimeDownloadPreferences().edit().putString(
                                 task.getTaskName(),
                                 task.video.file.url
                             ).apply()
@@ -335,7 +331,7 @@ class AnimeDownloaderService : Service() {
                 logger("Exception while downloading file: ${e.message}")
                 snackString("Exception while downloading file: ${e.message}")
                 e.printStackTrace()
-                FirebaseCrashlytics.getInstance().recordException(e)
+                Injekt.get<CrashlyticsInterface>().logException(e)
             }
             broadcastDownloadFailed(task.episode)
         }

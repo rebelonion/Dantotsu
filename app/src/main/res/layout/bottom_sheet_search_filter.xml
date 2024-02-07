@@ -2,172 +2,173 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bottom_sheet_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/bottomSheerCustomTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="16dp"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:text="@string/filter"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:drawableStartCompat="@drawable/ic_round_filter_alt_24" />
+        android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/bottomSheerCustomTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="16dp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="@string/filter"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            app:drawableStartCompat="@drawable/ic_round_filter_alt_24" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:hint="@string/sort_by"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:hintAnimationEnabled="true">
+            android:layout_margin="8dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-            <AutoCompleteTextView
-                android:id="@+id/searchSortBy"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/poppins_bold"
-                android:freezesText="false"
-                android:inputType="none"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textAllCaps="true"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
-                tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/sort_by"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                <AutoCompleteTextView
+                    android:id="@+id/searchSortBy"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:hint="@string/format"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/searchFormat"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/searchSeasonYearCont"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:hint="@string/format"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:hintAnimationEnabled="true">
+            android:layout_margin="8dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
 
-            <AutoCompleteTextView
-                android:id="@+id/searchFormat"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/poppins_bold"
-                android:freezesText="false"
-                android:inputType="none"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textAllCaps="true"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
-                tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                android:hint="@string/season"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true">
 
-    <LinearLayout
-        android:id="@+id/searchSeasonYearCont"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp"
-        android:baselineAligned="false"
-        android:orientation="horizontal">
+                <AutoCompleteTextView
+                    android:id="@+id/searchSeason"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:hint="@string/season"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:hintAnimationEnabled="true">
-
-            <AutoCompleteTextView
-                android:id="@+id/searchSeason"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/poppins_bold"
-                android:freezesText="false"
-                android:inputType="none"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textAllCaps="true"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
-                tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:hint="@string/year"
+                app:boxCornerRadiusBottomEnd="16dp"
+                app:boxCornerRadiusBottomStart="16dp"
+                app:boxCornerRadiusTopEnd="16dp"
+                app:boxCornerRadiusTopStart="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_weight="1"
-            android:hint="@string/year"
-            app:boxCornerRadiusBottomEnd="16dp"
-            app:boxCornerRadiusBottomStart="16dp"
-            app:boxCornerRadiusTopEnd="16dp"
-            app:boxCornerRadiusTopStart="16dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:hintAnimationEnabled="true">
-
-            <AutoCompleteTextView
-                android:id="@+id/searchYear"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins_bold"
-                android:freezesText="false"
-                android:inputType="none"
-                android:padding="8dp"
-                android:singleLine="true"
-                android:textAllCaps="true"
-                android:textColor="?android:attr/textColorSecondary"
-                android:textSize="14sp"
-                tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+                <AutoCompleteTextView
+                    android:id="@+id/searchYear"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:singleLine="true"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:orientation="horizontal">
 
@@ -186,25 +187,25 @@
                 android:text="@string/grid" />
         </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchFilterGenres"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fadingEdge="horizontal"
-        android:orientation="horizontal"
-        android:paddingTop="4dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:spanCount="6"
-        tools:listitem="@layout/item_chip" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchFilterGenres"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:fadingEdge="horizontal"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:spanCount="6"
+            tools:listitem="@layout/item_chip" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:orientation="horizontal">
 
@@ -224,64 +225,64 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/searchFilterTags"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fadeScrollbars="true"
-        android:orientation="horizontal"
-        android:paddingTop="4dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:spanCount="6"
-        tools:listitem="@layout/item_chip" />
+            android:id="@+id/searchFilterTags"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:fadeScrollbars="true"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:spanCount="6"
+            tools:listitem="@layout/item_chip" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="16dp"
-        android:background="?android:attr/listDivider" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="16dp"
+            android:background="?android:attr/listDivider" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/searchFilterCancel"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            app:strokeColor="?attr/colorPrimaryContainer"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:padding="8dp"
-            android:text="@string/cancel"
-            android:textSize="16sp"
-            app:cornerRadius="16dp"
-            tools:ignore="SpeakableTextPresentCheck" />
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/searchFilterApply"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            app:strokeColor="?attr/colorPrimaryContainer"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_margin="8dp"
-            android:layout_weight="1"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:padding="8dp"
-            android:text="@string/apply"
-            android:textSize="16sp"
-            app:cornerRadius="16dp"
-            tools:ignore="SpeakableTextPresentCheck" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/searchFilterCancel"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_bold"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="8dp"
+                android:text="@string/cancel"
+                android:textSize="16sp"
+                app:cornerRadius="16dp"
+                app:strokeColor="?attr/colorPrimaryContainer"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+            <Button
+                android:id="@+id/searchFilterApply"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_margin="8dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_bold"
+                android:insetTop="0dp"
+                android:insetBottom="0dp"
+                android:padding="8dp"
+                android:text="@string/apply"
+                android:textSize="16sp"
+                app:cornerRadius="16dp"
+                app:strokeColor="?attr/colorPrimaryContainer"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

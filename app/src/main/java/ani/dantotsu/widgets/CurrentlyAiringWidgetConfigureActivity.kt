@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.EditText
 import ani.dantotsu.R
 import ani.dantotsu.databinding.CurrentlyAiringWidgetConfigureBinding
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.themes.ThemeManager
 
 /**
@@ -46,7 +45,7 @@ class CurrentlyAiringWidgetConfigureActivity : Activity() {
     private lateinit var binding: CurrentlyAiringWidgetConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
-        LangSet.setLocale(this)
+
         ThemeManager(this).applyTheme()
         super.onCreate(icicle)
 

@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bottom_sheet_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true">
@@ -47,8 +48,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="@font/poppins_bold"
             android:buttonTint="?attr/colorPrimary"
+            android:fontFamily="@font/poppins_bold"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -70,9 +71,9 @@
                 android:insetBottom="0dp"
                 android:padding="8dp"
                 android:textSize="16sp"
-                app:strokeColor="?attr/colorPrimaryContainer"
                 android:visibility="gone"
                 app:cornerRadius="16dp"
+                app:strokeColor="?attr/colorPrimaryContainer"
                 tools:ignore="SpeakableTextPresentCheck"
                 tools:visibility="visible" />
 
@@ -88,9 +89,9 @@
                 android:insetBottom="0dp"
                 android:padding="8dp"
                 android:textSize="16sp"
-                app:strokeColor="?attr/colorPrimaryContainer"
                 android:visibility="gone"
                 app:cornerRadius="16dp"
+                app:strokeColor="?attr/colorPrimaryContainer"
                 tools:ignore="SpeakableTextPresentCheck"
                 tools:visibility="visible" />
         </LinearLayout>

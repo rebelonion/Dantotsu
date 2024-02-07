@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.alexvasilkov.gestures.views.GestureFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:gest_disableGestures="true"
-    app:gest_rotationEnabled="true"
-    app:gest_restrictRotation="true"
     app:gest_doubleTapZoom="1.5"
-    app:gest_maxZoom="6">
+    app:gest_maxZoom="6"
+    app:gest_restrictRotation="true"
+    app:gest_rotationEnabled="true">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,8 +20,8 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:focusable="false"
-            app:zoomEnabled="false"
             app:panEnabled="false"
+            app:zoomEnabled="false"
             tools:ignore="ContentDescription,ImageContrastCheck"
             tools:src="@tools:sample/backgrounds/scenic[0]" />
 
@@ -32,6 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="visible" />
+
         <View
             android:id="@+id/imgProgCover"
             android:layout_width="match_parent"

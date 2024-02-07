@@ -6,7 +6,6 @@ import android.widget.TextView
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.databinding.ItemQuestionBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.setAnimation
 import io.noties.markwon.Markwon
@@ -17,8 +16,6 @@ class FAQAdapter(
     private val manager: FragmentManager
 ) :
     RecyclerView.Adapter<FAQAdapter.FAQViewHolder>() {
-    private val uiSettings =
-        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
 
     inner class FAQViewHolder(val binding: ItemQuestionBinding) :
         RecyclerView.ViewHolder(binding.root)
@@ -35,7 +32,7 @@ class FAQAdapter(
 
     override fun onBindViewHolder(holder: FAQViewHolder, position: Int) {
         val b = holder.binding.root
-        setAnimation(b.context, b, uiSettings)
+        setAnimation(b.context, b)
         val faq = questions[position]
         b.text = faq.second
         b.setCompoundDrawablesWithIntrinsicBounds(faq.first, 0, 0, 0)

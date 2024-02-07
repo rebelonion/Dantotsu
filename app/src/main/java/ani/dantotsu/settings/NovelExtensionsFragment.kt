@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentNovelExtensionsBinding
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.parsers.novel.NovelExtensionManager
@@ -21,7 +22,6 @@ import ani.dantotsu.settings.paging.NovelExtensionsViewModel
 import ani.dantotsu.settings.paging.NovelExtensionsViewModelFactory
 import ani.dantotsu.settings.paging.OnNovelInstallClickListener
 import ani.dantotsu.snackString
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -73,6 +73,10 @@ class NovelExtensionsFragment : Fragment(),
         viewModel.setSearchQuery(query ?: "")
     }
 
+    override fun notifyDataChanged() {
+        viewModel.invalidatePager()
+    }
+
     override fun onInstallClick(pkg: NovelExtension.Available) {
         if (isAdded) {  // Check if the fragment is currently added to its activity
             val context = requireContext()
@@ -95,7 +99,7 @@ class NovelExtensionsFragment : Fragment(),
                         notificationManager.notify(1, builder.build())
                     },
                     { error ->
-                        FirebaseCrashlytics.getInstance().recordException(error)
+                        Injekt.get<CrashlyticsInterface>().logException(error)
                         val builder = NotificationCompat.Builder(
                             context,
                             Notifications.CHANNEL_DOWNLOADER_ERROR
@@ -112,7 +116,7 @@ class NovelExtensionsFragment : Fragment(),
                             context,
                             Notifications.CHANNEL_DOWNLOADER_PROGRESS
                         )
-                            .setSmallIcon(R.drawable.ic_round_download_24)
+                            .setSmallIcon(R.drawable.ic_download_24)
                             .setContentTitle("Installation complete")
                             .setContentText("The extension has been successfully installed.")
                             .setPriority(NotificationCompat.PRIORITY_LOW)

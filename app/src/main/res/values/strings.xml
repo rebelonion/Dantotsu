@@ -459,7 +459,7 @@
         <item>Trending</item>
         <item>A-Z</item>
         <item>Z-A</item>
-        <item>What?</item>
+        <item>Pure pain</item>
     </string-array>
     <string name="main_role">MAIN</string>
     <string name="supporting_role">SUPPORTING</string>
@@ -631,9 +631,9 @@
     <string name="extension_specific_dns">Extension-specific DNS</string>
     <string name="theme_">Theme:</string>
     <string name="user_agent">User Agent</string>
-    <string name="custom_theme">Custom Theme</string>
+    <string name="custom_theme">Custom Theme:</string>
     <string name="use_custom_theme">Custom theme</string>
-    <string name="use_unique_theme_for_each_item">Color same as Anime/Manga cover</string>
+    <string name="use_unique_theme_for_each_item">Theme as Anime/Manga </string>
     <string name="oled_theme_variant">OLED theme variant</string>
     <string name="installed_anime">Installed Anime</string>
     <string name="available_anime">Available Anime</string>
@@ -647,12 +647,13 @@
     <string name="app_widget_description">This is an app widget description</string>
     <string name="airing_image">Airing Image</string>
     <string name="anime_downloads">animeDownloads</string>
-    <string name="long_press_download">Long press the download button to download using the selected download manager</string>
     <string name="purge_anime_downloads">Delete all anime downloads</string>
     <string name="purge_manga_downloads">Delete all Manga Downloads</string>
     <string name="purge_novel_downloads">Delete all Novel Downloads</string>
     <string name="requires_android_12">Requires Android 12+</string>
     <string name="share_username_in_crash_reports">Share username in crash reports</string>
     <string name="pinned_sources">Pinned Sources</string>
+    <string name="import_export_settings">Import/Export Settings</string>
+    <string name="import_settings">Import Settings</string>
 
 </resources>

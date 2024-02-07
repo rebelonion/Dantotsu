@@ -11,11 +11,12 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.drawable.ColorDrawable
+import android.Manifest
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
@@ -31,8 +32,11 @@ import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.*
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
@@ -45,12 +49,15 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.parsers.ShowResponse
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.internal.PreferenceKeystore
+import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
 import ani.dantotsu.subcriptions.NotificationClickReceiver
-import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
@@ -60,10 +67,11 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.*
 import java.lang.Runnable
 import java.lang.reflect.Field
@@ -105,63 +113,22 @@ fun logger(e: Any?, print: Boolean = true) {
         println(e)
 }
 
-fun saveData(fileName: String, data: Any?, context: Context? = null) {
-    tryWith {
-        val a = context ?: currContext()
-        if (a != null) {
-            val fos: FileOutputStream = a.openFileOutput(fileName, Context.MODE_PRIVATE)
-            val os = ObjectOutputStream(fos)
-            os.writeObject(data)
-            os.close()
-            fos.close()
-        }
-    }
-}
-
-@Suppress("UNCHECKED_CAST")
-fun <T> loadData(fileName: String, context: Context? = null, toast: Boolean = true): T? {
-    val a = context ?: currContext()
-    try {
-        if (a?.fileList() != null)
-            if (fileName in a.fileList()) {
-                val fileIS: FileInputStream = a.openFileInput(fileName)
-                val objIS = ObjectInputStream(fileIS)
-                val data = objIS.readObject() as T
-                objIS.close()
-                fileIS.close()
-                return data
-            }
-    } catch (e: Exception) {
-        if (toast) snackString(a?.getString(R.string.error_loading_data, fileName))
-        //try to delete the file
-        try {
-            a?.deleteFile(fileName)
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().log("Failed to delete file $fileName")
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-        e.printStackTrace()
-    }
-    return null
-}
 
 fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
-    val uiSettings = loadData<UserInterfaceSettings>("ui_settings", toast = false)
-        ?: UserInterfaceSettings().apply {
-            saveData("ui_settings", this)
-        }
-    uiSettings.darkMode.apply {
+    val darkMode = PrefManager.getVal<Int>(PrefName.DarkMode)
+    val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
+    darkMode.apply {
         AppCompatDelegate.setDefaultNightMode(
             when (this) {
-                true -> AppCompatDelegate.MODE_NIGHT_YES
-                false -> AppCompatDelegate.MODE_NIGHT_NO
+                2 -> AppCompatDelegate.MODE_NIGHT_YES
+                1 -> AppCompatDelegate.MODE_NIGHT_NO
                 else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
             }
         )
     }
-    if (uiSettings.immersiveMode) {
+    if (immersiveMode) {
         if (navBarHeight == 0) {
             ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
                 ?.apply {
@@ -216,7 +183,11 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
         }
         val typedValue = TypedValue()
         val theme = requireContext().theme
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOnSurfaceInverse, typedValue, true)
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorSurface,
+            typedValue,
+            true
+        )
         window.navigationBarColor = typedValue.data
     }
 
@@ -325,20 +296,20 @@ class InputFilterMinMax(
 }
 
 
-class ZoomOutPageTransformer(private val uiSettings: UserInterfaceSettings) :
+class ZoomOutPageTransformer() :
     ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
-        if (position == 0.0f && uiSettings.layoutAnimations) {
+        if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {
             setAnimation(
                 view.context,
                 view,
-                uiSettings,
                 300,
                 floatArrayOf(1.3f, 1f, 1.3f, 1f),
                 0.5f to 0f
             )
             ObjectAnimator.ofFloat(view, "alpha", 0f, 1.0f)
-                .setDuration((200 * uiSettings.animationSpeed).toLong()).start()
+                .setDuration((200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong())
+                .start()
         }
     }
 }
@@ -346,12 +317,11 @@ class ZoomOutPageTransformer(private val uiSettings: UserInterfaceSettings) :
 fun setAnimation(
     context: Context,
     viewToAnimate: View,
-    uiSettings: UserInterfaceSettings,
     duration: Long = 150,
     list: FloatArray = floatArrayOf(0.0f, 1.0f, 0.0f, 1.0f),
     pivot: Pair<Float, Float> = 0.5f to 0.5f
 ) {
-    if (uiSettings.layoutAnimations) {
+    if (PrefManager.getVal(PrefName.LayoutAnimations)) {
         val anim = ScaleAnimation(
             list[0],
             list[1],
@@ -362,7 +332,7 @@ fun setAnimation(
             Animation.RELATIVE_TO_SELF,
             pivot.second
         )
-        anim.duration = (duration * uiSettings.animationSpeed).toLong()
+        anim.duration = (duration * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
         anim.setInterpolator(context, R.anim.over_shoot)
         viewToAnimate.startAnimation(anim)
     }
@@ -615,7 +585,7 @@ fun openLinkInBrowser(link: String?) {
     }
 }
 
-fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
+fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Activity) {
     FileProvider.getUriForFile(
         context,
         "$APPLICATION_ID.provider",
@@ -626,6 +596,105 @@ fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Context) {
         ) ?: return
     )
 }
+
+fun savePrefsToDownloads(
+    title: String,
+    serialized: String,
+    context: Activity,
+    password: CharArray? = null
+) {
+    FileProvider.getUriForFile(
+        context,
+        "$APPLICATION_ID.provider",
+        if (password != null) {
+            savePrefs(
+                serialized,
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
+                title,
+                context,
+                password
+            ) ?: return
+        } else {
+            savePrefs(
+                serialized,
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).absolutePath,
+                title,
+                context
+            ) ?: return
+        }
+    )
+}
+
+fun savePrefs(serialized: String, path: String, title: String, context: Context): File? {
+    var file = File(path, "$title.ani")
+    var counter = 1
+    while (file.exists()) {
+        file = File(path, "${title}_${counter}.ani")
+        counter++
+    }
+
+    return try {
+        file.writeText(serialized)
+        scanFile(file.absolutePath, context)
+        toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
+        file
+    } catch (e: Exception) {
+        snackString("Failed to save settings: ${e.localizedMessage}")
+        null
+    }
+}
+
+fun savePrefs(
+    serialized: String,
+    path: String,
+    title: String,
+    context: Context,
+    password: CharArray
+): File? {
+    var file = File(path, "$title.ani")
+    var counter = 1
+    while (file.exists()) {
+        file = File(path, "${title}_${counter}.sani")
+        counter++
+    }
+
+    val salt = generateSalt()
+
+    return try {
+        val encryptedData = PreferenceKeystore.encryptWithPassword(password, serialized, salt)
+
+        // Combine salt and encrypted data
+        val dataToSave = salt + encryptedData
+
+        file.writeBytes(dataToSave)
+        scanFile(file.absolutePath, context)
+        toast(String.format(context.getString(R.string.saved_to_path, file.absolutePath)))
+        file
+    } catch (e: Exception) {
+        snackString("Failed to save settings: ${e.localizedMessage}")
+        null
+    }
+}
+
+fun downloadsPermission(activity: AppCompatActivity): Boolean {
+    val permissions = arrayOf(
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+
+    val requiredPermissions = permissions.filter {
+        ContextCompat.checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
+    }.toTypedArray()
+
+    return if (requiredPermissions.isNotEmpty()) {
+        ActivityCompat.requestPermissions(activity, requiredPermissions, DOWNLOADS_PERMISSION_REQUEST_CODE)
+        false
+    } else {
+        true
+    }
+}
+
+private const val DOWNLOADS_PERMISSION_REQUEST_CODE = 100
 
 fun shareImage(title: String, bitmap: Bitmap, context: Context) {
 
@@ -743,10 +812,11 @@ fun MutableMap<String, Genre>.checkGenreTime(genre: String): Boolean {
     return true
 }
 
-fun setSlideIn(uiSettings: UserInterfaceSettings) = AnimationSet(false).apply {
-    if (uiSettings.layoutAnimations) {
+fun setSlideIn() = AnimationSet(false).apply {
+    if (PrefManager.getVal(PrefName.LayoutAnimations)) {
         var animation: Animation = AlphaAnimation(0.0f, 1.0f)
-        animation.duration = (500 * uiSettings.animationSpeed).toLong()
+        val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)
+        animation.duration = (500 * animationSpeed).toLong()
         animation.interpolator = AccelerateDecelerateInterpolator()
         addAnimation(animation)
 
@@ -757,16 +827,17 @@ fun setSlideIn(uiSettings: UserInterfaceSettings) = AnimationSet(false).apply {
             Animation.RELATIVE_TO_SELF, 0f
         )
 
-        animation.duration = (750 * uiSettings.animationSpeed).toLong()
+        animation.duration = (750 * animationSpeed).toLong()
         animation.interpolator = OvershootInterpolator(1.1f)
         addAnimation(animation)
     }
 }
 
-fun setSlideUp(uiSettings: UserInterfaceSettings) = AnimationSet(false).apply {
-    if (uiSettings.layoutAnimations) {
+fun setSlideUp() = AnimationSet(false).apply {
+    if (PrefManager.getVal(PrefName.LayoutAnimations)) {
         var animation: Animation = AlphaAnimation(0.0f, 1.0f)
-        animation.duration = (500 * uiSettings.animationSpeed).toLong()
+        val animationSpeed: Float = PrefManager.getVal(PrefName.AnimationSpeed)
+        animation.duration = (500 * animationSpeed).toLong()
         animation.interpolator = AccelerateDecelerateInterpolator()
         addAnimation(animation)
 
@@ -777,7 +848,7 @@ fun setSlideUp(uiSettings: UserInterfaceSettings) = AnimationSet(false).apply {
             Animation.RELATIVE_TO_SELF, 0f
         )
 
-        animation.duration = (750 * uiSettings.animationSpeed).toLong()
+        animation.duration = (750 * animationSpeed).toLong()
         animation.interpolator = OvershootInterpolator(1.1f)
         addAnimation(animation)
     }
@@ -839,7 +910,7 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
         }
     } catch (e: Exception) {
         logger(e.stackTraceToString())
-        FirebaseCrashlytics.getInstance().recordException(e)
+        Injekt.get<CrashlyticsInterface>().logException(e)
     }
 }
 
@@ -964,8 +1035,7 @@ const val INCOGNITO_CHANNEL_ID = 26
 fun incognitoNotification(context: Context) {
     val notificationManager =
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-    val incognito = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        .getBoolean("incognito", false)
+    val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
     if (incognito) {
         val intent = Intent(context, NotificationClickReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(

@@ -16,7 +16,7 @@
     <color name="button_icon">#A9FFFFFF</color>
     <color name="nav_status">#80FFFFFF</color>
     <color name="fav">#ad5edd</color>
-    <color name="incognito">#291B65 </color>
+    <color name="incognito">#291B65</color>
     <color name="filler">#54FF8400</color>
     <color name="warning">#FF0000</color>
     <color name="grey_20">#444444</color>
@@ -546,7 +546,6 @@
     <color name="md_theme_dark_8_surfaceTint">#4FDAD2</color>
     <color name="md_theme_dark_8_outlineVariant">#3F4948</color>
     <color name="md_theme_dark_8_scrim">#000000</color>
-
 
 
 </resources>

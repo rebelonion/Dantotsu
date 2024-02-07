@@ -32,18 +32,18 @@
                     android:layout_height="56dp"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
                     android:hint="Something"
                     android:textColorHint="@color/bg_opp"
                     android:transitionName="@string/search"
-                    android:fontFamily="@font/poppins_bold"
                     app:boxBackgroundColor="?attr/colorPrimaryContainer"
                     app:boxCornerRadiusBottomEnd="28dp"
                     app:boxCornerRadiusBottomStart="28dp"
                     app:boxCornerRadiusTopEnd="28dp"
                     app:boxCornerRadiusTopStart="28dp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
                     app:endIconDrawable="@drawable/ic_round_search_24"
                     app:endIconTint="@color/bg_opp"
-                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
                     app:hintAnimationEnabled="true">
 
                     <AutoCompleteTextView
@@ -54,8 +54,8 @@
                         android:fontFamily="@font/poppins_bold"
                         android:imeOptions="actionSearch"
                         android:inputType="textPersonName"
-                        android:selectAllOnFocus="true"
                         android:padding="8dp"
+                        android:selectAllOnFocus="true"
                         android:textSize="14sp"
                         tools:ignore="LabelFor,TextContrastCheck" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -66,8 +66,8 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="4dp"
                     app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                    app:strokeColor="@color/text_input_layout_stroke_color"
-                    app:cardCornerRadius="26dp">
+                    app:cardCornerRadius="26dp"
+                    app:strokeColor="@color/text_input_layout_stroke_color">
 
                     <com.google.android.material.imageview.ShapeableImageView
                         android:id="@+id/offlineMangaUserAvatar"
@@ -81,6 +81,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,10 +92,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:paddingStart="24dp"
                     android:fontFamily="@font/poppins_bold"
                     android:gravity="center_vertical"
                     android:hint="Type"
+                    android:paddingStart="24dp"
                     android:textSize="14sp"
                     tools:ignore="HardcodedText,RtlSymmetry" />
 
@@ -135,14 +136,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:numColumns="1"
-                android:verticalSpacing="20dp"
+                android:gravity="center"
                 android:horizontalSpacing="10dp"
+                android:numColumns="1"
                 android:paddingStart="25dp"
                 android:paddingEnd="25dp"
-                android:gravity="center"
                 android:scrollbars="none"
-                android:visibility="gone"/>
+                android:verticalSpacing="20dp"
+                android:visibility="gone" />
             <!-- for compact view -->
             <GridView
                 android:id="@+id/gridView1"
@@ -157,7 +158,7 @@
                 android:paddingEnd="-10dp"
                 android:scrollbars="none"
                 android:verticalSpacing="20dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
         </LinearLayout>
     </FrameLayout>
 

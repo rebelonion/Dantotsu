@@ -8,7 +8,8 @@ import androidx.work.NetworkType
 import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import ani.dantotsu.loadData
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import kotlinx.coroutines.Dispatchers
@@ -29,7 +30,7 @@ class SubscriptionWorker(val context: Context, params: WorkerParameters) :
 
         private const val SUBSCRIPTION_WORK_NAME = "work_subscription"
         fun enqueue(context: Context) {
-            val curTime = loadData<Int>("subscriptions_time_s") ?: defaultTime
+            val curTime = PrefManager.getVal(PrefName.SubscriptionsTimeS, defaultTime)
             if (timeMinutes[curTime] > 0L) {
                 val constraints =
                     Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()

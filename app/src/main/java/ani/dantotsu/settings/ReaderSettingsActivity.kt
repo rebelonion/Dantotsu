@@ -7,20 +7,20 @@ import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityReaderSettingsBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 
 class ReaderSettingsActivity : AppCompatActivity() {
     lateinit var binding: ActivityReaderSettingsBinding
-    private val reader = "reader_settings"
+    private var defaultSettings = CurrentReaderSettings()
+    private var defaultSettingsLN = CurrentNovelReaderSettings()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+
         ThemeManager(this).applyTheme()
         binding = ActivityReaderSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -31,34 +31,24 @@ class ReaderSettingsActivity : AppCompatActivity() {
             bottomMargin = navBarHeight
         }
 
-        val settings = loadData<ReaderSettings>(reader, toast = false) ?: ReaderSettings().apply {
-            saveData(
-                reader,
-                this
-            )
-        }
-
         binding.readerSettingsBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         //Manga Settings
-        binding.readerSettingsSourceName.isChecked = settings.showSource
+        binding.readerSettingsSourceName.isChecked = PrefManager.getVal(PrefName.ShowSource)
         binding.readerSettingsSourceName.setOnCheckedChangeListener { _, isChecked ->
-            settings.showSource = isChecked
-            saveData(reader, settings)
+            PrefManager.setVal(PrefName.ShowSource, isChecked)
         }
 
-        binding.readerSettingsSystemBars.isChecked = settings.showSystemBars
+        binding.readerSettingsSystemBars.isChecked = PrefManager.getVal(PrefName.ShowSystemBars)
         binding.readerSettingsSystemBars.setOnCheckedChangeListener { _, isChecked ->
-            settings.showSystemBars = isChecked
-            saveData(reader, settings)
+            PrefManager.setVal(PrefName.ShowSystemBars, isChecked)
         }
         //Default Manga
-        binding.readerSettingsAutoWebToon.isChecked = settings.autoDetectWebtoon
+        binding.readerSettingsAutoWebToon.isChecked = PrefManager.getVal(PrefName.AutoDetectWebtoon)
         binding.readerSettingsAutoWebToon.setOnCheckedChangeListener { _, isChecked ->
-            settings.autoDetectWebtoon = isChecked
-            saveData(reader, settings)
+            PrefManager.setVal(PrefName.AutoDetectWebtoon, isChecked)
         }
 
 
@@ -69,8 +59,8 @@ class ReaderSettingsActivity : AppCompatActivity() {
         )
 
         binding.readerSettingsLayoutText.text =
-            resources.getStringArray(R.array.manga_layouts)[settings.default.layout.ordinal]
-        var selectedLayout = layoutList[settings.default.layout.ordinal]
+            resources.getStringArray(R.array.manga_layouts)[defaultSettings.layout.ordinal]
+        var selectedLayout = layoutList[defaultSettings.layout.ordinal]
         selectedLayout.alpha = 1f
 
         layoutList.forEachIndexed { index, imageButton ->
@@ -78,25 +68,25 @@ class ReaderSettingsActivity : AppCompatActivity() {
                 selectedLayout.alpha = 0.33f
                 selectedLayout = imageButton
                 selectedLayout.alpha = 1f
-                settings.default.layout =
+                defaultSettings.layout =
                     CurrentReaderSettings.Layouts[index] ?: CurrentReaderSettings.Layouts.CONTINUOUS
                 binding.readerSettingsLayoutText.text =
-                    resources.getStringArray(R.array.manga_layouts)[settings.default.layout.ordinal]
-                saveData(reader, settings)
+                    resources.getStringArray(R.array.manga_layouts)[defaultSettings.layout.ordinal]
+                PrefManager.setVal(PrefName.LayoutReader, defaultSettings.layout.ordinal)
             }
         }
 
         binding.readerSettingsDirectionText.text =
-            resources.getStringArray(R.array.manga_directions)[settings.default.direction.ordinal]
-        binding.readerSettingsDirection.rotation = 90f * (settings.default.direction.ordinal)
+            resources.getStringArray(R.array.manga_directions)[defaultSettings.direction.ordinal]
+        binding.readerSettingsDirection.rotation = 90f * (defaultSettings.direction.ordinal)
         binding.readerSettingsDirection.setOnClickListener {
-            settings.default.direction =
-                CurrentReaderSettings.Directions[settings.default.direction.ordinal + 1]
+            defaultSettings.direction =
+                CurrentReaderSettings.Directions[defaultSettings.direction.ordinal + 1]
                     ?: CurrentReaderSettings.Directions.TOP_TO_BOTTOM
             binding.readerSettingsDirectionText.text =
-                resources.getStringArray(R.array.manga_directions)[settings.default.direction.ordinal]
-            binding.readerSettingsDirection.rotation = 90f * (settings.default.direction.ordinal)
-            saveData(reader, settings)
+                resources.getStringArray(R.array.manga_directions)[defaultSettings.direction.ordinal]
+            binding.readerSettingsDirection.rotation = 90f * (defaultSettings.direction.ordinal)
+            PrefManager.setVal(PrefName.Direction, defaultSettings.direction.ordinal)
         }
 
         val dualList = listOf(
@@ -105,8 +95,8 @@ class ReaderSettingsActivity : AppCompatActivity() {
             binding.readerSettingsDualForce
         )
 
-        binding.readerSettingsDualPageText.text = settings.default.dualPageMode.toString()
-        var selectedDual = dualList[settings.default.dualPageMode.ordinal]
+        binding.readerSettingsDualPageText.text = defaultSettings.dualPageMode.toString()
+        var selectedDual = dualList[defaultSettings.dualPageMode.ordinal]
         selectedDual.alpha = 1f
 
         dualList.forEachIndexed { index, imageButton ->
@@ -114,75 +104,78 @@ class ReaderSettingsActivity : AppCompatActivity() {
                 selectedDual.alpha = 0.33f
                 selectedDual = imageButton
                 selectedDual.alpha = 1f
-                settings.default.dualPageMode = CurrentReaderSettings.DualPageModes[index]
+                defaultSettings.dualPageMode = CurrentReaderSettings.DualPageModes[index]
                     ?: CurrentReaderSettings.DualPageModes.Automatic
-                binding.readerSettingsDualPageText.text = settings.default.dualPageMode.toString()
-                saveData(reader, settings)
+                binding.readerSettingsDualPageText.text = defaultSettings.dualPageMode.toString()
+                PrefManager.setVal(
+                    PrefName.DualPageModeReader,
+                    defaultSettings.dualPageMode.ordinal
+                )
             }
         }
-        binding.readerSettingsTrueColors.isChecked = settings.default.trueColors
+        binding.readerSettingsTrueColors.isChecked = defaultSettings.trueColors
         binding.readerSettingsTrueColors.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.trueColors = isChecked
-            saveData(reader, settings)
+            defaultSettings.trueColors = isChecked
+            PrefManager.setVal(PrefName.TrueColors, isChecked)
         }
 
-        binding.readerSettingsCropBorders.isChecked = settings.default.cropBorders
+        binding.readerSettingsCropBorders.isChecked = defaultSettings.cropBorders
         binding.readerSettingsCropBorders.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.cropBorders = isChecked
-            saveData(reader, settings)
+            defaultSettings.cropBorders = isChecked
+            PrefManager.setVal(PrefName.CropBorders, isChecked)
         }
 
-        binding.readerSettingsImageRotation.isChecked = settings.default.rotation
+        binding.readerSettingsImageRotation.isChecked = defaultSettings.rotation
         binding.readerSettingsImageRotation.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.rotation = isChecked
-            saveData(reader, settings)
+            defaultSettings.rotation = isChecked
+            PrefManager.setVal(PrefName.Rotation, isChecked)
         }
 
-        binding.readerSettingsHorizontalScrollBar.isChecked = settings.default.horizontalScrollBar
+        binding.readerSettingsHorizontalScrollBar.isChecked = defaultSettings.horizontalScrollBar
         binding.readerSettingsHorizontalScrollBar.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.horizontalScrollBar = isChecked
-            saveData(reader, settings)
+            defaultSettings.horizontalScrollBar = isChecked
+            PrefManager.setVal(PrefName.HorizontalScrollBar, isChecked)
         }
-        binding.readerSettingsPadding.isChecked = settings.default.padding
+        binding.readerSettingsPadding.isChecked = defaultSettings.padding
         binding.readerSettingsPadding.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.padding = isChecked
-            saveData(reader, settings)
+            defaultSettings.padding = isChecked
+            PrefManager.setVal(PrefName.Padding, isChecked)
         }
 
-        binding.readerSettingsKeepScreenOn.isChecked = settings.default.keepScreenOn
+        binding.readerSettingsKeepScreenOn.isChecked = defaultSettings.keepScreenOn
         binding.readerSettingsKeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.keepScreenOn = isChecked
-            saveData(reader, settings)
+            defaultSettings.keepScreenOn = isChecked
+            PrefManager.setVal(PrefName.KeepScreenOn, isChecked)
         }
 
-        binding.readerSettingsHidePageNumbers.isChecked = settings.default.hidePageNumbers
+        binding.readerSettingsHidePageNumbers.isChecked = defaultSettings.hidePageNumbers
         binding.readerSettingsHidePageNumbers.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.hidePageNumbers = isChecked
-            saveData(reader, settings)
+            defaultSettings.hidePageNumbers = isChecked
+            PrefManager.setVal(PrefName.HidePageNumbers, isChecked)
         }
 
-        binding.readerSettingsOverscroll.isChecked = settings.default.overScrollMode
+        binding.readerSettingsOverscroll.isChecked = defaultSettings.overScrollMode
         binding.readerSettingsOverscroll.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.overScrollMode = isChecked
-            saveData(reader, settings)
+            defaultSettings.overScrollMode = isChecked
+            PrefManager.setVal(PrefName.OverScrollMode, isChecked)
         }
 
-        binding.readerSettingsVolumeButton.isChecked = settings.default.volumeButtons
+        binding.readerSettingsVolumeButton.isChecked = defaultSettings.volumeButtons
         binding.readerSettingsVolumeButton.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.volumeButtons = isChecked
-            saveData(reader, settings)
+            defaultSettings.volumeButtons = isChecked
+            PrefManager.setVal(PrefName.VolumeButtonsReader, isChecked)
         }
 
-        binding.readerSettingsWrapImages.isChecked = settings.default.wrapImages
+        binding.readerSettingsWrapImages.isChecked = defaultSettings.wrapImages
         binding.readerSettingsWrapImages.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.wrapImages = isChecked
-            saveData(reader, settings)
+            defaultSettings.wrapImages = isChecked
+            PrefManager.setVal(PrefName.WrapImages, isChecked)
         }
 
-        binding.readerSettingsLongClickImage.isChecked = settings.default.longClickImage
+        binding.readerSettingsLongClickImage.isChecked = defaultSettings.longClickImage
         binding.readerSettingsLongClickImage.setOnCheckedChangeListener { _, isChecked ->
-            settings.default.longClickImage = isChecked
-            saveData(reader, settings)
+            defaultSettings.longClickImage = isChecked
+            PrefManager.setVal(PrefName.LongClickImage, isChecked)
         }
 
         //LN settings
@@ -191,8 +184,8 @@ class ReaderSettingsActivity : AppCompatActivity() {
             binding.LNcontinuous
         )
 
-        binding.LNlayoutText.text = settings.defaultLN.layout.string
-        var selectedLN = layoutListLN[settings.defaultLN.layout.ordinal]
+        binding.LNlayoutText.text = defaultSettingsLN.layout.string
+        var selectedLN = layoutListLN[defaultSettingsLN.layout.ordinal]
         selectedLN.alpha = 1f
 
         layoutListLN.forEachIndexed { index, imageButton ->
@@ -200,10 +193,10 @@ class ReaderSettingsActivity : AppCompatActivity() {
                 selectedLN.alpha = 0.33f
                 selectedLN = imageButton
                 selectedLN.alpha = 1f
-                settings.defaultLN.layout = CurrentNovelReaderSettings.Layouts[index]
+                defaultSettingsLN.layout = CurrentNovelReaderSettings.Layouts[index]
                     ?: CurrentNovelReaderSettings.Layouts.PAGED
-                binding.LNlayoutText.text = settings.defaultLN.layout.string
-                saveData(reader, settings)
+                binding.LNlayoutText.text = defaultSettingsLN.layout.string
+                PrefManager.setVal(PrefName.LayoutNovel, defaultSettingsLN.layout.ordinal)
             }
         }
 
@@ -213,8 +206,8 @@ class ReaderSettingsActivity : AppCompatActivity() {
             binding.LNdualForce
         )
 
-        binding.LNdualPageText.text = settings.defaultLN.dualPageMode.toString()
-        var selectedDualLN = dualListLN[settings.defaultLN.dualPageMode.ordinal]
+        binding.LNdualPageText.text = defaultSettingsLN.dualPageMode.toString()
+        var selectedDualLN = dualListLN[defaultSettingsLN.dualPageMode.ordinal]
         selectedDualLN.alpha = 1f
 
         dualListLN.forEachIndexed { index, imageButton ->
@@ -222,143 +215,146 @@ class ReaderSettingsActivity : AppCompatActivity() {
                 selectedDualLN.alpha = 0.33f
                 selectedDualLN = imageButton
                 selectedDualLN.alpha = 1f
-                settings.defaultLN.dualPageMode = CurrentReaderSettings.DualPageModes[index]
+                defaultSettingsLN.dualPageMode = CurrentReaderSettings.DualPageModes[index]
                     ?: CurrentReaderSettings.DualPageModes.Automatic
-                binding.LNdualPageText.text = settings.defaultLN.dualPageMode.toString()
-                saveData(reader, settings)
+                binding.LNdualPageText.text = defaultSettingsLN.dualPageMode.toString()
+                PrefManager.setVal(
+                    PrefName.DualPageModeNovel,
+                    defaultSettingsLN.dualPageMode.ordinal
+                )
             }
         }
 
-        binding.LNlineHeight.setText(settings.defaultLN.lineHeight.toString())
+        binding.LNlineHeight.setText(defaultSettingsLN.lineHeight.toString())
         binding.LNlineHeight.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val value = binding.LNlineHeight.text.toString().toFloatOrNull() ?: 1.4f
-                settings.defaultLN.lineHeight = value
+                defaultSettingsLN.lineHeight = value
                 binding.LNlineHeight.setText(value.toString())
-                saveData(reader, settings)
+                PrefManager.setVal(PrefName.LineHeight, value)
             }
         }
 
         binding.LNincrementLineHeight.setOnClickListener {
             val value = binding.LNlineHeight.text.toString().toFloatOrNull() ?: 1.4f
-            settings.defaultLN.lineHeight = value + 0.1f
-            binding.LNlineHeight.setText(settings.defaultLN.lineHeight.toString())
-            saveData(reader, settings)
+            defaultSettingsLN.lineHeight = value + 0.1f
+            binding.LNlineHeight.setText(defaultSettingsLN.lineHeight.toString())
+            PrefManager.setVal(PrefName.LineHeight, defaultSettingsLN.lineHeight)
         }
 
         binding.LNdecrementLineHeight.setOnClickListener {
             val value = binding.LNlineHeight.text.toString().toFloatOrNull() ?: 1.4f
-            settings.defaultLN.lineHeight = value - 0.1f
-            binding.LNlineHeight.setText(settings.defaultLN.lineHeight.toString())
-            saveData(reader, settings)
+            defaultSettingsLN.lineHeight = value - 0.1f
+            binding.LNlineHeight.setText(defaultSettingsLN.lineHeight.toString())
+            PrefManager.setVal(PrefName.LineHeight, defaultSettingsLN.lineHeight)
         }
 
-        binding.LNmargin.setText(settings.defaultLN.margin.toString())
+        binding.LNmargin.setText(defaultSettingsLN.margin.toString())
         binding.LNmargin.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val value = binding.LNmargin.text.toString().toFloatOrNull() ?: 0.06f
-                settings.defaultLN.margin = value
+                defaultSettingsLN.margin = value
                 binding.LNmargin.setText(value.toString())
-                saveData(reader, settings)
+                PrefManager.setVal(PrefName.Margin, value)
             }
         }
 
         binding.LNincrementMargin.setOnClickListener {
             val value = binding.LNmargin.text.toString().toFloatOrNull() ?: 0.06f
-            settings.defaultLN.margin = value + 0.01f
-            binding.LNmargin.setText(settings.defaultLN.margin.toString())
-            saveData(reader, settings)
+            defaultSettingsLN.margin = value + 0.01f
+            binding.LNmargin.setText(defaultSettingsLN.margin.toString())
+            PrefManager.setVal(PrefName.Margin, defaultSettingsLN.margin)
         }
 
         binding.LNdecrementMargin.setOnClickListener {
             val value = binding.LNmargin.text.toString().toFloatOrNull() ?: 0.06f
-            settings.defaultLN.margin = value - 0.01f
-            binding.LNmargin.setText(settings.defaultLN.margin.toString())
-            saveData(reader, settings)
+            defaultSettingsLN.margin = value - 0.01f
+            binding.LNmargin.setText(defaultSettingsLN.margin.toString())
+            PrefManager.setVal(PrefName.Margin, defaultSettingsLN.margin)
         }
 
-        binding.LNmaxInlineSize.setText(settings.defaultLN.maxInlineSize.toString())
+        binding.LNmaxInlineSize.setText(defaultSettingsLN.maxInlineSize.toString())
         binding.LNmaxInlineSize.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val value = binding.LNmaxInlineSize.text.toString().toIntOrNull() ?: 720
-                settings.defaultLN.maxInlineSize = value
+                defaultSettingsLN.maxInlineSize = value
                 binding.LNmaxInlineSize.setText(value.toString())
-                saveData(reader, settings)
+                PrefManager.setVal(PrefName.MaxInlineSize, value)
             }
         }
 
         binding.LNincrementMaxInlineSize.setOnClickListener {
             val value = binding.LNmaxInlineSize.text.toString().toIntOrNull() ?: 720
-            settings.defaultLN.maxInlineSize = value + 10
-            binding.LNmaxInlineSize.setText(settings.defaultLN.maxInlineSize.toString())
-            saveData(reader, settings)
+            defaultSettingsLN.maxInlineSize = value + 10
+            binding.LNmaxInlineSize.setText(defaultSettingsLN.maxInlineSize.toString())
+            PrefManager.setVal(PrefName.MaxInlineSize, defaultSettingsLN.maxInlineSize)
         }
 
         binding.LNdecrementMaxInlineSize.setOnClickListener {
             val value = binding.LNmaxInlineSize.text.toString().toIntOrNull() ?: 720
-            settings.defaultLN.maxInlineSize = value - 10
-            binding.LNmaxInlineSize.setText(settings.defaultLN.maxInlineSize.toString())
-            saveData(reader, settings)
+            defaultSettingsLN.maxInlineSize = value - 10
+            binding.LNmaxInlineSize.setText(defaultSettingsLN.maxInlineSize.toString())
+            PrefManager.setVal(PrefName.MaxInlineSize, defaultSettingsLN.maxInlineSize)
         }
 
-        binding.LNmaxBlockSize.setText(settings.defaultLN.maxBlockSize.toString())
+        binding.LNmaxBlockSize.setText(defaultSettingsLN.maxBlockSize.toString())
         binding.LNmaxBlockSize.setOnFocusChangeListener { _, hasFocus ->
             if (!hasFocus) {
                 val value = binding.LNmaxBlockSize.text.toString().toIntOrNull() ?: 720
-                settings.defaultLN.maxBlockSize = value
+                defaultSettingsLN.maxBlockSize = value
                 binding.LNmaxBlockSize.setText(value.toString())
-                saveData(reader, settings)
+                PrefManager.setVal(PrefName.MaxBlockSize, value)
             }
         }
         binding.LNincrementMaxBlockSize.setOnClickListener {
             val value = binding.LNmaxBlockSize.text.toString().toIntOrNull() ?: 720
-            settings.defaultLN.maxInlineSize = value + 10
-            binding.LNmaxBlockSize.setText(settings.defaultLN.maxInlineSize.toString())
-            saveData(reader, settings)
+            defaultSettingsLN.maxInlineSize = value + 10
+            binding.LNmaxBlockSize.setText(defaultSettingsLN.maxInlineSize.toString())
+            PrefManager.setVal(PrefName.MaxBlockSize, defaultSettingsLN.maxInlineSize)
         }
 
         binding.LNdecrementMaxBlockSize.setOnClickListener {
             val value = binding.LNmaxBlockSize.text.toString().toIntOrNull() ?: 720
-            settings.defaultLN.maxBlockSize = value - 10
-            binding.LNmaxBlockSize.setText(settings.defaultLN.maxBlockSize.toString())
-            saveData(reader, settings)
+            defaultSettingsLN.maxBlockSize = value - 10
+            binding.LNmaxBlockSize.setText(defaultSettingsLN.maxBlockSize.toString())
+            PrefManager.setVal(PrefName.MaxBlockSize, defaultSettingsLN.maxBlockSize)
         }
 
-        binding.LNuseDarkTheme.isChecked = settings.defaultLN.useDarkTheme
+        binding.LNuseDarkTheme.isChecked = defaultSettingsLN.useDarkTheme
         binding.LNuseDarkTheme.setOnCheckedChangeListener { _, isChecked ->
-            settings.defaultLN.useDarkTheme = isChecked
-            saveData(reader, settings)
+            defaultSettingsLN.useDarkTheme = isChecked
+            PrefManager.setVal(PrefName.UseDarkThemeNovel, isChecked)
         }
 
-        binding.LNuseOledTheme.isChecked = settings.defaultLN.useOledTheme
+        binding.LNuseOledTheme.isChecked = defaultSettingsLN.useOledTheme
         binding.LNuseOledTheme.setOnCheckedChangeListener { _, isChecked ->
-            settings.defaultLN.useOledTheme = isChecked
-            saveData(reader, settings)
+            defaultSettingsLN.useOledTheme = isChecked
+            PrefManager.setVal(PrefName.UseOledThemeNovel, isChecked)
         }
 
-        binding.LNkeepScreenOn.isChecked = settings.defaultLN.keepScreenOn
+        binding.LNkeepScreenOn.isChecked = defaultSettingsLN.keepScreenOn
         binding.LNkeepScreenOn.setOnCheckedChangeListener { _, isChecked ->
-            settings.defaultLN.keepScreenOn = isChecked
-            saveData(reader, settings)
+            defaultSettingsLN.keepScreenOn = isChecked
+            PrefManager.setVal(PrefName.KeepScreenOnNovel, isChecked)
         }
 
-        binding.LNvolumeButton.isChecked = settings.defaultLN.volumeButtons
+        binding.LNvolumeButton.isChecked = defaultSettingsLN.volumeButtons
         binding.LNvolumeButton.setOnCheckedChangeListener { _, isChecked ->
-            settings.defaultLN.volumeButtons = isChecked
-            saveData(reader, settings)
+            defaultSettingsLN.volumeButtons = isChecked
+            PrefManager.setVal(PrefName.VolumeButtonsNovel, isChecked)
         }
 
         //Update Progress
-        binding.readerSettingsAskUpdateProgress.isChecked = settings.askIndividual
+        binding.readerSettingsAskUpdateProgress.isChecked =
+            PrefManager.getVal(PrefName.AskIndividualReader)
         binding.readerSettingsAskUpdateProgress.setOnCheckedChangeListener { _, isChecked ->
-            settings.askIndividual = isChecked
-            saveData(reader, settings)
+            PrefManager.setVal(PrefName.AskIndividualReader, isChecked)
         }
-        binding.readerSettingsAskUpdateDoujins.isChecked = settings.updateForH
+        binding.readerSettingsAskUpdateDoujins.isChecked =
+            PrefManager.getVal(PrefName.UpdateForHReader)
         binding.readerSettingsAskUpdateDoujins.setOnCheckedChangeListener { _, isChecked ->
-            settings.updateForH = isChecked
+            PrefManager.setVal(PrefName.UpdateForHReader, isChecked)
             if (isChecked) snackString(getString(R.string.very_bold))
-            saveData(reader, settings)
         }
 
     }

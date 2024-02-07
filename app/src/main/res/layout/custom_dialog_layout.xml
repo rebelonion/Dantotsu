@@ -4,16 +4,18 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp">
+
     <TextView
         android:layout_width="265dp"
         android:layout_height="48dp"
+        android:ellipsize="end"
         android:fontFamily="@font/poppins_bold"
         android:gravity="center|start"
-        android:textSize="16sp"
         android:singleLine="true"
+        android:text="Scanlators"
         android:textColor="?attr/colorOnBackground"
-        android:ellipsize="end"
-        android:text="Scanlators" />
+        android:textSize="16sp" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -22,7 +24,7 @@
             android:id="@+id/checkboxContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"/>
+            android:orientation="vertical" />
     </ScrollView>
 
 </LinearLayout>

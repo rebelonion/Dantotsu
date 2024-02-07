@@ -10,12 +10,14 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import ani.dantotsu.FileUrl
+import ani.dantotsu.currContext
 import ani.dantotsu.logger
 import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.snackString
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
+import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
@@ -26,6 +28,7 @@ import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.interceptor.CloudflareBypassException
+import eu.kanade.tachiyomi.source.anime.getPreferenceKey
 import eu.kanade.tachiyomi.source.model.MangasPage
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
@@ -71,8 +74,78 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     override val name = extension.name
     override val saveName = extension.name
     override val hostUrl = extension.sources.first().name
-    override val isDubAvailableSeparately = false
     override val isNSFW = extension.isNsfw
+    override var selectDub: Boolean
+        get() = getDub()
+        set(value) {
+            setDub(value)
+        }
+
+    private fun getDub(): Boolean {
+        val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
+            ?: return false
+        currContext()?.let { context ->
+            val sharedPreferences =
+                context.getSharedPreferences(
+                    configurableSource.getPreferenceKey(),
+                    Context.MODE_PRIVATE
+                )
+            sharedPreferences.all.filterValues { AnimeNameAdapter.getSubDub(it.toString()) != AnimeNameAdapter.Companion.SubDubType.NULL }
+                .forEach { value ->
+                    return when (AnimeNameAdapter.getSubDub(value.value.toString())) {
+                        AnimeNameAdapter.Companion.SubDubType.SUB -> false
+                        AnimeNameAdapter.Companion.SubDubType.DUB -> true
+                        AnimeNameAdapter.Companion.SubDubType.NULL -> false
+                    }
+                }
+        }
+        return false
+    }
+
+    fun setDub(setDub: Boolean) {
+        val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
+            ?: return
+        val type = when (setDub) {
+            true -> AnimeNameAdapter.Companion.SubDubType.DUB
+            false -> AnimeNameAdapter.Companion.SubDubType.SUB
+        }
+        currContext()?.let { context ->
+            val sharedPreferences =
+                context.getSharedPreferences(
+                    configurableSource.getPreferenceKey(),
+                    Context.MODE_PRIVATE
+                )
+            sharedPreferences.all.filterValues { AnimeNameAdapter.getSubDub(it.toString()) != AnimeNameAdapter.Companion.SubDubType.NULL }
+                .forEach { value ->
+                    val setValue = AnimeNameAdapter.setSubDub(value.value.toString(), type)
+                    if (setValue != null) {
+                        sharedPreferences.edit().putString(value.key, setValue).apply()
+                    }
+                }
+        }
+    }
+
+    override fun isDubAvailableSeparately(sourceLang: Int?): Boolean {
+        val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
+            ?: return false
+        currContext()?.let { context ->
+            logger("isDubAvailableSeparately: ${configurableSource.getPreferenceKey()}")
+            val sharedPreferences =
+                context.getSharedPreferences(
+                    configurableSource.getPreferenceKey(),
+                    Context.MODE_PRIVATE
+                )
+            sharedPreferences.all.filterValues {
+                AnimeNameAdapter.setSubDub(
+                    it.toString(),
+                    AnimeNameAdapter.Companion.SubDubType.NULL
+                ) != null
+            }
+                .forEach { _ -> return true }
+        }
+        return false
+    }
+
     override suspend fun loadEpisodes(
         animeLink: String,
         extra: Map<String, String>?,
@@ -106,6 +179,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     }
                     it
                 }
+            } else if (episodesAreIncrementing(res)) {
+                res.sortedBy { it.episode_number }
             } else {
                 var episodeCounter = 1f
                 // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
@@ -113,26 +188,39 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
                 seasonGroups.keys.sortedBy { it.toInt() }
                     .flatMap { season ->
-                    seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
-                        if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
-                            val potentialNumber =
-                                AnimeNameAdapter.findEpisodeNumber(episode.name)
-                            if (potentialNumber != null) {
-                                episode.episode_number = potentialNumber
-                            } else {
-                                episode.episode_number = episodeCounter
+                        seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
+                            if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
+                                val potentialNumber =
+                                    AnimeNameAdapter.findEpisodeNumber(episode.name)
+                                if (potentialNumber != null) {
+                                    episode.episode_number = potentialNumber
+                                } else {
+                                    episode.episode_number = episodeCounter
+                                }
+                                episodeCounter++
                             }
-                            episodeCounter++
-                        }
-                        episode
-                    } ?: emptyList()
-                }
+                            episode
+                        } ?: emptyList()
+                    }
             }
             return sortedEpisodes.map { SEpisodeToEpisode(it) }
         } catch (e: Exception) {
             logger("Exception: $e")
         }
         return emptyList()
+    }
+
+    private fun episodesAreIncrementing(episodes: List<SEpisode>): Boolean {
+        val sortedEpisodes = episodes.sortedBy { it.episode_number }
+        val takenNumbers = mutableListOf<Float>()
+        sortedEpisodes.forEach {
+            if (it.episode_number !in takenNumbers) {
+                takenNumbers.add(it.episode_number)
+            } else {
+                return false
+            }
+        }
+        return true
     }
 
     override suspend fun loadVideoServers(
@@ -177,7 +265,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } catch (e: CloudflareBypassException) {
             logger("Exception in search: $e")
             withContext(Dispatchers.Main) {
-                snackString( "Failed to bypass Cloudflare")
+                snackString("Failed to bypass Cloudflare")
             }
             emptyList()
         } catch (e: Exception) {
@@ -626,8 +714,6 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         // If the format is still undetermined, log an error
         if (format == null) {
             logger("Unknown video format: $videoUrl")
-            //FirebaseCrashlytics.getInstance()
-            //   .recordException(Exception("Unknown video format: $videoUrl"))
             format = VideoType.CONTAINER
         }
         val headersMap: Map<String, String> =

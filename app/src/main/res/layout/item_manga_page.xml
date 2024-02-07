@@ -42,9 +42,9 @@
                 app:boxCornerRadiusBottomStart="28dp"
                 app:boxCornerRadiusTopEnd="28dp"
                 app:boxCornerRadiusTopStart="28dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:endIconDrawable="@drawable/ic_round_search_24"
                 app:endIconTint="@color/bg_opp"
-                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:hintAnimationEnabled="true">
 
                 <AutoCompleteTextView
@@ -67,8 +67,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
                 app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                app:strokeColor="@color/text_input_layout_stroke_color"
-                app:cardCornerRadius="26dp">
+                app:cardCornerRadius="26dp"
+                app:strokeColor="@color/text_input_layout_stroke_color">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/mangaUserAvatar"
@@ -247,13 +247,13 @@
 
     <LinearLayout
         android:id="@+id/mangaPopular"
-        android:visibility="invisible"
-        tools:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="invisible"
+        tools:visibility="visible">
 
         <TextView
             android:layout_width="0dp"
@@ -269,9 +269,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:textSize="12sp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/include_media_in_list" />
+            android:text="@string/include_media_in_list"
+            android:textSize="12sp" />
 
 
     </LinearLayout>

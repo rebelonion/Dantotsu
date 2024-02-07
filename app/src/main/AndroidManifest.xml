@@ -10,7 +10,8 @@
         android:required="false" />
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"
+    <uses-permission
+        android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"
         tools:ignore="LeanbackUsesWifi" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
@@ -51,7 +52,7 @@
         android:icon="${icon_placeholder}"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:requestLegacyExternalStorage="true"
+        android:requestLegacyExternalStorage="false"
         android:roundIcon="${icon_placeholder_round}"
         android:supportsRtl="true"
         android:theme="@style/Theme.Dantotsu"
@@ -289,13 +290,13 @@
 
         <service
             android:name=".widgets.CurrentlyAiringRemoteViewsService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="true" />
+            android:exported="true"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
             android:name=".download.video.ExoplayerDownloadService"
             android:exported="false"
             android:foregroundServiceType="dataSync">
-        <intent-filter>
+            <intent-filter>
                 <action android:name="androidx.media3.exoplayer.downloadService.action.RESTART" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -317,19 +318,22 @@
             android:name=".download.novel.NovelDownloaderService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
-        <service android:name=".download.anime.AnimeDownloaderService"
+        <service
+            android:name=".download.anime.AnimeDownloaderService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
         <service
             android:name=".connections.discord.DiscordService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
-        <service android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
-            android:permission="android.permission.BIND_JOB_SERVICE"
-            android:exported="true"/>
+        <service
+            android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
+            android:exported="true"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <meta-data android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
-            android:value="androidx.media3.cast.DefaultCastOptionsProvider"/>
+        <meta-data
+            android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+            android:value="androidx.media3.cast.DefaultCastOptionsProvider" />
     </application>
 
 </manifest>

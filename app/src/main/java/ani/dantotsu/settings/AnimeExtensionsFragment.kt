@@ -12,13 +12,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
 import ani.dantotsu.settings.paging.AnimeExtensionAdapter
 import ani.dantotsu.settings.paging.AnimeExtensionsViewModel
 import ani.dantotsu.settings.paging.AnimeExtensionsViewModelFactory
 import ani.dantotsu.settings.paging.OnAnimeInstallClickListener
 import ani.dantotsu.snackString
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -71,6 +71,10 @@ class AnimeExtensionsFragment : Fragment(),
         viewModel.setSearchQuery(query ?: "")
     }
 
+    override fun notifyDataChanged() {
+        viewModel.invalidatePager()
+    }
+
     override fun onInstallClick(pkg: AnimeExtension.Available) {
         val context = requireContext()
         if (isAdded) {
@@ -93,7 +97,7 @@ class AnimeExtensionsFragment : Fragment(),
                         notificationManager.notify(1, builder.build())
                     },
                     { error ->
-                        FirebaseCrashlytics.getInstance().recordException(error)
+                        Injekt.get<CrashlyticsInterface>().logException(error)
                         val builder = NotificationCompat.Builder(
                             context,
                             Notifications.CHANNEL_DOWNLOADER_ERROR
@@ -110,7 +114,7 @@ class AnimeExtensionsFragment : Fragment(),
                             context,
                             Notifications.CHANNEL_DOWNLOADER_PROGRESS
                         )
-                            .setSmallIcon(R.drawable.ic_round_download_24)
+                            .setSmallIcon(R.drawable.ic_download_24)
                             .setContentTitle("Installation complete")
                             .setContentText("The extension has been successfully installed.")
                             .setPriority(NotificationCompat.PRIORITY_LOW)

@@ -1,11 +1,7 @@
 package ani.dantotsu.others
 
-import ani.dantotsu.R
 import ani.dantotsu.client
-import ani.dantotsu.currContext
 import ani.dantotsu.media.Media
-import ani.dantotsu.snackString
-import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.withTimeout
 
 object MalScraper {
@@ -50,7 +46,7 @@ object MalScraper {
                 }
             }
         } catch (e: Exception) {
-           // if (e is TimeoutCancellationException) snackString(currContext()?.getString(R.string.error_loading_mal_data))
+            // if (e is TimeoutCancellationException) snackString(currContext()?.getString(R.string.error_loading_mal_data))
         }
     }
 }

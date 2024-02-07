@@ -25,6 +25,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
@@ -39,9 +40,9 @@ import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
-import ani.dantotsu.settings.PlayerSettings
-import ani.dantotsu.settings.UserInterfaceSettings
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Group.ANIME_GROUP
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
@@ -84,8 +85,6 @@ class AnimeWatchFragment : Fragment() {
     var continueEp: Boolean = false
     var loaded = false
 
-    lateinit var playerSettings: PlayerSettings
-    lateinit var uiSettings: UserInterfaceSettings
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -118,12 +117,6 @@ class AnimeWatchFragment : Fragment() {
         var maxGridSize = (screenWidth / 100f).roundToInt()
         maxGridSize = max(4, maxGridSize - (maxGridSize % 2))
 
-        playerSettings =
-            loadData("player_settings", toast = false)
-                ?: PlayerSettings().apply { saveData("player_settings", this) }
-        uiSettings = loadData("ui_settings", toast = false)
-            ?: UserInterfaceSettings().apply { saveData("ui_settings", this) }
-
         val gridLayoutManager = GridLayoutManager(requireContext(), maxGridSize)
 
         gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -144,6 +137,23 @@ class AnimeWatchFragment : Fragment() {
 
         binding.animeSourceRecycler.layoutManager = gridLayoutManager
 
+        binding.ScrollTop.setOnClickListener {
+            binding.animeSourceRecycler.scrollToPosition(10)
+            binding.animeSourceRecycler.smoothScrollToPosition(0)
+        }
+        binding.animeSourceRecycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val position = gridLayoutManager.findFirstVisibleItemPosition()
+                if (position > 2) {
+                    binding.ScrollTop.translationY = -navBarHeight.toFloat()
+                    binding.ScrollTop.visibility = View.VISIBLE
+                } else {
+                    binding.ScrollTop.visibility = View.GONE
+                }
+            }
+        })
         model.scrolledToTop.observe(viewLifecycleOwner) {
             if (it) binding.animeSourceRecycler.scrollToPosition(0)
         }
@@ -155,7 +165,7 @@ class AnimeWatchFragment : Fragment() {
                 media.selected = model.loadSelected(media)
 
                 subscribed =
-                    SubscriptionHelper.getSubscriptions(requireContext()).containsKey(media.id)
+                    SubscriptionHelper.getSubscriptions().containsKey(media.id)
 
                 style = media.selected!!.recyclerStyle
                 reverse = media.selected!!.recyclerReversed
@@ -172,7 +182,7 @@ class AnimeWatchFragment : Fragment() {
                     headerAdapter = AnimeWatchAdapter(it, this, model.watchSources!!)
                     episodeAdapter =
                         EpisodeAdapter(
-                            style ?: uiSettings.animeDefaultView,
+                            style ?: PrefManager.getVal(PrefName.AnimeDefaultView),
                             media,
                             this,
                             offlineMode = offlineMode
@@ -273,7 +283,7 @@ class AnimeWatchFragment : Fragment() {
         model.watchSources?.get(selected.sourceIndex)?.showUserTextListener = null
         selected.sourceIndex = i
         selected.server = null
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
         return model.watchSources?.get(i)!!
     }
@@ -281,7 +291,7 @@ class AnimeWatchFragment : Fragment() {
     fun onLangChange(i: Int) {
         val selected = model.loadSelected(media)
         selected.langIndex = i
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
     }
 
@@ -289,7 +299,7 @@ class AnimeWatchFragment : Fragment() {
         val selected = model.loadSelected(media)
         model.watchSources?.get(selected.sourceIndex)?.selectDub = checked
         selected.preferDub = checked
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         media.selected = selected
         lifecycleScope.launch(Dispatchers.IO) {
             model.forceLoadEpisode(
@@ -308,7 +318,7 @@ class AnimeWatchFragment : Fragment() {
         reverse = rev
         media.selected!!.recyclerStyle = style
         media.selected!!.recyclerReversed = reverse
-        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.saveSelected(media.id, media.selected!!)
         reload()
     }
 
@@ -316,7 +326,7 @@ class AnimeWatchFragment : Fragment() {
         media.selected!!.chip = i
         start = s
         end = e
-        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.saveSelected(media.id, media.selected!!)
         reload()
     }
 
@@ -364,12 +374,10 @@ class AnimeWatchFragment : Fragment() {
             if (allSettings.size > 1) {
                 val names =
                     allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }.toTypedArray()
-                var selectedIndex = 0
                 val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
                     .setTitle("Select a Source")
-                    .setSingleChoiceItems(names, selectedIndex) { dialog, which ->
-                        selectedIndex = which
-                        selectedSetting = allSettings[selectedIndex]
+                    .setSingleChoiceItems(names, -1) { dialog, which ->
+                        selectedSetting = allSettings[which]
                         itemSelected = true
                         dialog.dismiss()
 
@@ -419,7 +427,7 @@ class AnimeWatchFragment : Fragment() {
 
     fun onEpisodeClick(i: String) {
         model.continueMedia = false
-        model.saveSelected(media.id, media.selected!!, requireActivity())
+        model.saveSelected(media.id, media.selected!!)
         model.onEpisodeClick(media, i, requireActivity().supportFragmentManager)
     }
 
@@ -458,17 +466,11 @@ class AnimeWatchFragment : Fragment() {
             )
         )
         val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
-        val id = requireContext().getSharedPreferences(
-            ContextCompat.getString(requireContext(), R.string.anime_downloads),
-            Context.MODE_PRIVATE
-        ).getString(
+        val id = PrefManager.getAnimeDownloadPreferences().getString(
             taskName,
             ""
         ) ?: ""
-        requireContext().getSharedPreferences(
-            ContextCompat.getString(requireContext(), R.string.anime_downloads),
-            Context.MODE_PRIVATE
-        ).edit().remove(taskName).apply()
+        PrefManager.getAnimeDownloadPreferences().edit().remove(taskName).apply()
         DownloadService.sendRemoveDownload(
             requireContext(),
             ExoplayerDownloadService::class.java,
@@ -520,7 +522,7 @@ class AnimeWatchFragment : Fragment() {
         selected.latest =
             media.userProgress?.toFloat()?.takeIf { selected.latest < it } ?: selected.latest
 
-        model.saveSelected(media.id, selected, requireActivity())
+        model.saveSelected(media.id, selected)
         headerAdapter.handleEpisodes()
         val isDownloaded = model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)
         episodeAdapter.offlineMode = isDownloaded
@@ -536,7 +538,7 @@ class AnimeWatchFragment : Fragment() {
                 arr = (arr.reversed() as? ArrayList<Episode>) ?: arr
         }
         episodeAdapter.arr = arr
-        episodeAdapter.updateType(style ?: uiSettings.animeDefaultView)
+        episodeAdapter.updateType(style ?: PrefManager.getVal(PrefName.AnimeDefaultView))
         episodeAdapter.notifyItemRangeInserted(0, arr.size)
         for (download in downloadManager.animeDownloadedTypes) {
             if (download.title == media.mainName()) {

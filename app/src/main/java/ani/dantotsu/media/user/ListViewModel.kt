@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.tryWithSuspend
 
 class ListViewModel : ViewModel() {
-    var grid = MutableLiveData(loadData<Boolean>("listGrid") ?: true)
+    var grid = MutableLiveData(PrefManager.getVal<Boolean>(PrefName.ListGrid))
 
     private val lists = MutableLiveData<MutableMap<String, ArrayList<Media>>>()
     fun getLists(): LiveData<MutableMap<String, ArrayList<Media>>> = lists

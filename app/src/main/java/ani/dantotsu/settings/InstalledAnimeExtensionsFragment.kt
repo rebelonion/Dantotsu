@@ -17,19 +17,23 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
-import ani.dantotsu.loadData
+import ani.dantotsu.logger
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -38,7 +42,9 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Collections
 import java.util.Locale
+
 
 class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
@@ -46,7 +52,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentAnimeExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
-    private val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons: Boolean = PrefManager.getVal(PrefName.SkipExtensionIcons)
     private val animeExtensionManager: AnimeExtensionManager = Injekt.get()
     private val extensionsAdapter = AnimeExtensionsAdapter(
         { pkg ->
@@ -139,7 +145,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                                 notificationManager.notify(1, builder.build())
                             },
                             { error ->
-                                FirebaseCrashlytics.getInstance().recordException(error)
+                                Injekt.get<CrashlyticsInterface>().logException(error)
                                 Log.e("AnimeExtensionsAdapter", "Error: ", error)  // Log the error
                                 val builder = NotificationCompat.Builder(
                                     context,
@@ -173,6 +179,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         }, skipIcons
     )
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -184,14 +191,68 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         extensionsRecyclerView.adapter = extensionsAdapter
 
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val newList = extensionsAdapter.currentList.toMutableList()
+                val fromPosition = viewHolder.absoluteAdapterPosition
+                val toPosition = target.absoluteAdapterPosition
+                if (fromPosition < toPosition) { //probably need to switch to a recyclerview adapter
+                    for (i in fromPosition until toPosition) {
+                        Collections.swap(newList, i, i + 1)
+                    }
+                } else {
+                    for (i in fromPosition downTo toPosition + 1) {
+                        Collections.swap(newList, i, i - 1)
+                    }
+                }
+                extensionsAdapter.submitList(newList)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                super.onSelectedChanged(viewHolder, actionState)
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                    viewHolder?.itemView?.elevation = 8f
+                    viewHolder?.itemView?.translationZ = 8f
+                }
+            }
+
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
+                super.clearView(recyclerView, viewHolder)
+                extensionsAdapter.updatePref()
+                viewHolder.itemView.elevation = 0f
+                viewHolder.itemView.translationZ = 0f
+            }
+        }
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(extensionsRecyclerView)
+
 
         lifecycleScope.launch {
             animeExtensionManager.installedExtensionsFlow.collect { extensions ->
-                extensionsAdapter.updateData(extensions)
+                extensionsAdapter.updateData(sortToAnimeSourcesList(extensions))
             }
         }
-        val extensionsRecyclerView: RecyclerView = binding.allAnimeExtensionsRecyclerView
         return binding.root
+    }
+
+
+    private fun sortToAnimeSourcesList(inpt: List<AnimeExtension.Installed>): List<AnimeExtension.Installed> {
+        val sourcesMap = inpt.associateBy { it.name }
+        val orderedSources = AnimeSources.pinnedAnimeSources.mapNotNull { name ->
+            sourcesMap[name]
+        }
+        return orderedSources + inpt.filter { !AnimeSources.pinnedAnimeSources.contains(it.name) }
     }
 
     override fun onDestroyView() {
@@ -199,7 +260,13 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
     override fun updateContentBasedOnQuery(query: String?) {
-        extensionsAdapter.filter(query ?: "", animeExtensionManager.installedExtensionsFlow.value)
+        extensionsAdapter.filter(
+            query ?: "",
+            sortToAnimeSourcesList(animeExtensionManager.installedExtensionsFlow.value)
+        )
+    }
+
+    override fun notifyDataChanged() { // Do nothing
     }
 
     private class AnimeExtensionsAdapter(
@@ -211,7 +278,14 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
     ) {
 
         fun updateData(newExtensions: List<AnimeExtension.Installed>) {
-            submitList(newExtensions)  // Use submitList instead of manual list handling
+            submitList(newExtensions)
+        }
+
+        fun updatePref() {
+            val map = currentList.map { it.name }
+            PrefManager.setVal(PrefName.AnimeSourcesOrder, map)
+            AnimeSources.pinnedAnimeSources = map
+            AnimeSources.performReorderAnimeSources()
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -222,7 +296,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val extension = getItem(position) // Use getItem() from ListAdapter
+            val extension = getItem(position)
             val nsfw = if (extension.isNsfw) "(18+)" else ""
             val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
             holder.extensionNameTextView.text = extension.name
@@ -241,7 +315,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
             }
-            holder.card.setOnLongClickListener {
+            holder.closeTextView.setOnLongClickListener {
                 onUninstallClicked(extension, true)
                 true
             }
@@ -254,7 +328,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                     filteredList.add(extension)
                 }
             }
-            submitList(filteredList)
+            if (filteredList != currentList)
+                submitList(filteredList)
         }
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -264,7 +339,6 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
-            val card = view.findViewById<View>(R.id.extensionCardView)
         }
 
         companion object {

@@ -1,4 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
+
     <style name="Theme.Dantotsu" parent="Theme.Base">
         <item name="android:statusBarColor">@color/status</item>
         <item name="colorOnPrimary">@color/bg_black</item>
@@ -270,46 +271,55 @@
     <style name="Theme.Dantotsu.BlueOLED" parent="Theme.Dantotsu.Blue">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
     <style name="Theme.Dantotsu.GreenOLED" parent="Theme.Dantotsu.Green">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
     <style name="Theme.Dantotsu.PurpleOLED" parent="Theme.Dantotsu.Purple">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
     <style name="Theme.Dantotsu.PinkOLED" parent="Theme.Dantotsu.Pink">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
     <style name="Theme.Dantotsu.MonochromeOLED" parent="Theme.Dantotsu.Monochrome">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
     <style name="Theme.Dantotsu.RedOLED" parent="Theme.Dantotsu.Red">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
     <style name="Theme.Dantotsu.LavenderOLED" parent="Theme.Dantotsu.Lavender">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
     <style name="Theme.Dantotsu.SaikouOLED" parent="Theme.Dantotsu.Saikou">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
     <style name="Theme.Dantotsu.OceanOLED" parent="Theme.Dantotsu.Ocean">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
 </resources>

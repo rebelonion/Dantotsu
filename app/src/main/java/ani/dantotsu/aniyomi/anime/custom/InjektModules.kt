@@ -2,11 +2,11 @@ package ani.dantotsu.aniyomi.anime.custom
 
 
 import android.app.Application
-import android.content.Context
 import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.database.StandaloneDatabaseProvider
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.parsers.novel.NovelExtensionManager
@@ -16,7 +16,6 @@ import eu.kanade.tachiyomi.core.preference.AndroidPreferenceStore
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.network.NetworkHelper
-import eu.kanade.tachiyomi.network.NetworkPreferences
 import eu.kanade.tachiyomi.source.anime.AndroidAnimeSourceManager
 import eu.kanade.tachiyomi.source.manga.AndroidMangaSourceManager
 import kotlinx.serialization.json.Json
@@ -36,7 +35,7 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { DownloadsManager(app) }
 
-        addSingletonFactory { NetworkHelper(app, get()) }
+        addSingletonFactory { NetworkHelper(app) }
 
         addSingletonFactory { AnimeExtensionManager(app) }
         addSingletonFactory { MangaExtensionManager(app) }
@@ -44,9 +43,6 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory<AnimeSourceManager> { AndroidAnimeSourceManager(app, get()) }
         addSingletonFactory<MangaSourceManager> { AndroidMangaSourceManager(app, get()) }
-
-        val sharedPreferences = app.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        addSingleton(sharedPreferences)
 
         addSingletonFactory {
             Json {
@@ -56,6 +52,10 @@ class AppModule(val app: Application) : InjektModule {
         }
 
         addSingletonFactory { StandaloneDatabaseProvider(app) }
+
+        addSingletonFactory<CrashlyticsInterface> {
+            ani.dantotsu.connections.crashlytics.CrashlyticsFactory.createCrashlytics()
+        }
 
         addSingletonFactory { MangaCache() }
 
@@ -70,13 +70,6 @@ class PreferenceModule(val application: Application) : InjektModule {
     override fun InjektRegistrar.registerInjectables() {
         addSingletonFactory<PreferenceStore> {
             AndroidPreferenceStore(application)
-        }
-
-        addSingletonFactory {
-            NetworkPreferences(
-                preferenceStore = get(),
-                verboseLogging = false,
-            )
         }
 
         addSingletonFactory {

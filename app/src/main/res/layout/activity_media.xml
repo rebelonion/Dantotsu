@@ -84,8 +84,8 @@
                         android:scrollHorizontally="false"
                         android:singleLine="false"
                         android:text="@string/slogan"
-                        android:textSize="16sp"
                         android:textColor="?attr/colorOnBackground"
+                        android:textSize="16sp"
                         android:transitionName="mediaTitle" />
 
                     <TextView
@@ -123,10 +123,10 @@
                     android:text="@string/add"
                     android:textAllCaps="true"
                     android:textColor="?attr/colorSecondary"
-                    app:strokeColor="@color/bg_opp"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     app:cornerRadius="16dp"
+                    app:strokeColor="@color/bg_opp"
                     tools:ignore="SmallSp,TextContrastCheck" />
 
             </LinearLayout>
@@ -155,7 +155,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    app:contentScrim="?android:colorBackground"
                     android:background="?attr/colorSurface"
                     android:ellipsize="marquee"
                     android:focusable="true"
@@ -170,6 +169,7 @@
                     android:text="@string/slogan"
                     android:textSize="16sp"
                     android:transitionName="mediaTitle"
+                    app:contentScrim="?android:colorBackground"
                     tools:visibility="gone" />
 
                 <LinearLayout
@@ -226,9 +226,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_height="match_parent">
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/mediaViewPager"
@@ -242,9 +242,9 @@
         android:id="@+id/mediaTab"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="0dp"
         android:layout_gravity="center_horizontal|bottom"
         android:background="?attr/colorSurface"
+        android:padding="0dp"
         android:translationZ="1dp"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
@@ -270,8 +270,8 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_gravity="center"
-            app:tint="@color/bg"
             android:src="@drawable/ic_incognito_24"
+            app:tint="@color/bg"
             tools:ignore="ContentDescription" />
     </androidx.cardview.widget.CardView>
 
@@ -315,12 +315,12 @@
             tools:ignore="ContentDescription,ImageContrastCheck"
             tools:srcCompat="@tools:sample/backgrounds/scenic[2]" />
     </androidx.cardview.widget.CardView>
+
     <FrameLayout
         android:id="@+id/fragmentExtensionsContainer"
-        android:paddingTop="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
-    </FrameLayout>
+        android:paddingTop="16dp"
+        android:visibility="gone"></FrameLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

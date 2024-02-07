@@ -18,10 +18,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemExtensionAllBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.parsers.novel.NovelExtensionManager
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import com.bumptech.glide.Glide
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -75,7 +76,9 @@ class NovelExtensionsViewModel(
                 prefetchDistance = 15
             )
         ) {
-            NovelExtensionPagingSource(available, installed, query)
+            val nEPS = NovelExtensionPagingSource(available, installed, query)
+            currentPagingSource = nEPS
+            nEPS
         }.flow
     }.cachedIn(viewModelScope)
 }
@@ -93,7 +96,7 @@ class NovelExtensionPagingSource(
         val availableExtensions =
             availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
         val query = searchQuery
-        val isNsfwEnabled: Boolean = loadData("NFSWExtension") ?: true
+        val isNsfwEnabled: Boolean = PrefManager.getVal(PrefName.NSFWExtension)
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
@@ -130,7 +133,7 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
         DIFF_CALLBACK
     ) {
 
-    private val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons: Boolean = PrefManager.getVal(PrefName.SkipExtensionIcons)
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<NovelExtension.Available>() {

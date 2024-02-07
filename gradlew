@@ -59,7 +59,7 @@ die () {
     echo
     exit 1
 }
-
+ 
 # OS specific support (must be 'true' or 'false').
 cygwin=false
 msys=false

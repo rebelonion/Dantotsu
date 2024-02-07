@@ -14,13 +14,12 @@ import androidx.core.widget.addTextChangedListener
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityPlayerSettingsBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -39,7 +38,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+
         ThemeManager(this).applyTheme()
         binding = ActivityPlayerSettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -62,39 +61,12 @@ class PlayerSettingsActivity : AppCompatActivity() {
             bottomMargin = navBarHeight
         }
 
-        val settings = loadData<PlayerSettings>(player, toast = false) ?: PlayerSettings().apply {
-            saveData(
-                player,
-                this
-            )
-        }
 
         binding.playerSettingsBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
         //Video
-        binding.playerSettingsVideoInfo.isChecked = settings.videoInfo
-        binding.playerSettingsVideoInfo.setOnCheckedChangeListener { _, isChecked ->
-            settings.videoInfo = isChecked
-            saveData(player, settings)
-        }
-
-        binding.playerSettingsQualityHeight.setText(
-            (loadData<Int>("maxHeight", toast = false) ?: 480).toString()
-        )
-        binding.playerSettingsQualityHeight.addTextChangedListener {
-            val height = binding.playerSettingsQualityHeight.text.toString().toIntOrNull()
-            saveData("maxHeight", height)
-        }
-        binding.playerSettingsQualityWidth.setText(
-            (loadData<Int>("maxWidth", toast = false) ?: 720).toString()
-        )
-        binding.playerSettingsQualityWidth.addTextChangedListener {
-            val height = binding.playerSettingsQualityWidth.text.toString().toIntOrNull()
-            saveData("maxWidth", height)
-        }
-
 
         val speeds =
             arrayOf(
@@ -113,128 +85,126 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 2f
             )
         val cursedSpeeds = arrayOf(1f, 1.25f, 1.5f, 1.75f, 2f, 2.5f, 3f, 4f, 5f, 10f, 25f, 50f)
-        var curSpeedArr = if (settings.cursedSpeeds) cursedSpeeds else speeds
+        var curSpeedArr = if (PrefManager.getVal(PrefName.CursedSpeeds)) cursedSpeeds else speeds
         var speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
         binding.playerSettingsSpeed.text =
-            getString(R.string.default_playback_speed, speedsName[settings.defaultSpeed])
-        val speedDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+            getString(
+                R.string.default_playback_speed,
+                speedsName[PrefManager.getVal(PrefName.DefaultSpeed)]
+            )
+        val speedDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.default_speed))
         binding.playerSettingsSpeed.setOnClickListener {
             val dialog =
-                speedDialog.setSingleChoiceItems(speedsName, settings.defaultSpeed) { dialog, i ->
-                    settings.defaultSpeed = i
+                speedDialog.setSingleChoiceItems(
+                    speedsName,
+                    PrefManager.getVal(PrefName.DefaultSpeed)
+                ) { dialog, i ->
+                    PrefManager.setVal(PrefName.DefaultSpeed, i)
                     binding.playerSettingsSpeed.text =
                         getString(R.string.default_playback_speed, speedsName[i])
-                    saveData(player, settings)
                     dialog.dismiss()
                 }.show()
             dialog.window?.setDimAmount(0.8f)
         }
 
-        binding.playerSettingsCursedSpeeds.isChecked = settings.cursedSpeeds
+        binding.playerSettingsCursedSpeeds.isChecked = PrefManager.getVal(PrefName.CursedSpeeds)
         binding.playerSettingsCursedSpeeds.setOnCheckedChangeListener { _, isChecked ->
-            settings.cursedSpeeds = isChecked
-            curSpeedArr = if (settings.cursedSpeeds) cursedSpeeds else speeds
-            settings.defaultSpeed = if (settings.cursedSpeeds) 0 else 5
+            PrefManager.setVal(PrefName.CursedSpeeds, isChecked)
+            curSpeedArr = if (isChecked) cursedSpeeds else speeds
+            val newDefaultSpeed = if (isChecked) 0 else 5
+            PrefManager.setVal(PrefName.DefaultSpeed, newDefaultSpeed)
             speedsName = curSpeedArr.map { "${it}x" }.toTypedArray()
             binding.playerSettingsSpeed.text =
-                getString(R.string.default_playback_speed, speedsName[settings.defaultSpeed])
-            saveData(player, settings)
+                getString(
+                    R.string.default_playback_speed,
+                    speedsName[PrefManager.getVal(PrefName.DefaultSpeed)]
+                )
         }
 
-        //Time Stamp
-        binding.playerSettingsTimeStamps.isChecked = settings.timeStampsEnabled
+
+        // Time Stamp
+        binding.playerSettingsTimeStamps.isChecked = PrefManager.getVal(PrefName.TimeStampsEnabled)
         binding.playerSettingsTimeStamps.setOnCheckedChangeListener { _, isChecked ->
-            settings.timeStampsEnabled = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.TimeStampsEnabled, isChecked)
         }
 
-        binding.playerSettingsTimeStampsProxy.isChecked = settings.useProxyForTimeStamps
+        binding.playerSettingsTimeStampsProxy.isChecked =
+            PrefManager.getVal(PrefName.UseProxyForTimeStamps)
         binding.playerSettingsTimeStampsProxy.setOnCheckedChangeListener { _, isChecked ->
-            settings.useProxyForTimeStamps = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.UseProxyForTimeStamps, isChecked)
         }
 
-        binding.playerSettingsShowTimeStamp.isChecked = settings.showTimeStampButton
+        binding.playerSettingsShowTimeStamp.isChecked =
+            PrefManager.getVal(PrefName.ShowTimeStampButton)
         binding.playerSettingsShowTimeStamp.setOnCheckedChangeListener { _, isChecked ->
-            settings.showTimeStampButton = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.ShowTimeStampButton, isChecked)
         }
 
-
-        //Auto
-        binding.playerSettingsAutoSkipOpEd.isChecked = settings.autoSkipOPED
+        // Auto
+        binding.playerSettingsAutoSkipOpEd.isChecked = PrefManager.getVal(PrefName.AutoSkipOPED)
         binding.playerSettingsAutoSkipOpEd.setOnCheckedChangeListener { _, isChecked ->
-            settings.autoSkipOPED = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.AutoSkipOPED, isChecked)
         }
 
-        binding.playerSettingsAutoPlay.isChecked = settings.autoPlay
+        binding.playerSettingsAutoPlay.isChecked = PrefManager.getVal(PrefName.AutoPlay)
         binding.playerSettingsAutoPlay.setOnCheckedChangeListener { _, isChecked ->
-            settings.autoPlay = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.AutoPlay, isChecked)
         }
-        binding.playerSettingsAutoSkip.isChecked = settings.autoSkipFiller
+
+        binding.playerSettingsAutoSkip.isChecked = PrefManager.getVal(PrefName.AutoSkipFiller)
         binding.playerSettingsAutoSkip.setOnCheckedChangeListener { _, isChecked ->
-            settings.autoSkipFiller = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.AutoSkipFiller, isChecked)
         }
 
         //Update Progress
-        binding.playerSettingsAskUpdateProgress.isChecked = settings.askIndividual
+        binding.playerSettingsAskUpdateProgress.isChecked =
+            PrefManager.getVal(PrefName.AskIndividualPlayer)
         binding.playerSettingsAskUpdateProgress.setOnCheckedChangeListener { _, isChecked ->
-            settings.askIndividual = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.AskIndividualPlayer, isChecked)
         }
-        binding.playerSettingsAskUpdateHentai.isChecked = settings.updateForH
+        binding.playerSettingsAskUpdateHentai.isChecked =
+            PrefManager.getVal(PrefName.UpdateForHPlayer)
         binding.playerSettingsAskUpdateHentai.setOnCheckedChangeListener { _, isChecked ->
-            settings.updateForH = isChecked
+            PrefManager.setVal(PrefName.UpdateForHPlayer, isChecked)
             if (isChecked) snackString(getString(R.string.very_bold))
-            saveData(player, settings)
         }
         binding.playerSettingsCompletePercentage.value =
-            (settings.watchPercentage * 100).roundToInt().toFloat()
+            (PrefManager.getVal<Float>(PrefName.WatchPercentage) * 100).roundToInt().toFloat()
         binding.playerSettingsCompletePercentage.addOnChangeListener { _, value, _ ->
-            settings.watchPercentage = value / 100
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.WatchPercentage, value / 100)
         }
 
         //Behaviour
-        binding.playerSettingsAlwaysContinue.isChecked = settings.alwaysContinue
+        binding.playerSettingsAlwaysContinue.isChecked = PrefManager.getVal(PrefName.AlwaysContinue)
         binding.playerSettingsAlwaysContinue.setOnCheckedChangeListener { _, isChecked ->
-            settings.alwaysContinue = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.AlwaysContinue, isChecked)
         }
 
-        binding.playerSettingsPauseVideo.isChecked = settings.focusPause
+        binding.playerSettingsPauseVideo.isChecked = PrefManager.getVal(PrefName.FocusPause)
         binding.playerSettingsPauseVideo.setOnCheckedChangeListener { _, isChecked ->
-            settings.focusPause = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.FocusPause, isChecked)
         }
 
-        binding.playerSettingsVerticalGestures.isChecked = settings.gestures
+        binding.playerSettingsVerticalGestures.isChecked = PrefManager.getVal(PrefName.Gestures)
         binding.playerSettingsVerticalGestures.setOnCheckedChangeListener { _, isChecked ->
-            settings.gestures = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.Gestures, isChecked)
         }
 
-        binding.playerSettingsDoubleTap.isChecked = settings.doubleTap
+        binding.playerSettingsDoubleTap.isChecked = PrefManager.getVal(PrefName.DoubleTap)
         binding.playerSettingsDoubleTap.setOnCheckedChangeListener { _, isChecked ->
-            settings.doubleTap = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.DoubleTap, isChecked)
         }
-        binding.playerSettingsFastForward.isChecked = settings.fastforward
+        binding.playerSettingsFastForward.isChecked = PrefManager.getVal(PrefName.FastForward)
         binding.playerSettingsFastForward.setOnCheckedChangeListener { _, isChecked ->
-            settings.fastforward = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.FastForward, isChecked)
         }
-        binding.playerSettingsSeekTime.value = settings.seekTime.toFloat()
+        binding.playerSettingsSeekTime.value = PrefManager.getVal<Int>(PrefName.SeekTime).toFloat()
         binding.playerSettingsSeekTime.addOnChangeListener { _, value, _ ->
-            settings.seekTime = value.toInt()
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.SeekTime, value.toInt())
         }
 
-        binding.exoSkipTime.setText(settings.skipTime.toString())
+        binding.exoSkipTime.setText(PrefManager.getVal<Int>(PrefName.SkipTime).toString())
         binding.exoSkipTime.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.exoSkipTime.clearFocus()
@@ -244,8 +214,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.exoSkipTime.addTextChangedListener {
             val time = binding.exoSkipTime.text.toString().toIntOrNull()
             if (time != null) {
-                settings.skipTime = time
-                saveData(player, settings)
+                PrefManager.setVal(PrefName.SkipTime, time)
             }
         }
 
@@ -253,32 +222,37 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.playerSettingsPiP.apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 visibility = View.VISIBLE
-                isChecked = settings.pip
+                isChecked = PrefManager.getVal(PrefName.Pip)
                 setOnCheckedChangeListener { _, isChecked ->
-                    settings.pip = isChecked
-                    saveData(player, settings)
+                    PrefManager.setVal(PrefName.Pip, isChecked)
                 }
             } else visibility = View.GONE
         }
 
-        binding.playerSettingsCast.isChecked = settings.cast
+        binding.playerSettingsCast.isChecked = PrefManager.getVal(PrefName.Cast)
         binding.playerSettingsCast.setOnCheckedChangeListener { _, isChecked ->
-            settings.cast = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.Cast, isChecked)
+        }
+
+        binding.playerSettingsRotate.isChecked = PrefManager.getVal(PrefName.RotationPlayer)
+        binding.playerSettingsRotate.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.RotationPlayer, isChecked)
         }
 
         val resizeModes = arrayOf("Original", "Zoom", "Stretch")
-        val resizeDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val resizeDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.default_resize_mode))
         binding.playerResizeMode.setOnClickListener {
-            val dialog =
-                resizeDialog.setSingleChoiceItems(resizeModes, settings.resize) { dialog, count ->
-                    settings.resize = count
-                    saveData(player, settings)
-                    dialog.dismiss()
-                }.show()
+            val dialog = resizeDialog.setSingleChoiceItems(
+                resizeModes,
+                PrefManager.getVal<Int>(PrefName.Resize)
+            ) { dialog, count ->
+                PrefManager.setVal(PrefName.Resize, count)
+                dialog.dismiss()
+            }.show()
             dialog.window?.setDimAmount(0.8f)
         }
+
         fun restartApp() {
             Snackbar.make(
                 binding.root,
@@ -333,10 +307,9 @@ class PlayerSettingsActivity : AppCompatActivity() {
                     false -> 0.5f
                 }
         }
-        binding.subSwitch.isChecked = settings.subtitles
+        binding.subSwitch.isChecked = PrefManager.getVal(PrefName.Subtitles)
         binding.subSwitch.setOnCheckedChangeListener { _, isChecked ->
-            settings.subtitles = isChecked
-            saveData(player, settings)
+            PrefManager.setVal(PrefName.Subtitles, isChecked)
             toggleSubOptions(isChecked)
             restartApp()
         }
@@ -354,15 +327,14 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 "Blue",
                 "Magenta"
             )
-        val primaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val primaryColorDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.primary_sub_color))
         binding.videoSubColorPrimary.setOnClickListener {
             val dialog = primaryColorDialog.setSingleChoiceItems(
                 colorsPrimary,
-                settings.primaryColor
+                PrefManager.getVal(PrefName.PrimaryColor)
             ) { dialog, count ->
-                settings.primaryColor = count
-                saveData(player, settings)
+                PrefManager.setVal(PrefName.PrimaryColor, count)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
@@ -381,29 +353,27 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Magenta",
             "Transparent"
         )
-        val secondaryColorDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val secondaryColorDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorSecondary.setOnClickListener {
             val dialog = secondaryColorDialog.setSingleChoiceItems(
                 colorsSecondary,
-                settings.secondaryColor
+                PrefManager.getVal(PrefName.SecondaryColor)
             ) { dialog, count ->
-                settings.secondaryColor = count
-                saveData(player, settings)
+                PrefManager.setVal(PrefName.SecondaryColor, count)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
         val typesOutline = arrayOf("Outline", "Shine", "Drop Shadow", "None")
-        val outlineDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val outlineDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.outline_type))
         binding.videoSubOutline.setOnClickListener {
             val dialog = outlineDialog.setSingleChoiceItems(
                 typesOutline,
-                settings.outline
+                PrefManager.getVal(PrefName.Outline)
             ) { dialog, count ->
-                settings.outline = count
-                saveData(player, settings)
+                PrefManager.setVal(PrefName.Outline, count)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
@@ -422,15 +392,14 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Blue",
             "Magenta"
         )
-        val subBackgroundDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val subBackgroundDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorBackground.setOnClickListener {
             val dialog = subBackgroundDialog.setSingleChoiceItems(
                 colorsSubBackground,
-                settings.subBackground
+                PrefManager.getVal(PrefName.SubBackground)
             ) { dialog, count ->
-                settings.subBackground = count
-                saveData(player, settings)
+                PrefManager.setVal(PrefName.SubBackground, count)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
@@ -450,15 +419,14 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Blue",
             "Magenta"
         )
-        val subWindowDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val subWindowDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.outline_sub_color))
         binding.videoSubColorWindow.setOnClickListener {
             val dialog = subWindowDialog.setSingleChoiceItems(
                 colorsSubWindow,
-                settings.subWindow
+                PrefManager.getVal(PrefName.SubWindow)
             ) { dialog, count ->
-                settings.subWindow = count
-                saveData(player, settings)
+                PrefManager.setVal(PrefName.SubWindow, count)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
@@ -471,17 +439,19 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Century Gothic",
             "Century Gothic Bold"
         )
-        val fontDialog = AlertDialog.Builder(this, R.style.DialogTheme)
+        val fontDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.subtitle_font))
         binding.videoSubFont.setOnClickListener {
-            val dialog = fontDialog.setSingleChoiceItems(fonts, settings.font) { dialog, count ->
-                settings.font = count
-                saveData(player, settings)
+            val dialog = fontDialog.setSingleChoiceItems(
+                fonts,
+                PrefManager.getVal(PrefName.Font)
+            ) { dialog, count ->
+                PrefManager.setVal(PrefName.Font, count)
                 dialog.dismiss()
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
-        binding.subtitleFontSize.setText(settings.fontSize.toString())
+        binding.subtitleFontSize.setText(PrefManager.getVal<Int>(PrefName.FontSize).toString())
         binding.subtitleFontSize.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 binding.subtitleFontSize.clearFocus()
@@ -491,10 +461,9 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.subtitleFontSize.addTextChangedListener {
             val size = binding.subtitleFontSize.text.toString().toIntOrNull()
             if (size != null) {
-                settings.fontSize = size
-                saveData(player, settings)
+                PrefManager.setVal(PrefName.FontSize, size)
             }
         }
-        toggleSubOptions(settings.subtitles)
+        toggleSubOptions(PrefManager.getVal(PrefName.Subtitles))
     }
 }

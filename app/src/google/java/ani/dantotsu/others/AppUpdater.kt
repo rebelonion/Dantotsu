@@ -15,6 +15,7 @@ import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.*
+import ani.dantotsu.settings.saving.PrefManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +51,7 @@ object AppUpdater {
             }
 
             logger("Git Version : $version")
-            val dontShow = loadData("dont_ask_for_update_$version") ?: false
+            val dontShow = PrefManager.getCustomVal("dont_ask_for_update_$version", false)
             if (compareVersion(version) && !dontShow && !activity.isDestroyed) activity.runOnUiThread {
                 CustomBottomDialog.newInstance().apply {
                     setTitleText(
@@ -71,7 +72,7 @@ object AppUpdater {
                         false
                     ) { isChecked ->
                         if (isChecked) {
-                            saveData("dont_ask_for_update_$version", true)
+                            PrefManager.setCustomVal("dont_ask_for_update_$version", true)
                         }
                     }
                     setPositiveButton(currContext()!!.getString(R.string.lets_go)) {
@@ -186,7 +187,7 @@ object AppUpdater {
         return true
     }
 
-    fun openApk(context: Context, uri: Uri) {
+    private fun openApk(context: Context, uri: Uri) {
         try {
             uri.path?.let {
                 val contentUri = FileProvider.getUriForFile(

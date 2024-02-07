@@ -1,7 +1,6 @@
 package ani.dantotsu.media.user
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -17,12 +16,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityListBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
@@ -39,7 +36,7 @@ class ListActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+
         ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
 
@@ -67,8 +64,7 @@ class ListActivity : AppCompatActivity() {
         binding.listTitle.setTextColor(primaryTextColor)
         binding.listTabLayout.setTabTextColors(secondaryTextColor, primaryTextColor)
         binding.listTabLayout.setSelectedTabIndicatorColor(primaryTextColor)
-        val uiSettings = loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-        if (!uiSettings.immersiveMode) {
+        if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
             this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.nav_bg_inv)
             binding.root.fitsSystemWindows = true
@@ -154,8 +150,10 @@ class ListActivity : AppCompatActivity() {
                     R.id.release -> "release"
                     else -> null
                 }
-                currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                    ?.putString("sort_order", sort)?.apply()
+                PrefManager.setVal(
+                    if (anime) PrefName.AnimeListSortOrder else PrefName.MangaListSortOrder,
+                    sort ?: ""
+                )
                 binding.listProgressBar.visibility = View.VISIBLE
                 binding.listViewPager.adapter = null
                 scope.launch {

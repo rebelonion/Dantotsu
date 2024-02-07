@@ -5,13 +5,11 @@ import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.asyncMap
 import ani.dantotsu.currContext
-import ani.dantotsu.loadData
 import ani.dantotsu.others.MalSyncBackup
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.tryWithSuspend
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
-import kotlin.properties.Delegates
 
 /**
  * An abstract class for creating a new Source
@@ -163,7 +161,7 @@ abstract class AnimeParser : BaseParser() {
      *
      * **NOTE : do not forget to override `search` if the site does not support only dub search**
      * **/
-    open val isDubAvailableSeparately by Delegates.notNull<Boolean>()
+    open fun isDubAvailableSeparately(sourceLang: Int? = null): Boolean = false
 
     /**
      * The app changes this, depending on user's choice.
@@ -182,8 +180,12 @@ abstract class AnimeParser : BaseParser() {
      * **/
     override suspend fun loadSavedShowResponse(mediaId: Int): ShowResponse? {
         checkIfVariablesAreEmpty()
-        val dub = if (isDubAvailableSeparately) "_${if (selectDub) "dub" else "sub"}" else ""
-        var loaded = loadData<ShowResponse>("${saveName}${dub}_$mediaId")
+        val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""
+        var loaded = PrefManager.getNullableCustomVal(
+            "${saveName}${dub}_$mediaId",
+            null,
+            ShowResponse::class.java
+        )
         if (loaded == null && malSyncBackupName.isNotEmpty())
             loaded = MalSyncBackup.get(mediaId, malSyncBackupName, selectDub)
                 ?.also { saveShowResponse(mediaId, it, true) }
@@ -200,8 +202,8 @@ abstract class AnimeParser : BaseParser() {
                     )
                 } : ${response.name}"
             )
-            val dub = if (isDubAvailableSeparately) "_${if (selectDub) "dub" else "sub"}" else ""
-            saveData("${saveName}${dub}_$mediaId", response)
+            val dub = if (isDubAvailableSeparately()) "_${if (selectDub) "dub" else "sub"}" else ""
+            PrefManager.setCustomVal("${saveName}${dub}_$mediaId", response)
         }
     }
 }
@@ -209,8 +211,6 @@ abstract class AnimeParser : BaseParser() {
 class EmptyAnimeParser : AnimeParser() {
     override val name: String = "None"
     override val saveName: String = "None"
-
-    override val isDubAvailableSeparately: Boolean = false
     override suspend fun loadEpisodes(
         animeLink: String,
         extra: Map<String, String>?,

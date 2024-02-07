@@ -19,8 +19,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemExtensionAllBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import com.bumptech.glide.Glide
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -75,7 +76,9 @@ class AnimeExtensionsViewModel(
                 prefetchDistance = 15
             )
         ) {
-            AnimeExtensionPagingSource(available, installed, query)
+            val aEPS = AnimeExtensionPagingSource(available, installed, query)
+            currentPagingSource = aEPS
+            aEPS
         }.flow
     }.cachedIn(viewModelScope)
 }
@@ -92,15 +95,17 @@ class AnimeExtensionPagingSource(
         val availableExtensions =
             availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
         val query = searchQuery
-        val isNsfwEnabled: Boolean = loadData("NSFWExtension") ?: true
+        val isNsfwEnabled: Boolean = PrefManager.getVal(PrefName.NSFWExtension)
 
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw =
-            if (isNsfwEnabled) filteredExtensions else filteredExtensions.filterNot { it.isNsfw }
+        val lang: String = PrefManager.getVal(PrefName.LangSort)
+        val langFilter =
+            if (lang != "all") filteredExtensions.filter { it.lang == lang } else filteredExtensions
+        val filternfsw = if (isNsfwEnabled) langFilter else langFilter.filterNot { it.isNsfw }
         return try {
             val sublist = filternfsw.subList(
                 fromIndex = position,
@@ -126,7 +131,7 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
         DIFF_CALLBACK
     ) {
 
-    private val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons: Boolean = PrefManager.getVal(PrefName.SkipExtensionIcons)
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<AnimeExtension.Available>() {

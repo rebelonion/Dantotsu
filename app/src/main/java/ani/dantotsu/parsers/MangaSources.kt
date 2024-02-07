@@ -1,19 +1,21 @@
 package ani.dantotsu.parsers
 
-import android.content.Context
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 object MangaSources : MangaReadSources() {
     override var list: List<Lazier<BaseParser>> = emptyList()
-    var pinnedMangaSources: Set<String> = emptySet()
+    var pinnedMangaSources: List<String> = emptyList()
 
-    suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>, context: Context) {
-        val sharedPrefs = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        pinnedMangaSources = sharedPrefs.getStringSet("pinned_manga_sources", emptySet()) ?: emptySet()
+    suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
+        pinnedMangaSources =
+            PrefManager.getNullableVal<List<String>>(PrefName.MangaSourcesOrder, null)
+                ?: emptyList()
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()
@@ -24,7 +26,10 @@ object MangaSources : MangaReadSources() {
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->
-            list = sortPinnedMangaSources(createParsersFromExtensions(extensions), pinnedMangaSources) + Lazier(
+            list = sortPinnedMangaSources(
+                createParsersFromExtensions(extensions),
+                pinnedMangaSources
+            ) + Lazier(
                 { OfflineMangaParser() },
                 "Downloaded"
             )
@@ -47,21 +52,21 @@ object MangaSources : MangaReadSources() {
         }
     }
 
-    private fun sortPinnedMangaSources(Sources: List<Lazier<BaseParser>>, pinnedMangaSources: Set<String>): List<Lazier<BaseParser>> {
-        //find the pinned sources
-        val pinnedSources = Sources.filter { pinnedMangaSources.contains(it.name) }
-        //find the unpinned sources
-        val unpinnedSources = Sources.filter { !pinnedMangaSources.contains(it.name) }
-        //put the pinned sources at the top of the list
-        return pinnedSources + unpinnedSources
+    private fun sortPinnedMangaSources(
+        sources: List<Lazier<BaseParser>>,
+        pinnedMangaSources: List<String>
+    ): List<Lazier<BaseParser>> {
+        val pinnedSourcesMap = sources.filter { pinnedMangaSources.contains(it.name) }
+            .associateBy { it.name }
+        val orderedPinnedSources = pinnedMangaSources.mapNotNull { name ->
+            pinnedSourcesMap[name]
+        }
+        val unpinnedSources = sources.filterNot { pinnedMangaSources.contains(it.name) }
+        return orderedPinnedSources + unpinnedSources
     }
 }
 
 object HMangaSources : MangaReadSources() {
-    val aList: List<Lazier<BaseParser>> = lazyList()
-    suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
-        //todo
-    }
-
+    private val aList: List<Lazier<BaseParser>> = lazyList()
     override val list = listOf(aList, MangaSources.list).flatten()
 }

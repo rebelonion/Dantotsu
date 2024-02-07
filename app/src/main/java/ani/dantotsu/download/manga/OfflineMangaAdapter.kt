@@ -11,6 +11,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import ani.dantotsu.R
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 
 
 class OfflineMangaAdapter(
@@ -21,8 +23,7 @@ class OfflineMangaAdapter(
     private val inflater: LayoutInflater =
         context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
     private var originalItems: List<OfflineMangaModel> = items
-    private var style =
-        context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("offline_view", 0)
+    private var style: Int = PrefManager.getVal(PrefName.OfflineView)
 
     override fun getCount(): Int {
         return items.size
@@ -104,8 +105,7 @@ class OfflineMangaAdapter(
     }
 
     fun notifyNewGrid() {
-        style =
-            context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getInt("offline_view", 0)
+        style = PrefManager.getVal(PrefName.OfflineView)
         notifyDataSetChanged()
     }
 }

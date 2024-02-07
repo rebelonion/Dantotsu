@@ -30,7 +30,7 @@ class NovelReaderSettingsDialogFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val activity = requireActivity() as NovelReaderActivity
-        val settings = activity.settings.defaultLN
+        val settings = activity.defaultSettings
         val themeLabels = activity.themes.map { it.name }
         binding.themeSelect.adapter =
             NoPaddingArrayAdapter(activity, R.layout.item_dropdown, themeLabels)

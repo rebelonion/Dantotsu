@@ -62,6 +62,7 @@ data class VideoServer(
 ) : Serializable {
     constructor(name: String, embedUrl: String, extraData: Map<String, String>? = null)
             : this(name, FileUrl(embedUrl), extraData)
+
     constructor(name: String, offline: Boolean, extraData: Map<String, String>?)
             : this(name, FileUrl(""), extraData, null, offline)
 

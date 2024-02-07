@@ -267,12 +267,12 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="48dp"
                             android:fontFamily="@font/poppins"
-                            android:singleLine="false"
-                            android:textColor="@color/bg_white"
                             android:shadowColor="#000"
                             android:shadowDx="1"
                             android:shadowDy="1"
                             android:shadowRadius="1"
+                            android:singleLine="false"
+                            android:textColor="@color/bg_white"
                             android:textSize="12sp"
                             tools:ignore="TextContrastCheck"
                             tools:text="@string/popular_anime" />
@@ -289,7 +289,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:backgroundTint="#00FFFFFF"
-                            android:src="@drawable/ic_round_download_24"
+                            android:src="@drawable/ic_download_24"
                             android:visibility="gone"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -361,8 +361,8 @@
                     app:labelStyle="@style/fontTooltip"
                     app:thumbRadius="8dp"
                     app:tickColor="#0000"
-                    app:trackColorInactive="@color/grey_60"
                     app:trackColorActive="?attr/colorPrimary"
+                    app:trackColorInactive="@color/grey_60"
                     app:trackHeight="2dp" />
 
             </FrameLayout>

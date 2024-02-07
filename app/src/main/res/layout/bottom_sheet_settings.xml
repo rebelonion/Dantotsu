@@ -2,8 +2,13 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bottom_sheet_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -71,25 +76,25 @@
             </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
-        
-         <com.google.android.material.materialswitch.MaterialSwitch
+
+        <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsIncognito"
+            style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="64dp"
             android:checked="false"
             android:drawableStart="@drawable/ic_incognito_24"
             android:drawablePadding="16dp"
+            android:elegantTextHeight="true"
+            android:fontFamily="@font/poppins_bold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/poppins_bold"
             android:text="@string/incognito_mode"
             android:textAlignment="viewStart"
             android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
-            android:layout_marginBottom="8dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
@@ -99,6 +104,10 @@
             style="@style/Widget.Material3.Button.TextButton"
             android:layout_width="match_parent"
             android:layout_height="64dp"
+            android:checked="false"
+            android:drawableStart="@drawable/ic_download_24"
+            android:drawablePadding="16dp"
+            android:elegantTextHeight="true"
             android:fontFamily="@font/poppins_bold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
@@ -106,16 +115,18 @@
             android:paddingEnd="32dp"
             android:text="@string/offline_mode"
             android:textAlignment="viewStart"
-            android:textAllCaps="false"
             android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
-            android:drawableStart="@drawable/ic_round_download_24"
-            android:drawablePadding="16dp"
-            android:layout_marginBottom="8dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
-            app:thumbTint="@color/button_switch_track"
-            android:checked="false"/>
+            app:thumbTint="@color/button_switch_track" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingEnd="58dp"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/image_search"
@@ -195,6 +206,7 @@
             app:iconPadding="16dp"
             app:iconSize="24dp" />
 
+    </LinearLayout>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

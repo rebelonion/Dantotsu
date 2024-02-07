@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
 import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
@@ -28,11 +28,14 @@ import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
-import com.google.firebase.crashlytics.FirebaseCrashlytics
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat
 
 
@@ -93,7 +96,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         binding.selectorAutoText.text = selected
                         binding.selectorCancel.setOnClickListener {
                             media!!.selected!!.server = null
-                            model.saveSelected(media!!.id, media!!.selected!!, requireActivity())
+                            model.saveSelected(media!!.id, media!!.selected!!)
                             tryWith {
                                 dismiss()
                             }
@@ -142,11 +145,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         }
                         binding.selectorRecyclerView.adapter = null
                         binding.selectorProgressBar.visibility = View.VISIBLE
-                        makeDefault = loadData("make_default") ?: true
+                        makeDefault = PrefManager.getVal(PrefName.MakeDefault)
                         binding.selectorMakeDefault.isChecked = makeDefault
                         binding.selectorMakeDefault.setOnClickListener {
                             makeDefault = binding.selectorMakeDefault.isChecked
-                            saveData("make_default", makeDefault)
+                            PrefManager.setVal(PrefName.MakeDefault, makeDefault)
                         }
                         binding.selectorRecyclerView.layoutManager =
                             LinearLayoutManager(
@@ -265,7 +268,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]?.selectedVideo = 0
                 startExoplayer(media!!)
             } catch (e: Exception) {
-                FirebaseCrashlytics.getInstance().recordException(e)
+                Injekt.get<CrashlyticsInterface>().logException(e)
             }
         }
 
@@ -300,96 +303,88 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     extractor.server.name
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedVideo =
                     position
-                binding.urlDownload.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
-                val selectedVideo =
-                    if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
-
-                val subtitles = extractor.subtitles
-                val subtitleNames = subtitles.map { it.language }
-                var subtitleToDownload: Subtitle? = null
-                if (subtitles.isNotEmpty()) {
-                    val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                        .setTitle("Download Subtitle")
-                        .setSingleChoiceItems(
-                            subtitleNames.toTypedArray(),
-                            -1
-                        ) { dialog, which ->
-                            subtitleToDownload = subtitles[which]
-                        }
-                        .setPositiveButton("Download") { _, _ ->
-                            dialog?.dismiss()
-                            if (selectedVideo != null) {
-                                Helper.startAnimeDownloadService(
-                                    currActivity()!!,
-                                    media!!.mainName(),
-                                    episode.number,
-                                    selectedVideo,
-                                    subtitleToDownload,
-                                    media,
-                                    episode.thumb?.url ?: media!!.banner ?: media!!.cover
-                                )
-                            } else {
-                                snackString("No Video Selected")
-                            }
-                        }
-                        .setNegativeButton("Skip") { dialog, _ ->
-                            subtitleToDownload = null
-                            if (selectedVideo != null) {
-                                Helper.startAnimeDownloadService(
-                                    currActivity()!!,
-                                    media!!.mainName(),
-                                    episode.number,
-                                    selectedVideo,
-                                    subtitleToDownload,
-                                    media,
-                                    episode.thumb?.url ?: media!!.banner ?: media!!.cover
-                                )
-                            } else {
-                                snackString("No Video Selected")
-                            }
-                            dialog.dismiss()
-                        }
-                        .setNeutralButton("Cancel") { dialog, _ ->
-                            subtitleToDownload = null
-                            dialog.dismiss()
-                        }
-                        .show()
-                    alertDialog.window?.setDimAmount(0.8f)
-
-                } else {
-                    if (selectedVideo != null) {
-                        Helper.startAnimeDownloadService(
-                            requireActivity(),
-                            media!!.mainName(),
-                            episode.number,
-                            selectedVideo,
-                            subtitleToDownload,
-                            media,
-                            episode.thumb?.url ?: media!!.banner ?: media!!.cover
-                        )
-                    } else {
-                        snackString("No Video Selected")
-                    }
-                }
-                dismiss()
-            }
-            binding.urlDownload.setOnLongClickListener {
-                binding.urlDownload.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                if ((loadData<Int>("settings_download_manager") ?: 0) != 0) {
-                    media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedExtractor =
-                        extractor.server.name
-                    media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedVideo =
-                        position
+                if ((PrefManager.getVal(PrefName.DownloadManager) as Int) != 0) {
                     download(
                         requireActivity(),
                         media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!,
                         media!!.userPreferredName
                     )
                 } else {
-                    snackString("No Download Manager Selected")
+                    val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
+                    val selectedVideo =
+                        if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
+                    val subtitles = extractor.subtitles
+                    val subtitleNames = subtitles.map { it.language }
+                    var subtitleToDownload: Subtitle? = null
+                    if (subtitles.isNotEmpty()) {
+                        val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
+                            .setTitle("Download Subtitle")
+                            .setSingleChoiceItems(
+                                subtitleNames.toTypedArray(),
+                                -1
+                            ) { dialog, which ->
+                                subtitleToDownload = subtitles[which]
+                            }
+                            .setPositiveButton("Download") { _, _ ->
+                                dialog?.dismiss()
+                                if (selectedVideo != null) {
+                                    Helper.startAnimeDownloadService(
+                                        currActivity()!!,
+                                        media!!.mainName(),
+                                        episode.number,
+                                        selectedVideo,
+                                        subtitleToDownload,
+                                        media,
+                                        episode.thumb?.url ?: media!!.banner ?: media!!.cover
+                                    )
+                                    broadcastDownloadStarted(episode.number)
+                                } else {
+                                    snackString("No Video Selected")
+                                }
+                            }
+                            .setNegativeButton("Skip") { dialog, _ ->
+                                subtitleToDownload = null
+                                if (selectedVideo != null) {
+                                    Helper.startAnimeDownloadService(
+                                        currActivity()!!,
+                                        media!!.mainName(),
+                                        episode.number,
+                                        selectedVideo,
+                                        subtitleToDownload,
+                                        media,
+                                        episode.thumb?.url ?: media!!.banner ?: media!!.cover
+                                    )
+                                    broadcastDownloadStarted(episode.number)
+                                } else {
+                                    snackString("No Video Selected")
+                                }
+                                dialog.dismiss()
+                            }
+                            .setNeutralButton("Cancel") { dialog, _ ->
+                                subtitleToDownload = null
+                                dialog.dismiss()
+                            }
+                            .show()
+                        alertDialog.window?.setDimAmount(0.8f)
+
+                    } else {
+                        if (selectedVideo != null) {
+                            Helper.startAnimeDownloadService(
+                                requireActivity(),
+                                media!!.mainName(),
+                                episode.number,
+                                selectedVideo,
+                                subtitleToDownload,
+                                media,
+                                episode.thumb?.url ?: media!!.banner ?: media!!.cover
+                            )
+                            broadcastDownloadStarted(episode.number)
+                        } else {
+                            snackString("No Video Selected")
+                        }
+                    }
                 }
-                true
+                dismiss()
             }
             if (video.format == VideoType.CONTAINER) {
                 binding.urlSize.visibility = if (video.size != null) View.VISIBLE else View.GONE
@@ -402,6 +397,13 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             binding.urlNote.visibility = View.VISIBLE
             binding.urlNote.text = video.format.name
             binding.urlQuality.text = extractor.server.name
+        }
+
+        private fun broadcastDownloadStarted(episodeNumber: String) {
+            val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_STARTED).apply {
+                putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, episodeNumber)
+            }
+            requireActivity().sendBroadcast(intent)
         }
 
         override fun getItemCount(): Int = extractor.videos.size
@@ -422,7 +424,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         if (makeDefault) {
                             media!!.selected!!.server = extractor.server.name
                             media!!.selected!!.video = bindingAdapterPosition
-                            model.saveSelected(media!!.id, media!!.selected!!, requireActivity())
+                            model.saveSelected(media!!.id, media!!.selected!!)
                         }
                         startExoplayer(media!!)
                     }

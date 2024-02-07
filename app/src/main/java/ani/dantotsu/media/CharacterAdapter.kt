@@ -11,10 +11,8 @@ import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.databinding.ItemCharacterBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.loadImage
 import ani.dantotsu.setAnimation
-import ani.dantotsu.settings.UserInterfaceSettings
 import java.io.Serializable
 
 class CharacterAdapter(
@@ -26,13 +24,10 @@ class CharacterAdapter(
         return CharacterViewHolder(binding)
     }
 
-    private val uiSettings =
-        loadData<UserInterfaceSettings>("ui_settings") ?: UserInterfaceSettings()
-
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val binding = holder.binding
-        setAnimation(binding.root.context, holder.binding.root, uiSettings)
+        setAnimation(binding.root.context, holder.binding.root)
         val character = characterList[position]
         binding.itemCompactRelation.text = character.role + "  "
         binding.itemCompactImage.loadImage(character.image)

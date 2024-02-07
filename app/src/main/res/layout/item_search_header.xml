@@ -36,8 +36,8 @@
             android:fontFamily="@font/poppins_bold"
             android:imeOptions="actionSearch"
             android:inputType="textPersonName"
-            android:selectAllOnFocus="true"
             android:padding="8dp"
+            android:selectAllOnFocus="true"
             android:textSize="14sp"
             app:boxStrokeColor="@color/text_input_layout_stroke_color"
             tools:ignore="LabelFor,TextContrastCheck" />
@@ -61,8 +61,8 @@
             android:layoutDirection="inherit"
             android:text="@string/list_only"
             android:textColor="?attr/colorOnBackground"
-            app:buttonTint="?attr/colorPrimary"
             android:visibility="visible"
+            app:buttonTint="?attr/colorPrimary"
             app:checkedState="indeterminate"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
 
@@ -76,8 +76,8 @@
             android:layoutDirection="rtl"
             android:text="@string/adult"
             android:textAlignment="textEnd"
-            android:visibility="visible"
             android:textColor="?attr/colorOnBackground"
+            android:visibility="visible"
             app:buttonTint="?attr/colorPrimary"
             tools:ignore="TextContrastCheck,TouchTargetSizeCheck" />
     </LinearLayout>
@@ -101,11 +101,11 @@
             android:clipToPadding="false"
             android:fadeScrollbars="true"
             android:fadingEdge="horizontal"
-            android:requiresFadingEdge="horizontal"
             android:orientation="horizontal"
             android:paddingStart="16dp"
             android:paddingTop="4dp"
             android:paddingEnd="8dp"
+            android:requiresFadingEdge="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:spanCount="6"
             tools:listitem="@layout/item_chip" />
@@ -116,12 +116,12 @@
             android:layout_height="48dp"
             android:layout_gravity="center"
             android:padding="8dp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             app:cardBackgroundColor="@color/nav_bg"
             app:cardCornerRadius="16dp"
             app:contentPadding="4dp"
             app:contentPaddingLeft="8dp"
             app:contentPaddingRight="8dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
             tools:ignore="ContentDescription,TextContrastCheck">
 
             <TextView
@@ -140,13 +140,15 @@
 
 
     <LinearLayout
+        android:id="@+id/searchResultLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="0dp"
@@ -175,7 +177,17 @@
             app:srcCompat="@drawable/ic_round_grid_view_24"
             app:tint="?attr/colorOnBackground"
             tools:ignore="ContentDescription,ImageContrastCheck" />
-
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchHistoryList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:dividerHeight="0dp"
+        tools:listitem="@layout/item_search_history" />
 
 </LinearLayout>

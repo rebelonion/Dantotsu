@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.chip.Chip xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginStart="4dp"
     android:layout_marginTop="-4dp"
     android:layout_marginEnd="4dp"
     android:layout_marginBottom="-4dp"
-    app:chipBackgroundColor="@color/chip_background_color"
     android:elegantTextHeight="true"
     android:textAppearance="@style/Suffix"
-    app:chipStrokeColor="?attr/colorPrimaryContainer"
-    android:textSize="14sp">
+    android:textSize="14sp"
+    app:chipBackgroundColor="@color/chip_background_color"
+    app:chipStrokeColor="?attr/colorPrimaryContainer">
 
 </com.google.android.material.chip.Chip>

@@ -19,7 +19,6 @@ import ani.dantotsu.databinding.ActivityImageSearchBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +51,7 @@ class ImageSearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+
         initActivity(this)
         ThemeManager(this).applyTheme()
         binding = ActivityImageSearchBinding.inflate(layoutInflater)

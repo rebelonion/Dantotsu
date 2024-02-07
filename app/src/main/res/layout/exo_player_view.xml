@@ -10,7 +10,8 @@
         android:background="#000"
         tools:visibility="gone" />
 
-    <androidx.media3.ui.AspectRatioFrameLayout android:id="@id/exo_content_frame"
+    <androidx.media3.ui.AspectRatioFrameLayout
+        android:id="@id/exo_content_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center">
@@ -128,6 +129,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:alpha="0"
             android:fontFamily="@font/poppins_bold"
@@ -136,17 +138,18 @@
             android:textColor="#FFFFFF"
             android:textSize="16sp"
             app:drawableTopCompat="@drawable/anim_rewind"
-            android:layout_marginTop="16dp"
             tools:ignore="HardcodedText,RtlCompat" />
+
         <View
             android:layout_width="128dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
 
         <TextView
             android:id="@+id/exo_fast_forward_anim"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|end"
+            android:layout_marginTop="16dp"
             android:layout_weight="1"
             android:alpha="0"
             android:fontFamily="@font/poppins_bold"
@@ -154,33 +157,33 @@
             android:textAlignment="center"
             android:textColor="#FFFFFF"
             android:textSize="16sp"
-            android:layout_marginTop="16dp"
             app:drawableTopCompat="@drawable/anim_skip"
             tools:ignore="HardcodedText,RtlCompat" />
     </LinearLayout>
 
-    <View android:id="@id/exo_controller_placeholder"
+    <View
+        android:id="@id/exo_controller_placeholder"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 
     <TextView
         android:id="@+id/exo_fast_forward_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
         android:layout_gravity="top|center"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/rounded_top_nav"
         android:fontFamily="@font/poppins_semi_bold"
         android:paddingStart="9dp"
         android:paddingEnd="9dp"
-        android:visibility="gone"
-        android:background="@drawable/rounded_top_nav"
         android:textColor="@color/bg_white"
         android:textSize="18sp"
-        tools:hint= "2x"
-        tools:visibility="visible"
+        android:visibility="gone"
         app:drawableEndCompat="@drawable/ic_round_fast_forward_24"
-        app:drawableTint= "@color/bg_white"/>
+        app:drawableTint="@color/bg_white"
+        tools:hint="2x"
+        tools:visibility="visible" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/exo_skip_timestamp"
@@ -267,8 +270,8 @@
                 android:valueTo="10"
                 app:labelBehavior="gone"
                 app:thumbElevation="0dp"
-                app:trackColorInactive="?attr/colorOnPrimary"
                 app:trackColorActive="?attr/colorPrimary"
+                app:trackColorInactive="?attr/colorOnPrimary"
                 app:trackHeight="24dp" />
 
             <ImageView
@@ -310,8 +313,8 @@
                 android:valueTo="10"
                 app:labelBehavior="gone"
                 app:thumbElevation="0dp"
-                app:trackColorInactive="?attr/colorOnPrimary"
                 app:trackColorActive="?attr/colorPrimary"
+                app:trackColorInactive="?attr/colorOnPrimary"
                 app:trackHeight="24dp" />
 
             <ImageView

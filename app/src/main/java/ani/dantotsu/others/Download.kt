@@ -14,9 +14,10 @@ import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.currContext
 import ani.dantotsu.defaultHeaders
-import ani.dantotsu.loadData
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.parsers.Book
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +37,7 @@ object Download {
 
     private fun getDownloadDir(context: Context): File {
         val direct: File
-        if (loadData<Boolean>("sd_dl") == true) {
+        if (PrefManager.getVal(PrefName.SdDl)) {
             val arrayOfFiles = ContextCompat.getExternalFilesDirs(context, null)
             val parentDirectory = arrayOfFiles[1].toString()
             direct = File(parentDirectory)
@@ -92,7 +93,7 @@ object Download {
         if (!file.url.startsWith("http"))
             toast(context.getString(R.string.invalid_url))
         else
-            when (loadData<Int>("settings_download_manager", context, false) ?: 0) {
+            when (PrefManager.getVal(PrefName.DownloadManager) as Int) {
                 1 -> oneDM(context, file, notif ?: fileName)
                 2 -> adm(context, file, fileName, folder)
                 else -> defaultDownload(context, file, fileName, folder, notif ?: fileName)
@@ -117,7 +118,7 @@ object Download {
                 request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
                 val arrayOfFiles = ContextCompat.getExternalFilesDirs(context, null)
-                if (loadData<Boolean>("sd_dl") == true && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
+                if (PrefManager.getVal(PrefName.SdDl) && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
                     val parentDirectory = arrayOfFiles[1].toString() + folder
                     val direct = File(parentDirectory)
                     if (!direct.exists()) direct.mkdirs()

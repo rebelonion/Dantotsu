@@ -6,9 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="96dp"
     android:layout_margin="8dp"
+    android:background="@drawable/card_outline"
     android:clipToPadding="false"
     android:translationZ="8dp"
-    android:background="@drawable/card_outline"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp">
 

@@ -12,6 +12,7 @@
         <item name="android:colorBackground">@color/darkest_Black</item>
         <!-- set colorSurface to black -->
         <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
 
@@ -61,21 +62,34 @@
     </style>
 
     <style name="MyPopup" parent="">
-        <item name="android:fontFamily">@font/poppins_bold</item>
-        <item name="android:textColor">?attr/colorOnBackground</item>
-        <item name="android:popupBackground">?attr/colorSurface</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
+        <item name="android:fontFamily">@font/poppins_semi_bold</item>
+        <item name="android:textColor">?attr/colorOnBackground</item>
+        <item name="android:windowTitleStyle">@style/HeadingText</item>
+        <item name="android:popupBackground">?attr/colorSurface</item>
         <item name="android:windowBackground">@drawable/shape_corner_16dp</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
     </style>
 
+    <style name="HeadingText">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="PreferenceTheme" parent="PreferenceThemeOverlay.v14.Material">
+        <item name="android:fontFamily">@font/poppins_bold</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
     <style name="BottomNavBar" parent="">
         <!-- set background color  to transparent -->
         <item name="android:background">@android:color/transparent</item>
     </style>
-    <style name="ThemeOverlay_Dantotsu_MediaRouter" parent="ThemeOverlay.AppCompat">
-    </style>
+
+    <style name="ThemeOverlay_Dantotsu_MediaRouter" parent="ThemeOverlay.AppCompat"></style>
 </resources>

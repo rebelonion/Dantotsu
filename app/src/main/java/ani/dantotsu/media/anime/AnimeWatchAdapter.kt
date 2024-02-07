@@ -1,7 +1,6 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
@@ -27,6 +26,8 @@ import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.DynamicAnimeParser
 import ani.dantotsu.parsers.WatchSources
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
@@ -59,7 +60,7 @@ class AnimeWatchAdapter(
         _binding = binding
 
         //Youtube
-        if (media.anime!!.youtube != null && fragment.uiSettings.showYtButton) {
+        if (media.anime!!.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
             binding.animeSourceYT.visibility = View.VISIBLE
             binding.animeSourceYT.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(media.anime.youtube))
@@ -90,11 +91,9 @@ class AnimeWatchAdapter(
                 null
             )
         }
-        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences(
-                "Dantotsu",
-                Context.MODE_PRIVATE
+        val offline = if (!isOnline(binding.root.context) || PrefManager.getVal(
+                PrefName.OfflineMode
             )
-                ?.getBoolean("offlineMode", false) == true
         ) View.GONE else View.VISIBLE
 
         binding.animeSourceNameContainer.visibility = offline
@@ -113,7 +112,7 @@ class AnimeWatchAdapter(
                 binding.animeSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
                 binding.animeSourceDubbedCont.visibility =
-                    if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                    if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
             }
         }
 
@@ -133,7 +132,7 @@ class AnimeWatchAdapter(
                 binding.animeSourceDubbed.isChecked = selectDub
                 changing = false
                 binding.animeSourceDubbedCont.visibility =
-                    if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                    if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
                 source = i
                 setLanguageList(0, i)
             }
@@ -154,7 +153,7 @@ class AnimeWatchAdapter(
                     binding.animeSourceDubbed.isChecked = selectDub
                     changing = false
                     binding.animeSourceDubbedCont.visibility =
-                        if (isDubAvailableSeparately) View.VISIBLE else View.GONE
+                        if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
                     setLanguageList(i, source)
                 }
                 subscribeButton(false)
@@ -199,7 +198,8 @@ class AnimeWatchAdapter(
             var refresh = false
             var run = false
             var reversed = media.selected!!.recyclerReversed
-            var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.animeDefaultView
+            var style =
+                media.selected!!.recyclerStyle ?: PrefManager.getVal(PrefName.AnimeDefaultView)
             dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
             dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
             dialogBinding.animeSourceTop.setOnClickListener {
@@ -357,7 +357,9 @@ class AnimeWatchAdapter(
                 val episodes = media.anime.episodes!!.keys.toTypedArray()
 
                 val anilistEp = (media.userProgress ?: 0).plus(1)
-                val appEp = loadData<String>("${media.id}_current_ep")?.toIntOrNull() ?: 1
+                val appEp =
+                    PrefManager.getCustomVal<String?>("${media.id}_current_ep", "")?.toIntOrNull()
+                        ?: 1
 
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
                 if (episodes.contains(continueEp)) {
@@ -369,7 +371,10 @@ class AnimeWatchAdapter(
                         media.id,
                         continueEp
                     )
-                    if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight > fragment.playerSettings.watchPercentage) {
+                    if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight > PrefManager.getVal<Float>(
+                            PrefName.WatchPercentage
+                        )
+                    ) {
                         val e = episodes.indexOf(continueEp)
                         if (e != -1 && e + 1 < episodes.size) {
                             continueEp = episodes[e + 1]
@@ -396,7 +401,10 @@ class AnimeWatchAdapter(
                         fragment.onEpisodeClick(continueEp)
                     }
                     if (fragment.continueEp) {
-                        if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight < fragment.playerSettings.watchPercentage) {
+                        if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight < PrefManager.getVal<Float>(
+                                PrefName.WatchPercentage
+                            )
+                        ) {
                             binding.animeSourceContinue.performClick()
                             fragment.continueEp = false
                         }

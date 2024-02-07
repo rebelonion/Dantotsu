@@ -10,6 +10,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:fontFamily">@font/poppins</item>
+        <item name="preferenceTheme">@style/PreferenceTheme</item>
         <item name="shapeAppearanceLargeComponent">@style/ShapeAppearanceOverlay.Demo</item>
         <item name="android:ambientShadowAlpha">0.08</item>
         <item name="android:spotShadowAlpha">0.08</item>
@@ -42,16 +43,6 @@
 
     <style name="Theme.Dantotsu.NeverCutout" parent="@style/Theme.Dantotsu.NoActionBar">
         <item name="android:navigationBarColor">@color/nav_bg</item>
-    </style>
-
-    <style name="DialogTheme" parent="Theme.Dantotsu">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="windowActionBar">false</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowBackground">@drawable/shape_corner_16dp</item>
     </style>
 
     <style name="Theme.Dantotsu.ALLBLACK" parent="Theme.Base">

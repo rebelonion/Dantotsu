@@ -1,6 +1,5 @@
 package ani.dantotsu.settings
 
-import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -26,7 +25,11 @@ import ani.dantotsu.offline.OfflineFragment
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.setSafeOnClickListener
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.startMainActivity
+import java.util.Timer
+import kotlin.concurrent.schedule
 
 class SettingsDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSettingsBinding? = null
@@ -59,7 +62,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         if (Anilist.token != null) {
             binding.settingsLogin.setText(R.string.logout)
             binding.settingsLogin.setOnClickListener {
-                Anilist.removeSavedToken(it.context)
+                Anilist.removeSavedToken()
                 dismiss()
                 startMainActivity(requireActivity())
             }
@@ -75,14 +78,10 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         }
 
         binding.settingsIncognito.isChecked =
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.getBoolean(
-                "incognito",
-                false
-            ) ?: false
+            PrefManager.getVal(PrefName.Incognito)
 
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putBoolean("incognito", isChecked)?.apply()
+            PrefManager.setVal(PrefName.Incognito, isChecked)
             incognitoNotification(requireContext())
         }
         binding.settingsExtensionSettings.setSafeOnClickListener {
@@ -102,60 +101,59 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             dismiss()
         }
 
-        binding.settingsDownloads.isChecked =
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                ?.getBoolean("offlineMode", false) ?: false
+        binding.settingsDownloads.isChecked = PrefManager.getVal(PrefName.OfflineMode)
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
-            when (pageType) {
-                PageType.MANGA -> {
-                    val intent = Intent(activity, NoInternet::class.java)
-                    intent.putExtra(
-                        "FRAGMENT_CLASS_NAME",
-                        OfflineMangaFragment::class.java.name
-                    )
-                    startActivity(intent)
+            Timer().schedule(300) {
+                when (pageType) {
+                    PageType.MANGA -> {
+                        val intent = Intent(activity, NoInternet::class.java)
+                        intent.putExtra(
+                            "FRAGMENT_CLASS_NAME",
+                            OfflineMangaFragment::class.java.name
+                        )
+                        startActivity(intent)
+                    }
+
+                    PageType.ANIME -> {
+                        val intent = Intent(activity, NoInternet::class.java)
+                        intent.putExtra(
+                            "FRAGMENT_CLASS_NAME",
+                            OfflineAnimeFragment::class.java.name
+                        )
+                        startActivity(intent)
+                    }
+
+                    PageType.HOME -> {
+                        val intent = Intent(activity, NoInternet::class.java)
+                        intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
+                        startActivity(intent)
+                    }
+
+                    PageType.OfflineMANGA -> {
+                        val intent = Intent(activity, MainActivity::class.java)
+                        intent.putExtra("FRAGMENT_CLASS_NAME", MangaFragment::class.java.name)
+                        startActivity(intent)
+                    }
+
+                    PageType.OfflineHOME -> {
+                        val intent = Intent(activity, MainActivity::class.java)
+                        intent.putExtra(
+                            "FRAGMENT_CLASS_NAME",
+                            if (Anilist.token != null) HomeFragment::class.java.name else LoginFragment::class.java.name
+                        )
+                        startActivity(intent)
+                    }
+
+                    PageType.OfflineANIME -> {
+                        val intent = Intent(activity, MainActivity::class.java)
+                        intent.putExtra("FRAGMENT_CLASS_NAME", AnimeFragment::class.java.name)
+                        startActivity(intent)
+                    }
                 }
 
-                PageType.ANIME -> {
-                    val intent = Intent(activity, NoInternet::class.java)
-                    intent.putExtra(
-                        "FRAGMENT_CLASS_NAME",
-                        OfflineAnimeFragment::class.java.name
-                    )
-                    startActivity(intent)
-                }
-
-                PageType.HOME -> {
-                    val intent = Intent(activity, NoInternet::class.java)
-                    intent.putExtra("FRAGMENT_CLASS_NAME", OfflineFragment::class.java.name)
-                    startActivity(intent)
-                }
-
-                PageType.OfflineMANGA -> {
-                    val intent = Intent(activity, MainActivity::class.java)
-                    intent.putExtra("FRAGMENT_CLASS_NAME", MangaFragment::class.java.name)
-                    startActivity(intent)
-                }
-
-                PageType.OfflineHOME -> {
-                    val intent = Intent(activity, MainActivity::class.java)
-                    intent.putExtra(
-                        "FRAGMENT_CLASS_NAME",
-                        if (Anilist.token != null) HomeFragment::class.java.name else LoginFragment::class.java.name
-                    )
-                    startActivity(intent)
-                }
-
-                PageType.OfflineANIME -> {
-                    val intent = Intent(activity, MainActivity::class.java)
-                    intent.putExtra("FRAGMENT_CLASS_NAME", AnimeFragment::class.java.name)
-                    startActivity(intent)
-                }
+                dismiss()
+                PrefManager.setVal(PrefName.OfflineMode, isChecked)
             }
-
-            dismiss()
-            context?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)?.edit()
-                ?.putBoolean("offlineMode", isChecked)?.apply()
         }
     }
 

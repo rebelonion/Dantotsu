@@ -193,7 +193,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="?android:attr/selectableItemBackground"
-                    app:srcCompat="@drawable/ic_round_download_24"
+                    app:srcCompat="@drawable/ic_download_24"
                     app:tint="?attr/colorOnBackground"
                     tools:ignore="ContentDescription,ImageContrastCheck" />
             </androidx.cardview.widget.CardView>
@@ -269,9 +269,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_bold"
+                    android:text="Open Website"
                     android:textColor="?attr/colorSecondary"
-                    tools:ignore="TextContrastCheck"
-                    android:text="Open Website" />
+                    tools:ignore="TextContrastCheck" />
 
             </LinearLayout>
 

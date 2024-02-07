@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mediaListContainer"
+    android:background="@drawable/bottom_sheet_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -47,8 +48,8 @@
             app:boxCornerRadiusBottomStart="28dp"
             app:boxCornerRadiusTopEnd="28dp"
             app:boxCornerRadiusTopStart="28dp"
-            app:endIconDrawable="@drawable/ic_round_search_24"
             app:boxStrokeColor="@color/text_input_layout_stroke_color"
+            app:endIconDrawable="@drawable/ic_round_search_24"
             app:hintAnimationEnabled="true">
 
             <AutoCompleteTextView

@@ -1,6 +1,5 @@
 package ani.dantotsu.home
 
-import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.os.Bundle
@@ -23,43 +22,36 @@ import ani.dantotsu.databinding.ActivityNoInternetBinding
 import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
 import ani.dantotsu.initActivity
-import ani.dantotsu.loadData
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.offline.OfflineFragment
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.selectedOption
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class NoInternet : AppCompatActivity() {
     private lateinit var binding: ActivityNoInternetBinding
-    lateinit var bottomBar: AnimatedBottomBar
-    private var uiSettings = UserInterfaceSettings()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+
         ThemeManager(this).applyTheme()
 
         binding = ActivityNoInternetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
+        val bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-            val backgroundDrawable = _bottomBar.background as GradientDrawable
+            val backgroundDrawable = bottomBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
             val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xE8000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
-            _bottomBar.background = backgroundDrawable
+            bottomBar.background = backgroundDrawable
         }
-        val colorOverflow = this.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("colorOverflow", false)
-        if (!colorOverflow) {
-            _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
-        }
 
         var doubleBackToExitPressedOnce = false
         onBackPressedDispatcher.addCallback(this) {
@@ -76,8 +68,7 @@ class NoInternet : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
-            uiSettings = loadData("ui_settings") ?: uiSettings
-            selectedOption = uiSettings.defaultStartUpTab
+            selectedOption = PrefManager.getVal(PrefName.DefaultStartUpTab)
 
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
@@ -89,7 +80,7 @@ class NoInternet : AppCompatActivity() {
         val mainViewPager = binding.viewpager
         mainViewPager.isUserInputEnabled = false
         mainViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
-        mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
+        mainViewPager.setPageTransformer(ZoomOutPageTransformer())
         navbar.setOnTabSelectListener(object :
             AnimatedBottomBar.OnTabSelectListener {
             override fun onTabSelected(

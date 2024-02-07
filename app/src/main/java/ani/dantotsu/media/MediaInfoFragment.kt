@@ -2,7 +2,6 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +25,8 @@ import ani.dantotsu.*
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.GenresViewModel
 import ani.dantotsu.databinding.*
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +61,7 @@ class MediaInfoFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
-        val offline = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE).getBoolean("offlineMode", false) || !isOnline(requireContext())
+        val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
         binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.visibility = if (loaded) View.VISIBLE else View.GONE
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }
@@ -94,8 +95,31 @@ class MediaInfoFragment : Fragment() {
                 binding.mediaInfoStart.text = media.startDate?.toString() ?: "??"
                 binding.mediaInfoEnd.text = media.endDate?.toString() ?: "??"
                 if (media.anime != null) {
-                    binding.mediaInfoDuration.text =
-                        if (media.anime.episodeDuration != null) media.anime.episodeDuration.toString() else "??"
+                    val episodeDuration = media.anime.episodeDuration
+
+                    binding.mediaInfoDuration.text = when {
+                        episodeDuration != null -> {
+                            val hours = episodeDuration / 60
+                            val minutes = episodeDuration % 60
+
+                            val formattedDuration = buildString {
+                                if (hours > 0) {
+                                    append("$hours hour")
+                                    if (hours > 1) append("s")
+                                }
+
+                                if (minutes > 0) {
+                                    if (hours > 0) append(", ")
+                                    append("$minutes min")
+                                    if (minutes > 1) append("s")
+                                }
+                            }
+
+                            formattedDuration
+                        }
+
+                        else -> "??"
+                    }
                     binding.mediaInfoDurationContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeasonContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeason.text =
@@ -464,7 +488,7 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bindi.root)
                 }
 
-                if (!media.recommendations.isNullOrEmpty() && !offline ) {
+                if (!media.recommendations.isNullOrEmpty() && !offline) {
                     val bind = ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,

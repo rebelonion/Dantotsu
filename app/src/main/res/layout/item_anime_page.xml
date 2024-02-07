@@ -41,9 +41,9 @@
                 app:boxCornerRadiusBottomStart="28dp"
                 app:boxCornerRadiusTopEnd="28dp"
                 app:boxCornerRadiusTopStart="28dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:endIconDrawable="@drawable/ic_round_search_24"
                 app:endIconTint="@color/bg_opp"
-                app:boxStrokeColor="@color/text_input_layout_stroke_color"
                 app:hintAnimationEnabled="true">
 
                 <AutoCompleteTextView
@@ -65,8 +65,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="4dp"
                 app:cardBackgroundColor="?attr/colorPrimaryContainer"
-                app:strokeColor="@color/text_input_layout_stroke_color"
-                app:cardCornerRadius="26dp">
+                app:cardCornerRadius="26dp"
+                app:strokeColor="@color/text_input_layout_stroke_color">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/animeUserAvatar"
@@ -92,11 +92,14 @@
     </FrameLayout>
 
     <HorizontalScrollView
+        android:id="@+id/animeSeasons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:clipToPadding="false"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
+        android:fillViewport="true"
+        android:paddingStart="2dp"
+        android:paddingEnd="2dp"
         android:scrollbarSize="0dp">
 
         <LinearLayout
@@ -111,8 +114,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/this_season"
+                android:textAppearance="@style/Suffix"
                 app:chipStrokeColor="?attr/colorPrimaryContainer"
-                android:textAppearance="@style/Suffix" />
+                app:layout_constraintBaseline_toBaselineOf="@+id/animeNextSeason"
+                app:layout_constraintEnd_toStartOf="@+id/animeNextSeason"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/animeNextSeason"
@@ -120,19 +126,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:text="@string/next_season"
-                app:chipStrokeColor="?attr/colorPrimaryContainer"
-                android:textAppearance="@style/Suffix" />
+                android:textAppearance="@style/Suffix"
+                app:chipStrokeColor="?attr/colorPrimaryContainer" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/animePreviousSeason"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
                 android:text="@string/previous_season"
+                android:textAppearance="@style/Suffix"
                 app:chipStrokeColor="?attr/colorPrimaryContainer"
-                android:textAppearance="@style/Suffix" />
-
-
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
         </LinearLayout>
+
     </HorizontalScrollView>
 
 
@@ -313,9 +321,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:textSize="12sp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/include_media_in_list" />
+            android:text="@string/include_media_in_list"
+            android:textSize="12sp" />
 
     </LinearLayout>
 

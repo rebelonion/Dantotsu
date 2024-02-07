@@ -2,7 +2,6 @@ package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,12 +25,12 @@ import ani.dantotsu.connections.anilist.AnilistMangaViewModel
 import ani.dantotsu.connections.anilist.SearchResults
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.databinding.FragmentMangaBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.ProgressAdapter
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import kotlinx.coroutines.Dispatchers
@@ -45,9 +44,6 @@ class MangaFragment : Fragment() {
     private var _binding: FragmentMangaBinding? = null
     private val binding get() = _binding!!
     private lateinit var mangaPageAdapter: MangaPageAdapter
-
-    private var uiSettings: UserInterfaceSettings =
-        loadData("ui_settings") ?: UserInterfaceSettings()
 
     val model: AnilistMangaViewModel by activityViewModels()
 
@@ -175,7 +171,7 @@ class MangaFragment : Fragment() {
                         if (it != null) {
                             mangaPageAdapter.updateTrending(
                                 MediaAdaptor(
-                                    if (uiSettings.smallView) 3 else 2,
+                                    if (PrefManager.getVal(PrefName.SmallView)) 3 else 2,
                                     it,
                                     requireActivity(),
                                     viewPager = mangaPageAdapter.trendingViewPager
@@ -242,8 +238,11 @@ class MangaFragment : Fragment() {
                         model.loaded = true
                         model.loadTrending()
                         model.loadTrendingNovel()
-                        model.loadPopular("MANGA", sort = Anilist.sortBy[1], onList = requireContext().getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-                            .getBoolean("popular_list", false) )
+                        model.loadPopular(
+                            "MANGA", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
+                                PrefName.PopularMangaList
+                            )
+                        )
                     }
                     live.postValue(false)
                     _binding?.mangaRefresh?.isRefreshing = false

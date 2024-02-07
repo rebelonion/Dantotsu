@@ -7,7 +7,6 @@ import ani.dantotsu.R
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityFaqBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.others.LangSet
 import ani.dantotsu.themes.ThemeManager
 
 class FAQActivity : AppCompatActivity() {
@@ -32,7 +31,7 @@ class FAQActivity : AppCompatActivity() {
                 currContext()?.getString(R.string.answer_17) ?: ""
             ),
             Triple(
-                R.drawable.ic_round_download_24,
+                R.drawable.ic_download_24,
                 currContext()?.getString(R.string.question_3) ?: "",
                 currContext()?.getString(R.string.answer_3) ?: ""
             ),
@@ -101,7 +100,7 @@ class FAQActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+
         ThemeManager(this).applyTheme()
         binding = ActivityFaqBinding.inflate(layoutInflater)
         setContentView(binding.root)

@@ -1,7 +1,7 @@
 package ani.dantotsu.connections.anilist
 
 import android.app.Activity
-import android.content.Context
+import android.util.Base64
 import ani.dantotsu.R
 import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
@@ -12,18 +12,23 @@ import ani.dantotsu.connections.anilist.api.Page
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.currContext
 import ani.dantotsu.isOnline
-import ani.dantotsu.loadData
 import ani.dantotsu.logError
 import ani.dantotsu.media.Author
 import ani.dantotsu.media.Character
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.Studio
 import ani.dantotsu.others.MalScraper
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.ObjectInputStream
+import java.io.ObjectOutputStream
+import java.io.Serializable
 import kotlin.system.measureTimeMillis
 
 class AnilistQueries {
@@ -35,12 +40,7 @@ class AnilistQueries {
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
-        currContext()?.let {
-            it.getSharedPreferences(it.getString(R.string.preference_file_key), Context.MODE_PRIVATE)
-                .edit()
-                .putString("anilist_username", user.name)
-                .apply()
-        }
+        PrefManager.setVal(PrefName.AnilistUserName, user.name)
 
         Anilist.userid = user.id
         Anilist.username = user.name
@@ -281,8 +281,8 @@ class AnilistQueries {
         }
 
         statuses.forEach { repeat(it) }
-        val set = loadData<MutableSet<Int>>("continue_$type")
-        if (set != null) {
+        val set = PrefManager.getCustomVal<Set<Int>>("continue_$type", setOf()).toMutableSet()
+        if (set.isNotEmpty()) {
             set.reversed().forEach {
                 if (map.containsKey(it)) returnArray.add(map[it]!!)
             }
@@ -355,7 +355,11 @@ class AnilistQueries {
     }
 
     private suspend fun bannerImage(type: String): String? {
-        var image = loadData<BannerImage>("banner_$type")
+        //var image = loadData<BannerImage>("banner_$type")
+        val image: BannerImage? = BannerImage(
+            PrefManager.getCustomVal("banner_${type}_url", null),
+            PrefManager.getCustomVal("banner_${type}_time", 0L)
+        )
         if (image == null || image.checkTime()) {
             val response =
                 executeQuery<Query.MediaListCollection>("""{ MediaListCollection(userId: ${Anilist.userid}, type: $type, chunk:1,perChunk:25, sort: [SCORE_DESC,UPDATED_TIME_DESC]) { lists { entries{ media { id bannerImage } } } } } """)
@@ -366,13 +370,9 @@ class AnilistQueries {
                     else null
                 }
             }?.flatten()?.randomOrNull() ?: return null
-
-            image = BannerImage(
-                random,
-                System.currentTimeMillis()
-            )
-            saveData("banner_$type", image)
-            return image.url
+            PrefManager.setCustomVal("banner_${type}_url", random)
+            PrefManager.setCustomVal("banner_${type}_time", System.currentTimeMillis())
+            return random
         } else return image.url
     }
 
@@ -419,11 +419,17 @@ class AnilistQueries {
 
         sorted["Favourites"] = favMedia(anime)
         sorted["Favourites"]?.sortWith(compareBy { it.userFavOrder })
+        //favMedia doesn't fill userProgress, so we need to fill it manually by searching :(
+        sorted["Favourites"]?.forEach { fav ->
+            all.find { it.id == fav.id }?.let {
+                fav.userProgress = it.userProgress
+            }
+        }
 
         sorted["All"] = all
-        val listsort = currContext()?.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            ?.getString("sort_order", "score")
-        val sort = listsort ?: sortOrder ?: options?.rowOrder
+        val listSort: String = if (anime) PrefManager.getVal(PrefName.AnimeListSortOrder)
+        else PrefManager.getVal(PrefName.MangaListSortOrder)
+        val sort = listSort ?: sortOrder ?: options?.rowOrder
         for (i in sorted.keys) {
             when (sort) {
                 "score" -> sorted[i]?.sortWith { b, a ->
@@ -444,11 +450,19 @@ class AnilistQueries {
     }
 
 
-    suspend fun getGenresAndTags(activity: Activity): Boolean {
-        var genres: ArrayList<String>? = loadData("genres_list", activity)
-        var tags: Map<Boolean, List<String>>? = loadData("tags_map", activity)
+    suspend fun getGenresAndTags(): Boolean {
+        var genres: ArrayList<String>? = PrefManager.getVal<Set<String>>(PrefName.GenresList)
+            .toMutableList() as ArrayList<String>?
+        val adultTags = PrefManager.getVal<Set<String>>(PrefName.TagsListIsAdult).toMutableList()
+        val nonAdultTags =
+            PrefManager.getVal<Set<String>>(PrefName.TagsListNonAdult).toMutableList()
+        var tags = if (adultTags.isEmpty() || nonAdultTags.isEmpty()) null else
+            mapOf(
+                true to adultTags,
+                false to nonAdultTags
+            )
 
-        if (genres == null) {
+        if (genres.isNullOrEmpty()) {
             executeQuery<Query.GenreCollection>(
                 """{GenreCollection}""",
                 force = true,
@@ -458,7 +472,7 @@ class AnilistQueries {
                 forEach {
                     genres?.add(it)
                 }
-                saveData("genres_list", genres!!)
+                PrefManager.setVal(PrefName.GenresList, genres?.toSet())
             }
         }
         if (tags == null) {
@@ -476,10 +490,11 @@ class AnilistQueries {
                     true to adult,
                     false to good
                 )
-                saveData("tags_map", tags)
+                PrefManager.setVal(PrefName.TagsListIsAdult, adult.toSet())
+                PrefManager.setVal(PrefName.TagsListNonAdult, good.toSet())
             }
         }
-        return if (genres != null && tags != null) {
+        return if (!genres.isNullOrEmpty() && tags != null) {
             Anilist.genres = genres
             Anilist.tags = tags
             true
@@ -496,8 +511,37 @@ class AnilistQueries {
         }
     }
 
+    private fun <K, V : Serializable> saveSerializableMap(prefKey: String, map: Map<K, V>) {
+        val byteStream = ByteArrayOutputStream()
+
+        ObjectOutputStream(byteStream).use { outputStream ->
+            outputStream.writeObject(map)
+        }
+        val serializedMap = Base64.encodeToString(byteStream.toByteArray(), Base64.DEFAULT)
+        PrefManager.setCustomVal(prefKey, serializedMap)
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    private fun <K, V : Serializable> loadSerializableMap(prefKey: String): Map<K, V>? {
+        try {
+            val serializedMap = PrefManager.getCustomVal(prefKey, "")
+            if (serializedMap.isEmpty()) return null
+
+            val bytes = Base64.decode(serializedMap, Base64.DEFAULT)
+            val byteArrayStream = ByteArrayInputStream(bytes)
+
+            return ObjectInputStream(byteArrayStream).use { inputStream ->
+                inputStream.readObject() as? Map<K, V>
+            }
+        } catch (e: Exception) {
+            return null
+        }
+    }
+
     private suspend fun getGenreThumbnail(genre: String): Genre? {
-        val genres = loadData<MutableMap<String, Genre>>("genre_thumb") ?: mutableMapOf()
+        val genres: MutableMap<String, Genre> =
+            loadSerializableMap<String, Genre>("genre_thumb")?.toMutableMap()
+                ?: mutableMapOf()
         if (genres.checkGenreTime(genre)) {
             try {
                 val genreQuery =
@@ -510,7 +554,7 @@ class AnilistQueries {
                             it.bannerImage!!,
                             System.currentTimeMillis()
                         )
-                        saveData("genre_thumb", genres)
+                        saveSerializableMap("genre_thumb", genres)
                         return genres[genre]
                     }
                 }
@@ -665,7 +709,7 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
                 page = pageInfo.currentPage.toString().toIntOrNull() ?: 0,
                 hasNextPage = pageInfo.hasNextPage == true,
             )
-        } else snackString(currContext()?.getString(R.string.empty_response))
+        }
         return null
     }
 
@@ -723,7 +767,7 @@ Page(page:$page,perPage:50) {
         if (smaller) {
             val response = execute()?.airingSchedules ?: return null
             val idArr = mutableListOf<Int>()
-            val listOnly = loadData("recently_list_only") ?: false
+            val listOnly: Boolean = PrefManager.getVal(PrefName.RecentlyListOnly)
             return response.mapNotNull { i ->
                 i.media?.let {
                     if (!idArr.contains(it.id))

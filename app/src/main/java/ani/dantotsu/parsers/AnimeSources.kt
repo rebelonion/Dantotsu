@@ -1,19 +1,21 @@
 package ani.dantotsu.parsers
 
-import android.content.Context
 import ani.dantotsu.Lazier
 import ani.dantotsu.lazyList
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
 object AnimeSources : WatchSources() {
     override var list: List<Lazier<BaseParser>> = emptyList()
-    var pinnedAnimeSources: Set<String> = emptySet()
+    var pinnedAnimeSources: List<String> = emptyList()
 
-    suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>, context: Context) {
-        val sharedPrefs = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        pinnedAnimeSources = sharedPrefs.getStringSet("pinned_anime_sources", emptySet()) ?: emptySet()
+    suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>) {
+        pinnedAnimeSources =
+            PrefManager.getNullableVal<List<String>>(PrefName.AnimeSourcesOrder, null)
+                ?: emptyList()
 
         // Initialize with the first value from StateFlow
         val initialExtensions = fromExtensions.first()
@@ -24,7 +26,10 @@ object AnimeSources : WatchSources() {
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->
-            list = sortPinnedAnimeSources(createParsersFromExtensions(extensions), pinnedAnimeSources)  + Lazier(
+            list = sortPinnedAnimeSources(
+                createParsersFromExtensions(extensions),
+                pinnedAnimeSources
+            ) + Lazier(
                 { OfflineAnimeParser() },
                 "Downloaded"
             )
@@ -34,7 +39,7 @@ object AnimeSources : WatchSources() {
     fun performReorderAnimeSources() {
         //remove the downloaded source from the list to avoid duplicates
         list = list.filter { it.name != "Downloaded" }
-        list = sortPinnedAnimeSources(list, pinnedAnimeSources)  + Lazier(
+        list = sortPinnedAnimeSources(list, pinnedAnimeSources) + Lazier(
             { OfflineAnimeParser() },
             "Downloaded"
         )
@@ -47,13 +52,17 @@ object AnimeSources : WatchSources() {
         }
     }
 
-    private fun sortPinnedAnimeSources(Sources: List<Lazier<BaseParser>>, pinnedAnimeSources: Set<String>): List<Lazier<BaseParser>> {
-        //find the pinned sources
-        val pinnedSources = Sources.filter { pinnedAnimeSources.contains(it.name) }
-        //find the unpinned sources
-        val unpinnedSources = Sources.filter { !pinnedAnimeSources.contains(it.name) }
-        //put the pinned sources at the top of the list
-        return pinnedSources + unpinnedSources
+    private fun sortPinnedAnimeSources(
+        sources: List<Lazier<BaseParser>>,
+        pinnedAnimeSources: List<String>
+    ): List<Lazier<BaseParser>> {
+        val pinnedSourcesMap = sources.filter { pinnedAnimeSources.contains(it.name) }
+            .associateBy { it.name }
+        val orderedPinnedSources = pinnedAnimeSources.mapNotNull { name ->
+            pinnedSourcesMap[name]
+        }
+        val unpinnedSources = sources.filterNot { pinnedAnimeSources.contains(it.name) }
+        return orderedPinnedSources + unpinnedSources
     }
 }
 

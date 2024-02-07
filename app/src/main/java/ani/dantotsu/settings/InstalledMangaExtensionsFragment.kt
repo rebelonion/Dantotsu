@@ -18,19 +18,22 @@ import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
-import ani.dantotsu.loadData
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -39,13 +42,14 @@ import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.util.Collections
 import java.util.Locale
 
 class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
     private var _binding: FragmentMangaExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
-    private val skipIcons = loadData("skip_extension_icons") ?: false
+    private val skipIcons: Boolean = PrefManager.getVal(PrefName.SkipExtensionIcons)
     private val mangaExtensionManager: MangaExtensionManager = Injekt.get()
     private val extensionsAdapter = MangaExtensionsAdapter(
         { pkg ->
@@ -138,7 +142,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                                 notificationManager.notify(1, builder.build())
                             },
                             { error ->
-                                FirebaseCrashlytics.getInstance().recordException(error)
+                                Injekt.get<CrashlyticsInterface>().logException(error)
                                 Log.e("MangaExtensionsAdapter", "Error: ", error)  // Log the error
                                 val builder = NotificationCompat.Builder(
                                     context,
@@ -156,7 +160,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_PROGRESS
                                 )
-                                    .setSmallIcon(androidx.media3.ui.R.drawable.exo_ic_check)
+                                    .setSmallIcon(R.drawable.ic_check)
                                     .setContentTitle("Update complete")
                                     .setContentText("The extension has been successfully updated.")
                                     .setPriority(NotificationCompat.PRIORITY_LOW)
@@ -183,14 +187,67 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
         extensionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         extensionsRecyclerView.adapter = extensionsAdapter
 
+        val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                val newList = extensionsAdapter.currentList.toMutableList()
+                val fromPosition = viewHolder.absoluteAdapterPosition
+                val toPosition = target.absoluteAdapterPosition
+                if (fromPosition < toPosition) { //probably need to switch to a recyclerview adapter
+                    for (i in fromPosition until toPosition) {
+                        Collections.swap(newList, i, i + 1)
+                    }
+                } else {
+                    for (i in fromPosition downTo toPosition + 1) {
+                        Collections.swap(newList, i, i - 1)
+                    }
+                }
+                extensionsAdapter.submitList(newList)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {}
+
+            override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
+                super.onSelectedChanged(viewHolder, actionState)
+                if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
+                    viewHolder?.itemView?.elevation = 8f
+                    viewHolder?.itemView?.translationZ = 8f
+                }
+            }
+
+            override fun clearView(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder
+            ) {
+                super.clearView(recyclerView, viewHolder)
+                extensionsAdapter.updatePref()
+                viewHolder.itemView.elevation = 0f
+                viewHolder.itemView.translationZ = 0f
+            }
+        }
+        ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(extensionsRecyclerView)
+
 
         lifecycleScope.launch {
             mangaExtensionManager.installedExtensionsFlow.collect { extensions ->
-                extensionsAdapter.updateData(extensions)
+                extensionsAdapter.updateData(sortToMangaSourcesList(extensions))
             }
         }
-        val extensionsRecyclerView: RecyclerView = binding.allMangaExtensionsRecyclerView
         return binding.root
+    }
+
+    private fun sortToMangaSourcesList(inpt: List<MangaExtension.Installed>): List<MangaExtension.Installed> {
+        val sourcesMap = inpt.associateBy { it.name }
+        val orderedSources = MangaSources.pinnedMangaSources.mapNotNull { name ->
+            sourcesMap[name]
+        }
+        return orderedSources + inpt.filter { !MangaSources.pinnedMangaSources.contains(it.name) }
     }
 
     override fun onDestroyView() {
@@ -198,21 +255,25 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
     }
 
     override fun updateContentBasedOnQuery(query: String?) {
-        extensionsAdapter.filter(query ?: "", mangaExtensionManager.installedExtensionsFlow.value)
+        extensionsAdapter.filter(
+            query ?: "",
+            sortToMangaSourcesList(mangaExtensionManager.installedExtensionsFlow.value)
+        )
+    }
+
+    override fun notifyDataChanged() { // Do nothing
     }
 
     private class MangaExtensionsAdapter(
         private val onSettingsClicked: (MangaExtension.Installed) -> Unit,
         private val onUninstallClicked: (MangaExtension.Installed, Boolean) -> Unit,
-        skipIcons: Boolean
+        val skipIcons: Boolean
     ) : ListAdapter<MangaExtension.Installed, MangaExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
     ) {
 
-        val skipIcons = skipIcons
-
         fun updateData(newExtensions: List<MangaExtension.Installed>) {
-            submitList(newExtensions)  // Use submitList instead of manual list handling
+            submitList(newExtensions)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -221,7 +282,14 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
-        @SuppressLint("SetTextI18n")
+        fun updatePref() {
+            val map = currentList.map { it.name }.toList()
+            PrefManager.setVal(PrefName.MangaSourcesOrder, map)
+            MangaSources.pinnedMangaSources = map
+            MangaSources.performReorderMangaSources()
+        }
+
+        @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)  // Use getItem() from ListAdapter
             val nsfw = if (extension.isNsfw) "(18+)" else ""
@@ -242,11 +310,6 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             holder.settingsImageView.setOnClickListener {
                 onSettingsClicked(extension)
             }
-
-            holder.card.setOnLongClickListener {
-                onUninstallClicked(extension, true)
-                true
-            }
         }
 
         fun filter(query: String, currentList: List<MangaExtension.Installed>) {
@@ -256,7 +319,8 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                     filteredList.add(extension)
                 }
             }
-            submitList(filteredList)
+            if (filteredList != currentList)
+                submitList(filteredList)
         }
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -266,7 +330,6 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             val settingsImageView: ImageView = view.findViewById(R.id.settingsImageView)
             val extensionIconImageView: ImageView = view.findViewById(R.id.extensionIconImageView)
             val closeTextView: ImageView = view.findViewById(R.id.closeTextView)
-            val card: View = view.findViewById(R.id.extensionCardView)
         }
 
         companion object {

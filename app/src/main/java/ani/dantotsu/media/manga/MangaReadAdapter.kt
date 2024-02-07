@@ -2,7 +2,6 @@ package ani.dantotsu.media.manga
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +27,8 @@ import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
@@ -69,12 +70,9 @@ class MangaReadAdapter(
                 null
             )
         }
-        val offline = if (!isOnline(binding.root.context) || currContext()?.getSharedPreferences(
-                "Dantotsu",
-                Context.MODE_PRIVATE
-            )
-                ?.getBoolean("offlineMode", false) == true
-        ) View.GONE else View.VISIBLE
+        val offline =
+            if (!isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
+            ) View.GONE else View.VISIBLE
 
         binding.animeSourceNameContainer.visibility = offline
         binding.animeSourceSettings.visibility = offline
@@ -163,7 +161,8 @@ class MangaReadAdapter(
             var refresh = false
             var run = false
             var reversed = media.selected!!.recyclerReversed
-            var style = media.selected!!.recyclerStyle ?: fragment.uiSettings.mangaDefaultView
+            var style =
+                media.selected!!.recyclerStyle ?: PrefManager.getVal(PrefName.MangaDefaultView)
             dialogBinding.animeSourceTop.rotation = if (reversed) -90f else 90f
             dialogBinding.sortText.text = if (reversed) "Down to Up" else "Up to Down"
             dialogBinding.animeSourceTop.setOnClickListener {
@@ -392,7 +391,8 @@ class MangaReadAdapter(
             if (media.manga?.chapters != null) {
                 val chapters = media.manga.chapters!!.keys.toTypedArray()
                 val anilistEp = (media.userProgress ?: 0).plus(1)
-                val appEp = loadData<String>("${media.id}_current_chp")?.toIntOrNull() ?: 1
+                val appEp = PrefManager.getCustomVal<String?>("${media.id}_current_chp", null)
+                    ?.toIntOrNull() ?: 1
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
                 val filteredChapters = chapters.filter { chapterKey ->
                     val chapter = media.manga.chapters!![chapterKey]!!

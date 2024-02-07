@@ -2,14 +2,12 @@ package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import androidx.annotation.OptIn
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.coroutineScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadIndex
@@ -22,6 +20,7 @@ import ani.dantotsu.databinding.ItemEpisodeListBinding
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
+import ani.dantotsu.settings.saving.PrefManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 import kotlinx.coroutines.delay
@@ -30,8 +29,8 @@ import kotlin.math.ln
 import kotlin.math.pow
 
 fun handleProgress(cont: LinearLayout, bar: View, empty: View, mediaId: Int, ep: String) {
-    val curr = loadData<Long>("${mediaId}_${ep}")
-    val max = loadData<Long>("${mediaId}_${ep}_max")
+    val curr = PrefManager.getNullableCustomVal("${mediaId}_${ep}", null, Long::class.java)
+    val max = PrefManager.getNullableCustomVal("${mediaId}_${ep}_max", null, Long::class.java)
     if (curr != null && max != null) {
         cont.visibility = View.VISIBLE
         val div = curr.toFloat() / max.toFloat()
@@ -110,7 +109,7 @@ class EpisodeAdapter(
         when (holder) {
             is EpisodeListViewHolder -> {
                 val binding = holder.binding
-                setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+                setAnimation(fragment.requireContext(), holder.binding.root)
 
                 val thumb =
                     ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
@@ -129,7 +128,7 @@ class EpisodeAdapter(
                 binding.itemEpisodeDesc.visibility =
                     if (ep.desc != null && ep.desc?.trim(' ') != "") View.VISIBLE else View.GONE
                 binding.itemEpisodeDesc.text = ep.desc ?: ""
-                holder.bind(ep.number, ep.downloadProgress , ep.desc)
+                holder.bind(ep.number, ep.downloadProgress, ep.desc)
 
                 if (media.userProgress != null) {
                     if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat()) {
@@ -159,7 +158,7 @@ class EpisodeAdapter(
 
             is EpisodeGridViewHolder -> {
                 val binding = holder.binding
-                setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+                setAnimation(fragment.requireContext(), holder.binding.root)
 
                 val thumb =
                     ep.thumb?.let { if (it.url.isNotEmpty()) GlideUrl(it.url) { it.headers } else null }
@@ -202,7 +201,7 @@ class EpisodeAdapter(
 
             is EpisodeCompactViewHolder -> {
                 val binding = holder.binding
-                setAnimation(fragment.requireContext(), holder.binding.root, fragment.uiSettings)
+                setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemEpisodeNumber.text = ep.number
                 binding.itemEpisodeFillerView.visibility =
                     if (ep.filler) View.VISIBLE else View.GONE
@@ -253,10 +252,7 @@ class EpisodeAdapter(
                 media.mainName(),
                 episodeNumber
             )
-            val id = fragment.requireContext().getSharedPreferences(
-                ContextCompat.getString(fragment.requireContext(), R.string.anime_downloads),
-                Context.MODE_PRIVATE
-            ).getString(
+            val id = PrefManager.getAnimeDownloadPreferences().getString(
                 taskName,
                 ""
             ) ?: ""
@@ -391,9 +387,10 @@ class EpisodeAdapter(
                 }, 1000)
             } else {
                 binding.itemDownloadStatus.visibility = View.GONE
-                binding.itemEpisodeDesc.visibility = if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
+                binding.itemEpisodeDesc.visibility =
+                    if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
                 // Show download icon
-                binding.itemDownload.setImageResource(R.drawable.ic_circle_add)
+                binding.itemDownload.setImageResource(R.drawable.ic_download_24)
                 binding.itemDownload.rotation = 0f
             }
 

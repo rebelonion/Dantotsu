@@ -1,17 +1,16 @@
 package ani.dantotsu.download
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Environment
 import android.widget.Toast
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.Serializable
 
 class DownloadsManager(private val context: Context) {
-    private val prefs: SharedPreferences =
-        context.getSharedPreferences("downloads_pref", Context.MODE_PRIVATE)
     private val gson = Gson()
     private val downloadsList = loadDownloads().toMutableList()
 
@@ -24,11 +23,11 @@ class DownloadsManager(private val context: Context) {
 
     private fun saveDownloads() {
         val jsonString = gson.toJson(downloadsList)
-        prefs.edit().putString("downloads_key", jsonString).apply()
+        PrefManager.setVal(PrefName.DownloadsKeys, jsonString)
     }
 
     private fun loadDownloads(): List<DownloadedType> {
-        val jsonString = prefs.getString("downloads_key", null)
+        val jsonString = PrefManager.getVal(PrefName.DownloadsKeys, null as String?)
         return if (jsonString != null) {
             val type = object : TypeToken<List<DownloadedType>>() {}.type
             gson.fromJson(jsonString, type)
@@ -75,9 +74,11 @@ class DownloadsManager(private val context: Context) {
             DownloadedType.Type.MANGA -> {
                 downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.MANGA }
             }
+
             DownloadedType.Type.ANIME -> {
                 downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.ANIME }
             }
+
             DownloadedType.Type.NOVEL -> {
                 downloadsList.removeAll { it.title == title && it.type == DownloadedType.Type.NOVEL }
             }
@@ -252,7 +253,12 @@ class DownloadsManager(private val context: Context) {
         const val mangaLocation = "Dantotsu/Manga"
         const val animeLocation = "Dantotsu/Anime"
 
-        fun getDirectory(context: Context, type: DownloadedType.Type, title: String, chapter: String? = null): File {
+        fun getDirectory(
+            context: Context,
+            type: DownloadedType.Type,
+            title: String,
+            chapter: String? = null
+        ): File {
             return if (type == DownloadedType.Type.MANGA) {
                 if (chapter != null) {
                     File(

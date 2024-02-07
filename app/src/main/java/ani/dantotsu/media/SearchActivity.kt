@@ -16,7 +16,8 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistSearch
 import ani.dantotsu.connections.anilist.SearchResults
 import ani.dantotsu.databinding.ActivitySearchBinding
-import ani.dantotsu.others.LangSet
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,13 +34,14 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var mediaAdaptor: MediaAdaptor
     private lateinit var progressAdapter: ProgressAdapter
     private lateinit var concatAdapter: ConcatAdapter
+    private lateinit var headerAdaptor: SearchAdapter
 
     lateinit var result: SearchResults
     lateinit var updateChips: (() -> Unit)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        LangSet.setLocale(this)
+
         ThemeManager(this).applyTheme()
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -51,7 +53,7 @@ class SearchActivity : AppCompatActivity() {
             bottom = navBarHeight + 80f.px
         )
 
-        style = loadData<Int>("searchStyle") ?: 0
+        style = PrefManager.getVal(PrefName.SearchStyle)
         var listOnly: Boolean? = intent.getBooleanExtra("listOnly", false)
         if (!listOnly!!) listOnly = null
 
@@ -76,7 +78,7 @@ class SearchActivity : AppCompatActivity() {
 
         progressAdapter = ProgressAdapter(searched = model.searched)
         mediaAdaptor = MediaAdaptor(style, model.searchResults.results, this, matchParent = true)
-        val headerAdaptor = SearchAdapter(this)
+        headerAdaptor = SearchAdapter(this, model.searchResults.type)
 
         val gridSize = (screenWidth / 120f).toInt()
         val gridLayoutManager = GridLayoutManager(this, gridSize)
@@ -154,9 +156,18 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    fun emptyMediaAdapter() {
+        searchTimer.cancel()
+        searchTimer.purge()
+        mediaAdaptor.notifyItemRangeRemoved(0, model.searchResults.results.size)
+        model.searchResults.results.clear()
+        progressAdapter.bar?.visibility = View.GONE
+    }
+
     private var searchTimer = Timer()
     private var loading = false
     fun search() {
+        headerAdaptor.setHistoryVisibility(false)
         val size = model.searchResults.results.size
         model.searchResults.results.clear()
         binding.searchRecyclerView.post {
@@ -188,6 +199,7 @@ class SearchActivity : AppCompatActivity() {
 
     var state: Parcelable? = null
     override fun onPause() {
+        headerAdaptor.addHistory()
         super.onPause()
         state = binding.searchRecyclerView.layoutManager?.onSaveInstanceState()
     }

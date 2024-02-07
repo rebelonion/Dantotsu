@@ -3,7 +3,6 @@ package ani.dantotsu.subcriptions
 import android.content.Context
 import ani.dantotsu.R
 import ani.dantotsu.currContext
-import ani.dantotsu.loadData
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.Selected
 import ani.dantotsu.media.manga.MangaNameAdapter
@@ -15,7 +14,8 @@ import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
-import ani.dantotsu.saveData
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.tryWithSuspend
 import kotlinx.coroutines.withTimeoutOrNull
 
@@ -27,23 +27,18 @@ class SubscriptionHelper {
             isAdult: Boolean,
             isAnime: Boolean
         ): Selected {
-            val sharedPreferences = context.getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            val data = loadData<Selected>("${mediaId}-select", context) ?: Selected().let {
-                it.sourceIndex =
-                    if (isAdult) 0
-                    else if (isAnime) {
-                        sharedPreferences.getInt("settings_def_anime_source_s_r", 0)
-                    } else {
-                        sharedPreferences.getInt("settings_def_manga_source_s_r", 0)
+            val data =
+                PrefManager.getNullableCustomVal("${mediaId}-select", null, Selected::class.java)
+                    ?: Selected().let {
+                        it.sourceIndex = 0
+                        it.preferDub = PrefManager.getVal(PrefName.SettingsPreferDub)
+                        it
                     }
-                it.preferDub = loadData("settings_prefer_dub", context) ?: false
-                it
-            }
             return data
         }
 
         private fun saveSelected(context: Context, mediaId: Int, data: Selected) {
-            saveData("$mediaId-select", data, context)
+            PrefManager.setCustomVal("${mediaId}-select", data)
         }
 
         fun getAnimeParser(context: Context, isAdult: Boolean, id: Int): AnimeParser {
@@ -130,12 +125,24 @@ class SubscriptionHelper {
         ) : java.io.Serializable
 
         private const val subscriptions = "subscriptions"
-        fun getSubscriptions(context: Context): Map<Int, SubscribeMedia> =
-            loadData(subscriptions, context)
-                ?: mapOf<Int, SubscribeMedia>().also { saveData(subscriptions, it, context) }
 
+        @Suppress("UNCHECKED_CAST")
+        fun getSubscriptions(): Map<Int, SubscribeMedia> =
+            (PrefManager.getNullableCustomVal(
+                subscriptions,
+                null,
+                Map::class.java
+            ) as? Map<Int, SubscribeMedia>)
+                ?: mapOf<Int, SubscribeMedia>().also { PrefManager.setCustomVal(subscriptions, it) }
+
+        @Suppress("UNCHECKED_CAST")
         fun saveSubscription(context: Context, media: Media, subscribed: Boolean) {
-            val data = loadData<Map<Int, SubscribeMedia>>(subscriptions, context)!!.toMutableMap()
+            val data = PrefManager.getNullableCustomVal(
+                subscriptions,
+                null,
+                Map::class.java
+            ) as? MutableMap<Int, SubscribeMedia>
+                ?: mutableMapOf()
             if (subscribed) {
                 if (!data.containsKey(media.id)) {
                     val new = SubscribeMedia(
@@ -150,7 +157,7 @@ class SubscriptionHelper {
             } else {
                 data.remove(media.id)
             }
-            saveData(subscriptions, data, context)
+            PrefManager.setCustomVal(subscriptions, data)
         }
     }
 }

@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
 
     <com.google.android.material.navigationrail.NavigationRailView
         android:id="@+id/mediaTab"
@@ -12,14 +12,14 @@
         android:layout_height="match_parent"
         android:background="?attr/colorSurface"
         android:translationZ="0dp"
-        app:itemPaddingTop="32dp"
-        app:menuGravity="center"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
+        app:itemPaddingTop="32dp"
         app:itemRippleColor="?attr/colorPrimary"
         app:itemTextAppearanceActive="@style/NavBarText"
         app:itemTextAppearanceInactive="@style/NavBarText"
-        app:itemTextColor="@color/tab_layout_icon" />
+        app:itemTextColor="@color/tab_layout_icon"
+        app:menuGravity="center" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -103,8 +103,8 @@
                             android:scrollHorizontally="false"
                             android:singleLine="false"
                             android:text="@string/slogan"
-                            android:textSize="16sp"
                             android:textColor="?attr/colorOnBackground"
+                            android:textSize="16sp"
                             android:transitionName="mediaTitle" />
 
                         <TextView
@@ -139,10 +139,10 @@
                             android:text="@string/add"
                             android:textAllCaps="true"
                             android:textColor="?attr/colorSecondary"
-                            app:strokeColor="@color/bg_opp"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             app:cornerRadius="16dp"
+                            app:strokeColor="@color/bg_opp"
                             tools:ignore="SmallSp,TextContrastCheck" />
 
                     </LinearLayout>
@@ -173,7 +173,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center_vertical"
-                        app:contentScrim="?android:colorBackground"
                         android:ellipsize="marquee"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
@@ -187,6 +186,7 @@
                         android:text="@string/slogan"
                         android:textSize="16sp"
                         android:transitionName="mediaTitle"
+                        app:contentScrim="?android:colorBackground"
                         tools:visibility="gone" />
 
                     <LinearLayout
@@ -292,8 +292,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                app:tint="@color/incognito"
                 android:src="@drawable/ic_incognito_24"
+                app:tint="@color/incognito"
                 tools:ignore="ContentDescription" />
         </androidx.cardview.widget.CardView>
 
@@ -315,13 +315,13 @@
                 android:src="@drawable/ic_round_close_24"
                 tools:ignore="ContentDescription" />
         </androidx.cardview.widget.CardView>
+
         <FrameLayout
             android:id="@+id/fragmentExtensionsContainer"
-            android:paddingTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone">
-        </FrameLayout>
+            android:paddingTop="16dp"
+            android:visibility="gone"></FrameLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </LinearLayout>

@@ -21,7 +21,6 @@ class OfflineAnimeParser : AnimeParser() {
     override val name = "Offline"
     override val saveName = "Offline"
     override val hostUrl = "Offline"
-    override val isDubAvailableSeparately = false
     override val isNSFW = false
 
     override suspend fun loadEpisodes(
@@ -119,7 +118,7 @@ class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
         val sublist = getSubtitle(
             videoServer.extraData?.get("title") ?: "",
             videoServer.extraData?.get("episode") ?: ""
-        )?: emptyList()
+        ) ?: emptyList()
         //we need to return a "fake" video so that the app doesn't crash
         val video = Video(
             null,

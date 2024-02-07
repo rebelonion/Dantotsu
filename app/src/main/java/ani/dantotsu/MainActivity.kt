@@ -2,7 +2,6 @@ package ani.dantotsu
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.GradientDrawable
@@ -45,15 +44,13 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.others.LangSet
-import ani.dantotsu.others.SharedPreferenceBooleanLiveData
-import ani.dantotsu.parsers.novel.NovelExtensionManager
-import ani.dantotsu.settings.UserInterfaceSettings
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefManager.asLiveBool
+import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.SharedPreferenceBooleanLiveData
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
 import eu.kanade.domain.source.service.SourcePreferences
-import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
-import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -73,18 +70,16 @@ class MainActivity : AppCompatActivity() {
     private val scope = lifecycleScope
     private var load = false
 
-    private var uiSettings = UserInterfaceSettings()
-
 
     @SuppressLint("InternalInsetResource", "DiscouragedApi")
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         ThemeManager(this).applyTheme()
-        LangSet.setLocale(this)
+
         super.onCreate(savedInstanceState)
 
         //get FRAGMENT_CLASS_NAME from intent
-        val FRAGMENT_CLASS_NAME = intent.getStringExtra("FRAGMENT_CLASS_NAME")
+        val fragment = intent.getStringExtra("FRAGMENT_CLASS_NAME")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -98,12 +93,8 @@ class MainActivity : AppCompatActivity() {
             backgroundDrawable.setColor(semiTransparentColor)
             _bottomBar.background = backgroundDrawable
         }
-        val sharedPreferences = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-        val colorOverflow = sharedPreferences.getBoolean("colorOverflow", false)
-        if (!colorOverflow) {
-            _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
-        }
 
         val offset = try {
             val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -114,11 +105,10 @@ class MainActivity : AppCompatActivity() {
         val layoutParams = binding.incognito.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.topMargin = 11 * offset / 12
         binding.incognito.layoutParams = layoutParams
-        incognitoLiveData = SharedPreferenceBooleanLiveData(
-            sharedPreferences,
-            "incognito",
+        incognitoLiveData = PrefManager.getLiveVal(
+            PrefName.Incognito,
             false
-        )
+        ).asLiveBool()
         incognitoLiveData.observe(this) {
             if (it) {
                 val slideDownAnim = ObjectAnimator.ofFloat(
@@ -162,7 +152,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         val preferences: SourcePreferences = Injekt.get()
-        if (preferences.animeExtensionUpdatesCount().get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0) {
+        if (preferences.animeExtensionUpdatesCount()
+                .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
+        ) {
             Toast.makeText(
                 this,
                 "You have extension updates available!",
@@ -213,24 +205,22 @@ class MainActivity : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
-            uiSettings = loadData("ui_settings") ?: uiSettings
-            selectedOption = if (FRAGMENT_CLASS_NAME != null) {
-                when (FRAGMENT_CLASS_NAME) {
+            selectedOption = if (fragment != null) {
+                when (fragment) {
                     AnimeFragment::class.java.name -> 0
                     HomeFragment::class.java.name -> 1
                     MangaFragment::class.java.name -> 2
                     else -> 1
                 }
             } else {
-                uiSettings.defaultStartUpTab
+                PrefManager.getVal(PrefName.DefaultStartUpTab)
             }
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
 
             }
         }
-        val offlineMode = getSharedPreferences("Dantotsu", Context.MODE_PRIVATE)
-            .getBoolean("offlineMode", false)
+        val offlineMode: Boolean = PrefManager.getVal(PrefName.OfflineMode)
         if (!isOnline(this)) {
             snackString(this@MainActivity.getString(R.string.no_internet_connection))
             startActivity(Intent(this, NoInternet::class.java))
@@ -251,7 +241,7 @@ class MainActivity : AppCompatActivity() {
                             mainViewPager.isUserInputEnabled = false
                             mainViewPager.adapter =
                                 ViewPagerAdapter(supportFragmentManager, lifecycle)
-                            mainViewPager.setPageTransformer(ZoomOutPageTransformer(uiSettings))
+                            mainViewPager.setPageTransformer(ZoomOutPageTransformer())
                             navbar.setOnTabSelectListener(object :
                                 AnimatedBottomBar.OnTabSelectListener {
                                 override fun onTabSelected(
@@ -305,7 +295,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                    if (loadData<Boolean>("allow_opening_links", this) != true) {
+                    if (!(PrefManager.getVal(PrefName.AllowOpeningLinks) as Boolean)) {
                         CustomBottomDialog.newInstance().apply {
                             title = "Allow Dantotsu to automatically open Anilist & MAL Links?"
                             val md = "Open settings & click +Add Links & select Anilist & Mal urls"
@@ -317,18 +307,19 @@ class MainActivity : AppCompatActivity() {
                             })
 
                             setNegativeButton(this@MainActivity.getString(R.string.no)) {
-                                saveData("allow_opening_links", true, this@MainActivity)
+                                PrefManager.setVal(PrefName.AllowOpeningLinks, true)
                                 dismiss()
                             }
 
                             setPositiveButton(this@MainActivity.getString(R.string.yes)) {
-                                saveData("allow_opening_links", true, this@MainActivity)
+                                PrefManager.setVal(PrefName.AllowOpeningLinks, true)
                                 tryWith(true) {
                                     startActivity(
                                         Intent(Settings.ACTION_APP_OPEN_BY_DEFAULT_SETTINGS)
                                             .setData(Uri.parse("package:$packageName"))
                                     )
                                 }
+                                dismiss()
                             }
                         }.show(supportFragmentManager, "dialog")
                     }
@@ -342,7 +333,7 @@ class MainActivity : AppCompatActivity() {
             while (downloadCursor.moveToNext()) {
                 val download = downloadCursor.download
                 Log.e("Downloader", download.request.uri.toString())
-                Log.e("Downloader", download.request.id.toString())
+                Log.e("Downloader", download.request.id)
                 Log.e("Downloader", download.request.mimeType.toString())
                 Log.e("Downloader", download.request.data.size.toString())
                 Log.e("Downloader", download.bytesDownloaded.toString())

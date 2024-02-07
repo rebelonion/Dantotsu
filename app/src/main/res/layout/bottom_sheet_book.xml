@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/bottom_sheet_background"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -72,14 +73,14 @@
             android:id="@+id/itemBookDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:alpha="0.58"
-            app:lineHeight="16sp"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
-            tools:text="@string/always_minimize_info"
-            tools:ignore="TextContrastCheck"/>
+            android:alpha="0.58"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
+            app:lineHeight="16sp"
+            tools:ignore="TextContrastCheck"
+            tools:text="@string/always_minimize_info" />
 
 
         <TextView
