@@ -292,7 +292,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
         @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val extension = getItem(position) // Use getItem() from ListAdapter
+            val extension = getItem(position)
             val nsfw = if (extension.isNsfw) "(18+)" else ""
             val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
             holder.extensionNameTextView.text = extension.name
@@ -324,7 +324,8 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                     filteredList.add(extension)
                 }
             }
-            submitList(filteredList)
+            if (filteredList != currentList)
+                submitList(filteredList)
         }
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

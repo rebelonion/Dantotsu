@@ -249,7 +249,8 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                     filteredList.add(extension)
                 }
             }
-            submitList(filteredList)
+            if (filteredList != currentList)
+                submitList(filteredList)
         }
 
         inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
