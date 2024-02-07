@@ -19,7 +19,7 @@ android {
         targetSdk 34
         versionCode((System.currentTimeMillis() / 60000).toInteger())
         versionName "2.1.0"
-        versionCode 210
+        versionCode 210000000
         signingConfig signingConfigs.debug
     }
 
