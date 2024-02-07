@@ -31,7 +31,7 @@ class SearchHistoryAdapter(private val type: String, private val searchClicked: 
             PrefManager.getLiveVal(historyType, mutableSetOf<String>()).asLiveStringSet()
         searchHistoryLiveData?.observeForever {
             searchHistory = it.toMutableSet()
-            submitList(searchHistory?.reversed())
+            submitList(searchHistory?.toList())
         }
     }
 
