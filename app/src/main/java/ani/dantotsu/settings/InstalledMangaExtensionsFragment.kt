@@ -195,10 +195,19 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                extensionsAdapter.onMove(
-                    viewHolder.absoluteAdapterPosition,
-                    target.absoluteAdapterPosition
-                )
+                val newList = extensionsAdapter.currentList.toMutableList()
+                val fromPosition = viewHolder.absoluteAdapterPosition
+                val toPosition = target.absoluteAdapterPosition
+                if (fromPosition < toPosition) { //probably need to switch to a recyclerview adapter
+                    for (i in fromPosition until toPosition) {
+                        Collections.swap(newList, i, i + 1)
+                    }
+                } else {
+                    for (i in fromPosition downTo toPosition + 1) {
+                        Collections.swap(newList, i, i - 1)
+                    }
+                }
+                extensionsAdapter.submitList(newList)
                 return true
             }
 
@@ -217,6 +226,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder: RecyclerView.ViewHolder
             ) {
                 super.clearView(recyclerView, viewHolder)
+                extensionsAdapter.updatePref()
                 viewHolder.itemView.elevation = 0f
                 viewHolder.itemView.translationZ = 0f
             }
@@ -262,12 +272,8 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
         DIFF_CALLBACK_INSTALLED
     ) {
 
-        private val data: MutableList<MangaExtension.Installed> = mutableListOf()
-
         fun updateData(newExtensions: List<MangaExtension.Installed>) {
             submitList(newExtensions)
-            data.clear()
-            data.addAll(newExtensions)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -276,13 +282,11 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
-        fun onMove(fromPosition: Int, toPosition: Int) {
-            Collections.swap(data, fromPosition, toPosition)
-            val map = data.map { it.name }.toList()
+        fun updatePref() {
+            val map = currentList.map { it.name }.toList()
             PrefManager.setVal(PrefName.MangaSourcesOrder, map)
             MangaSources.pinnedMangaSources = map
             MangaSources.performReorderMangaSources()
-            notifyItemMoved(fromPosition, toPosition)
         }
 
         @SuppressLint("SetTextI18n", "ClickableViewAccessibility")

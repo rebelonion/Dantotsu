@@ -124,10 +124,19 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                extensionsAdapter.onMove(
-                    viewHolder.absoluteAdapterPosition,
-                    target.absoluteAdapterPosition
-                )
+                val newList = extensionsAdapter.currentList.toMutableList()
+                val fromPosition = viewHolder.absoluteAdapterPosition
+                val toPosition = target.absoluteAdapterPosition
+                if (fromPosition < toPosition) { //probably need to switch to a recyclerview adapter
+                    for (i in fromPosition until toPosition) {
+                        Collections.swap(newList, i, i + 1)
+                    }
+                } else {
+                    for (i in fromPosition downTo toPosition + 1) {
+                        Collections.swap(newList, i, i - 1)
+                    }
+                }
+                extensionsAdapter.submitList(newList)
                 return true
             }
 
@@ -146,6 +155,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                 viewHolder: RecyclerView.ViewHolder
             ) {
                 super.clearView(recyclerView, viewHolder)
+                extensionsAdapter.updatePref()
                 viewHolder.itemView.elevation = 0f
                 viewHolder.itemView.translationZ = 0f
             }
@@ -191,21 +201,16 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
     ) : ListAdapter<NovelExtension.Installed, NovelExtensionsAdapter.ViewHolder>(
         DIFF_CALLBACK_INSTALLED
     ) {
-        private val data: MutableList<NovelExtension.Installed> = mutableListOf()
 
         fun updateData(newExtensions: List<NovelExtension.Installed>) {
             submitList(newExtensions)
-            data.clear()
-            data.addAll(newExtensions)
         }
 
-        fun onMove(fromPosition: Int, toPosition: Int) {
-            Collections.swap(data, fromPosition, toPosition)
-            val map = data.map { it.name }.toList()
+        fun updatePref() {
+            val map = currentList.map { it.name }
             PrefManager.setVal(PrefName.NovelSourcesOrder, map)
             NovelSources.pinnedNovelSources = map
             NovelSources.performReorderNovelSources()
-            notifyItemMoved(fromPosition, toPosition)
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
