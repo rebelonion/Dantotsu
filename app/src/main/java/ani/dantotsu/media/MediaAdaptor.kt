@@ -396,10 +396,8 @@ class MediaAdaptor(
                 if (itemCompactImage != null) {
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         activity,
-                        Pair.create(
-                            itemCompactImage,
-                            ViewCompat.getTransitionName(activity.findViewById(R.id.itemCompactImage))!!
-                        ),
+                        itemCompactImage,
+                        ViewCompat.getTransitionName(itemCompactImage)!!
                     ).toBundle()
                 } else {
                     null
