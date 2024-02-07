@@ -54,7 +54,7 @@
         android:largeHeap="true"
         android:requestLegacyExternalStorage="false"
         android:roundIcon="${icon_placeholder_round}"
-        android:supportsRtl="false"
+        android:supportsRtl="true"
         android:theme="@style/Theme.Dantotsu"
         android:usesCleartextTraffic="true"
         tools:ignore="AllowBackup">
