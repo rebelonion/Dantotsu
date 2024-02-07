@@ -1244,10 +1244,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             media.anime!!.selectedEpisode!!
         )
 
-        val set = PrefManager.getVal<Set<Int>>(PrefName.ContinueAnime).toMutableSet()
-        if (set.contains(media.id)) set.remove(media.id)
-        set.add(media.id)
-        PrefManager.setVal(PrefName.ContinueAnime, set.toSet())
+        val list = PrefManager.getVal<Set<Int>>(PrefName.ContinuedAnime).toMutableList()
+        if (list.contains(media.id)) list.remove(media.id)
+        list.add(media.id)
+        PrefManager.setVal(PrefName.ContinuedAnime, list.toList())
 
         lifecycleScope.launch(Dispatchers.IO) {
             extractor?.onVideoStopped(video)

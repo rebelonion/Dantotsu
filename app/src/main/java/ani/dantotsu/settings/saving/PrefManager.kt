@@ -37,6 +37,7 @@ object PrefManager {
         Compat.importOldPrefs(context)
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun <T> setVal(prefName: PrefName, value: T?) {
         val pref = getPrefLocation(prefName.data.prefLocation)
         with(pref.edit()) {
@@ -46,7 +47,7 @@ object PrefManager {
                 is Float -> putFloat(prefName.name, value)
                 is Long -> putLong(prefName.name, value)
                 is String -> putString(prefName.name, value)
-                is Set<*> -> convertAndPutStringSet(prefName.name, value)
+                is Set<*> -> putStringSet(prefName.name, value as Set<String>)
                 null -> remove(prefName.name)
                 else -> serializeClass(prefName.name, value, prefName.data.prefLocation)
             }
@@ -64,10 +65,7 @@ object PrefManager {
                 Float::class -> pref.getFloat(prefName.name, default as Float) as T
                 Long::class -> pref.getLong(prefName.name, default as Long) as T
                 String::class -> pref.getString(prefName.name, default as String?) as T
-                Set::class -> convertFromStringSet(
-                    pref.getStringSet(prefName.name, null),
-                    default
-                ) as T
+                Set::class -> pref.getStringSet(prefName.name, default as Set<String>) as T
 
                 List::class -> deserializeClass(
                     prefName.name,
@@ -100,9 +98,9 @@ object PrefManager {
                     prefName.data.default as String?
                 ) as T
 
-                Set::class -> convertFromStringSet(
-                    pref.getStringSet(prefName.name, null),
-                    prefName.data.default
+                Set::class -> pref.getStringSet(
+                    prefName.name,
+                    prefName.data.default as Set<String>
                 ) as T
 
                 List::class -> deserializeClass(
@@ -131,10 +129,7 @@ object PrefManager {
                 Float::class -> pref.getFloat(prefName.name, default as Float) as T?
                 Long::class -> pref.getLong(prefName.name, default as Long) as T?
                 String::class -> pref.getString(prefName.name, default as String?) as T?
-                Set::class -> convertFromStringSet(
-                    pref.getStringSet(prefName.name, null),
-                    default
-                ) as T?
+                Set::class -> pref.getStringSet(prefName.name, default as Set<String>) as T?
 
                 else -> deserializeClass(prefName.name, default, prefName.data.prefLocation)
             }
@@ -152,11 +147,7 @@ object PrefManager {
                 is Float -> irrelevantPreferences!!.getFloat(key, default) as T
                 is Long -> irrelevantPreferences!!.getLong(key, default) as T
                 is String -> irrelevantPreferences!!.getString(key, default) as T
-                is Set<*> -> convertFromStringSet(
-                    irrelevantPreferences!!.getStringSet(key, null),
-                    default
-                ) as T
-
+                is Set<*> -> irrelevantPreferences!!.getStringSet(key, default as Set<String>) as T
                 else -> throw IllegalArgumentException("Type not supported")
             }
         } catch (e: Exception) {
@@ -193,9 +184,9 @@ object PrefManager {
                     default as? String
                 ) as T?
 
-                clazz.isAssignableFrom(Set::class.java) -> convertFromStringSet(
-                    irrelevantPreferences!!.getStringSet(key, null),
-                    default
+                clazz.isAssignableFrom(Set::class.java) -> irrelevantPreferences!!.getStringSet(
+                    key,
+                    default as? Set<String> ?: setOf()
                 ) as T?
 
                 else -> deserializeClass(key, default, Location.Irrelevant)
@@ -214,6 +205,7 @@ object PrefManager {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     fun <T> setCustomVal(key: String, value: T?) {
         //for custom force irrelevant
         with(irrelevantPreferences!!.edit()) {
@@ -223,7 +215,7 @@ object PrefManager {
                 is Float -> putFloat(key, value as Float)
                 is Long -> putLong(key, value as Long)
                 is String -> putString(key, value as String)
-                is Set<*> -> convertAndPutStringSet(key, value)
+                is Set<*> -> putStringSet(key, value as Set<String>)
                 null -> remove(key)
                 else -> serializeClass(key, value, Location.Irrelevant)
             }
@@ -369,41 +361,6 @@ object PrefManager {
             Location.Protected -> protectedPreferences
         }!!
     }
-
-    private fun <T> convertFromStringSet(stringSet: Set<String>?, default: T): Set<*> {
-        if (stringSet.isNullOrEmpty()) return default as Set<*>
-
-        return try {
-            val typeIdentifier = stringSet.first()
-            val convertedSet = stringSet.drop(1) // Remove the type identifier
-            when (typeIdentifier) {
-                "Int" -> convertedSet.mapNotNull { it.toIntOrNull() }.toSet()
-                "Boolean" -> convertedSet.mapNotNull { it.toBooleanStrictOrNull() }.toSet()
-                "Float" -> convertedSet.mapNotNull { it.toFloatOrNull() }.toSet()
-                "Long" -> convertedSet.mapNotNull { it.toLongOrNull() }.toSet()
-                "String" -> convertedSet.toSet()
-                else -> stringSet
-            }
-        } catch (e: Exception) {
-            snackString("Error converting preference: ${e.message}")
-            default as Set<*>
-        }
-    }
-
-    private fun SharedPreferences.Editor.convertAndPutStringSet(key: String, value: Set<*>) {
-        val typeIdentifier = when (value.firstOrNull()) {
-            is Int -> "Int"
-            is Boolean -> "Boolean"
-            is Float -> "Float"
-            is Long -> "Long"
-            is String -> "String"
-            null -> return
-            else -> throw IllegalArgumentException("Type not supported")
-        }
-        val stringSet = setOf(typeIdentifier) + value.map { it.toString() }
-        putStringSet(key, stringSet)
-    }
-
 
     private fun <T> serializeClass(key: String, value: T, location: Location) {
         val pref = getPrefLocation(location)

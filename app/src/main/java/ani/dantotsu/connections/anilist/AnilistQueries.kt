@@ -444,7 +444,7 @@ class AnilistQueries {
     }
 
 
-    suspend fun getGenresAndTags(activity: Activity): Boolean {
+    suspend fun getGenresAndTags(): Boolean {
         var genres: ArrayList<String>? = PrefManager.getVal<Set<String>>(PrefName.GenresList)
             .toMutableList() as ArrayList<String>?
         val adultTags = PrefManager.getVal<Set<String>>(PrefName.TagsListIsAdult).toMutableList()

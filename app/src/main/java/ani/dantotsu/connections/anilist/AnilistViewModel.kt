@@ -104,7 +104,7 @@ class AnilistHomeViewModel : ViewModel() {
         if (!BuildConfig.FLAVOR.contains("fdroid")) {
             if (PrefManager.getVal(PrefName.CheckUpdate)) AppUpdater.check(context)
         }
-        genres.postValue(Anilist.query.getGenresAndTags(context))
+        genres.postValue(Anilist.query.getGenresAndTags())
     }
 
     val empty = MutableLiveData<Boolean>(null)

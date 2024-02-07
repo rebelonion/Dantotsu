@@ -96,7 +96,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Cast(Pref(Location.Player, Boolean::class, true)),
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
-    ContinueAnime(Pref(Location.Player, Set::class, setOf<Int>())),
+    ContinuedAnime(Pref(Location.Player, List::class, listOf<String>())),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),
