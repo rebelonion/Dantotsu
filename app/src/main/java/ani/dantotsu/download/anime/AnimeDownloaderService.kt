@@ -225,8 +225,6 @@ class AnimeDownloaderService : Service() {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                 }
 
-                broadcastDownloadStarted(task.episode)
-
                 currActivity()?.let {
                     Helper.downloadVideo(
                         it,

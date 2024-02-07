@@ -337,6 +337,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                         media,
                                         episode.thumb?.url ?: media!!.banner ?: media!!.cover
                                     )
+                                    broadcastDownloadStarted(episode.number)
                                 } else {
                                     snackString("No Video Selected")
                                 }
@@ -353,6 +354,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                         media,
                                         episode.thumb?.url ?: media!!.banner ?: media!!.cover
                                     )
+                                    broadcastDownloadStarted(episode.number)
                                 } else {
                                     snackString("No Video Selected")
                                 }
@@ -376,6 +378,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                 media,
                                 episode.thumb?.url ?: media!!.banner ?: media!!.cover
                             )
+                            broadcastDownloadStarted(episode.number)
                         } else {
                             snackString("No Video Selected")
                         }
@@ -394,6 +397,13 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             binding.urlNote.visibility = View.VISIBLE
             binding.urlNote.text = video.format.name
             binding.urlQuality.text = extractor.server.name
+        }
+
+        private fun broadcastDownloadStarted(episodeNumber: String) {
+            val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_STARTED).apply {
+                putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, episodeNumber)
+            }
+            requireActivity().sendBroadcast(intent)
         }
 
         override fun getItemCount(): Int = extractor.videos.size
