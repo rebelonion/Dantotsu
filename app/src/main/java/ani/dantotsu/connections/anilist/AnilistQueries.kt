@@ -419,6 +419,12 @@ class AnilistQueries {
 
         sorted["Favourites"] = favMedia(anime)
         sorted["Favourites"]?.sortWith(compareBy { it.userFavOrder })
+        //favMedia doesn't fill userProgress, so we need to fill it manually by searching :(
+        sorted["Favourites"]?.forEach { fav ->
+            all.find { it.id == fav.id }?.let {
+                fav.userProgress = it.userProgress
+            }
+        }
 
         sorted["All"] = all
         val listSort: String = if (anime) PrefManager.getVal(PrefName.AnimeListSortOrder)
