@@ -98,7 +98,7 @@ jobs:
         if [ ${#commit_messages} -gt $max_length ]; then
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
-        contentbody=$( jq -nc --arg msg "Alpha-Build: <@719439449423085569> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
+        contentbody=$( jq -nc --arg msg "Alpha-Build: <@714249925248024617> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
         curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         
         #Telegram
