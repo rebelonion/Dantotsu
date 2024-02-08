@@ -372,18 +372,18 @@ class EpisodeAdapter(
             if (activeDownloads.contains(episodeNumber)) {
                 // Show spinner
                 binding.itemDownload.setImageResource(R.drawable.ic_sync)
-                startOrContinueRotation(episodeNumber)
+                startOrContinueRotation(episodeNumber) {
+                    binding.itemDownload.rotation = 0f
+                }
                 binding.itemEpisodeDesc.visibility = View.GONE
             } else if (downloadedEpisodes.contains(episodeNumber)) {
                 binding.itemEpisodeDesc.visibility = View.GONE
                 binding.itemDownloadStatus.visibility = View.VISIBLE
                 // Show checkmark
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_check)
-                //binding.itemDownload.setColorFilter(typedValue2.data) //TODO: colors go to wrong places
                 binding.itemDownload.postDelayed({
                     binding.itemDownload.setImageResource(R.drawable.ic_round_delete_24)
                     binding.itemDownload.rotation = 0f
-                    //binding.itemDownload.setColorFilter(typedValue2.data)
                 }, 1000)
             } else {
                 binding.itemDownloadStatus.visibility = View.GONE
@@ -396,7 +396,7 @@ class EpisodeAdapter(
 
         }
 
-        private fun startOrContinueRotation(episodeNumber: String) {
+        private fun startOrContinueRotation(episodeNumber: String, resetRotation: () -> Unit) {
             if (!isRotationCoroutineRunningFor(episodeNumber)) {
                 val scope = fragment.lifecycle.coroutineScope
                 scope.launch {
@@ -411,6 +411,7 @@ class EpisodeAdapter(
                     }
                     // Remove chapter number from active coroutines set
                     activeCoroutines.remove(episodeNumber)
+                    resetRotation()
                 }
             }
         }

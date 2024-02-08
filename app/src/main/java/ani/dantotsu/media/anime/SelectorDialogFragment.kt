@@ -1,6 +1,7 @@
 package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
@@ -316,6 +317,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     val subtitles = extractor.subtitles
                     val subtitleNames = subtitles.map { it.language }
                     var subtitleToDownload: Subtitle? = null
+                    val activity = currActivity()?:requireActivity()
                     if (subtitles.isNotEmpty()) {
                         val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
                             .setTitle("Download Subtitle")
@@ -329,7 +331,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                 dialog?.dismiss()
                                 if (selectedVideo != null) {
                                     Helper.startAnimeDownloadService(
-                                        currActivity()!!,
+                                        activity,
                                         media!!.mainName(),
                                         episode.number,
                                         selectedVideo,
@@ -337,7 +339,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                         media,
                                         episode.thumb?.url ?: media!!.banner ?: media!!.cover
                                     )
-                                    broadcastDownloadStarted(episode.number)
+                                    broadcastDownloadStarted(episode.number, activity)
                                 } else {
                                     snackString("No Video Selected")
                                 }
@@ -354,7 +356,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                         media,
                                         episode.thumb?.url ?: media!!.banner ?: media!!.cover
                                     )
-                                    broadcastDownloadStarted(episode.number)
+                                    broadcastDownloadStarted(episode.number, activity)
                                 } else {
                                     snackString("No Video Selected")
                                 }
@@ -378,7 +380,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                 media,
                                 episode.thumb?.url ?: media!!.banner ?: media!!.cover
                             )
-                            broadcastDownloadStarted(episode.number)
+                            broadcastDownloadStarted(episode.number, activity)
                         } else {
                             snackString("No Video Selected")
                         }
@@ -399,11 +401,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             binding.urlQuality.text = extractor.server.name
         }
 
-        private fun broadcastDownloadStarted(episodeNumber: String) {
+        private fun broadcastDownloadStarted(episodeNumber: String, activity: Activity) {
             val intent = Intent(AnimeWatchFragment.ACTION_DOWNLOAD_STARTED).apply {
                 putExtra(AnimeWatchFragment.EXTRA_EPISODE_NUMBER, episodeNumber)
             }
-            requireActivity().sendBroadcast(intent)
+            activity.sendBroadcast(intent)
         }
 
         override fun getItemCount(): Int = extractor.videos.size

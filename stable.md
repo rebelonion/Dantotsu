@@ -1,29 +1,29 @@
-# 2.1.0
+# 2.2.0
 
-## Update?????
-
-- **IMPORTANT PLEASE READ**
-  - Manga extensions installed will need to be uninstalled before they can be updated. You can do this in your phone settings, or long press the extension in Dantotsu settings.
-  - If you used a pretest from discord, PLEASE DELETE ALL ANIME DOWNLOADS. you can do this in settings.
-  - This also could break previous manga downloads.
-
-- **Bugfixes:**
-  - Source fixes
-  - Manga extension fix
-  - General theme tweaks
-  - Various bugs/crashes
-  - Many others
+- **Important:**
+  - All settings will be reset due to the new settings system. Sorry for the inconvenience!
 
 - **New Features:**
-  - Anime Downloads
-  - Tap to scroll in manga (paged mode)
-  - Webview to set cookies
-  - New theme
-  - Internal casting (long press cast to use old method)
-  - Manga page ui rework  
-  - Video source ui cleanup
-  - Offline mode declutter
-  - Better incognito awareness
+  - Import/Export settings
+  - New source organization system in extension settings
+  - Filter sources by language
+  - Defaulting to the external casting system (internal cast can be enabled in settings)
+  - sub/dub toggle for some sources (requires source settings page to be opened at least once)
+  - SoftSub downloads (when available)
+  - Various UI uplifts
+  - Many small features (see beta changelogs)
+  - New easter egg :3
+
+- **Bugfixes:**
+  - Many source fixes
+  - Better information on Anilist rate limiting
+  - User will get a notification when rate limited
+  - Rate limiting less likely to occur (especially on app startup)
+  - Various bug/crash fixes
+  - General theme tweaks
+  - Popups will now follow OLED mode
+  - Fix for file permissions on older Android versions
+  - Many small bug fixes (see beta changelogs)
 
 - **Like what you see?**
   - Consider supporting me on [Github](https://github.com/sponsors/rebelonion) or [Buy Me a Coffee](https://www.buymeacoffee.com/rebelonion)!

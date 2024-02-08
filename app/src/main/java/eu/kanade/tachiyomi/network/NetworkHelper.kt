@@ -12,6 +12,7 @@ import eu.kanade.tachiyomi.network.interceptor.UserAgentInterceptor
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import okhttp3.brotli.BrotliInterceptor
 import java.io.File
 import java.util.concurrent.TimeUnit
 
@@ -19,26 +20,23 @@ class NetworkHelper(
     context: Context
 ) {
 
-    private val cacheDir = File(context.cacheDir, "network_cache")
-    private val cacheSize = 5L * 1024 * 1024 // 5 MiB
-
     val cookieJar = AndroidCookieJar()
 
-    private val userAgentInterceptor by lazy {
-        UserAgentInterceptor(::defaultUserAgentProvider)
-    }
-    private val cloudflareInterceptor by lazy {
-        CloudflareInterceptor(context, cookieJar, ::defaultUserAgentProvider)
-    }
-
-    private fun baseClientBuilder(callTimeout: Int = 2): OkHttpClient.Builder {
+    val client: OkHttpClient = run {
         val builder = OkHttpClient.Builder()
             .cookieJar(cookieJar)
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
-            .callTimeout(callTimeout.toLong(), TimeUnit.MINUTES)
+            .callTimeout(2, TimeUnit.MINUTES)
+            .cache(
+                Cache(
+                    directory = File(context.cacheDir, "network_cache"),
+                    maxSize = 5L * 1024 * 1024, // 5 MiB
+                ),
+            )
+            .addInterceptor(BrotliInterceptor)
             .addInterceptor(UncaughtExceptionInterceptor())
-            .addInterceptor(userAgentInterceptor)
+            .addInterceptor(UserAgentInterceptor(::defaultUserAgentProvider))
 
         if (PrefManager.getVal(PrefName.VerboseLogging)) {
             val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
@@ -46,6 +44,10 @@ class NetworkHelper(
             }
             builder.addNetworkInterceptor(httpLoggingInterceptor)
         }
+
+        builder.addInterceptor(
+            CloudflareInterceptor(context, cookieJar, ::defaultUserAgentProvider),
+        )
 
         when (PrefManager.getVal<Int>(PrefName.DohProvider)) {
             PREF_DOH_CLOUDFLARE -> builder.dohCloudflare()
@@ -63,19 +65,17 @@ class NetworkHelper(
             PREF_DOH_LIBREDNS -> builder.dohLibreDNS()
         }
 
-        return builder
+        builder.build()
     }
 
+    val downloadClient = client.newBuilder().callTimeout(20, TimeUnit.MINUTES).build()
 
-    val client by lazy { baseClientBuilder().cache(Cache(cacheDir, cacheSize)).build() }
-    val downloadClient by lazy { baseClientBuilder(20).build() }
-
+    /**
+     * @deprecated Since extension-lib 1.5
+     */
+    @Deprecated("The regular client handles Cloudflare by default")
     @Suppress("UNUSED")
-    val cloudflareClient by lazy {
-        client.newBuilder()
-            .addInterceptor(cloudflareInterceptor)
-            .build()
-    }
+    val cloudflareClient: OkHttpClient = client
 
     val requestClient = Requests(
         client,

@@ -122,7 +122,7 @@ class MangaReaderActivity : AppCompatActivity() {
     }
 
     private fun hideBars() {
-        if (PrefManager.getVal(PrefName.ShowSystemBars)) hideSystemBars()
+        if (!PrefManager.getVal<Boolean>(PrefName.ShowSystemBars)) hideSystemBars()
     }
 
     override fun onDestroy() {

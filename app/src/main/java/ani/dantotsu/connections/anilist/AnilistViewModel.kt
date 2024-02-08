@@ -97,6 +97,17 @@ class AnilistHomeViewModel : ViewModel() {
     fun getRecommendation(): LiveData<ArrayList<Media>> = recommendation
     suspend fun setRecommendation() = recommendation.postValue(Anilist.query.recommendations())
 
+    suspend fun initHomePage() {
+        val res = Anilist.query.initHomePage()
+        res["currentAnime"]?.let { animeContinue.postValue(it) }
+        res["favoriteAnime"]?.let { animeFav.postValue(it) }
+        res["plannedAnime"]?.let { animePlanned.postValue(it) }
+        res["currentManga"]?.let { mangaContinue.postValue(it) }
+        res["favoriteManga"]?.let { mangaFav.postValue(it) }
+        res["plannedManga"]?.let { mangaPlanned.postValue(it) }
+        res["recommendations"]?.let { recommendation.postValue(it) }
+    }
+
     suspend fun loadMain(context: FragmentActivity) {
         Anilist.getSavedToken()
         MAL.getSavedToken(context)

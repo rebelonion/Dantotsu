@@ -257,8 +257,15 @@ class AnimeWatchAdapter(
                     val url = sourceHttp?.baseUrl
                     url?.let {
                         refresh = true
+                        val headersMap = try {
+                            sourceHttp.headers.toMultimap()
+                                .mapValues { it.value.getOrNull(0) ?: "" }
+                        } catch (e: Exception) {
+                            emptyMap()
+                        }
                         val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
                             .putExtra("url", url)
+                            .putExtra("headers", headersMap as HashMap<String, String>)
                         startActivity(fragment.requireContext(), intent, null)
                     }
                 }

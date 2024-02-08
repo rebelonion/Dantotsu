@@ -22,6 +22,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemSearchHeaderBinding
+import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import com.google.android.material.checkbox.MaterialCheckBox.*
@@ -104,6 +105,9 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
                     if (binding.searchBarText.text.toString() != "") binding.searchBarText.text.toString() else null
                 onList = listOnly
                 isAdult = adult
+            }
+            if (binding.searchBarText.text.toString().equals("hentai", true)) {
+                openLinkInBrowser("https://www.youtube.com/watch?v=GgJrEOo0QoA")
             }
             activity.search()
         }

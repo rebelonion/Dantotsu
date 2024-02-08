@@ -306,13 +306,13 @@ class HomeFragment : Fragment() {
         }
 
         val array = arrayOf(
-            Runnable { runBlocking { model.setAnimeContinue() } },
-            Runnable { runBlocking { model.setAnimeFav() } },
-            Runnable { runBlocking { model.setAnimePlanned() } },
-            Runnable { runBlocking { model.setMangaContinue() } },
-            Runnable { runBlocking { model.setMangaFav() } },
-            Runnable { runBlocking { model.setMangaPlanned() } },
-            Runnable { runBlocking { model.setRecommendation() } }
+            "AnimeContinue",
+            "AnimeFav",
+            "AnimePlanned",
+            "MangaContinue",
+            "MangaFav",
+            "MangaPlanned",
+            "Recommendation"
         )
 
         val containers = arrayOf(
@@ -339,9 +339,11 @@ class HomeFragment : Fragment() {
                         var empty = true
                         val homeLayoutShow: List<Boolean> =
                             PrefManager.getVal(PrefName.HomeLayoutShow)
+                        runBlocking {
+                            model.initHomePage()
+                        }
                         (array.indices).forEach { i ->
                             if (homeLayoutShow.elementAt(i)) {
-                                array[i].run()
                                 empty = false
                             } else withContext(Dispatchers.Main) {
                                 containers[i].visibility = View.GONE

@@ -16,7 +16,7 @@
         android:layout_marginTop="-16dp"
         android:layout_marginBottom="-16dp"
         android:clipToPadding="false"
-        android:padding="24dp">
+        android:padding="22dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/itemCompactCard"
@@ -28,8 +28,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/itemCompactImage"
-                android:layout_width="108dp"
-                android:layout_height="160dp"
+                android:layout_width="102dp"
+                android:layout_height="154dp"
                 android:scaleType="centerCrop"
                 android:transitionName="mediaCover"
                 app:shapeAppearanceOverlay="@style/roundedImageView"

@@ -151,7 +151,7 @@
                         app:srcCompat="@drawable/ic_round_screen_rotation_alt_24"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
-                    <androidx.mediarouter.app.MediaRouteButton
+                    <ani.dantotsu.media.anime.CustomCastButton
                         android:id="@+id/exo_cast"
                         android:layout_width="wrap_content"
                         android:layout_height="48dp"

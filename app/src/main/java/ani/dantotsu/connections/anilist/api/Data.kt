@@ -106,6 +106,40 @@ class Query {
     }
 
     @Serializable
+    data class CombinedMediaListResponse(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("current") val current: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("planned") val planned: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("repeating") val repeating: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+        )
+    }
+
+    @Serializable
+    data class HomePageMedia(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("currentAnime") val currentAnime: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("repeatingAnime") val repeatingAnime: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("favoriteAnime") val favoriteAnime: ani.dantotsu.connections.anilist.api.User?,
+            @SerialName("plannedAnime") val plannedAnime: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("currentManga") val currentManga: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("repeatingManga") val repeatingManga: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?,
+            @SerialName("plannedManga") val plannedManga: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("recommendationQuery") val recommendationQuery: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("recommendationPlannedQueryAnime") val recommendationPlannedQueryAnime: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("recommendationPlannedQueryManga") val recommendationPlannedQueryManga: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+        )
+    }
+
+    @Serializable
     data class GenreCollection(
         @SerialName("data")
         val data: Data
