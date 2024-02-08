@@ -154,15 +154,15 @@ class MangaChapterAdapter(
             if (activeDownloads.contains(chapterNumber)) {
                 // Show spinner
                 binding.itemDownload.setImageResource(R.drawable.ic_sync)
-                startOrContinueRotation(chapterNumber)
+                startOrContinueRotation(chapterNumber) {
+                    binding.itemDownload.rotation = 0f
+                }
             } else if (downloadedChapters.contains(chapterNumber)) {
                 // Show checkmark
                 binding.itemDownload.setImageResource(R.drawable.ic_circle_check)
-                //binding.itemDownload.setColorFilter(typedValue2.data) //TODO: colors go to wrong places
                 binding.itemDownload.postDelayed({
                     binding.itemDownload.setImageResource(R.drawable.ic_round_delete_24)
                     binding.itemDownload.rotation = 0f
-                    //binding.itemDownload.setColorFilter(typedValue2.data)
                 }, 1000)
             } else {
                 // Show download icon
@@ -172,7 +172,7 @@ class MangaChapterAdapter(
 
         }
 
-        private fun startOrContinueRotation(chapterNumber: String) {
+        private fun startOrContinueRotation(chapterNumber: String, resetRotation: () -> Unit) {
             if (!isRotationCoroutineRunningFor(chapterNumber)) {
                 val scope = fragment.lifecycle.coroutineScope
                 scope.launch {
@@ -187,6 +187,7 @@ class MangaChapterAdapter(
                     }
                     // Remove chapter number from active coroutines set
                     activeCoroutines.remove(chapterNumber)
+                    resetRotation()
                 }
             }
         }
