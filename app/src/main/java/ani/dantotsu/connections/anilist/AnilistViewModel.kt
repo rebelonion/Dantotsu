@@ -96,7 +96,7 @@ class AnilistHomeViewModel : ViewModel() {
 
     fun getRecommendation(): LiveData<ArrayList<Media>> = recommendation
     suspend fun setRecommendation() = recommendation.postValue(Anilist.query.recommendations())
-    
+
     suspend fun initHomePage() {
         val res = Anilist.query.initHomePage()
         res["currentAnime"]?.let { animeContinue.postValue(it) }

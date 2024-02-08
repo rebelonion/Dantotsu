@@ -305,14 +305,14 @@ class HomeFragment : Fragment() {
             }
         }
 
-        val array = arrayOf( //deprecated: no longer should be run. only indices are used
-            Runnable { runBlocking { model.setAnimeContinue() } },
-            Runnable { runBlocking { model.setAnimeFav() } },
-            Runnable { runBlocking { model.setAnimePlanned() } },
-            Runnable { runBlocking { model.setMangaContinue() } },
-            Runnable { runBlocking { model.setMangaFav() } },
-            Runnable { runBlocking { model.setMangaPlanned() } },
-            Runnable { runBlocking { model.setRecommendation() } }
+        val array = arrayOf(
+            "AnimeContinue",
+            "AnimeFav",
+            "AnimePlanned",
+            "MangaContinue",
+            "MangaFav",
+            "MangaPlanned",
+            "Recommendation"
         )
 
         val containers = arrayOf(
