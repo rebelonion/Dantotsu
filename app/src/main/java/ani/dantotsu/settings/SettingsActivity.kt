@@ -458,11 +458,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.RecentlyListOnly, isChecked)
         }
-        binding.settingsShareUsername.isChecked = PrefManager.getVal(PrefName.SharedUserID)
-        binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.SharedUserID, isChecked)
-        }
-
         binding.settingsPreferDub.isChecked = PrefManager.getVal(PrefName.SettingsPreferDub)
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.SettingsPreferDub, isChecked)
@@ -696,15 +691,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             openSettings(this, null)
         }
 
-
-        binding.settingsCheckUpdate.isChecked = PrefManager.getVal(PrefName.CheckUpdate)
-        binding.settingsCheckUpdate.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.CheckUpdate, isChecked)
-            if (!isChecked) {
-                snackString(getString(R.string.long_click_to_check_update))
-            }
-        }
-
         if (!BuildConfig.FLAVOR.contains("fdroid")) {
             binding.settingsLogo.setOnLongClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -713,15 +699,33 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 true
             }
 
+            binding.settingsCheckUpdate.isChecked = PrefManager.getVal(PrefName.CheckUpdate)
+            binding.settingsCheckUpdate.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.CheckUpdate, isChecked)
+                if (!isChecked) {
+                    snackString(getString(R.string.long_click_to_check_update))
+                }
+            }
+
             binding.settingsCheckUpdate.setOnLongClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
                     AppUpdater.check(this@SettingsActivity, true)
                 }
                 true
             }
+
+            binding.settingsShareUsername.isChecked = PrefManager.getVal(PrefName.SharedUserID)
+            binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.SharedUserID, isChecked)
+            }
+
         } else {
             binding.settingsCheckUpdate.visibility = View.GONE
             binding.settingsShareUsername.visibility = View.GONE
+            binding.settingsCheckUpdate.isEnabled = false
+            binding.settingsShareUsername.isEnabled = false
+            binding.settingsCheckUpdate.isChecked = false
+            binding.settingsShareUsername.isChecked = false
         }
 
         binding.settingsAccountHelp.setOnClickListener {
