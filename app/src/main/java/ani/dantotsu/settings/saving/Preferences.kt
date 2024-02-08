@@ -24,7 +24,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
         Pref(
             Location.General,
             String::class,
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:110.0) Gecko/20100101 Firefox/110.0"
+            "Mozilla/5.0 (Linux; Android 13; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36"
         )
     ),
     AnimeSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
