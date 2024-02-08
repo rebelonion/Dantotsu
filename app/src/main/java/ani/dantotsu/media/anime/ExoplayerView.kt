@@ -1079,17 +1079,17 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         //Cast
         if (PrefManager.getVal(PrefName.Cast)) {
-            playerView.findViewById<MediaRouteButton>(R.id.exo_cast).apply {
+            playerView.findViewById<CustomCastButton>(R.id.exo_cast).apply {
                 visibility = View.VISIBLE
-                try {
-                    CastButtonFactory.setUpMediaRouteButton(context, this)
-                    dialogFactory = CustomCastThemeFactory()
-                } catch (e: Exception) {
-                    isCastApiAvailable = false
-                }
-                setOnLongClickListener {
-                    cast()
-                    true
+                if(PrefManager.getVal(PrefName.UseInternalCast)) {
+                    try {
+                        CastButtonFactory.setUpMediaRouteButton(context, this)
+                        dialogFactory = CustomCastThemeFactory()
+                    } catch (e: Exception) {
+                        isCastApiAvailable = false
+                    }
+                } else {
+                    setCastCallback { cast() }
                 }
             }
         }
@@ -2001,6 +2001,34 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         fun setForceDisabled(forceDisabled: Boolean) {
             this.forceDisabled = forceDisabled
             isEnabled = enabled
+        }
+    }
+}
+
+class CustomCastButton : MediaRouteButton {
+
+    private var castCallback: (() -> Unit)? = null
+
+    fun setCastCallback(castCallback: () -> Unit) {
+        this.castCallback = castCallback
+    }
+    constructor(context: Context) : super(context)
+
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
+
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+
+    constructor(context: Context, attrs: AttributeSet, castCallback: () -> Unit) : super(context, attrs) {
+        this.castCallback = castCallback
+    }
+
+
+    override fun performClick(): Boolean {
+        return if (PrefManager.getVal(PrefName.UseInternalCast)) {
+            super.performClick()
+        } else {
+            castCallback?.let { it() }
+            true
         }
     }
 }
