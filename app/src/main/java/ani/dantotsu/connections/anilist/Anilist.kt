@@ -3,6 +3,7 @@ package ani.dantotsu.connections.anilist
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.browser.customtabs.CustomTabsIntent
 import ani.dantotsu.R
 import ani.dantotsu.client
@@ -128,7 +129,6 @@ object Anilist {
                 toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
                 throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
             }
-
             val data = mapOf(
                 "query" to query,
                 "variables" to variables
@@ -147,6 +147,8 @@ object Anilist {
                     data = data,
                     cacheTime = cache ?: 10
                 )
+                val remaining = json.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1
+                Log.d("AnilistQuery", "Remaining requests: $remaining")
                 if (json.code == 429) {
                     val retry = json.headers["Retry-After"]?.toIntOrNull() ?: -1
                     val passedLimitReset = json.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0

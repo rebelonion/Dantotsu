@@ -305,7 +305,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        val array = arrayOf(
+        val array = arrayOf( //deprecated: no longer should be run. only indices are used
             Runnable { runBlocking { model.setAnimeContinue() } },
             Runnable { runBlocking { model.setAnimeFav() } },
             Runnable { runBlocking { model.setAnimePlanned() } },
@@ -339,9 +339,11 @@ class HomeFragment : Fragment() {
                         var empty = true
                         val homeLayoutShow: List<Boolean> =
                             PrefManager.getVal(PrefName.HomeLayoutShow)
+                        runBlocking {
+                            model.initHomePage()
+                        }
                         (array.indices).forEach { i ->
                             if (homeLayoutShow.elementAt(i)) {
-                                array[i].run()
                                 empty = false
                             } else withContext(Dispatchers.Main) {
                                 containers[i].visibility = View.GONE
