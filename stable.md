@@ -1,24 +1,28 @@
-# 2.0.0
+# 2.2.0
+
+- **Important:**
+  - All settings will be reset due to the new settings system. Sorry for the inconvenience!
 
 - **New Features:**
-  - Novel Support
-  - Offline support for manga and novels
-  - Filter anime/manga by language
-  - Filter manga by scanlator
-  - Many new theme options
-  - Saikou theme
-  - Random anime/manga selector from lists
-  - Incognito mode (sus)
+  - Import/Export settings
+  - New source organization system in extension settings
+  - Filter sources by language
+  - Defaulting to the external casting system (internal cast can be enabled in settings)
+  - sub/dub toggle for some sources (requires source settings page to be opened at least once)
+  - SoftSub downloads (when available)
   - Various UI uplifts
   - Many small features (see beta changelogs)
   - New easter egg :3
 
 - **Bugfixes:**
-  - Discord RPC fix
   - Many source fixes
+  - Better information on Anilist rate limiting
+  - User will get a notification when rate limited
+  - Rate limiting less likely to occur (especially on app startup)
   - Various bug/crash fixes
   - General theme tweaks
-  - Ability to disable hold-to-fast-forward in videos (caused issues for some users)
+  - Popups will now follow OLED mode
+  - Fix for file permissions on older Android versions
   - Many small bug fixes (see beta changelogs)
 
 - **Like what you see?**
