@@ -97,7 +97,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import okhttp3.internal.immutableListOf
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.*
@@ -1375,16 +1374,16 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             logger("mimeType: $mimeType")
 
             if (sub != null) {
-                val listofnotnullsubs = immutableListOf(sub).filterNotNull()
+                val listofnotnullsubs = listOfNotNull(sub)
                 builder.setSubtitleConfigurations(listofnotnullsubs)
             }
             builder.build()
         } else {
             val addedSubsDownloadedMediaItem = downloadedMediaItem.buildUpon()
             if (sub != null) {
-                val listofnotnullsubs = immutableListOf(sub).filterNotNull()
+                val listofnotnullsubs = listOfNotNull(sub)
                 val addLanguage = listofnotnullsubs[0].buildUpon().setLanguage("en").build()
-                addedSubsDownloadedMediaItem.setSubtitleConfigurations(immutableListOf(addLanguage))
+                addedSubsDownloadedMediaItem.setSubtitleConfigurations(listOf(addLanguage))
                 episode.selectedSubtitle = 0
             }
             addedSubsDownloadedMediaItem.build()

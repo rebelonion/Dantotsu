@@ -17,12 +17,14 @@ import uy.kohesive.injekt.api.get
 
 class CookieCatcher : AppCompatActivity() {
     @SuppressLint("SetJavaScriptEnabled")
+    @Suppress("UNCHECKED_CAST")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
 
         //get url from intent
         val url = intent.getStringExtra("url") ?: "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+        val headers: Map<String, String> = intent.getSerializableExtra("headers") as? Map<String, String> ?: emptyMap()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val process = Application.getProcessName()
@@ -54,7 +56,7 @@ class CookieCatcher : AppCompatActivity() {
             }
         }
 
-        webView.loadUrl(url)
+        webView.loadUrl(url, headers)
     }
 
 }
