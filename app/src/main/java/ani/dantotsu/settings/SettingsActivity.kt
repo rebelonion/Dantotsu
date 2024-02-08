@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
@@ -873,11 +874,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         // Inflate the dialog layout
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_user_agent, null)
-        dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)?.hint = "Password"
-        val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
-        subtitleTextView?.visibility = View.VISIBLE
-        if (!isExporting)
-            subtitleTextView?.text = "Enter your password to decrypt the file"
+        val box = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+        box?.hint = "Password"
+        box?.setSingleLine()
 
         val dialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle("Enter Password")
@@ -889,12 +888,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 callback(null)
             }
             .create()
-
-        dialog.window?.setDimAmount(0.8f)
-        dialog.show()
-
-        // Override the positive button here
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+        fun handleOkAction() {
             val editText = dialog.findViewById<TextInputEditText>(R.id.userAgentTextBox)
             if (editText?.text?.isNotBlank() == true) {
                 editText.text?.toString()?.trim()?.toCharArray(password)
@@ -904,6 +898,28 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 toast("Password cannot be empty")
             }
         }
+        box?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                handleOkAction()
+                true
+            } else {
+                false
+            }
+        }
+        val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
+        subtitleTextView?.visibility = View.VISIBLE
+        if (!isExporting)
+            subtitleTextView?.text = "Enter your password to decrypt the file"
+
+
+        dialog.window?.setDimAmount(0.8f)
+        dialog.show()
+
+        // Override the positive button here
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            handleOkAction()
+        }
+
     }
 
 
