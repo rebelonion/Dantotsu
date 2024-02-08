@@ -39,7 +39,7 @@ object AppUpdater {
                     .parsed<JsonArray>().map {
                         Mapper.json.decodeFromJsonElement<GithubResponse>(it)
                     }
-                val r = res.filter { it.prerelease }.maxByOrNull {
+                val r = res.filter { it.prerelease }.filter { !it.tagName.contains("fdroid") }.maxByOrNull {
                     it.timeStamp()
                 } ?: throw Exception("No Pre Release Found")
                 val v = r.tagName.substringAfter("v", "")

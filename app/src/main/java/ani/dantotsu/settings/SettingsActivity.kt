@@ -14,6 +14,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import android.widget.Toast
@@ -457,11 +458,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         binding.settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.RecentlyListOnly, isChecked)
         }
-        binding.settingsShareUsername.isChecked = PrefManager.getVal(PrefName.SharedUserID)
-        binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.SharedUserID, isChecked)
-        }
-
         binding.settingsPreferDub.isChecked = PrefManager.getVal(PrefName.SettingsPreferDub)
         binding.settingsPreferDub.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.SettingsPreferDub, isChecked)
@@ -695,15 +691,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             openSettings(this, null)
         }
 
-
-        binding.settingsCheckUpdate.isChecked = PrefManager.getVal(PrefName.CheckUpdate)
-        binding.settingsCheckUpdate.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.CheckUpdate, isChecked)
-            if (!isChecked) {
-                snackString(getString(R.string.long_click_to_check_update))
-            }
-        }
-
         if (!BuildConfig.FLAVOR.contains("fdroid")) {
             binding.settingsLogo.setOnLongClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
@@ -712,15 +699,33 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 true
             }
 
+            binding.settingsCheckUpdate.isChecked = PrefManager.getVal(PrefName.CheckUpdate)
+            binding.settingsCheckUpdate.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.CheckUpdate, isChecked)
+                if (!isChecked) {
+                    snackString(getString(R.string.long_click_to_check_update))
+                }
+            }
+
             binding.settingsCheckUpdate.setOnLongClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
                     AppUpdater.check(this@SettingsActivity, true)
                 }
                 true
             }
+
+            binding.settingsShareUsername.isChecked = PrefManager.getVal(PrefName.SharedUserID)
+            binding.settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.SharedUserID, isChecked)
+            }
+
         } else {
             binding.settingsCheckUpdate.visibility = View.GONE
             binding.settingsShareUsername.visibility = View.GONE
+            binding.settingsCheckUpdate.isEnabled = false
+            binding.settingsShareUsername.isEnabled = false
+            binding.settingsCheckUpdate.isChecked = false
+            binding.settingsShareUsername.isChecked = false
         }
 
         binding.settingsAccountHelp.setOnClickListener {
@@ -873,11 +878,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         // Inflate the dialog layout
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_user_agent, null)
-        dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)?.hint = "Password"
-        val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
-        subtitleTextView?.visibility = View.VISIBLE
-        if (!isExporting)
-            subtitleTextView?.text = "Enter your password to decrypt the file"
+        val box = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+        box?.hint = "Password"
+        box?.setSingleLine()
 
         val dialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle("Enter Password")
@@ -889,12 +892,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 callback(null)
             }
             .create()
-
-        dialog.window?.setDimAmount(0.8f)
-        dialog.show()
-
-        // Override the positive button here
-        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+        fun handleOkAction() {
             val editText = dialog.findViewById<TextInputEditText>(R.id.userAgentTextBox)
             if (editText?.text?.isNotBlank() == true) {
                 editText.text?.toString()?.trim()?.toCharArray(password)
@@ -904,6 +902,28 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 toast("Password cannot be empty")
             }
         }
+        box?.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                handleOkAction()
+                true
+            } else {
+                false
+            }
+        }
+        val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
+        subtitleTextView?.visibility = View.VISIBLE
+        if (!isExporting)
+            subtitleTextView?.text = "Enter your password to decrypt the file"
+
+
+        dialog.window?.setDimAmount(0.8f)
+        dialog.show()
+
+        // Override the positive button here
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            handleOkAction()
+        }
+
     }
 
 
