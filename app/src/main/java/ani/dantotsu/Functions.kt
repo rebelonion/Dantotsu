@@ -651,7 +651,7 @@ fun savePrefs(
     context: Context,
     password: CharArray
 ): File? {
-    var file = File(path, "$title.ani")
+    var file = File(path, "$title.sani")
     var counter = 1
     while (file.exists()) {
         file = File(path, "${title}_${counter}.sani")
