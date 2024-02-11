@@ -5,6 +5,9 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
+import android.os.Bundle
+import ani.dantotsu.settings.FAQActivity
+import androidx.core.content.ContextCompat.startActivity
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
@@ -62,6 +65,12 @@ class MangaReadAdapter(
         val binding = holder.binding
         _binding = binding
         binding.sourceTitle.setText(R.string.chaps)
+
+        //Fuck u launch
+        binding.faqbutton.setOnClickListener {
+        val intent = Intent(fragment.requireContext(), FAQActivity::class.java)
+            startActivity(fragment.requireContext(), intent, null)
+        }
 
         //Wrong Title
         binding.animeSourceSearch.setOnClickListener {
@@ -435,13 +444,18 @@ class MangaReadAdapter(
                     binding.animeSourceContinue.visibility = View.GONE
                 }
                 binding.animeSourceProgressBar.visibility = View.GONE
-                if (media.manga.chapters!!.isNotEmpty())
+                if (media.manga.chapters!!.isNotEmpty()) {
                     binding.animeSourceNotFound.visibility = View.GONE
-                else
+                    binding.faqbutton.visibility = View.GONE
+                    }
+                else {
                     binding.animeSourceNotFound.visibility = View.VISIBLE
+                    binding.faqbutton.visibility = View.VISIBLE
+                    }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE
+                binding.faqbutton.visibility = View.GONE
                 clearChips()
                 binding.animeSourceProgressBar.visibility = View.VISIBLE
             }
