@@ -657,5 +657,5 @@
     <string name="import_export_settings">Import/Export Settings</string>
     <string name="import_settings">Import Settings</string>
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
-
+    <string name="comments">Comments</string>
 </resources>

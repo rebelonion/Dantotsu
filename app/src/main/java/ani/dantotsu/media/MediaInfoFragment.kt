@@ -504,6 +504,16 @@ class MediaInfoFragment : Fragment() {
                     )
                     parent.addView(bind.root)
                 }
+                // Comments Section
+                if (!offline) {
+                    val bind = FragmentCommentsBinding.inflate(
+                        LayoutInflater.from(context),
+                        parent,
+                        false
+                    )
+                    bind.commentsList.adapter // rebel take over
+                    parent.addView(bind.root)
+                }
             }
         }
 
