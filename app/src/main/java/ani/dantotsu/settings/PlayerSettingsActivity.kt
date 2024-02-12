@@ -442,7 +442,8 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Poppins",
             "Poppins Thin",
             "Century Gothic",
-            "Century Gothic Bold"
+            "Century Gothic Bold",
+            "Mojangles"
         )
         val fontDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.subtitle_font))
