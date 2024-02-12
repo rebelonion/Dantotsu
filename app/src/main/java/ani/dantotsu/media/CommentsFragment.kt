@@ -21,7 +21,7 @@ class CommentsFragment : AppCompatActivity(){
         binding = FragmentCommentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.CommentsLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        binding.commentsLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
             bottomMargin = navBarHeight
         }
