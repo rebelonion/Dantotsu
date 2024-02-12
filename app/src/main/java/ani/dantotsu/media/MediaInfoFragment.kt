@@ -3,6 +3,7 @@ package ani.dantotsu.media
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -73,6 +74,15 @@ class MediaInfoFragment : Fragment() {
         model.getMedia().observe(viewLifecycleOwner) { media ->
             if (media != null && !loaded) {
                 loaded = true
+
+                //Youtube
+                if (media.anime!!.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
+                    binding.animeSourceYT.visibility = View.VISIBLE
+                    binding.animeSourceYT.setOnClickListener {
+                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(media.anime.youtube))
+                        requireContext().startActivity(intent)
+                    }
+                }
                 binding.mediaInfoProgressBar.visibility = View.GONE
                 binding.mediaInfoContainer.visibility = View.VISIBLE
                 binding.mediaInfoName.text = "\t\t\t" + (media.name ?: media.nameRomaji)
@@ -502,16 +512,6 @@ class MediaInfoFragment : Fragment() {
                         LinearLayoutManager.HORIZONTAL,
                         false
                     )
-                    parent.addView(bind.root)
-                }
-                // Comments Section
-                if (!offline) {
-                    val bind = FragmentCommentsBinding.inflate(
-                        LayoutInflater.from(context),
-                        parent,
-                        false
-                    )
-                    bind.commentsList.adapter // rebel take over
                     parent.addView(bind.root)
                 }
             }
