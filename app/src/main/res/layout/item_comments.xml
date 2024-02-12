@@ -11,9 +11,10 @@
     android:orientation="horizontal"
     android:background="@drawable/card_outline"
     android:backgroundTint="?attr/colorSurfaceVariant"
-    android:padding="12dp"
+    android:padding="6dp"
     android:paddingStart="12dp"
     android:paddingEnd="12dp">
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/commentUserAvatar"
         android:layout_marginTop="4dp"
@@ -30,10 +31,12 @@
         android:layout_weight="1"
         android:layout_marginStart="8dp"
         android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
+
             <TextView
                 android:id="@+id/commentUserName"
                 android:layout_width="wrap_content"
@@ -42,6 +45,7 @@
                 android:text="Username"
                 android:textSize="15sp"
                 tools:ignore="HardcodedText,RtlSymmetry"/>
+
             <TextView
                 android:id="@+id/commentUserTime"
                 android:layout_width="wrap_content"
@@ -52,7 +56,9 @@
                 android:text="Time"
                 android:textSize="12sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
+
         </LinearLayout>
+
         <TextView
             android:id="@+id/commentText"
             android:layout_width="match_parent"
@@ -70,7 +76,9 @@
             android:layout_gravity="end"
             android:fontFamily="@font/poppins_semi_bold"
             app:srcCompat="@drawable/ic_round_reply_24"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:layout_marginTop="-6dp"
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 

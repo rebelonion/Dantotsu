@@ -2,10 +2,8 @@ package ani.dantotsu.media.anime
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
-import android.os.Bundle
 import ani.dantotsu.settings.FAQActivity
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
@@ -20,6 +18,7 @@ import ani.dantotsu.*
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
+import ani.dantotsu.media.CommentsFragment
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
@@ -60,20 +59,22 @@ class AnimeWatchAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         _binding = binding
-
-        //Youtube
-        if (media.anime!!.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
-            binding.animeSourceYT.visibility = View.VISIBLE
-            binding.animeSourceYT.setOnClickListener {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(media.anime.youtube))
-                fragment.requireContext().startActivity(intent)
-            }
+        //Comments
+        binding.animeComments.visibility = View.GONE
+        binding.animeComments.setOnClickListener {
+            startActivity(
+                fragment.requireContext(),
+                Intent(fragment.requireContext(), CommentsFragment::class.java),
+                null
+            )
         }
 
-        //Fuck u launch
         binding.faqbutton.setOnClickListener {
-        val intent = Intent(fragment.requireContext(), FAQActivity::class.java)
-            startActivity(fragment.requireContext(), intent, null)
+            startActivity(
+                fragment.requireContext(),
+                Intent(fragment.requireContext(), FAQActivity::class.java),
+                null
+            )
         }
 
         binding.animeSourceDubbed.isChecked = media.selected!!.preferDub

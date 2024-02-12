@@ -109,6 +109,8 @@
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".media.CommentsFragment" />
+        <activity
             android:name=".media.SearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".media.StudioActivity" />
