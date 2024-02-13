@@ -5,12 +5,10 @@
     android:id="@+id/commentsCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="24dp"
-    android:layout_marginEnd="24dp"
+    android:layout_marginStart="6dp"
+    android:layout_marginEnd="6dp"
     android:layout_marginBottom="12dp"
     android:orientation="horizontal"
-    android:background="@drawable/card_outline"
-    android:backgroundTint="?attr/colorSurfaceVariant"
     android:padding="6dp"
     android:paddingStart="12dp"
     android:paddingEnd="12dp">
@@ -61,7 +59,7 @@
 
         <TextView
             android:id="@+id/commentText"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_semi_bold"
             android:maxLines="3"
@@ -69,17 +67,84 @@
             android:text="@string/slogan"
             android:textSize="12sp" />
 
-        <ImageView
-            android:id="@+id/commentReply"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_gravity="end"
-            android:fontFamily="@font/poppins_semi_bold"
-            app:srcCompat="@drawable/ic_round_reply_24"
-            android:textSize="12sp"
-            android:layout_marginTop="-6dp"
-            tools:ignore="ContentDescription" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/commentReply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
 
+                android:alpha="0.6"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Reply"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/commentEdit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Edit"
+                android:textSize="12sp"
+                android:layout_marginStart="12dp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/commentDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Delete"
+                android:textSize="12sp"
+                android:layout_marginStart="12dp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/commentTotalReplies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.6"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="View x more replies"
+            android:textSize="12sp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:id="@+id/commentUpVote"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:alpha="0.4"
+            app:srcCompat="@drawable/ic_round_upvote_inactive_24"
+            tools:ignore="ContentDescription" />
+        <TextView
+            android:id="@+id/commentTotalVotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="10"
+            android:textSize="12sp"
+            android:layout_gravity="center"
+            android:alpha="0.6"
+            tools:ignore="HardcodedText" />
+        <ImageView
+            android:id="@+id/commentDownVote"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:alpha="0.4"
+            app:srcCompat="@drawable/ic_round_upvote_inactive_24"
+            android:rotation="180"
+            tools:ignore="ContentDescription" />
+        </LinearLayout>
 
 </LinearLayout>

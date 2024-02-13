@@ -60,7 +60,7 @@ class AnimeWatchAdapter(
         val binding = holder.binding
         _binding = binding
         //Comments
-        binding.animeComments.visibility = View.GONE
+        binding.animeComments.visibility = View.VISIBLE
         binding.animeComments.setOnClickListener {
             startActivity(
                 fragment.requireContext(),
