@@ -60,11 +60,13 @@
             android:textSize="12sp"
             android:fontFamily="@font/poppins_semi_bold"
             android:hint="Add a comment..."
-            android:inputType="text"
+            android:inputType="textMultiLine"
             android:padding="8dp"
             android:background="@drawable/card_outline"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:maxLength="300"
+            android:maxLines="15"
             tools:ignore="HardcodedText"
             android:autofillHints="The One Piece is real" />
 

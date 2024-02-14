@@ -109,7 +109,7 @@
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".media.CommentsFragment" />
+            android:name=".media.comments.CommentsFragment" />
         <activity
             android:name=".media.SearchActivity"
             android:parentActivityName=".MainActivity" />

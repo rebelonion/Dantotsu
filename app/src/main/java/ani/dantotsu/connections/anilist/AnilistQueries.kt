@@ -42,6 +42,7 @@ class AnilistQueries {
         PrefManager.setVal(PrefName.AnilistUserName, user.name)
 
         Anilist.userid = user.id
+        PrefManager.setVal(PrefName.AnilistUserId, user.id.toString())
         Anilist.username = user.name
         Anilist.bg = user.bannerImage
         Anilist.avatar = user.avatar?.medium

@@ -160,6 +160,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     DiscordAvatar(Pref(Location.Protected, String::class, "")),
     AnilistToken(Pref(Location.Protected, String::class, "")),
     AnilistUserName(Pref(Location.Protected, String::class, "")),
+    AnilistUserId(Pref(Location.Protected, String::class, "")),
     MALCodeChallenge(Pref(Location.Protected, String::class, "")),
     MALToken(Pref(Location.Protected, MAL.ResponseToken::class, "")),
 }

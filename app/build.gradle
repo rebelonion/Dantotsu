@@ -126,13 +126,27 @@ dependencies {
 //    UI
     implementation 'com.google.android.material:material:1.11.0'
     implementation 'nl.joery.animatedbottombar:library:1.1.0'
-    implementation 'io.noties.markwon:core:4.6.2'
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     implementation 'com.alexvasilkov:gesture-views:2.8.3'
     implementation 'com.github.VipulOG:ebook-reader:0.1.6'
     implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
     implementation 'com.github.eltos:simpledialogfragments:v3.7'
+
+    //   Markwon
+    ext.markwon_version = '4.6.2'
+    implementation  "io.noties.markwon:core:$markwon_version"
+    implementation  "io.noties.markwon:editor:$markwon_version"
+    implementation  "io.noties.markwon:ext-strikethrough:$markwon_version"
+    implementation  "io.noties.markwon:ext-tables:$markwon_version"
+    implementation  "io.noties.markwon:ext-tasklist:$markwon_version"
+    implementation  "io.noties.markwon:html:$markwon_version"
+    implementation  "io.noties.markwon:image-glide:$markwon_version"
+
+//    Groupie
+    ext.groupie_version = '2.10.1'
+    implementation "com.github.lisawray.groupie:groupie:$groupie_version"
+    implementation "com.github.lisawray.groupie:groupie-viewbinding:$groupie_version"
 
 //    string matching
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'

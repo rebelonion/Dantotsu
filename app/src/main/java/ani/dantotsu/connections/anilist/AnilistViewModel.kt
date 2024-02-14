@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
+import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.media.Media
@@ -36,6 +37,7 @@ suspend fun getUserId(context: Context, block: () -> Unit) {
                 if (MAL.token != null && !MAL.query.getUserData())
                     snackString(context.getString(R.string.error_loading_mal_user_data))
             }
+            CommentsAPI.fetchAuthToken()
             true
         } else {
             snackString(context.getString(R.string.error_loading_anilist_user_data))

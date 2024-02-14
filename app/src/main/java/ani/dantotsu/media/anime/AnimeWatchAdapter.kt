@@ -18,7 +18,7 @@ import ani.dantotsu.*
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
-import ani.dantotsu.media.CommentsFragment
+import ani.dantotsu.media.comments.CommentsFragment
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
@@ -59,12 +59,13 @@ class AnimeWatchAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         _binding = binding
-        //Comments
+        //CommentsAPI
         binding.animeComments.visibility = View.VISIBLE
         binding.animeComments.setOnClickListener {
             startActivity(
                 fragment.requireContext(),
-                Intent(fragment.requireContext(), CommentsFragment::class.java),
+                Intent(fragment.requireContext(), CommentsFragment::class.java)
+                    .putExtra("mediaId", media.id),
                 null
             )
         }
