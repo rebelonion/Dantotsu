@@ -38,6 +38,10 @@ object CommentsAPI {
         val request = requestBuilder()
         val json = request.get(url)
         if (!json.text.startsWith("{")) return null
+        val res = json.code == 200
+        if (!res) {
+            errorReason(json.code, json.text)
+        }
         val parsed = try {
             Json.decodeFromString<CommentResponse>(json.text)
         } catch (e: Exception) {
