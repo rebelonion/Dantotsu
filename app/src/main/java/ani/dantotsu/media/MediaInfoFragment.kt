@@ -76,7 +76,7 @@ class MediaInfoFragment : Fragment() {
                 loaded = true
 
                 //Youtube
-                if (media.anime!!.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
+                if (media.anime?.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
                     binding.animeSourceYT.visibility = View.VISIBLE
                     binding.animeSourceYT.setOnClickListener {
                         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(media.anime.youtube))

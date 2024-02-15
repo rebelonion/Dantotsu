@@ -19,6 +19,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:scaleType="center"
+        style="@style/CircularImageView"
         app:srcCompat="@drawable/ic_round_add_circle_24"
         tools:ignore="ContentDescription,ImageContrastCheck" />
 
@@ -33,6 +34,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <TextView
@@ -41,8 +43,33 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="Username"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:textAlignment="gravity"
                 android:textSize="15sp"
+                android:paddingTop="1dp"
+                android:paddingBottom="0dp"
                 tools:ignore="HardcodedText,RtlSymmetry"/>
+
+            <ImageView
+                android:id="@+id/modBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_shield"
+                android:layout_gravity="top"
+                android:visibility="visible"
+                android:scaleX="0.8"
+                android:scaleY="0.8" />
+
+            <ImageView
+                android:id="@+id/adminBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_crown"
+                android:layout_gravity="top"
+                android:visibility="visible"
+                android:scaleX="0.9"
+                android:scaleY="0.9" />
 
             <TextView
                 android:id="@+id/commentUserTime"
@@ -100,6 +127,17 @@
                 android:alpha="0.6"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="Delete"
+                android:textSize="12sp"
+                android:layout_marginStart="12dp"
+                tools:ignore="HardcodedText" />
+
+            <TextView
+                android:id="@+id/commentBanUser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.6"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Ban User"
                 android:textSize="12sp"
                 android:layout_marginStart="12dp"
                 tools:ignore="HardcodedText" />

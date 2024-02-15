@@ -9,8 +9,6 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.NetworkHelper
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -27,7 +25,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
 object CommentsAPI {
-    val address: String = "http://10.0.2.2:8081"
+    val address: String = "https://1224665.xyz:443"
     val appSecret = BuildConfig.APP_SECRET
     var authToken: String? = null
     var userId: String? = null
@@ -55,7 +53,7 @@ object CommentsAPI {
         val json = request.post(url)
         val res = json.code == 200
         if (!res) {
-            errorReason(json.code)
+            errorReason(json.code, json.text)
         }
         return res
     }
@@ -73,7 +71,7 @@ object CommentsAPI {
         val json = request.post(url, requestBody = body.build())
         val res = json.code == 200
         if (!res) {
-            errorReason(json.code)
+            errorReason(json.code, json.text)
             return null
         }
         val parsed = try {
@@ -105,7 +103,32 @@ object CommentsAPI {
         val json = request.delete(url)
         val res = json.code == 200
         if (!res) {
-            errorReason(json.code)
+            errorReason(json.code, json.text)
+        }
+        return res
+    }
+
+    suspend fun editComment(commentId: Int, content: String): Boolean {
+        val url = "$address/comments/$commentId"
+        val body = FormBody.Builder()
+            .add("content", content)
+            .build()
+        val request = requestBuilder()
+        val json = request.put(url, requestBody = body)
+        val res = json.code == 200
+        if (!res) {
+            errorReason(json.code, json.text)
+        }
+        return res
+    }
+
+    suspend fun banUser(userId: String): Boolean {
+        val url = "$address/ban/$userId"
+        val request = requestBuilder()
+        val json = request.post(url)
+        val res = json.code == 200
+        if (!res) {
+            errorReason(json.code, json.text)
         }
         return res
     }
@@ -125,7 +148,7 @@ object CommentsAPI {
             val parsed = try {
                 Json.decodeFromString<AuthResponse>(json.text)
             } catch (e: Exception) {
-                println("comment: $e")
+                snackString("Failed to login to comments API: ${e.printStackTrace()}")
                 return
             }
             authToken = parsed.authToken
@@ -155,12 +178,12 @@ object CommentsAPI {
         )
     }
 
-    private fun errorReason(code: Int) {
+    private fun errorReason(code: Int, reason: String? = null) {
         val error = when (code) {
             429 -> "Rate limited. :("
             else -> "Failed to connect"
         }
-        snackString("Error $code: $error")
+        snackString("Error $code: ${reason ?: error}")
     }
 
     @SuppressLint("GetInstance")
@@ -221,7 +244,7 @@ data class Comment(
     @SerialName("parent_comment_id")
     val parentCommentId: Int?,
     @SerialName("content")
-    val content: String,
+    var content: String,
     @SerialName("timestamp")
     val timestamp: String,
     @SerialName("deleted")
@@ -236,7 +259,13 @@ data class Comment(
     @SerialName("username")
     val username: String,
     @SerialName("profile_picture_url")
-    val profilePictureUrl: String?
+    val profilePictureUrl: String?,
+    @SerialName("is_mod")
+    @Serializable(with = NumericBooleanSerializer::class)
+    val isMod: Boolean? = null,
+    @SerialName("is_admin")
+    @Serializable(with = NumericBooleanSerializer::class)
+    val isAdmin: Boolean? = null
 )
 
 @Serializable

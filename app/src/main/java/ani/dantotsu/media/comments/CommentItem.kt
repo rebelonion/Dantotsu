@@ -20,9 +20,10 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 
-class CommentItem(private val comment: Comment,
+class CommentItem(val comment: Comment,
                   private val markwon: Markwon,
-                  private val section: Section
+                  private val section: Section,
+                  private val editCallback: (CommentItem) -> Unit
 ) : BindableItem<ItemCommentsBinding>() {
 
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
@@ -30,13 +31,29 @@ class CommentItem(private val comment: Comment,
         val node = markwon.parse(comment.content)
         val spanned = markwon.render(node)
         markwon.setParsedMarkdown(viewBinding.commentText, viewBinding.commentText.setSpoilerText(spanned, markwon))
-        viewBinding.commentDelete.visibility = if (isUserComment) View.VISIBLE else View.GONE
+        viewBinding.commentDelete.visibility = if (isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
+        viewBinding.commentBanUser.visibility = if (CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentReply.visibility = View.GONE //TODO: implement reply
         viewBinding.commentTotalReplies.visibility = View.GONE //TODO: implement reply
         viewBinding.commentReply.setOnClickListener {
 
         }
+        var isEditing = false
+        viewBinding.commentEdit.setOnClickListener {
+            if (!isEditing) {
+                viewBinding.commentEdit.text = "Cancel"
+                isEditing = true
+                editCallback(this)
+            } else {
+                viewBinding.commentEdit.text = "Edit"
+                isEditing = false
+                editCallback(this)
+            }
+
+        }
+        viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
+        viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
         viewBinding.commentDelete.setOnClickListener {
             val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
             scope.launch {
@@ -44,6 +61,15 @@ class CommentItem(private val comment: Comment,
                 if (success) {
                     snackString("Comment Deleted")
                     section.remove(this@CommentItem)
+                }
+            }
+        }
+        viewBinding.commentBanUser.setOnClickListener {
+            val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+            scope.launch {
+                val success = CommentsAPI.banUser(comment.userId)
+                if (success) {
+                    snackString("User Banned")
                 }
             }
         }
@@ -136,5 +162,12 @@ class CommentItem(private val comment: Comment,
         } catch (e: Exception) {
             "now"
         }
+    }
+
+    fun timestampToMillis(timestamp: String): Long {
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+        val parsedDate = dateFormat.parse(timestamp)
+        return parsedDate?.time ?: 0
     }
 }

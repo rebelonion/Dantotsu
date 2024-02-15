@@ -659,8 +659,8 @@
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
 
     <string name="comments">Comments</string>
-    <string name="comments_sort_ascending">Ascending</string>
-    <string name="comments_sort_descending">Descending</string>
-    <string name="comments_sort_upvote">Most UpVoted</string>
-    <string name="comments_sort_downvote">Most DownVoted</string>
+    <string name="newest">newest</string>
+    <string name="oldest">oldest</string>
+    <string name="highest_rated">highest rated</string>
+    <string name="lowest_rated">lowest rated</string>
 </resources>

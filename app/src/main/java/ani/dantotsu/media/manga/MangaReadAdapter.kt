@@ -5,9 +5,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
-import android.os.Bundle
-import ani.dantotsu.settings.FAQActivity
-import androidx.core.content.ContextCompat.startActivity
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.CheckBox
@@ -15,9 +12,11 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
+import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
@@ -25,11 +24,13 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.media.anime.handleProgress
+import ani.dantotsu.media.comments.CommentsActivity
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
@@ -66,9 +67,19 @@ class MangaReadAdapter(
         _binding = binding
         binding.sourceTitle.setText(R.string.chaps)
 
+        binding.animeComments.visibility = if (CommentsAPI.userId == null) View.GONE else View.VISIBLE
+        binding.animeComments.setOnClickListener {
+            startActivity(
+                fragment.requireContext(),
+                Intent(fragment.requireContext(), CommentsActivity::class.java)
+                    .putExtra("mediaId", media.id),
+                null
+            )
+        }
+
         //Fuck u launch
         binding.faqbutton.setOnClickListener {
-        val intent = Intent(fragment.requireContext(), FAQActivity::class.java)
+            val intent = Intent(fragment.requireContext(), FAQActivity::class.java)
             startActivity(fragment.requireContext(), intent, null)
         }
 
@@ -447,11 +458,10 @@ class MangaReadAdapter(
                 if (media.manga.chapters!!.isNotEmpty()) {
                     binding.animeSourceNotFound.visibility = View.GONE
                     binding.faqbutton.visibility = View.GONE
-                    }
-                else {
+                } else {
                     binding.animeSourceNotFound.visibility = View.VISIBLE
                     binding.faqbutton.visibility = View.VISIBLE
-                    }
+                }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE

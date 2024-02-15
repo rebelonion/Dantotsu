@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:fitsSystemWindows="true"
     android:id="@+id/commentsLayout">
 
     <LinearLayout
@@ -38,27 +39,43 @@
                 android:contentDescription="@string/sort_by"
                 app:srcCompat="@drawable/ic_round_sort_24"
                 app:tint="?attr/colorOnBackground" />
-
         </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/commentsProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginTop="64dp" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/commentsRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="58dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/commentsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginBottom="58dp"
+            android:visibility="gone"
             tools:listitem="@layout/item_comments" />
-
-
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/commentInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
         android:layout_gravity="bottom|end"
+        android:windowSoftInputMode="adjustResize"
         android:background="@color/nav_bg">
 
         <com.google.android.material.imageview.ShapeableImageView
@@ -95,6 +112,5 @@
             android:layout_marginEnd="12dp"
             android:background="@drawable/ic_round_send_24"
             tools:ignore="ContentDescription" />
-
     </LinearLayout>
 </FrameLayout>

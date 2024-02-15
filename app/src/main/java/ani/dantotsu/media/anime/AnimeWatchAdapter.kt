@@ -15,10 +15,11 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
+import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
-import ani.dantotsu.media.comments.CommentsFragment
+import ani.dantotsu.media.comments.CommentsActivity
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
@@ -60,11 +61,11 @@ class AnimeWatchAdapter(
         val binding = holder.binding
         _binding = binding
         //CommentsAPI
-        binding.animeComments.visibility = View.VISIBLE
+        binding.animeComments.visibility = if (CommentsAPI.userId == null) View.GONE else View.VISIBLE
         binding.animeComments.setOnClickListener {
             startActivity(
                 fragment.requireContext(),
-                Intent(fragment.requireContext(), CommentsFragment::class.java)
+                Intent(fragment.requireContext(), CommentsActivity::class.java)
                     .putExtra("mediaId", media.id),
                 null
             )

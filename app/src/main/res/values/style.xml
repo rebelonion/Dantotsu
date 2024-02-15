@@ -91,5 +91,15 @@
         <item name="android:background">@android:color/transparent</item>
     </style>
 
+    <style name="CircularImageView" parent="">
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.App.CircularImageView</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.App.CircularImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+
     <style name="ThemeOverlay_Dantotsu_MediaRouter" parent="ThemeOverlay.AppCompat"></style>
 </resources>

@@ -109,7 +109,8 @@
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".media.comments.CommentsFragment" />
+            android:name=".media.comments.CommentsActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".media.SearchActivity"
             android:parentActivityName=".MainActivity" />
