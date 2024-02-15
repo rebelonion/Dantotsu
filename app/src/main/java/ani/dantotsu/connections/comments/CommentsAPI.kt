@@ -39,7 +39,7 @@ object CommentsAPI {
         val json = request.get(url)
         if (!json.text.startsWith("{")) return null
         val res = json.code == 200
-        if (!res) {
+        if (!res && json.code != 404) {
             errorReason(json.code, json.text)
         }
         val parsed = try {
