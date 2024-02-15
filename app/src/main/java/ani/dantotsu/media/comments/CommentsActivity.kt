@@ -15,6 +15,8 @@ import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.databinding.ActivityCommentsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
@@ -100,7 +102,26 @@ class CommentsActivity : AppCompatActivity() {
                 section.clear()
                 withContext(Dispatchers.IO) {
                     val comments = CommentsAPI.getCommentsForId(mediaId)
-                    comments?.comments?.forEach {
+                    val sorted = when (PrefManager.getVal(PrefName.CommentSortOrder, "newest")) {
+                        "newest" -> comments?.comments?.sortedByDescending { comment ->
+                            CommentItem.timestampToMillis(comment.timestamp)
+                        }
+
+                        "oldest" -> comments?.comments?.sortedBy { comment ->
+                            CommentItem.timestampToMillis(comment.timestamp)
+                        }
+
+                        "highest_rated" -> comments?.comments?.sortedByDescending { comment ->
+                            comment.upvotes - comment.downvotes
+                        }
+
+                        "lowest_rated" -> comments?.comments?.sortedBy { comment ->
+                            comment.upvotes - comment.downvotes
+                        }
+
+                        else -> comments?.comments
+                    }
+                    sorted?.forEach {
                         withContext(Dispatchers.Main) {
                             section.add(CommentItem(it, buildMarkwon(), section) { comment ->
                                 editCallback(comment)
@@ -123,7 +144,26 @@ class CommentsActivity : AppCompatActivity() {
             binding.commentsList.visibility = View.GONE
             withContext(Dispatchers.IO) {
                 val comments = CommentsAPI.getCommentsForId(mediaId)
-                comments?.comments?.forEach {
+                val sorted = when (PrefManager.getVal(PrefName.CommentSortOrder, "newest")) {
+                    "newest" -> comments?.comments?.sortedByDescending { comment ->
+                        CommentItem.timestampToMillis(comment.timestamp)
+                    }
+
+                    "oldest" -> comments?.comments?.sortedBy { comment ->
+                        CommentItem.timestampToMillis(comment.timestamp)
+                    }
+
+                    "highest_rated" -> comments?.comments?.sortedByDescending { comment ->
+                        comment.upvotes - comment.downvotes
+                    }
+
+                    "lowest_rated" -> comments?.comments?.sortedBy { comment ->
+                        comment.upvotes - comment.downvotes
+                    }
+
+                    else -> comments?.comments
+                }
+                sorted?.forEach {
                     withContext(Dispatchers.Main) {
                         section.add(CommentItem(it, buildMarkwon(), section) { comment ->
                             editCallback(comment)
@@ -142,26 +182,29 @@ class CommentsActivity : AppCompatActivity() {
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.comment_sort_newest -> {
+                        PrefManager.setVal(PrefName.CommentSortOrder, "newest")
                         val groups = section.groups
                         groups.sortByDescending { comment ->
                             comment as CommentItem
-                            comment.timestampToMillis(comment.comment.timestamp)
+                            CommentItem.timestampToMillis(comment.comment.timestamp)
                         }
                         section.update(groups)
                         binding.commentsList.scrollToPosition(0)
                     }
 
                     R.id.comment_sort_oldest -> {
+                        PrefManager.setVal(PrefName.CommentSortOrder, "oldest")
                         val groups = section.groups
                         groups.sortBy { comment ->
                             comment as CommentItem
-                            comment.timestampToMillis(comment.comment.timestamp)
+                            CommentItem.timestampToMillis(comment.comment.timestamp)
                         }
                         section.update(groups)
                         binding.commentsList.scrollToPosition(0)
                     }
 
                     R.id.comment_sort_highest_rated -> {
+                        PrefManager.setVal(PrefName.CommentSortOrder, "highest_rated")
                         val groups = section.groups
                         groups.sortByDescending { comment ->
                             comment as CommentItem
@@ -172,6 +215,7 @@ class CommentsActivity : AppCompatActivity() {
                     }
 
                     R.id.comment_sort_lowest_rated -> {
+                        PrefManager.setVal(PrefName.CommentSortOrder, "lowest_rated")
                         val groups = section.groups
                         groups.sortBy { comment ->
                             comment as CommentItem
@@ -246,43 +290,81 @@ class CommentsActivity : AppCompatActivity() {
                 snackString("You are banned from commenting :(")
                 return@setOnClickListener
             }
-            binding.commentInput.text.toString().let {
-                if (it.isNotEmpty()) {
-                    binding.commentInput.text.clear()
-                    lifecycleScope.launch {
-                        if (editing) {
-                            val success = withContext(Dispatchers.IO) {
-                                CommentsAPI.editComment(editingCommentId, it)
-                            }
-                            if (success) {
-                                val groups = section.groups
-                                groups.forEach { item ->
-                                    if (item is CommentItem) {
-                                        if (item.comment.commentId == editingCommentId) {
-                                            item.comment.content = it
-                                            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
-                                            item.comment.timestamp = dateFormat.format(System.currentTimeMillis())
-                                            item.notifyChanged()
-                                            snackString("Comment edited")
+            val firstComment = PrefManager.getVal(PrefName.FirstComment, false)
+            if (!firstComment) {
+                //show a dialog explaining the rules
+                val alertDialog = android.app.AlertDialog.Builder(this, R.style.MyPopup)
+                    .setTitle("Commenting Rules")
+                    .setMessage(
+                        "I WILL BAN YOU WITHOUT HESITATION\n" +
+                                "1. No racism\n" +
+                                "2. No hate speech\n" +
+                                "3. No spam\n" +
+                                "4. No NSFW content\n" +
+                                "6. No advertising\n" +
+                                "7. No self promotion\n" +
+                                "8. No impersonation\n" +
+                                "9. No harassment\n" +
+                                "10. No illegal content\n" +
+                                "11. Anything you know you shouldn't comment\n"
+                    )
+                    .setPositiveButton("I Understand") { dialog, _ ->
+                        dialog.dismiss()
+                        PrefManager.setVal(PrefName.FirstComment, false)
+                        binding.commentInput.text.toString().let {
+                            if (it.isNotEmpty()) {
+                                binding.commentInput.text.clear()
+                                lifecycleScope.launch {
+                                    if (editing) {
+                                        val success = withContext(Dispatchers.IO) {
+                                            CommentsAPI.editComment(editingCommentId, it)
                                         }
-                                    }
+                                        if (success) {
+                                            val groups = section.groups
+                                            groups.forEach { item ->
+                                                if (item is CommentItem) {
+                                                    if (item.comment.commentId == editingCommentId) {
+                                                        item.comment.content = it
+                                                        val dateFormat =
+                                                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                                        dateFormat.timeZone =
+                                                            TimeZone.getTimeZone("UTC")
+                                                        item.comment.timestamp =
+                                                            dateFormat.format(System.currentTimeMillis())
+                                                        item.notifyChanged()
+                                                        snackString("Comment edited")
+                                                    }
+                                                }
 
+                                            }
+                                        }
+                                    } else {
+                                        val success = withContext(Dispatchers.IO) {
+                                            CommentsAPI.comment(mediaId, null, it)
+                                        }
+                                        if (success != null)
+                                            section.add(
+                                                0,
+                                                CommentItem(
+                                                    success,
+                                                    buildMarkwon(),
+                                                    section
+                                                ) { comment ->
+                                                    editCallback(comment)
+                                                })
+                                    }
                                 }
+                            } else {
+                                snackString("Comment cannot be empty")
                             }
-                        } else {
-                            val success = withContext(Dispatchers.IO) {
-                                CommentsAPI.comment(mediaId, null, it)
-                            }
-                            if (success != null)
-                                section.add(0, CommentItem(success, buildMarkwon(), section) { comment ->
-                                    editCallback(comment)
-                                })
                         }
                     }
-                } else {
-                    snackString("Comment cannot be empty")
-                }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                val dialog = alertDialog.show()
+                dialog?.window?.setDimAmount(0.8f)
+
             }
         }
     }

@@ -63,6 +63,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     PopularAnimeList(Pref(Location.UI, Boolean::class, true)),
     AnimeListSortOrder(Pref(Location.UI, String::class, "score")),
     MangaListSortOrder(Pref(Location.UI, String::class, "score")),
+    CommentSortOrder(Pref(Location.UI, String::class, "newest")),
 
     //Player
     DefaultSpeed(Pref(Location.Player, Int::class, 5)),
@@ -152,6 +153,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     TagsListIsAdult(Pref(Location.Irrelevant, Set::class, setOf<String>())),
     TagsListNonAdult(Pref(Location.Irrelevant, Set::class, setOf<String>())),
     MakeDefault(Pref(Location.Irrelevant, Boolean::class, true)),
+    FirstComment(Pref(Location.Irrelevant, Boolean::class, false)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),
