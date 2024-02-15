@@ -253,7 +253,7 @@ data class Comment(
     @SerialName("content")
     var content: String,
     @SerialName("timestamp")
-    val timestamp: String,
+    var timestamp: String,
     @SerialName("deleted")
     @Serializable(with = NumericBooleanSerializer::class)
     val deleted: Boolean?,

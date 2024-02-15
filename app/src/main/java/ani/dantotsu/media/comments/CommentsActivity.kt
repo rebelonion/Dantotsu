@@ -40,6 +40,8 @@ import io.noties.markwon.image.glide.GlideImagesPlugin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.TimeZone
 
 class CommentsActivity : AppCompatActivity() {
     lateinit var binding: ActivityCommentsBinding
@@ -258,6 +260,9 @@ class CommentsActivity : AppCompatActivity() {
                                     if (item is CommentItem) {
                                         if (item.comment.commentId == editingCommentId) {
                                             item.comment.content = it
+                                            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                            dateFormat.timeZone = TimeZone.getTimeZone("UTC")
+                                            item.comment.timestamp = dateFormat.format(System.currentTimeMillis())
                                             item.notifyChanged()
                                             snackString("Comment edited")
                                         }
