@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/comment_sort_ascending"
+        android:title="@string/comments_sort_ascending" />
+    <item
+        android:id="@+id/comment_sort_descending"
+        android:title="@string/comments_sort_descending" />
+    <item
+        android:id="@+id/comment_sort_upvote"
+        android:title="@string/comments_sort_upvote" />
+    <item
+        android:id="@+id/comment_sort_downvote"
+        android:title="@string/comments_sort_downvote" />
+</menu>

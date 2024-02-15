@@ -4,11 +4,14 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentsAPI
@@ -16,6 +19,8 @@ import ani.dantotsu.databinding.FragmentCommentsBinding
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -119,6 +124,14 @@ class CommentsFragment : AppCompatActivity(){
                 }
             }
             adapter.add(section)
+        }
+        binding.commentSort.setOnClickListener {
+            val popup = PopupMenu(this, it)
+            popup.setOnMenuItemClickListener { item ->
+                true
+            }
+            popup.inflate(R.menu.comments_sort_menu)
+            popup.show()
         }
     }
 
