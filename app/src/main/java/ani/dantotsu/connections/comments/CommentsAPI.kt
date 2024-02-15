@@ -142,20 +142,20 @@ object CommentsAPI {
             .add("username", user.username)
             .add("profile_picture_url", Anilist.avatar ?: "")
             .build()
-            val request = requestBuilder()
-            val json = request.post(url, requestBody = body)
-            if (!json.text.startsWith("{")) return
-            val parsed = try {
-                Json.decodeFromString<AuthResponse>(json.text)
-            } catch (e: Exception) {
-                snackString("Failed to login to comments API: ${e.printStackTrace()}")
-                return
-            }
-            authToken = parsed.authToken
-            userId = parsed.user.id
-            isBanned = parsed.user.isBanned ?: false
-            isAdmin = parsed.user.isAdmin ?: false
-            isMod = parsed.user.isMod ?: false
+        val request = requestBuilder()
+        val json = request.post(url, requestBody = body)
+        if (!json.text.startsWith("{")) return
+        val parsed = try {
+            Json.decodeFromString<AuthResponse>(json.text)
+        } catch (e: Exception) {
+            snackString("Failed to login to comments API: ${e.printStackTrace()}")
+            return
+        }
+        authToken = parsed.authToken
+        userId = parsed.user.id
+        isBanned = parsed.user.isBanned ?: false
+        isAdmin = parsed.user.isAdmin ?: false
+        isMod = parsed.user.isMod ?: false
     }
 
     private fun headerBuilder(): Map<String, String> {
@@ -188,10 +188,17 @@ object CommentsAPI {
 
     @SuppressLint("GetInstance")
     private fun generateUserId(): String? {
-        val anilistId = PrefManager.getVal(PrefName.AnilistUserId, null as String?) ?: return null
+        val anilistId = PrefManager.getVal(PrefName.AnilistUserId, null as String?)
+            ?: if (Anilist.userid != null) {
+                PrefManager.setVal(PrefName.AnilistUserId, Anilist.userid.toString())
+                Anilist.userid.toString()
+            } else {
+                return null
+            }
         val userIdEncryptKey = BuildConfig.USER_ID_ENCRYPT_KEY
         val keySpec = SecretKeySpec(userIdEncryptKey.toByteArray(), KeyProperties.KEY_ALGORITHM_AES)
-        val cipher = Cipher.getInstance("${KeyProperties.KEY_ALGORITHM_AES}/ECB/${KeyProperties.ENCRYPTION_PADDING_PKCS7}")
+        val cipher =
+            Cipher.getInstance("${KeyProperties.KEY_ALGORITHM_AES}/ECB/${KeyProperties.ENCRYPTION_PADDING_PKCS7}")
         cipher.init(Cipher.ENCRYPT_MODE, keySpec)
         val encrypted = cipher.doFinal(anilistId.toByteArray())
         return encrypted.joinToString("") { "%02x".format(it) }
@@ -290,7 +297,8 @@ data class ReturnedComment(
 )
 
 object NumericBooleanSerializer : KSerializer<Boolean> {
-    override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("NumericBoolean", PrimitiveKind.INT)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("NumericBoolean", PrimitiveKind.INT)
 
     override fun serialize(encoder: Encoder, value: Boolean) {
         encoder.encodeInt(if (value) 1 else 0)
