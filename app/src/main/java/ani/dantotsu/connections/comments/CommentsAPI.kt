@@ -1,6 +1,6 @@
 package ani.dantotsu.connections.comments
 
-import ani.dantotsu.Secrets
+import ani.dantotsu.BuildConfig
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
