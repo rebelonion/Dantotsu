@@ -153,7 +153,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     TagsListIsAdult(Pref(Location.Irrelevant, Set::class, setOf<String>())),
     TagsListNonAdult(Pref(Location.Irrelevant, Set::class, setOf<String>())),
     MakeDefault(Pref(Location.Irrelevant, Boolean::class, true)),
-    FirstComment(Pref(Location.Irrelevant, Boolean::class, false)),
+    FirstComment(Pref(Location.Irrelevant, Boolean::class, true)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

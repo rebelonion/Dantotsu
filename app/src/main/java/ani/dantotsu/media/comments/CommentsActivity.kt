@@ -290,8 +290,8 @@ class CommentsActivity : AppCompatActivity() {
                 snackString("You are banned from commenting :(")
                 return@setOnClickListener
             }
-            val firstComment = PrefManager.getVal(PrefName.FirstComment, false)
-            if (!firstComment) {
+            val firstComment = PrefManager.getVal<Boolean>(PrefName.FirstComment)
+            if (firstComment) {
                 //show a dialog explaining the rules
                 val alertDialog = android.app.AlertDialog.Builder(this, R.style.MyPopup)
                     .setTitle("Commenting Rules")
