@@ -41,6 +41,7 @@
                 android:id="@+id/commentUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="Username"
                 android:layout_gravity="center_vertical"
@@ -55,27 +56,31 @@
                 android:id="@+id/modBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_shield"
+                android:layout_marginEnd="6dp"
                 android:layout_gravity="top"
+                android:src="@drawable/ic_shield"
                 android:visibility="visible"
                 android:scaleX="0.8"
-                android:scaleY="0.8" />
+                android:scaleY="0.8"
+                tools:ignore="ContentDescription,RtlSymmetry" />
+
 
             <ImageView
                 android:id="@+id/adminBadge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_crown"
+                android:layout_marginEnd="6dp"
                 android:layout_gravity="top"
+                android:src="@drawable/ic_crown"
                 android:visibility="visible"
                 android:scaleX="0.9"
-                android:scaleY="0.9" />
+                android:scaleY="0.9"
+                tools:ignore="ContentDescription,RtlSymmetry" />
 
             <TextView
                 android:id="@+id/commentUserTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="6dp"
                 android:alpha="0.6"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="Time"
