@@ -28,7 +28,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1039200814590:android:40e14720ee97917e1aacaf",
         "android_client_info": {
-          "package_name": "ani.dantotsu.beta"
+          "package_name": "ani.dantotsu.betas"
         }
       },
       "oauth_client": [],
@@ -47,7 +47,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:1039200814590:android:40e14720ee97917e1aacaf",
         "android_client_info": {
-          "package_name": "ani.dantotsu.alpha"
+          "package_name": "ani.dantotsu.alphas"
         }
       },
       "oauth_client": [],
