@@ -342,6 +342,7 @@
     <string name="year">Year</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
     <string name="this_season">This Season</string>
     <string name="next_season">Next Season</string>
     <string name="previous_season">Previous Season</string>
@@ -659,8 +660,10 @@
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
 
     <string name="comments">Comments</string>
-    <string name="newest">newest</string>
-    <string name="oldest">oldest</string>
-    <string name="highest_rated">highest rated</string>
-    <string name="lowest_rated">lowest rated</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
+    <string name="highest_rated">Highest rated</string>
+    <string name="lowest_rated">Lowest rated</string>
+
+
 </resources>

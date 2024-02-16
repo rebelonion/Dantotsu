@@ -4,6 +4,7 @@ import android.view.View
 import ani.dantotsu.R
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentsAPI
+import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.snackString
@@ -42,11 +43,11 @@ class CommentItem(val comment: Comment,
         var isEditing = false
         viewBinding.commentEdit.setOnClickListener {
             if (!isEditing) {
-                viewBinding.commentEdit.text = "Cancel"
+                viewBinding.commentEdit.text = currActivity()!!.getString(R.string.cancel)
                 isEditing = true
                 editCallback(this)
             } else {
-                viewBinding.commentEdit.text = "Edit"
+                viewBinding.commentEdit.text = currActivity()!!.getString(R.string.edit)
                 isEditing = false
                 editCallback(this)
             }
@@ -128,15 +129,21 @@ class CommentItem(val comment: Comment,
     }
 
     private fun setVoteButtons(viewBinding: ItemCommentsBinding) {
-        if (comment.userVoteType == 1) {
-            viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)
-            viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
-        } else if (comment.userVoteType == -1) {
-            viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
-            viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_active_24)
-        } else {
-            viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
-            viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+        when (comment.userVoteType) {
+            1 -> {
+                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_active_24)
+                viewBinding.commentUpVote.alpha = 1f
+                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+            }
+            -1 -> {
+                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_active_24)
+                viewBinding.commentDownVote.alpha = 1f
+            }
+            else -> {
+                viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+                viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
+            }
         }
     }
 

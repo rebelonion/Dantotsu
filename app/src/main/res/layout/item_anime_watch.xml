@@ -29,11 +29,9 @@
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:text="@string/comments"
+            android:textAlignment="center"
             android:textColor="@color/bg_white"
             android:visibility="gone"
-            app:cornerRadius="12dp"
-            app:icon="@drawable/ic_round_comment_24"
-            app:iconTint="@color/bg_white"
             tools:ignore="TextContrastCheck"
             tools:visibility="visible"/>
 
