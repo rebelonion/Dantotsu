@@ -301,7 +301,7 @@ class CommentsActivity : AppCompatActivity() {
                                 "2. No hate speech\n" +
                                 "3. No spam\n" +
                                 "4. No NSFW content\n" +
-                                "6. No advertising\n" +
+                                "6. ENGLISH ONLY\n" +
                                 "7. No self promotion\n" +
                                 "8. No impersonation\n" +
                                 "9. No harassment\n" +

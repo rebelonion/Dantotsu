@@ -1,8 +1,6 @@
 package ani.dantotsu.connections.comments
 
-import android.annotation.SuppressLint
-import android.security.keystore.KeyProperties
-import ani.dantotsu.BuildConfig
+import ani.dantotsu.Secrets
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -21,12 +19,9 @@ import kotlinx.serialization.json.Json
 import okhttp3.FormBody
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import javax.crypto.Cipher
-import javax.crypto.spec.SecretKeySpec
 
 object CommentsAPI {
     val address: String = "https://1224665.xyz:443"
-    val appSecret = BuildConfig.APP_SECRET
     var authToken: String? = null
     var userId: String? = null
     var isBanned: Boolean = false
@@ -139,12 +134,9 @@ object CommentsAPI {
 
     suspend fun fetchAuthToken() {
         val url = "$address/authenticate"
-        userId = generateUserId()
-        val user = User(userId ?: return, Anilist.username ?: "")
+        val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
         val body: FormBody = FormBody.Builder()
-            .add("user_id", user.id)
-            .add("username", user.username)
-            .add("profile_picture_url", Anilist.avatar ?: "")
+            .add("token", token)
             .build()
         val request = requestBuilder()
         val json = request.post(url, requestBody = body)
@@ -165,12 +157,12 @@ object CommentsAPI {
     private fun headerBuilder(): Map<String, String> {
         return if (authToken != null) {
             mapOf(
-                "appauth" to appSecret,
+                "appauth" to BuildConfig.APP_SECRET,
                 "Authorization" to authToken!!
             )
         } else {
             mapOf(
-                "appauth" to appSecret,
+                "appauth" to BuildConfig.APP_SECRET,
             )
         }
     }
@@ -188,24 +180,6 @@ object CommentsAPI {
             else -> "Failed to connect"
         }
         snackString("Error $code: ${reason ?: error}")
-    }
-
-    @SuppressLint("GetInstance")
-    private fun generateUserId(): String? {
-        val anilistId = PrefManager.getVal(PrefName.AnilistUserId, null as String?)
-            ?: if (Anilist.userid != null) {
-                PrefManager.setVal(PrefName.AnilistUserId, Anilist.userid.toString())
-                Anilist.userid.toString()
-            } else {
-                return null
-            }
-        val userIdEncryptKey = BuildConfig.USER_ID_ENCRYPT_KEY
-        val keySpec = SecretKeySpec(userIdEncryptKey.toByteArray(), KeyProperties.KEY_ALGORITHM_AES)
-        val cipher =
-            Cipher.getInstance("${KeyProperties.KEY_ALGORITHM_AES}/ECB/${KeyProperties.ENCRYPTION_PADDING_PKCS7}")
-        cipher.init(Cipher.ENCRYPT_MODE, keySpec)
-        val encrypted = cipher.doFinal(anilistId.toByteArray())
-        return encrypted.joinToString("") { "%02x".format(it) }
     }
 }
 

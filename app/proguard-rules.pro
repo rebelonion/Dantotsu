@@ -43,6 +43,25 @@
     public static <1> INSTANCE;
     kotlinx.serialization.KSerializer serializer(...);
 }
+-keep class ani.dantotsu.** { *; }
+-keep class ani.dantotsu.download.DownloadsManager { *; }
+-keepattributes Signature
+-keep class uy.kohesive.injekt.** { *; }
+-keep class eu.kanade.tachiyomi.** { *; }
+-keep class kotlin.** { *; }
+-dontwarn kotlin.**
+-keep class kotlinx.** { *; }
+-keepclassmembers class uy.kohesive.injekt.api.FullTypeReference {
+    <init>(...);
+}
+-keep class com.google.gson.** { *; }
+-keepattributes *Annotation*
+-keepattributes EnclosingMethod
+-keep class com.google.gson.reflect.TypeToken { *; }
+-keep class org.jsoup.** { *; }
+-keepclassmembers class org.jsoup.nodes.Document { *; }
+
+
 
 # @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
 -keepattributes RuntimeVisibleAnnotations,AnnotationDefault
