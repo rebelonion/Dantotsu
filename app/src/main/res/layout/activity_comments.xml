@@ -64,55 +64,98 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            tools:visibility="visible"
             tools:listitem="@layout/item_comments" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </LinearLayout>
-
     <LinearLayout
-        android:id="@+id/commentInputLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
+        android:orientation="vertical"
         android:layout_gravity="bottom|end"
         android:windowSoftInputMode="adjustResize"
         android:background="@color/nav_bg">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/commentUserAvatar"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:scaleType="center"
-            android:layout_marginStart="12dp"
-            style="@style/CircularImageView"
-            app:srcCompat="@drawable/ic_round_add_circle_24"
-            tools:ignore="ContentDescription,ImageContrastCheck" />
+        <LinearLayout
+            android:id="@+id/commentReplyToContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            tools:ignore="UseCompoundDrawables">
+            <TextView
+                android:id="@+id/commentReplyTo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Replying to "
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
 
-        <EditText
-            android:id="@+id/commentInput"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:textSize="12sp"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:hint="Add a comment..."
-            android:inputType="textMultiLine"
-            android:padding="8dp"
-            android:background="@drawable/card_outline"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:maxLength="300"
-            android:maxLines="15"
-            tools:ignore="HardcodedText"
-            android:autofillHints="The One Piece is real" />
+            <ImageView
+                android:id="@+id/commentReplyToCancel"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                app:srcCompat="@drawable/ic_round_close_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
 
-        <ImageButton
-            android:id="@+id/commentSend"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_marginEnd="12dp"
-            android:background="@drawable/ic_round_send_24"
-            tools:ignore="ContentDescription" />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/commentInputLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="8dp"
+            android:paddingTop="8dp"
+            android:windowSoftInputMode="adjustResize">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/commentUserAvatar"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:scaleType="center"
+                android:layout_marginStart="12dp"
+                style="@style/CircularImageView"
+                app:srcCompat="@drawable/ic_round_add_circle_24"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            <EditText
+                android:id="@+id/commentInput"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:hint="Add a comment..."
+                android:inputType="textMultiLine"
+                android:padding="8dp"
+                android:background="@drawable/card_outline"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:maxLength="300"
+                android:maxLines="15"
+                tools:ignore="HardcodedText"
+                android:autofillHints="The One Piece is real" />
+
+            <ImageButton
+                android:id="@+id/commentSend"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/ic_round_send_24"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
     </LinearLayout>
 </FrameLayout>

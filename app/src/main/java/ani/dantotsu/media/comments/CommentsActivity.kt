@@ -73,7 +73,7 @@ class CommentsActivity : AppCompatActivity() {
                 markwonEditor
             )
         )
-
+        binding.commentReplyToContainer.visibility = View.GONE //TODO: implement reply
         var editing = false
         var editingCommentId = -1
         fun editCallback(comment: CommentItem) {

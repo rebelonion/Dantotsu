@@ -7,188 +7,208 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="6dp"
     android:layout_marginEnd="6dp"
-    android:layout_marginBottom="12dp"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="6dp"
-    android:paddingStart="12dp"
-    android:paddingEnd="12dp">
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/commentUserAvatar"
-        android:layout_marginTop="4dp"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:scaleType="center"
-        style="@style/CircularImageView"
-        app:srcCompat="@drawable/ic_round_add_circle_24"
-        tools:ignore="ContentDescription,ImageContrastCheck" />
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp">
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:layout_marginStart="8dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/commentUserAvatar"
+            android:layout_marginTop="4dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="center"
+            style="@style/CircularImageView"
+            app:srcCompat="@drawable/ic_round_add_circle_24"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/commentUserName"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/commentUserName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="Username"
+                    android:singleLine="true"
+                    android:ellipsize="end"
+                    android:textSize="15sp"
+                    android:paddingTop="1dp"
+                    android:paddingBottom="0dp"
+                    tools:ignore="HardcodedText,RtlSymmetry"/>
+
+                <TextView
+                    android:id="@+id/commentUserTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:alpha="0.6"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="Time"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
+
+                <ImageView
+                    android:id="@+id/modBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:layout_marginEnd="6dp"
+                    android:layout_gravity="top"
+                    android:src="@drawable/ic_shield"
+                    android:visibility="visible"
+                    android:scaleX="0.8"
+                    android:scaleY="0.8"
+                    tools:ignore="ContentDescription,RtlSymmetry" />
+
+
+                <ImageView
+                    android:id="@+id/adminBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0"
+                    android:layout_marginEnd="6dp"
+                    android:layout_gravity="top"
+                    android:src="@drawable/ic_crown"
+                    android:visibility="visible"
+                    android:scaleX="0.9"
+                    android:scaleY="0.9"
+                    tools:ignore="ContentDescription,RtlSymmetry" />
+
+            </LinearLayout>
+
+            <ani.dantotsu.media.comments.SpoilerTextView
+                android:id="@+id/commentText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="Username"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:textAlignment="gravity"
-                android:textSize="15sp"
-                android:paddingTop="1dp"
-                android:paddingBottom="0dp"
-                tools:ignore="HardcodedText,RtlSymmetry"/>
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:text="@string/slogan"
+                android:textSize="12sp" />
 
-            <ImageView
-                android:id="@+id/modBadge"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
-                android:layout_gravity="top"
-                android:src="@drawable/ic_shield"
-                android:visibility="visible"
-                android:scaleX="0.8"
-                android:scaleY="0.8"
-                tools:ignore="ContentDescription,RtlSymmetry" />
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/commentReply"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:alpha="0.6"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="Reply"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText" />
 
+                <TextView
+                    android:id="@+id/commentEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:alpha="0.6"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="Edit"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText" />
 
-            <ImageView
-                android:id="@+id/adminBadge"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="6dp"
-                android:layout_gravity="top"
-                android:src="@drawable/ic_crown"
-                android:visibility="visible"
-                android:scaleX="0.9"
-                android:scaleY="0.9"
-                tools:ignore="ContentDescription,RtlSymmetry" />
+                <TextView
+                    android:id="@+id/commentDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="12dp"
+                    android:alpha="0.6"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="Delete"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText" />
 
-            <TextView
-                android:id="@+id/commentUserTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.6"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:text="Time"
-                android:textSize="12sp"
-                tools:ignore="HardcodedText,RtlSymmetry" />
-
+                <TextView
+                    android:id="@+id/commentBanUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.6"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="Ban User"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
         </LinearLayout>
-
-        <ani.dantotsu.media.comments.SpoilerTextView
-            android:id="@+id/commentText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:maxLines="3"
-            android:ellipsize="end"
-            android:text="@string/slogan"
-            android:textSize="12sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="center_vertical"
+            android:orientation="vertical">
+            <ImageView
+                android:id="@+id/commentUpVote"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:alpha="0.4"
+                app:srcCompat="@drawable/ic_round_upvote_inactive_24"
+                tools:ignore="ContentDescription" />
             <TextView
-                android:id="@+id/commentReply"
+                android:id="@+id/commentTotalVotes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:alpha="0.6"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="Reply"
+                android:text="10"
                 android:textSize="12sp"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/commentEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
+                android:layout_gravity="center"
                 android:alpha="0.6"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:text="Edit"
-                android:textSize="12sp"
                 tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/commentDelete"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:alpha="0.6"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:text="Delete"
-                android:textSize="12sp"
-                tools:ignore="HardcodedText" />
-
-            <TextView
-                android:id="@+id/commentBanUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:alpha="0.6"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:text="Ban User"
-                android:textSize="12sp"
-                tools:ignore="HardcodedText" />
+            <ImageView
+                android:id="@+id/commentDownVote"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:alpha="0.4"
+                app:srcCompat="@drawable/ic_round_upvote_inactive_24"
+                android:rotation="180"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
-        <TextView
-            android:id="@+id/commentTotalReplies"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:alpha="0.6"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="View x more replies"
-            android:textSize="12sp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="6dp"
-            tools:ignore="HardcodedText" />
     </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/commentTotalRepliesContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:orientation="vertical">
-        <ImageView
-            android:id="@+id/commentUpVote"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:alpha="0.4"
-            app:srcCompat="@drawable/ic_round_upvote_inactive_24"
-            tools:ignore="ContentDescription" />
-        <TextView
-            android:id="@+id/commentTotalVotes"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="10"
-            android:textSize="12sp"
-            android:layout_gravity="center"
-            android:alpha="0.6"
-            tools:ignore="HardcodedText" />
-        <ImageView
-            android:id="@+id/commentDownVote"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:alpha="0.4"
-            app:srcCompat="@drawable/ic_round_upvote_inactive_24"
-            android:rotation="180"
-            tools:ignore="ContentDescription" />
-        </LinearLayout>
+        android:orientation="horizontal">
 
+    <View
+        android:layout_width="32dp"
+        android:layout_height="3dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="44dp"
+        android:background="@color/nav_tab" />
+
+    <TextView
+        android:id="@+id/commentTotalReplies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:alpha="0.8"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:text="View replies"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
+
+    </LinearLayout>
 </LinearLayout>
