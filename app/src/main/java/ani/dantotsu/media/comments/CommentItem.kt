@@ -1,5 +1,6 @@
 package ani.dantotsu.media.comments
 
+import android.annotation.SuppressLint
 import android.view.View
 import ani.dantotsu.R
 import ani.dantotsu.connections.comments.Comment
@@ -27,13 +28,14 @@ class CommentItem(val comment: Comment,
                   private val editCallback: (CommentItem) -> Unit
 ) : BindableItem<ItemCommentsBinding>() {
 
+    @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
         val isUserComment = CommentsAPI.userId == comment.userId
         val node = markwon.parse(comment.content)
         val spanned = markwon.render(node)
         markwon.setParsedMarkdown(viewBinding.commentText, viewBinding.commentText.setSpoilerText(spanned, markwon))
         viewBinding.commentDelete.visibility = if (isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
-        viewBinding.commentBanUser.visibility = if (CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
+        viewBinding.commentBanUser.visibility = if ((CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentReply.visibility = View.GONE //TODO: implement reply
         viewBinding.commentTotalReplies.visibility = View.GONE //TODO: implement reply
@@ -117,7 +119,7 @@ class CommentItem(val comment: Comment,
         viewBinding.commentUserAvatar
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
-        viewBinding.commentUserTime.text = formatTimestamp(comment.timestamp)
+        viewBinding.commentUserTime.text = "● ${formatTimestamp(comment.timestamp)}"
     }
 
     override fun getLayout(): Int {
