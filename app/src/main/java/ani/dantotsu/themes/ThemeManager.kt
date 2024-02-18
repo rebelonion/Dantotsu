@@ -44,6 +44,7 @@ class ThemeManager(private val context: Activity) {
             "GREEN" -> if (useOLED) R.style.Theme_Dantotsu_GreenOLED else R.style.Theme_Dantotsu_Green
             "PURPLE" -> if (useOLED) R.style.Theme_Dantotsu_PurpleOLED else R.style.Theme_Dantotsu_Purple
             "PINK" -> if (useOLED) R.style.Theme_Dantotsu_PinkOLED else R.style.Theme_Dantotsu_Pink
+            "ORIAX" -> if (useOLED) R.style.Theme_Dantotsu_OriaxOLED else R.style.Theme_Dantotsu_Oriax
             "SAIKOU" -> if (useOLED) R.style.Theme_Dantotsu_SaikouOLED else R.style.Theme_Dantotsu_Saikou
             "RED" -> if (useOLED) R.style.Theme_Dantotsu_RedOLED else R.style.Theme_Dantotsu_Red
             "LAVENDER" -> if (useOLED) R.style.Theme_Dantotsu_LavenderOLED else R.style.Theme_Dantotsu_Lavender
@@ -127,6 +128,7 @@ class ThemeManager(private val context: Activity) {
             GREEN("GREEN"),
             PURPLE("PURPLE"),
             PINK("PINK"),
+            ORIAX("ORIAX"),
             SAIKOU("SAIKOU"),
             RED("RED"),
             LAVENDER("LAVENDER"),
