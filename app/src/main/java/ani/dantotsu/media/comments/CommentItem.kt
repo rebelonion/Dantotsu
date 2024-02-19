@@ -2,6 +2,7 @@ package ani.dantotsu.media.comments
 
 import android.annotation.SuppressLint
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentsAPI
@@ -25,11 +26,23 @@ import java.util.TimeZone
 class CommentItem(val comment: Comment,
                   private val markwon: Markwon,
                   private val section: Section,
-                  private val editCallback: (CommentItem) -> Unit
+                  private val editCallback: (CommentItem) -> Unit,
+                  private val viewReplyCallback: (CommentItem) -> Unit,
+                    private val replyCallback: (CommentItem) -> Unit
 ) : BindableItem<ItemCommentsBinding>() {
+    var binding: ItemCommentsBinding? = null
+    val adapter = GroupieAdapter()
+    val repliesSection = Section()
+
+    init {
+        adapter.add(repliesSection)
+    }
 
     @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
+        binding = viewBinding
+        viewBinding.commentRepliesList.layoutManager = LinearLayoutManager(currActivity())
+        viewBinding.commentRepliesList.adapter = adapter
         val isUserComment = CommentsAPI.userId == comment.userId
         val node = markwon.parse(comment.content)
         val spanned = markwon.render(node)
@@ -37,16 +50,25 @@ class CommentItem(val comment: Comment,
         viewBinding.commentDelete.visibility = if (isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
         viewBinding.commentBanUser.visibility = if ((CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
-        viewBinding.commentReply.visibility = View.GONE //TODO: implement reply
-        viewBinding.commentTotalReplies.visibility = View.GONE //TODO: implement reply
-        viewBinding.commentReply.setOnClickListener {
-
+        if ((comment.replyCount ?: 0) > 0) {
+            viewBinding.commentTotalReplies.visibility = View.VISIBLE
+            viewBinding.commentTotalReplies.text = "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
+        } else {
+            viewBinding.commentTotalReplies.visibility = View.GONE
+        }
+        viewBinding.commentReply.visibility = View.VISIBLE
+        viewBinding.commentTotalReplies.setOnClickListener {
+            viewBinding.commentTotalReplies.visibility = View.GONE
+            viewReplyCallback(this)
         }
         var isEditing = false
+        var isReplying = false
         viewBinding.commentEdit.setOnClickListener {
             if (!isEditing) {
                 viewBinding.commentEdit.text = currActivity()!!.getString(R.string.cancel)
                 isEditing = true
+                isReplying = false
+                viewBinding.commentReply.text = "Reply"
                 editCallback(this)
             } else {
                 viewBinding.commentEdit.text = currActivity()!!.getString(R.string.edit)
@@ -54,6 +76,19 @@ class CommentItem(val comment: Comment,
                 editCallback(this)
             }
 
+        }
+        viewBinding.commentReply.setOnClickListener {
+            if (!isReplying) {
+                viewBinding.commentReply.text = currActivity()!!.getString(R.string.cancel)
+                isReplying = true
+                isEditing = false
+                viewBinding.commentEdit.text = currActivity()!!.getString(R.string.edit)
+                replyCallback(this)
+            } else {
+                viewBinding.commentReply.text = "Reply"
+                isReplying = false
+                replyCallback(this)
+            }
         }
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE

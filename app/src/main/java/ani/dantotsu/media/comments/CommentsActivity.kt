@@ -76,7 +76,11 @@ class CommentsActivity : AppCompatActivity() {
         binding.commentReplyToContainer.visibility = View.GONE //TODO: implement reply
         var editing = false
         var editingCommentId = -1
+        var replying = false
+        var replyingComment: CommentItem? = null
         fun editCallback(comment: CommentItem) {
+            replying = false
+            replyingComment = null
             if (editingCommentId == comment.comment.commentId) {
                 editing = false
                 editingCommentId = -1
@@ -93,6 +97,42 @@ class CommentsActivity : AppCompatActivity() {
                 imm.showSoftInput(binding.commentInput, InputMethodManager.SHOW_IMPLICIT)
             }
 
+        }
+
+        fun replyCallback(comment: CommentItem) {
+            editing = false
+            editingCommentId = -1
+            if (replyingComment?.comment?.commentId == comment.comment.commentId) {
+                replying = false
+                replyingComment = null
+                binding.commentInput.setText("")
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.commentInput.windowToken, 0)
+            } else {
+                replying = true
+                replyingComment = comment
+                binding.commentInput.requestFocus()
+                binding.commentInput.setSelection(binding.commentInput.text.length)
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.showSoftInput(binding.commentInput, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+
+        fun viewReplyCallback(comment: CommentItem) {
+            lifecycleScope.launch {
+                val replies = withContext(Dispatchers.IO) {
+                    CommentsAPI.getRepliesFromId(comment.comment.commentId)
+                }
+                replies?.comments?.forEach {
+                    comment.repliesSection.add(CommentItem(it, buildMarkwon(), comment.repliesSection, { comment ->
+                        editCallback(comment)
+                    }, { comment ->
+                        viewReplyCallback(comment)
+                    }, { comment ->
+                        replyCallback(comment)
+                    }))
+                }
+            }
         }
 
         binding.commentsRefresh.setOnRefreshListener {
@@ -123,9 +163,13 @@ class CommentsActivity : AppCompatActivity() {
                     }
                     sorted?.forEach {
                         withContext(Dispatchers.Main) {
-                            section.add(CommentItem(it, buildMarkwon(), section) { comment ->
+                            section.add(CommentItem(it, buildMarkwon(), section, { comment ->
                                 editCallback(comment)
-                            })
+                            }, { comment ->
+                                viewReplyCallback(comment)
+                            }, { comment ->
+                                replyCallback(comment)
+                            }))
                         }
                     }
                 }
@@ -165,9 +209,13 @@ class CommentsActivity : AppCompatActivity() {
                 }
                 sorted?.forEach {
                     withContext(Dispatchers.Main) {
-                        section.add(CommentItem(it, buildMarkwon(), section) { comment ->
+                        section.add(CommentItem(it, buildMarkwon(), section, { comment ->
                             editCallback(comment)
-                        })
+                        }, { comment ->
+                            viewReplyCallback(comment)
+                        }, { comment ->
+                            replyCallback(comment)
+                        }))
                     }
                 }
                 totalPages = comments?.totalPages ?: 1
@@ -254,10 +302,14 @@ class CommentsActivity : AppCompatActivity() {
                                             CommentItem(
                                                 it,
                                                 buildMarkwon(),
-                                                section
-                                            ) { comment ->
-                                                editCallback(comment)
-                                            })
+                                                section, { comment ->
+                                                    editCallback(comment)
+                                                }, { comment ->
+                                                    viewReplyCallback(comment)
+                                                }, { comment ->
+                                                    replyCallback(comment)
+                                                })
+                                        )
                                     }
                                 }
                                 totalPages = comments?.totalPages ?: 1
@@ -290,6 +342,76 @@ class CommentsActivity : AppCompatActivity() {
                 snackString("You are banned from commenting :(")
                 return@setOnClickListener
             }
+            fun onSuccess() {
+                binding.commentInput.text.toString().let {
+                    if (it.isNotEmpty()) {
+                        binding.commentInput.text.clear()
+                        lifecycleScope.launch {
+                            if (editing) {
+                                val success = withContext(Dispatchers.IO) {
+                                    CommentsAPI.editComment(editingCommentId, it)
+                                }
+                                if (success) {
+                                    val groups = section.groups
+                                    groups.forEach { item ->
+                                        if (item is CommentItem) {
+                                            if (item.comment.commentId == editingCommentId) {
+                                                item.comment.content = it
+                                                val dateFormat =
+                                                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+                                                dateFormat.timeZone =
+                                                    TimeZone.getTimeZone("UTC")
+                                                item.comment.timestamp =
+                                                    dateFormat.format(System.currentTimeMillis())
+                                                item.notifyChanged()
+                                                snackString("Comment edited")
+                                            }
+                                        }
+
+                                    }
+                                }
+                            } else {
+                                val success = withContext(Dispatchers.IO) {
+                                    CommentsAPI.comment(mediaId, if (replying) replyingComment!!.comment.commentId else null, it)
+                                }
+                                if (success != null)
+                                    if (replying) {
+                                        replyingComment?.repliesSection?.add(
+                                            0,
+                                            CommentItem(
+                                                success,
+                                                buildMarkwon(),
+                                                replyingComment?.repliesSection!!, { comment ->
+                                                    editCallback(comment)
+                                                }, { comment ->
+                                                    viewReplyCallback(comment)
+                                                }, { comment ->
+                                                    replyCallback(comment)
+                                                })
+                                        )
+                                    } else {
+                                        section.add(
+                                            0,
+                                            CommentItem(
+                                                success,
+                                                buildMarkwon(),
+                                                section, { comment ->
+                                                    editCallback(comment)
+                                                }, { comment ->
+                                                    viewReplyCallback(comment)
+                                                }, { comment ->
+                                                    replyCallback(comment)
+                                                })
+                                        )
+                                    }
+                            }
+                        }
+                    } else {
+                        snackString("Comment cannot be empty")
+                    }
+                }
+            }
+
             val firstComment = PrefManager.getVal<Boolean>(PrefName.FirstComment)
             if (firstComment) {
                 //show a dialog explaining the rules
@@ -311,53 +433,7 @@ class CommentsActivity : AppCompatActivity() {
                     .setPositiveButton("I Understand") { dialog, _ ->
                         dialog.dismiss()
                         PrefManager.setVal(PrefName.FirstComment, false)
-                        binding.commentInput.text.toString().let {
-                            if (it.isNotEmpty()) {
-                                binding.commentInput.text.clear()
-                                lifecycleScope.launch {
-                                    if (editing) {
-                                        val success = withContext(Dispatchers.IO) {
-                                            CommentsAPI.editComment(editingCommentId, it)
-                                        }
-                                        if (success) {
-                                            val groups = section.groups
-                                            groups.forEach { item ->
-                                                if (item is CommentItem) {
-                                                    if (item.comment.commentId == editingCommentId) {
-                                                        item.comment.content = it
-                                                        val dateFormat =
-                                                            SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-                                                        dateFormat.timeZone =
-                                                            TimeZone.getTimeZone("UTC")
-                                                        item.comment.timestamp =
-                                                            dateFormat.format(System.currentTimeMillis())
-                                                        item.notifyChanged()
-                                                        snackString("Comment edited")
-                                                    }
-                                                }
-
-                                            }
-                                        }
-                                    } else {
-                                        val success = withContext(Dispatchers.IO) {
-                                            CommentsAPI.comment(mediaId, null, it)
-                                        }
-                                        if (success != null)
-                                            section.add(
-                                                0,
-                                                CommentItem(
-                                                    success,
-                                                    buildMarkwon(),
-                                                    section
-                                                ) { comment ->
-                                                    editCallback(comment)
-                                                })
-                                    }
-                                }
-                            } else {
-                                snackString("Comment cannot be empty")
-                            }
-                        }
+                        onSuccess()
                     }
                     .setNegativeButton("Cancel") { dialog, _ ->
                         dialog.dismiss()
@@ -365,6 +441,8 @@ class CommentsActivity : AppCompatActivity() {
                 val dialog = alertDialog.show()
                 dialog?.window?.setDimAmount(0.8f)
 
+            } else {
+                onSuccess()
             }
         }
     }

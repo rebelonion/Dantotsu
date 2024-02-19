@@ -46,6 +46,24 @@ object CommentsAPI {
         return parsed
     }
 
+    suspend fun getRepliesFromId(id: Int, page: Int = 1): CommentResponse? {
+        val url = "$address/comments/parent/$id/$page"
+        val request = requestBuilder()
+        val json = request.get(url)
+        if (!json.text.startsWith("{")) return null
+        val res = json.code == 200
+        if (!res && json.code != 404) {
+            errorReason(json.code, json.text)
+        }
+        val parsed = try {
+            Json.decodeFromString<CommentResponse>(json.text)
+        } catch (e: Exception) {
+            println("comments: $e")
+            return null
+        }
+        return parsed
+    }
+
     suspend fun vote(commentId: Int, voteType: Int): Boolean {
         val url = "$address/comments/vote/$commentId/$voteType"
         val request = requestBuilder()
@@ -155,16 +173,13 @@ object CommentsAPI {
     }
 
     private fun headerBuilder(): Map<String, String> {
-        return if (authToken != null) {
-            mapOf(
-                "appauth" to BuildConfig.APP_SECRET,
-                "Authorization" to authToken!!
-            )
-        } else {
-            mapOf(
-                "appauth" to BuildConfig.APP_SECRET,
-            )
+        val map = mutableMapOf(
+            "appauth" to "6*45Qp%W2RS@t38jkXoSKY588Ynj%n"
+        )
+        if (authToken != null) {
+            map["Authorization"] = authToken!!
         }
+        return map
     }
 
     private fun requestBuilder(): Requests {
@@ -250,7 +265,9 @@ data class Comment(
     val isMod: Boolean? = null,
     @SerialName("is_admin")
     @Serializable(with = NumericBooleanSerializer::class)
-    val isAdmin: Boolean? = null
+    val isAdmin: Boolean? = null,
+    @SerialName("reply_count")
+    val replyCount: Int? = null
 )
 
 @Serializable
