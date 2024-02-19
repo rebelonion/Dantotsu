@@ -61,6 +61,7 @@ import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.session.MediaSession
 import androidx.media3.ui.*
 import androidx.media3.ui.CaptionStyleCompat.*
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.mediarouter.app.MediaRouteButton
 import ani.dantotsu.*
 import ani.dantotsu.R
@@ -1448,10 +1449,26 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     private fun buildExoplayer() {
         //Player
+        val DEFAULT_MIN_BUFFER_MS = 600000
+        val DEFAULT_MAX_BUFFER_MS = 600000
+        val BUFFER_FOR_PLAYBACK_MS = 2500
+        val BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 5000
+        
+        val loadControl = DefaultLoadControl.Builder()
+            .setBackBuffer(1000 * 60 * 2, true)
+            .setBufferDurationsMs(
+                DEFAULT_MIN_BUFFER_MS,
+                DEFAULT_MAX_BUFFER_MS,
+                BUFFER_FOR_PLAYBACK_MS,
+                BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
+            )
+            .build()
+            
         hideSystemBars()
         exoPlayer = ExoPlayer.Builder(this)
             .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
             .setTrackSelector(trackSelector)
+            .setLoadControl(loadControl)
             .build().apply {
                 playWhenReady = true
                 this.playbackParameters = this@ExoplayerView.playbackParameters
