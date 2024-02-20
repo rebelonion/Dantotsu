@@ -55,17 +55,24 @@ class CommentItem(val comment: Comment,
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
         if ((comment.replyCount ?: 0) > 0) {
             viewBinding.commentTotalReplies.visibility = View.VISIBLE
+            viewBinding.commentRepliesDivider.visibility = View.VISIBLE
             viewBinding.commentTotalReplies.text = "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
         } else {
             viewBinding.commentTotalReplies.visibility = View.GONE
+            viewBinding.commentRepliesDivider.visibility = View.GONE
         }
         viewBinding.commentReply.visibility = View.VISIBLE
         viewBinding.commentTotalReplies.setOnClickListener {
             viewBinding.commentTotalReplies.visibility = View.GONE
+            viewBinding.commentRepliesDivider.visibility = View.GONE
             viewReplyCallback(this)
         }
         viewBinding.commentUserName.setOnClickListener {
             openLinkInBrowser("https://anilist.co/user/${comment.username}")
+        }
+        viewBinding.commentText.setOnLongClickListener {
+            copyToClipboard(comment.content)
+            true
         }
         var isEditing = false
         var isReplying = false
