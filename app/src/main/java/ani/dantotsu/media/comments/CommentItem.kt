@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentsAPI
+import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -60,6 +63,9 @@ class CommentItem(val comment: Comment,
         viewBinding.commentTotalReplies.setOnClickListener {
             viewBinding.commentTotalReplies.visibility = View.GONE
             viewReplyCallback(this)
+        }
+        viewBinding.commentUserName.setOnClickListener {
+            openLinkInBrowser("https://anilist.co/user/${comment.username}")
         }
         var isEditing = false
         var isReplying = false
