@@ -21,7 +21,7 @@ jobs:
 
         
     - name: Download last SHA artifact
-      uses: actions/download-artifact@v4.1.2
+      uses: dawidd6/action-download-artifact@v3
       with:
         workflow: beta.yml
         name: last-sha
@@ -92,7 +92,7 @@ jobs:
       shell: bash
       run: |
         #Discord
-        commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g')
+        commit_messages=$(echo "$COMMIT_LOG" | sed 's/%0A/\n/g; s/^/\n/')
         #  Truncate commit messages if they are too long
         max_length=1900 # Adjust this value as needed
         if [ ${#commit_messages} -gt $max_length ]; then
@@ -104,7 +104,7 @@ jobs:
         #Telegram
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
-          -F "caption=Alpha-Build: ${VERSION}:  ${commit_messages}" \
+          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
       env:
