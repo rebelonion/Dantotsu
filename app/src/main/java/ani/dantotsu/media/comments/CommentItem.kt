@@ -54,10 +54,13 @@ class CommentItem(val comment: Comment,
         viewBinding.commentDelete.visibility = if (isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
         viewBinding.commentBanUser.visibility = if ((CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
+        replying(isReplying) //sets default text
+        editing(isEditing)
         if ((comment.replyCount ?: 0) > 0) {
             viewBinding.commentTotalReplies.visibility = View.VISIBLE
             viewBinding.commentRepliesDivider.visibility = View.VISIBLE
-            viewBinding.commentTotalReplies.text = "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
+            viewBinding.commentTotalReplies.text = if(repliesVisible) "Hide Replies" else
+                "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
         } else {
             viewBinding.commentTotalReplies.visibility = View.GONE
             viewBinding.commentRepliesDivider.visibility = View.GONE
