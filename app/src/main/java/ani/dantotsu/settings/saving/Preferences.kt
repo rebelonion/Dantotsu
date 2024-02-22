@@ -10,7 +10,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     SharedUserID(Pref(Location.General, Boolean::class, true)),
     OfflineView(Pref(Location.General, Int::class, 0)),
     DownloadManager(Pref(Location.General, Int::class, 0)),
-    NSFWExtension(Pref(Location.General, Boolean::class, false)),
+    NSFWExtension(Pref(Location.General, Boolean::class, true)),
     SdDl(Pref(Location.General, Boolean::class, false)),
     ContinueMedia(Pref(Location.General, Boolean::class, true)),
     RecentlyListOnly(Pref(Location.General, Boolean::class, false)),
@@ -98,7 +98,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     UseInternalCast(Pref(Location.Player, Boolean::class, false)),
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
-    ContinuedAnime(Pref(Location.Player, List::class, listOf<String>())),
+    ContinuedAnimeSet(Pref(Location.Player, Set::class, setOf<String>())),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),

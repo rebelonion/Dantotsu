@@ -301,10 +301,14 @@ class AnilistQueries {
                 }
             }
         }
-        val set = PrefManager.getCustomVal<Set<Int>>("continue_$type", setOf()).toMutableSet()
+        if (type != "ANIME") {
+            returnArray.addAll(map.values)
+            return returnArray
+        }
+        val set = PrefManager.getVal<Set<String>>(PrefName.ContinuedAnimeSet).toMutableSet()
         if (set.isNotEmpty()) {
-            set.reversed().forEach {
-                if (map.containsKey(it)) returnArray.add(map[it]!!)
+            set.forEach {
+                if (map.containsKey(it.toInt())) returnArray.add(map[it.toInt()]!!)
             }
             for (i in map) {
                 if (i.value !in returnArray) returnArray.add(i.value)
@@ -448,11 +452,15 @@ class AnilistQueries {
                     subMap[m.id] = m
                 }
             }
-            val set = PrefManager.getCustomVal<Set<Int>>("continue_${type.uppercase()}", setOf())
-                .toMutableSet()
+            if (type != "Anime") {
+                returnArray.addAll(subMap.values)
+                returnMap["current$type"] = returnArray
+                return
+            }
+            val set = PrefManager.getVal<Set<String>>(PrefName.ContinuedAnimeSet).toMutableSet()
             if (set.isNotEmpty()) {
-                set.reversed().forEach {
-                    if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
+                set.forEach {
+                    if (subMap.containsKey(it.toInt())) returnArray.add(subMap[it.toInt()]!!)
                 }
                 for (i in subMap) {
                     if (i.value !in returnArray) returnArray.add(i.value)
