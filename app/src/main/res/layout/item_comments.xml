@@ -186,17 +186,31 @@
                 tools:ignore="ContentDescription" />
         </LinearLayout>
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/commentTotalReplies"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:alpha="0.8"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:text="View replies"
-        android:textSize="12sp"
-        tools:ignore="HardcodedText" />
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/commentRepliesDivider"
+            android:layout_width="32dp"
+            android:layout_height="3dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="44dp"
+            android:background="@color/nav_tab" />
+        <TextView
+            android:id="@+id/commentTotalReplies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:alpha="0.8"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="View replies"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentRepliesList"

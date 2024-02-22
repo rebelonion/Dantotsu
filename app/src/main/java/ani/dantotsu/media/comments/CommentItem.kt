@@ -6,9 +6,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentsAPI
+import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -53,9 +56,11 @@ class CommentItem(val comment: Comment,
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
         if ((comment.replyCount ?: 0) > 0) {
             viewBinding.commentTotalReplies.visibility = View.VISIBLE
+            viewBinding.commentRepliesDivider.visibility = View.VISIBLE
             viewBinding.commentTotalReplies.text = "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
         } else {
             viewBinding.commentTotalReplies.visibility = View.GONE
+            viewBinding.commentRepliesDivider.visibility = View.GONE
         }
         viewBinding.commentReply.visibility = View.VISIBLE
         viewBinding.commentTotalReplies.setOnClickListener {
