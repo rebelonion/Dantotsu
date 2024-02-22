@@ -26,13 +26,14 @@ import java.util.TimeZone
 class CommentItem(val comment: Comment,
                   private val markwon: Markwon,
                   private val section: Section,
-                  private val editCallback: (CommentItem) -> Unit,
-                  private val viewReplyCallback: (CommentItem) -> Unit,
-                    private val replyCallback: (CommentItem) -> Unit
+                  private val commentsActivity: CommentsActivity,
 ) : BindableItem<ItemCommentsBinding>() {
     var binding: ItemCommentsBinding? = null
     val adapter = GroupieAdapter()
     val repliesSection = Section()
+    private var isEditing = false
+    private var isReplying = false
+    private var repliesVisible = false
 
     init {
         adapter.add(repliesSection)
@@ -58,37 +59,25 @@ class CommentItem(val comment: Comment,
         }
         viewBinding.commentReply.visibility = View.VISIBLE
         viewBinding.commentTotalReplies.setOnClickListener {
-            viewBinding.commentTotalReplies.visibility = View.GONE
-            viewReplyCallback(this)
-        }
-        var isEditing = false
-        var isReplying = false
-        viewBinding.commentEdit.setOnClickListener {
-            if (!isEditing) {
-                viewBinding.commentEdit.text = currActivity()!!.getString(R.string.cancel)
-                isEditing = true
-                isReplying = false
-                viewBinding.commentReply.text = "Reply"
-                editCallback(this)
+            if (repliesVisible) {
+                repliesSection.clear()
+                viewBinding.commentTotalReplies.text = "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
+                repliesVisible = false
             } else {
-                viewBinding.commentEdit.text = currActivity()!!.getString(R.string.edit)
-                isEditing = false
-                editCallback(this)
+                viewBinding.commentTotalReplies.text = "Hide Replies"
+                repliesSection.clear()
+                commentsActivity.viewReplyCallback(this)
+                repliesVisible = true
             }
+        }
 
+        viewBinding.commentEdit.setOnClickListener {
+            editing(!isEditing)
+            commentsActivity.editCallback(this)
         }
         viewBinding.commentReply.setOnClickListener {
-            if (!isReplying) {
-                viewBinding.commentReply.text = currActivity()!!.getString(R.string.cancel)
-                isReplying = true
-                isEditing = false
-                viewBinding.commentEdit.text = currActivity()!!.getString(R.string.edit)
-                replyCallback(this)
-            } else {
-                viewBinding.commentReply.text = "Reply"
-                isReplying = false
-                replyCallback(this)
-            }
+            replying(!isReplying)
+            commentsActivity.replyCallback(this)
         }
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
@@ -163,6 +152,16 @@ class CommentItem(val comment: Comment,
 
     override fun initializeViewBinding(view: View): ItemCommentsBinding {
         return ItemCommentsBinding.bind(view)
+    }
+
+    fun replying(isReplying: Boolean) {
+        binding?.commentReply?.text = if (isReplying) currActivity()!!.getString(R.string.cancel) else "Reply"
+        this.isReplying = isReplying
+    }
+
+    fun editing(isEditing: Boolean) {
+        binding?.commentEdit?.text = if (isEditing) currActivity()!!.getString(R.string.cancel) else currActivity()!!.getString(R.string.edit)
+        this.isEditing = isEditing
     }
 
     private fun setVoteButtons(viewBinding: ItemCommentsBinding) {

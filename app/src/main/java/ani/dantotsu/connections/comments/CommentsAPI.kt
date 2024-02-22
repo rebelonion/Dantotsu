@@ -194,9 +194,22 @@ object CommentsAPI {
             429 -> "Rate limited. :("
             else -> "Failed to connect"
         }
-        snackString("Error $code: ${reason ?: error}")
+        val parsed = try {
+            Json.decodeFromString<ErrorResponse>(reason!!)
+        } catch (e: Exception) {
+            null
+        }
+        val message = parsed?.message ?: reason ?: error
+
+        snackString("Error $code: $message")
     }
 }
+
+@Serializable
+data class ErrorResponse(
+    @SerialName("message")
+    val message: String
+)
 
 @Serializable
 data class AuthResponse(
