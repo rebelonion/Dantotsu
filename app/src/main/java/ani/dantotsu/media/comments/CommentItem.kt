@@ -76,6 +76,14 @@ class CommentItem(val comment: Comment,
             }
         }
 
+        viewBinding.commentUserName.setOnClickListener {
+            openLinkInBrowser("https://anilist.co/user/${comment.username}")
+        }
+        viewBinding.commentText.setOnLongClickListener {
+            copyToClipboard(comment.content)
+            true
+        }
+
         viewBinding.commentEdit.setOnClickListener {
             editing(!isEditing)
             commentsActivity.editCallback(this)
