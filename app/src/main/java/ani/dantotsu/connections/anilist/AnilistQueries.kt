@@ -670,8 +670,8 @@ class AnilistQueries {
             PrefManager.getVal<Set<String>>(PrefName.TagsListNonAdult).toMutableList()
         var tags = if (adultTags.isEmpty() || nonAdultTags.isEmpty()) null else
             mapOf(
-                true to adultTags,
-                false to nonAdultTags
+                true to adultTags.sortedBy { it },
+                false to nonAdultTags.sortedBy { it }
             )
 
         if (genres.isNullOrEmpty()) {
