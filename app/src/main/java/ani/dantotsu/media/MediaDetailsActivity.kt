@@ -484,6 +484,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         private val c1: Int,
         private val c2: Int,
         var clicked: Boolean,
+        needsInitialClick: Boolean = false,
         callback: suspend (Boolean) -> (Unit)
     ) {
         private var disabled = false
@@ -492,6 +493,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         init {
             enabled(true)
+            if (needsInitialClick) {
+                scope.launch {
+                    clicked()
+                }
+            }
             image.setOnClickListener {
                 if (pressable && !disabled) {
                     pressable = false

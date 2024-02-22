@@ -162,7 +162,8 @@ class MangaReadAdapter(
             R.drawable.ic_round_notifications_none_24,
             R.color.bg_opp,
             R.color.violet_400,
-            fragment.subscribed
+            fragment.subscribed,
+            true
         ) {
             fragment.onNotificationPressed(it, binding.animeSource.text.toString())
         }
