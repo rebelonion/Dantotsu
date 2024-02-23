@@ -27,6 +27,7 @@ object CommentsAPI {
     var isBanned: Boolean = false
     var isAdmin: Boolean = false
     var isMod: Boolean = false
+    var totalVotes: Int = 0
 
     suspend fun getCommentsForId(id: Int, page: Int = 1): CommentResponse? {
         val url = "$address/comments/$id/$page"
@@ -110,7 +111,8 @@ object CommentsAPI {
             0,
             null,
             Anilist.username ?: "",
-            Anilist.avatar
+            Anilist.avatar,
+            totalVotes = totalVotes
         )
     }
 
@@ -170,6 +172,7 @@ object CommentsAPI {
         isBanned = parsed.user.isBanned ?: false
         isAdmin = parsed.user.isAdmin ?: false
         isMod = parsed.user.isMod ?: false
+        totalVotes = parsed.user.totalVotes
     }
 
     private fun headerBuilder(): Map<String, String> {
@@ -235,7 +238,9 @@ data class User(
     val isAdmin: Boolean? = null,
     @SerialName("is_admin")
     @Serializable(with = NumericBooleanSerializer::class)
-    val isMod: Boolean? = null
+    val isMod: Boolean? = null,
+    @SerialName("total_votes")
+    val totalVotes: Int,
 )
 
 @Serializable
@@ -280,7 +285,9 @@ data class Comment(
     @Serializable(with = NumericBooleanSerializer::class)
     val isAdmin: Boolean? = null,
     @SerialName("reply_count")
-    val replyCount: Int? = null
+    val replyCount: Int? = null,
+    @SerialName("total_votes")
+    val totalVotes: Int
 )
 
 @Serializable
