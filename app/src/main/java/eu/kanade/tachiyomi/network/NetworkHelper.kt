@@ -34,8 +34,8 @@ class NetworkHelper(
                     maxSize = 5L * 1024 * 1024, // 5 MiB
                 ),
             )
-            .addInterceptor(BrotliInterceptor)
             .addInterceptor(UncaughtExceptionInterceptor())
+            .addInterceptor(BrotliInterceptor)
             .addInterceptor(UserAgentInterceptor(::defaultUserAgentProvider))
 
         if (PrefManager.getVal(PrefName.VerboseLogging)) {

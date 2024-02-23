@@ -17,6 +17,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import okhttp3.FormBody
+import okio.IOException
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -159,7 +160,12 @@ object CommentsAPI {
             .add("token", token)
             .build()
         val request = requestBuilder()
-        val json = request.post(url, requestBody = body)
+        val json = try {
+            request.post(url, requestBody = body)
+        } catch (e: IOException) {
+            snackString("Failed to login to comments API")
+            return
+        }
         if (!json.text.startsWith("{")) return
         val parsed = try {
             Json.decodeFromString<AuthResponse>(json.text)
