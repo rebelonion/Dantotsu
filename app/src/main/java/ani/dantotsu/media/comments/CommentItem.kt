@@ -1,6 +1,7 @@
 package ani.dantotsu.media.comments
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
@@ -25,6 +26,8 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
+import kotlin.math.abs
+import kotlin.math.sqrt
 
 class CommentItem(val comment: Comment,
                   private val markwon: Markwon,
@@ -159,6 +162,7 @@ class CommentItem(val comment: Comment,
         viewBinding.commentUserAvatar
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
+        viewBinding.commentUserName.setTextColor(getAvatarColor(comment.upvotes - comment.downvotes))
         viewBinding.commentUserTime.text = "● ${formatTimestamp(comment.timestamp)}"
     }
 
@@ -231,4 +235,67 @@ class CommentItem(val comment: Comment,
             return parsedDate?.time ?: 0
         }
     }
+
+    private fun getAvatarColor(voteCount: Int): Int {
+        //0.8x^{2} where x is the level
+        val level = sqrt(abs(voteCount.toDouble()) / 0.8).toInt()
+        return if (level > usernameColors.size - 1) {
+            Color.parseColor(usernameColors[usernameColors.size - 1])
+        } else {
+            Color.parseColor(usernameColors[level])
+        }
+    }
+
+    private val usernameColors: Array<String> = arrayOf(
+        "#9932cc",
+        "#a020f0",
+        "#8b008b",
+        "#7b68ee",
+        "#da70d6",
+        "#dda0dd",
+        "#ffe4b5",
+        "#f0e68c",
+        "#ffb6c1",
+        "#fa8072",
+        "#b03060",
+        "#ff1493",
+        "#ff00ff",
+        "#ff69b4",
+        "#dc143c",
+        "#8b0000",
+        "#ff0000",
+        "#a0522d",
+        "#f4a460",
+        "#b8860b",
+        "#ffa500",
+        "#d2691e",
+        "#ff6347",
+        "#808000",
+        "#ffd700",
+        "#ffff54",
+        "#8fbc8f",
+        "#3cb371",
+        "#008000",
+        "#00fa9a",
+        "#98fb98",
+        "#00ff00",
+        "#adff2f",
+        "#32cd32",
+        "#556b2f",
+        "#9acd32",
+        "#7fffd4",
+        "#2f4f4f",
+        "#5f9ea0",
+        "#87ceeb",
+        "#00bfff",
+        "#00ffff",
+        "#1e90ff",
+        "#4682b4",
+        "#0000ff",
+        "#0000cd",
+        "#00008b",
+        "#191970",
+        "#ffffff",
+    )
+
 }
