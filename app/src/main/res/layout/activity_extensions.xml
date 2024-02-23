@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context=".settings.SettingsActivity">
 
     <LinearLayout
@@ -80,39 +81,6 @@
             app:tabPaddingStart="16dp"
             app:tabTextAppearance="@style/NavBarText" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/searchView"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:transitionName="@string/search"
-            app:boxBackgroundColor="@color/bg"
-            app:boxBackgroundMode="outline"
-            app:boxCornerRadiusBottomEnd="28dp"
-            app:boxCornerRadiusBottomStart="28dp"
-            app:boxCornerRadiusTopEnd="28dp"
-            app:boxCornerRadiusTopStart="28dp"
-            app:endIconDrawable="@drawable/ic_round_search_24"
-            app:hintAnimationEnabled="true">
-
-            <AutoCompleteTextView
-                android:id="@+id/searchViewText"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:fontFamily="@font/poppins_bold"
-                android:imeOptions="actionSearch"
-                android:inputType="textPersonName"
-                android:padding="8dp"
-                android:selectAllOnFocus="true"
-                android:textSize="14sp"
-
-                tools:ignore="LabelFor,TextContrastCheck" />
-        </com.google.android.material.textfield.TextInputLayout>
-
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
@@ -127,5 +95,39 @@
             android:layout_weight="1"
             android:visibility="gone"></FrameLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchView"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_gravity="bottom"
+            android:transitionName="@string/search"
+            app:boxBackgroundColor="@color/bg"
+            app:boxBackgroundMode="outline"
+            app:boxCornerRadiusBottomEnd="28dp"
+            app:boxCornerRadiusBottomStart="28dp"
+            app:boxCornerRadiusTopEnd="28dp"
+            app:boxCornerRadiusTopStart="28dp"
+            app:endIconDrawable="@drawable/ic_round_search_24"
+            app:hintAnimationEnabled="true">
+
+         <AutoCompleteTextView
+            android:id="@+id/searchViewText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_gravity="bottom"
+            android:fontFamily="@font/poppins_bold"
+            android:imeOptions="actionSearch"
+            android:inputType="textPersonName"
+            android:hint="@string/search"
+            android:padding="8dp"
+            android:selectAllOnFocus="true"
+            android:textSize="14sp"
+            tools:ignore="LabelFor,TextContrastCheck" />
+        </com.google.android.material.textfield.TextInputLayout>
+        
     </LinearLayout>
 </LinearLayout>

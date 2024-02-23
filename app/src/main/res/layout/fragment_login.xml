@@ -50,20 +50,6 @@
             app:icon="@drawable/ic_anilist"
             app:iconTint="?attr/colorOnPrimaryContainer" />
 
-        <Button
-            android:id="@+id/importSettingsButton"
-            android:layout_width="156dp"
-            android:layout_height="64dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="32dp"
-            android:backgroundTint="?attr/colorPrimary"
-            android:fontFamily="@font/poppins_bold"
-            android:text="@string/import_settings"
-            android:textColor="?attr/colorOnPrimary"
-            app:cornerRadius="16dp"
-            app:icon="@drawable/ic_download_24"
-            app:iconTint="?attr/colorOnPrimary" />
-
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -101,6 +87,25 @@
                 android:src="@drawable/ic_telegram"
                 app:tint="?attr/colorOutline"
                 tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+        
+        <LinearLayout
+              	android:layout_width="match_parent"
+              	android:layout_height="wrap_content"
+              	android:orientation="horizontal"
+              	android:padding="8dp"
+              	android:gravity="center">
+
+      	<TextView
+            		android:id="@+id/importSettingsButton"
+            		android:clickable="true"
+            		android:layout_width="wrap_content"
+            		android:layout_height="wrap_content"
+            		android:text="@string/import_settings_underline"
+            		android:textSize="11sp"
+            		android:textColor="?attr/colorOutline"
+            		android:fontFamily="@font/poppins_bold"/>
 
         </LinearLayout>
 
