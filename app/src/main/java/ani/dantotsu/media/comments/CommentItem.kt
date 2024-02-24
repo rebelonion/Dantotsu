@@ -27,12 +27,14 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 import kotlin.math.abs
+import kotlin.math.pow
 import kotlin.math.sqrt
 
 class CommentItem(val comment: Comment,
                   private val markwon: Markwon,
                   private val section: Section,
                   private val commentsActivity: CommentsActivity,
+                  private val backgroundColor: Int
 ) : BindableItem<ItemCommentsBinding>() {
     var binding: ItemCommentsBinding? = null
     val adapter = GroupieAdapter()
@@ -162,7 +164,7 @@ class CommentItem(val comment: Comment,
         viewBinding.commentUserAvatar
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
-        viewBinding.commentUserName.setTextColor(getAvatarColor(comment.upvotes - comment.downvotes))
+        viewBinding.commentUserName.setTextColor(getAvatarColor(comment.upvotes - comment.downvotes, backgroundColor))
         viewBinding.commentUserTime.text = "● ${formatTimestamp(comment.timestamp)}"
     }
 
@@ -236,15 +238,68 @@ class CommentItem(val comment: Comment,
         }
     }
 
-    private fun getAvatarColor(voteCount: Int): Int {
-        //0.8x^{2} where x is the level
-        val level = sqrt(abs(voteCount.toDouble()) / 0.8).toInt()
-        return if (level > usernameColors.size - 1) {
-            Color.parseColor(usernameColors[usernameColors.size - 1])
-        } else {
-            Color.parseColor(usernameColors[level])
-        }
+    private fun getLuminance(color: Int): Double {
+        val r = Color.red(color) / 255.0
+        val g = Color.green(color) / 255.0
+        val b = Color.blue(color) / 255.0
+
+        val rL = if (r <= 0.03928) r / 12.92 else ((r + 0.055) / 1.055).pow(2.4)
+        val gL = if (g <= 0.03928) g / 12.92 else ((g + 0.055) / 1.055).pow(2.4)
+        val bL = if (b <= 0.03928) b / 12.92 else ((b + 0.055) / 1.055).pow(2.4)
+
+        return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL
     }
+
+    private fun getContrastRatio(color1: Int, color2: Int): Double {
+        val l1 = getLuminance(color1)
+        val l2 = getLuminance(color2)
+
+        return if (l1 > l2) (l1 + 0.05) / (l2 + 0.05) else (l2 + 0.05) / (l1 + 0.05)
+    }
+
+    private fun getAvatarColor(voteCount: Int, backgroundColor: Int): Int {
+        val level = sqrt(abs(voteCount.toDouble()) / 0.8).toInt()
+        val colorString = if (level > usernameColors.size - 1) usernameColors[usernameColors.size - 1] else usernameColors[level]
+        var color = Color.parseColor(colorString)
+        val ratio = getContrastRatio(color, backgroundColor)
+        if (ratio < 4.5) {
+            color = adjustColorForContrast(color, backgroundColor)
+        }
+
+        return color
+    }
+
+    private fun adjustColorForContrast(originalColor: Int, backgroundColor: Int): Int {
+        var adjustedColor = originalColor
+        var contrastRatio = getContrastRatio(adjustedColor, backgroundColor)
+        val isBackgroundDark = getLuminance(backgroundColor) < 0.5
+
+        while (contrastRatio < 4.5) {
+            // Adjust brightness by modifying the RGB values
+            val r = Color.red(adjustedColor)
+            val g = Color.green(adjustedColor)
+            val b = Color.blue(adjustedColor)
+
+            // Calculate the amount to adjust
+            val adjustment = if (isBackgroundDark) 10 else -10
+
+            // Adjust the color
+            val newR = (r + adjustment).coerceIn(0, 255)
+            val newG = (g + adjustment).coerceIn(0, 255)
+            val newB = (b + adjustment).coerceIn(0, 255)
+
+            adjustedColor = Color.rgb(newR, newG, newB)
+            contrastRatio = getContrastRatio(adjustedColor, backgroundColor)
+
+            // Break the loop if the color adjustment does not change (to avoid infinite loop)
+            if (newR == r && newG == g && newB == b) {
+                break
+            }
+        }
+        return adjustedColor
+    }
+
+
 
     private val usernameColors: Array<String> = arrayOf(
         "#9932cc",

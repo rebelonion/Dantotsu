@@ -1,5 +1,6 @@
 package ani.dantotsu.media.comments
 
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextWatcher
@@ -55,6 +56,7 @@ class CommentsActivity : AppCompatActivity() {
     private val section = Section()
     private val adapter = GroupieAdapter()
     private var mediaId: Int = -1
+    private var backgroundColor: Int = 0
     var pagesLoaded = 1
     var totalPages = 1
 
@@ -71,6 +73,7 @@ class CommentsActivity : AppCompatActivity() {
             finish()
         }
         this.mediaId = mediaId
+        backgroundColor = (binding.root.background as? ColorDrawable)?.color ?: 0
 
         val markwon = buildMarkwon()
 
@@ -129,10 +132,15 @@ class CommentsActivity : AppCompatActivity() {
             popup.show()
         }
 
-        var isFetching  = false
+        var isFetching = false
         //if we have scrolled to the bottom of the list, load more comments
-        binding.commentsList.addOnScrollListener(object : androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: androidx.recyclerview.widget.RecyclerView, dx: Int, dy: Int) {
+        binding.commentsList.addOnScrollListener(object :
+            androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
+            override fun onScrolled(
+                recyclerView: androidx.recyclerview.widget.RecyclerView,
+                dx: Int,
+                dy: Int
+            ) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (shouldLoadMoreComments(recyclerView)) {
                     loadMoreComments()
@@ -164,7 +172,15 @@ class CommentsActivity : AppCompatActivity() {
 
             private suspend fun updateUIWithComment(comment: Comment) {
                 withContext(Dispatchers.Main) {
-                    section.add(CommentItem(comment, buildMarkwon(), section, this@CommentsActivity))
+                    section.add(
+                        CommentItem(
+                            comment,
+                            buildMarkwon(),
+                            section,
+                            this@CommentsActivity,
+                            backgroundColor
+                        )
+                    )
                 }
             }
         })
@@ -215,7 +231,15 @@ class CommentsActivity : AppCompatActivity() {
         val sortedComments = sortComments(comments?.comments)
         sortedComments.forEach {
             withContext(Dispatchers.Main) {
-                section.add(CommentItem(it, buildMarkwon(), section, this@CommentsActivity))
+                section.add(
+                    CommentItem(
+                        it,
+                        buildMarkwon(),
+                        section,
+                        this@CommentsActivity,
+                        backgroundColor
+                    )
+                )
             }
         }
 
@@ -309,7 +333,9 @@ class CommentsActivity : AppCompatActivity() {
                         it,
                         buildMarkwon(),
                         comment.repliesSection,
-                        this@CommentsActivity)
+                        this@CommentsActivity,
+                        backgroundColor
+                    )
                 )
             }
         }
@@ -366,7 +392,9 @@ class CommentsActivity : AppCompatActivity() {
 
     private suspend fun handleEditComment(commentText: String) {
         val success = withContext(Dispatchers.IO) {
-            CommentsAPI.editComment(commentWithInteraction?.comment?.commentId ?: return@withContext false, commentText)
+            CommentsAPI.editComment(
+                commentWithInteraction?.comment?.commentId ?: return@withContext false, commentText
+            )
         }
         if (success) {
             updateCommentInSection(commentText)
@@ -403,12 +431,18 @@ class CommentsActivity : AppCompatActivity() {
             if (interactionState == InteractionState.REPLY) {
                 commentWithInteraction?.repliesSection?.add(
                     0,
-                    CommentItem(it, buildMarkwon(), commentWithInteraction!!.repliesSection, this@CommentsActivity)
+                    CommentItem(
+                        it,
+                        buildMarkwon(),
+                        commentWithInteraction!!.repliesSection,
+                        this@CommentsActivity,
+                        backgroundColor
+                    )
                 )
             } else {
                 section.add(
                     0,
-                    CommentItem(it, buildMarkwon(), section, this@CommentsActivity)
+                    CommentItem(it, buildMarkwon(), section, this@CommentsActivity, backgroundColor)
                 )
             }
         }
