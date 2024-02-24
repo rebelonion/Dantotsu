@@ -13,6 +13,8 @@ import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -39,7 +41,7 @@ class CommentItem(val comment: Comment,
     var binding: ItemCommentsBinding? = null
     val adapter = GroupieAdapter()
     val repliesSection = Section()
-    private var isEditing = false
+    var isEditing = false
     private var isReplying = false
     private var repliesVisible = false
 
@@ -98,6 +100,7 @@ class CommentItem(val comment: Comment,
         }
         viewBinding.commentReply.setOnClickListener {
             replying(!isReplying)
+            commentsActivity.replyTo(this, comment.username)
             commentsActivity.replyCallback(this)
         }
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
@@ -178,6 +181,7 @@ class CommentItem(val comment: Comment,
 
     fun replying(isReplying: Boolean) {
         binding?.commentReply?.text = if (isReplying) currActivity()!!.getString(R.string.cancel) else "Reply"
+        PrefManager.setVal(PrefName.ReplyTo, isReplying)
         this.isReplying = isReplying
     }
 
@@ -185,7 +189,9 @@ class CommentItem(val comment: Comment,
         binding?.commentEdit?.text = if (isEditing) currActivity()!!.getString(R.string.cancel) else currActivity()!!.getString(R.string.edit)
         this.isEditing = isEditing
     }
-
+    fun test(isEditing: Boolean){
+        this.isEditing = isEditing
+    }
     private fun setVoteButtons(viewBinding: ItemCommentsBinding) {
         when (comment.userVoteType) {
             1 -> {

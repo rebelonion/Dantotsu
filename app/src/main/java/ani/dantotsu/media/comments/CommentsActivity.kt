@@ -1,6 +1,7 @@
 package ani.dantotsu.media.comments
 
 import android.graphics.drawable.ColorDrawable
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextWatcher
@@ -85,13 +86,13 @@ class CommentsActivity : AppCompatActivity() {
                 markwonEditor
             )
         )
-        binding.commentReplyToContainer.visibility = View.GONE //TODO: implement reply
 
         binding.commentsRefresh.setOnRefreshListener {
             lifecycleScope.launch {
                 loadAndDisplayComments()
                 binding.commentsRefresh.isRefreshing = false
             }
+            binding.commentReplyToContainer.visibility = View.GONE
         }
 
         binding.commentsList.adapter = adapter
@@ -315,13 +316,24 @@ class CommentsActivity : AppCompatActivity() {
     fun replyCallback(comment: CommentItem) {
         if (resetOldState() == InteractionState.REPLY) return
         commentWithInteraction = comment
+        binding.commentReplyToContainer.visibility = View.VISIBLE
         binding.commentInput.requestFocus()
         binding.commentInput.setSelection(binding.commentInput.text.length)
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(binding.commentInput, InputMethodManager.SHOW_IMPLICIT)
         interactionState = InteractionState.REPLY
-    }
 
+    }
+    @SuppressLint("SetTextI18n")
+    fun replyTo(comment: CommentItem,Username: String) {
+        binding.commentReplyToContainer.visibility = if (PrefManager.getVal(PrefName.ReplyTo)) View.VISIBLE else View.GONE
+        binding.commentReplyTo.text = "Replying to $Username"
+        binding.commentReplyToCancel.setOnClickListener {
+            comment.replying(false)
+            replyCallback(comment)
+            binding.commentReplyToContainer.visibility = View.GONE
+        }
+    }
     fun viewReplyCallback(comment: CommentItem) {
         lifecycleScope.launch {
             val replies = withContext(Dispatchers.IO) {
