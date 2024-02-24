@@ -167,7 +167,10 @@ class CommentItem(val comment: Comment,
         viewBinding.commentUserAvatar
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
-        viewBinding.commentUserName.setTextColor(getAvatarColor(comment.upvotes - comment.downvotes, backgroundColor))
+        val levelColor = getAvatarColor(comment.upvotes - comment.downvotes, backgroundColor)
+        viewBinding.commentUserName.setTextColor(levelColor.first)
+        viewBinding.commentUserLevel.text = "Lv. ${levelColor.second}"
+        viewBinding.commentUserLevel.setTextColor(levelColor.first)
         viewBinding.commentUserTime.text = "● ${formatTimestamp(comment.timestamp)}"
     }
 
@@ -263,8 +266,8 @@ class CommentItem(val comment: Comment,
         return if (l1 > l2) (l1 + 0.05) / (l2 + 0.05) else (l2 + 0.05) / (l1 + 0.05)
     }
 
-    private fun getAvatarColor(voteCount: Int, backgroundColor: Int): Int {
-        val level = sqrt(abs(voteCount.toDouble()) / 0.8).toInt()
+    private fun getAvatarColor(voteCount: Int, backgroundColor: Int): Pair<Int, Int> {
+        val level = if (voteCount < 0) 0 else sqrt(abs(voteCount.toDouble()) / 0.8).toInt()
         val colorString = if (level > usernameColors.size - 1) usernameColors[usernameColors.size - 1] else usernameColors[level]
         var color = Color.parseColor(colorString)
         val ratio = getContrastRatio(color, backgroundColor)
@@ -272,7 +275,7 @@ class CommentItem(val comment: Comment,
             color = adjustColorForContrast(color, backgroundColor)
         }
 
-        return color
+        return Pair(color, level)
     }
 
     private fun adjustColorForContrast(originalColor: Int, backgroundColor: Int): Int {
