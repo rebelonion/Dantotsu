@@ -12,7 +12,6 @@ import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -34,9 +33,10 @@ import kotlin.math.sqrt
 
 class CommentItem(val comment: Comment,
                   private val markwon: Markwon,
-                  private val section: Section,
+                  val parentSection: Section,
                   private val commentsActivity: CommentsActivity,
-                  private val backgroundColor: Int
+                  private val backgroundColor: Int,
+                  val commentDepth: Int
 ) : BindableItem<ItemCommentsBinding>() {
     var binding: ItemCommentsBinding? = null
     val adapter = GroupieAdapter()
@@ -44,6 +44,7 @@ class CommentItem(val comment: Comment,
     var isEditing = false
     private var isReplying = false
     private var repliesVisible = false
+    var MAX_DEPTH = 3
 
     init {
         adapter.add(repliesSection)
@@ -111,7 +112,7 @@ class CommentItem(val comment: Comment,
                 val success = CommentsAPI.deleteComment(comment.commentId)
                 if (success) {
                     snackString("Comment Deleted")
-                    section.remove(this@CommentItem)
+                    parentSection.remove(this@CommentItem)
                 }
             }
         }

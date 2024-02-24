@@ -179,7 +179,8 @@ class CommentsActivity : AppCompatActivity() {
                             buildMarkwon(),
                             section,
                             this@CommentsActivity,
-                            backgroundColor
+                            backgroundColor,
+                            0
                         )
                     )
                 }
@@ -238,7 +239,8 @@ class CommentsActivity : AppCompatActivity() {
                         buildMarkwon(),
                         section,
                         this@CommentsActivity,
-                        backgroundColor
+                        backgroundColor,
+                        0
                     )
                 )
             }
@@ -339,19 +341,25 @@ class CommentsActivity : AppCompatActivity() {
             val replies = withContext(Dispatchers.IO) {
                 CommentsAPI.getRepliesFromId(comment.comment.commentId)
             }
+
             replies?.comments?.forEach {
-                comment.repliesSection.add(
-                    CommentItem(
-                        it,
-                        buildMarkwon(),
-                        comment.repliesSection,
-                        this@CommentsActivity,
-                        backgroundColor
-                    )
+                val depth = if (comment.commentDepth + 1 > comment.MAX_DEPTH) comment.commentDepth else comment.commentDepth + 1
+                val section = if (comment.commentDepth + 1 > comment.MAX_DEPTH) comment.parentSection else comment.repliesSection
+
+                val newCommentItem = CommentItem(
+                    it,
+                    buildMarkwon(),
+                    section,
+                    this@CommentsActivity,
+                    backgroundColor,
+                    depth
                 )
+
+                section.add(newCommentItem)
             }
         }
     }
+
 
     /**
      * Shows the comment rules dialog
@@ -441,20 +449,24 @@ class CommentsActivity : AppCompatActivity() {
         }
         success?.let {
             if (interactionState == InteractionState.REPLY) {
-                commentWithInteraction?.repliesSection?.add(
-                    0,
+                if (commentWithInteraction == null) return@let
+                val section = if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction?.parentSection else commentWithInteraction?.repliesSection
+                val depth = if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.commentDepth else commentWithInteraction!!.commentDepth + 1
+                section?.add(
+                    if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) 0 else section.itemCount,
                     CommentItem(
                         it,
                         buildMarkwon(),
-                        commentWithInteraction!!.repliesSection,
+                        section,
                         this@CommentsActivity,
-                        backgroundColor
+                        backgroundColor,
+                        depth
                     )
                 )
             } else {
                 section.add(
                     0,
-                    CommentItem(it, buildMarkwon(), section, this@CommentsActivity, backgroundColor)
+                    CommentItem(it, buildMarkwon(), section, this@CommentsActivity, backgroundColor, 0)
                 )
             }
         }
