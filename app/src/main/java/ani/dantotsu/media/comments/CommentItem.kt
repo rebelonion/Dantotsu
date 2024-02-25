@@ -108,30 +108,36 @@ class CommentItem(val comment: Comment,
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
         viewBinding.commentDelete.setOnClickListener {
-            val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-            scope.launch {
-                val success = CommentsAPI.deleteComment(comment.commentId)
-                if (success) {
-                    snackString("Comment Deleted")
-                    parentSection.remove(this@CommentItem)
+            dialogBuilder("Delete Comment", "Are you sure you want to delete this comment?") {
+                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+                scope.launch {
+                    val success = CommentsAPI.deleteComment(comment.commentId)
+                    if (success) {
+                        snackString("Comment Deleted")
+                        parentSection.remove(this@CommentItem)
+                    }
                 }
             }
         }
         viewBinding.commentBanUser.setOnClickListener {
-            val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-            scope.launch {
-                val success = CommentsAPI.banUser(comment.userId)
-                if (success) {
-                    snackString("User Banned")
+            dialogBuilder("Ban User", "Are you sure you want to ban this user?") {
+                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+                scope.launch {
+                    val success = CommentsAPI.banUser(comment.userId)
+                    if (success) {
+                        snackString("User Banned")
+                    }
                 }
             }
         }
         viewBinding.commentReport.setOnClickListener {
-            val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-            scope.launch {
-                val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsActivity.mediaName)
-                if (success) {
-                    snackString("Comment Reported")
+            dialogBuilder("Report Comment", "Only report comments that violate the rules. Are you sure you want to report this comment?") {
+                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+                scope.launch {
+                    val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsActivity.mediaName)
+                    if (success) {
+                        snackString("Comment Reported")
+                    }
                 }
             }
         }
@@ -338,6 +344,27 @@ class CommentItem(val comment: Comment,
     }
 
 
+    /**
+     * Builds the dialog for yes/no confirmation
+     * no doesn't do anything, yes calls the callback
+     * @param title the title of the dialog
+     * @param message the message of the dialog
+     * @param callback the callback to call when the user clicks yes
+     */
+    fun dialogBuilder(title: String, message: String, callback: () -> Unit) {
+        val alertDialog = android.app.AlertDialog.Builder(commentsActivity, R.style.MyPopup)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("Yes") { dialog, _ ->
+                callback()
+                dialog.dismiss()
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }
+        val dialog = alertDialog.show()
+        dialog?.window?.setDimAmount(0.8f)
+    }
 
     private val usernameColors: Array<String> = arrayOf(
         "#9932cc",
