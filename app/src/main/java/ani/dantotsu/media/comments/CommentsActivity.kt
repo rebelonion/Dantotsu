@@ -41,6 +41,7 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
 import io.noties.markwon.ext.tables.TablePlugin
 import io.noties.markwon.ext.tasklist.TaskListPlugin
 import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.html.TagHandlerNoOp
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.glide.GlideImagesPlugin
 import kotlinx.coroutines.Dispatchers
@@ -500,9 +501,13 @@ class CommentsActivity : AppCompatActivity() {
         val markwon = Markwon.builder(this)
             .usePlugin(SoftBreakAddsNewLinePlugin.create())
             .usePlugin(StrikethroughPlugin.create())
-            .usePlugin(HtmlPlugin.create())
             .usePlugin(TablePlugin.create(this))
             .usePlugin(TaskListPlugin.create(this))
+            .usePlugin(HtmlPlugin.create { plugin ->
+                plugin.addHandler(
+                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre")
+                )
+            })
             .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
 
                 private val requestManager: RequestManager =
