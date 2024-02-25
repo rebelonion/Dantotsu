@@ -72,7 +72,8 @@ class MangaReadAdapter(
             startActivity(
                 fragment.requireContext(),
                 Intent(fragment.requireContext(), CommentsActivity::class.java)
-                    .putExtra("mediaId", media.id),
+                    .putExtra("mediaId", media.id)
+                    .putExtra("mediaName", media.mainName()),
                 null
             )
         }

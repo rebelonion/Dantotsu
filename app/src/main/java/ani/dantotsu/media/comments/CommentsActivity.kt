@@ -57,6 +57,7 @@ class CommentsActivity : AppCompatActivity() {
     private val section = Section()
     private val adapter = GroupieAdapter()
     private var mediaId: Int = -1
+    var mediaName: String = ""
     private var backgroundColor: Int = 0
     var pagesLoaded = 1
     var totalPages = 1
@@ -69,6 +70,7 @@ class CommentsActivity : AppCompatActivity() {
         initActivity(this)
         //get the media id from the intent
         val mediaId = intent.getIntExtra("mediaId", -1)
+        mediaName = intent.getStringExtra("mediaName")?:"unknown"
         if (mediaId == -1) {
             snackString("Invalid Media ID")
             finish()

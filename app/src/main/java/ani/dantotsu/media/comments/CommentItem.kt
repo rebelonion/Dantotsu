@@ -17,7 +17,6 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
-
 import com.xwray.groupie.viewbinding.BindableItem
 import io.noties.markwon.Markwon
 import kotlinx.coroutines.CoroutineScope
@@ -124,6 +123,15 @@ class CommentItem(val comment: Comment,
                 val success = CommentsAPI.banUser(comment.userId)
                 if (success) {
                     snackString("User Banned")
+                }
+            }
+        }
+        viewBinding.commentReport.setOnClickListener {
+            val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+            scope.launch {
+                val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsActivity.mediaName)
+                if (success) {
+                    snackString("Comment Reported")
                 }
             }
         }

@@ -1,6 +1,5 @@
 package ani.dantotsu.connections.comments
 
-import ani.dantotsu.BuildConfig
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -33,7 +32,12 @@ object CommentsAPI {
     suspend fun getCommentsForId(id: Int, page: Int = 1): CommentResponse? {
         val url = "$address/comments/$id/$page"
         val request = requestBuilder()
-        val json = request.get(url)
+        val json = try {
+            request.get(url)
+        } catch (e: IOException) {
+            snackString("Failed to fetch comments")
+            return null
+        }
         if (!json.text.startsWith("{")) return null
         val res = json.code == 200
         if (!res && json.code != 404) {
@@ -42,7 +46,6 @@ object CommentsAPI {
         val parsed = try {
             Json.decodeFromString<CommentResponse>(json.text)
         } catch (e: Exception) {
-            println("comments: $e")
             return null
         }
         return parsed
@@ -51,7 +54,12 @@ object CommentsAPI {
     suspend fun getRepliesFromId(id: Int, page: Int = 1): CommentResponse? {
         val url = "$address/comments/parent/$id/$page"
         val request = requestBuilder()
-        val json = request.get(url)
+        val json = try {
+            request.get(url)
+        } catch (e: IOException) {
+            snackString("Failed to fetch comments")
+            return null
+        }
         if (!json.text.startsWith("{")) return null
         val res = json.code == 200
         if (!res && json.code != 404) {
@@ -60,7 +68,6 @@ object CommentsAPI {
         val parsed = try {
             Json.decodeFromString<CommentResponse>(json.text)
         } catch (e: Exception) {
-            println("comments: $e")
             return null
         }
         return parsed
@@ -69,7 +76,12 @@ object CommentsAPI {
     suspend fun vote(commentId: Int, voteType: Int): Boolean {
         val url = "$address/comments/vote/$commentId/$voteType"
         val request = requestBuilder()
-        val json = request.post(url)
+        val json = try {
+            request.post(url)
+        } catch (e: IOException) {
+            snackString("Failed to vote")
+            return false
+        }
         val res = json.code == 200
         if (!res) {
             errorReason(json.code, json.text)
@@ -87,7 +99,12 @@ object CommentsAPI {
             body.add("parent_comment_id", it.toString())
         }
         val request = requestBuilder()
-        val json = request.post(url, requestBody = body.build())
+        val json = try{
+            request.post(url, requestBody = body.build())
+        } catch (e: IOException) {
+            snackString("Failed to comment")
+            return null
+        }
         val res = json.code == 200
         if (!res) {
             errorReason(json.code, json.text)
@@ -96,7 +113,6 @@ object CommentsAPI {
         val parsed = try {
             Json.decodeFromString<ReturnedComment>(json.text)
         } catch (e: Exception) {
-            println("comment: $e")
             snackString("Failed to parse comment")
             return null
         }
@@ -120,7 +136,12 @@ object CommentsAPI {
     suspend fun deleteComment(commentId: Int): Boolean {
         val url = "$address/comments/$commentId"
         val request = requestBuilder()
-        val json = request.delete(url)
+        val json = try{
+            request.delete(url)
+        } catch (e: IOException) {
+            snackString("Failed to delete comment")
+            return false
+        }
         val res = json.code == 200
         if (!res) {
             errorReason(json.code, json.text)
@@ -134,7 +155,12 @@ object CommentsAPI {
             .add("content", content)
             .build()
         val request = requestBuilder()
-        val json = request.put(url, requestBody = body)
+        val json = try {
+            request.put(url, requestBody = body)
+        } catch (e: IOException) {
+            snackString("Failed to edit comment")
+            return false
+        }
         val res = json.code == 200
         if (!res) {
             errorReason(json.code, json.text)
@@ -145,7 +171,32 @@ object CommentsAPI {
     suspend fun banUser(userId: String): Boolean {
         val url = "$address/ban/$userId"
         val request = requestBuilder()
-        val json = request.post(url)
+        val json = try{
+            request.post(url)
+        } catch (e: IOException) {
+            snackString("Failed to ban user")
+            return false
+        }
+        val res = json.code == 200
+        if (!res) {
+            errorReason(json.code, json.text)
+        }
+        return res
+    }
+
+    suspend fun reportComment(commentId: Int, username: String, mediaTitle: String): Boolean {
+        val url = "$address/report/$commentId"
+        val body = FormBody.Builder()
+            .add("username", username)
+            .add("mediaName", mediaTitle)
+            .build()
+        val request = requestBuilder()
+        val json = try{
+            request.post(url, requestBody = body)
+        } catch (e: IOException) {
+            snackString("Failed to report comment")
+            return false
+        }
         val res = json.code == 200
         if (!res) {
             errorReason(json.code, json.text)
@@ -154,6 +205,7 @@ object CommentsAPI {
     }
 
     suspend fun fetchAuthToken() {
+        if (authToken != null) return
         val url = "$address/authenticate"
         val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
         val body: FormBody = FormBody.Builder()
