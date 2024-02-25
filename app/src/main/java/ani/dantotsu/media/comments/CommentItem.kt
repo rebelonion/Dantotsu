@@ -41,7 +41,7 @@ class CommentItem(val comment: Comment,
     val adapter = GroupieAdapter()
     private var subCommentIds: MutableList<Int> = mutableListOf()
     val repliesSection = Section()
-    var isEditing = false
+    private var isEditing = false
     private var isReplying = false
     private var repliesVisible = false
     var MAX_DEPTH = 3
