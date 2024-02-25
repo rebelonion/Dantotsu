@@ -40,6 +40,7 @@ class CommentItem(val comment: Comment,
 ) : BindableItem<ItemCommentsBinding>() {
     var binding: ItemCommentsBinding? = null
     val adapter = GroupieAdapter()
+    private var subCommentIds: MutableList<Int> = mutableListOf()
     val repliesSection = Section()
     var isEditing = false
     private var isReplying = false
@@ -77,6 +78,7 @@ class CommentItem(val comment: Comment,
         viewBinding.commentTotalReplies.setOnClickListener {
             if (repliesVisible) {
                 repliesSection.clear()
+                removeSubCommentIds()
                 viewBinding.commentTotalReplies.text = "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
                 repliesVisible = false
             } else {
@@ -168,7 +170,7 @@ class CommentItem(val comment: Comment,
         viewBinding.commentUserAvatar
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
-        val levelColor = getAvatarColor(comment.upvotes - comment.downvotes, backgroundColor)
+        val levelColor = getAvatarColor(comment.totalVotes, backgroundColor)
         viewBinding.commentUserName.setTextColor(levelColor.first)
         viewBinding.commentUserLevel.text = "Lv. ${levelColor.second}"
         viewBinding.commentUserLevel.setTextColor(levelColor.first)
@@ -193,9 +195,27 @@ class CommentItem(val comment: Comment,
         binding?.commentEdit?.text = if (isEditing) currActivity()!!.getString(R.string.cancel) else currActivity()!!.getString(R.string.edit)
         this.isEditing = isEditing
     }
+
+    fun registerSubComment(id: Int) {
+        subCommentIds.add(id)
+    }
+
+    private fun removeSubCommentIds(){
+        subCommentIds.forEach { id ->
+            val parentComments = parentSection.groups as? List<CommentItem> ?: emptyList()
+            val commentToRemove = parentComments.find { it.comment.commentId == id }
+            commentToRemove?.let {
+                it.removeSubCommentIds()
+                parentSection.remove(it)
+            }
+        }
+        subCommentIds.clear()
+    }
+
     fun test(isEditing: Boolean){
         this.isEditing = isEditing
     }
+
     private fun setVoteButtons(viewBinding: ItemCommentsBinding) {
         when (comment.userVoteType) {
             1 -> {

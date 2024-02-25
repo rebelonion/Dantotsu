@@ -171,6 +171,7 @@ class CommentsActivity : AppCompatActivity() {
                 }
             }
 
+            //adds additional comments to the section
             private suspend fun updateUIWithComment(comment: Comment) {
                 withContext(Dispatchers.Main) {
                     section.add(
@@ -219,6 +220,12 @@ class CommentsActivity : AppCompatActivity() {
     enum class InteractionState {
         NONE, EDIT, REPLY
     }
+
+    /**
+     * Loads and displays the comments
+     * Called when the activity is created
+     * Or when the user refreshes the comments
+     */
 
     private suspend fun loadAndDisplayComments() {
         binding.commentsProgressBar.visibility = View.VISIBLE
@@ -336,6 +343,11 @@ class CommentsActivity : AppCompatActivity() {
             binding.commentReplyToContainer.visibility = View.GONE
         }
     }
+
+    /**
+     * Callback from the comment item to view the replies to the comment
+     * @param comment the comment to view the replies of
+     */
     fun viewReplyCallback(comment: CommentItem) {
         lifecycleScope.launch {
             val replies = withContext(Dispatchers.IO) {
@@ -345,7 +357,7 @@ class CommentsActivity : AppCompatActivity() {
             replies?.comments?.forEach {
                 val depth = if (comment.commentDepth + 1 > comment.MAX_DEPTH) comment.commentDepth else comment.commentDepth + 1
                 val section = if (comment.commentDepth + 1 > comment.MAX_DEPTH) comment.parentSection else comment.repliesSection
-
+                if (depth >= comment.MAX_DEPTH) comment.registerSubComment(it.commentId)
                 val newCommentItem = CommentItem(
                     it,
                     buildMarkwon(),
@@ -439,6 +451,11 @@ class CommentsActivity : AppCompatActivity() {
         item.notifyChanged()
     }
 
+    /**
+     * Handles the new user-added comment
+     * @param commentText the text of the comment
+     */
+
     private suspend fun handleNewComment(commentText: String) {
         val success = withContext(Dispatchers.IO) {
             CommentsAPI.comment(
@@ -452,6 +469,7 @@ class CommentsActivity : AppCompatActivity() {
                 if (commentWithInteraction == null) return@let
                 val section = if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction?.parentSection else commentWithInteraction?.repliesSection
                 val depth = if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.commentDepth else commentWithInteraction!!.commentDepth + 1
+                if (depth >= commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.registerSubComment(it.commentId)
                 section?.add(
                     if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) 0 else section.itemCount,
                     CommentItem(
