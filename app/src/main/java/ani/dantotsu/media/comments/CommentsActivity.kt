@@ -283,6 +283,7 @@ class CommentsActivity : AppCompatActivity() {
         interactionState = InteractionState.NONE
         return when (oldState) {
             InteractionState.EDIT -> {
+                binding.commentReplyToContainer.visibility = View.GONE
                 binding.commentInput.setText("")
                 val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.commentInput.windowToken, 0)
@@ -337,12 +338,16 @@ class CommentsActivity : AppCompatActivity() {
 
     }
     @SuppressLint("SetTextI18n")
-    fun replyTo(comment: CommentItem,Username: String) {
-        binding.commentReplyToContainer.visibility = if (PrefManager.getVal(PrefName.ReplyTo)) View.VISIBLE else View.GONE
-        binding.commentReplyTo.text = "Replying to $Username"
-        binding.commentReplyToCancel.setOnClickListener {
-            comment.replying(false)
-            replyCallback(comment)
+    fun replyTo(comment: CommentItem, username: String) {
+        if (comment.isReplying) {
+            binding.commentReplyToContainer.visibility = View.VISIBLE
+            binding.commentReplyTo.text = "Replying to $username"
+            binding.commentReplyToCancel.setOnClickListener {
+                comment.replying(false)
+                replyCallback(comment)
+                binding.commentReplyToContainer.visibility = View.GONE
+            }
+        } else {
             binding.commentReplyToContainer.visibility = View.GONE
         }
     }

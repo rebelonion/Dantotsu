@@ -42,7 +42,7 @@ class CommentItem(val comment: Comment,
     private var subCommentIds: MutableList<Int> = mutableListOf()
     val repliesSection = Section()
     private var isEditing = false
-    private var isReplying = false
+    var isReplying = false
     private var repliesVisible = false
     var MAX_DEPTH = 3
 
@@ -201,7 +201,6 @@ class CommentItem(val comment: Comment,
 
     fun replying(isReplying: Boolean) {
         binding?.commentReply?.text = if (isReplying) currActivity()!!.getString(R.string.cancel) else "Reply"
-        PrefManager.setVal(PrefName.ReplyTo, isReplying)
         this.isReplying = isReplying
     }
 
@@ -224,10 +223,6 @@ class CommentItem(val comment: Comment,
             }
         }
         subCommentIds.clear()
-    }
-
-    fun test(isEditing: Boolean){
-        this.isEditing = isEditing
     }
 
     private fun setVoteButtons(viewBinding: ItemCommentsBinding) {
@@ -351,7 +346,7 @@ class CommentItem(val comment: Comment,
      * @param message the message of the dialog
      * @param callback the callback to call when the user clicks yes
      */
-    fun dialogBuilder(title: String, message: String, callback: () -> Unit) {
+    private fun dialogBuilder(title: String, message: String, callback: () -> Unit) {
         val alertDialog = android.app.AlertDialog.Builder(commentsActivity, R.style.MyPopup)
             .setTitle(title)
             .setMessage(message)
