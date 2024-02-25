@@ -3,7 +3,7 @@
     <style name="Theme.Base" parent="Theme.Material3.DayNight">
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">?android:colorBackground</item>
-        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentStatus">false</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="elevationOverlayEnabled">false</item>
         <item name="windowActionBar">false</item>
