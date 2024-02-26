@@ -111,6 +111,10 @@ class App : MultiDexApplication() {
             logger("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }
+        val commentsScope = CoroutineScope(Dispatchers.Default)
+        commentsScope.launch {
+            CommentsAPI.fetchAuthToken()
+        }
     }
 
 

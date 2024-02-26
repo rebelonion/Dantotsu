@@ -37,7 +37,6 @@ suspend fun getUserId(context: Context, block: () -> Unit) {
                 if (MAL.token != null && !MAL.query.getUserData())
                     snackString(context.getString(R.string.error_loading_mal_user_data))
             }
-            CommentsAPI.fetchAuthToken()
             true
         } else {
             snackString(context.getString(R.string.error_loading_anilist_user_data))

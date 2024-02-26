@@ -1,6 +1,7 @@
 package ani.dantotsu.settings.saving
 
 import android.graphics.Color
+import ani.dantotsu.connections.comments.AuthResponse
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.Pref
@@ -154,6 +155,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     TagsListNonAdult(Pref(Location.Irrelevant, Set::class, setOf<String>())),
     MakeDefault(Pref(Location.Irrelevant, Boolean::class, true)),
     FirstComment(Pref(Location.Irrelevant, Boolean::class, true)),
+    CommentAuthResponse(Pref(Location.Irrelevant, AuthResponse::class, "")),
+    CommentTokenExpiry(Pref(Location.Irrelevant, Long::class, 0L)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

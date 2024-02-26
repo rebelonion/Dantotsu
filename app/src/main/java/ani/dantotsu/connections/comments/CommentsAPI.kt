@@ -4,6 +4,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import com.lagradost.nicehttp.NiceResponse
 import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.NetworkHelper
 import kotlinx.serialization.KSerializer
@@ -206,31 +207,63 @@ object CommentsAPI {
 
     suspend fun fetchAuthToken() {
         if (authToken != null) return
+        val MAX_RETRIES = 5
+        val tokenLifetime: Long = 1000 * 60 * 60 * 24 * 6 // 6 days
+        val tokenExpiry = PrefManager.getVal<Long>(PrefName.CommentTokenExpiry)
+        if (tokenExpiry < System.currentTimeMillis() + tokenLifetime) {
+            val commentResponse = PrefManager.getNullableVal<AuthResponse>(PrefName.CommentAuthResponse, null)
+            if (commentResponse != null) {
+                authToken = commentResponse.authToken
+                userId = commentResponse.user.id
+                isBanned = commentResponse.user.isBanned ?: false
+                isAdmin = commentResponse.user.isAdmin ?: false
+                isMod = commentResponse.user.isMod ?: false
+                totalVotes = commentResponse.user.totalVotes
+                return
+            }
+        }
         val url = "$address/authenticate"
         val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
+        repeat(MAX_RETRIES) { // Define MAX_RETRIES as a constant
+            try {
+                val json = authRequest(token, url)
+                if (json.code == 200) {
+                    if (!json.text.startsWith("{")) throw IOException("Invalid response")
+                    val parsed = try {
+                        Json.decodeFromString<AuthResponse>(json.text)
+                    } catch (e: Exception) {
+                        snackString("Failed to login to comments API: ${e.printStackTrace()}")
+                        return
+                    }
+                    PrefManager.setVal(PrefName.CommentAuthResponse, parsed)
+                    PrefManager.setVal(PrefName.CommentTokenExpiry, System.currentTimeMillis() + tokenLifetime)
+                    authToken = parsed.authToken
+                    userId = parsed.user.id
+                    isBanned = parsed.user.isBanned ?: false
+                    isAdmin = parsed.user.isAdmin ?: false
+                    isMod = parsed.user.isMod ?: false
+                    totalVotes = parsed.user.totalVotes
+                    return
+                } else if (json.code != 429) {
+                    errorReason(json.code, json.text)
+                    return
+                }
+            } catch (e: IOException) {
+                snackString("Failed to login to comments API")
+                return
+            }
+             // Wait for 1 minute before retrying
+            kotlinx.coroutines.delay(60000)
+        }
+        snackString("Failed to login after multiple attempts")
+    }
+
+    private suspend fun authRequest(token: String, url: String): NiceResponse {
         val body: FormBody = FormBody.Builder()
             .add("token", token)
             .build()
         val request = requestBuilder()
-        val json = try {
-            request.post(url, requestBody = body)
-        } catch (e: IOException) {
-            snackString("Failed to login to comments API")
-            return
-        }
-        if (!json.text.startsWith("{")) return
-        val parsed = try {
-            Json.decodeFromString<AuthResponse>(json.text)
-        } catch (e: Exception) {
-            snackString("Failed to login to comments API: ${e.printStackTrace()}")
-            return
-        }
-        authToken = parsed.authToken
-        userId = parsed.user.id
-        isBanned = parsed.user.isBanned ?: false
-        isAdmin = parsed.user.isAdmin ?: false
-        isMod = parsed.user.isMod ?: false
-        totalVotes = parsed.user.totalVotes
+        return request.post(url, requestBody = body)
     }
 
     private fun headerBuilder(): Map<String, String> {
@@ -278,7 +311,11 @@ data class AuthResponse(
     val authToken: String,
     @SerialName("user")
     val user: User
-)
+) : java.io.Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1
+    }
+}
 
 @Serializable
 data class User(
@@ -299,7 +336,11 @@ data class User(
     val isMod: Boolean? = null,
     @SerialName("total_votes")
     val totalVotes: Int,
-)
+) : java.io.Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1
+    }
+}
 
 @Serializable
 data class CommentResponse(
