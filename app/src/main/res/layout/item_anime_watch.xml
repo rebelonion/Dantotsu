@@ -19,22 +19,6 @@
         android:orientation="vertical"
         android:padding="32dp">
 
-        <Button
-            android:id="@+id/animeComments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:backgroundTint="?attr/colorSurfaceVariant"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:text="@string/comments"
-            android:textAlignment="center"
-            android:textColor="@color/bg_white"
-            android:visibility="gone"
-            tools:ignore="TextContrastCheck"
-            tools:visibility="visible"/>
-
         <TextView
             android:id="@+id/animeSourceTitle"
             android:layout_width="match_parent"

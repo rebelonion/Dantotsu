@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/commentsLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?android:colorBackground"
+    android:fitsSystemWindows="true">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/commentsRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/commentInputLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:windowSoftInputMode="adjustResize">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/commentUserAvatar"
+                    style="@style/CircularImageView"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginStart="12dp"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_round_add_circle_24"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
+
+                <EditText
+                    android:id="@+id/commentInput"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:layout_gravity="start|center_vertical"
+                    android:autofillHints="The One Piece is real"
+                    android:background="@drawable/card_outline"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:hint="Add a comment..."
+                    android:inputType="textMultiLine"
+                    android:maxLength="300"
+                    android:maxLines="8"
+                    android:padding="8dp"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText" />
+
+                <ImageButton
+                    android:id="@+id/commentLabel"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:scaleType="center"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
+                    android:translationX="100dp"
+                    android:background="@drawable/ic_label_off_24"
+                    android:visibility="gone"/>
+
+                <ImageButton
+                    android:id="@+id/commentSend"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginEnd="12dp"
+                    android:translationX="100dp"
+                    android:scaleType="center"
+                    android:scaleX="0.85"
+                    android:scaleY="0.85"
+                    android:background="@drawable/ic_round_send_24"
+                    tools:ignore="ContentDescription"
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <androidx.core.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:orientation="horizontal"
+                        tools:ignore="UseCompoundDrawables">
+
+                        <ImageView
+                            android:id="@+id/commentFilter"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="12dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:contentDescription="@string/sort_by"
+                            app:srcCompat="@drawable/ic_round_filter_alt_24"
+                            app:tint="?attr/colorOnBackground" />
+
+                        <ImageView
+                            android:id="@+id/commentSort"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginEnd="12dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:contentDescription="@string/sort_by"
+                            app:srcCompat="@drawable/ic_round_sort_24"
+                            app:tint="?attr/colorOnBackground" />
+                    </LinearLayout>
+
+
+                    <ProgressBar
+                        android:id="@+id/commentsProgressBar"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center_horizontal"
+                        android:layout_marginTop="64dp" />
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/commentsList"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        android:visibility="gone"
+                        tools:listitem="@layout/item_comments"
+                        tools:visibility="visible" />
+
+                </LinearLayout>
+            </androidx.core.widget.NestedScrollView>
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:background="@color/nav_bg"
+        android:orientation="vertical"
+        android:windowSoftInputMode="adjustResize">
+
+        <LinearLayout
+            android:id="@+id/commentReplyToContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            tools:ignore="UseCompoundDrawables">
+
+            <TextView
+                android:id="@+id/commentReplyTo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:singleLine="true"
+                android:text="Replying to "
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+            <ImageView
+                android:id="@+id/commentReplyToCancel"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/selectableItemBackground"
+                app:srcCompat="@drawable/ic_round_close_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

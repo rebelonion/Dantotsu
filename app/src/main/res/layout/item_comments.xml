@@ -27,6 +27,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:scaleType="center"
+            android:layout_gravity="center_horizontal"
             style="@style/CircularImageView"
             app:srcCompat="@drawable/ic_round_add_circle_24"
             tools:ignore="ContentDescription,ImageContrastCheck" />
@@ -42,7 +43,36 @@
                 android:alpha="0.6"
                 tools:ignore="HardcodedText" />
 
+            <LinearLayout
+                android:id="@+id/commentUserTagLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/commentTag"
+                    android:layout_width="16dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_label_24" />
+
+                <TextView
+                    android:id="@+id/commentUserTag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:paddingTop="2dp"
+                    android:text="9999"
+                    android:maxLines="1"
+                    android:textSize="12sp"
+                    android:alpha="0.6"
+                    android:layout_marginEnd="12dp"
+                    android:layout_gravity="center_vertical"
+                    tools:ignore="HardcodedText" />
+
             </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -116,7 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:maxLines="4"
+                android:maxLines="8"
                 android:scrollHorizontally="false"
                 android:ellipsize="end"
                 android:text="@string/slogan"
@@ -132,6 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:alpha="0.6"
+                    android:paddingTop="1dp"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="Reply"
                     android:textSize="12sp"
@@ -143,6 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:alpha="0.6"
+                    android:paddingTop="1dp"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="Edit"
                     android:textSize="12sp"
@@ -154,6 +186,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:alpha="0.6"
+                    android:paddingTop="1dp"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="Delete"
                     android:textSize="12sp"
@@ -165,6 +198,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="12dp"
                     android:alpha="0.6"
+                    android:paddingTop="1dp"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="Report"
                     android:textSize="12sp"
@@ -175,6 +209,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.6"
+                    android:paddingTop="1dp"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="Ban User"
                     android:textSize="12sp"

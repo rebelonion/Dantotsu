@@ -109,9 +109,6 @@
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".media.comments.CommentsActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden" />
-        <activity
             android:name=".media.SearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".media.StudioActivity" />
@@ -130,7 +127,8 @@
         <activity
             android:name=".media.MediaDetailsActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.Dantotsu.NeverCutout" />
+            android:theme="@style/Theme.Dantotsu.NeverCutout"
+            android:windowSoftInputMode="adjustPan|stateHidden"/>
         <activity android:name=".media.CharacterDetailsActivity" />
         <activity android:name=".home.NoInternet" />
         <activity

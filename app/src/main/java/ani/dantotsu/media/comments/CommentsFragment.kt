@@ -1,14 +1,23 @@
 package ani.dantotsu.media.comments
 
-import android.graphics.drawable.ColorDrawable
+import android.animation.ValueAnimator
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.animation.doOnEnd
+import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
@@ -16,13 +25,11 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentResponse
 import ani.dantotsu.connections.comments.CommentsAPI
-import ani.dantotsu.databinding.ActivityCommentsBinding
-import ani.dantotsu.initActivity
+import ani.dantotsu.databinding.FragmentCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
-import ani.dantotsu.themes.ThemeManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
@@ -51,30 +58,39 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
-class CommentsActivity : AppCompatActivity() {
-    lateinit var binding: ActivityCommentsBinding
+class CommentsFragment : Fragment() {
+    lateinit var binding: FragmentCommentsBinding
+    lateinit var activity: AppCompatActivity
     private var interactionState = InteractionState.NONE
     private var commentWithInteraction: CommentItem? = null
     private val section = Section()
     private val adapter = GroupieAdapter()
+    private var tag: Int? = null
+    private var filterTag: Int? = null
     private var mediaId: Int = -1
     var mediaName: String = ""
     private var backgroundColor: Int = 0
     var pagesLoaded = 1
     var totalPages = 1
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        ThemeManager(this).applyTheme()
-        binding = ActivityCommentsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        initActivity(this)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentCommentsBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        activity = requireActivity() as AppCompatActivity
         //get the media id from the intent
-        val mediaId = intent.getIntExtra("mediaId", -1)
-        mediaName = intent.getStringExtra("mediaName")?:"unknown"
+        val mediaId = arguments?.getInt("mediaId") ?: -1
+        mediaName = arguments?.getString("mediaName") ?: "unknown"
         if (mediaId == -1) {
             snackString("Invalid Media ID")
-            finish()
+            return
         }
         this.mediaId = mediaId
         backgroundColor = (binding.root.background as? ColorDrawable)?.color ?: 0
@@ -82,7 +98,6 @@ class CommentsActivity : AppCompatActivity() {
         val markwon = buildMarkwon()
 
         binding.commentUserAvatar.loadImage(Anilist.avatar)
-        binding.commentTitle.text = getText(R.string.comments)
         val markwonEditor = MarkwonEditor.create(markwon)
         binding.commentInput.addTextChangedListener(
             MarkwonEditorTextWatcher.withProcess(
@@ -99,7 +114,7 @@ class CommentsActivity : AppCompatActivity() {
         }
 
         binding.commentsList.adapter = adapter
-        binding.commentsList.layoutManager = LinearLayoutManager(this)
+        binding.commentsList.layoutManager = LinearLayoutManager(activity)
 
         lifecycleScope.launch {
             loadAndDisplayComments()
@@ -117,7 +132,7 @@ class CommentsActivity : AppCompatActivity() {
                 section.update(groups)
             }
 
-            val popup = PopupMenu(this, view)
+            val popup = PopupMenu(activity, view)
             popup.setOnMenuItemClickListener { item ->
                 val sortOrder = when (item.itemId) {
                     R.id.comment_sort_newest -> "newest"
@@ -134,6 +149,36 @@ class CommentsActivity : AppCompatActivity() {
             }
             popup.inflate(R.menu.comments_sort_menu)
             popup.show()
+        }
+
+        binding.commentFilter.setOnClickListener {
+            val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+                .setTitle("Enter a chapter/episode number tag")
+                .setView(R.layout.dialog_edittext)
+                .setPositiveButton("OK") { dialog, _ ->
+                    val editText =
+                        (dialog as AlertDialog).findViewById<EditText>(R.id.dialogEditText)
+                    val text = editText?.text.toString()
+                    filterTag = text.toIntOrNull()
+                    lifecycleScope.launch {
+                        loadAndDisplayComments()
+                    }
+
+                    dialog.dismiss()
+                }
+                .setNeutralButton("Clear") { dialog, _ ->
+                    filterTag = null
+                    lifecycleScope.launch {
+                        loadAndDisplayComments()
+                    }
+                    dialog.dismiss()
+                }
+                .setNegativeButton("Cancel") { dialog, _ ->
+                    filterTag = null
+                    dialog.dismiss()
+                }
+            val dialog = alertDialog.show()
+            dialog?.window?.setDimAmount(0.8f)
         }
 
         var isFetching = false
@@ -170,7 +215,7 @@ class CommentsActivity : AppCompatActivity() {
 
             private suspend fun fetchComments(): CommentResponse? {
                 return withContext(Dispatchers.IO) {
-                    CommentsAPI.getCommentsForId(mediaId, pagesLoaded + 1)
+                    CommentsAPI.getCommentsForId(mediaId, pagesLoaded + 1, filterTag)
                 }
             }
 
@@ -182,7 +227,7 @@ class CommentsActivity : AppCompatActivity() {
                             comment,
                             buildMarkwon(),
                             section,
-                            this@CommentsActivity,
+                            this@CommentsFragment,
                             backgroundColor,
                             0
                         )
@@ -206,6 +251,79 @@ class CommentsActivity : AppCompatActivity() {
                 }
             }
         })
+
+        binding.commentInput.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus) {
+                val targetWidth = binding.commentInputLayout.width -
+                        binding.commentLabel.width -
+                        binding.commentSend.width -
+                        binding.commentUserAvatar.width - 12 + 16
+                val anim = ValueAnimator.ofInt(binding.commentInput.width, targetWidth)
+                anim.addUpdateListener { valueAnimator ->
+                    val layoutParams = binding.commentInput.layoutParams
+                    layoutParams.width = valueAnimator.animatedValue as Int
+                    binding.commentInput.layoutParams = layoutParams
+                }
+                anim.duration = 300
+
+                anim.start()
+                anim.doOnEnd {
+                    binding.commentLabel.visibility = View.VISIBLE
+                    binding.commentSend.visibility = View.VISIBLE
+                    binding.commentLabel.animate().translationX(0f).setDuration(300).start()
+                    binding.commentSend.animate().translationX(0f).setDuration(300).start()
+
+                }
+            }
+
+            binding.commentLabel.setOnClickListener {
+                //alert dialog to enter a number, with a cancel and ok button
+                val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+                    .setTitle("Enter a chapter/episode number tag")
+                    .setView(R.layout.dialog_edittext)
+                    .setPositiveButton("OK") { dialog, _ ->
+                        val editText =
+                            (dialog as AlertDialog).findViewById<EditText>(R.id.dialogEditText)
+                        val text = editText?.text.toString()
+                        tag = text.toIntOrNull()
+                        if (tag == null) {
+                            binding.commentLabel.background = ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.ic_label_off_24,
+                                null
+                            )
+                        } else {
+                            binding.commentLabel.background = ResourcesCompat.getDrawable(
+                                resources,
+                                R.drawable.ic_label_24,
+                                null
+                            )
+                        }
+                        dialog.dismiss()
+                    }
+                    .setNeutralButton("Clear") { dialog, _ ->
+                        tag = null
+                        binding.commentLabel.background = ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic_label_off_24,
+                            null
+                        )
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        tag = null
+                        binding.commentLabel.background = ResourcesCompat.getDrawable(
+                            resources,
+                            R.drawable.ic_label_off_24,
+                            null
+                        )
+                        dialog.dismiss()
+                    }
+                val dialog = alertDialog.show()
+                dialog?.window?.setDimAmount(0.8f)
+            }
+        }
+
         binding.commentSend.setOnClickListener {
             if (CommentsAPI.isBanned) {
                 snackString("You are banned from commenting :(")
@@ -220,6 +338,19 @@ class CommentsActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onStart() {
+        super.onStart()
+        adapter.notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onResume() {
+        super.onResume()
+        tag = null
+        adapter.notifyDataSetChanged()
+    }
+
     enum class InteractionState {
         NONE, EDIT, REPLY
     }
@@ -229,7 +360,6 @@ class CommentsActivity : AppCompatActivity() {
      * Called when the activity is created
      * Or when the user refreshes the comments
      */
-
     private suspend fun loadAndDisplayComments() {
         binding.commentsProgressBar.visibility = View.VISIBLE
         binding.commentsList.visibility = View.GONE
@@ -237,7 +367,7 @@ class CommentsActivity : AppCompatActivity() {
         section.clear()
 
         val comments = withContext(Dispatchers.IO) {
-            CommentsAPI.getCommentsForId(mediaId)
+            CommentsAPI.getCommentsForId(mediaId, tag = filterTag)
         }
 
         val sortedComments = sortComments(comments?.comments)
@@ -248,7 +378,7 @@ class CommentsActivity : AppCompatActivity() {
                         it,
                         buildMarkwon(),
                         section,
-                        this@CommentsActivity,
+                        this@CommentsFragment,
                         backgroundColor,
                         0
                     )
@@ -264,8 +394,7 @@ class CommentsActivity : AppCompatActivity() {
 
     private fun sortComments(comments: List<Comment>?): List<Comment> {
         if (comments == null) return emptyList()
-        val sortOrder = PrefManager.getVal(PrefName.CommentSortOrder, "newest")
-        return when (sortOrder) {
+        return when (PrefManager.getVal(PrefName.CommentSortOrder, "newest")) {
             "newest" -> comments.sortedByDescending { CommentItem.timestampToMillis(it.timestamp) }
             "oldest" -> comments.sortedBy { CommentItem.timestampToMillis(it.timestamp) }
             "highest_rated" -> comments.sortedByDescending { it.upvotes - it.downvotes }
@@ -285,7 +414,7 @@ class CommentsActivity : AppCompatActivity() {
             InteractionState.EDIT -> {
                 binding.commentReplyToContainer.visibility = View.GONE
                 binding.commentInput.setText("")
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.commentInput.windowToken, 0)
                 commentWithInteraction?.editing(false)
                 InteractionState.EDIT
@@ -293,7 +422,7 @@ class CommentsActivity : AppCompatActivity() {
 
             InteractionState.REPLY -> {
                 binding.commentInput.setText("")
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(binding.commentInput.windowToken, 0)
                 commentWithInteraction?.replying(false)
                 InteractionState.REPLY
@@ -316,7 +445,7 @@ class CommentsActivity : AppCompatActivity() {
         binding.commentInput.setText(comment.comment.content)
         binding.commentInput.requestFocus()
         binding.commentInput.setSelection(binding.commentInput.text.length)
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(binding.commentInput, InputMethodManager.SHOW_IMPLICIT)
         interactionState = InteractionState.EDIT
     }
@@ -332,11 +461,12 @@ class CommentsActivity : AppCompatActivity() {
         binding.commentReplyToContainer.visibility = View.VISIBLE
         binding.commentInput.requestFocus()
         binding.commentInput.setSelection(binding.commentInput.text.length)
-        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(binding.commentInput, InputMethodManager.SHOW_IMPLICIT)
         interactionState = InteractionState.REPLY
 
     }
+
     @SuppressLint("SetTextI18n")
     fun replyTo(comment: CommentItem, username: String) {
         if (comment.isReplying) {
@@ -363,14 +493,16 @@ class CommentsActivity : AppCompatActivity() {
             }
 
             replies?.comments?.forEach {
-                val depth = if (comment.commentDepth + 1 > comment.MAX_DEPTH) comment.commentDepth else comment.commentDepth + 1
-                val section = if (comment.commentDepth + 1 > comment.MAX_DEPTH) comment.parentSection else comment.repliesSection
+                val depth =
+                    if (comment.commentDepth + 1 > comment.MAX_DEPTH) comment.commentDepth else comment.commentDepth + 1
+                val section =
+                    if (comment.commentDepth + 1 > comment.MAX_DEPTH) comment.parentSection else comment.repliesSection
                 if (depth >= comment.MAX_DEPTH) comment.registerSubComment(it.commentId)
                 val newCommentItem = CommentItem(
                     it,
                     buildMarkwon(),
                     section,
-                    this@CommentsActivity,
+                    this@CommentsFragment,
                     backgroundColor,
                     depth
                 )
@@ -386,7 +518,7 @@ class CommentsActivity : AppCompatActivity() {
      * Called when the user tries to comment for the first time
      */
     private fun showCommentRulesDialog() {
-        val alertDialog = android.app.AlertDialog.Builder(this, R.style.MyPopup)
+        val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
             .setTitle("Commenting Rules")
             .setMessage(
                 "I WILL BAN YOU WITHOUT HESITATION\n" +
@@ -426,6 +558,12 @@ class CommentsActivity : AppCompatActivity() {
                 handleEditComment(commentText)
             } else {
                 handleNewComment(commentText)
+                tag = null
+                binding.commentLabel.background = ResourcesCompat.getDrawable(
+                    resources,
+                    R.drawable.ic_label_off_24,
+                    null
+                )
             }
         }
     }
@@ -469,22 +607,27 @@ class CommentsActivity : AppCompatActivity() {
             CommentsAPI.comment(
                 mediaId,
                 if (interactionState == InteractionState.REPLY) commentWithInteraction?.comment?.commentId else null,
-                commentText
+                commentText,
+                tag
             )
         }
         success?.let {
             if (interactionState == InteractionState.REPLY) {
                 if (commentWithInteraction == null) return@let
-                val section = if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction?.parentSection else commentWithInteraction?.repliesSection
-                val depth = if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.commentDepth else commentWithInteraction!!.commentDepth + 1
-                if (depth >= commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.registerSubComment(it.commentId)
+                val section =
+                    if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction?.parentSection else commentWithInteraction?.repliesSection
+                val depth =
+                    if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.commentDepth else commentWithInteraction!!.commentDepth + 1
+                if (depth >= commentWithInteraction!!.MAX_DEPTH) commentWithInteraction!!.registerSubComment(
+                    it.commentId
+                )
                 section?.add(
                     if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) 0 else section.itemCount,
                     CommentItem(
                         it,
                         buildMarkwon(),
                         section,
-                        this@CommentsActivity,
+                        this@CommentsFragment,
                         backgroundColor,
                         depth
                     )
@@ -492,7 +635,14 @@ class CommentsActivity : AppCompatActivity() {
             } else {
                 section.add(
                     0,
-                    CommentItem(it, buildMarkwon(), section, this@CommentsActivity, backgroundColor, 0)
+                    CommentItem(
+                        it,
+                        buildMarkwon(),
+                        section,
+                        this@CommentsFragment,
+                        backgroundColor,
+                        0
+                    )
                 )
             }
         }
@@ -503,11 +653,11 @@ class CommentsActivity : AppCompatActivity() {
      * @return the markwon instance
      */
     private fun buildMarkwon(): Markwon {
-        val markwon = Markwon.builder(this)
+        val markwon = Markwon.builder(activity)
             .usePlugin(SoftBreakAddsNewLinePlugin.create())
             .usePlugin(StrikethroughPlugin.create())
-            .usePlugin(TablePlugin.create(this))
-            .usePlugin(TaskListPlugin.create(this))
+            .usePlugin(TablePlugin.create(activity))
+            .usePlugin(TaskListPlugin.create(activity))
             .usePlugin(HtmlPlugin.create { plugin ->
                 plugin.addHandler(
                     TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre")
@@ -516,7 +666,7 @@ class CommentsActivity : AppCompatActivity() {
             .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
 
                 private val requestManager: RequestManager =
-                    Glide.with(this@CommentsActivity).apply {
+                    Glide.with(this@CommentsFragment).apply {
                         addDefaultRequestListener(object : RequestListener<Any> {
                             override fun onResourceReady(
                                 resource: Any,

@@ -234,7 +234,7 @@
             android:id="@+id/mediaViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="false"
+            android:nestedScrollingEnabled="true"
             tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
@@ -248,7 +248,7 @@
         android:translationZ="1dp"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
         app:itemIconTint="@color/tab_layout_icon"
-        app:itemRippleColor="?attr/colorPrimary"
+        app:itemRippleColor="#00000000"
         app:itemTextAppearanceActive="@style/NavBarText"
         app:itemTextAppearanceInactive="@style/NavBarText"
         app:itemTextColor="@color/tab_layout_icon"

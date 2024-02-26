@@ -30,9 +30,12 @@ object CommentsAPI {
     var isMod: Boolean = false
     var totalVotes: Int = 0
 
-    suspend fun getCommentsForId(id: Int, page: Int = 1): CommentResponse? {
-        val url = "$address/comments/$id/$page"
+    suspend fun getCommentsForId(id: Int, page: Int = 1, tag: Int?): CommentResponse? {
+        var url = "$address/comments/$id/$page"
         val request = requestBuilder()
+        tag?.let {
+            url += "?tag=$it"
+        }
         val json = try {
             request.get(url)
         } catch (e: IOException) {
@@ -90,12 +93,15 @@ object CommentsAPI {
         return res
     }
 
-    suspend fun comment(mediaId: Int, parentCommentId: Int?, content: String): Comment? {
+    suspend fun comment(mediaId: Int, parentCommentId: Int?, content: String, tag: Int?): Comment? {
         val url = "$address/comments"
         val body = FormBody.Builder()
             .add("user_id", userId ?: return null)
             .add("media_id", mediaId.toString())
             .add("content", content)
+        if (tag != null) {
+            body.add("tag", tag.toString())
+        }
         parentCommentId?.let {
             body.add("parent_comment_id", it.toString())
         }
@@ -125,6 +131,7 @@ object CommentsAPI {
             parsed.content,
             parsed.timestamp,
             parsed.deleted,
+            parsed.tag,
             0,
             0,
             null,
@@ -224,7 +231,7 @@ object CommentsAPI {
         }
         val url = "$address/authenticate"
         val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
-        repeat(MAX_RETRIES) { // Define MAX_RETRIES as a constant
+        repeat(MAX_RETRIES) {
             try {
                 val json = authRequest(token, url)
                 if (json.code == 200) {
@@ -252,7 +259,6 @@ object CommentsAPI {
                 snackString("Failed to login to comments API")
                 return
             }
-             // Wait for 1 minute before retrying
             kotlinx.coroutines.delay(60000)
         }
         snackString("Failed to login after multiple attempts")
@@ -367,6 +373,8 @@ data class Comment(
     @SerialName("deleted")
     @Serializable(with = NumericBooleanSerializer::class)
     val deleted: Boolean?,
+    @SerialName("tag")
+    val tag: Int?,
     @SerialName("upvotes")
     var upvotes: Int,
     @SerialName("downvotes")
@@ -408,6 +416,8 @@ data class ReturnedComment(
     @SerialName("deleted")
     @Serializable(with = NumericBooleanSerializer::class)
     val deleted: Boolean?,
+    @SerialName("tag")
+    val tag: Int?,
 )
 
 object NumericBooleanSerializer : KSerializer<Boolean> {

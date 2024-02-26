@@ -12,8 +12,6 @@ import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.settings.saving.PrefManager
-import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -33,7 +31,7 @@ import kotlin.math.sqrt
 class CommentItem(val comment: Comment,
                   private val markwon: Markwon,
                   val parentSection: Section,
-                  private val commentsActivity: CommentsActivity,
+                  private val commentsFragment: CommentsFragment,
                   private val backgroundColor: Int,
                   val commentDepth: Int
 ) : BindableItem<ItemCommentsBinding>() {
@@ -62,6 +60,12 @@ class CommentItem(val comment: Comment,
         viewBinding.commentDelete.visibility = if (isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
         viewBinding.commentBanUser.visibility = if ((CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
+        if (comment.tag == null) {
+            viewBinding.commentUserTagLayout.visibility = View.GONE
+        } else {
+            viewBinding.commentUserTagLayout.visibility = View.VISIBLE
+            viewBinding.commentUserTag.text = comment.tag.toString()
+        }
         replying(isReplying) //sets default text
         editing(isEditing)
         if ((comment.replyCount ?: 0) > 0) {
@@ -83,7 +87,7 @@ class CommentItem(val comment: Comment,
             } else {
                 viewBinding.commentTotalReplies.text = "Hide Replies"
                 repliesSection.clear()
-                commentsActivity.viewReplyCallback(this)
+                commentsFragment.viewReplyCallback(this)
                 repliesVisible = true
             }
         }
@@ -98,12 +102,12 @@ class CommentItem(val comment: Comment,
 
         viewBinding.commentEdit.setOnClickListener {
             editing(!isEditing)
-            commentsActivity.editCallback(this)
+            commentsFragment.editCallback(this)
         }
         viewBinding.commentReply.setOnClickListener {
             replying(!isReplying)
-            commentsActivity.replyTo(this, comment.username)
-            commentsActivity.replyCallback(this)
+            commentsFragment.replyTo(this, comment.username)
+            commentsFragment.replyCallback(this)
         }
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
@@ -134,7 +138,7 @@ class CommentItem(val comment: Comment,
             dialogBuilder("Report Comment", "Only report comments that violate the rules. Are you sure you want to report this comment?") {
                 val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
                 scope.launch {
-                    val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsActivity.mediaName)
+                    val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsFragment.mediaName)
                     if (success) {
                         snackString("Comment Reported")
                     }
@@ -347,7 +351,7 @@ class CommentItem(val comment: Comment,
      * @param callback the callback to call when the user clicks yes
      */
     private fun dialogBuilder(title: String, message: String, callback: () -> Unit) {
-        val alertDialog = android.app.AlertDialog.Builder(commentsActivity, R.style.MyPopup)
+        val alertDialog = android.app.AlertDialog.Builder(commentsFragment.activity, R.style.MyPopup)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton("Yes") { dialog, _ ->

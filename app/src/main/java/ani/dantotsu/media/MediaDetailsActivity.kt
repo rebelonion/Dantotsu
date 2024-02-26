@@ -36,6 +36,7 @@ import ani.dantotsu.databinding.ActivityMediaBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.anime.AnimeWatchFragment
+import ani.dantotsu.media.comments.CommentsFragment
 import ani.dantotsu.media.manga.MangaReadFragment
 import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.navBarHeight
@@ -318,13 +319,14 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         tabLayout.menu.clear()
         if (media.anime != null) {
             viewPager.adapter =
-                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME)
+                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME, media)
             tabLayout.inflateMenu(R.menu.anime_menu_detail)
         } else if (media.manga != null) {
             viewPager.adapter = ViewPagerAdapter(
                 supportFragmentManager,
                 lifecycle,
-                if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA
+                if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA,
+                media
             )
             if (media.format == "NOVEL") {
                 tabLayout.inflateMenu(R.menu.novel_menu_detail)
@@ -378,6 +380,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             R.id.watch, R.id.read -> {
                 selected = 1
             }
+
+            R.id.comment -> {
+                selected = 2
+            }
         }
     }
 
@@ -385,10 +391,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         if (anime) when (selected) {
             0 -> return R.id.info
             1 -> return R.id.watch
+            2 -> return R.id.comment
         }
         else when (selected) {
             0 -> return R.id.info
             1 -> return R.id.read
+            2 -> return R.id.comment
         }
         return R.id.info
     }
@@ -408,18 +416,27 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
-        private val media: SupportedMedia
+        private val mediaType: SupportedMedia,
+        private val media: Media
     ) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
 
-        override fun getItemCount(): Int = 2
+        override fun getItemCount(): Int = 3
 
         override fun createFragment(position: Int): Fragment = when (position) {
             0 -> MediaInfoFragment()
-            1 -> when (media) {
+            1 -> when (mediaType) {
                 SupportedMedia.ANIME -> AnimeWatchFragment()
                 SupportedMedia.MANGA -> MangaReadFragment()
                 SupportedMedia.NOVEL -> NovelReadFragment()
+            }
+            2 -> {
+                val fragment = CommentsFragment()
+                val bundle = Bundle()
+                bundle.putInt("mediaId", media.id)
+                bundle.putString("mediaName", media.mainName())
+                fragment.arguments = bundle
+                fragment
             }
 
             else -> MediaInfoFragment()

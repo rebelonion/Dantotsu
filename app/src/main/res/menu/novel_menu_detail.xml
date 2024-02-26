@@ -12,4 +12,10 @@
         android:icon="@drawable/ic_round_book_24"
         android:title="@string/read" />
 
+    <item
+        android:id="@+id/comment"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_comment_24"
+        android:title="@string/comments" />
+
 </menu>

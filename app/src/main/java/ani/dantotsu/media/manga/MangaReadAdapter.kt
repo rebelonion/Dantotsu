@@ -24,7 +24,6 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.media.anime.handleProgress
-import ani.dantotsu.media.comments.CommentsActivity
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
@@ -66,17 +65,6 @@ class MangaReadAdapter(
         val binding = holder.binding
         _binding = binding
         binding.sourceTitle.setText(R.string.chaps)
-
-        binding.animeComments.visibility = if (CommentsAPI.userId == null) View.GONE else View.VISIBLE
-        binding.animeComments.setOnClickListener {
-            startActivity(
-                fragment.requireContext(),
-                Intent(fragment.requireContext(), CommentsActivity::class.java)
-                    .putExtra("mediaId", media.id)
-                    .putExtra("mediaName", media.mainName()),
-                null
-            )
-        }
 
         //Fuck u launch
         binding.faqbutton.setOnClickListener {
