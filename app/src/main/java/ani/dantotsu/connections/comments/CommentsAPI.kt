@@ -417,7 +417,7 @@ data class ReturnedComment(
     @Serializable(with = NumericBooleanSerializer::class)
     val deleted: Boolean?,
     @SerialName("tag")
-    val tag: Int?,
+    val tag: Int? = null,
 )
 
 object NumericBooleanSerializer : KSerializer<Boolean> {
