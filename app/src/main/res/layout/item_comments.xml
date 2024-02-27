@@ -5,70 +5,65 @@
     android:id="@+id/commentsCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="6dp"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginEnd="6dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:padding="6dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:baselineAligned="false">
 
         <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:orientation="vertical">
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/commentUserAvatar"
-            android:layout_marginTop="4dp"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:scaleType="center"
-            android:layout_gravity="center_horizontal"
-            style="@style/CircularImageView"
-            app:srcCompat="@drawable/ic_round_add_circle_24"
-            tools:ignore="ContentDescription,ImageContrastCheck" />
-
-            <TextView
-                android:id="@+id/commentUserLevel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/commentUserAvatar"
+                style="@style/CircularImageView"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:layout_gravity="center_horizontal"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:text="lvl 1"
-                android:textSize="12sp"
-                android:alpha="0.6"
-                tools:ignore="HardcodedText" />
+                android:layout_marginTop="12dp"
+                android:scaleType="center"
+                app:srcCompat="@drawable/ic_round_add_circle_24"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
 
             <LinearLayout
                 android:id="@+id/commentUserTagLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_gravity="center"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
-                    android:id="@+id/commentTag"
                     android:layout_width="16dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="16dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_label_24" />
+                    android:src="@drawable/ic_label_24"
+                    android:alpha="0.9"
+                    tools:ignore="ContentDescription"
+                    app:tint="?attr/colorPrimary" />
 
                 <TextView
                     android:id="@+id/commentUserTag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:paddingTop="2dp"
-                    android:text="9999"
-                    android:maxLines="1"
-                    android:textSize="12sp"
-                    android:alpha="0.6"
-                    android:layout_marginEnd="12dp"
                     android:layout_gravity="center_vertical"
-                    tools:ignore="HardcodedText" />
+                    android:alpha="0.9"
+                    android:fontFamily="@font/poppins_bold"
+                    android:maxLines="1"
+                    android:paddingTop="2dp"
+                    android:text="1095"
+                    android:textColor="?attr/colorPrimary"
+                    android:textSize="12sp"
+                    tools:ignore="HardcodedText,SmallSp"/>
 
             </LinearLayout>
 
@@ -91,7 +86,8 @@
                     android:id="@+id/commentUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="4dp"
+                    android:textColor="?attr/colorPrimary"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="Username"
                     android:singleLine="true"
@@ -100,6 +96,27 @@
                     android:paddingTop="1dp"
                     android:paddingBottom="0dp"
                     tools:ignore="HardcodedText,RtlSymmetry"/>
+
+                <TextView
+                    android:id="@+id/commentUserLevel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="6dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="[1]"
+                    android:textSize="12sp"
+                    android:alpha="0.8"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:alpha="0.6"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="•"
+                    android:textSize="16sp"
+                    tools:ignore="HardcodedText,RtlSymmetry" />
 
                 <TextView
                     android:id="@+id/commentUserTime"
@@ -146,6 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
+
                 android:maxLines="8"
                 android:scrollHorizontally="false"
                 android:ellipsize="end"
@@ -224,8 +242,8 @@
             android:orientation="vertical">
             <ImageView
                 android:id="@+id/commentUpVote"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:alpha="0.4"
                 app:srcCompat="@drawable/ic_round_upvote_inactive_24"
                 tools:ignore="ContentDescription" />
@@ -234,15 +252,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="10"
+                android:text="100"
                 android:textSize="12sp"
                 android:layout_gravity="center"
                 android:alpha="0.6"
                 tools:ignore="HardcodedText" />
             <ImageView
                 android:id="@+id/commentDownVote"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:alpha="0.4"
                 app:srcCompat="@drawable/ic_round_upvote_inactive_24"
                 android:rotation="180"
@@ -252,6 +270,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-8dp"
         android:layout_gravity="center_vertical"
         android:orientation="horizontal">
 

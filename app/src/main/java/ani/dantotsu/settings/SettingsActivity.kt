@@ -225,7 +225,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val tag = "colorPicker"
             CustomColorDialog().title("Custom Theme")
                 .colorPreset(originalColor)
-                .colors(this, SimpleColorDialog.BEIGE_COLOR_PALLET)
+                .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET)
                 .allowCustom(true)
                 .showOutline(0x46000000)
                 .gridNumColumn(5)

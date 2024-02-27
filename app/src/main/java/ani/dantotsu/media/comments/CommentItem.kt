@@ -59,6 +59,7 @@ class CommentItem(val comment: Comment,
         markwon.setParsedMarkdown(viewBinding.commentText, viewBinding.commentText.setSpoilerText(spanned, markwon))
         viewBinding.commentDelete.visibility = if (isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
         viewBinding.commentBanUser.visibility = if ((CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment) View.VISIBLE else View.GONE
+        viewBinding.commentReport.visibility = if (!isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
         if (comment.tag == null) {
             viewBinding.commentUserTagLayout.visibility = View.GONE
@@ -189,10 +190,9 @@ class CommentItem(val comment: Comment,
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
         val levelColor = getAvatarColor(comment.totalVotes, backgroundColor)
-        viewBinding.commentUserName.setTextColor(levelColor.first)
-        viewBinding.commentUserLevel.text = "Lv. ${levelColor.second}"
+        viewBinding.commentUserLevel.text = "[${levelColor.second}]"
         viewBinding.commentUserLevel.setTextColor(levelColor.first)
-        viewBinding.commentUserTime.text = "● ${formatTimestamp(comment.timestamp)}"
+        viewBinding.commentUserTime.text = formatTimestamp(comment.timestamp)
     }
 
     override fun getLayout(): Int {

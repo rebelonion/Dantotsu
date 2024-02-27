@@ -159,7 +159,7 @@ class CommentsFragment : Fragment() {
         }
 
         binding.commentFilter.setOnClickListener {
-            val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+            val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
                 .setTitle("Enter a chapter/episode number tag")
                 .setView(R.layout.dialog_edittext)
                 .setPositiveButton("OK") { dialog, _ ->

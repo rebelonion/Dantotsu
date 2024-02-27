@@ -5,15 +5,14 @@
     android:id="@+id/commentsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?android:colorBackground"
-    android:fitsSystemWindows="true">
+    android:background="?android:colorBackground">
 
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/commentsRefresh"
         android:layout_width="match_parent"
-        android:layout_marginTop="58dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="58dp"
         android:clipChildren="false"
         android:clipToPadding="false">
 
@@ -41,8 +40,8 @@
 
                         <ImageView
                             android:id="@+id/commentFilter"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:layout_marginEnd="12dp"
                             android:background="?android:attr/selectableItemBackground"
                             android:contentDescription="@string/sort_by"
@@ -51,8 +50,8 @@
 
                         <ImageView
                             android:id="@+id/commentSort"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
                             android:layout_marginEnd="12dp"
                             android:background="?android:attr/selectableItemBackground"
                             android:contentDescription="@string/sort_by"
@@ -90,8 +89,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:windowSoftInputMode="adjustResize">
+        android:paddingBottom="8dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/commentUserAvatar"
@@ -107,10 +105,10 @@
             android:id="@+id/commentInput"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:layout_gravity="start|center_vertical"
             android:autofillHints="The One Piece is real"
             android:background="@drawable/card_outline"
             android:fontFamily="@font/poppins_semi_bold"
@@ -124,27 +122,25 @@
 
         <ImageButton
             android:id="@+id/commentLabel"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:scaleType="center"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
-            android:translationX="100dp"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_gravity="center"
             android:background="@drawable/ic_label_off_24"
-            android:visibility="gone"/>
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
 
         <ImageButton
             android:id="@+id/commentSend"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
             android:layout_marginEnd="12dp"
-            android:translationX="100dp"
-            android:scaleType="center"
-            android:scaleX="0.85"
-            android:scaleY="0.85"
+            android:layout_gravity="center"
             android:background="@drawable/ic_round_send_24"
+            android:visibility="gone"
             tools:ignore="ContentDescription"
-            android:visibility="gone"/>
+            tools:visibility="visible" />
     </LinearLayout>
 
 
