@@ -77,6 +77,28 @@ object CommentsAPI {
         return parsed
     }
 
+    suspend fun getSingleComment(id: Int): Comment? {
+        val url = "$address/comments/$id"
+        val request = requestBuilder()
+        val json = try {
+            request.get(url)
+        } catch (e: IOException) {
+            snackString("Failed to fetch comment")
+            return null
+        }
+        if (!json.text.startsWith("{")) return null
+        val res = json.code == 200
+        if (!res && json.code != 404) {
+            errorReason(json.code, json.text)
+        }
+        val parsed = try {
+            Json.decodeFromString<Comment>(json.text)
+        } catch (e: Exception) {
+            return null
+        }
+        return parsed
+    }
+
     suspend fun vote(commentId: Int, voteType: Int): Boolean {
         val url = "$address/comments/vote/$commentId/$voteType"
         val request = requestBuilder()
@@ -212,6 +234,27 @@ object CommentsAPI {
         return res
     }
 
+    suspend fun getNotifications(): NotificationResponse? {
+        val url = "$address/notification/reply"
+        val request = requestBuilder()
+        val json = try {
+            request.get(url)
+        } catch (e: IOException) {
+            return null
+        }
+        if (!json.text.startsWith("{")) return null
+        val res = json.code == 200
+        if (!res) {
+            return null
+        }
+        val parsed = try {
+            Json.decodeFromString<NotificationResponse>(json.text)
+        } catch (e: Exception) {
+            return null
+        }
+        return parsed
+    }
+
     suspend fun fetchAuthToken() {
         if (authToken != null) return
         val MAX_RETRIES = 5
@@ -310,6 +353,23 @@ data class ErrorResponse(
     @SerialName("message")
     val message: String
 )
+
+@Serializable
+data class NotificationResponse(
+    @SerialName("notifications")
+    val notifications: List<Notification>
+)
+
+@Serializable
+data class Notification(
+    @SerialName("username")
+    val username: String,
+    @SerialName("media_id")
+    val mediaId: Int,
+    @SerialName("comment_id")
+    val commentId: Int
+)
+
 
 @Serializable
 data class AuthResponse(

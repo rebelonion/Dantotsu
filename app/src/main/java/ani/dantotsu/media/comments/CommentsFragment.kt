@@ -119,7 +119,12 @@ class CommentsFragment : Fragment() {
         binding.commentsList.layoutManager = LinearLayoutManager(activity)
 
         lifecycleScope.launch {
-            loadAndDisplayComments()
+            val commentId = arguments?.getInt("commentId")
+            if (commentId != null && commentId > 0) {
+                loadSingleComment(commentId)
+            } else {
+                loadAndDisplayComments()
+            }
         }
 
         binding.commentSort.setOnClickListener { view ->
@@ -393,6 +398,31 @@ class CommentsFragment : Fragment() {
         binding.commentsProgressBar.visibility = View.GONE
         binding.commentsList.visibility = View.VISIBLE
         adapter.add(section)
+    }
+
+    private suspend fun loadSingleComment(commentId: Int) {
+        binding.commentsProgressBar.visibility = View.VISIBLE
+        binding.commentsList.visibility = View.GONE
+        adapter.clear()
+        section.clear()
+
+        val comment = withContext(Dispatchers.IO) {
+            CommentsAPI.getSingleComment(commentId)
+        }
+        if (comment != null) {
+            withContext(Dispatchers.Main) {
+                section.add(
+                    CommentItem(
+                        comment,
+                        buildMarkwon(),
+                        section,
+                        this@CommentsFragment,
+                        backgroundColor,
+                        0
+                    )
+                )
+            }
+        }
     }
 
     private fun sortComments(comments: List<Comment>?): List<Comment> {

@@ -6,10 +6,13 @@ import android.content.Context
 import android.os.Bundle
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import androidx.work.Constraints
+import androidx.work.PeriodicWorkRequest
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
+import ani.dantotsu.notifications.NotificationWorker
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
@@ -115,6 +118,19 @@ class App : MultiDexApplication() {
         commentsScope.launch {
             CommentsAPI.fetchAuthToken()
         }
+
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
+            .build()
+        val recurringWork = PeriodicWorkRequest.Builder(NotificationWorker::class.java,
+            15, java.util.concurrent.TimeUnit.MINUTES)
+            .setConstraints(constraints)
+            .build()
+        androidx.work.WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            NotificationWorker.WORK_NAME,
+            androidx.work.ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
+            recurringWork
+        )
     }
 
 

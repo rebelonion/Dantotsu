@@ -55,6 +55,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 
@@ -72,6 +74,15 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var media: Media = intent.getSerialized("media") ?: mediaSingleton ?: emptyMedia()
+        val id = intent.getIntExtra("mediaId", -1)
+        if (id != -1) {
+            runBlocking {
+                withContext(Dispatchers.IO) {
+                    media =
+                        Anilist.query.getMedia(id, false) ?: emptyMedia()
+                }
+            }
+        }
         if (media.name == "No media found") {
             snackString(media.name)
             onBackPressedDispatcher.onBackPressed()
@@ -314,19 +325,19 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 progress()
             }
         }
-
         adult = media.isAdult
         tabLayout.menu.clear()
         if (media.anime != null) {
             viewPager.adapter =
-                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME, media)
+                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME, media, intent.getIntExtra("commentId", -1))
             tabLayout.inflateMenu(R.menu.anime_menu_detail)
         } else if (media.manga != null) {
             viewPager.adapter = ViewPagerAdapter(
                 supportFragmentManager,
                 lifecycle,
                 if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA,
-                media
+                media,
+                intent.getIntExtra("commentId", -1)
             )
             if (media.format == "NOVEL") {
                 tabLayout.inflateMenu(R.menu.novel_menu_detail)
@@ -357,6 +368,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         if (model.continueMedia == null && media.cameFromContinue) {
             model.continueMedia = PrefManager.getVal(PrefName.ContinueMedia)
             selected = 1
+        }
+        val frag = intent.getStringExtra("FRAGMENT_TO_LOAD")
+        if (frag != null) {
+            selected = 2
         }
 
         val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
@@ -417,7 +432,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
         private val mediaType: SupportedMedia,
-        private val media: Media
+        private val media: Media,
+        private val commentId: Int
     ) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
 
@@ -435,6 +451,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 val bundle = Bundle()
                 bundle.putInt("mediaId", media.id)
                 bundle.putString("mediaName", media.mainName())
+                if (commentId != -1) bundle.putInt("commentId", commentId)
                 fragment.arguments = bundle
                 fragment
             }

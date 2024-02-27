@@ -20,18 +20,6 @@ object Notifications {
     const val ID_DOWNLOAD_IMAGE = 2
 
     /**
-     * Notification channel and ids used by the library updater.
-     */
-    private const val GROUP_LIBRARY = "group_library"
-    const val CHANNEL_LIBRARY_PROGRESS = "library_progress_channel"
-    const val ID_LIBRARY_PROGRESS = -101
-    const val ID_LIBRARY_SIZE_WARNING = -103
-    const val CHANNEL_LIBRARY_ERROR = "library_errors_channel"
-    const val ID_LIBRARY_ERROR = -102
-    const val CHANNEL_LIBRARY_SKIPPED = "library_skipped_channel"
-    const val ID_LIBRARY_SKIPPED = -104
-
-    /**
      * Notification channel and ids used by the downloader.
      */
     private const val GROUP_DOWNLOADER = "group_downloader"
@@ -52,21 +40,17 @@ object Notifications {
     const val GROUP_NEW_EPISODES = "eu.kanade.tachiyomi.NEW_EPISODES"
 
     /**
-     * Notification channel and ids used by the backup/restore system.
-     */
-    private const val GROUP_BACKUP_RESTORE = "group_backup_restore"
-    const val CHANNEL_BACKUP_RESTORE_PROGRESS = "backup_restore_progress_channel"
-    const val ID_BACKUP_PROGRESS = -501
-    const val ID_RESTORE_PROGRESS = -503
-    const val CHANNEL_BACKUP_RESTORE_COMPLETE = "backup_restore_complete_channel_v2"
-    const val ID_BACKUP_COMPLETE = -502
-    const val ID_RESTORE_COMPLETE = -504
-
-    /**
      * Notification channel used for Incognito Mode
      */
     const val CHANNEL_INCOGNITO_MODE = "incognito_mode_channel"
     const val ID_INCOGNITO_MODE = -701
+
+    /**
+     * Notification channel used for comment notifications
+     */
+    const val CHANNEL_COMMENTS = "comments_channel"
+    const val ID_COMMENT_REPLY = -801
+
 
     /**
      * Notification channel and ids used for app and extension updates.
@@ -88,6 +72,12 @@ object Notifications {
         "updates_ext_channel",
         "downloader_cache_renewal",
         "crash_logs_channel",
+        "backup_restore_complete_channel_v2",
+        "backup_restore_progress_channel",
+        "group_backup_restore",
+        "library_skipped_channel",
+        "library_errors_channel",
+        "library_progress_channel",
     )
 
     /**
@@ -102,42 +92,10 @@ object Notifications {
         // Delete old notification channels
         deprecatedChannels.forEach(notificationManager::deleteNotificationChannel)
 
-        notificationManager.createNotificationChannelGroupsCompat(
-            listOf(
-                buildNotificationChannelGroup(GROUP_BACKUP_RESTORE) {
-                    setName("Backup & Restore")
-                },
-                buildNotificationChannelGroup(GROUP_DOWNLOADER) {
-                    setName("Downloader")
-                },
-                buildNotificationChannelGroup(GROUP_LIBRARY) {
-                    setName("Library")
-                },
-                buildNotificationChannelGroup(GROUP_APK_UPDATES) {
-                    setName("App & Extension Updates")
-                },
-            ),
-        )
-
         notificationManager.createNotificationChannelsCompat(
             listOf(
                 buildNotificationChannel(CHANNEL_COMMON, IMPORTANCE_LOW) {
                     setName("Common")
-                },
-                buildNotificationChannel(CHANNEL_LIBRARY_PROGRESS, IMPORTANCE_LOW) {
-                    setName("Library Progress")
-                    setGroup(GROUP_LIBRARY)
-                    setShowBadge(false)
-                },
-                buildNotificationChannel(CHANNEL_LIBRARY_ERROR, IMPORTANCE_LOW) {
-                    setName("Library Errors")
-                    setGroup(GROUP_LIBRARY)
-                    setShowBadge(false)
-                },
-                buildNotificationChannel(CHANNEL_LIBRARY_SKIPPED, IMPORTANCE_LOW) {
-                    setName("Library Skipped")
-                    setGroup(GROUP_LIBRARY)
-                    setShowBadge(false)
                 },
                 buildNotificationChannel(CHANNEL_NEW_CHAPTERS_EPISODES, IMPORTANCE_DEFAULT) {
                     setName("New Chapters & Episodes")
@@ -152,19 +110,11 @@ object Notifications {
                     setGroup(GROUP_DOWNLOADER)
                     setShowBadge(false)
                 },
-                buildNotificationChannel(CHANNEL_BACKUP_RESTORE_PROGRESS, IMPORTANCE_LOW) {
-                    setName("Backup & Restore Progress")
-                    setGroup(GROUP_BACKUP_RESTORE)
-                    setShowBadge(false)
-                },
-                buildNotificationChannel(CHANNEL_BACKUP_RESTORE_COMPLETE, IMPORTANCE_HIGH) {
-                    setName("Backup & Restore Complete")
-                    setGroup(GROUP_BACKUP_RESTORE)
-                    setShowBadge(false)
-                    setSound(null, null)
-                },
                 buildNotificationChannel(CHANNEL_INCOGNITO_MODE, IMPORTANCE_LOW) {
                     setName("Incognito Mode")
+                },
+                buildNotificationChannel(CHANNEL_COMMENTS, IMPORTANCE_HIGH) {
+                    setName("Comments")
                 },
                 buildNotificationChannel(CHANNEL_APP_UPDATE, IMPORTANCE_DEFAULT) {
                     setGroup(GROUP_APK_UPDATES)
