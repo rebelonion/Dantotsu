@@ -64,7 +64,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     ) { _, i, value ->
                         set[i] = value
                     }
-                    setPositiveButton("ok") { _, _ ->
+                    setPositiveButton("Done") { _, _ ->
                         PrefManager.setVal(PrefName.HomeLayoutShow, set)
                         restartApp()
                     }
