@@ -27,6 +27,7 @@ import ani.dantotsu.connections.comments.CommentResponse
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.databinding.FragmentCommentsBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -85,6 +86,7 @@ class CommentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as AppCompatActivity
+        (activity as? MediaDetailsActivity)?.binding?.mediaAppBar?.setExpanded(false, true)
         //get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
         mediaName = arguments?.getString("mediaName") ?: "unknown"
@@ -349,6 +351,7 @@ class CommentsFragment : Fragment() {
         super.onResume()
         tag = null
         adapter.notifyDataSetChanged()
+        (activity as? MediaDetailsActivity)?.binding?.mediaAppBar?.setExpanded(false, true)
     }
 
     enum class InteractionState {

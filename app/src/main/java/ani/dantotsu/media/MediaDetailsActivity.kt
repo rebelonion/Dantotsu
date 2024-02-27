@@ -60,7 +60,7 @@ import kotlin.math.abs
 
 class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
 
-    private lateinit var binding: ActivityMediaBinding
+    lateinit var binding: ActivityMediaBinding
     private val scope = lifecycleScope
     private val model: MediaDetailsViewModel by viewModels()
     private lateinit var tabLayout: NavigationBarView

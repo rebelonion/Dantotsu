@@ -128,7 +128,7 @@
             android:name=".media.MediaDetailsActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.Dantotsu.NeverCutout"
-            android:windowSoftInputMode="adjustPan|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".media.CharacterDetailsActivity" />
         <activity android:name=".home.NoInternet" />
         <activity
