@@ -13,6 +13,10 @@ class MediaNameFetch {
             mediaIds.forEachIndexed { index, mediaId ->
                 query += """
                 media$index: Media(id: $mediaId) {
+                    coverImage {
+                        medium
+                        color
+                    }
                     id
                     title {
                         romaji
@@ -24,7 +28,7 @@ class MediaNameFetch {
             return query
         }
 
-        suspend fun fetchMediaTitles(ids: List<Int>): Map<Int, String> {
+        suspend fun fetchMediaTitles(ids: List<Int>): Map<Int, ReturnedData> {
             return try {
                 val url = "https://graphql.anilist.co/"
                 val data = mapOf(
@@ -40,15 +44,19 @@ class MediaNameFetch {
                         data = data
                     )
                     val mediaResponse = parseMediaResponseWithGson(response.text)
-                    val mediaMap = mutableMapOf<Int, String>()
+                    val mediaMap = mutableMapOf<Int, ReturnedData>()
                     mediaResponse.data.forEach { (_, mediaItem) ->
-                        mediaMap[mediaItem.id] = mediaItem.title.romaji
+                        mediaMap[mediaItem.id] = ReturnedData(
+                            mediaItem.title.romaji,
+                            mediaItem.coverImage.medium,
+                            mediaItem.coverImage.color
+                        )
                     }
                     mediaMap
                 }
             } catch (e: Exception) {
-                val errorMap = mutableMapOf<Int, String>()
-                ids.forEach { errorMap[it] = "Unknown" }
+                val errorMap = mutableMapOf<Int, ReturnedData>()
+                ids.forEach { errorMap[it] = ReturnedData("Unknown", "", "#222222") }
                 errorMap
             }
         }
@@ -58,14 +66,17 @@ class MediaNameFetch {
             val type = object : TypeToken<MediaResponse>() {}.type
             return gson.fromJson(response, type)
         }
+        data class ReturnedData(val title: String, val coverImage: String, val color: String)
 
         data class MediaResponse(val data: Map<String, MediaItem>)
         data class MediaItem(
+            val coverImage: MediaCoverImage,
             val id: Int,
             val title: MediaTitle
         )
 
         data class MediaTitle(val romaji: String)
+        data class MediaCoverImage(val medium: String, val color: String)
 
     }
 }

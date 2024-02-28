@@ -1,5 +1,6 @@
 package ani.dantotsu
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -16,7 +17,6 @@ import android.content.res.Configuration
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.Manifest
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
@@ -688,7 +688,11 @@ fun downloadsPermission(activity: AppCompatActivity): Boolean {
     }.toTypedArray()
 
     return if (requiredPermissions.isNotEmpty()) {
-        ActivityCompat.requestPermissions(activity, requiredPermissions, DOWNLOADS_PERMISSION_REQUEST_CODE)
+        ActivityCompat.requestPermissions(
+            activity,
+            requiredPermissions,
+            DOWNLOADS_PERMISSION_REQUEST_CODE
+        )
         false
     } else {
         true
@@ -1067,4 +1071,12 @@ suspend fun View.pop() {
         ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()
     }
     delay(100)
+}
+
+
+fun logToFile(context: Context, message: String) {
+    val externalFilesDir = context.getExternalFilesDir(null)
+    val file = File(externalFilesDir, "notifications.log")
+    file.appendText(message)
+    file.appendText("\n")
 }

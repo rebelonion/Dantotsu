@@ -17,9 +17,11 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.Json
 import okhttp3.FormBody
+import okhttp3.OkHttpClient
 import okio.IOException
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.io.File
 
 object CommentsAPI {
     val address: String = "https://1224665.xyz:443"
@@ -214,11 +216,13 @@ object CommentsAPI {
         return res
     }
 
-    suspend fun reportComment(commentId: Int, username: String, mediaTitle: String): Boolean {
+    suspend fun reportComment(commentId: Int, username: String, mediaTitle: String, reportedId: String): Boolean {
         val url = "$address/report/$commentId"
         val body = FormBody.Builder()
             .add("username", username)
             .add("mediaName", mediaTitle)
+            .add("reporter", Anilist.username ?: "unknown")
+            .add("reportedId", reportedId)
             .build()
         val request = requestBuilder()
         val json = try{
@@ -234,9 +238,9 @@ object CommentsAPI {
         return res
     }
 
-    suspend fun getNotifications(): NotificationResponse? {
+    suspend fun getNotifications(client: OkHttpClient): NotificationResponse? {
         val url = "$address/notification/reply"
-        val request = requestBuilder()
+        val request = requestBuilder(client)
         val json = try {
             request.get(url)
         } catch (e: IOException) {
@@ -255,7 +259,7 @@ object CommentsAPI {
         return parsed
     }
 
-    suspend fun fetchAuthToken() {
+    suspend fun fetchAuthToken(client: OkHttpClient? = null) {
         if (authToken != null) return
         val MAX_RETRIES = 5
         val tokenLifetime: Long = 1000 * 60 * 60 * 24 * 6 // 6 days
@@ -276,7 +280,7 @@ object CommentsAPI {
         val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
         repeat(MAX_RETRIES) {
             try {
-                val json = authRequest(token, url)
+                val json = authRequest(token, url, client)
                 if (json.code == 200) {
                     if (!json.text.startsWith("{")) throw IOException("Invalid response")
                     val parsed = try {
@@ -307,11 +311,11 @@ object CommentsAPI {
         snackString("Failed to login after multiple attempts")
     }
 
-    private suspend fun authRequest(token: String, url: String): NiceResponse {
+    private suspend fun authRequest(token: String, url: String, client: OkHttpClient? = null): NiceResponse {
         val body: FormBody = FormBody.Builder()
             .add("token", token)
             .build()
-        val request = requestBuilder()
+        val request = if (client != null) requestBuilder(client) else requestBuilder()
         return request.post(url, requestBody = body)
     }
 
@@ -325,9 +329,9 @@ object CommentsAPI {
         return map
     }
 
-    private fun requestBuilder(): Requests {
+    private fun requestBuilder(client: OkHttpClient = Injekt.get<NetworkHelper>().client): Requests {
         return Requests(
-            Injekt.get<NetworkHelper>().client,
+            client,
             headerBuilder()
         )
     }

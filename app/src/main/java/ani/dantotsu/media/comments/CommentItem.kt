@@ -139,7 +139,7 @@ class CommentItem(val comment: Comment,
             dialogBuilder("Report Comment", "Only report comments that violate the rules. Are you sure you want to report this comment?") {
                 val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
                 scope.launch {
-                    val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsFragment.mediaName)
+                    val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsFragment.mediaName, comment.userId)
                     if (success) {
                         snackString("Comment Reported")
                     }

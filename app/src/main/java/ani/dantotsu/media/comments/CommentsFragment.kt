@@ -348,7 +348,6 @@ class CommentsFragment : Fragment() {
     @SuppressLint("NotifyDataSetChanged")
     override fun onStart() {
         super.onStart()
-        adapter.notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -423,6 +422,10 @@ class CommentsFragment : Fragment() {
                 )
             }
         }
+
+        binding.commentsProgressBar.visibility = View.GONE
+        binding.commentsList.visibility = View.VISIBLE
+        adapter.add(section)
     }
 
     private fun sortComments(comments: List<Comment>?): List<Comment> {
@@ -693,7 +696,7 @@ class CommentsFragment : Fragment() {
             .usePlugin(TaskListPlugin.create(activity))
             .usePlugin(HtmlPlugin.create { plugin ->
                 plugin.addHandler(
-                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre")
+                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")
                 )
             })
             .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {

@@ -220,6 +220,21 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+        intent.extras?.let { extras ->
+            val fragmentToLoad = extras.getString("FRAGMENT_TO_LOAD")
+            val mediaId = extras.getInt("mediaId", -1)
+            val commentId = extras.getInt("commentId", -1)
+
+            if (fragmentToLoad != null && mediaId != -1 && commentId != -1) {
+                val detailIntent = Intent(this, MediaDetailsActivity::class.java).apply {
+                    putExtra("FRAGMENT_TO_LOAD", fragmentToLoad)
+                    putExtra("mediaId", mediaId)
+                    putExtra("commentId", commentId)
+                }
+                startActivity(detailIntent)
+                return
+            }
+        }
         val offlineMode: Boolean = PrefManager.getVal(PrefName.OfflineMode)
         if (!isOnline(this)) {
             snackString(this@MainActivity.getString(R.string.no_internet_connection))
