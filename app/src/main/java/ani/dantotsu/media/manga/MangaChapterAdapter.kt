@@ -1,5 +1,6 @@
 package ani.dantotsu.media.manga
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -16,6 +17,9 @@ import ani.dantotsu.databinding.ItemChapterListBinding
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.setAnimation
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -258,6 +262,7 @@ class MangaChapterAdapter(
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ChapterCompactViewHolder -> {
@@ -290,6 +295,23 @@ class MangaChapterAdapter(
                 holder.bind(ep.number, ep.progress)
                 setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemChapterNumber.text = ep.number
+
+                if (ep.date != null) {
+                    binding.itemChapterDateLayout.visibility = View.VISIBLE
+                    val time = Date(ep.date)
+                    val dateFormat = SimpleDateFormat("MMM/dd/yyyy", Locale.ENGLISH).format(time)
+                    binding.itemChapterDate.text =
+                        if (dateFormat != "Jan/01/1970") "$dateFormat • " else ""
+                }
+                if (ep.scanlator != null) {
+                    binding.itemChapterDateLayout.visibility = View.VISIBLE
+                    binding.itemChapterScan.text = ep.scanlator.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.ROOT
+                        ) else it.toString()
+                    }
+                }
+
                 if (ep.progress.isNullOrEmpty()) {
                     binding.itemChapterTitle.visibility = View.GONE
                 } else binding.itemChapterTitle.visibility = View.VISIBLE
