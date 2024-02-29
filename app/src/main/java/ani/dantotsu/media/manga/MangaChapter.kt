@@ -13,6 +13,7 @@ data class MangaChapter(
     var description: String? = null,
     var sChapter: SChapter,
     val scanlator: String? = null,
+    val date: Long? = null,
     var progress: String? = ""
 ) : Serializable {
     constructor(chapter: MangaChapter) : this(
@@ -21,7 +22,8 @@ data class MangaChapter(
         chapter.title,
         chapter.description,
         chapter.sChapter,
-        chapter.scanlator
+        chapter.scanlator,
+        chapter.date
     )
 
     private val images = mutableListOf<MangaImage>()

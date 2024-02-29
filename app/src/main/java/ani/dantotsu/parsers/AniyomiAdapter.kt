@@ -633,7 +633,8 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             sChapter.name,
             null,
             sChapter.scanlator,
-            sChapter
+            sChapter,
+            sChapter.date_upload
         )
     }
 
