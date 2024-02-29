@@ -125,6 +125,10 @@ class TripleNavAdapter(
     }
 
     fun setVisibility(visibility: Int) {
+        if (isScreenVertical) {
+            nav1.visibility = visibility
+            return
+        }
         nav1.visibility = visibility
         nav2.visibility = visibility
         nav3.visibility = visibility
