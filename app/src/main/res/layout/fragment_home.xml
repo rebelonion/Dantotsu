@@ -94,7 +94,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/poppins_bold"
-                                        android:textColor="?attr/colorSecondaryVariant"
+                                        android:textColor="?attr/colorPrimaryVariant"
                                         android:textSize="12sp" />
                                 </LinearLayout>
 
@@ -117,7 +117,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/poppins_bold"
-                                        android:textColor="?attr/colorSecondaryVariant"
+                                        android:textColor="?attr/colorPrimaryVariant"
                                         android:textSize="12sp" />
                                 </LinearLayout>
 
