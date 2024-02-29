@@ -13,7 +13,7 @@ class TripleNavAdapter(
     private val nav3: AnimatedBottomBar,
     anime: Boolean,
     format: String,
-    isVertical: Boolean = false
+    private val isScreenVertical: Boolean = false
 ) {
     var selected: Int = 0
     var selectionListener: ((Int, Int) -> Unit)? = null
@@ -31,16 +31,12 @@ class TripleNavAdapter(
         }
         val commentTab = nav3.createTab(R.drawable.ic_round_comment_24, R.string.comments, R.id.comment)
         nav1.addTab(infoTab)
-        nav2.addTab(watchTab)
-        nav3.addTab(commentTab)
         nav1.visibility = ViewGroup.VISIBLE
-        nav2.visibility = ViewGroup.VISIBLE
-        nav3.visibility = ViewGroup.VISIBLE
-        if (!isVertical) {
-            nav1.indicatorColor = Color.TRANSPARENT
-            nav2.indicatorColor = Color.TRANSPARENT
-            nav3.indicatorColor = Color.TRANSPARENT
-        } else {
+        if (isScreenVertical) {
+            nav2.visibility = ViewGroup.GONE
+            nav3.visibility = ViewGroup.GONE
+            nav1.addTab(watchTab)
+            nav1.addTab(commentTab)
             nav1.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
             }
@@ -50,6 +46,38 @@ class TripleNavAdapter(
             nav3.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
             }
+        } else {
+            nav1.indicatorColor = Color.TRANSPARENT
+            nav2.indicatorColor = Color.TRANSPARENT
+            nav3.indicatorColor = Color.TRANSPARENT
+            nav2.visibility = ViewGroup.VISIBLE
+            nav3.visibility = ViewGroup.VISIBLE
+            nav2.addTab(watchTab)
+            nav3.addTab(commentTab)
+            nav2.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+                override fun onTabSelected(
+                    lastIndex: Int,
+                    lastTab: AnimatedBottomBar.Tab?,
+                    newIndex: Int,
+                    newTab: AnimatedBottomBar.Tab
+                ) {
+                    selected = 1
+                    deselectOthers(selected)
+                    selectionListener?.invoke(selected, newTab.id)
+                }
+            })
+            nav3.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+                override fun onTabSelected(
+                    lastIndex: Int,
+                    lastTab: AnimatedBottomBar.Tab?,
+                    newIndex: Int,
+                    newTab: AnimatedBottomBar.Tab
+                ) {
+                    selected = 2
+                    deselectOthers(selected)
+                    selectionListener?.invoke(selected, newTab.id)
+                }
+            })
         }
         nav1.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
             override fun onTabSelected(
@@ -58,32 +86,10 @@ class TripleNavAdapter(
                 newIndex: Int,
                 newTab: AnimatedBottomBar.Tab
             ) {
-                selected = 0
-                deselectOthers(selected)
-                selectionListener?.invoke(selected, newTab.id)
-            }
-        })
-        nav2.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
-            override fun onTabSelected(
-                lastIndex: Int,
-                lastTab: AnimatedBottomBar.Tab?,
-                newIndex: Int,
-                newTab: AnimatedBottomBar.Tab
-            ) {
-                selected = 1
-                deselectOthers(selected)
-                selectionListener?.invoke(selected, newTab.id)
-            }
-        })
-        nav3.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
-            override fun onTabSelected(
-                lastIndex: Int,
-                lastTab: AnimatedBottomBar.Tab?,
-                newIndex: Int,
-                newTab: AnimatedBottomBar.Tab
-            ) {
-                selected = 2
-                deselectOthers(selected)
+                if (!isScreenVertical) {
+                    selected = 0
+                    deselectOthers(selected)
+                } else selected = newIndex
                 selectionListener?.invoke(selected, newTab.id)
             }
         })
@@ -105,13 +111,17 @@ class TripleNavAdapter(
     }
 
     fun selectTab(tab: Int) {
-        when (tab) {
-            0 -> nav1.selectTabAt(0)
-            1 -> nav2.selectTabAt(0)
-            2 -> nav3.selectTabAt(0)
-        }
         selected = tab
-        deselectOthers(selected)
+        if (!isScreenVertical) {
+            when (tab) {
+                0 -> nav1.selectTabAt(0)
+                1 -> nav2.selectTabAt(0)
+                2 -> nav3.selectTabAt(0)
+            }
+            deselectOthers(selected)
+        } else {
+            nav1.selectTabAt(selected)
+        }
     }
 
     fun setVisibility(visibility: Int) {

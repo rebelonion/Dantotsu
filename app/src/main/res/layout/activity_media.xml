@@ -2,9 +2,9 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:fitsSystemWindows="false"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="false">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/mediaAppBar"
@@ -235,8 +235,8 @@
             android:id="@+id/mediaViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:nestedScrollingEnabled="true"
             android:layout_marginBottom="72dp"
+            android:nestedScrollingEnabled="true"
             tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
@@ -247,39 +247,39 @@
         android:layout_gravity="center|bottom"
         android:orientation="horizontal">
 
-    <nl.joery.animatedbottombar.AnimatedBottomBar
-        android:id="@+id/mediaTab1"
-        android:layout_width="0dp"
-        android:layout_height="72dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal|bottom"
-        android:background="?attr/colorSurface"
-        android:padding="0dp"
-        app:abb_animationInterpolator="@anim/over_shoot"
-        app:abb_selectedTabType="text"
-        app:abb_textAppearance="@style/NavBarText"
-
-
-        app:itemActiveIndicatorStyle="@style/BottomNavBar"
-        app:itemIconTint="@color/tab_layout_icon"
-        app:itemRippleColor="#00000000"
-        app:itemTextAppearanceActive="@style/NavBarText"
-        app:itemTextAppearanceInactive="@style/NavBarText"
-        app:itemTextColor="@color/tab_layout_icon" />
+        <nl.joery.animatedbottombar.AnimatedBottomBar
+            android:id="@+id/mediaTab1"
+            android:layout_width="0dp"
+            android:layout_height="72dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_weight="1"
+            android:background="?attr/colorSurface"
+            android:padding="0dp"
+            app:abb_animationInterpolator="@anim/over_shoot"
+            app:abb_indicatorAppearance="round"
+            app:abb_indicatorLocation="top"
+            app:abb_selectedTabType="text"
+            app:abb_textAppearance="@style/NavBarText"
+            app:itemActiveIndicatorStyle="@style/BottomNavBar"
+            app:itemIconTint="@color/tab_layout_icon"
+            app:itemRippleColor="#00000000"
+            app:itemTextAppearanceActive="@style/NavBarText"
+            app:itemTextAppearanceInactive="@style/NavBarText"
+            app:itemTextColor="@color/tab_layout_icon" />
 
         <nl.joery.animatedbottombar.AnimatedBottomBar
             android:id="@+id/mediaTab2"
             android:layout_width="0dp"
             android:layout_height="72dp"
-            android:layout_weight="1"
             android:layout_gravity="center_horizontal|bottom"
+            android:layout_weight="1"
             android:background="?attr/colorSurface"
             android:padding="0dp"
             app:abb_animationInterpolator="@anim/over_shoot"
+            app:abb_indicatorAppearance="round"
+            app:abb_indicatorLocation="top"
             app:abb_selectedTabType="text"
             app:abb_textAppearance="@style/NavBarText"
-
-
             app:itemActiveIndicatorStyle="@style/BottomNavBar"
             app:itemIconTint="@color/tab_layout_icon"
             app:itemRippleColor="#00000000"
@@ -291,15 +291,15 @@
             android:id="@+id/mediaTab3"
             android:layout_width="0dp"
             android:layout_height="72dp"
-            android:layout_weight="1"
             android:layout_gravity="center_horizontal|bottom"
+            android:layout_weight="1"
             android:background="?attr/colorSurface"
             android:padding="0dp"
             app:abb_animationInterpolator="@anim/over_shoot"
+            app:abb_indicatorAppearance="round"
+            app:abb_indicatorLocation="top"
             app:abb_selectedTabType="text"
             app:abb_textAppearance="@style/NavBarText"
-
-
             app:itemActiveIndicatorStyle="@style/BottomNavBar"
             app:itemIconTint="@color/tab_layout_icon"
             app:itemRippleColor="#00000000"
@@ -375,6 +375,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingTop="16dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
