@@ -36,23 +36,6 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val views = resources.getStringArray(R.array.home_layouts)
-        binding.uiSettingsHomeLayout.setOnClickListener {
-            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle(getString(R.string.home_layout_show)).apply {
-                    setMultiChoiceItems(
-                        views,
-                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toBooleanArray()
-                    ) { _, i, value ->
-                        val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow)
-                            .toMutableList()
-                        set[i] = value
-                        PrefManager.setVal(PrefName.HomeLayoutShow, set)
-                    }
-                }.show()
-            dialog.window?.setDimAmount(0.8f)
-        }
-        
         binding.uiSettingsHomeLayout.setOnClickListener {
             val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toMutableList()
             val views = resources.getStringArray(R.array.home_layouts)
