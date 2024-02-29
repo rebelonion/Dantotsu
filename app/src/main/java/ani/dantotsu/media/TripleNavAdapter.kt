@@ -40,6 +40,16 @@ class TripleNavAdapter(
             nav1.indicatorColor = Color.TRANSPARENT
             nav2.indicatorColor = Color.TRANSPARENT
             nav3.indicatorColor = Color.TRANSPARENT
+        } else {
+            nav1.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = navBarHeight
+            }
+            nav2.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = navBarHeight
+            }
+            nav3.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = navBarHeight
+            }
         }
         nav1.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
             override fun onTabSelected(
