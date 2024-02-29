@@ -298,10 +298,7 @@ class MangaChapterAdapter(
 
                 if (ep.date != null) {
                     binding.itemChapterDateLayout.visibility = View.VISIBLE
-                    val time = Date(ep.date)
-                    val dateFormat = SimpleDateFormat("MMM/dd/yyyy", Locale.ENGLISH).format(time)
-                    binding.itemChapterDate.text =
-                        if (dateFormat != "Jan/01/1970") "$dateFormat • " else ""
+                    binding.itemChapterDate.text = formatDate(ep.date)
                 }
                 if (ep.scanlator != null) {
                     binding.itemChapterDateLayout.visibility = View.VISIBLE
@@ -311,6 +308,9 @@ class MangaChapterAdapter(
                         ) else it.toString()
                     }
                 }
+                if (formatDate(ep.date) == "" || ep.scanlator == null) {
+                    binding.itemChapterDateDivider.visibility = View.GONE
+                } else binding.itemChapterDateDivider.visibility = View.VISIBLE
 
                 if (ep.progress.isNullOrEmpty()) {
                     binding.itemChapterTitle.visibility = View.GONE
@@ -344,6 +344,33 @@ class MangaChapterAdapter(
     fun updateType(t: Int) {
         type = t
     }
+    private fun formatDate(timestamp: Long?): String {
+        timestamp ?: return "" // Return empty string if timestamp is null
 
+        val targetDate = Date(timestamp)
+
+        if (targetDate < Date(946684800000L)) { // January 1, 2000 (who want dates before that?)
+            return ""
+        }
+
+        val currentDate = Date()
+        val difference = currentDate.time - targetDate.time
+
+        return when (val daysDifference = difference / (1000 * 60 * 60 * 24)) {
+            0L -> {
+                val hoursDifference = difference / (1000 * 60 * 60)
+                val minutesDifference = (difference / (1000 * 60)) % 60
+
+                when {
+                    hoursDifference > 0 -> "$hoursDifference hour${if (hoursDifference > 1) "s" else ""} ago"
+                    minutesDifference > 0 -> "$minutesDifference minute${if (minutesDifference > 1) "s" else ""} ago"
+                    else -> "Just now"
+                }
+            }
+            1L -> "1 day ago"
+            in 2..6 -> "$daysDifference days ago"
+            else -> SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH).format(targetDate)
+        }
+    }
 
 }
