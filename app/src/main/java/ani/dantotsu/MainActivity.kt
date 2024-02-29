@@ -217,7 +217,6 @@ class MainActivity : AppCompatActivity() {
             }
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
-
             }
         }
         intent.extras?.let { extras ->

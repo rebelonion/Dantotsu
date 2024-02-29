@@ -2,7 +2,9 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.TypedValue
@@ -10,7 +12,9 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +22,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
+import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -25,7 +30,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ani.dantotsu.CustomBottomNavBar
 import ani.dantotsu.GesturesListener
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
@@ -41,6 +45,7 @@ import ani.dantotsu.media.manga.MangaReadFragment
 import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.AndroidBug5497Workaround
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.settings.saving.PrefManager
@@ -50,7 +55,6 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.navigation.NavigationBarView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -65,7 +69,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     lateinit var binding: ActivityMediaBinding
     private val scope = lifecycleScope
     private val model: MediaDetailsViewModel by viewModels()
-    private lateinit var tabLayout: NavigationBarView
+    lateinit var tabLayout: TripleNavAdapter
     var selected = 0
     var anime = true
     private var adult = false
@@ -96,19 +100,30 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
 
+        val isVertical = resources.configuration.orientation
         //Ui init
 
         initActivity(this)
-
+        val oldMargin = binding.mediaViewPager.marginBottom
+        AndroidBug5497Workaround.assistActivity(this) {
+            if (it) {
+                binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 0
+                }
+                binding.mediaTabContainer.visibility = View.GONE
+            } else {
+                binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = oldMargin
+                }
+                binding.mediaTabContainer.visibility = View.VISIBLE
+            }
+        }
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
         binding.mediaClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
         binding.incognito.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
         binding.mediaCollapsing.minimumHeight = statusBarHeight
-
-        if (binding.mediaTab is CustomBottomNavBar) binding.mediaTab.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin = navBarHeight
-        }
+        //binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
 
         binding.mediaTitle.isSelected = true
 
@@ -131,7 +146,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         val banner =
             if (bannerAnimations) binding.mediaBanner else binding.mediaBannerNoKen
         val viewPager = binding.mediaViewPager
-        tabLayout = binding.mediaTab as NavigationBarView
+        //tabLayout = binding.mediaTab as AnimatedBottomBar
         viewPager.isUserInputEnabled = false
         viewPager.setPageTransformer(ZoomOutPageTransformer())
 
@@ -325,12 +340,18 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 progress()
             }
         }
+        tabLayout = TripleNavAdapter(
+            binding.mediaTab1,
+            binding.mediaTab2,
+            binding.mediaTab3,
+            media.anime != null,
+            media.format ?: "",
+            isVertical == 1
+        )
         adult = media.isAdult
-        tabLayout.menu.clear()
         if (media.anime != null) {
             viewPager.adapter =
                 ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME, media, intent.getIntExtra("commentId", -1))
-            tabLayout.inflateMenu(R.menu.anime_menu_detail)
         } else if (media.manga != null) {
             viewPager.adapter = ViewPagerAdapter(
                 supportFragmentManager,
@@ -339,30 +360,23 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 media,
                 intent.getIntExtra("commentId", -1)
             )
-            if (media.format == "NOVEL") {
-                tabLayout.inflateMenu(R.menu.novel_menu_detail)
-            } else {
-                tabLayout.inflateMenu(R.menu.manga_menu_detail)
-            }
             anime = false
         }
 
 
         selected = media.selected!!.window
         binding.mediaTitle.translationX = -screenWidth
-        tabLayout.visibility = View.VISIBLE
 
-        tabLayout.setOnItemSelectedListener { item ->
-            selectFromID(item.itemId)
+        tabLayout.selectionListener = { selected, newId ->
+            this.selected = selected
+            selectFromID(newId)
             viewPager.setCurrentItem(selected, false)
             val sel = model.loadSelected(media, isDownload)
             sel.window = selected
             model.saveSelected(media.id, sel)
-            true
         }
-
-
-        tabLayout.selectedItemId = idFromSelect()
+        tabLayout.selectTab(selected)
+        selectFromID(tabLayout.selected)
         viewPager.setCurrentItem(selected, false)
 
         if (model.continueMedia == null && media.cameFromContinue) {
@@ -384,7 +398,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
         }
     }
-
 
     private fun selectFromID(id: Int) {
         when (id) {
@@ -418,7 +431,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
     override fun onResume() {
         if (this::tabLayout.isInitialized) {
-            tabLayout.selectedItemId = idFromSelect()
+            tabLayout.selectTab(selected)
         }
         super.onResume()
     }
@@ -587,4 +600,3 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         var mediaSingleton: Media? = null
     }
 }
-

@@ -104,6 +104,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".settings.ExtensionsActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".others.imagesearch.ImageSearchActivity"

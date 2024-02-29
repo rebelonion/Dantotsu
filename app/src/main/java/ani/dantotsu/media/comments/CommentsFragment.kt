@@ -11,6 +11,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -25,6 +26,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentResponse
 import ani.dantotsu.connections.comments.CommentsAPI
+import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.FragmentCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsActivity
@@ -88,7 +90,6 @@ class CommentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as AppCompatActivity
-        (activity as? MediaDetailsActivity)?.binding?.mediaAppBar?.setExpanded(false, true)
         //get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
         mediaName = arguments?.getString("mediaName") ?: "unknown"
@@ -695,7 +696,7 @@ class CommentsFragment : Fragment() {
             .usePlugin(object : AbstractMarkwonPlugin() {
                 override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                     builder.linkResolver { view, link ->
-                        // do nothing
+                        copyToClipboard(link, true)
                     }
                 }
             })

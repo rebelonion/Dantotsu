@@ -372,11 +372,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                 activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
                 activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
                 activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-                try {
-                    activity.findViewById<CustomBottomNavBar>(R.id.mediaTab).visibility = visibility
-                } catch (e: ClassCastException) {
-                    activity.findViewById<NavigationRailView>(R.id.mediaTab).visibility = visibility
-                }
+                activity.tabLayout.setVisibility(visibility)
                 activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
                     if (show) View.GONE else View.VISIBLE
             }

@@ -262,10 +262,10 @@ class CommentItem(val comment: Comment,
             val minutes = diff / (60 * 1000) % 60
 
             return when {
-                days > 0 -> "$days days ago"
-                hours > 0 -> "$hours hours ago"
-                minutes > 0 -> "$minutes minutes ago"
-                else -> "just now"
+                days > 0 -> "${days}d"
+                hours > 0 -> "${hours}h"
+                minutes > 0 -> "${minutes}m"
+                else -> "now"
             }
         } catch (e: Exception) {
             "now"
