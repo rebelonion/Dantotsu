@@ -48,7 +48,9 @@ object Notifications {
     /**
      * Notification channel used for comment notifications
      */
+    private const val GROUP_COMMENTS = "group_comments"
     const val CHANNEL_COMMENTS = "comments_channel"
+    const val CHANNEL_COMMENT_WARING = "comment_warning_channel"
     const val ID_COMMENT_REPLY = -801
 
 
@@ -92,6 +94,20 @@ object Notifications {
         // Delete old notification channels
         deprecatedChannels.forEach(notificationManager::deleteNotificationChannel)
 
+        notificationManager.createNotificationChannelGroupsCompat(
+            listOf(
+                buildNotificationChannelGroup(GROUP_DOWNLOADER) {
+                    setName("Downloader")
+                },
+                buildNotificationChannelGroup(GROUP_APK_UPDATES) {
+                    setName("App & Extension Updates")
+                },
+                buildNotificationChannelGroup(GROUP_COMMENTS) {
+                    setName("Comments")
+                },
+            ),
+        )
+
         notificationManager.createNotificationChannelsCompat(
             listOf(
                 buildNotificationChannel(CHANNEL_COMMON, IMPORTANCE_LOW) {
@@ -115,6 +131,11 @@ object Notifications {
                 },
                 buildNotificationChannel(CHANNEL_COMMENTS, IMPORTANCE_HIGH) {
                     setName("Comments")
+                    setGroup(GROUP_COMMENTS)
+                },
+                buildNotificationChannel(CHANNEL_COMMENT_WARING, IMPORTANCE_HIGH) {
+                    setName("Comment Warnings")
+                    setGroup(GROUP_COMMENTS)
                 },
                 buildNotificationChannel(CHANNEL_APP_UPDATE, IMPORTANCE_DEFAULT) {
                     setGroup(GROUP_APK_UPDATES)

@@ -18,43 +18,63 @@ import androidx.work.WorkerParameters
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.comments.CommentsAPI
-import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import java.io.File
-import java.text.DateFormat
+import java.util.Locale
 
 
 class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
     override fun doWork(): Result {
         val scope = CoroutineScope(Dispatchers.IO)
-        //time in human readable format
-        val formattedTime = DateFormat.getDateTimeInstance().format(System.currentTimeMillis())
         scope.launch {
             PrefManager.init(applicationContext) //make sure prefs are initialized
             val client = OkHttpClient()
             CommentsAPI.fetchAuthToken(client)
             val notifications = CommentsAPI.getNotifications(client)
-            val mediaIds = notifications?.notifications?.map { it.mediaId }
-            val names = MediaNameFetch.fetchMediaTitles(mediaIds ?: emptyList())
+            //if we have at least one reply notification, we need to fetch the media titles
+            var names = emptyMap<Int, MediaNameFetch.Companion.ReturnedData>()
+            if (notifications?.notifications?.any { it.type == 1 || it.type == null } == true) {
+                val mediaIds = notifications.notifications.filter { it.type == 1 || it.type == null }.map { it.mediaId }
+                names = MediaNameFetch.fetchMediaTitles(mediaIds)
+            }
+
             notifications?.notifications?.forEach {
-                val title = "New Comment Reply"
-                val mediaName = names[it.mediaId]?.title ?: "Unknown"
-                val message = "${it.username} replied to your comment in $mediaName"
-                val notification = createNotification(
-                    NotificationType.COMMENT_REPLY,
-                    message,
-                    title,
-                    it.mediaId,
-                    it.commentId,
-                    names[it.mediaId]?.color ?: "#222222",
-                    names[it.mediaId]?.coverImage ?: ""
-                )
+                val type: NotificationType = when (it.type) {
+                    1 -> NotificationType.COMMENT_REPLY
+                    2 -> NotificationType.COMMENT_WARNING
+                    else -> NotificationType.COMMENT_REPLY
+                }
+                val notification = if (it.type == 2) {
+                    val title = "You received a warning"
+                    val message = it.content ?: "Be more thoughtful with your comments"
+                    createNotification(
+                        NotificationType.COMMENT_WARNING,
+                        message,
+                        title,
+                        it.mediaId,
+                        it.commentId,
+                        "",
+                         ""
+                    )
+                } else {
+                    val title = "New Comment Reply"
+                    val mediaName = names[it.mediaId]?.title ?: "Unknown"
+                    val message = "${it.username} replied to your comment in $mediaName"
+                    createNotification(
+                        NotificationType.COMMENT_REPLY,
+                        message,
+                        title,
+                        it.mediaId,
+                        it.commentId,
+                        names[it.mediaId]?.color ?: "#222222",
+                        names[it.mediaId]?.coverImage ?: ""
+                    )
+                }
 
                 if (ActivityCompat.checkSelfPermission(
                         applicationContext,
@@ -63,8 +83,8 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
                 ) {
                     NotificationManagerCompat.from(applicationContext)
                         .notify(
-                            NotificationType.COMMENT_REPLY.id,
-                            it.commentId,
+                            type.id,
+                            System.currentTimeMillis().toInt(),
                             notification
                         )
                 }
@@ -83,6 +103,28 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
         imageUrl: String
     ): android.app.Notification {
         val notification = when (notificationType) {
+            NotificationType.COMMENT_WARNING -> {
+                val intent = Intent(applicationContext, MainActivity::class.java).apply {
+                    putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
+                    putExtra("mediaId", mediaId)
+                    putExtra("commentId", commentId)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                val pendingIntent = PendingIntent.getActivity(
+                    applicationContext,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                val builder = NotificationCompat.Builder(applicationContext, notificationType.id)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
+                builder.build()
+            }
             NotificationType.COMMENT_REPLY -> {
                 val intent = Intent(applicationContext, MainActivity::class.java).apply {
                     putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
@@ -141,6 +183,7 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
 
     enum class NotificationType(val id: String) {
         COMMENT_REPLY(Notifications.CHANNEL_COMMENTS),
+        COMMENT_WARNING(Notifications.CHANNEL_COMMENT_WARING)
     }
 
     companion object {

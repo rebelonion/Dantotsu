@@ -408,7 +408,11 @@ data class Notification(
     @SerialName("media_id")
     val mediaId: Int,
     @SerialName("comment_id")
-    val commentId: Int
+    val commentId: Int,
+    @SerialName("type")
+    val type: Int? = null,
+    @SerialName("content")
+    val content: String? = null
 )
 
 
@@ -449,6 +453,8 @@ data class User(
     val isMod: Boolean? = null,
     @SerialName("total_votes")
     val totalVotes: Int,
+    @SerialName("warnings")
+    val warnings: Int
 ) : java.io.Serializable {
     companion object {
         private const val serialVersionUID: Long = 1
