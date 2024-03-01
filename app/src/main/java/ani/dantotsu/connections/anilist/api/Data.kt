@@ -174,6 +174,100 @@ class Query {
             val user: ani.dantotsu.connections.anilist.api.User?
         )
     }
+
+    @Serializable
+    data class UserProfileResponse(
+        @SerialName("data")
+        val data: Data
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("user")
+            val user: UserProfile?
+        )
+    }
+
+    @Serializable
+    data class UserProfile(
+        @SerialName("id")
+        val id: Int,
+        @SerialName("name")
+        val name: String,
+        @SerialName("about")
+        val about: String?,
+        @SerialName("avatar")
+        val avatar: UserAvatar?,
+        @SerialName("bannerImage")
+        val bannerImage: String?,
+        @SerialName("isFollowing")
+        val isFollowing: Boolean,
+        @SerialName("isFollower")
+        val isFollower: Boolean,
+        @SerialName("isBlocked")
+        val isBlocked: Boolean,
+        @SerialName("favorites")
+        val favorites: UserFavorites?,
+        @SerialName("statistics")
+        val statistics: UserStatisticTypes,
+        @SerialName("siteUrl")
+        val siteUrl: String,
+    )
+
+    @Serializable
+    data class UserFavorites(
+        @SerialName("anime")
+        val anime: UserMediaFavoritesCollection,
+        @SerialName("manga")
+        val manga: UserMediaFavoritesCollection,
+        @SerialName("characters")
+        val characters: UserCharacterFavoritesCollection,
+        @SerialName("staff")
+        val staff: UserStaffFavoritesCollection,
+        @SerialName("studios")
+        val studios: UserStudioFavoritesCollection,
+    )
+
+    @Serializable
+    data class UserMediaFavoritesCollection(
+        @SerialName("nodes")
+        val nodes: List<UserMediaImageFavorite>,
+    )
+
+    @Serializable
+    data class UserMediaImageFavorite(
+        @SerialName("coverImage")
+        val coverImage: MediaCoverImage
+    )
+
+    @Serializable
+    data class UserCharacterFavoritesCollection(
+        @SerialName("nodes")
+        val nodes: List<UserCharacterImageFavorite>,
+    )
+
+    @Serializable
+    data class UserCharacterImageFavorite(
+        @SerialName("image")
+        val image: CharacterImage
+    )
+
+    @Serializable
+    data class UserStaffFavoritesCollection(
+        @SerialName("nodes")
+        val nodes: List<UserCharacterImageFavorite>, //downstream it's the same as character
+    )
+
+    @Serializable
+    data class UserStudioFavoritesCollection(
+        @SerialName("nodes")
+        val nodes: List<UserStudioFavorite>,
+    )
+
+    @Serializable
+    data class UserStudioFavorite(
+        @SerialName("name")
+        val name: String,
+    )
 }
 
 //data class WhaData(

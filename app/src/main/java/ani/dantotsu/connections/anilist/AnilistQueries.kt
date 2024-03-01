@@ -52,6 +52,13 @@ class AnilistQueries {
         return true
     }
 
+    suspend fun getUserProfile(id: Int): Query.UserProfileResponse? {
+        return executeQuery<Query.UserProfileResponse>(
+            """{user:User(id:$id){id,name,about(asHtml:true)avatar{medium,large},bannerImage,isFollowing,isFollower,isBlocked,favourites{anime{nodes{coverImage{extraLarge,large,medium,color}}}manga{nodes{coverImage{extraLarge,large,medium,color}}}characters{nodes{image{large,medium}}}staff{nodes{image{large,medium}}}studios{nodes{name}}}statistics{anime{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}manga{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}}siteUrl}}""",
+            force = true
+        )
+    }
+
     suspend fun getMedia(id: Int, mal: Boolean = false): Media? {
         val response = executeQuery<Query.Media>(
             """{Media(${if (!mal) "id:" else "idMal:"}$id){id idMal status chapters episodes nextAiringEpisode{episode}type meanScore isAdult isFavourite format bannerImage coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}""",
