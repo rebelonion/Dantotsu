@@ -2,6 +2,8 @@ package ani.dantotsu.connections.discord
 
 import ani.dantotsu.connections.discord.serializers.Activity
 import ani.dantotsu.connections.discord.serializers.Presence
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -81,7 +83,7 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
                     ),
                     afk = true,
                     since = data.startTimestamp,
-                    status = data.status
+                    status = PrefManager.getVal(PrefName.DiscordStatus)
                 )
             ))
         }
