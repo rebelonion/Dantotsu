@@ -21,7 +21,6 @@ import okhttp3.OkHttpClient
 import okio.IOException
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 object CommentsAPI {
     val address: String = "https://1224665.xyz:443"
@@ -130,7 +129,7 @@ object CommentsAPI {
             body.add("parent_comment_id", it.toString())
         }
         val request = requestBuilder()
-        val json = try{
+        val json = try {
             request.post(url, requestBody = body.build())
         } catch (e: IOException) {
             snackString("Failed to comment")
@@ -168,7 +167,7 @@ object CommentsAPI {
     suspend fun deleteComment(commentId: Int): Boolean {
         val url = "$address/comments/$commentId"
         val request = requestBuilder()
-        val json = try{
+        val json = try {
             request.delete(url)
         } catch (e: IOException) {
             snackString("Failed to delete comment")
@@ -203,7 +202,7 @@ object CommentsAPI {
     suspend fun banUser(userId: String): Boolean {
         val url = "$address/ban/$userId"
         val request = requestBuilder()
-        val json = try{
+        val json = try {
             request.post(url)
         } catch (e: IOException) {
             snackString("Failed to ban user")
@@ -216,7 +215,12 @@ object CommentsAPI {
         return res
     }
 
-    suspend fun reportComment(commentId: Int, username: String, mediaTitle: String, reportedId: String): Boolean {
+    suspend fun reportComment(
+        commentId: Int,
+        username: String,
+        mediaTitle: String,
+        reportedId: String
+    ): Boolean {
         val url = "$address/report/$commentId"
         val body = FormBody.Builder()
             .add("username", username)
@@ -225,7 +229,7 @@ object CommentsAPI {
             .add("reportedId", reportedId)
             .build()
         val request = requestBuilder()
-        val json = try{
+        val json = try {
             request.post(url, requestBody = body)
         } catch (e: IOException) {
             snackString("Failed to report comment")
@@ -259,13 +263,38 @@ object CommentsAPI {
         return parsed
     }
 
+    private suspend fun getUserDetails(client: OkHttpClient? = null): User? {
+        val url = "$address/user"
+        val request = if (client != null) requestBuilder(client) else requestBuilder()
+        val json = try {
+            request.get(url)
+        } catch (e: IOException) {
+            return null
+        }
+        if (json.code == 200) {
+            val parsed = try {
+                Json.decodeFromString<UserResponse>(json.text)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return null
+            }
+            isBanned = parsed.user.isBanned ?: false
+            isAdmin = parsed.user.isAdmin ?: false
+            isMod = parsed.user.isMod ?: false
+            totalVotes = parsed.user.totalVotes
+            return parsed.user
+        }
+        return null
+    }
+
     suspend fun fetchAuthToken(client: OkHttpClient? = null) {
         if (authToken != null) return
         val MAX_RETRIES = 5
         val tokenLifetime: Long = 1000 * 60 * 60 * 24 * 6 // 6 days
         val tokenExpiry = PrefManager.getVal<Long>(PrefName.CommentTokenExpiry)
         if (tokenExpiry < System.currentTimeMillis() + tokenLifetime) {
-            val commentResponse = PrefManager.getNullableVal<AuthResponse>(PrefName.CommentAuthResponse, null)
+            val commentResponse =
+                PrefManager.getNullableVal<AuthResponse>(PrefName.CommentAuthResponse, null)
             if (commentResponse != null) {
                 authToken = commentResponse.authToken
                 userId = commentResponse.user.id
@@ -273,8 +302,9 @@ object CommentsAPI {
                 isAdmin = commentResponse.user.isAdmin ?: false
                 isMod = commentResponse.user.isMod ?: false
                 totalVotes = commentResponse.user.totalVotes
-                return
+                if (getUserDetails(client) != null) return
             }
+
         }
         val url = "$address/authenticate"
         val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
@@ -290,7 +320,10 @@ object CommentsAPI {
                         return
                     }
                     PrefManager.setVal(PrefName.CommentAuthResponse, parsed)
-                    PrefManager.setVal(PrefName.CommentTokenExpiry, System.currentTimeMillis() + tokenLifetime)
+                    PrefManager.setVal(
+                        PrefName.CommentTokenExpiry,
+                        System.currentTimeMillis() + tokenLifetime
+                    )
                     authToken = parsed.authToken
                     userId = parsed.user.id
                     isBanned = parsed.user.isBanned ?: false
@@ -311,7 +344,11 @@ object CommentsAPI {
         snackString("Failed to login after multiple attempts")
     }
 
-    private suspend fun authRequest(token: String, url: String, client: OkHttpClient? = null): NiceResponse {
+    private suspend fun authRequest(
+        token: String,
+        url: String,
+        client: OkHttpClient? = null
+    ): NiceResponse {
         val body: FormBody = FormBody.Builder()
             .add("token", token)
             .build()
@@ -386,6 +423,12 @@ data class AuthResponse(
         private const val serialVersionUID: Long = 1
     }
 }
+
+@Serializable
+data class UserResponse(
+    @SerialName("user")
+    val user: User
+)
 
 @Serializable
 data class User(
