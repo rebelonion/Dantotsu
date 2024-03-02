@@ -255,10 +255,8 @@ class MangaReadAdapter(
                 if (options.count() > 1) View.VISIBLE else View.GONE
             dialogBinding.scanlatorNo.text = "${options.count()}"
             dialogBinding.animeScanlatorTop.setOnClickListener {
-                val dialogView2 =
-                    LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
-                val checkboxContainer =
-                    dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
+                val dialogView2 = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+                val checkboxContainer = dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
 
                 // Dynamically add checkboxes
                 options.forEach { option ->
@@ -293,6 +291,26 @@ class MangaReadAdapter(
                     .setNegativeButton("Cancel", null)
                     .show()
                 dialog.window?.setDimAmount(0.8f)
+
+                // ImageButton to tick all checkboxes
+                val tickAllButton = dialogView2.findViewById<ImageButton>(R.id.toggleButton)
+                tickAllButton.setOnClickListener {
+                    var allTicked = false
+                    for (i in 0 until checkboxContainer.childCount) {
+                        val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                        if (!checkBox.isChecked) {
+                            allTicked = true
+                            break
+                        }
+                    }
+
+                    // Toggle all checkboxes
+                    for (i in 0 until checkboxContainer.childCount) {
+                        val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                        checkBox.isChecked = allTicked
+                    }
+                    tickAllButton.setImageResource(if (allTicked) R.drawable.untick_all_boxes else R.drawable.tick_all_boxes)
+                }
             }
 
             nestedDialog = AlertDialog.Builder(fragment.requireContext(), R.style.MyPopup)
