@@ -7,10 +7,13 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.MainActivity
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
 import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
@@ -76,7 +79,12 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
                 Anilist.loginIntent(requireActivity())
             }
         }
-
+        binding.settingsUserAvatar.setOnClickListener{
+            ContextCompat.startActivity(
+                currContext()!!, Intent(currContext()!!, ProfileActivity::class.java)
+                    .putExtra("userId", Anilist.userid), null
+            )
+        }
         binding.settingsIncognito.isChecked =
             PrefManager.getVal(PrefName.Incognito)
 

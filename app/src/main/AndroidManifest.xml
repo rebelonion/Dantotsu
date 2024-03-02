@@ -108,6 +108,10 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".profile.ProfileActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
