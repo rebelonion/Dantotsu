@@ -10,12 +10,8 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.copyToClipboard
-import ani.dantotsu.currActivity
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
-import ani.dantotsu.media.user.ListActivity
-import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
@@ -56,7 +52,7 @@ class CommentItem(val comment: Comment,
     @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
         binding = viewBinding
-        viewBinding.commentRepliesList.layoutManager = LinearLayoutManager(currActivity())
+        viewBinding.commentRepliesList.layoutManager = LinearLayoutManager(commentsFragment.activity)
         viewBinding.commentRepliesList.adapter = adapter
         val isUserComment = CommentsAPI.userId == comment.userId
         val node = markwon.parse(comment.content)
@@ -101,7 +97,7 @@ class CommentItem(val comment: Comment,
 
         viewBinding.commentUserName.setOnClickListener {
             ContextCompat.startActivity(
-                currContext()!!, Intent(currContext()!!, ProfileActivity::class.java)
+                commentsFragment.activity, Intent(commentsFragment.activity, ProfileActivity::class.java)
                     .putExtra("userId", comment.userId.toInt())
                     .putExtra("username","[${levelColor.second}]"), null
             )
@@ -215,12 +211,12 @@ class CommentItem(val comment: Comment,
     }
 
     fun replying(isReplying: Boolean) {
-        binding?.commentReply?.text = if (isReplying) currActivity()!!.getString(R.string.cancel) else "Reply"
+        binding?.commentReply?.text = if (isReplying) commentsFragment.activity.getString(R.string.cancel) else "Reply"
         this.isReplying = isReplying
     }
 
     fun editing(isEditing: Boolean) {
-        binding?.commentEdit?.text = if (isEditing) currActivity()!!.getString(R.string.cancel) else currActivity()!!.getString(R.string.edit)
+        binding?.commentEdit?.text = if (isEditing) commentsFragment.activity.getString(R.string.cancel) else commentsFragment.activity.getString(R.string.edit)
         this.isEditing = isEditing
     }
 

@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
+import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentResponse
@@ -100,7 +101,7 @@ class CommentsFragment : Fragment() {
         this.mediaId = mediaId
         backgroundColor = (binding.root.background as? ColorDrawable)?.color ?: 0
 
-        val markwon = buildMarkwon()
+        val markwon = buildMarkwon(activity)
 
         binding.commentUserAvatar.loadImage(Anilist.avatar)
         val markwonEditor = MarkwonEditor.create(markwon)
@@ -235,7 +236,7 @@ class CommentsFragment : Fragment() {
                     section.add(
                         CommentItem(
                             comment,
-                            buildMarkwon(),
+                            buildMarkwon(activity),
                             section,
                             this@CommentsFragment,
                             backgroundColor,
@@ -386,7 +387,7 @@ class CommentsFragment : Fragment() {
                 section.add(
                     CommentItem(
                         it,
-                        buildMarkwon(),
+                        buildMarkwon(activity),
                         section,
                         this@CommentsFragment,
                         backgroundColor,
@@ -416,7 +417,7 @@ class CommentsFragment : Fragment() {
                 section.add(
                     CommentItem(
                         comment,
-                        buildMarkwon(),
+                        buildMarkwon(activity),
                         section,
                         this@CommentsFragment,
                         backgroundColor,
@@ -539,7 +540,7 @@ class CommentsFragment : Fragment() {
                 if (depth >= comment.MAX_DEPTH) comment.registerSubComment(it.commentId)
                 val newCommentItem = CommentItem(
                     it,
-                    buildMarkwon(),
+                    buildMarkwon(activity),
                     section,
                     this@CommentsFragment,
                     backgroundColor,
@@ -664,7 +665,7 @@ class CommentsFragment : Fragment() {
                     if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) 0 else section.itemCount,
                     CommentItem(
                         it,
-                        buildMarkwon(),
+                        buildMarkwon(activity),
                         section,
                         this@CommentsFragment,
                         backgroundColor,
@@ -676,7 +677,7 @@ class CommentsFragment : Fragment() {
                     0,
                     CommentItem(
                         it,
-                        buildMarkwon(),
+                        buildMarkwon(activity),
                         section,
                         this@CommentsFragment,
                         backgroundColor,
@@ -685,69 +686,5 @@ class CommentsFragment : Fragment() {
                 )
             }
         }
-    }
-
-    /**
-     * Builds the markwon instance with all the plugins
-     * @return the markwon instance
-     */
-    private fun buildMarkwon(): Markwon {
-        val markwon = Markwon.builder(activity)
-            .usePlugin(object : AbstractMarkwonPlugin() {
-                override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
-                    builder.linkResolver { view, link ->
-                        copyToClipboard(link, true)
-                    }
-                }
-            })
-
-            .usePlugin(SoftBreakAddsNewLinePlugin.create())
-            .usePlugin(StrikethroughPlugin.create())
-            .usePlugin(TablePlugin.create(activity))
-            .usePlugin(TaskListPlugin.create(activity))
-            .usePlugin(HtmlPlugin.create { plugin ->
-                plugin.addHandler(
-                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")
-                )
-            })
-            .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
-
-                private val requestManager: RequestManager =
-                    Glide.with(this@CommentsFragment).apply {
-                        addDefaultRequestListener(object : RequestListener<Any> {
-                            override fun onResourceReady(
-                                resource: Any,
-                                model: Any,
-                                target: Target<Any>,
-                                dataSource: DataSource,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                if (resource is GifDrawable) {
-                                    resource.start()
-                                }
-                                return false
-                            }
-
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Any>,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                return false
-                            }
-                        })
-                    }
-
-                override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
-                    return requestManager.load(drawable.destination)
-                }
-
-                override fun cancel(target: Target<*>) {
-                    requestManager.clear(target)
-                }
-            }))
-            .build()
-        return markwon
     }
 }

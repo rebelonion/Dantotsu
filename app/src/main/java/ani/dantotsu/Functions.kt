@@ -17,6 +17,7 @@ import android.content.res.Configuration
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities.*
@@ -59,8 +60,15 @@ import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
 import ani.dantotsu.subcriptions.NotificationClickReceiver
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.target.Target
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -68,6 +76,17 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
 import eu.kanade.tachiyomi.data.notification.Notifications
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
+import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tasklist.TaskListPlugin
+import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.html.TagHandlerNoOp
+import io.noties.markwon.image.AsyncDrawable
+import io.noties.markwon.image.glide.GlideImagesPlugin
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
@@ -1079,4 +1098,70 @@ fun logToFile(context: Context, message: String) {
     val file = File(externalFilesDir, "notifications.log")
     file.appendText(message)
     file.appendText("\n")
+}
+
+/**
+ * Builds the markwon instance with all the plugins
+ * @return the markwon instance
+ */
+fun buildMarkwon(activity: Activity, userInputContent: Boolean = true): Markwon {
+    val markwon = Markwon.builder(activity)
+        .usePlugin(object : AbstractMarkwonPlugin() {
+            override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                builder.linkResolver { view, link ->
+                    copyToClipboard(link, true)
+                }
+            }
+        })
+
+        .usePlugin(SoftBreakAddsNewLinePlugin.create())
+        .usePlugin(StrikethroughPlugin.create())
+        .usePlugin(TablePlugin.create(activity))
+        .usePlugin(TaskListPlugin.create(activity))
+        .usePlugin(HtmlPlugin.create { plugin ->
+            if (!userInputContent) {
+                plugin.addHandler(
+                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")
+                )
+            }
+        })
+        .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
+
+            private val requestManager: RequestManager =
+                Glide.with(activity).apply {
+                    addDefaultRequestListener(object : RequestListener<Any> {
+                        override fun onResourceReady(
+                            resource: Any,
+                            model: Any,
+                            target: Target<Any>,
+                            dataSource: DataSource,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            if (resource is GifDrawable) {
+                                resource.start()
+                            }
+                            return false
+                        }
+
+                        override fun onLoadFailed(
+                            e: GlideException?,
+                            model: Any?,
+                            target: Target<Any>,
+                            isFirstResource: Boolean
+                        ): Boolean {
+                            return false
+                        }
+                    })
+                }
+
+            override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
+                return requestManager.load(drawable.destination)
+            }
+
+            override fun cancel(target: Target<*>) {
+                requestManager.clear(target)
+            }
+        }))
+        .build()
+    return markwon
 }
