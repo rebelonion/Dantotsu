@@ -99,8 +99,6 @@ class ProfileActivity : AppCompatActivity(){
                     )
                 }
                 binding.profileUserName.text = "${user.name} $userLevel"
-                binding.profileUserEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()
-                binding.profileUserChaptersRead.text = user.statistics.manga.chaptersRead.toString()
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.profileBannerImage.pause()
                 binding.profileBannerImage.loadImage(user.bannerImage)
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }

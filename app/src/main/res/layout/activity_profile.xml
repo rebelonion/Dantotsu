@@ -46,87 +46,44 @@
                 android:src="@drawable/linear_gradient_bg"
                 tools:ignore="ContentDescription" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/profileUserAvatarContainer"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
-                android:layout_gravity="end"
-                android:layout_marginTop="-52dp"
-                android:layout_marginEnd="32dp"
-                app:cardCornerRadius="64dp">
-
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/profileUserAvatar"
-                    android:layout_width="78dp"
-                    android:layout_height="78dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/ic_round_add_circle_24"
-                    tools:ignore="ContentDescription,ImageContrastCheck" />
-
-            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:id="@+id/profileUserDataContainer"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="-24dp"
+                android:layout_marginTop="-124dp"
+                android:layout_gravity="center"
                 android:orientation="vertical"
                 tools:visibility="visible">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/profileUserAvatarContainer"
+                    android:layout_width="82dp"
+                    android:layout_height="82dp"
+                    android:layout_gravity="center"
+                    android:backgroundTint="@color/bg_opp"
+                    app:cardCornerRadius="64dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/profileUserAvatar"
+                        android:layout_width="78dp"
+                        android:layout_height="78dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/ic_round_add_circle_24"
+                        tools:tint="@color/bg"
+                        tools:ignore="ContentDescription,ImageContrastCheck" />
+
+                </com.google.android.material.card.MaterialCardView>
 
                 <TextView
                     android:id="@+id/profileUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:textColor="?attr/colorPrimary"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/username"
                     android:textSize="18sp" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.58"
-                        android:fontFamily="@font/poppins"
-                        android:text="@string/episodes_watched"
-                        android:textSize="12sp"
-                        tools:ignore="TextContrastCheck,TooDeepLayout" />
-
-                    <TextView
-                        android:id="@+id/profileUserEpisodesWatched"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_bold"
-                        android:textColor="?attr/colorPrimaryVariant"
-                        android:textSize="12sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.58"
-                        android:fontFamily="@font/poppins"
-                        android:text="@string/chapters_read"
-                        android:textSize="12sp"
-                        tools:ignore="TextContrastCheck" />
-
-                    <TextView
-                        android:id="@+id/profileUserChaptersRead"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/poppins_bold"
-                        android:textColor="?attr/colorPrimaryVariant"
-                        android:textSize="12sp" />
-                </LinearLayout>
 
             </LinearLayout>
 

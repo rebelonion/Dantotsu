@@ -12,16 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="List"
-            android:textSize="18sp"
-            tools:ignore="HardcodedText" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -141,33 +131,6 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/userInfoContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <TextView
-            android:id="@+id/profileUserBioTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="24dp"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="Bio"
-            android:textSize="18sp"
-            tools:ignore="HardcodedText" />
-
-        <TextView
-            android:id="@+id/profileUserBio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:alpha="0.58"
-            android:textSize="12sp"
-            tools:text="@tools:sample/lorem"/>
-    </LinearLayout>
-    <LinearLayout
         android:id="@+id/userStatsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -178,6 +141,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="18dp"
             android:layout_marginTop="24dp"
+            android:textColor="?attr/colorPrimary"
             android:fontFamily="@font/poppins_semi_bold"
             android:text="Stats"
             android:textSize="18sp"
@@ -363,4 +327,35 @@
             </TableRow>
         </TableLayout>
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userInfoContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/profileUserBioTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="24dp"
+            android:textColor="?attr/colorPrimary"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="Bio"
+            android:textSize="18sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/profileUserBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:alpha="0.58"
+            android:textSize="12sp"
+            tools:text="@tools:sample/lorem"/>
+    </LinearLayout>
+
 </LinearLayout>
