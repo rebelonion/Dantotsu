@@ -70,7 +70,7 @@
                 
            <LinearLayout
               	android:layout_width="match_parent"
-              	android:layout_height="match_parent"
+              	android:layout_height="wrap_content"
               	android:orientation="horizontal"
               	android:gravity="center">
 
@@ -78,8 +78,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-            		android:layout_marginLeft="24dp"
-            		android:layout_marginRight="24dp">
+            		android:layout_marginLeft="12dp"
+            		android:layout_marginRight="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins"
                     android:text="@string/episodes_watched"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:padding="5dp"
                     tools:ignore="TextContrastCheck,TooDeepLayout" />
 
@@ -98,15 +98,15 @@
                     android:fontFamily="@font/poppins_bold"
                     android:padding="5dp"
                     android:textColor="?attr/colorPrimaryVariant"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-            		android:layout_marginLeft="24dp"
-            		android:layout_marginRight="24dp">
+            		android:layout_marginLeft="12dp"
+            		android:layout_marginRight="12dp">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -114,7 +114,7 @@
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins"
                     android:text="@string/chapters_read"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     tools:ignore="TextContrastCheck" />
 
                 <TextView
@@ -123,7 +123,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="?attr/colorPrimaryVariant"
-                    android:textSize="12sp" />
+                    android:textSize="16sp" />
             </LinearLayout>
 
           </LinearLayout>
