@@ -72,13 +72,13 @@
               	android:layout_width="wrap_content"
               	android:layout_height="wrap_content"
               	android:orientation="horizontal"
-              	android:gravity="center|center_horizontal">
+              	android:gravity="center">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -98,15 +98,11 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-           	<android.view.View
-               	android:layout_width="36dp"
-              	android:layout_height="wrap_content"/>
-
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center_horizontal">
+                android:gravity="center">
 
                 <TextView
                     android:layout_width="wrap_content"
