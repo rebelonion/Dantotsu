@@ -14,8 +14,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -805,7 +807,41 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     restartMainActivity.isEnabled = true
                     reload()
                 }
+
+                binding.imageSwitcher.visibility = View.VISIBLE
+                var initialStatus = when (PrefManager.getVal<String>(PrefName.DiscordStatus)) {
+                    "online" -> R.drawable.discord_status_online
+                    "idle" -> R.drawable.discord_status_idle
+                    "dnd" -> R.drawable.discord_status_dnd
+                    else -> R.drawable.discord_status_online
+                }
+                binding.imageSwitcher.setImageResource(initialStatus)
+
+                val zoomInAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_zoom)
+                binding.imageSwitcher.setOnClickListener {
+                    var status = "online"
+                    initialStatus = when (initialStatus) {
+                        R.drawable.discord_status_online -> {
+                            status = "idle"
+                            R.drawable.discord_status_idle
+                        }
+                        R.drawable.discord_status_idle -> {
+                            status = "dnd"
+                            R.drawable.discord_status_dnd
+                        }
+                        R.drawable.discord_status_dnd -> {
+                            status = "online"
+                            R.drawable.discord_status_online
+                        }
+                        else -> R.drawable.discord_status_online
+                    }
+
+                    PrefManager.setVal(PrefName.DiscordStatus, status)
+                    binding.imageSwitcher.setImageResource(initialStatus)
+                    binding.imageSwitcher.startAnimation(zoomInAnimation)
+                }
             } else {
+                binding.imageSwitcher.visibility = View.GONE
                 binding.settingsDiscordAvatar.setImageResource(R.drawable.ic_round_person_24)
                 binding.settingsDiscordUsername.visibility = View.GONE
                 binding.settingsDiscordLogin.setText(R.string.login)

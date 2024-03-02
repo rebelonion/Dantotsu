@@ -238,7 +238,8 @@
                     android:id="@+id/settingsDiscordLoginContainer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="ExtraText">
 
                     <ImageView
                         android:layout_width="31dp"
@@ -281,6 +282,14 @@
                             android:textSize="14sp" />
 
                     </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/imageSwitcher"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/discord_status_idle"
+                        android:onClick="onImageClicked"
+                        android:padding="16dp" />
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/settingsDiscordAvatarContainer"
