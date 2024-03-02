@@ -292,6 +292,320 @@ class Query {
         @SerialName("name")
         val name: String,
     )
+
+    //----------------------------------------
+    // Statistics
+
+    @Serializable
+    data class StatisticsResponse(
+        @SerialName("data")
+        val data: Data
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("User")
+            val user: StatisticsUser?
+        )
+    }
+
+    @Serializable
+    data class StatisticsUser(
+        @SerialName("id")
+        val id: Int,
+        @SerialName("name")
+        val name: String,
+        @SerialName("statistics")
+        val statistics: StatisticsTypes
+    )
+
+    @Serializable
+    data class StatisticsTypes(
+        @SerialName("anime")
+        val anime: Statistics,
+        @SerialName("manga")
+        val manga: Statistics
+    )
+
+    @Serializable
+    data class Statistics(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("standardDeviation")
+        val standardDeviation: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("episodesWatched")
+        val episodesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("volumesRead")
+        val volumesRead: Int,
+        @SerialName("formats")
+        val formats: List<StatisticsFormat>,
+        @SerialName("statuses")
+        val statuses: List<StatisticsStatus>,
+        @SerialName("scores")
+        val scores: List<StatisticsScore>,
+        @SerialName("lengths")
+        val lengths: List<StatisticsLength>,
+        @SerialName("releaseYears")
+        val releaseYears: List<StatisticsReleaseYear>,
+        @SerialName("startYears")
+        val startYears: List<StatisticsStartYear>,
+        @SerialName("genres")
+        val genres: List<StatisticsGenre>,
+        @SerialName("tags")
+        val tags: List<StatisticsTag>,
+        @SerialName("countries")
+        val countries: List<StatisticsCountry>,
+        @SerialName("voiceActors")
+        val voiceActors: List<StatisticsVoiceActor>,
+        @SerialName("staff")
+        val staff: List<StatisticsStaff>,
+        @SerialName("studios")
+        val studios: List<StatisticsStudio>
+    )
+
+    @Serializable
+    data class StatisticsFormat(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("format")
+        val format: String
+    )
+
+    @Serializable
+    data class StatisticsStatus(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("status")
+        val status: String
+    )
+
+    @Serializable
+    data class StatisticsScore(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("score")
+        val score: Int
+    )
+
+    @Serializable
+    data class StatisticsLength(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("length")
+        val length: String? //can be null for manga
+    )
+
+    @Serializable
+    data class StatisticsReleaseYear(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("releaseYear")
+        val releaseYear: Int
+    )
+
+    @Serializable
+    data class StatisticsStartYear(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("startYear")
+        val startYear: Int
+    )
+
+    @Serializable
+    data class StatisticsGenre(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("genre")
+        val genre: String
+    )
+
+    @Serializable
+    data class StatisticsTag(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("tag")
+        val tag: Tag
+    )
+
+    @Serializable
+    data class Tag(
+        @SerialName("id")
+        val id: Int,
+        @SerialName("name")
+        val name: String
+    )
+
+    @Serializable
+    data class StatisticsCountry(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("country")
+        val country: String
+    )
+
+    @Serializable
+    data class StatisticsVoiceActor(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("voiceActor")
+        val voiceActor: VoiceActor,
+        @SerialName("characterIds")
+        val characterIds: List<Int>
+    )
+
+    @Serializable
+    data class VoiceActor(
+        @SerialName("id")
+        val id: Int,
+        @SerialName("name")
+        val name: StaffName
+    )
+
+    @Serializable
+    data class StaffName(
+        @SerialName("first")
+        val first: String?,
+        @SerialName("middle")
+        val middle: String?,
+        @SerialName("last")
+        val last: String?,
+        @SerialName("full")
+        val full: String?,
+        @SerialName("native")
+        val native: String?,
+        @SerialName("alternative")
+        val alternative: List<String>?,
+        @SerialName("userPreferred")
+        val userPreferred: String?
+    )
+
+    @Serializable
+    data class StatisticsStaff(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("staff")
+        val staff: VoiceActor
+    )
+
+    @Serializable
+    data class StatisticsStudio(
+        @SerialName("count")
+        val count: Int,
+        @SerialName("meanScore")
+        val meanScore: Float,
+        @SerialName("minutesWatched")
+        val minutesWatched: Int,
+        @SerialName("chaptersRead")
+        val chaptersRead: Int,
+        @SerialName("mediaIds")
+        val mediaIds: List<Int>,
+        @SerialName("studio")
+        val studio: StatStudio
+    )
+
+    @Serializable
+    data class StatStudio(
+        @SerialName("id")
+        val id: Int,
+        @SerialName("name")
+        val name: String,
+        @SerialName("isAnimationStudio")
+        val isAnimationStudio: Boolean
+    )
+
 }
 
 //data class WhaData(

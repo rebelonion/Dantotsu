@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <nl.joery.animatedbottombar.AnimatedBottomBar
+            android:id="@+id/typeTab"
+            android:layout_width="match_parent"
+            android:layout_height="72dp"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="?attr/colorSurface"
+            android:padding="0dp"
+            app:abb_animationInterpolator="@anim/over_shoot"
+            app:abb_indicatorAppearance="round"
+            app:abb_indicatorLocation="bottom"
+            app:abb_selectedTabType="text"
+            app:abb_textAppearance="@style/NavBarText"
+            app:itemActiveIndicatorStyle="@style/BottomNavBar"
+            app:itemIconTint="@color/tab_layout_icon"
+            app:itemRippleColor="#00000000"
+            app:itemTextAppearanceActive="@style/NavBarText"
+            app:itemTextAppearanceInactive="@style/NavBarText"
+            app:itemTextColor="@color/tab_layout_icon" />
+
+        <TextView
+            android:id="@+id/selectedTabText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Anime"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/formatChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/StatusChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/scoreChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/lengthChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/releaseYearChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/startYearChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/genreChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/tagChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/countryChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/voiceActorChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/staffChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/studioChartView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

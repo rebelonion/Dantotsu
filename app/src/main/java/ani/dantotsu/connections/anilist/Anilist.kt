@@ -11,6 +11,7 @@ import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.tryWithSuspend
 import java.util.Calendar
@@ -124,7 +125,7 @@ object Anilist {
         show: Boolean = false,
         cache: Int? = null
     ): T? {
-        return tryWithSuspend {
+        return try {
             if (rateLimitReset > System.currentTimeMillis() / 1000) {
                 toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
                 throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
@@ -163,6 +164,10 @@ object Anilist {
                 if (show) println("Response : ${json.text}")
                 json.parsed()
             } else null
+        } catch (e: Exception) {
+            if (show) snackString("Error fetching Anilist data: ${e.message}")
+            Log.e("AnilistQuery", "Error: ${e.message}")
+            null
         }
     }
 }
