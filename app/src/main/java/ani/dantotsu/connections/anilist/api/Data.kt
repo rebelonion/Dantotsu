@@ -235,6 +235,8 @@ class Query {
 
     @Serializable
     data class UserMediaImageFavorite(
+        @SerialName("id")
+        val id: Int,
         @SerialName("coverImage")
         val coverImage: MediaCoverImage
     )
@@ -247,6 +249,8 @@ class Query {
 
     @Serializable
     data class UserCharacterImageFavorite(
+        @SerialName("id")
+        val id: Int,
         @SerialName("image")
         val image: CharacterImage
     )
@@ -265,6 +269,8 @@ class Query {
 
     @Serializable
     data class UserStudioFavorite(
+        @SerialName("id")
+        val id: Int,
         @SerialName("name")
         val name: String,
     )
