@@ -77,7 +77,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -85,7 +86,7 @@
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins"
                     android:text="@string/episodes_watched"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     tools:ignore="TextContrastCheck,TooDeepLayout" />
 
                 <TextView
@@ -97,10 +98,15 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
+           	<android.view.View
+               	android:layout_width="36dp"
+              	android:layout_height="wrap_content"/>
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -108,7 +114,7 @@
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins"
                     android:text="@string/chapters_read"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     tools:ignore="TextContrastCheck" />
 
                 <TextView
