@@ -70,9 +70,9 @@
                 
            <LinearLayout
               	android:layout_width="match_parent"
-              	android:layout_height="wrap_content"
-              	android:orientation="horizontal"
-              	android:gravity="center">
+              	android:layout_height="90dp"
+              	android:orientation="vertical"
+              	android:gravity="center|center_horizontal">
 
             <LinearLayout
                 android:layout_width="match_parent"
