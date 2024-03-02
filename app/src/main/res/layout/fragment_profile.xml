@@ -6,151 +6,356 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:text="List"
-        android:textSize="18sp"
-        tools:ignore="HardcodedText" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/profileListContainer"
+    <LinearLayout
+        android:id="@+id/userListContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:clipToPadding="false"
-        android:paddingStart="24dp"
-        android:paddingEnd="24dp">
+        android:orientation="vertical">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/profileAnimeList"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="8dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:cardCornerRadius="16dp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/profileMangaList"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_max="256dp"
-            tools:visibility="visible">
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp">
 
-            <ImageView
-                android:id="@+id/profileAnimeListImage"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profileAnimeList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                tools:ignore="ContentDescription"
-                tools:src="@tools:sample/backgrounds/scenic" />
+                android:layout_height="72dp"
+                android:layout_margin="8dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:cardCornerRadius="16dp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/profileMangaList"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="256dp"
+                tools:visibility="visible">
 
-            <View
+                <ImageView
+                    android:id="@+id/profileAnimeListImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.6"
+                    android:background="@color/bg_black" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/anime_list"
+                        android:textAllCaps="true"
+                        android:textColor="@color/bg_white"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="64dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:background="?attr/colorPrimary" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/profileMangaList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.6"
-                android:background="@color/bg_black" />
+                android:layout_height="72dp"
+                android:layout_margin="8dp"
+                android:layout_marginBottom="16dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:cardCornerRadius="16dp"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/profileAnimeList"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="256dp"
+                tools:visibility="visible">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/profileMangaListImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:alpha="0.6"
+                    android:background="@color/bg_black" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/manga_list"
+                        android:textAllCaps="true"
+                        android:textColor="@color/bg_white"
+                        android:textSize="16sp" />
+
+                    <View
+                        android:layout_width="64dp"
+                        android:layout_height="2dp"
+                        android:layout_gravity="center"
+                        android:background="?attr/colorPrimary" />
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userStatsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/profileUserStatsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="24dp"
+            android:textColor="?attr/colorPrimary"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="Stats"
+            android:textSize="18sp"
+            tools:ignore="HardcodedText" />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            tools:ignore="HardcodedText">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:alpha="0.58"
+                    android:text="Episodes watched"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/statsEpisodesWatched"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="@string/anime_list"
-                    android:textAllCaps="true"
-                    android:textColor="@color/bg_white"
-                    android:textSize="16sp" />
+                    android:textAlignment="textEnd" />
 
-                <View
-                    android:layout_width="64dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center"
-                    android:background="?attr/colorPrimary" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+            </TableRow>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/profileMangaList"
-            android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_margin="8dp"
-            android:layout_marginBottom="16dp"
-            app:boxStrokeColor="@color/text_input_layout_stroke_color"
-            app:cardCornerRadius="16dp"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/profileAnimeList"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_max="256dp"
-            tools:visibility="visible">
-
-            <ImageView
-                android:id="@+id/profileMangaListImage"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                tools:ignore="ContentDescription"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:alpha="0.6"
-                android:background="@color/bg_black" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="vertical">
+                android:layout_height="24dp"
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:alpha="0.58"
+                    android:text="Days watched"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/statsDaysWatched"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="@string/manga_list"
-                    android:textAllCaps="true"
-                    android:textColor="@color/bg_white"
-                    android:textSize="16sp" />
+                    android:textAlignment="textEnd" />
+            </TableRow>
 
-                <View
-                    android:layout_width="64dp"
-                    android:layout_height="2dp"
-                    android:layout_gravity="center"
-                    android:background="?attr/colorPrimary" />
-            </LinearLayout>
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
 
-        </com.google.android.material.card.MaterialCardView>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:text="Total Anime"
+                    android:textStyle="bold" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <TextView
-        android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/statsTotalAnime"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textAlignment="textEnd" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:text="Anime Mean Score"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/statsAnimeMeanScore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textAlignment="textEnd" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:text="Chapter read"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/statsChaptersRead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textAlignment="textEnd" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:text="Volume read"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/statsVolumeRead"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textAlignment="textEnd" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:text="Total Manga"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/statsTotalManga"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textAlignment="textEnd" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="24dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:text="Manga Mean Score"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/statsMangaMeanScore"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textAlignment="textEnd" />
+            </TableRow>
+        </TableLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/userInfoContainer"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="24dp"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:text="Info"
-        android:textSize="18sp"
-        tools:ignore="HardcodedText" />
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/profileUserBioTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginTop="24dp"
+            android:textColor="?attr/colorPrimary"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="Bio"
+            android:textSize="18sp"
+            tools:ignore="HardcodedText" />
 
-    <TextView
-        android:id="@+id/profileUserInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
-        android:text="info"
-        android:alpha="0.58"
-        android:textSize="12sp" />
+        <TextView
+            android:id="@+id/profileUserBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:alpha="0.58"
+            android:textSize="12sp"
+            tools:text="@tools:sample/lorem"/>
+    </LinearLayout>
+
 </LinearLayout>

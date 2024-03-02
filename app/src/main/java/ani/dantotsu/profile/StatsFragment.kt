@@ -135,7 +135,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val names: List<String> = if (anime) {
             stats?.data?.user?.statistics?.anime?.formats?.map { it.format } ?: emptyList()
         } else {
-            stats?.data?.user?.statistics?.manga?.formats?.map { it.format } ?: emptyList()
+            stats?.data?.user?.statistics?.manga?.countries?.map { it.country } ?: emptyList()
         }
         val values: List<Number> = if (anime) {
             when (statType) {

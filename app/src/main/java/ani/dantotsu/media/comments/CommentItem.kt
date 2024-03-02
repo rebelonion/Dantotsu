@@ -12,6 +12,7 @@ import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
@@ -101,7 +102,13 @@ class CommentItem(val comment: Comment,
                     .putExtra("userId", comment.userId.toInt())
                     .putExtra("username","[${levelColor.second}]"), null
             )
-
+        }
+        viewBinding.commentUserAvatar.setOnClickListener {
+            ContextCompat.startActivity(
+                commentsFragment.activity, Intent(commentsFragment.activity, ProfileActivity::class.java)
+                    .putExtra("userId", comment.userId.toInt())
+                    .putExtra("username","[${levelColor.second}]"), null
+            )
         }
         viewBinding.commentText.setOnLongClickListener {
             copyToClipboard(comment.content)
@@ -193,10 +200,15 @@ class CommentItem(val comment: Comment,
             }
         }
         viewBinding.commentTotalVotes.text = (comment.upvotes - comment.downvotes).toString()
-        viewBinding.commentUserAvatar
+        viewBinding.commentUserAvatar.setOnLongClickListener {
+            ImageViewDialog.newInstance(
+                commentsFragment.activity,
+                "${comment.username}'s [Cover]",
+                comment.profilePictureUrl
+            )
+        }
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
-
         viewBinding.commentUserLevel.text = "[${levelColor.second}]"
         viewBinding.commentUserLevel.setTextColor(levelColor.first)
         viewBinding.commentUserTime.text = formatTimestamp(comment.timestamp)

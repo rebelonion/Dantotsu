@@ -4,8 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -20,8 +22,12 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.user.ListActivity
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.ImageViewDialog
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -32,7 +38,7 @@ import nl.joery.animatedbottombar.AnimatedBottomBar
 class ProfileActivity : AppCompatActivity(){
     private lateinit var binding: ActivityProfileBinding
     private var selected: Int = 0
-    private lateinit var tabLayout: AnimatedBottomBar
+    private lateinit var navBar: AnimatedBottomBar
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,15 +46,14 @@ class ProfileActivity : AppCompatActivity(){
         initActivity(this)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        tabLayout = binding.typeTab
-        val profileTab = tabLayout.createTab(R.drawable.ic_round_person_24, "Profile")
-        val statsTab = tabLayout.createTab(R.drawable.ic_stats_24, "Stats")
-        tabLayout.addTab(profileTab)
-        tabLayout.addTab(statsTab)
-        tabLayout.visibility = View.GONE
+        navBar = binding.profileNavBar
+        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
+        val profileTab = navBar.createTab(R.drawable.ic_round_person_24, "Profile")
+        val statsTab = navBar.createTab(R.drawable.ic_stats_24, "Stats")
+        navBar.addTab(profileTab)
+        navBar.addTab(statsTab)
+        navBar.visibility = View.GONE
         binding.mediaViewPager.isUserInputEnabled = false
-
-
         lifecycleScope.launch(Dispatchers.IO) {
             val userid = intent.getIntExtra("userId", 0)
             val respond = Anilist.query.getUserProfile(userid)
@@ -60,9 +65,9 @@ class ProfileActivity : AppCompatActivity(){
             }
             withContext(Dispatchers.Main) {
                 binding.mediaViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, user, this@ProfileActivity)
-                tabLayout.visibility = View.VISIBLE
-                tabLayout.selectTabAt(selected)
-                tabLayout.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+                navBar.visibility = View.VISIBLE
+                navBar.selectTabAt(selected)
+                navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
                     override fun onTabSelected(
                         lastIndex: Int,
                         lastTab: AnimatedBottomBar.Tab?,
@@ -76,13 +81,27 @@ class ProfileActivity : AppCompatActivity(){
                 val userLevel =  intent.getStringExtra("username")?: ""
 
                 binding.profileProgressBar.visibility = View.GONE
+                binding.profileTopContainer.visibility = View.VISIBLE
                 binding.profileBannerImage.loadImage(user.bannerImage)
+                binding.profileBannerImage.setOnLongClickListener {
+                    ImageViewDialog.newInstance(
+                        this@ProfileActivity,
+                        "${user.name}'s [Banner]",
+                        user.bannerImage
+                    )
+                }
                 binding.profileUserAvatar.loadImage(user.avatar?.medium)
+                binding.profileUserAvatar.setOnLongClickListener {
+                    ImageViewDialog.newInstance(
+                        this@ProfileActivity,
+                        "${user.name}'s [Avatar]",
+                        user.avatar?.medium
+                    )
+                }
                 binding.profileUserName.text = "${user.name} $userLevel"
-                binding.profileUserEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()
-                binding.profileUserChaptersRead.text = user.statistics.manga.chaptersRead.toString()
-
+                if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.profileBannerImage.pause()
                 binding.profileBannerImage.loadImage(user.bannerImage)
+                binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
                 binding.profileBannerImage.setOnLongClickListener {
                     ImageViewDialog.newInstance(
                         this@ProfileActivity,
@@ -104,8 +123,8 @@ class ProfileActivity : AppCompatActivity(){
     }
 
     override fun onResume() {
-        if (this::tabLayout.isInitialized) {
-            tabLayout.selectTabAt(selected)
+        if (this::navBar.isInitialized) {
+            navBar.selectTabAt(selected)
         }
         super.onResume()
     }
