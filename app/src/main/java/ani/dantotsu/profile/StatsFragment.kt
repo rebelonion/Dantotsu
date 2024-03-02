@@ -129,12 +129,12 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val fotmatTypes: List<String> = if (anime) {
             stats?.data?.user?.statistics?.anime?.formats?.map { it.format } ?: emptyList()
         } else {
-            stats?.data?.user?.statistics?.manga?.formats?.map { it.format } ?: emptyList()
+            stats?.data?.user?.statistics?.manga?.countries?.map { it.country } ?: emptyList()
         }
         val formatCount: List<Int> = if (anime) {
             stats?.data?.user?.statistics?.anime?.formats?.map { it.count } ?: emptyList()
         } else {
-            stats?.data?.user?.statistics?.manga?.formats?.map { it.count } ?: emptyList()
+            stats?.data?.user?.statistics?.manga?.countries?.map { it.count } ?: emptyList()
         }
         if (fotmatTypes.isEmpty() || formatCount.isEmpty())
             return null
