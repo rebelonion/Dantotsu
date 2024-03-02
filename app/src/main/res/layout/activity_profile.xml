@@ -70,7 +70,7 @@
                 
            <LinearLayout
               	android:layout_width="match_parent"
-              	android:layout_height="wrap_content"
+              	android:layout_height="match_parent"
               	android:orientation="horizontal"
               	android:gravity="center">
 
@@ -78,7 +78,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-            		android:padding="8dp"
             		android:layout_marginLeft="24dp"
             		android:layout_marginRight="24dp">
 
@@ -106,7 +105,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-            		android:padding="8dp"
             		android:layout_marginLeft="24dp"
             		android:layout_marginRight="24dp">
 
@@ -114,7 +112,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:padding="5dp"
                     android:fontFamily="@font/poppins"
                     android:text="@string/chapters_read"
                     android:textSize="12sp"
@@ -124,7 +121,6 @@
                     android:id="@+id/profileUserChaptersRead"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:fontFamily="@font/poppins_bold"
                     android:textColor="?attr/colorPrimaryVariant"
                     android:textSize="12sp" />
