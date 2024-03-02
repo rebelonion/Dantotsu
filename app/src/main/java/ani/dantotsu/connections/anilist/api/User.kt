@@ -115,20 +115,20 @@ data class UserAvatar(
 
 @Serializable
 data class UserStatisticTypes(
-    @SerialName("anime") var anime: UserStatistics,
-    @SerialName("manga") var manga: UserStatistics
+    @SerialName("anime") var anime: UserStatistics?,
+    @SerialName("manga") var manga: UserStatistics?
 )
 
 @Serializable
 data class UserStatistics(
     //
-    @SerialName("count") var count: Int,
-    @SerialName("meanScore") var meanScore: Float,
-    @SerialName("standardDeviation") var standardDeviation: Float,
-    @SerialName("minutesWatched") var minutesWatched: Int,
-    @SerialName("episodesWatched") var episodesWatched: Int,
-    @SerialName("chaptersRead") var chaptersRead: Int,
-    @SerialName("volumesRead") var volumesRead: Int,
+    @SerialName("count") var count: Int?,
+    @SerialName("meanScore") var meanScore: Float?,
+    @SerialName("standardDeviation") var standardDeviation: Float?,
+    @SerialName("minutesWatched") var minutesWatched: Int?,
+    @SerialName("episodesWatched") var episodesWatched: Int?,
+    @SerialName("chaptersRead") var chaptersRead: Int?,
+    @SerialName("volumesRead") var volumesRead: Int?,
     //    @SerialName("formats") var formats: List<UserFormatStatistic>?,
     //    @SerialName("statuses") var statuses: List<UserStatusStatistic>?,
     //    @SerialName("scores") var scores: List<UserScoreStatistic>?,

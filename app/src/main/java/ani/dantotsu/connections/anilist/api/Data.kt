@@ -208,12 +208,30 @@ class Query {
         @SerialName("favorites")
         val favorites: UserFavorites?,
         @SerialName("statistics")
-        val statistics: UserStatisticTypes,
+        val statistics: NNUserStatisticTypes,
         @SerialName("siteUrl")
         val siteUrl: String,
     )
 
     @Serializable
+    data class NNUserStatisticTypes(
+        @SerialName("anime") var anime: NNUserStatistics,
+        @SerialName("manga") var manga: NNUserStatistics
+    )
+
+    @Serializable
+    data class NNUserStatistics(
+        //
+        @SerialName("count") var count: Int,
+        @SerialName("meanScore") var meanScore: Float,
+        @SerialName("standardDeviation") var standardDeviation: Float,
+        @SerialName("minutesWatched") var minutesWatched: Int,
+        @SerialName("episodesWatched") var episodesWatched: Int,
+        @SerialName("chaptersRead") var chaptersRead: Int,
+        @SerialName("volumesRead") var volumesRead: Int,
+    )
+
+        @Serializable
     data class UserFavorites(
         @SerialName("anime")
         val anime: UserMediaFavoritesCollection,
