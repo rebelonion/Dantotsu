@@ -38,7 +38,6 @@
             android:layout_height="48dp"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="5dp"
-            android:layout_marginBottom="5dp"
             android:background="@null"
             android:src="@drawable/untick_all_boxes"
             app:tint="?attr/colorPrimary" />
