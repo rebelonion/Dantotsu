@@ -144,7 +144,7 @@
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Stats"
-            android:textSize="18sp"
+            android:textSize="16sp"
             tools:ignore="HardcodedText" />
 
         <TableLayout
@@ -342,7 +342,7 @@
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Bio"
-            android:textSize="18sp"
+            android:textSize="16sp"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -352,7 +352,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
-            android:maxLines="5"
             android:padding="16dp"
             tools:text="@string/slogan"/>
     </LinearLayout>
