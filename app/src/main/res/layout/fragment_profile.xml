@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/userListContainer"
@@ -135,6 +135,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/profileUserStatsTitle"
             android:layout_width="wrap_content"
@@ -333,6 +334,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/profileUserBioTitle"
             android:layout_width="wrap_content"
@@ -353,7 +355,7 @@
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
             android:padding="16dp"
-            tools:text="@string/slogan"/>
+            tools:text="@string/slogan" />
     </LinearLayout>
 
     <LinearLayout
