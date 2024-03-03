@@ -301,7 +301,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
             return null
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
-            .chartType(AAChartType.Pyramid)
+            .chartType(AAChartType.Funnel)
             .title("Status")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
@@ -367,7 +367,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
             return null
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
-            .chartType(AAChartType.Pie)
+            .chartType(AAChartType.Pyramid)
             .title("Length")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
