@@ -359,7 +359,6 @@ class CommentsFragment : Fragment() {
         super.onResume()
         tag = null
         adapter.notifyDataSetChanged()
-        (activity as? MediaDetailsActivity)?.binding?.mediaAppBar?.setExpanded(false, true)
     }
 
     enum class InteractionState {
