@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
@@ -13,7 +14,6 @@ import ani.dantotsu.databinding.FragmentStatisticsBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartAlignType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartLayoutType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartStackingType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartVerticalAlignType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
@@ -21,24 +21,21 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AADataElement
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAChart
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AALang
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPosition
-import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotArea
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import com.github.aachartmodel.aainfographics.aatools.AAGradientColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import nl.joery.animatedbottombar.AnimatedBottomBar
+import java.util.Locale
 
 class StatsFragment(private val user: Query.UserProfile, private val activity: ProfileActivity) :
     Fragment() {
     private lateinit var binding: FragmentStatisticsBinding
     private var selected: Int = 0
-    private lateinit var tabLayout: AnimatedBottomBar
     private var stats: Query.StatisticsResponse? = null
+    private var type: MediaType = MediaType.ANIME
+    private var statType: StatType = StatType.COUNT
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,42 +48,51 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        tabLayout = binding.typeTab
-        val animeTab = tabLayout.createTab(R.drawable.ic_round_movie_filter_24, "Anime")
-        val mangaTab = tabLayout.createTab(R.drawable.ic_round_menu_book_24, "Manga")
-        tabLayout.addTab(animeTab)
-        tabLayout.addTab(mangaTab)
 
-        tabLayout.visibility = View.GONE
+        binding.sourceType.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                R.layout.item_dropdown,
+                MediaType.entries.map { it.name.uppercase(Locale.ROOT) }
+            )
+        )
+        binding.sourceFilter.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                R.layout.item_dropdown,
+                StatType.entries.map { it.name.uppercase(Locale.ROOT) }
+            )
+        )
+
+        binding.filterContainer.visibility = View.GONE
         activity.lifecycleScope.launch {
             stats = Anilist.query.getUserStatistics(user.id)
             withContext(Dispatchers.Main) {
-                tabLayout.visibility = View.VISIBLE
-                tabLayout.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
-                    override fun onTabSelected(
-                        lastIndex: Int,
-                        lastTab: AnimatedBottomBar.Tab?,
-                        newIndex: Int,
-                        newTab: AnimatedBottomBar.Tab
-                    ) {
-                        selected = newIndex
-                        when (newIndex) {
-                            0 -> loadAnimeStats()
-                            1 -> loadMangaStats()
-                        }
-                    }
-                })
-                tabLayout.selectTabAt(selected)
-                loadAnimeStats()
+                binding.filterContainer.visibility = View.VISIBLE
+                binding.sourceType.setOnItemClickListener { _, _, i, _ ->
+                    type = MediaType.entries.toTypedArray()[i]
+                    updateStats()
+                }
+                binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->
+                    statType = StatType.entries.toTypedArray()[i]
+                    updateStats()
+                }
+                updateStats()
             }
         }
     }
 
     override fun onResume() {
-        if (this::tabLayout.isInitialized) {
-            tabLayout.selectTabAt(selected)
-        }
         super.onResume()
+        updateStats()
+    }
+
+
+    private fun updateStats() {
+        when (type) {
+            MediaType.ANIME -> loadAnimeStats()
+            MediaType.MANGA -> loadMangaStats()
+        }
     }
 
     private fun loadAnimeStats() {
@@ -126,32 +132,50 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
     }
 
     private fun getFormatChartModel(anime: Boolean): AAChartModel? {
-        val fotmatTypes: List<String> = if (anime) {
+        val names: List<String> = if (anime) {
             stats?.data?.user?.statistics?.anime?.formats?.map { it.format } ?: emptyList()
         } else {
             stats?.data?.user?.statistics?.manga?.countries?.map { it.country } ?: emptyList()
         }
-        val formatCount: List<Int> = if (anime) {
-            stats?.data?.user?.statistics?.anime?.formats?.map { it.count } ?: emptyList()
+        val values: List<Number> = if (anime) {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.anime?.formats?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.anime?.formats?.map { it.minutesWatched }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.anime?.formats?.map { it.meanScore }
+            } ?: emptyList()
         } else {
-            stats?.data?.user?.statistics?.manga?.countries?.map { it.count } ?: emptyList()
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.manga?.formats?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.manga?.formats?.map { it.chaptersRead }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.manga?.formats?.map { it.meanScore }
+            } ?: emptyList()
         }
-        if (fotmatTypes.isEmpty() || formatCount.isEmpty())
+        if (names.isEmpty() || values.isEmpty())
             return null
         return AAChartModel()
             .chartType(AAChartType.Pie)
             .title("Format")
+            .subtitle(statType.name.lowercase(Locale.ROOT))
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(true)
-            .series(getElements(fotmatTypes, formatCount))
+            .series(getElements(names, values, StatType.COUNT))
     }
 
-    private fun getElements(types: List<String>, counts: List<Int>): Array<Any> {
-        val elements = AASeriesElement()
-        val dataElements = mutableListOf<AADataElement>()
-        for (i in types.indices) {
-            dataElements.add(AADataElement().name(types[i]).y(counts[i]))
+    enum class StatType {
+        COUNT, TIME, MEAN_SCORE
+    }
+
+    enum class MediaType {
+        ANIME, MANGA
+    }
+
+    private fun getElements(names: List<String>, statData: List<Number>, type: StatType): Array<Any> {
+        val statDataElements = mutableListOf<AADataElement>()
+        for (i in statData.indices) {
+            statDataElements.add(AADataElement().name(names[i]).y(statData[i]))
         }
-        return arrayOf(elements.data(dataElements.toTypedArray()))
+        return arrayOf(
+            AASeriesElement().name("Count").data(statDataElements.toTypedArray()),
+        )
     }
 }

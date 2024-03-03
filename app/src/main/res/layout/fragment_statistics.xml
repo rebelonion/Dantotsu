@@ -4,26 +4,83 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
-        <nl.joery.animatedbottombar.AnimatedBottomBar
-            android:id="@+id/typeTab"
+        <LinearLayout
+            android:id="@+id/filterContainer"
             android:layout_width="match_parent"
-            android:layout_height="72dp"
-            android:layout_gravity="center_horizontal|bottom"
-            android:background="?attr/colorSurface"
-            android:padding="0dp"
-            app:abb_animationInterpolator="@anim/over_shoot"
-            app:abb_indicatorAppearance="round"
-            app:abb_indicatorLocation="bottom"
-            app:abb_selectedTabType="text"
-            app:abb_textAppearance="@style/NavBarText"
-            app:itemActiveIndicatorStyle="@style/BottomNavBar"
-            app:itemIconTint="@color/tab_layout_icon"
-            app:itemRippleColor="#00000000"
-            app:itemTextAppearanceActive="@style/NavBarText"
-            app:itemTextAppearanceInactive="@style/NavBarText"
-            app:itemTextColor="@color/tab_layout_icon" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="16dp">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sourceTypeNameContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:hint="Type"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                    app:hintAnimationEnabled="true"
+                    android:paddingEnd="8dp">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/sourceType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppins_bold"
+                            android:freezesText="false"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:padding="8dp"
+                            android:text="@string/anime"
+                            android:textAllCaps="true"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:textSize="14sp"
+                            tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/sourceFilterNameContainer"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:hint="View"
+                    app:boxCornerRadiusBottomEnd="8dp"
+                    app:boxCornerRadiusBottomStart="8dp"
+                    app:boxCornerRadiusTopEnd="8dp"
+                    app:boxCornerRadiusTopStart="8dp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                    app:hintAnimationEnabled="true"
+                    android:paddingEnd="8dp">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/sourceFilter"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/poppins_bold"
+                            android:freezesText="false"
+                            android:inputType="none"
+                            android:maxLines="1"
+                            android:padding="8dp"
+                            android:text="COUNT"
+                            android:textAllCaps="true"
+                            android:textColor="?android:attr/textColorSecondary"
+                            android:textSize="14sp"
+                            tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
 
         <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
             android:id="@+id/formatChartView"
