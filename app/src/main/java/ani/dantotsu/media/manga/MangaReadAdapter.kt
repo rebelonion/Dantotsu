@@ -13,6 +13,7 @@ import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.children
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
@@ -257,13 +258,39 @@ class MangaReadAdapter(
             dialogBinding.animeScanlatorTop.setOnClickListener {
                 val dialogView2 = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
                 val checkboxContainer = dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
+                val tickAllButton = dialogView2.findViewById<ImageButton>(R.id.toggleButton)
+
+                // Function to get the right image resource for the toggle button
+                fun getToggleImageResource(container: ViewGroup): Int {
+                    var allChecked = true
+                    var allUnchecked = true
+
+                    for (i in 0 until container.childCount) {
+                        val checkBox = container.getChildAt(i) as CheckBox
+                        if (!checkBox.isChecked) {
+                            allChecked = false
+                        } else {
+                            allUnchecked = false
+                        }
+                    }
+                    return when {
+                        allChecked -> R.drawable.untick_all_boxes
+                        allUnchecked -> R.drawable.tick_all_boxes
+                        else -> R.drawable.invert_all_boxes
+                    }
+                }
 
                 // Dynamically add checkboxes
                 options.forEach { option ->
                     val checkBox = CheckBox(currContext()).apply {
                         text = option
+                        setOnCheckedChangeListener { _, _ ->
+                            // Update image resource when you change a checkbox
+                            tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+                        }
                     }
-                    //set checked if it's already selected
+
+                    // Set checked if its already selected
                     if (media.selected!!.scanlators != null) {
                         checkBox.isChecked = media.selected!!.scanlators?.contains(option) != true
                         scanlatorSelectionListener?.onScanlatorsSelected()
@@ -277,7 +304,6 @@ class MangaReadAdapter(
                 val dialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
                     .setView(dialogView2)
                     .setPositiveButton("OK") { _, _ ->
-                        //add unchecked to hidden
                         hiddenScanlators.clear()
                         for (i in 0 until checkboxContainer.childCount) {
                             val checkBox = checkboxContainer.getChildAt(i) as CheckBox
@@ -292,24 +318,19 @@ class MangaReadAdapter(
                     .show()
                 dialog.window?.setDimAmount(0.8f)
 
-                // ImageButton to tick all checkboxes
-                val tickAllButton = dialogView2.findViewById<ImageButton>(R.id.toggleButton)
+                // Standard image resource
+                tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+
+                // Listens to ticked checkboxes and changes image resource accordingly
                 tickAllButton.setOnClickListener {
-                    var allTicked = false
+                    // Toggle checkboxes
                     for (i in 0 until checkboxContainer.childCount) {
                         val checkBox = checkboxContainer.getChildAt(i) as CheckBox
-                        if (!checkBox.isChecked) {
-                            allTicked = true
-                            break
-                        }
+                        checkBox.isChecked = !checkBox.isChecked
                     }
 
-                    // Toggle all checkboxes
-                    for (i in 0 until checkboxContainer.childCount) {
-                        val checkBox = checkboxContainer.getChildAt(i) as CheckBox
-                        checkBox.isChecked = allTicked
-                    }
-                    tickAllButton.setImageResource(if (allTicked) R.drawable.untick_all_boxes else R.drawable.tick_all_boxes)
+                    // Update image resource
+                    tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
                 }
             }
 

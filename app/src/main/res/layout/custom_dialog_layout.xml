@@ -1,40 +1,30 @@
 <!-- custom_dialog_layout.xml -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="16dp">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textScanlators"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/toggleButton"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="start"
-            android:src="@drawable/untick_all_boxes"
-            app:tint="?attr/colorPrimary" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:ellipsize="end"
-            android:fontFamily="@font/poppins_bold"
-            android:gravity="center|start"
-            android:singleLine="true"
-            android:text="Scanlators"
-            android:textColor="?attr/colorOnBackground"
-            android:textSize="16sp" />
-    </LinearLayout>
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="Scanlators"
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="16sp"
+        android:fontFamily="@font/poppins_bold"
+        android:layout_marginTop="16dp"/>
 
     <ScrollView
+        android:id="@+id/scrollViewCheckboxes"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textScanlators"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
 
         <LinearLayout
             android:id="@+id/checkboxContainer"
@@ -43,4 +33,16 @@
             android:orientation="vertical" />
     </ScrollView>
 
-</LinearLayout>
+    <ImageButton
+        android:id="@+id/toggleButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@null"
+        android:src="@drawable/untick_all_boxes"
+        app:tint="?attr/colorPrimary"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>
