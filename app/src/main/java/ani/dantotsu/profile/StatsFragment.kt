@@ -93,6 +93,8 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
                     loadStats(type == MediaType.ANIME)
                 }
                 loadStats(type == MediaType.ANIME)
+                binding.statisticProgressBar.visibility = View.GONE
+                binding.chartsContainer.visibility = View.VISIBLE
             }
         }
     }
@@ -271,7 +273,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
             .chartType(AAChartType.Pie)
-            .title("Format")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(true)
@@ -302,7 +303,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
             .chartType(AAChartType.Funnel)
-            .title("Status")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(true)
@@ -333,7 +333,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
             .chartType(AAChartType.Column)
-            .title("Score")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(false)
@@ -368,7 +367,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
             .chartType(AAChartType.Pyramid)
-            .title("Length")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(true)
@@ -400,7 +398,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val hexColorsArray: Array<Any> = palette.map { String.format("#%06X", 0xFFFFFF and it) }.toTypedArray()
         return AAChartModel()
             .chartType(AAChartType.Bubble)
-            .title("Release Year")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(false)
@@ -435,7 +432,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val hexColorsArray: Array<Any> = palette.map { String.format("#%06X", 0xFFFFFF and it) }.toTypedArray()
         return AAChartModel()
             .chartType(AAChartType.Bar)
-            .title("Start Year")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(false)
@@ -470,7 +466,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val hexColorsArray: Array<Any> = palette.map { String.format("#%06X", 0xFFFFFF and it) }.toTypedArray()
         return Pair(AAChartModel()
             .chartType(AAChartType.Area)
-            .title("Genre")
             .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(false)
@@ -555,7 +550,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
 
     private fun setColors(aaOptions: AAOptions) {
         val backgroundColor = TypedValue()
-        activity.theme.resolveAttribute(android.R.attr.windowBackground, backgroundColor, true)
+        activity.theme.resolveAttribute(com.google.android.material.R.attr.colorSurfaceVariant, backgroundColor, true)
         val backgroundStyle = AAStyle().color(
             AAColor.rgbaColor(
                 Color.red(backgroundColor.data),
