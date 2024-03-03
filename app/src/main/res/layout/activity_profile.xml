@@ -61,7 +61,7 @@
                     android:layout_width="82dp"
                     android:layout_height="82dp"
                     android:layout_gravity="center"
-                    android:backgroundTint="@color/bg_opp"
+                    android:backgroundTint="@color/transparent"
                     app:cardCornerRadius="64dp">
 
                     <com.google.android.material.imageview.ShapeableImageView
@@ -69,8 +69,7 @@
                         android:layout_width="78dp"
                         android:layout_height="78dp"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/ic_round_add_circle_24"
-                        tools:tint="@color/bg"
+                        tools:tint="@color/transparent"
                         tools:ignore="ContentDescription,ImageContrastCheck" />
 
                 </com.google.android.material.card.MaterialCardView>

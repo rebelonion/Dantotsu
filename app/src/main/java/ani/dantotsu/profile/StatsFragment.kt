@@ -14,33 +14,31 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentStatisticsBinding
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartAlignType
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartLayoutType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartStackingType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
-import com.github.aachartmodel.aainfographics.aachartcreator.AAChartVerticalAlignType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartZoomType
 import com.github.aachartmodel.aainfographics.aachartcreator.AADataElement
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAItemStyle
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAMarker
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
-import com.github.aachartmodel.aainfographics.aatools.AAGradientColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
+import kotlin.reflect.KClass
 
 class StatsFragment(private val user: Query.UserProfile, private val activity: ProfileActivity) :
     Fragment() {
     private lateinit var binding: FragmentStatisticsBinding
-    private var selected: Int = 0
     private var stats: Query.StatisticsResponse? = null
     private var type: MediaType = MediaType.ANIME
     private var statType: StatType = StatType.COUNT
-    var chartType: AAChartType = AAChartType.Pie
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,7 +63,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
             ArrayAdapter(
                 requireContext(),
                 R.layout.item_dropdown,
-                AAChartType.entries.map { it.name.uppercase(Locale.ROOT) }
+                StatType.entries.map { it.name.uppercase(Locale.ROOT) }
             )
         )
 
@@ -76,33 +74,24 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
                 binding.filterContainer.visibility = View.VISIBLE
                 binding.sourceType.setOnItemClickListener { _, _, i, _ ->
                     type = MediaType.entries.toTypedArray()[i]
-                    updateStats()
+                    loadStats(type == MediaType.ANIME)
                 }
                 binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->
-                    //statType = StatType.entries.toTypedArray()[i]
-                    chartType = AAChartType.entries.toTypedArray()[i]
-                    updateStats()
+                    statType = StatType.entries.toTypedArray()[i]
+                    loadStats(type == MediaType.ANIME)
                 }
-                updateStats()
+                loadStats(type == MediaType.ANIME)
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        updateStats()
+        loadStats(type == MediaType.ANIME)
     }
 
-
-    private fun updateStats() {
-        when (type) {
-            MediaType.ANIME -> loadAnimeStats()
-            MediaType.MANGA -> loadMangaStats()
-        }
-    }
-
-    private fun loadAnimeStats() {
-        val formatChartModel = getFormatChartModel(true)
+    private fun loadStats(anime: Boolean) {
+        val formatChartModel = getFormatChartModel(anime)
         if (formatChartModel != null) {
             binding.formatChartView.visibility = View.VISIBLE
             val aaOptions = buildOptions(formatChartModel)
@@ -110,7 +99,8 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         } else {
             binding.formatChartView.visibility = View.GONE
         }
-        val statusChartModel = getStatusChartModel(true)
+
+        val statusChartModel = getStatusChartModel(anime)
         if (statusChartModel != null) {
             binding.statusChartView.visibility = View.VISIBLE
             val aaOptions = buildOptions(statusChartModel)
@@ -118,38 +108,46 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         } else {
             binding.statusChartView.visibility = View.GONE
         }
+
+        val scoreChartModel = getScoreChartModel(anime)
+        if (scoreChartModel != null) {
+            binding.scoreChartView.visibility = View.VISIBLE
+            val aaOptions = buildOptions(scoreChartModel, false, """
+        function () {
+        return 'score: ' +
+        this.x +
+        '<br/> ' +
+        ' ${getTypeName()} ' +
+        this.y
+        }
+            """.trimIndent()
+            )
+            binding.scoreChartView.aa_drawChartWithChartOptions(aaOptions)
+        } else {
+            binding.scoreChartView.visibility = View.GONE
+        }
+
     }
 
-    private fun loadMangaStats() {
-        val formatChartModel = getFormatChartModel(false)
-        if (formatChartModel != null) {
-            binding.formatChartView.visibility = View.VISIBLE
-            val aaOptions = buildOptions(formatChartModel)
-            binding.formatChartView.aa_drawChartWithChartOptions(aaOptions)
-        } else {
-            binding.formatChartView.visibility = View.GONE
-        }
-        val statusChartModel = getStatusChartModel(false)
-        if (statusChartModel != null) {
-            binding.statusChartView.visibility = View.VISIBLE
-            val aaOptions = buildOptions(statusChartModel)
-            binding.statusChartView.aa_drawChartWithChartOptions(aaOptions)
-        } else {
-            binding.statusChartView.visibility = View.GONE
-        }
-    }
-
-    private fun buildOptions(aaChartModel: AAChartModel): AAOptions {
+    private fun buildOptions(
+        aaChartModel: AAChartModel,
+        polar: Boolean = true,
+        formatting: String? = null
+    ): AAOptions {
         val aaOptions = aaChartModel.aa_toAAOptions()
         aaOptions.chart?.zoomType = "xy"
         aaOptions.chart?.pinchType = "xy"
-        aaOptions.chart?.polar = true
+        aaOptions.chart?.polar = polar
         aaOptions.tooltip?.apply {
-            shared = true
-            formatter(////I want to show {name}: {y}, {percentage:.2f}%
-                """
+            headerFormat
+            if (formatting != null) {
+                formatter(formatting)
+            } else {
+                formatter(
+                    """
         function () {
-        return this.series.name + ': <br/> '
+        return this.point.name
+        + ': <br/> '
         + '<b> '
         +  this.y
         + ', '
@@ -157,14 +155,11 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         + '%'
         }
              """.trimIndent()
-            )
+                )
+            }
         }
         aaOptions.legend?.apply {
             enabled(true)
-                //.verticalAlign(AAChartVerticalAlignType.Top)
-                //.layout(AAChartLayoutType.Vertical)
-                //.align(AAChartAlignType.Right)
-                //.itemMarginTop(10f)
                 .labelFormat = "{name}: {y}"
         }
         aaOptions.plotOptions?.series?.connectNulls(true)
@@ -176,12 +171,12 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val names: List<String> = if (anime) {
             stats?.data?.user?.statistics?.anime?.formats?.map { it.format } ?: emptyList()
         } else {
-            stats?.data?.user?.statistics?.manga?.countries?.map { it.country } ?: emptyList()
+            stats?.data?.user?.statistics?.manga?.formats?.map { it.format } ?: emptyList()
         }
         val values: List<Number> = if (anime) {
             when (statType) {
                 StatType.COUNT -> stats?.data?.user?.statistics?.anime?.formats?.map { it.count }
-                StatType.TIME -> stats?.data?.user?.statistics?.anime?.formats?.map { it.minutesWatched }
+                StatType.TIME -> stats?.data?.user?.statistics?.anime?.formats?.map { it.minutesWatched / 60 }
                 StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.anime?.formats?.map { it.meanScore }
             } ?: emptyList()
         } else {
@@ -198,7 +193,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         return AAChartModel()
             .chartType(AAChartType.Pie)
             .title("Format")
-            .subtitle(statType.name.lowercase(Locale.ROOT))
+            .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(true)
             .series(getElements(names, values, palette))
@@ -213,7 +208,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val values: List<Number> = if (anime) {
             when (statType) {
                 StatType.COUNT -> stats?.data?.user?.statistics?.anime?.statuses?.map { it.count }
-                StatType.TIME -> stats?.data?.user?.statistics?.anime?.statuses?.map { it.minutesWatched }
+                StatType.TIME -> stats?.data?.user?.statistics?.anime?.statuses?.map { it.minutesWatched / 60 }
                 StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.anime?.statuses?.map { it.meanScore }
             } ?: emptyList()
         } else {
@@ -228,11 +223,46 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         val primaryColor = getBaseColor(activity)
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
-            .chartType(chartType)
+            .chartType(AAChartType.Pyramid)
             .title("Status")
-            .subtitle(statType.name.lowercase(Locale.ROOT))
+            .subtitle(getTypeName())
             .zoomType(AAChartZoomType.XY)
             .dataLabelsEnabled(true)
+            .series(getElements(names, values, palette))
+    }
+
+    private fun getScoreChartModel(anime: Boolean): AAChartModel? {
+        val names: List<Int> = if (anime) {
+            stats?.data?.user?.statistics?.anime?.scores?.map { it.score } ?: emptyList()
+        } else {
+            stats?.data?.user?.statistics?.manga?.scores?.map { it.score } ?: emptyList()
+        }
+        val values: List<Number> = if (anime) {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.anime?.scores?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.anime?.scores?.map { it.minutesWatched / 60 }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.anime?.scores?.map { it.meanScore }
+            } ?: emptyList()
+        } else {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.manga?.scores?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.manga?.scores?.map { it.chaptersRead }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.manga?.scores?.map { it.meanScore }
+            } ?: emptyList()
+        }
+        if (names.isEmpty() || values.isEmpty())
+            return null
+        val primaryColor = getBaseColor(activity)
+        val palette = generateColorPalette(primaryColor, names.size)
+        return AAChartModel()
+            .chartType(AAChartType.Column)
+            .title("Score")
+            .subtitle(getTypeName())
+            .zoomType(AAChartZoomType.XY)
+            .dataLabelsEnabled(false)
+            .yAxisTitle(getTypeName())
+            .xAxisTickInterval(10)
+            .stacking(AAChartStackingType.Normal)
             .series(getElements(names, values, palette))
     }
 
@@ -244,15 +274,24 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         ANIME, MANGA
     }
 
+    private fun getTypeName(): String {
+        return when (statType) {
+            StatType.COUNT -> "Count"
+            StatType.TIME -> if (type == MediaType.ANIME) "Hours Watched" else "Chapters Read"
+            StatType.MEAN_SCORE -> "Mean Score"
+        }
+    }
+
     private fun getElements(
-        names: List<String>,
+        names: List<Any>,
         statData: List<Number>,
         colors: List<Int>
     ): Array<Any> {
         val statDataElements = mutableListOf<AADataElement>()
         for (i in statData.indices) {
-            statDataElements.add(
-                AADataElement().name(names[i]).y(statData[i]).color(
+            val element = AADataElement()
+                .y(statData[i])
+                .color(
                     AAColor.rgbaColor(
                         Color.red(colors[i]),
                         Color.green(colors[i]),
@@ -260,10 +299,21 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
                         0.9f
                     )
                 )
-            )
+            if (names[i] is Number) {
+                element.x(names[i] as Number)
+                element.dataLabels(AADataLabels()
+                    .enabled(false)
+                    .format("{point.y}")
+                    .backgroundColor(AAColor.rgbaColor(255, 255, 255, 0.0f))
+                )
+            } else {
+                element.name(names[i] as String)
+            }
+            statDataElements.add(element)
         }
         return arrayOf(
-            AASeriesElement().name("Count").data(statDataElements.toTypedArray()),
+            AASeriesElement().name("Score")
+                .data(statDataElements.toTypedArray())
         )
     }
 
