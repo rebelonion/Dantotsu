@@ -22,11 +22,14 @@ import com.github.aachartmodel.aainfographics.aachartcreator.AADataElement
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
 import com.github.aachartmodel.aainfographics.aachartcreator.AASeriesElement
 import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAArea
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAChart
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAItemStyle
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAMarker
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPlotOptions
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAYAxis
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -162,6 +165,46 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         } else {
             binding.releaseYearChartView.visibility = View.GONE
         }
+
+        val startYearChartModel = getStartYearChartModel(anime)
+        if (startYearChartModel != null) {
+            binding.startYearChartView.visibility = View.VISIBLE
+            val aaOptions = buildOptions(startYearChartModel, false, """
+        function () {
+        return 'Year: ' +
+        this.x +
+        '<br/> ' +
+        ' ${getTypeName()} ' +
+        this.y
+        }
+            """.trimIndent()
+            )
+            binding.startYearChartView.aa_drawChartWithChartOptions(aaOptions)
+        } else {
+            binding.startYearChartView.visibility = View.GONE
+        }
+
+        val genreChartModel = getGenreChartModel(anime)
+        if (genreChartModel.first != null) {
+            binding.genreChartView.visibility = View.VISIBLE
+            val aaOptions = buildOptions(genreChartModel.first!!, true, """
+        function () {
+        return 'Genre: ' +
+        this.x +
+        '<br/> ' +
+        ' ${getTypeName()} ' +
+        this.y
+        }
+            """.trimIndent()
+            )
+            val min = genreChartModel.second.first
+            val max = genreChartModel.second.second
+            aaOptions.yAxis = AAYAxis().min(min).max(max).tickInterval(if (max > 100) 20 else 10)
+            binding.genreChartView.aa_drawChartWithChartOptions(aaOptions)
+        } else {
+            binding.genreChartView.visibility = View.GONE
+        }
+
 
     }
 
@@ -302,9 +345,9 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
 
     private fun getLengthChartModel(anime: Boolean): AAChartModel? {
         val names: List<String> = if (anime) {
-            stats?.data?.user?.statistics?.anime?.lengths?.mapNotNull { it.length } ?: emptyList()
+            stats?.data?.user?.statistics?.anime?.lengths?.map { it.length?: "unknown" } ?: emptyList()
         } else {
-            stats?.data?.user?.statistics?.manga?.lengths?.mapNotNull { it.length } ?: emptyList()
+            stats?.data?.user?.statistics?.manga?.lengths?.map { it.length?: "unknown" } ?: emptyList()
         }
         val values: List<Number> = if (anime) {
             when (statType) {
@@ -351,7 +394,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
                 StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.manga?.releaseYears?.map { it.meanScore }
             } ?: emptyList()
         }
-        //clear nulls from names
         if (names.isEmpty() || values.isEmpty())
             return null
         val palette = generateColorPalette(primaryColor, names.size)
@@ -366,6 +408,79 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
             .stacking(AAChartStackingType.Normal)
             .series(getElementsSimple(names, values))
             .colorsTheme(hexColorsArray)
+    }
+
+    private fun getStartYearChartModel(anime: Boolean): AAChartModel? {
+        val names: List<Number> = if (anime) {
+            stats?.data?.user?.statistics?.anime?.startYears?.map { it.startYear } ?: emptyList()
+        } else {
+            stats?.data?.user?.statistics?.manga?.startYears?.map { it.startYear } ?: emptyList()
+        }
+        val values: List<Number> = if (anime) {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.anime?.startYears?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.anime?.startYears?.map { it.minutesWatched / 60 }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.anime?.startYears?.map { it.meanScore }
+            } ?: emptyList()
+        } else {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.manga?.startYears?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.manga?.startYears?.map { it.chaptersRead }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.manga?.startYears?.map { it.meanScore }
+            } ?: emptyList()
+        }
+        if (names.isEmpty() || values.isEmpty())
+            return null
+        val palette = generateColorPalette(primaryColor, names.size)
+        val hexColorsArray: Array<Any> = palette.map { String.format("#%06X", 0xFFFFFF and it) }.toTypedArray()
+        return AAChartModel()
+            .chartType(AAChartType.Bar)
+            .title("Start Year")
+            .subtitle(getTypeName())
+            .zoomType(AAChartZoomType.XY)
+            .dataLabelsEnabled(false)
+            .yAxisTitle(getTypeName())
+            .stacking(AAChartStackingType.Normal)
+            .series(getElementsSimple(names, values))
+            .colorsTheme(hexColorsArray)
+    }
+
+    private fun getGenreChartModel(anime: Boolean): Pair<AAChartModel?, Pair<Int, Int>> {
+        val names: List<String> = if (anime) {
+            stats?.data?.user?.statistics?.anime?.genres?.map { it.genre } ?: emptyList()
+        } else {
+            stats?.data?.user?.statistics?.manga?.genres?.map { it.genre } ?: emptyList()
+        }
+        val values: List<Number> = if (anime) {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.anime?.genres?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.anime?.genres?.map { it.minutesWatched / 60 }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.anime?.genres?.map { it.meanScore }
+            } ?: emptyList()
+        } else {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.manga?.genres?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.manga?.genres?.map { it.chaptersRead }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.manga?.genres?.map { it.meanScore }
+            } ?: emptyList()
+        }
+        if (names.isEmpty() || values.isEmpty())
+            return Pair(null, Pair(0, 0))
+        val palette = generateColorPalette(primaryColor, names.size)
+        val hexColorsArray: Array<Any> = palette.map { String.format("#%06X", 0xFFFFFF and it) }.toTypedArray()
+        return Pair(AAChartModel()
+            .chartType(AAChartType.Area)
+            .title("Genre")
+            .subtitle(getTypeName())
+            .zoomType(AAChartZoomType.XY)
+            .dataLabelsEnabled(false)
+            .legendEnabled(false)
+            .yAxisTitle(getTypeName())
+            .stacking(AAChartStackingType.Normal)
+            .series(getElementsSimple(names, values))
+            .colorsTheme(hexColorsArray)
+            .categories(names.toTypedArray()),
+            Pair(values.minOf { it.toInt() }, values.maxOf { it.toInt() }))
     }
 
     enum class StatType {
@@ -409,6 +524,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
                     .backgroundColor(AAColor.rgbaColor(255, 255, 255, 0.0f))
                 )
             } else {
+                element.x(i)
                 element.name(names[i] as String)
             }
             statDataElements.add(element)
@@ -420,17 +536,16 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
     }
 
     private fun getElementsSimple(
-        names: List<Number>,
-        statData: List<Number>
+        names: List<Any>,
+        statData: List<Any>
     ): Array<Any> {
-        val statValues = mutableListOf<Array<Number>>()
+        val statValues = mutableListOf<Array<Any>>()
         for (i in statData.indices) {
             statValues.add(arrayOf(names[i], statData[i], statData[i]))
         }
-        val sorted = statValues.sortedBy { it[0] as Int }
         return arrayOf(
             AASeriesElement().name("Score")
-                .data(sorted.toTypedArray())
+                .data(statValues.toTypedArray())
                 .dataLabels(AADataLabels()
                     .enabled(false)
                 )
