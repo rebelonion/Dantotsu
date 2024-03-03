@@ -54,7 +54,7 @@ class AnilistQueries {
 
     suspend fun getUserProfile(id: Int): Query.UserProfileResponse? {
         return executeQuery<Query.UserProfileResponse>(
-            """{user:User(id:$id){id,name,about(asHtml:false)avatar{medium,large},bannerImage,isFollowing,isFollower,isBlocked,favourites{anime{nodes{coverImage{extraLarge,large,medium,color}}}manga{nodes{id,coverImage{extraLarge,large,medium,color}}}characters{nodes{id,image{large,medium}}}staff{nodes{id,image{large,medium}}}studios{nodes{id,name}}}statistics{anime{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}manga{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}}siteUrl}}""",
+            """{user:User(id:$id){id,name,about(asHtml:true)avatar{medium,large},bannerImage,isFollowing,isFollower,isBlocked,favourites{anime{nodes{coverImage{extraLarge,large,medium,color}}}manga{nodes{id,coverImage{extraLarge,large,medium,color}}}characters{nodes{id,image{large,medium}}}staff{nodes{id,image{large,medium}}}studios{nodes{id,name}}}statistics{anime{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}manga{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}}siteUrl}}""",
             force = true
         )
     }
