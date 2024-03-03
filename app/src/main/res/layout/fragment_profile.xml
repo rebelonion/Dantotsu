@@ -139,10 +139,10 @@
             android:id="@+id/profileUserStatsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="24dp"
-            android:textColor="?attr/colorPrimary"
-            android:fontFamily="@font/poppins_semi_bold"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/poppins_bold"
             android:text="Stats"
             android:textSize="18sp"
             tools:ignore="HardcodedText" />
@@ -337,10 +337,10 @@
             android:id="@+id/profileUserBioTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="24dp"
-            android:textColor="?attr/colorPrimary"
-            android:fontFamily="@font/poppins_semi_bold"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/poppins_bold"
             android:text="Bio"
             android:textSize="18sp"
             tools:ignore="HardcodedText" />
@@ -349,13 +349,159 @@
             android:id="@+id/profileUserBio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:paddingStart="32dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="32dp"
-            android:alpha="0.58"
-            android:textSize="12sp"
-            tools:text="@tools:sample/lorem"/>
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:maxLines="5"
+            android:padding="16dp"
+            tools:text="@string/slogan"/>
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/profileFavAnimeContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <TextView
+            android:id="@+id/profileFavAnime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:text="@string/fav_anime"
+            android:textSize="16sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="250dp">
+
+            <LinearLayout
+                android:id="@+id/profileFavAnimeEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_round_heart_broken_24"
+                    app:tint="?attr/colorPrimary"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="User has no favorite anime"
+                    android:textAlignment="center"
+                    tools:ignore="TextContrastCheck" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/profileFavAnimeProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="90dp" />
+
+            <ani.dantotsu.FadingEdgeRecyclerView
+                android:id="@+id/profileFavAnimeRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:requiresFadingEdge="horizontal"
+                tools:itemCount="4"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_media_compact"
+                tools:orientation="horizontal" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profileFavMangaContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+
+        <TextView
+            android:id="@+id/profileFavManga"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:text="@string/fav_manga"
+            android:textSize="16sp" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="250dp">
+
+            <LinearLayout
+                android:id="@+id/profileFavMangaEmpty"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:visibility="gone"
+                tools:ignore="UseCompoundDrawables">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:src="@drawable/ic_round_heart_broken_24"
+                    app:tint="?attr/colorPrimary"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.58"
+                    android:paddingStart="32dp"
+                    android:paddingEnd="32dp"
+                    android:text="User has no favorite manga."
+                    android:textAlignment="center"
+                    tools:ignore="TextContrastCheck" />
+
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/profileFavMangaProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="90dp" />
+
+            <ani.dantotsu.FadingEdgeRecyclerView
+                android:id="@+id/profileFavMangaRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:requiresFadingEdge="horizontal"
+                tools:itemCount="4"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_media_compact"
+                tools:orientation="horizontal" />
+        </FrameLayout>
+    </LinearLayout>
 </LinearLayout>

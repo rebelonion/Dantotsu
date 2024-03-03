@@ -333,3 +333,19 @@ class GenresViewModel : ViewModel() {
         }
     }
 }
+
+class ProfileViewModel :  ViewModel(){
+    private val animeFav: MutableLiveData<ArrayList<Media>> =
+        MutableLiveData<ArrayList<Media>>(null)
+    fun getAnimeFav(): LiveData<ArrayList<Media>> = animeFav
+    suspend fun setAnimeFav(id: Int) {
+        animeFav.postValue(Anilist.query.userFavMedia(true, id))
+    }
+
+    private val mangaFav: MutableLiveData<ArrayList<Media>> =
+        MutableLiveData<ArrayList<Media>>(null)
+    fun getMangaFav(): LiveData<ArrayList<Media>> = mangaFav
+    suspend fun setMangaFav(id: Int) {
+        mangaFav.postValue(Anilist.query.userFavMedia(false, id))
+    }
+}
