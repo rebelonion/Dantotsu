@@ -92,6 +92,24 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             PrefManager.setVal(PrefName.Incognito, isChecked)
             incognitoNotification(requireContext())
         }
+        
+        private var clickCount = 0
+        private var startTime: Long = 0L
+
+        binding.settingsIncognito.setOnClickListener {
+           val currentTime = System.currentTimeMillis()
+           if (currentTime - startTime < 400) {
+             clickCount++
+           if (clickCount == 5) {
+           Toast.makeText(requireContext(), "Works?", Toast.LENGTH_SHORT)
+           clickCount = 0
+           }
+       } else {
+        clickCount = 0
+        startTime = currentTime
+          }
+      }
+
         binding.settingsExtensionSettings.setSafeOnClickListener {
             startActivity(Intent(activity, ExtensionsActivity::class.java))
             dismiss()
