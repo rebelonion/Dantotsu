@@ -78,7 +78,6 @@ class ListActivity : AppCompatActivity() {
             )
             binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = statusBarHeight
-                bottomMargin = navBarHeight
             }
         }
         setContentView(binding.root)
