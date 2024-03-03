@@ -25,13 +25,13 @@ import com.github.aachartmodel.aainfographics.aachartcreator.aa_toAAOptions
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AADataLabels
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAItemStyle
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAMarker
+import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAPlotOptions
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aatools.AAColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Locale
-import kotlin.reflect.KClass
 
 class StatsFragment(private val user: Query.UserProfile, private val activity: ProfileActivity) :
     Fragment() {
@@ -39,6 +39,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
     private var stats: Query.StatisticsResponse? = null
     private var type: MediaType = MediaType.ANIME
     private var statType: StatType = StatType.COUNT
+    private var primaryColor: Int = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +52,14 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val typedValue = TypedValue()
+        activity.theme.resolveAttribute(
+            com.google.android.material.R.attr.colorPrimary,
+            typedValue,
+            true
+        )
+        primaryColor = typedValue.data
 
         binding.sourceType.setAdapter(
             ArrayAdapter(
@@ -127,6 +136,33 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
             binding.scoreChartView.visibility = View.GONE
         }
 
+        val lengthChartModel = getLengthChartModel(anime)
+        if (lengthChartModel != null) {
+            binding.lengthChartView.visibility = View.VISIBLE
+            val aaOptions = buildOptions(lengthChartModel)
+            binding.lengthChartView.aa_drawChartWithChartOptions(aaOptions)
+        } else {
+            binding.lengthChartView.visibility = View.GONE
+        }
+
+        val releaseYearChartModel = getReleaseYearChartModel(anime)
+        if (releaseYearChartModel != null) {
+            binding.releaseYearChartView.visibility = View.VISIBLE
+            val aaOptions = buildOptions(releaseYearChartModel, false, """
+        function () {
+        return 'Year: ' +
+        this.x +
+        '<br/> ' +
+        ' ${getTypeName()} ' +
+        this.y
+        }
+            """.trimIndent()
+            )
+            binding.releaseYearChartView.aa_drawChartWithChartOptions(aaOptions)
+        } else {
+            binding.releaseYearChartView.visibility = View.GONE
+        }
+
     }
 
     private fun buildOptions(
@@ -188,7 +224,7 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         }
         if (names.isEmpty() || values.isEmpty())
             return null
-        val primaryColor = getBaseColor(activity)
+        val primaryColor = primaryColor
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
             .chartType(AAChartType.Pie)
@@ -220,7 +256,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         }
         if (names.isEmpty() || values.isEmpty())
             return null
-        val primaryColor = getBaseColor(activity)
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
             .chartType(AAChartType.Pyramid)
@@ -252,7 +287,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
         }
         if (names.isEmpty() || values.isEmpty())
             return null
-        val primaryColor = getBaseColor(activity)
         val palette = generateColorPalette(primaryColor, names.size)
         return AAChartModel()
             .chartType(AAChartType.Column)
@@ -264,6 +298,74 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
             .xAxisTickInterval(10)
             .stacking(AAChartStackingType.Normal)
             .series(getElements(names, values, palette))
+    }
+
+    private fun getLengthChartModel(anime: Boolean): AAChartModel? {
+        val names: List<String> = if (anime) {
+            stats?.data?.user?.statistics?.anime?.lengths?.mapNotNull { it.length } ?: emptyList()
+        } else {
+            stats?.data?.user?.statistics?.manga?.lengths?.mapNotNull { it.length } ?: emptyList()
+        }
+        val values: List<Number> = if (anime) {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.anime?.lengths?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.anime?.lengths?.map { it.minutesWatched / 60 }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.anime?.lengths?.map { it.meanScore }
+            } ?: emptyList()
+        } else {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.manga?.lengths?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.manga?.lengths?.map { it.chaptersRead }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.manga?.lengths?.map { it.meanScore }
+            } ?: emptyList()
+        }
+        //clear nulls from names
+        if (names.isEmpty() || values.isEmpty())
+            return null
+        val palette = generateColorPalette(primaryColor, names.size)
+        return AAChartModel()
+            .chartType(AAChartType.Pie)
+            .title("Length")
+            .subtitle(getTypeName())
+            .zoomType(AAChartZoomType.XY)
+            .dataLabelsEnabled(true)
+            .series(getElements(names, values, palette))
+    }
+
+    private fun getReleaseYearChartModel(anime: Boolean): AAChartModel? {
+        val names: List<Number> = if (anime) {
+            stats?.data?.user?.statistics?.anime?.releaseYears?.map { it.releaseYear } ?: emptyList()
+        } else {
+            stats?.data?.user?.statistics?.manga?.releaseYears?.map { it.releaseYear } ?: emptyList()
+        }
+        val values: List<Number> = if (anime) {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.anime?.releaseYears?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.anime?.releaseYears?.map { it.minutesWatched / 60 }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.anime?.releaseYears?.map { it.meanScore }
+            } ?: emptyList()
+        } else {
+            when (statType) {
+                StatType.COUNT -> stats?.data?.user?.statistics?.manga?.releaseYears?.map { it.count }
+                StatType.TIME -> stats?.data?.user?.statistics?.manga?.releaseYears?.map { it.chaptersRead }
+                StatType.MEAN_SCORE -> stats?.data?.user?.statistics?.manga?.releaseYears?.map { it.meanScore }
+            } ?: emptyList()
+        }
+        //clear nulls from names
+        if (names.isEmpty() || values.isEmpty())
+            return null
+        val palette = generateColorPalette(primaryColor, names.size)
+        val hexColorsArray: Array<Any> = palette.map { String.format("#%06X", 0xFFFFFF and it) }.toTypedArray()
+        return AAChartModel()
+            .chartType(AAChartType.Bubble)
+            .title("Release Year")
+            .subtitle(getTypeName())
+            .zoomType(AAChartZoomType.XY)
+            .dataLabelsEnabled(false)
+            .yAxisTitle(getTypeName())
+            .stacking(AAChartStackingType.Normal)
+            .series(getElementsSimple(names, values))
+            .colorsTheme(hexColorsArray)
     }
 
     enum class StatType {
@@ -312,19 +414,28 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
             statDataElements.add(element)
         }
         return arrayOf(
-            AASeriesElement().name("Score")
+            AASeriesElement().name("Score").color(primaryColor)
                 .data(statDataElements.toTypedArray())
         )
     }
 
-    private fun getBaseColor(context: Context): Int {
-        val typedValue = TypedValue()
-        context.theme.resolveAttribute(
-            com.google.android.material.R.attr.colorPrimary,
-            typedValue,
-            true
+    private fun getElementsSimple(
+        names: List<Number>,
+        statData: List<Number>
+    ): Array<Any> {
+        val statValues = mutableListOf<Array<Number>>()
+        for (i in statData.indices) {
+            statValues.add(arrayOf(names[i], statData[i], statData[i]))
+        }
+        val sorted = statValues.sortedBy { it[0] as Int }
+        return arrayOf(
+            AASeriesElement().name("Score")
+                .data(sorted.toTypedArray())
+                .dataLabels(AADataLabels()
+                    .enabled(false)
+                )
+                .colorByPoint(true)
         )
-        return typedValue.data
     }
 
     private fun setColors(aaOptions: AAOptions) {
@@ -352,7 +463,6 @@ class StatsFragment(private val user: Query.UserProfile, private val activity: P
                 0.9f
             )
         )
-        val primaryColor = getBaseColor(activity)
 
 
         aaOptions.chart?.backgroundColor(backgroundStyle.color)
