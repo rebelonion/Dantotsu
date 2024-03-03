@@ -1,7 +1,7 @@
 <resources>
 
     <style name="Theme.Dantotsu" parent="Theme.Base">
-        <item name="android:statusBarColor">@color/status</item>
+        <item name="android:statusBarColor">@color/transparent</item>
         <item name="colorOnPrimary">@color/bg_black</item>
         <item name="android:textColor">@color/bg_white</item>
         <item name="colorSecondaryVariant">@color/violet_400</item>

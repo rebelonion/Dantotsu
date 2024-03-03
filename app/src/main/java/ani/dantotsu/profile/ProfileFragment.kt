@@ -5,13 +5,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.LayoutAnimationController
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.bottomBar
 import ani.dantotsu.buildMarkwon
+import ani.dantotsu.connections.anilist.ProfileViewModel
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentProfileBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.user.ListActivity
+import ani.dantotsu.setSlideIn
+import ani.dantotsu.setSlideUp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ProfileFragment(private val user: Query.UserProfile, private val activity: ProfileActivity): Fragment() {
     lateinit var binding: FragmentProfileBinding
@@ -24,6 +38,7 @@ class ProfileFragment(private val user: Query.UserProfile, private val activity:
         return binding.root
     }
 
+    val model: ProfileViewModel by activityViewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val markwon = buildMarkwon(activity, false)
@@ -58,5 +73,66 @@ class ProfileFragment(private val user: Query.UserProfile, private val activity:
         binding.statsMangaMeanScore.text = user.statistics.manga.meanScore.toString()
 
 
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
+            model.setAnimeFav(user.id)
+            model.setMangaFav(user.id)
+        }
+        
+        initRecyclerView(
+            model.getAnimeFav(),
+            binding.profileFavAnimeContainer,
+            binding.profileFavAnimeRecyclerView,
+            binding.profileFavAnimeProgressBar,
+            binding.profileFavAnimeEmpty,
+            binding.profileFavAnime
+        )
+        
+        initRecyclerView(
+            model.getMangaFav(),
+            binding.profileFavMangaContainer,
+            binding.profileFavMangaRecyclerView,
+            binding.profileFavMangaProgressBar,
+            binding.profileFavMangaEmpty,
+            binding.profileFavManga
+        )
     }
+    private fun initRecyclerView(
+        mode: LiveData<ArrayList<Media>>,
+        container: View,
+        recyclerView: RecyclerView,
+        progress: View,
+        empty: View,
+        title: View
+    ) {
+        container.visibility = View.VISIBLE
+        progress.visibility = View.VISIBLE
+        recyclerView.visibility = View.GONE
+        empty.visibility = View.GONE
+        title.visibility = View.INVISIBLE
+
+        mode.observe(viewLifecycleOwner) {
+            recyclerView.visibility = View.GONE
+            empty.visibility = View.GONE
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    recyclerView.adapter = MediaAdaptor(0, it, requireActivity())
+                    recyclerView.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    recyclerView.visibility = View.VISIBLE
+                    recyclerView.layoutAnimation =
+                        LayoutAnimationController(setSlideIn(), 0.25f)
+
+                } else {
+                    empty.visibility = View.VISIBLE
+                }
+                title.visibility = View.VISIBLE
+                title.startAnimation(setSlideUp())
+                progress.visibility = View.GONE
+            }
+        }
+    }
+
 }

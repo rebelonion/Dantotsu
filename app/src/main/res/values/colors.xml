@@ -12,7 +12,7 @@
     <color name="nav_bg_inv">#00FFFFFF</color>
     <color name="nav_tab">#40000000</color>
     <color name="nav_tab_disabled">#19000000</color>
-    <color name="status">#00000000</color>
+    <color name="transparent">#00000000</color>
     <color name="button_icon">#A9FFFFFF</color>
     <color name="nav_status">#80FFFFFF</color>
     <color name="fav">#ad5edd</color>

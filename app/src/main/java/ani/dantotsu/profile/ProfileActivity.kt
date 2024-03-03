@@ -53,7 +53,7 @@ class ProfileActivity : AppCompatActivity(){
         navBar.addTab(profileTab)
         navBar.addTab(statsTab)
         navBar.visibility = View.GONE
-        binding.mediaViewPager.isUserInputEnabled = false
+        binding.profileViewPager.isUserInputEnabled = false
         lifecycleScope.launch(Dispatchers.IO) {
             val userid = intent.getIntExtra("userId", 0)
             val respond = Anilist.query.getUserProfile(userid)
@@ -64,7 +64,8 @@ class ProfileActivity : AppCompatActivity(){
                 return@launch
             }
             withContext(Dispatchers.Main) {
-                binding.mediaViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, user, this@ProfileActivity)
+                binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
+                binding.profileViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, user, this@ProfileActivity)
                 navBar.visibility = View.VISIBLE
                 navBar.selectTabAt(selected)
                 navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
@@ -75,7 +76,7 @@ class ProfileActivity : AppCompatActivity(){
                         newTab: AnimatedBottomBar.Tab
                     ) {
                         selected = newIndex
-                        binding.mediaViewPager.setCurrentItem(selected, true)
+                        binding.profileViewPager.setCurrentItem(selected, true)
                     }
                 })
                 val userLevel =  intent.getStringExtra("username")?: ""
