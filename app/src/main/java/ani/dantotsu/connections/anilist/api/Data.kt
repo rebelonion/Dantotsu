@@ -217,11 +217,10 @@ class Query {
     data class NNUserStatisticTypes(
         @SerialName("anime") var anime: NNUserStatistics,
         @SerialName("manga") var manga: NNUserStatistics
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class NNUserStatistics(
-        //
         @SerialName("count") var count: Int,
         @SerialName("meanScore") var meanScore: Float,
         @SerialName("standardDeviation") var standardDeviation: Float,
@@ -229,7 +228,7 @@ class Query {
         @SerialName("episodesWatched") var episodesWatched: Int,
         @SerialName("chaptersRead") var chaptersRead: Int,
         @SerialName("volumesRead") var volumesRead: Int,
-    )
+    ): java.io.Serializable
 
         @Serializable
     data class UserFavorites(
@@ -243,13 +242,13 @@ class Query {
         val staff: UserStaffFavoritesCollection,
         @SerialName("studios")
         val studios: UserStudioFavoritesCollection,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserMediaFavoritesCollection(
         @SerialName("nodes")
         val nodes: List<UserMediaImageFavorite>,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserMediaImageFavorite(
@@ -257,13 +256,13 @@ class Query {
         val id: Int,
         @SerialName("coverImage")
         val coverImage: MediaCoverImage
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserCharacterFavoritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserCharacterImageFavorite(
@@ -271,19 +270,19 @@ class Query {
         val id: Int,
         @SerialName("image")
         val image: CharacterImage
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserStaffFavoritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>, //downstream it's the same as character
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserStudioFavoritesCollection(
         @SerialName("nodes")
         val nodes: List<UserStudioFavorite>,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserStudioFavorite(
@@ -291,7 +290,7 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: String,
-    )
+    ): java.io.Serializable
 
     //----------------------------------------
     // Statistics
