@@ -13,7 +13,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.bottomBar
 import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.ProfileViewModel
 import ani.dantotsu.connections.anilist.api.Query
@@ -27,8 +26,10 @@ import ani.dantotsu.setSlideUp
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProfileFragment(private val user: Query.UserProfile, private val activity: ProfileActivity): Fragment() {
+class ProfileFragment(): Fragment() {
     lateinit var binding: FragmentProfileBinding
+    private lateinit var activity: ProfileActivity
+    private lateinit var user: Query.UserProfile
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,6 +42,8 @@ class ProfileFragment(private val user: Query.UserProfile, private val activity:
     val model: ProfileViewModel by activityViewModels()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity = requireActivity() as ProfileActivity
+        user = arguments?.getSerializable("user") as Query.UserProfile
         val markwon = buildMarkwon(activity, false)
         markwon.setMarkdown(binding.profileUserBio, user.about?:"")
         binding.userInfoContainer.visibility = if (user.about != null) View.VISIBLE else View.GONE
@@ -96,6 +99,14 @@ class ProfileFragment(private val user: Query.UserProfile, private val activity:
             binding.profileFavManga
         )
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (this::binding.isInitialized) {
+            binding.root.requestLayout()
+        }
+    }
+
     private fun initRecyclerView(
         mode: LiveData<ArrayList<Media>>,
         container: View,
@@ -131,6 +142,17 @@ class ProfileFragment(private val user: Query.UserProfile, private val activity:
                 title.visibility = View.VISIBLE
                 title.startAnimation(setSlideUp())
                 progress.visibility = View.GONE
+            }
+        }
+    }
+
+    companion object {
+        fun newInstance(query: Query.UserProfile): ProfileFragment {
+            val args = Bundle().apply {
+                putSerializable("user", query)
+            }
+            return ProfileFragment().apply {
+                arguments = args
             }
         }
     }

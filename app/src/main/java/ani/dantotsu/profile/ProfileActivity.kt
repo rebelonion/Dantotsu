@@ -13,6 +13,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
@@ -39,6 +40,7 @@ class ProfileActivity : AppCompatActivity(){
     private lateinit var binding: ActivityProfileBinding
     private var selected: Int = 0
     private lateinit var navBar: AnimatedBottomBar
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,7 +67,7 @@ class ProfileActivity : AppCompatActivity(){
             }
             withContext(Dispatchers.Main) {
                 binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
-                binding.profileViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, user, this@ProfileActivity)
+                binding.profileViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, user)
                 navBar.visibility = View.VISIBLE
                 navBar.selectTabAt(selected)
                 navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
@@ -129,20 +131,18 @@ class ProfileActivity : AppCompatActivity(){
         }
         super.onResume()
     }
-
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
-        private val user: Query.UserProfile,
-        private val activity: ProfileActivity
+        private val user: Query.UserProfile
     ) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
 
         override fun getItemCount(): Int = 2
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> ProfileFragment(user, activity)
-            1 -> StatsFragment(user, activity)
-            else -> ProfileFragment(user, activity)
+            0 -> ProfileFragment.newInstance(user)
+            1 -> StatsFragment.newInstance(user)
+            else -> ProfileFragment.newInstance(user)
         }
     }
 }

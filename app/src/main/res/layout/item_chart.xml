@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chartLayout"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/typeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="Format"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText" />
+
+        <ImageButton
+            android:id="@+id/openButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="end"
+            android:background="?android:colorBackground"
+            android:contentDescription="Open"
+            android:src="@drawable/ic_open_24"
+            app:tint="?attr/colorPrimary"
+            tools:ignore="HardcodedText" />
+
+    </FrameLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:backgroundTint="@color/transparent"
+        app:cardCornerRadius="64dp">
+
+        <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+            android:id="@+id/chartView"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:background="?android:colorBackground" />
+    </com.google.android.material.card.MaterialCardView>
+</LinearLayout>

@@ -211,7 +211,7 @@ class Query {
         val statistics: NNUserStatisticTypes,
         @SerialName("siteUrl")
         val siteUrl: String,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class NNUserStatisticTypes(
