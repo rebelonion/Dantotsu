@@ -75,14 +75,7 @@ class MediaInfoFragment : Fragment() {
             if (media != null && !loaded) {
                 loaded = true
 
-                //Youtube
-                if (media.anime?.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
-                    binding.animeSourceYT.visibility = View.VISIBLE
-                    binding.animeSourceYT.setOnClickListener {
-                        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(media.anime.youtube))
-                        requireContext().startActivity(intent)
-                    }
-                }
+
                 binding.mediaInfoProgressBar.visibility = View.GONE
                 binding.mediaInfoContainer.visibility = View.VISIBLE
                 binding.mediaInfoName.text = "\t\t\t" + (media.name ?: media.nameRomaji)
