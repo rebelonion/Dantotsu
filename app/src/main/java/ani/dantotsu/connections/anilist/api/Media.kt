@@ -515,6 +515,12 @@ data class MediaListCollection(
     )
 
 @Serializable
+data class FollowData(
+    @SerialName("id") var id: Int,
+    @SerialName("isFollowing") var isFollowing: Boolean,
+)
+
+@Serializable
 data class MediaListGroup(
     // Media list entries
     @SerialName("entries") var entries: List<MediaList>?,

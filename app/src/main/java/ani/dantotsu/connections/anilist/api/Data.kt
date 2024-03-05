@@ -140,6 +140,19 @@ class Query {
     }
 
     @Serializable
+    data class ToggleFollow(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("ToggleFollow")
+            val toggleFollow: FollowData
+
+        )
+    }
+
+    @Serializable
     data class GenreCollection(
         @SerialName("data")
         val data: Data
@@ -200,7 +213,7 @@ class Query {
         @SerialName("bannerImage")
         val bannerImage: String?,
         @SerialName("isFollowing")
-        val isFollowing: Boolean,
+        var isFollowing: Boolean,
         @SerialName("isFollower")
         val isFollower: Boolean,
         @SerialName("isBlocked")
