@@ -52,7 +52,7 @@
                 android:id="@+id/profileUserDataContainer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-124dp"
+                android:layout_marginTop="-171dp"
                 android:layout_gravity="center"
                 android:orientation="vertical"
                 tools:visibility="visible">
@@ -81,6 +81,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_gravity="center"
                     android:textColor="?attr/colorPrimary"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/username"
@@ -91,20 +92,16 @@
                     style="@style/Widget.Material3.Button.OutlinedButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
                     android:enabled="true"
                     android:layout_gravity="center"
                     android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:padding="8dp"
+                    android:textColor="@color/bg_opp"
                     android:text="Follow"
-                    android:textSize="16sp"
-                    app:cornerRadius="16dp"
+                    android:textSize="14sp"
+                    android:backgroundTint="?attr/colorPrimaryContainer"
+                    app:cornerRadius="8dp"
                     app:strokeColor="?attr/colorPrimaryContainer"
                     tools:ignore="SpeakableTextPresentCheck" />
-
-
 
             </LinearLayout>
 

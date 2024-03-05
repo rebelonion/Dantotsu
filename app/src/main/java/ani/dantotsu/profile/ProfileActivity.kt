@@ -81,7 +81,7 @@ class ProfileActivity : AppCompatActivity() {
                 })
                 val userLevel = intent.getStringExtra("username") ?: ""
                 binding.followButton.visibility = if (user.id == Anilist.userid || Anilist.userid == null) View.GONE else View.VISIBLE
-                binding.followButton.text = if (user.isFollowing) "Unfollow" else "Follow"
+                binding.followButton.text = if (user.isFollowing) "Unfollow" else if(user.isFollower) "Follows you" else "Follow"
                 if (user.isFollowing && user.isFollower) binding.followButton.text = "Mutual"
                 binding.followButton.setOnClickListener {
                     lifecycleScope.launch(Dispatchers.IO) {
@@ -90,7 +90,7 @@ class ProfileActivity : AppCompatActivity() {
                             withContext(Dispatchers.Main) {
                                 snackString("Success")
                                 user.isFollowing = res.data.toggleFollow.isFollowing
-                                binding.followButton.text = if (user.isFollowing) "Unfollow" else "Follow"
+                                binding.followButton.text = if (user.isFollowing) "Unfollow" else if(user.isFollower) "Follows you" else "Follow"
                                 if (user.isFollowing && user.isFollower) binding.followButton.text = "Mutual"
                             }
                         }
