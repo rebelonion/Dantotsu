@@ -1,0 +1,55 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    app:cardCornerRadius="16dp"
+    android:layout_marginBottom="16dp">
+
+    <ImageView
+        android:id="@+id/followBanner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:ignore="ContentDescription,ImageContrastCheck" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:orientation="horizontal">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_gravity="center"
+            app:cardCornerRadius="32dp">
+
+            <ImageView
+                android:id="@+id/followProfile"
+
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                tools:ignore="ContentDescription,ImageContrastCheck"
+                tools:srcCompat="@tools:sample/avatars" />
+        </androidx.cardview.widget.CardView>
+
+        <TextView
+            android:id="@+id/followName"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="10dp"
+            android:gravity="center_vertical"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="?attr/colorSecondary"
+            tools:text="Username"
+            tools:ignore="RtlSymmetry" />
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_gravity="bottom"
+        android:layout_height="4dp"
+        android:layout_marginStart="-16dp"
+        android:layout_marginEnd="-16dp"
+        android:background="?android:attr/listDivider" />
+</androidx.cardview.widget.CardView>

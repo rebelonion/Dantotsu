@@ -102,7 +102,21 @@
                     app:cornerRadius="8dp"
                     app:strokeColor="?attr/colorPrimaryContainer"
                     tools:ignore="SpeakableTextPresentCheck" />
-
+                <Button
+                    android:id="@+id/temp"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:enabled="true"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_bold"
+                    android:textColor="@color/bg_opp"
+                    android:text="temp"
+                    android:textSize="14sp"
+                    android:backgroundTint="?attr/colorPrimaryContainer"
+                    app:cornerRadius="8dp"
+                    app:strokeColor="?attr/colorPrimaryContainer"
+                    tools:ignore="SpeakableTextPresentCheck" />
             </LinearLayout>
 
             <androidx.viewpager2.widget.ViewPager2

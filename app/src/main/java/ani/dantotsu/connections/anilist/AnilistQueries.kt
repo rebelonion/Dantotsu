@@ -1254,6 +1254,7 @@ Page(page:$page,perPage:50) {
             show = true
         )
     }
+
     suspend fun userFavMedia(anime: Boolean, id: Int): ArrayList<Media> {
         var hasNextPage = true
         var page = 0
@@ -1279,6 +1280,9 @@ Page(page:$page,perPage:50) {
     }
     private fun userFavMediaQuery(anime: Boolean, page: Int, id: Int): String {
         return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
+    }
+    suspend fun userFollowing(id: Int): Query.Following?{
+        return executeQuery<Query.Following>("""{Following:Page {following(userId:${id},sort:[USERNAME]){id name avatar{large medium}bannerImage}}}""", force = true)
     }
     private suspend fun userBannerImage(type: String,id: Int?): String? {
             val response =

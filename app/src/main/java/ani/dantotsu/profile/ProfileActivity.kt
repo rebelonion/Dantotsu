@@ -1,10 +1,12 @@
 package ani.dantotsu.profile
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -98,14 +100,15 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 binding.profileProgressBar.visibility = View.GONE
                 binding.profileTopContainer.visibility = View.VISIBLE
-                binding.profileBannerImage.loadImage(user.bannerImage)
-                binding.profileBannerImage.setOnLongClickListener {
-                    ImageViewDialog.newInstance(
-                        this@ProfileActivity,
-                        "${user.name}'s [Banner]",
-                        user.bannerImage
+
+                binding.temp.setOnClickListener {
+                    ContextCompat.startActivity(
+                        this@ProfileActivity, Intent(this@ProfileActivity, FollowActivity::class.java)
+                            .putExtra("title", "Following")
+                            .putExtra("userId", user.id), null
                     )
                 }
+
                 binding.profileUserAvatar.loadImage(user.avatar?.medium)
                 binding.profileUserAvatar.setOnLongClickListener {
                     ImageViewDialog.newInstance(
@@ -114,6 +117,7 @@ class ProfileActivity : AppCompatActivity() {
                         user.avatar?.medium
                     )
                 }
+
                 binding.profileUserName.text = "${user.name} $userLevel"
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.profileBannerImage.pause()
                 binding.profileBannerImage.loadImage(user.bannerImage)
@@ -125,14 +129,7 @@ class ProfileActivity : AppCompatActivity() {
                         user.bannerImage
                     )
                 }
-                binding.profileUserAvatar.loadImage(user.avatar?.medium)
-                binding.profileUserAvatar.setOnLongClickListener {
-                    ImageViewDialog.newInstance(
-                        this@ProfileActivity,
-                        user.name + " [Avatar]",
-                        user.avatar?.medium
-                    )
-                }
+
             }
         }
 

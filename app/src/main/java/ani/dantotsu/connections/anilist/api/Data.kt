@@ -199,7 +199,17 @@ class Query {
             val user: UserProfile?
         )
     }
-
+    @Serializable
+    data class Following(
+        @SerialName("data")
+        val data: Data
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("following")
+            val following: ani.dantotsu.connections.anilist.api.User?
+        )
+    }
     @Serializable
     data class UserProfile(
         @SerialName("id")
