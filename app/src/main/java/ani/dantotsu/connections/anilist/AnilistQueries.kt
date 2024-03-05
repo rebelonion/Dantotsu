@@ -352,10 +352,10 @@ class AnilistQueries {
             returnArray.addAll(map.values)
             return returnArray
         }
-        val set = PrefManager.getVal<Set<String>>(PrefName.ContinuedAnimeSet).toMutableSet()
-        if (set.isNotEmpty()) {
-            set.forEach {
-                if (map.containsKey(it.toInt())) returnArray.add(map[it.toInt()]!!)
+        val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+        if (list.isNotEmpty()) {
+            list.reversed().forEach {
+                if (map.containsKey(it)) returnArray.add(map[it]!!)
             }
             for (i in map) {
                 if (i.value !in returnArray) returnArray.add(i.value)
@@ -504,10 +504,10 @@ class AnilistQueries {
                 returnMap["current$type"] = returnArray
                 return
             }
-            val set = PrefManager.getVal<Set<String>>(PrefName.ContinuedAnimeSet).toMutableSet()
-            if (set.isNotEmpty()) {
-                set.forEach {
-                    if (subMap.containsKey(it.toInt())) returnArray.add(subMap[it.toInt()]!!)
+            val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+            if (list.isNotEmpty()) {
+                list.reversed().forEach {
+                    if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
                 }
                 for (i in subMap) {
                     if (i.value !in returnArray) returnArray.add(i.value)
@@ -529,9 +529,9 @@ class AnilistQueries {
                     subMap[m.id] = m
                 }
             }
-            val set = PrefManager.getCustomVal<Set<Int>>("continue_$type", setOf()).toMutableSet()
-            if (set.isNotEmpty()) {
-                set.reversed().forEach {
+            val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+            if (list.isNotEmpty()) {
+                list.reversed().forEach {
                     if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
                 }
                 for (i in subMap) {
