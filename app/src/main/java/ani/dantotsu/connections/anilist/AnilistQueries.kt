@@ -31,6 +31,14 @@ import java.io.Serializable
 import kotlin.system.measureTimeMillis
 
 class AnilistQueries {
+
+    suspend fun toggleFollow(id: Int): Query.ToggleFollow? {
+        val response = executeQuery<Query.ToggleFollow>(
+            """mutation{ToggleFollow(userId:$id){id, isFollowing, isFollower}}"""
+        )
+        return response
+    }
+
     suspend fun getUserData(): Boolean {
         val response: Query.Viewer?
         measureTimeMillis {
@@ -40,7 +48,6 @@ class AnilistQueries {
         val user = response?.data?.user ?: return false
 
         PrefManager.setVal(PrefName.AnilistUserName, user.name)
-
         Anilist.userid = user.id
         PrefManager.setVal(PrefName.AnilistUserId, user.id.toString())
         Anilist.username = user.name

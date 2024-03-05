@@ -21,6 +21,7 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
@@ -79,7 +80,22 @@ class ProfileActivity : AppCompatActivity() {
                     }
                 })
                 val userLevel = intent.getStringExtra("username") ?: ""
-
+                binding.followButton.visibility = if (user.id == Anilist.userid || Anilist.userid == null) View.GONE else View.VISIBLE
+                binding.followButton.text = if (user.isFollowing) "Unfollow" else "Follow"
+                if (user.isFollowing && user.isFollower) binding.followButton.text = "Mutual"
+                binding.followButton.setOnClickListener {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        val res = Anilist.query.toggleFollow(user.id)
+                        if (res?.data?.toggleFollow != null) {
+                            withContext(Dispatchers.Main) {
+                                snackString("Success")
+                                user.isFollowing = res.data.toggleFollow.isFollowing
+                                binding.followButton.text = if (user.isFollowing) "Unfollow" else "Follow"
+                                if (user.isFollowing && user.isFollower) binding.followButton.text = "Mutual"
+                            }
+                        }
+                    }
+                }
                 binding.profileProgressBar.visibility = View.GONE
                 binding.profileTopContainer.visibility = View.VISIBLE
                 binding.profileBannerImage.loadImage(user.bannerImage)

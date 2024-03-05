@@ -86,6 +86,26 @@
                     android:text="@string/username"
                     android:textSize="18sp" />
 
+                <Button
+                    android:id="@+id/followButton"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:enabled="true"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:padding="8dp"
+                    android:text="Follow"
+                    android:textSize="16sp"
+                    app:cornerRadius="16dp"
+                    app:strokeColor="?attr/colorPrimaryContainer"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+
+
             </LinearLayout>
 
             <androidx.viewpager2.widget.ViewPager2
