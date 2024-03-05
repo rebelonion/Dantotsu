@@ -95,6 +95,7 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         binding.searchChipRecycler.adapter = SearchChipAdapter(activity).also {
             activity.updateChips = { it.update() }
         }
+
         binding.searchChipRecycler.layoutManager =
             LinearLayoutManager(binding.root.context, HORIZONTAL, false)
 
@@ -213,13 +214,16 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
             binding.searchHistoryList.startAnimation(fadeInAnimation())
             binding.searchResultLayout.visibility = View.GONE
             binding.searchHistoryList.visibility = View.VISIBLE
+            binding.searchByImage.visibility = View.VISIBLE
         } else {
             if (binding.searchResultLayout.visibility != View.VISIBLE) {
                 binding.searchResultLayout.startAnimation(fadeInAnimation())
                 binding.searchHistoryList.startAnimation(fadeOutAnimation())
             }
+
             binding.searchResultLayout.visibility = View.VISIBLE
             binding.searchHistoryList.visibility = View.GONE
+            binding.searchByImage.visibility = View.GONE
         }
     }
 
