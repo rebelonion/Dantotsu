@@ -665,6 +665,7 @@
     <string name="oldest">Oldest</string>
     <string name="highest_rated">Highest rated</string>
     <string name="lowest_rated">Lowest rated</string>
+    <string name="compare"><u>Compare</u></string>
 
 
 </resources>

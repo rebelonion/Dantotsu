@@ -608,12 +608,11 @@ class AnilistQueries {
 
 
     private suspend fun bannerImage(type: String): String? {
-        //var image = loadData<BannerImage>("banner_$type")
-        val image: BannerImage? = BannerImage(
-            PrefManager.getCustomVal("banner_${type}_url", null),
+        val image = BannerImage(
+            PrefManager.getCustomVal("banner_${type}_url", ""),
             PrefManager.getCustomVal("banner_${type}_time", 0L)
         )
-        if (image == null || image.checkTime()) {
+        if (image.url.isNullOrEmpty() || image.checkTime()) {
             val response =
                 executeQuery<Query.MediaListCollection>("""{ MediaListCollection(userId: ${Anilist.userid}, type: $type, chunk:1,perChunk:25, sort: [SCORE_DESC,UPDATED_TIME_DESC]) { lists { entries{ media { id bannerImage } } } } } """)
             val random = response?.data?.mediaListCollection?.lists?.mapNotNull {

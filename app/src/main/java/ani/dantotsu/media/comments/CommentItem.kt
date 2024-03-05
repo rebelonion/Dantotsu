@@ -15,6 +15,8 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.snackString
+import ani.dantotsu.util.ColorEditor.Companion.adjustColorForContrast
+import ani.dantotsu.util.ColorEditor.Companion.getContrastRatio
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
@@ -300,25 +302,6 @@ class CommentItem(val comment: Comment,
         }
     }
 
-    private fun getLuminance(color: Int): Double {
-        val r = Color.red(color) / 255.0
-        val g = Color.green(color) / 255.0
-        val b = Color.blue(color) / 255.0
-
-        val rL = if (r <= 0.03928) r / 12.92 else ((r + 0.055) / 1.055).pow(2.4)
-        val gL = if (g <= 0.03928) g / 12.92 else ((g + 0.055) / 1.055).pow(2.4)
-        val bL = if (b <= 0.03928) b / 12.92 else ((b + 0.055) / 1.055).pow(2.4)
-
-        return 0.2126 * rL + 0.7152 * gL + 0.0722 * bL
-    }
-
-    private fun getContrastRatio(color1: Int, color2: Int): Double {
-        val l1 = getLuminance(color1)
-        val l2 = getLuminance(color2)
-
-        return if (l1 > l2) (l1 + 0.05) / (l2 + 0.05) else (l2 + 0.05) / (l1 + 0.05)
-    }
-
     private fun getAvatarColor(voteCount: Int, backgroundColor: Int): Pair<Int, Int> {
         val level = if (voteCount < 0) 0 else sqrt(abs(voteCount.toDouble()) / 0.8).toInt()
         val colorString = if (level > usernameColors.size - 1) usernameColors[usernameColors.size - 1] else usernameColors[level]
@@ -330,37 +313,6 @@ class CommentItem(val comment: Comment,
 
         return Pair(color, level)
     }
-
-    private fun adjustColorForContrast(originalColor: Int, backgroundColor: Int): Int {
-        var adjustedColor = originalColor
-        var contrastRatio = getContrastRatio(adjustedColor, backgroundColor)
-        val isBackgroundDark = getLuminance(backgroundColor) < 0.5
-
-        while (contrastRatio < 4.5) {
-            // Adjust brightness by modifying the RGB values
-            val r = Color.red(adjustedColor)
-            val g = Color.green(adjustedColor)
-            val b = Color.blue(adjustedColor)
-
-            // Calculate the amount to adjust
-            val adjustment = if (isBackgroundDark) 10 else -10
-
-            // Adjust the color
-            val newR = (r + adjustment).coerceIn(0, 255)
-            val newG = (g + adjustment).coerceIn(0, 255)
-            val newB = (b + adjustment).coerceIn(0, 255)
-
-            adjustedColor = Color.rgb(newR, newG, newB)
-            contrastRatio = getContrastRatio(adjustedColor, backgroundColor)
-
-            // Break the loop if the color adjustment does not change (to avoid infinite loop)
-            if (newR == r && newG == g && newB == b) {
-                break
-            }
-        }
-        return adjustedColor
-    }
-
 
     /**
      * Builds the dialog for yes/no confirmation

@@ -440,7 +440,7 @@ class MangaReadAdapter(
             if (media.manga?.chapters != null) {
                 val chapters = media.manga.chapters!!.keys.toTypedArray()
                 val anilistEp = (media.userProgress ?: 0).plus(1)
-                val appEp = PrefManager.getCustomVal<String?>("${media.id}_current_chp", null)
+                val appEp = PrefManager.getNullableCustomVal("${media.id}_current_chp", null, String::class.java)
                     ?.toIntOrNull() ?: 1
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
                 val filteredChapters = chapters.filter { chapterKey ->

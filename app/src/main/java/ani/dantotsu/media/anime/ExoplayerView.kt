@@ -1260,7 +1260,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         subtitle = intent.getSerialized("subtitle")
             ?: when (val subLang: String? =
-                PrefManager.getCustomVal("subLang_${media.id}", null as String?)) {
+                PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)) {
                 null -> {
                     when (episode.selectedSubtitle) {
                         null -> null

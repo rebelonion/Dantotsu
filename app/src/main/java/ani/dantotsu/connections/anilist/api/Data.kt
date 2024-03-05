@@ -299,12 +299,12 @@ class Query {
     data class StatisticsResponse(
         @SerialName("data")
         val data: Data
-    ) {
+    ): java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("User")
             val user: StatisticsUser?
-        )
+        ): java.io.Serializable
     }
 
     @Serializable
