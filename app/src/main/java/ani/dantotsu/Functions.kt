@@ -784,7 +784,9 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
     val clipboard = getSystemService(activity, ClipboardManager::class.java)
     val clip = ClipData.newPlainText("label", string)
     clipboard?.setPrimaryClip(clip)
-    if (toast) snackString(activity.getString(R.string.copied_text, string))
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+        if (toast) snackString(activity.getString(R.string.copied_text, string))
+    }
 }
 
 @SuppressLint("SetTextI18n")
@@ -1108,7 +1110,7 @@ fun buildMarkwon(activity: Activity, userInputContent: Boolean = true): Markwon 
     val markwon = Markwon.builder(activity)
         .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
-                builder.linkResolver { view, link ->
+                builder.linkResolver { _, link ->
                     copyToClipboard(link, true)
                 }
             }
@@ -1119,7 +1121,7 @@ fun buildMarkwon(activity: Activity, userInputContent: Boolean = true): Markwon 
         .usePlugin(TablePlugin.create(activity))
         .usePlugin(TaskListPlugin.create(activity))
         .usePlugin(HtmlPlugin.create { plugin ->
-            if (!userInputContent) {
+            if (userInputContent) {
                 plugin.addHandler(
                     TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")
                 )

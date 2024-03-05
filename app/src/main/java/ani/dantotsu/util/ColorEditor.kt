@@ -84,5 +84,14 @@ class ColorEditor {
             }
             return adjustedColor
         }
+
+        fun Int.toCssColor(): String {
+            var base = "rgba("
+            base += "${Color.red(this)}, "
+            base += "${Color.green(this)}, "
+            base += "${Color.blue(this)}, "
+            base += "${Color.alpha(this) / 255.0})"
+            return base
+        }
     }
 }

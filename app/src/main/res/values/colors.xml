@@ -226,7 +226,7 @@
 
     <!-- theme 4 -->
     <color name="seed_4">#e800ac</color>
-    <color name="md_theme_light_4_primary">#B30084</color>
+    <color name="md_theme_light_4_primary">#FF92E2</color>
     <color name="md_theme_light_4_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_4_primaryContainer">#FFD8EA</color>
     <color name="md_theme_light_4_onPrimaryContainer">#3C002A</color>

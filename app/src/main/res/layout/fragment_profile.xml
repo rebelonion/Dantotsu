@@ -332,7 +332,7 @@
     <LinearLayout
         android:id="@+id/userInfoContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
@@ -347,12 +347,13 @@
             android:textSize="16sp"
             tools:ignore="HardcodedText" />
 
-        <TextView
+        <WebView
             android:id="@+id/profileUserBio"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:textAlignment="textStart"
             android:ellipsize="end"
             android:padding="16dp"
             tools:text="@string/slogan" />

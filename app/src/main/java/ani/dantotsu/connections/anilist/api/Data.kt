@@ -143,7 +143,7 @@ class Query {
     data class ToggleFollow(
         @SerialName("data")
         val data: Data?
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("ToggleFollow")
@@ -156,7 +156,7 @@ class Query {
     data class GenreCollection(
         @SerialName("data")
         val data: Data
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("GenreCollection")
@@ -168,7 +168,7 @@ class Query {
     data class MediaTagCollection(
         @SerialName("data")
         val data: Data
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("MediaTagCollection")
@@ -180,7 +180,7 @@ class Query {
     data class User(
         @SerialName("data")
         val data: Data
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("User")
@@ -192,7 +192,7 @@ class Query {
     data class UserProfileResponse(
         @SerialName("data")
         val data: Data
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("user")
@@ -218,7 +218,7 @@ class Query {
         val isFollower: Boolean,
         @SerialName("isBlocked")
         val isBlocked: Boolean,
-        @SerialName("favorites")
+        @SerialName("favourites")
         val favorites: UserFavorites?,
         @SerialName("statistics")
         val statistics: NNUserStatisticTypes,
@@ -326,6 +326,8 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: String,
+        @SerialName("mediaListOptions")
+        val mediaListOptions: MediaListOptions,
         @SerialName("statistics")
         val statistics: StatisticsTypes
     )

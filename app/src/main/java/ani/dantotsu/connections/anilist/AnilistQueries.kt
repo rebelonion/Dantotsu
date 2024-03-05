@@ -61,14 +61,14 @@ class AnilistQueries {
 
     suspend fun getUserProfile(id: Int): Query.UserProfileResponse? {
         return executeQuery<Query.UserProfileResponse>(
-            """{user:User(id:$id){id,name,about(asHtml:true)avatar{medium,large},bannerImage,isFollowing,isFollower,isBlocked,favourites{anime{nodes{coverImage{extraLarge,large,medium,color}}}manga{nodes{id,coverImage{extraLarge,large,medium,color}}}characters{nodes{id,image{large,medium}}}staff{nodes{id,image{large,medium}}}studios{nodes{id,name}}}statistics{anime{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}manga{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}}siteUrl}}""",
+            """{user:User(id:$id){id,name,about(asHtml:true)avatar{medium,large},bannerImage,isFollowing,isFollower,isBlocked,favourites{anime{nodes{id,coverImage{extraLarge,large,medium,color}}}manga{nodes{id,coverImage{extraLarge,large,medium,color}}}characters{nodes{id,image{large,medium}}}staff{nodes{id,image{large,medium}}}studios{nodes{id,name}}}statistics{anime{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}manga{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}}siteUrl}}""",
             force = true
         )
     }
 
     suspend fun getUserStatistics(id: Int, sort: String = "ID"): Query.StatisticsResponse? {
         return executeQuery<Query.StatisticsResponse>(
-            """{User(id:$id){id name statistics{anime{...UserStatistics}manga{...UserStatistics}}}}fragment UserStatistics on UserStatistics{count meanScore standardDeviation minutesWatched episodesWatched chaptersRead volumesRead formats(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds format}statuses(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds status}scores(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds score}lengths(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds length}releaseYears(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds releaseYear}startYears(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds startYear}genres(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds genre}tags(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds tag{id name}}countries(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds country}voiceActors(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds voiceActor{id name{first middle last full native alternative userPreferred}}characterIds}staff(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds staff{id name{first middle last full native alternative userPreferred}}}studios(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds studio{id name isAnimationStudio}}}""",
+            """{User(id:$id){id name mediaListOptions{scoreFormat}statistics{anime{...UserStatistics}manga{...UserStatistics}}}}fragment UserStatistics on UserStatistics{count meanScore standardDeviation minutesWatched episodesWatched chaptersRead volumesRead formats(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds format}statuses(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds status}scores(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds score}lengths(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds length}releaseYears(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds releaseYear}startYears(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds startYear}genres(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds genre}tags(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds tag{id name}}countries(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds country}voiceActors(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds voiceActor{id name{first middle last full native alternative userPreferred}}characterIds}staff(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds staff{id name{first middle last full native alternative userPreferred}}}studios(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds studio{id name isAnimationStudio}}}""",
             force = true,
             show = true
         )
@@ -352,10 +352,10 @@ class AnilistQueries {
             returnArray.addAll(map.values)
             return returnArray
         }
-        val set = PrefManager.getVal<Set<String>>(PrefName.ContinuedAnimeSet).toMutableSet()
-        if (set.isNotEmpty()) {
-            set.forEach {
-                if (map.containsKey(it.toInt())) returnArray.add(map[it.toInt()]!!)
+        val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+        if (list.isNotEmpty()) {
+            list.reversed().forEach {
+                if (map.containsKey(it)) returnArray.add(map[it]!!)
             }
             for (i in map) {
                 if (i.value !in returnArray) returnArray.add(i.value)
@@ -504,10 +504,10 @@ class AnilistQueries {
                 returnMap["current$type"] = returnArray
                 return
             }
-            val set = PrefManager.getVal<Set<String>>(PrefName.ContinuedAnimeSet).toMutableSet()
-            if (set.isNotEmpty()) {
-                set.forEach {
-                    if (subMap.containsKey(it.toInt())) returnArray.add(subMap[it.toInt()]!!)
+            val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+            if (list.isNotEmpty()) {
+                list.reversed().forEach {
+                    if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
                 }
                 for (i in subMap) {
                     if (i.value !in returnArray) returnArray.add(i.value)
@@ -529,9 +529,9 @@ class AnilistQueries {
                     subMap[m.id] = m
                 }
             }
-            val set = PrefManager.getCustomVal<Set<Int>>("continue_$type", setOf()).toMutableSet()
-            if (set.isNotEmpty()) {
-                set.reversed().forEach {
+            val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+            if (list.isNotEmpty()) {
+                list.reversed().forEach {
                     if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
                 }
                 for (i in subMap) {

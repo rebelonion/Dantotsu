@@ -2,6 +2,7 @@ package ani.dantotsu.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.ProfileViewModel
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentProfileBinding
@@ -23,10 +23,12 @@ import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
+import ani.dantotsu.util.ColorEditor.Companion.toCssColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class ProfileFragment(): Fragment() {
+
+class ProfileFragment() : Fragment() {
     lateinit var binding: FragmentProfileBinding
     private lateinit var activity: ProfileActivity
     private lateinit var user: Query.UserProfile
@@ -44,8 +46,34 @@ class ProfileFragment(): Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
         user = arguments?.getSerializable("user") as Query.UserProfile
-        val markwon = buildMarkwon(activity, false)
-        markwon.setMarkdown(binding.profileUserBio, user.about?:"")
+
+        val backGroundColorTypedValue = TypedValue()
+        val textColorTypedValue = TypedValue()
+        activity.theme.resolveAttribute(
+            android.R.attr.windowBackground,
+            backGroundColorTypedValue,
+            true
+        )
+        activity.theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOnBackground,
+            textColorTypedValue,
+            true
+        )
+
+        binding.profileUserBio.settings.loadWithOverviewMode = true
+        binding.profileUserBio.settings.useWideViewPort = true
+        binding.profileUserBio.setInitialScale(1)
+        binding.profileUserBio.loadDataWithBaseURL(
+            null,
+            styled(
+                convertMarkdownToHtml(user.about ?: ""),
+                backGroundColorTypedValue.data,
+                textColorTypedValue.data
+            ),
+            "text/html; charset=utf-8",
+            "UTF-8",
+            null
+        )
         binding.userInfoContainer.visibility = if (user.about != null) View.VISIBLE else View.GONE
 
         binding.profileAnimeList.setOnClickListener {
@@ -67,7 +95,8 @@ class ProfileFragment(): Fragment() {
         binding.profileAnimeListImage.loadImage("https://bit.ly/31bsIHq")
         binding.profileMangaListImage.loadImage("https://bit.ly/2ZGfcuG")
         binding.statsEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()
-        binding.statsDaysWatched.text = (user.statistics.anime.minutesWatched / (24 * 60)).toString()
+        binding.statsDaysWatched.text =
+            (user.statistics.anime.minutesWatched / (24 * 60)).toString()
         binding.statsTotalAnime.text = user.statistics.anime.count.toString()
         binding.statsAnimeMeanScore.text = user.statistics.anime.meanScore.toString()
         binding.statsChaptersRead.text = user.statistics.manga.chaptersRead.toString()
@@ -80,7 +109,7 @@ class ProfileFragment(): Fragment() {
             model.setAnimeFav(user.id)
             model.setMangaFav(user.id)
         }
-        
+
         initRecyclerView(
             model.getAnimeFav(),
             binding.profileFavAnimeContainer,
@@ -89,7 +118,7 @@ class ProfileFragment(): Fragment() {
             binding.profileFavAnimeEmpty,
             binding.profileFavAnime
         )
-        
+
         initRecyclerView(
             model.getMangaFav(),
             binding.profileFavMangaContainer,
@@ -104,6 +133,16 @@ class ProfileFragment(): Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
+        }
+    }
+
+    private fun convertMarkdownToHtml(markdown: String): String {
+        val regex = """\[\!\[(.*?)\]\((.*?)\)\]\((.*?)\)""".toRegex()
+        return regex.replace(markdown) { matchResult ->
+            val altText = matchResult.groupValues[1]
+            val imageUrl = matchResult.groupValues[2]
+            val linkUrl = matchResult.groupValues[3]
+            """<a href="$linkUrl"><img src="$imageUrl" alt="$altText"></a>"""
         }
     }
 
@@ -144,6 +183,37 @@ class ProfileFragment(): Fragment() {
                 progress.visibility = View.GONE
             }
         }
+    }
+
+    private fun styled(html: String, backGroundColor: Int, textColor: Int): String {
+        return """
+            <html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, charset=UTF-8">
+        <style>
+            body {
+                background-color: ${backGroundColor.toCssColor()};
+                color: ${textColor.toCssColor()};
+                margin: 0;
+                padding: 0;
+                max-width: 100%;
+                overflow-x: hidden; /* Prevent horizontal scrolling */
+            }
+            img {
+                max-width: 100%;
+                height: auto; /* Maintain aspect ratio */
+            }
+            a {
+                color: ${textColor.toCssColor()};
+            }
+            /* Add responsive design elements for other content as needed */
+        </style>
+</head>
+<body>
+    $html
+</body>
+
+    """.trimIndent()
     }
 
     companion object {
