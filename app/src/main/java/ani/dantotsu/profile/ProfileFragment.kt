@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
-import android.webkit.WebView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -64,7 +63,6 @@ class ProfileFragment() : Fragment() {
         binding.profileUserBio.settings.loadWithOverviewMode = true
         binding.profileUserBio.settings.useWideViewPort = true
         binding.profileUserBio.settings.javaScriptEnabled = true
-        WebView.setWebContentsDebuggingEnabled(true)
         binding.profileUserBio.setInitialScale(1)
         binding.profileUserBio.loadDataWithBaseURL(
             null,
