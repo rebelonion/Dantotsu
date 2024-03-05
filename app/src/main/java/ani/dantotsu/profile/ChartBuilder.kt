@@ -116,7 +116,7 @@ class ChartBuilder {
                 aaOptions.chart?.scrollablePlotArea(AAScrollablePlotArea().scrollPositionX(scrollPos))
                 aaOptions.chart?.scrollablePlotArea?.minWidth((context.resources.displayMetrics.widthPixels.toFloat() / context.resources.displayMetrics.density) * (names.size.toFloat() / 18.0f))
             }
-            val min = statData.minOfOrNull { it.toDouble() } ?: 0.0
+            val min = ((statData.minOfOrNull { it.toDouble() } ?: 0.0) - 1.0).coerceAtLeast(0.0)
             val max = statData.maxOfOrNull { it.toDouble() } ?: 0.0
             val aaYaxis = AAYAxis().min(min).max(max)
             val tickInterval = when (max) {

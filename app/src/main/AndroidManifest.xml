@@ -122,6 +122,8 @@
             android:name=".media.CalendarActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".media.user.ListActivity" />
+        <activity android:name=".profile.SingleStatActivity"
+            android:parentActivityName=".profile.ProfileActivity"/>
         <activity
             android:name=".media.manga.mangareader.MangaReaderActivity"
             android:excludeFromRecents="true"

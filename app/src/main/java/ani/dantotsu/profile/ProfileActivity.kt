@@ -1,42 +1,36 @@
 package ani.dantotsu.profile
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
-import ani.dantotsu.media.Media
-import ani.dantotsu.media.MediaDetailsActivity
-import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.toast
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 
-class ProfileActivity : AppCompatActivity(){
+class ProfileActivity : AppCompatActivity() {
     private lateinit var binding: ActivityProfileBinding
     private var selected: Int = 0
     private lateinit var navBar: AnimatedBottomBar
@@ -61,13 +55,16 @@ class ProfileActivity : AppCompatActivity(){
             val respond = Anilist.query.getUserProfile(userid)
             val user = respond?.data?.user
             if (user == null) {
-                snackString("User not found")
+                toast("User not found")
                 finish()
                 return@launch
             }
             withContext(Dispatchers.Main) {
-                binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
-                binding.profileViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, user)
+                binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = navBarHeight
+                }
+                binding.profileViewPager.adapter =
+                    ViewPagerAdapter(supportFragmentManager, lifecycle, user)
                 navBar.visibility = View.VISIBLE
                 navBar.selectTabAt(selected)
                 navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
@@ -81,7 +78,7 @@ class ProfileActivity : AppCompatActivity(){
                         binding.profileViewPager.setCurrentItem(selected, true)
                     }
                 })
-                val userLevel =  intent.getStringExtra("username")?: ""
+                val userLevel = intent.getStringExtra("username") ?: ""
 
                 binding.profileProgressBar.visibility = View.GONE
                 binding.profileTopContainer.visibility = View.VISIBLE
@@ -131,6 +128,7 @@ class ProfileActivity : AppCompatActivity(){
         }
         super.onResume()
     }
+
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,

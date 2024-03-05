@@ -144,7 +144,7 @@ class StatsFragment() :
                 names,
                 values
             )
-            adapter.add(ChartItem("Format", formatChart))
+            adapter.add(ChartItem("Format", formatChart, activity))
         }
     }
 
@@ -177,7 +177,7 @@ class StatsFragment() :
                 names,
                 values
             )
-            adapter.add(ChartItem("Status", statusChart))
+            adapter.add(ChartItem("Status", statusChart, activity))
         }
     }
 
@@ -211,7 +211,7 @@ class StatsFragment() :
                 values,
                 xAxisName = "Score",
             )
-            adapter.add(ChartItem("Score", scoreChart))
+            adapter.add(ChartItem("Score", scoreChart, activity))
         }
     }
 
@@ -247,7 +247,7 @@ class StatsFragment() :
                 values,
                 xAxisName = "Length",
             )
-            adapter.add(ChartItem("Length", lengthChart))
+            adapter.add(ChartItem("Length", lengthChart, activity))
         }
     }
 
@@ -283,7 +283,7 @@ class StatsFragment() :
                 values,
                 xAxisName = "Year",
             )
-            adapter.add(ChartItem("Release Year", releaseYearChart))
+            adapter.add(ChartItem("Release Year", releaseYearChart, activity))
         }
     }
 
@@ -317,7 +317,7 @@ class StatsFragment() :
                 values,
                 xAxisName = "Year",
             )
-            adapter.add(ChartItem("Start Year", startYearChart))
+            adapter.add(ChartItem("Start Year", startYearChart, activity))
         }
     }
 
@@ -347,13 +347,13 @@ class StatsFragment() :
                 AAChartType.Areaspline,
                 statType,
                 type,
-                names.take(15),
-                values.take(15),
+                names,
+                values,
                 xAxisName = "Genre",
                 polar = true,
                 categories = names
             )
-            adapter.add(ChartItem("Genre", genreChart))
+            adapter.add(ChartItem("Genre", genreChart, activity))
         }
     }
 
@@ -393,7 +393,7 @@ class StatsFragment() :
                 scrollPos = 0.0f
             )
             tagChart.yAxis = AAYAxis().min(min).max(max).tickInterval(if (max > 100) 20 else 10)
-            adapter.add(ChartItem("Tag", tagChart))
+            adapter.add(ChartItem("Tag", tagChart, activity))
         }
     }
 
@@ -430,7 +430,7 @@ class StatsFragment() :
                 categories = names,
                 scrollPos = null
             )
-            adapter.add(ChartItem("Country", countryChart))
+            adapter.add(ChartItem("Country", countryChart, activity))
         }
     }
 
@@ -467,7 +467,7 @@ class StatsFragment() :
                 categories = names,
                 scrollPos = 0.0f
             )
-            adapter.add(ChartItem("Voice Actor", voiceActorsChart))
+            adapter.add(ChartItem("Voice Actor", voiceActorsChart, activity))
         }
     }
 
@@ -504,7 +504,7 @@ class StatsFragment() :
                 categories = names,
                 scrollPos = 0.0f
             )
-            adapter.add(ChartItem("Staff", staffChart))
+            adapter.add(ChartItem("Staff", staffChart, activity))
         }
     }
 
@@ -541,7 +541,7 @@ class StatsFragment() :
                 categories = names,
                 scrollPos = null
             )
-            adapter.add(ChartItem("Studio", studioChart))
+            adapter.add(ChartItem("Studio", studioChart, activity))
         }
     }
 
