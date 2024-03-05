@@ -62,7 +62,6 @@ class ProfileFragment() : Fragment() {
 
         binding.profileUserBio.settings.loadWithOverviewMode = true
         binding.profileUserBio.settings.useWideViewPort = true
-        binding.profileUserBio.settings.javaScriptEnabled = true
         binding.profileUserBio.setInitialScale(1)
         binding.profileUserBio.loadDataWithBaseURL(
             null,
@@ -203,6 +202,9 @@ class ProfileFragment() : Fragment() {
             img {
                 max-width: 100%;
                 height: auto; /* Maintain aspect ratio */
+            }
+            a {
+                color: ${textColor.toCssColor()};
             }
             /* Add responsive design elements for other content as needed */
         </style>
