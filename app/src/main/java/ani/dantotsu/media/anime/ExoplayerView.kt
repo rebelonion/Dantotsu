@@ -312,7 +312,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             2 -> ResourcesCompat.getFont(this, R.font.poppins)
             3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
             4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
-            5 -> ResourcesCompat.getFont(this, R.font.century_gothic_bold)
+            5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
             6 -> ResourcesCompat.getFont(this, R.font.blocky)
             else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
         }
