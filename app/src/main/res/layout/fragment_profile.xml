@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:id="@+id/userListContainer"
@@ -333,6 +334,7 @@
         android:id="@+id/userInfoContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
@@ -505,5 +507,66 @@
                 tools:listitem="@layout/item_media_compact"
                 tools:orientation="horizontal" />
         </FrameLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/profileFavCharactersContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Favorite Characters"
+            android:textSize="16sp" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/profileFavCharactersRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profileFavStaffContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:visibility="gone">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="Favorite Staff"
+            android:textSize="16sp" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/profileFavStaffRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
     </LinearLayout>
 </LinearLayout>

@@ -143,7 +143,7 @@ class Query {
     data class ToggleFollow(
         @SerialName("data")
         val data: Data?
-    ) : java.io.Serializable {
+    ) {
         @Serializable
         data class Data(
             @SerialName("ToggleFollow")
@@ -156,7 +156,7 @@ class Query {
     data class GenreCollection(
         @SerialName("data")
         val data: Data
-    ) : java.io.Serializable {
+    ) {
         @Serializable
         data class Data(
             @SerialName("GenreCollection")
@@ -168,7 +168,7 @@ class Query {
     data class MediaTagCollection(
         @SerialName("data")
         val data: Data
-    ) : java.io.Serializable {
+    ) {
         @Serializable
         data class Data(
             @SerialName("MediaTagCollection")
@@ -180,7 +180,7 @@ class Query {
     data class User(
         @SerialName("data")
         val data: Data
-    ) : java.io.Serializable {
+    ) {
         @Serializable
         data class Data(
             @SerialName("User")
@@ -192,7 +192,7 @@ class Query {
     data class UserProfileResponse(
         @SerialName("data")
         val data: Data
-    ) : java.io.Serializable {
+    ) {
         @Serializable
         data class Data(
             @SerialName("user")
@@ -219,7 +219,7 @@ class Query {
         @SerialName("isBlocked")
         val isBlocked: Boolean,
         @SerialName("favourites")
-        val favorites: UserFavorites?,
+        val favourites: UserFavourites?,
         @SerialName("statistics")
         val statistics: NNUserStatisticTypes,
         @SerialName("siteUrl")
@@ -244,21 +244,21 @@ class Query {
     ): java.io.Serializable
 
         @Serializable
-    data class UserFavorites(
+    data class UserFavourites(
         @SerialName("anime")
-        val anime: UserMediaFavoritesCollection,
+        val anime: UserMediaFavouritesCollection,
         @SerialName("manga")
-        val manga: UserMediaFavoritesCollection,
+        val manga: UserMediaFavouritesCollection,
         @SerialName("characters")
-        val characters: UserCharacterFavoritesCollection,
+        val characters: UserCharacterFavouritesCollection,
         @SerialName("staff")
-        val staff: UserStaffFavoritesCollection,
+        val staff: UserStaffFavouritesCollection,
         @SerialName("studios")
-        val studios: UserStudioFavoritesCollection,
+        val studios: UserStudioFavouritesCollection,
     ): java.io.Serializable
 
     @Serializable
-    data class UserMediaFavoritesCollection(
+    data class UserMediaFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserMediaImageFavorite>,
     ): java.io.Serializable
@@ -272,7 +272,7 @@ class Query {
     ): java.io.Serializable
 
     @Serializable
-    data class UserCharacterFavoritesCollection(
+    data class UserCharacterFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>,
     ): java.io.Serializable
@@ -281,18 +281,20 @@ class Query {
     data class UserCharacterImageFavorite(
         @SerialName("id")
         val id: Int,
+        @SerialName("name")
+        val name: CharacterName,
         @SerialName("image")
         val image: CharacterImage
     ): java.io.Serializable
 
     @Serializable
-    data class UserStaffFavoritesCollection(
+    data class UserStaffFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>, //downstream it's the same as character
     ): java.io.Serializable
 
     @Serializable
-    data class UserStudioFavoritesCollection(
+    data class UserStudioFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserStudioFavorite>,
     ): java.io.Serializable

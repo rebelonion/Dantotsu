@@ -442,7 +442,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Poppins",
             "Poppins Thin",
             "Century Gothic",
-            "Century Gothic Bold",
+            "Levenim MT Bold",
             "Blocky"
         )
         val fontDialog = AlertDialog.Builder(this, R.style.MyPopup)

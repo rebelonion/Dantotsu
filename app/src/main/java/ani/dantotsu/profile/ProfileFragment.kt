@@ -18,6 +18,8 @@ import ani.dantotsu.connections.anilist.ProfileViewModel
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentProfileBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.media.Character
+import ani.dantotsu.media.CharacterAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.user.ListActivity
@@ -45,8 +47,11 @@ class ProfileFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
-        user = arguments?.getSerializable("user") as Query.UserProfile
+        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
+            model.setData(user.id)
+        }
 
+        user = arguments?.getSerializable("user") as Query.UserProfile
         val backGroundColorTypedValue = TypedValue()
         val textColorTypedValue = TypedValue()
         activity.theme.resolveAttribute(
@@ -74,7 +79,8 @@ class ProfileFragment() : Fragment() {
             "UTF-8",
             null
         )
-        binding.userInfoContainer.visibility = if (user.about != null) View.VISIBLE else View.GONE
+        binding.userInfoContainer.visibility =
+            if (user.about != null) View.VISIBLE else View.GONE
 
         binding.profileAnimeList.setOnClickListener {
             ContextCompat.startActivity(
@@ -92,8 +98,6 @@ class ProfileFragment() : Fragment() {
                     .putExtra("username", user.name), null
             )
         }
-        binding.profileAnimeListImage.loadImage("https://bit.ly/31bsIHq")
-        binding.profileMangaListImage.loadImage("https://bit.ly/2ZGfcuG")
         binding.statsEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()
         binding.statsDaysWatched.text =
             (user.statistics.anime.minutesWatched / (24 * 60)).toString()
@@ -103,13 +107,12 @@ class ProfileFragment() : Fragment() {
         binding.statsVolumeRead.text = (user.statistics.manga.volumesRead).toString()
         binding.statsTotalManga.text = user.statistics.manga.count.toString()
         binding.statsMangaMeanScore.text = user.statistics.manga.meanScore.toString()
-
-
-        viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
-            model.setAnimeFav(user.id)
-            model.setMangaFav(user.id)
+        model.getListImages().observe(viewLifecycleOwner) {
+            if (it.isNotEmpty()) {
+                binding.profileAnimeListImage.loadImage(it[0] ?: "https://bit.ly/31bsIHq")
+                binding.profileMangaListImage.loadImage(it[1] ?: "https://bit.ly/2ZGfcuG")
+            }
         }
-
         initRecyclerView(
             model.getAnimeFav(),
             binding.profileFavAnimeContainer,
@@ -127,12 +130,42 @@ class ProfileFragment() : Fragment() {
             binding.profileFavMangaEmpty,
             binding.profileFavManga
         )
+
+        val favCharacter = arrayListOf<Character>()
+        user.favourites?.characters?.nodes?.forEach { i ->
+            favCharacter.add(Character(i.id, i.name.full, i.image.large, i.image.large, ""))
+        }
+        if (favCharacter.isEmpty()) {
+            binding.profileFavCharactersContainer.visibility = View.GONE
+        }
+        binding.profileFavCharactersRecycler.adapter = CharacterAdapter(favCharacter)
+        binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+
+        val favStaff = arrayListOf<Character>()
+        user.favourites?.staff?.nodes?.forEach { i ->
+            favStaff.add(Character(i.id, i.name.full, i.image.large, i.image.large, ""))
+        }
+        if (favStaff.isEmpty()) {
+            binding.profileFavStaffContainer.visibility = View.GONE
+        }
+        binding.profileFavStaffRecycler.adapter = CharacterAdapter(favStaff)
+        binding.profileFavStaffRecycler.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
+
     }
 
     override fun onResume() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
+
         }
     }
 
