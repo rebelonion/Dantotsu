@@ -225,9 +225,9 @@ class StatsFragment :
         val chartPackets = mutableListOf<ChartPacket>()
         stats.forEach { stat ->
             val names: List<Int> = if (anime) {
-                stat?.statistics?.anime?.scores?.map { it.score } ?: emptyList()
+                stat?.statistics?.anime?.scores?.map { convertScore(it.score, stat.mediaListOptions.scoreFormat) } ?: emptyList()
             } else {
-                stat?.statistics?.manga?.scores?.map { it.score } ?: emptyList()
+                stat?.statistics?.manga?.scores?.map { convertScore(it.score, stat.mediaListOptions.scoreFormat) } ?: emptyList()
             }
             val values: List<Number> = if (anime) {
                 when (statType) {
@@ -701,6 +701,17 @@ class StatsFragment :
                 scrollPos = 0.0f
             )
             adapter.add(ChartItem("Staff", staffChart, activity))
+        }
+    }
+
+    private fun convertScore(score: Int, type: String?): Int {
+        return when (type) {
+            "POINT_100" -> score
+            "POINT_10_DECIMAL" -> score
+            "POINT_10" -> score * 10
+            "POINT_5" -> score * 20
+            "POINT_3" -> score * 33
+            else -> score
         }
     }
 

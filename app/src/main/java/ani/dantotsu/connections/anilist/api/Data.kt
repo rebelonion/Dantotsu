@@ -326,6 +326,8 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: String,
+        @SerialName("mediaListOptions")
+        val mediaListOptions: MediaListOptions,
         @SerialName("statistics")
         val statistics: StatisticsTypes
     )

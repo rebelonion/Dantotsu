@@ -164,7 +164,7 @@ data class Favourites(
 @Serializable
 data class MediaListOptions(
     // The score format the user is using for media lists
-    // @SerialName("scoreFormat") var scoreFormat: ScoreFormat?,
+    @SerialName("scoreFormat") var scoreFormat: String?,
 
     // The default order list rows should be displayed in
     @SerialName("rowOrder") var rowOrder: String?,
