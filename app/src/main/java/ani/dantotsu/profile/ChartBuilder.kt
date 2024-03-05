@@ -18,7 +18,6 @@ import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAScrollablePlotAre
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAStyle
 import com.github.aachartmodel.aainfographics.aaoptionsmodel.AAYAxis
 import com.github.aachartmodel.aainfographics.aatools.AAColor
-import com.github.aachartmodel.aainfographics.aatools.AAGradientColor
 
 class ChartBuilder {
     companion object {
@@ -37,7 +36,7 @@ class ChartBuilder {
         data class ChartPacket(
             val username: String,
             val names: List<Any>,
-            val statData: List<Number>
+            var statData: List<Number>
         )
 
         fun buildChart(
@@ -47,11 +46,12 @@ class ChartBuilder {
             statType: StatType,
             mediaType: MediaType,
             chartPackets: List<ChartPacket>,
-            xAxisName: String = "X Axis",
+            xAxisName: String,
             xAxisTickInterval: Int? = null,
             polar: Boolean = false,
             passedCategories: List<String>? = null,
             scrollPos: Float? = null,
+            normalize: Boolean = false
         ): AAOptions {
             val typedValue = TypedValue()
             context.theme.resolveAttribute(
@@ -69,6 +69,11 @@ class ChartBuilder {
                 aaChartType = AAChartType.Column
                 categories = chartPackets[0].names.map { it.toString() }
             }
+            if (normalize && chartPackets.size > 1) {
+                chartPackets.forEach {
+                    it.statData = normalizeData(it.statData)
+                }
+            }
 
             val namesMax = chartPackets.maxOf { it.names.size }
             val palette = ColorEditor.generateColorPalette(primaryColor, namesMax)
@@ -76,20 +81,25 @@ class ChartBuilder {
                 ChartType.OneDimensional -> {
                     val chart = AAChartModel()
                         .chartType(aaChartType)
-                        .subtitle(getTypeName(statType, mediaType))
+                        .subtitle(
+                            getTypeName(
+                                statType,
+                                mediaType
+                            ) + if (normalize && chartPackets.size > 1) " (Normalized)" else ""
+                        )
                         .zoomType(AAChartZoomType.None)
                         .dataLabelsEnabled(true)
                     val elements: MutableList<Any> = mutableListOf()
                     chartPackets.forEachIndexed { index, chartPacket ->
-                            val element = AASeriesElement()
-                                .name(chartPacket.username)
-                                .data(
-                                    get1DElements(
-                                        chartPacket.names,
-                                        chartPacket.statData,
-                                        palette
-                                    )
+                        val element = AASeriesElement()
+                            .name(chartPacket.username)
+                            .data(
+                                get1DElements(
+                                    chartPacket.names,
+                                    chartPacket.statData,
+                                    palette
                                 )
+                            )
                         if (index == 0) {
                             element.color(primaryColor)
                         } else {
@@ -109,31 +119,66 @@ class ChartBuilder {
                         palette.map { String.format("#%06X", 0xFFFFFF and it) }.toTypedArray()
                     val chart = AAChartModel()
                         .chartType(aaChartType)
-                        .subtitle(getTypeName(statType, mediaType))
+                        .subtitle(
+                            getTypeName(
+                                statType,
+                                mediaType
+                            ) + if (normalize && chartPackets.size > 1) " (Normalized)" else ""
+                        )
                         .zoomType(AAChartZoomType.None)
                         .dataLabelsEnabled(false)
-                        .yAxisTitle(getTypeName(statType, mediaType))
-                        if (chartPackets.size == 1) {
-                            chart.colorsTheme(hexColorsArray)
-                        }
+                        .yAxisTitle(
+                            getTypeName(
+                                statType,
+                                mediaType
+                            ) + if (normalize && chartPackets.size > 1) " (Normalized)" else ""
+                        )
+                    if (chartPackets.size == 1) {
+                        chart.colorsTheme(hexColorsArray)
+                    }
 
                     val elements: MutableList<AASeriesElement> = mutableListOf()
                     chartPackets.forEachIndexed { index, chartPacket ->
                         val element = get2DElements(
-                                    chartPacket.names,
-                                    chartPacket.statData,
-                                    chartPackets.size == 1
-                                )
+                            chartPacket.names,
+                            chartPacket.statData,
+                            chartPackets.size == 1
+                        )
                         element.name(chartPacket.username)
 
                         if (index == 0) {
-                            element.color(AAColor.rgbaColor(Color.red(primaryColor), Color.green(primaryColor), Color.blue(primaryColor), 0.9f))
+                            element.color(
+                                AAColor.rgbaColor(
+                                    Color.red(primaryColor),
+                                    Color.green(primaryColor),
+                                    Color.blue(primaryColor),
+                                    0.9f
+                                )
+                            )
 
                         } else {
-                            element.color(AAColor.rgbaColor(Color.red(ColorEditor.oppositeColor(primaryColor)), Color.green(ColorEditor.oppositeColor(primaryColor)), Color.blue(ColorEditor.oppositeColor(primaryColor)), 0.9f))
+                            element.color(
+                                AAColor.rgbaColor(
+                                    Color.red(
+                                        ColorEditor.oppositeColor(
+                                            primaryColor
+                                        )
+                                    ),
+                                    Color.green(ColorEditor.oppositeColor(primaryColor)),
+                                    Color.blue(ColorEditor.oppositeColor(primaryColor)),
+                                    0.9f
+                                )
+                            )
                         }
                         if (chartPackets.size == 1) {
-                            element.fillColor(AAColor.rgbaColor(Color.red(primaryColor), Color.green(primaryColor), Color.blue(primaryColor), 0.9f))
+                            element.fillColor(
+                                AAColor.rgbaColor(
+                                    Color.red(primaryColor),
+                                    Color.green(primaryColor),
+                                    Color.blue(primaryColor),
+                                    0.9f
+                                )
+                            )
                         }
                         elements.add(element)
                     }
@@ -205,12 +250,12 @@ class ChartBuilder {
                 statValues.add(arrayOf(names[i], statData[i], statData[i]))
             }
             return AASeriesElement()
-                    .data(statValues.toTypedArray())
-                    .dataLabels(
-                        AADataLabels()
-                            .enabled(false)
-                    )
-                    .colorByPoint(colorByPoint)
+                .data(statValues.toTypedArray())
+                .dataLabels(
+                    AADataLabels()
+                        .enabled(false)
+                )
+                .colorByPoint(colorByPoint)
         }
 
         private fun get1DElements(
@@ -255,6 +300,14 @@ class ChartBuilder {
             }
         }
 
+        private fun normalizeData(data: List<Number>): List<Number> {
+            if (data.isEmpty()) {
+                return data
+            }
+            val max = data.maxOf { it.toDouble() }
+            return data.map { (it.toDouble() / max) * 100 }
+        }
+
         private fun setColors(aaOptions: AAOptions, context: Context, primaryColor: Int) {
             val backgroundColor = TypedValue()
             context.theme.resolveAttribute(
@@ -281,7 +334,7 @@ class ChartBuilder {
                     Color.red(colorOnBackground.data),
                     Color.green(colorOnBackground.data),
                     Color.blue(colorOnBackground.data),
-                    0.9f
+                    1.0f
                 )
             )
 
@@ -292,7 +345,7 @@ class ChartBuilder {
                     Color.red(backgroundColor.data),
                     Color.green(backgroundColor.data),
                     Color.blue(backgroundColor.data),
-                    0.9f
+                    1.0f
                 )
             )
             aaOptions.title?.style(onBackgroundStyle)

@@ -12,10 +12,10 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentStatisticsBinding
-import ani.dantotsu.profile.ChartBuilder.Companion.ChartType
-import ani.dantotsu.profile.ChartBuilder.Companion.StatType
-import ani.dantotsu.profile.ChartBuilder.Companion.MediaType
 import ani.dantotsu.profile.ChartBuilder.Companion.ChartPacket
+import ani.dantotsu.profile.ChartBuilder.Companion.ChartType
+import ani.dantotsu.profile.ChartBuilder.Companion.MediaType
+import ani.dantotsu.profile.ChartBuilder.Companion.StatType
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
@@ -147,7 +147,7 @@ class StatsFragment :
 
     private fun loadFormatChart(anime: Boolean) {
         val chartPackets = mutableListOf<ChartPacket>()
-        stats.forEach {stat ->
+        stats.forEach { stat ->
             val names: List<String> = if (anime) {
                 stat?.statistics?.anime?.formats?.map { it.format } ?: emptyList()
             } else {
@@ -167,7 +167,7 @@ class StatsFragment :
                 } ?: emptyList()
             }
             if (names.isNotEmpty() && values.isNotEmpty()) {
-                chartPackets.add(ChartPacket(stat?.name?:"Unknown", names, values))
+                chartPackets.add(ChartPacket(stat?.name ?: "Unknown", names, values))
             }
         }
         if (chartPackets.isNotEmpty()) {
@@ -178,6 +178,7 @@ class StatsFragment :
                 statType,
                 type,
                 chartPackets,
+                xAxisName = "Format",
             )
             adapter.add(ChartItem("Format", formatChart, activity))
         }
@@ -215,7 +216,8 @@ class StatsFragment :
                 AAChartType.Funnel,
                 statType,
                 type,
-                chartPackets
+                chartPackets,
+                xAxisName = "Status",
             )
             adapter.add(ChartItem("Status", statusChart, activity))
         }
@@ -225,9 +227,19 @@ class StatsFragment :
         val chartPackets = mutableListOf<ChartPacket>()
         stats.forEach { stat ->
             val names: List<Int> = if (anime) {
-                stat?.statistics?.anime?.scores?.map { convertScore(it.score, stat.mediaListOptions.scoreFormat) } ?: emptyList()
+                stat?.statistics?.anime?.scores?.map {
+                    convertScore(
+                        it.score,
+                        stat.mediaListOptions.scoreFormat
+                    )
+                } ?: emptyList()
             } else {
-                stat?.statistics?.manga?.scores?.map { convertScore(it.score, stat.mediaListOptions.scoreFormat) } ?: emptyList()
+                stat?.statistics?.manga?.scores?.map {
+                    convertScore(
+                        it.score,
+                        stat.mediaListOptions.scoreFormat
+                    )
+                } ?: emptyList()
             }
             val values: List<Number> = if (anime) {
                 when (statType) {
@@ -337,6 +349,7 @@ class StatsFragment :
                 type,
                 chartPackets,
                 xAxisName = "Year",
+                scrollPos = 0.0f
             )
             adapter.add(ChartItem("Release Year", releaseYearChart, activity))
         }
@@ -429,6 +442,7 @@ class StatsFragment :
                 xAxisName = "Genre",
                 polar = true,
                 passedCategories = chartPackets[0].names as List<String>,
+                normalize = true
             )
             adapter.add(ChartItem("Genre", genreChart, activity))
         }
@@ -546,9 +560,11 @@ class StatsFragment :
         val chartPackets = mutableListOf<ChartPacket>()
         stats.forEach { stat ->
             val names: List<String> = if (anime) {
-                stat?.statistics?.anime?.voiceActors?.map { it.voiceActor.name.full?:"unknown" } ?: emptyList()
+                stat?.statistics?.anime?.voiceActors?.map { it.voiceActor.name.full ?: "unknown" }
+                    ?: emptyList()
             } else {
-                stat?.statistics?.manga?.voiceActors?.map { it.voiceActor.name.full?:"unknown" } ?: emptyList()
+                stat?.statistics?.manga?.voiceActors?.map { it.voiceActor.name.full ?: "unknown" }
+                    ?: emptyList()
             }
             val values: List<Number> = if (anime) {
                 when (statType) {
@@ -644,7 +660,8 @@ class StatsFragment :
                 xAxisName = "Studio",
                 polar = true,
                 passedCategories = chartPackets[0].names as List<String>,
-                scrollPos = null
+                scrollPos = null,
+                normalize = true
             )
             adapter.add(ChartItem("Studio", studioChart, activity))
         }
@@ -654,9 +671,11 @@ class StatsFragment :
         val chartPackets = mutableListOf<ChartPacket>()
         stats.forEach { stat ->
             val names: List<String> = if (anime) {
-                stat?.statistics?.anime?.staff?.map { it.staff.name.full?:"unknown" } ?: emptyList()
+                stat?.statistics?.anime?.staff?.map { it.staff.name.full ?: "unknown" }
+                    ?: emptyList()
             } else {
-                stat?.statistics?.manga?.staff?.map { it.staff.name.full?:"unknown" } ?: emptyList()
+                stat?.statistics?.manga?.staff?.map { it.staff.name.full ?: "unknown" }
+                    ?: emptyList()
             }
             val values: List<Number> = if (anime) {
                 when (statType) {
