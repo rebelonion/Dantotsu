@@ -135,6 +135,18 @@
 
                         </FrameLayout>
 
+                        <ImageButton
+                            android:id="@+id/imageButton"
+                            android:layout_width="47dp"
+                            android:layout_height="47dp"
+                            android:layout_gravity="end|center_vertical"
+                            android:layout_marginEnd="10dp"
+                            android:background="@null"
+                            android:padding="7dp"
+                            android:scaleType="fitCenter"
+                            app:srcCompat="@drawable/inbox_empty"
+                            app:tint="@color/bg_white" />
+
                         <com.google.android.material.card.MaterialCardView
                             android:id="@+id/homeUserAvatarContainer"
                             android:layout_width="52dp"

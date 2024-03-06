@@ -222,6 +222,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".inbox.InboxActivity"
+            android:label="Inbox Activity">
+        </activity>
+        <activity
             android:name=".connections.anilist.UrlMedia"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:excludeFromRecents="true"
