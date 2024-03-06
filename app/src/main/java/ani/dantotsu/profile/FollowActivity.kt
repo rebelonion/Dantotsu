@@ -36,20 +36,22 @@ class FollowActivity : AppCompatActivity(){
     private lateinit var selected: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val immersiveMode = PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)
+        if (immersiveMode) {
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+        }
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
         initActivity(this)
         binding = ActivityFollowBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
+        if (!immersiveMode) {
             this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.nav_bg_inv)
             binding.root.fitsSystemWindows = true
 
         } else {
             binding.root.fitsSystemWindows = false
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -58,6 +60,8 @@ class FollowActivity : AppCompatActivity(){
                 topMargin = statusBarHeight
             }
         }
+
+        setContentView(binding.root)
         val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)
         selected = getSelected(layoutType)
         binding.followerGrid.alpha = 0.33f
