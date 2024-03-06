@@ -19,11 +19,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
-        android:text="Username"
+        android:text="@string/username"
         android:textColor="?attr/colorOnBackground"
         android:textSize="12sp"
         android:ellipsize="end"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText" />
+        android:textStyle="bold"/>
 
 </LinearLayout>
