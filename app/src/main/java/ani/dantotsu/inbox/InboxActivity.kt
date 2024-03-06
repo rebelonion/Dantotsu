@@ -22,6 +22,9 @@ class InboxActivity : AppCompatActivity() {
         binding = ActivityInboxBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Find the ImageButton from activity_inbox.xml
+        val imageButton = findViewById<ImageButton>(R.id.imageButton)
+
         navBar = binding.inboxNavBar
         navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
 
@@ -53,13 +56,5 @@ class InboxActivity : AppCompatActivity() {
 
         navBar.selectTabAt(selected)
         navBar.visibility = View.VISIBLE
-
-        val imageButton = findViewById<ImageButton>(R.id.imageButton)
-
-        imageButton.setOnClickListener {
-            val intent = Intent(this, this::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
-            startActivity(intent)
         }
     }
-}

@@ -27,6 +27,7 @@ import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentHomeBinding
+import ani.dantotsu.inbox.InboxActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
@@ -77,6 +78,7 @@ class HomeFragment : Fragment() {
                 binding.homeUserChaptersRead.text = Anilist.chapterRead.toString()
                 binding.homeUserAvatar.loadImage(Anilist.avatar)
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.homeUserBg.pause()
+                binding.imageButton.startAnimation(setSlideIn())
                 binding.homeUserBg.loadImage(Anilist.bg)
                 binding.homeUserDataProgressBar.visibility = View.GONE
 
@@ -304,6 +306,13 @@ class HomeFragment : Fragment() {
                 (binding.homeDantotsuIcon.drawable as Animatable).start()
             }
         }
+
+        binding.imageButton.setOnClickListener {
+            val intent = Intent(requireActivity(), InboxActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+        }
+
 
         val array = arrayOf(
             "AnimeContinue",
