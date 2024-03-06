@@ -666,6 +666,9 @@
     <string name="highest_rated">Highest rated</string>
     <string name="lowest_rated">Lowest rated</string>
     <string name="compare"><u>Compare</u></string>
+    <string name="view_following">View Following</string>
+    <string name="menu">menu</string>
+    <string name="view_followers">View Followers</string>
 
 
 </resources>

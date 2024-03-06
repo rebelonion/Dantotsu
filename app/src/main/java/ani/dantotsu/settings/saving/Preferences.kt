@@ -66,6 +66,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AnimeListSortOrder(Pref(Location.UI, String::class, "score")),
     MangaListSortOrder(Pref(Location.UI, String::class, "score")),
     CommentSortOrder(Pref(Location.UI, String::class, "newest")),
+    FollowerLayout(Pref(Location.UI, Int::class, 0)),
 
     //Player
     DefaultSpeed(Pref(Location.Player, Int::class, 5)),

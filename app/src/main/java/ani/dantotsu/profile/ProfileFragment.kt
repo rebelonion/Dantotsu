@@ -47,11 +47,11 @@ class ProfileFragment() : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
+
+        user = arguments?.getSerializable("user") as Query.UserProfile
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             model.setData(user.id)
         }
-
-        user = arguments?.getSerializable("user") as Query.UserProfile
         val backGroundColorTypedValue = TypedValue()
         val textColorTypedValue = TypedValue()
         activity.theme.resolveAttribute(

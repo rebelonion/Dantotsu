@@ -141,12 +141,12 @@
             android:id="@+id/profileUserStatsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Stats"
-            android:textSize="16sp"
+            android:textSize="18sp"
             tools:ignore="HardcodedText" />
 
         <TableLayout
@@ -341,18 +341,19 @@
             android:id="@+id/profileUserBioTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Bio"
-            android:textSize="16sp"
+            android:textSize="18sp"
             tools:ignore="HardcodedText" />
 
         <WebView
             android:id="@+id/profileUserBio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:textAlignment="textStart"
@@ -373,11 +374,11 @@
             android:id="@+id/profileFavAnime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="8dp"
             android:fontFamily="@font/poppins_bold"
             android:padding="8dp"
             android:text="@string/fav_anime"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -447,11 +448,11 @@
             android:id="@+id/profileFavManga"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="8dp"
             android:fontFamily="@font/poppins_bold"
             android:padding="8dp"
             android:text="@string/fav_manga"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -517,12 +518,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Favorite Characters"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <ani.dantotsu.FadingEdgeRecyclerView
             android:id="@+id/profileFavCharactersRecycler"
@@ -548,12 +549,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
             android:text="Favorite Staff"
-            android:textSize="16sp" />
+            android:textSize="18sp" />
 
         <ani.dantotsu.FadingEdgeRecyclerView
             android:id="@+id/profileFavStaffRecycler"

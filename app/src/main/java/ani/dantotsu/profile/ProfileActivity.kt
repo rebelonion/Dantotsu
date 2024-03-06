@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
@@ -82,8 +83,10 @@ class ProfileActivity : AppCompatActivity() {
                     }
                 })
                 val userLevel = intent.getStringExtra("username") ?: ""
-                binding.followButton.visibility = if (user.id == Anilist.userid || Anilist.userid == null) View.GONE else View.VISIBLE
-                binding.followButton.text = if (user.isFollowing) "Unfollow" else if(user.isFollower) "Follows you" else "Follow"
+                binding.followButton.visibility =
+                    if (user.id == Anilist.userid || Anilist.userid == null) View.GONE else View.VISIBLE
+                binding.followButton.text =
+                    if (user.isFollowing) "Unfollow" else if (user.isFollower) "Follows you" else "Follow"
                 if (user.isFollowing && user.isFollower) binding.followButton.text = "Mutual"
                 binding.followButton.setOnClickListener {
                     lifecycleScope.launch(Dispatchers.IO) {
@@ -92,8 +95,10 @@ class ProfileActivity : AppCompatActivity() {
                             withContext(Dispatchers.Main) {
                                 snackString("Success")
                                 user.isFollowing = res.data.toggleFollow.isFollowing
-                                binding.followButton.text = if (user.isFollowing) "Unfollow" else if(user.isFollower) "Follows you" else "Follow"
-                                if (user.isFollowing && user.isFollower) binding.followButton.text = "Mutual"
+                                binding.followButton.text =
+                                    if (user.isFollowing) "Unfollow" else if (user.isFollower) "Follows you" else "Follow"
+                                if (user.isFollowing && user.isFollower) binding.followButton.text =
+                                    "Mutual"
                             }
                         }
                     }
@@ -101,12 +106,35 @@ class ProfileActivity : AppCompatActivity() {
                 binding.profileProgressBar.visibility = View.GONE
                 binding.profileTopContainer.visibility = View.VISIBLE
 
-                binding.temp.setOnClickListener {
-                    ContextCompat.startActivity(
-                        this@ProfileActivity, Intent(this@ProfileActivity, FollowActivity::class.java)
-                            .putExtra("title", "Following")
-                            .putExtra("userId", user.id), null
-                    )
+                binding.profileMenuButton.setOnClickListener {
+                    val popup = PopupMenu(this@ProfileActivity, binding.profileMenuButton)
+                    popup.menuInflater.inflate(R.menu.menu_profile, popup.menu)
+                    popup.setOnMenuItemClickListener { item ->
+                        when (item.itemId) {
+                            R.id.action_view_following -> {
+                                ContextCompat.startActivity(
+                                    this@ProfileActivity,
+                                    Intent(this@ProfileActivity, FollowActivity::class.java)
+                                        .putExtra("title", "Following")
+                                        .putExtra("userId", user.id),
+                                    null
+                                )
+                                true
+                            }
+                            R.id.action_view_followers -> {
+                                ContextCompat.startActivity(
+                                    this@ProfileActivity,
+                                    Intent(this@ProfileActivity, FollowActivity::class.java)
+                                        .putExtra("title", "Followers")
+                                        .putExtra("userId", user.id),
+                                    null
+                                )
+                                true
+                            }
+                            else -> false
+                        }
+                    }
+                    popup.show()
                 }
 
                 binding.profileUserAvatar.loadImage(user.avatar?.medium)
@@ -122,6 +150,10 @@ class ProfileActivity : AppCompatActivity() {
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.profileBannerImage.pause()
                 binding.profileBannerImage.loadImage(user.bannerImage)
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
+                binding.profileBannerGradient.updateLayoutParams { height += statusBarHeight }
+                binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    topMargin += statusBarHeight
+                }
                 binding.profileBannerImage.setOnLongClickListener {
                     ImageViewDialog.newInstance(
                         this@ProfileActivity,
@@ -132,7 +164,6 @@ class ProfileActivity : AppCompatActivity() {
 
             }
         }
-
     }
 
     override fun onResume() {
