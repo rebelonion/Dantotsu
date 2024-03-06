@@ -137,7 +137,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
+        <TextView 
             android:id="@+id/profileUserStatsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -145,7 +145,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="Stats"
+            android:text="@string/stats"
             android:textSize="18sp"
             tools:ignore="HardcodedText" />
 
@@ -168,7 +168,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:text="Episodes watched"
+                    android:text="@string/episodes_watched"
                     android:textStyle="bold" />
 
                 <TextView
@@ -190,7 +190,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:text="Days watched"
+                    android:text="@string/days_watched"
                     android:textStyle="bold" />
 
                 <TextView
@@ -211,7 +211,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:text="Total Anime"
+                    android:text="@string/total_anime"
                     android:textStyle="bold" />
 
                 <TextView
@@ -232,7 +232,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:text="Anime Mean Score"
+                    android:text="@string/anime_mean_score"
                     android:textStyle="bold" />
 
                 <TextView
@@ -253,7 +253,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:text="Chapter read"
+                    android:text="@string/chapters_read"
                     android:textStyle="bold" />
 
                 <TextView
@@ -274,7 +274,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:text="Volume read"
+                    android:text="@string/volume_read"
                     android:textStyle="bold" />
 
                 <TextView
@@ -295,7 +295,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:text="Total Manga"
+                    android:text="@string/total_manga"
                     android:textStyle="bold" />
 
                 <TextView
@@ -316,7 +316,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
-                    android:text="Manga Mean Score"
+                    android:text="@string/manga_mean_score"
                     android:textStyle="bold" />
 
                 <TextView
@@ -345,7 +345,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="Bio"
+            android:text="@string/about_me"
             android:textSize="18sp"
             tools:ignore="HardcodedText" />
 
@@ -407,7 +407,7 @@
                     android:alpha="0.58"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:text="User has no favorite anime"
+                    android:text="string/no_fav_anime"
                     android:textAlignment="center"
                     tools:ignore="TextContrastCheck" />
 
@@ -481,7 +481,7 @@
                     android:alpha="0.58"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:text="User has no favorite manga."
+                    android:text="string/no_fav_manga"
                     android:textAlignment="center"
                     tools:ignore="TextContrastCheck" />
 
@@ -522,7 +522,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="Favorite Characters"
+            android:text="string/fav_character"
             android:textSize="18sp" />
 
         <ani.dantotsu.FadingEdgeRecyclerView
@@ -553,7 +553,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="Favorite Staff"
+            android:text="string/fav_staff"
             android:textSize="18sp" />
 
         <ani.dantotsu.FadingEdgeRecyclerView
