@@ -53,10 +53,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="120dp"
-            android:text="Username"
+            android:text="@string/ssername"
             android:textColor="@color/bg_white"
             android:textSize="18sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
+            android:textStyle="bold"/>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>
