@@ -56,6 +56,24 @@
                     android:textSize="14sp" />
 
             </LinearLayout>
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="14dp"
+                android:backgroundTint="@color/nav_bg_inv"
+                app:cardCornerRadius="26dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/settingsNotification"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:scaleType="center"
+                    app:srcCompat="@drawable/ic_round_notifications_active_24"
+                    app:tint="@color/bg_opp"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/homeUserAvatarContainer"

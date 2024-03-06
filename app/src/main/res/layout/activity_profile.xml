@@ -58,8 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|bottom"
-                    android:orientation="vertical"
-                    tools:visibility="visible">
+                    android:orientation="vertical">
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/profileUserAvatarContainer"
@@ -97,28 +96,43 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:backgroundTint="?attr/colorPrimaryContainer"
+                        android:backgroundTint="?attr/colorOnSecondary"
                         android:enabled="true"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Follow"
                         android:textColor="@color/bg_opp"
                         android:textSize="14sp"
                         app:cornerRadius="8dp"
-                        app:strokeColor="?attr/colorPrimaryContainer"
-                        tools:ignore="SpeakableTextPresentCheck" />
+                        app:strokeColor="?attr/colorOnSecondary"
+                        tools:ignore="HardcodedText,SpeakableTextPresentCheck" />
 
                 </LinearLayout>
 
-
-                <ImageView
-                    android:id="@+id/profileMenuButton"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="16dp"
-                    android:contentDescription="@string/menu"
-                    android:src="@drawable/ic_round_dots_vertical_24" />
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/profileActivityButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginEnd="8dp"
+                        android:contentDescription="@string/menu"
+                        android:src="@drawable/inbox_empty"
+                        app:tint="@color/bg_opp" />
+
+                    <ImageView
+                        android:id="@+id/profileMenuButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="@string/menu"
+                        android:src="@drawable/ic_round_dots_vertical_24"
+                        app:tint="@color/bg_opp" />
+                </LinearLayout>
             </FrameLayout>
 
             <androidx.viewpager2.widget.ViewPager2

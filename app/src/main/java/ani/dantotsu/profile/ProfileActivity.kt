@@ -105,7 +105,15 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 binding.profileProgressBar.visibility = View.GONE
                 binding.profileTopContainer.visibility = View.VISIBLE
-
+                binding.profileActivityButton.setOnClickListener {
+                    ContextCompat.startActivity(
+                        this@ProfileActivity,
+                        Intent(this@ProfileActivity, ActivityActivity::class.java)
+                            .putExtra("userId", user.id)
+                            .putExtra("username", user.name),
+                        null
+                    )
+                }
                 binding.profileMenuButton.setOnClickListener {
                     val popup = PopupMenu(this@ProfileActivity, binding.profileMenuButton)
                     popup.menuInflater.inflate(R.menu.menu_profile, popup.menu)
@@ -151,9 +159,8 @@ class ProfileActivity : AppCompatActivity() {
                 binding.profileBannerImage.loadImage(user.bannerImage)
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
                 binding.profileBannerGradient.updateLayoutParams { height += statusBarHeight }
-                binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                    topMargin += statusBarHeight
-                }
+                binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+                binding.profileActivityButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                 binding.profileBannerImage.setOnLongClickListener {
                     ImageViewDialog.newInstance(
                         this@ProfileActivity,

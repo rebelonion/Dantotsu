@@ -115,6 +115,16 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".profile.ActivityActivity"
+            android:label="Inbox Activity"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
+            android:name=".notifications.NotificationActivity"
+            android:label="Inbox Activity"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
@@ -221,10 +231,7 @@
                 <data android:host="discord.dantotsu.com" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".inbox.InboxActivity"
-            android:label="Inbox Activity">
-        </activity>
+
         <activity
             android:name=".connections.anilist.UrlMedia"
             android:configChanges="orientation|screenSize|layoutDirection"

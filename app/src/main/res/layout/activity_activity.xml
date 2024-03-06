@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -39,52 +38,11 @@
             android:fontFamily="@font/poppins_bold"
             android:gravity="center|start"
             android:singleLine="true"
+            android:text="Activity"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
             android:textColor="?attr/colorOnBackground"
             android:textSize="18sp"
-            tools:text="Follow" />
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="8dp"
-            app:cardBackgroundColor="@color/nav_bg_inv"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp">
-
-            <ImageButton
-                android:id="@+id/followerList"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:alpha="0.33"
-                android:background="?android:attr/selectableItemBackground"
-                android:scaleX="-1"
-                app:srcCompat="@drawable/ic_round_view_list_24"
-                app:tint="?attr/colorOnBackground"
-                tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="46dp"
-            app:cardBackgroundColor="@color/nav_bg_inv"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="0dp">
-
-            <ImageButton
-                android:id="@+id/followerGrid"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:alpha="0.33"
-                android:background="?android:attr/selectableItemBackground"
-                app:srcCompat="@drawable/ic_round_grid_view_24"
-                app:tint="?attr/colorOnBackground"
-                tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
-        </androidx.cardview.widget.CardView>
-
+            tools:ignore="HardcodedText" />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -93,5 +51,5 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        tools:listitem="@layout/item_follower" />
+        tools:listitem="@layout/item_activity" />
 </LinearLayout>

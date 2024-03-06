@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="180dp"
     android:layout_marginTop="16dp"
     android:orientation="horizontal">
 
@@ -12,10 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
         android:backgroundTint="@color/bg_white"
-        app:cardCornerRadius="16dp">
+        app:cardCornerRadius="24dp">
 
         <ImageView
-            android:id="@+id/profileBannerImage"
+            android:id="@+id/notificationBannerImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
@@ -29,18 +29,18 @@
             tools:ignore="ContentDescription" />
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/profileUserAvatarContainer"
-            android:layout_width="82dp"
-            android:layout_height="82dp"
+            android:id="@+id/notificationCoverContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="16dp"
             android:backgroundTint="@color/bg_white"
-            app:cardCornerRadius="64dp">
+            app:cardCornerRadius="16dp">
 
             <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/profileUserAvatar"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
+                android:id="@+id/notificationCover"
+                android:layout_width="102dp"
+                android:layout_height="154dp"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/ic_round_add_circle_24"
                 tools:ignore="ContentDescription,ImageContrastCheck"
@@ -49,15 +49,30 @@
         </com.google.android.material.card.MaterialCardView>
 
         <TextView
-            android:id="@+id/profileUserName"
+            android:id="@+id/notificationText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="120dp"
-            android:text="Username"
+            android:layout_marginStart="128dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="@string/slogan"
             android:textColor="@color/bg_white"
             android:textSize="18sp"
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="Wed,06 March 2024, 7:00PM"
+            android:textColor="@color/bg_white"
+            android:textSize="14sp"
+            tools:ignore="HardcodedText" />
+
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>
