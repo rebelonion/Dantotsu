@@ -58,6 +58,7 @@ data class Media(
     var endDate: FuzzyDate? = null,
 
     var characters: ArrayList<Character>? = null,
+    var staff: ArrayList<Author>? = null,
     var prequel: Media? = null,
     var sequel: Media? = null,
     var relations: ArrayList<Media>? = null,

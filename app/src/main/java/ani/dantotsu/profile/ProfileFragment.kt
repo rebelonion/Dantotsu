@@ -18,6 +18,8 @@ import ani.dantotsu.connections.anilist.ProfileViewModel
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentProfileBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.media.Author
+import ani.dantotsu.media.AuthorAdapter
 import ani.dantotsu.media.Character
 import ani.dantotsu.media.CharacterAdapter
 import ani.dantotsu.media.Media
@@ -145,14 +147,14 @@ class ProfileFragment() : Fragment() {
             false
         )
 
-        val favStaff = arrayListOf<Character>()
+        val favStaff = arrayListOf<Author>()
         user.favourites?.staff?.nodes?.forEach { i ->
-            favStaff.add(Character(i.id, i.name.full, i.image.large, i.image.large, ""))
+            favStaff.add(Author(i.id, i.name.full, i.image.large , "" ))
         }
         if (favStaff.isEmpty()) {
             binding.profileFavStaffContainer.visibility = View.GONE
         }
-        binding.profileFavStaffRecycler.adapter = CharacterAdapter(favStaff)
+        binding.profileFavStaffRecycler.adapter = AuthorAdapter(favStaff)
         binding.profileFavStaffRecycler.layoutManager = LinearLayoutManager(
             requireContext(),
             LinearLayoutManager.HORIZONTAL,
