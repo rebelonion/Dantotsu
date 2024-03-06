@@ -120,7 +120,6 @@ class ProfileFragment() : Fragment() {
             binding.profileFavAnimeContainer,
             binding.profileFavAnimeRecyclerView,
             binding.profileFavAnimeProgressBar,
-            binding.profileFavAnimeEmpty,
             binding.profileFavAnime
         )
 
@@ -129,7 +128,6 @@ class ProfileFragment() : Fragment() {
             binding.profileFavMangaContainer,
             binding.profileFavMangaRecyclerView,
             binding.profileFavMangaProgressBar,
-            binding.profileFavMangaEmpty,
             binding.profileFavManga
         )
 
@@ -186,21 +184,18 @@ class ProfileFragment() : Fragment() {
         container: View,
         recyclerView: RecyclerView,
         progress: View,
-        empty: View,
         title: View
     ) {
         container.visibility = View.VISIBLE
         progress.visibility = View.VISIBLE
         recyclerView.visibility = View.GONE
-        empty.visibility = View.GONE
         title.visibility = View.INVISIBLE
 
         mode.observe(viewLifecycleOwner) {
             recyclerView.visibility = View.GONE
-            empty.visibility = View.GONE
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    recyclerView.adapter = MediaAdaptor(0, it, requireActivity())
+                    recyclerView.adapter = MediaAdaptor(0, it, requireActivity(), fav=true)
                     recyclerView.layoutManager = LinearLayoutManager(
                         requireContext(),
                         LinearLayoutManager.HORIZONTAL,
@@ -211,7 +206,7 @@ class ProfileFragment() : Fragment() {
                         LayoutAnimationController(setSlideIn(), 0.25f)
 
                 } else {
-                    empty.visibility = View.VISIBLE
+                    container.visibility = View.GONE
                 }
                 title.visibility = View.VISIBLE
                 title.startAnimation(setSlideUp())
