@@ -15,9 +15,8 @@
         android:visibility="gone" />
 
     <FrameLayout
-        android:layout_marginTop="16dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
         android:orientation="horizontal">
 
         <ImageView
@@ -33,16 +32,17 @@
         <TextView
             android:id="@+id/listTitle"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_height="48dp"
             android:layout_marginStart="44dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center|start"
             android:ellipsize="end"
             android:fontFamily="@font/poppins_bold"
-            android:gravity="center|start"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
             android:textColor="?attr/colorOnBackground"
             android:textSize="18sp"
-            tools:text="xyz" />
+            tools:text="Follow" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
@@ -55,8 +55,8 @@
 
             <ImageButton
                 android:id="@+id/followerList"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:alpha="0.33"
                 android:background="?android:attr/selectableItemBackground"
                 android:scaleX="-1"
@@ -76,8 +76,8 @@
 
             <ImageButton
                 android:id="@+id/followerGrid"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:alpha="0.33"
                 android:background="?android:attr/selectableItemBackground"
                 app:srcCompat="@drawable/ic_round_grid_view_24"
