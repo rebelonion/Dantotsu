@@ -10,6 +10,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
+import ani.dantotsu.media.Character
 import ani.dantotsu.media.Media
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.settings.saving.PrefManager
@@ -331,5 +332,27 @@ class GenresViewModel : ViewModel() {
                 }
             }
         }
+    }
+}
+
+class ProfileViewModel : ViewModel(){
+
+    private val mangaFav: MutableLiveData<ArrayList<Media>> =
+        MutableLiveData<ArrayList<Media>>(null)
+    fun getMangaFav(): LiveData<ArrayList<Media>> = mangaFav
+
+    private val animeFav: MutableLiveData<ArrayList<Media>> =
+        MutableLiveData<ArrayList<Media>>(null)
+    fun getAnimeFav(): LiveData<ArrayList<Media>> = animeFav
+
+    private val listImages: MutableLiveData<ArrayList<String?>> =
+        MutableLiveData<ArrayList<String?>>(arrayListOf())
+    fun getListImages(): LiveData<ArrayList<String?>> = listImages
+
+    suspend fun setData(id: Int) {
+        mangaFav.postValue(Anilist.query.userFavMedia(false, id))
+        animeFav.postValue(Anilist.query.userFavMedia(true, id))
+        listImages.postValue(Anilist.query.getUserBannerImages(id))
+
     }
 }

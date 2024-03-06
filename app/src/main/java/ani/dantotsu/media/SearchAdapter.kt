@@ -1,6 +1,7 @@
 package ani.dantotsu.media
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.text.Editable
 import android.text.TextWatcher
@@ -14,6 +15,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.HORIZONTAL
@@ -23,6 +25,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemSearchHeaderBinding
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import com.google.android.material.checkbox.MaterialCheckBox.*
@@ -92,13 +95,16 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         binding.searchChipRecycler.adapter = SearchChipAdapter(activity).also {
             activity.updateChips = { it.update() }
         }
+
         binding.searchChipRecycler.layoutManager =
             LinearLayoutManager(binding.root.context, HORIZONTAL, false)
 
         binding.searchFilter.setOnClickListener {
             SearchFilterBottomDialog.newInstance().show(activity.supportFragmentManager, "dialog")
         }
-
+        binding.searchByImage.setOnClickListener {
+            activity.startActivity(Intent(activity, ImageSearchActivity::class.java))
+        }
         fun searchTitle() {
             activity.result.apply {
                 search =
@@ -208,13 +214,16 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
             binding.searchHistoryList.startAnimation(fadeInAnimation())
             binding.searchResultLayout.visibility = View.GONE
             binding.searchHistoryList.visibility = View.VISIBLE
+            binding.searchByImage.visibility = View.VISIBLE
         } else {
             if (binding.searchResultLayout.visibility != View.VISIBLE) {
                 binding.searchResultLayout.startAnimation(fadeInAnimation())
                 binding.searchHistoryList.startAnimation(fadeOutAnimation())
             }
+
             binding.searchResultLayout.visibility = View.VISIBLE
             binding.searchHistoryList.visibility = View.GONE
+            binding.searchByImage.visibility = View.GONE
         }
     }
 

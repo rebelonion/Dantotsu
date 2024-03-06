@@ -251,7 +251,7 @@ data class MediaCoverImage(
 
     // Average #hex color of cover image
     @SerialName("color") var color: String?,
-)
+) : java.io.Serializable
 
 @Serializable
 data class MediaList(
@@ -490,7 +490,7 @@ data class MediaExternalLink(
 
     // isDisabled: Boolean
     @SerialName("notes") var notes: String?,
-)
+) : java.io.Serializable
 
 @Serializable
 enum class ExternalLinkType {
@@ -512,7 +512,13 @@ data class MediaListCollection(
     // If there is another chunk
     @SerialName("hasNextChunk") var hasNextChunk: Boolean?,
 
-    )
+    ) : java.io.Serializable
+
+@Serializable
+data class FollowData(
+    @SerialName("id") var id: Int,
+    @SerialName("isFollowing") var isFollowing: Boolean,
+) : java.io.Serializable
 
 @Serializable
 data class MediaListGroup(
@@ -526,4 +532,4 @@ data class MediaListGroup(
     @SerialName("isSplitCompletedList") var isSplitCompletedList: Boolean?,
 
     @SerialName("status") var status: MediaListStatus?,
-)
+) : java.io.Serializable

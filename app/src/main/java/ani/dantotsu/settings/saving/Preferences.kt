@@ -66,6 +66,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AnimeListSortOrder(Pref(Location.UI, String::class, "score")),
     MangaListSortOrder(Pref(Location.UI, String::class, "score")),
     CommentSortOrder(Pref(Location.UI, String::class, "newest")),
+    FollowerLayout(Pref(Location.UI, Int::class, 0)),
 
     //Player
     DefaultSpeed(Pref(Location.Player, Int::class, 5)),
@@ -100,7 +101,6 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     UseInternalCast(Pref(Location.Player, Boolean::class, false)),
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
-    ContinuedAnimeSet(Pref(Location.Player, Set::class, setOf<String>())),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),

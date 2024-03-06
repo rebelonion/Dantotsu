@@ -42,7 +42,7 @@
     <style name="Theme.Dantotsu.PopupOverlay" parent="Theme.Dantotsu" />
 
     <style name="Theme.Dantotsu.NeverCutout" parent="@style/Theme.Dantotsu.NoActionBar">
-        <item name="android:navigationBarColor">@color/nav_bg</item>
+        <item name="android:navigationBarColor">?android:colorBackground</item>
     </style>
 
     <style name="Theme.Dantotsu.ALLBLACK" parent="Theme.Base">

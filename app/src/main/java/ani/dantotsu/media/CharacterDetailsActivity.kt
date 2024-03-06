@@ -48,7 +48,7 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
         initActivity(this)
         screenWidth = resources.displayMetrics.run { widthPixels / density }
         if (PrefManager.getVal(PrefName.ImmersiveMode)) this.window.statusBarColor =
-            ContextCompat.getColor(this, R.color.status)
+            ContextCompat.getColor(this, R.color.transparent)
 
         val banner =
             if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen
@@ -144,7 +144,7 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
         if (percentage <= percent && isCollapsed) {
             isCollapsed = false
             if (immersiveMode) this.window.statusBarColor =
-                ContextCompat.getColor(this, R.color.status)
+                ContextCompat.getColor(this, R.color.transparent)
             binding.characterAppBar.setBackgroundResource(R.color.bg)
         }
     }

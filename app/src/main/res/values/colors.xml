@@ -8,11 +8,12 @@
     <color name="bg">@color/bg_white</color>
     <color name="bg_opp">@color/bg_black</color>
     <color name="fg">#A8000000</color>
+    <color name="bg_black_50" alpha="128">#80000000</color>
     <color name="nav_bg">#fff</color>
     <color name="nav_bg_inv">#00FFFFFF</color>
     <color name="nav_tab">#40000000</color>
     <color name="nav_tab_disabled">#19000000</color>
-    <color name="status">#00000000</color>
+    <color name="transparent">#00000000</color>
     <color name="button_icon">#A9FFFFFF</color>
     <color name="nav_status">#80FFFFFF</color>
     <color name="fav">#ad5edd</color>
@@ -226,7 +227,7 @@
 
     <!-- theme 4 -->
     <color name="seed_4">#e800ac</color>
-    <color name="md_theme_light_4_primary">#B30084</color>
+    <color name="md_theme_light_4_primary">#FF92E2</color>
     <color name="md_theme_light_4_onPrimary">#FFFFFF</color>
     <color name="md_theme_light_4_primaryContainer">#FFD8EA</color>
     <color name="md_theme_light_4_onPrimaryContainer">#3C002A</color>

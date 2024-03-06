@@ -19,6 +19,24 @@
         android:orientation="vertical"
         android:padding="32dp">
 
+        <Button
+            android:id="@+id/animeSourceYT"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="@color/yt_red"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/play_yt"
+            android:textColor="@color/bg_white"
+            android:visibility="gone"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_round_play_circle_24"
+            app:iconTint="@color/bg_white"
+            tools:ignore="TextContrastCheck"
+            tools:visibility="visible"/>
+
         <TextView
             android:id="@+id/animeSourceTitle"
             android:layout_width="match_parent"

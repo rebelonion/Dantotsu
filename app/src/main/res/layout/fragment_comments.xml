@@ -134,6 +134,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:background="?android:colorBackground"
             android:paddingTop="8dp"
             android:paddingBottom="8dp">
 

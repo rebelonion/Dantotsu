@@ -122,10 +122,6 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             openLinkInBrowser("https://anilist.co/settings/lists")
             dismiss()
         }
-        binding.imageSearch.setOnClickListener {
-            startActivity(Intent(activity, ImageSearchActivity::class.java))
-            dismiss()
-        }
 
         binding.settingsDownloads.isChecked = PrefManager.getVal(PrefName.OfflineMode)
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->

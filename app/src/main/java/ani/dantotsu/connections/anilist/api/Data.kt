@@ -140,52 +140,99 @@ class Query {
     }
 
     @Serializable
+    data class ToggleFollow(
+        @SerialName("data")
+        val data: Data?
+    ) : java.io.Serializable {
+        @Serializable
+        data class Data(
+            @SerialName("ToggleFollow")
+            val toggleFollow: FollowData
+        ) : java.io.Serializable
+    }
+
+    @Serializable
     data class GenreCollection(
         @SerialName("data")
         val data: Data
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("GenreCollection")
             val genreCollection: List<String>?
-        )
+        ) : java.io.Serializable
     }
 
     @Serializable
     data class MediaTagCollection(
         @SerialName("data")
         val data: Data
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("MediaTagCollection")
             val mediaTagCollection: List<MediaTag>?
-        )
+        ) : java.io.Serializable
     }
 
     @Serializable
     data class User(
         @SerialName("data")
         val data: Data
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("User")
             val user: ani.dantotsu.connections.anilist.api.User?
-        )
+        ) : java.io.Serializable
     }
 
     @Serializable
     data class UserProfileResponse(
         @SerialName("data")
         val data: Data
-    ) {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("user")
             val user: UserProfile?
-        )
+        ) : java.io.Serializable
     }
+    @Serializable
+    data class Following(
+        @SerialName("data")
+        val data: Data
+    ) : java.io.Serializable {
+        @Serializable
+        data class Data(
+            @SerialName("Page")
+            val page: FollowingPage?
+        ) : java.io.Serializable
+    }
+
+    @Serializable
+    data class Follower(
+        @SerialName("data")
+        val data: Data
+    ) : java.io.Serializable {
+        @Serializable
+        data class Data(
+            @SerialName("Page")
+            val page: FollowerPage?
+        ) : java.io.Serializable
+    }
+
+    @Serializable
+    data class FollowerPage(
+        @SerialName("followers")
+        val followers: List<ani.dantotsu.connections.anilist.api.User>?
+    ) : java.io.Serializable
+
+    @Serializable
+    data class FollowingPage(
+        @SerialName("following")
+        val following: List<ani.dantotsu.connections.anilist.api.User>?
+    ) : java.io.Serializable
 
     @Serializable
     data class UserProfile(
@@ -200,28 +247,27 @@ class Query {
         @SerialName("bannerImage")
         val bannerImage: String?,
         @SerialName("isFollowing")
-        val isFollowing: Boolean,
+        var isFollowing: Boolean,
         @SerialName("isFollower")
         val isFollower: Boolean,
         @SerialName("isBlocked")
         val isBlocked: Boolean,
-        @SerialName("favorites")
-        val favorites: UserFavorites?,
+        @SerialName("favourites")
+        val favourites: UserFavourites?,
         @SerialName("statistics")
         val statistics: NNUserStatisticTypes,
         @SerialName("siteUrl")
         val siteUrl: String,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class NNUserStatisticTypes(
         @SerialName("anime") var anime: NNUserStatistics,
         @SerialName("manga") var manga: NNUserStatistics
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class NNUserStatistics(
-        //
         @SerialName("count") var count: Int,
         @SerialName("meanScore") var meanScore: Float,
         @SerialName("standardDeviation") var standardDeviation: Float,
@@ -229,27 +275,27 @@ class Query {
         @SerialName("episodesWatched") var episodesWatched: Int,
         @SerialName("chaptersRead") var chaptersRead: Int,
         @SerialName("volumesRead") var volumesRead: Int,
-    )
+    ): java.io.Serializable
 
         @Serializable
-    data class UserFavorites(
+    data class UserFavourites(
         @SerialName("anime")
-        val anime: UserMediaFavoritesCollection,
+        val anime: UserMediaFavouritesCollection,
         @SerialName("manga")
-        val manga: UserMediaFavoritesCollection,
+        val manga: UserMediaFavouritesCollection,
         @SerialName("characters")
-        val characters: UserCharacterFavoritesCollection,
+        val characters: UserCharacterFavouritesCollection,
         @SerialName("staff")
-        val staff: UserStaffFavoritesCollection,
+        val staff: UserStaffFavouritesCollection,
         @SerialName("studios")
-        val studios: UserStudioFavoritesCollection,
-    )
+        val studios: UserStudioFavouritesCollection,
+    ): java.io.Serializable
 
     @Serializable
-    data class UserMediaFavoritesCollection(
+    data class UserMediaFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserMediaImageFavorite>,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserMediaImageFavorite(
@@ -257,33 +303,35 @@ class Query {
         val id: Int,
         @SerialName("coverImage")
         val coverImage: MediaCoverImage
-    )
+    ): java.io.Serializable
 
     @Serializable
-    data class UserCharacterFavoritesCollection(
+    data class UserCharacterFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserCharacterImageFavorite(
         @SerialName("id")
         val id: Int,
+        @SerialName("name")
+        val name: CharacterName,
         @SerialName("image")
         val image: CharacterImage
-    )
+    ): java.io.Serializable
 
     @Serializable
-    data class UserStaffFavoritesCollection(
+    data class UserStaffFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>, //downstream it's the same as character
-    )
+    ): java.io.Serializable
 
     @Serializable
-    data class UserStudioFavoritesCollection(
+    data class UserStudioFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserStudioFavorite>,
-    )
+    ): java.io.Serializable
 
     @Serializable
     data class UserStudioFavorite(
@@ -291,7 +339,7 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: String,
-    )
+    ): java.io.Serializable
 
     //----------------------------------------
     // Statistics
@@ -300,12 +348,12 @@ class Query {
     data class StatisticsResponse(
         @SerialName("data")
         val data: Data
-    ) {
+    ): java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("User")
             val user: StatisticsUser?
-        )
+        ): java.io.Serializable
     }
 
     @Serializable
@@ -314,9 +362,11 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: String,
+        @SerialName("mediaListOptions")
+        val mediaListOptions: MediaListOptions,
         @SerialName("statistics")
         val statistics: StatisticsTypes
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsTypes(
@@ -324,7 +374,7 @@ class Query {
         val anime: Statistics,
         @SerialName("manga")
         val manga: Statistics
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class Statistics(
@@ -366,7 +416,7 @@ class Query {
         val staff: List<StatisticsStaff>,
         @SerialName("studios")
         val studios: List<StatisticsStudio>
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsFormat(
@@ -382,7 +432,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("format")
         val format: String
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsStatus(
@@ -398,7 +448,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("status")
         val status: String
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsScore(
@@ -414,7 +464,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("score")
         val score: Int
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsLength(
@@ -430,7 +480,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("length")
         val length: String? //can be null for manga
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsReleaseYear(
@@ -446,7 +496,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("releaseYear")
         val releaseYear: Int
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsStartYear(
@@ -462,7 +512,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("startYear")
         val startYear: Int
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsGenre(
@@ -478,7 +528,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("genre")
         val genre: String
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsTag(
@@ -494,7 +544,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("tag")
         val tag: Tag
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class Tag(
@@ -502,7 +552,7 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: String
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsCountry(
@@ -518,7 +568,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("country")
         val country: String
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsVoiceActor(
@@ -536,7 +586,7 @@ class Query {
         val voiceActor: VoiceActor,
         @SerialName("characterIds")
         val characterIds: List<Int>
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class VoiceActor(
@@ -544,7 +594,7 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: StaffName
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StaffName(
@@ -562,7 +612,7 @@ class Query {
         val alternative: List<String>?,
         @SerialName("userPreferred")
         val userPreferred: String?
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsStaff(
@@ -578,7 +628,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("staff")
         val staff: VoiceActor
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatisticsStudio(
@@ -594,7 +644,7 @@ class Query {
         val mediaIds: List<Int>,
         @SerialName("studio")
         val studio: StatStudio
-    )
+    ) : java.io.Serializable
 
     @Serializable
     data class StatStudio(
@@ -604,7 +654,7 @@ class Query {
         val name: String,
         @SerialName("isAnimationStudio")
         val isAnimationStudio: Boolean
-    )
+    ) : java.io.Serializable
 
 }
 

@@ -42,25 +42,7 @@
                 android:visibility="gone"
                 tools:visibility="visible">
 
-                <Button
-                    android:id="@+id/animeSourceYT"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginStart="32dp"
-                    android:backgroundTint="@color/yt_red"
-                    android:fontFamily="@font/poppins_bold"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:text="@string/play_yt"
-                    android:textColor="@color/bg_white"
-                    android:visibility="gone"
-                    app:cornerRadius="12dp"
-                    app:icon="@drawable/ic_round_play_circle_24"
-                    app:iconTint="@color/bg_white"
-                    tools:ignore="TextContrastCheck"
-                    tools:visibility="visible"/>
+
 
                 <TableLayout
                     android:layout_width="match_parent"

@@ -19,90 +19,117 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp">
+        android:layout_marginBottom="72dp"
+        android:scrollbars="none">
 
         <LinearLayout
-            android:id="@+id/profileTopContainer"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            tools:visibility="visible"
+            android:layout_height="match_parent"
             android:orientation="vertical">
-            <com.flaviofaria.kenburnsview.KenBurnsView
-                android:id="@+id/profileBannerImage"
+
+            <FrameLayout
+                android:id="@+id/profileTopContainer"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                tools:ignore="ContentDescription"
-                tools:src="@tools:sample/backgrounds/scenic" />
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="-200dp"
-                android:src="@drawable/linear_gradient_bg"
-                tools:ignore="ContentDescription" />
-
-
-            <LinearLayout
-                android:id="@+id/profileUserDataContainer"
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-124dp"
-                android:layout_gravity="center"
                 android:orientation="vertical"
+                android:visibility="gone"
                 tools:visibility="visible">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/profileUserAvatarContainer"
-                    android:layout_width="82dp"
-                    android:layout_height="82dp"
-                    android:layout_gravity="center"
-                    android:backgroundTint="@color/bg_opp"
-                    app:cardCornerRadius="64dp">
+                <com.flaviofaria.kenburnsview.KenBurnsView
+                    android:id="@+id/profileBannerImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription"
+                    tools:src="@tools:sample/backgrounds/scenic" />
 
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/profileUserAvatar"
-                        android:layout_width="78dp"
-                        android:layout_height="78dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/ic_round_add_circle_24"
-                        tools:tint="@color/bg"
-                        tools:ignore="ContentDescription,ImageContrastCheck" />
+                <ImageView
+                    android:id="@+id/profileBannerGradient"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/linear_gradient_bg"
+                    tools:ignore="ContentDescription" />
 
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
-                    android:id="@+id/profileUserName"
+                <LinearLayout
+                    android:id="@+id/profileUserDataContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:textColor="?attr/colorPrimary"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:text="@string/username"
-                    android:textSize="18sp" />
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:orientation="vertical"
+                    tools:visibility="visible">
 
-            </LinearLayout>
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/profileUserAvatarContainer"
+                        android:layout_width="82dp"
+                        android:layout_height="82dp"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/transparent"
+                        app:cardCornerRadius="64dp">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/profileUserAvatar"
+                            android:layout_width="82dp"
+                            android:layout_height="82dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_round_add_circle_24"
+                            tools:ignore="ContentDescription,ImageContrastCheck"
+                            tools:tint="@color/transparent" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/profileUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="@string/username"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/followButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="?attr/colorPrimaryContainer"
+                        android:enabled="true"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="Follow"
+                        android:textColor="@color/bg_opp"
+                        android:textSize="14sp"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="?attr/colorPrimaryContainer"
+                        tools:ignore="SpeakableTextPresentCheck" />
+
+                </LinearLayout>
 
 
-            <LinearLayout
+                <ImageView
+                    android:id="@+id/profileMenuButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:contentDescription="@string/menu"
+                    android:src="@drawable/ic_round_dots_vertical_24" />
+            </FrameLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/profileViewPager"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+                tools:ignore="SpeakableTextPresentCheck" />
 
-                <androidx.viewpager2.widget.ViewPager2
-                    android:id="@+id/mediaViewPager"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:nestedScrollingEnabled="true"
-                    tools:ignore="SpeakableTextPresentCheck" />
-            </LinearLayout>
         </LinearLayout>
-    </ScrollView>
+
+    </androidx.core.widget.NestedScrollView>
 
 
     <nl.joery.animatedbottombar.AnimatedBottomBar

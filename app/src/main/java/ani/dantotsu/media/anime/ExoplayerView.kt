@@ -312,7 +312,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             2 -> ResourcesCompat.getFont(this, R.font.poppins)
             3 -> ResourcesCompat.getFont(this, R.font.poppins_thin)
             4 -> ResourcesCompat.getFont(this, R.font.century_gothic_regular)
-            5 -> ResourcesCompat.getFont(this, R.font.century_gothic_bold)
+            5 -> ResourcesCompat.getFont(this, R.font.levenim_mt_bold)
             6 -> ResourcesCompat.getFont(this, R.font.blocky)
             else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
         }
@@ -1245,10 +1245,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             media.anime!!.selectedEpisode!!
         )
 
-        val list = PrefManager.getVal<Set<String>>(PrefName.ContinuedAnimeSet).toMutableList()
-        if (list.contains(media.id.toString())) list.remove(media.id.toString())
-        list.add(media.id.toString())
-        PrefManager.setVal(PrefName.ContinuedAnimeSet, list.toSet())
+        val list = (PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>).toMutableList()
+        if (list.contains(media.id)) list.remove(media.id)
+        list.add(media.id)
+        PrefManager.setCustomVal("continueAnimeList", list)
 
         lifecycleScope.launch(Dispatchers.IO) {
             extractor?.onVideoStopped(video)
@@ -1260,7 +1260,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         subtitle = intent.getSerialized("subtitle")
             ?: when (val subLang: String? =
-                PrefManager.getCustomVal("subLang_${media.id}", null as String?)) {
+                PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)) {
                 null -> {
                     when (episode.selectedSubtitle) {
                         null -> null

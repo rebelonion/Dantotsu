@@ -46,7 +46,7 @@ data class Character(
 
     // Notes for site moderators
     @SerialName("modNotes") var modNotes: String?,
-)
+) : java.io.Serializable
 
 @Serializable
 data class CharacterConnection(
@@ -56,7 +56,7 @@ data class CharacterConnection(
 
     // The pagination information
     // @SerialName("pageInfo") var pageInfo: PageInfo?,
-)
+) : java.io.Serializable
 
 @Serializable
 data class CharacterEdge(
@@ -82,7 +82,7 @@ data class CharacterEdge(
 
     // The order the character should be displayed from the users favourites
     @SerialName("favouriteOrder") var favouriteOrder: Int?,
-)
+) : java.io.Serializable
 
 @Serializable
 data class CharacterName(
@@ -109,7 +109,7 @@ data class CharacterName(
 
     // The currently authenticated users preferred name language. Default romaji for non-authenticated
     @SerialName("userPreferred") var userPreferred: String?,
-)
+) : java.io.Serializable
 
 @Serializable
 data class CharacterImage(
@@ -118,4 +118,4 @@ data class CharacterImage(
 
     // The character's image of media at medium size
     @SerialName("medium") var medium: String?,
-)
+) : java.io.Serializable
