@@ -2,9 +2,13 @@ package ani.dantotsu.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
+import android.view.Window
+import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
@@ -17,6 +21,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
@@ -37,12 +42,27 @@ class FollowActivity : AppCompatActivity(){
         binding = ActivityFollowBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
+            this.window.statusBarColor =
+                ContextCompat.getColor(this, R.color.nav_bg_inv)
+            binding.root.fitsSystemWindows = true
+
+        } else {
+            binding.root.fitsSystemWindows = false
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            window.setFlags(
+                WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN
+            )
+            binding.listTitle.updateLayoutParams<MarginLayoutParams> {
+                topMargin = statusBarHeight
+            }
+        }
         val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)
         selected = getSelected(layoutType)
         binding.followerGrid.alpha = 0.33f
         binding.followerList.alpha = 0.33f
         selected(selected)
-        binding.root.updateLayoutParams<MarginLayoutParams> { topMargin += navBarHeight }
         binding.listRecyclerView.layoutManager = LinearLayoutManager(
             this,
             LinearLayoutManager.VERTICAL,
@@ -53,11 +73,13 @@ class FollowActivity : AppCompatActivity(){
         binding.listBack.setOnClickListener { finish() }
 
         val title = intent.getStringExtra("title")
+        val userID= intent.getIntExtra("userId", 0)
         binding.listTitle.text = title
+
         lifecycleScope.launch(Dispatchers.IO) {
             val respond = when (title) {
-                "Following" -> Anilist.query.userFollowing(intent.getIntExtra("userId", 0))?.data?.page?.following
-                "Followers" -> Anilist.query.userFollowers(intent.getIntExtra("userId", 0))?.data?.page?.followers
+                "Following" -> Anilist.query.userFollowing(userID)?.data?.page?.following
+                "Followers" -> Anilist.query.userFollowers(userID)?.data?.page?.followers
                 else -> null
             }
             users = respond
