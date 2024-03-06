@@ -19,7 +19,11 @@ class FollowerItem(
         binding = viewBinding
         binding.profileUserName.text = name
         avatar?.let { binding.profileUserAvatar.loadImage(it) }
-        banner?.let { binding.profileBannerImage.loadImage(it) }
+        if (banner != null) {
+            binding.profileBannerImage.loadImage(banner)
+        } else {
+            binding.profileBannerImage.setImageResource(R.drawable.linear_gradient_bg)
+        }
         binding.root.setOnClickListener { clickCallback(id) }
     }
 
