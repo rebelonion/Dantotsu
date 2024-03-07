@@ -28,6 +28,7 @@ object Anilist {
     var bg: String? = null
     var episodesWatched: Int? = null
     var chapterRead: Int? = null
+    var unreadNotificationCount: Int = 0
 
     var genres: ArrayList<String>? = null
     var tags: Map<Boolean, List<String>>? = null

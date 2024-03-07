@@ -46,7 +46,7 @@ data class User(
     @SerialName("statistics") var statistics: UserStatisticTypes?,
 
     // The number of unread notifications the user has
-    //    @SerialName("unreadNotificationCount") var unreadNotificationCount: Int?,
+    @SerialName("unreadNotificationCount") var unreadNotificationCount: Int?,
 
     // The url for the user page on the AniList website
     //    @SerialName("siteUrl") var siteUrl: String?,

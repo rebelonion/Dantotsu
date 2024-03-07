@@ -7,6 +7,8 @@ import ani.dantotsu.checkId
 import ani.dantotsu.connections.anilist.Anilist.authorRoles
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.anilist.api.Notification
+import ani.dantotsu.connections.anilist.api.NotificationResponse
 import ani.dantotsu.connections.anilist.api.Page
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.currContext
@@ -36,7 +38,7 @@ class AnilistQueries {
         val response: Query.Viewer?
         measureTimeMillis {
             response =
-                executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}}}""")
+                executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}unreadNotificationCount}}""")
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
@@ -49,6 +51,7 @@ class AnilistQueries {
         Anilist.episodesWatched = user.statistics?.anime?.episodesWatched
         Anilist.chapterRead = user.statistics?.manga?.chaptersRead
         Anilist.adult = user.options?.displayAdultContent ?: false
+        Anilist.unreadNotificationCount = user.unreadNotificationCount?:0
         return true
     }
 
@@ -1336,5 +1339,13 @@ Page(page:$page,perPage:50) {
         default[0] = userBannerImage("ANIME", id)
         default[1] = userBannerImage("MANGA",id)
         return default
+    }
+
+    suspend fun getNotifications(id: Int): NotificationResponse? {
+        val res = executeQuery<NotificationResponse>("""{User(id:$id){unreadNotificationCount}Page{notifications(resetNotificationCount:true){__typename...on AiringNotification{id,type,animeId,episode,contexts,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}},}...on FollowingNotification{id,userId,type,context,createdAt,user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMessageNotification{id,userId,type,activityId,context,createdAt,message{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMentionNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplySubscribedNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentMentionNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentReplyNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentSubscribedNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentLikeNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadLikeNotification{id,userId,type,threadId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on RelatedMediaAdditionNotification{id,type,context,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDataChangeNotification{id,type,mediaId,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaMergeNotification{id,type,mediaId,deletedMediaTitles,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDeletionNotification{id,type,deletedMediaTitle,context,reason,createdAt,}}}}""", force = true)
+        if (res != null) {
+            Anilist.unreadNotificationCount = 0
+        }
+        return res
     }
 }

@@ -70,13 +70,14 @@ class ProfileFragment() : Fragment() {
         binding.profileUserBio.settings.loadWithOverviewMode = true
         binding.profileUserBio.settings.useWideViewPort = true
         binding.profileUserBio.setInitialScale(1)
+        val styledHtml = styled(
+            convertMarkdownToHtml(user.about ?: ""),
+            backGroundColorTypedValue.data,
+            textColorTypedValue.data
+        )
         binding.profileUserBio.loadDataWithBaseURL(
             null,
-            styled(
-                convertMarkdownToHtml(user.about ?: ""),
-                backGroundColorTypedValue.data,
-                textColorTypedValue.data
-            ),
+            styledHtml,
             "text/html; charset=utf-8",
             "UTF-8",
             null
@@ -215,7 +216,22 @@ class ProfileFragment() : Fragment() {
         }
     }
 
-    private fun styled(html: String, backGroundColor: Int, textColor: Int): String {
+    private fun styled(html: String, backGroundColor: Int, textColor: Int): String {  //istg anilist has the worst api
+        //remove some of the html entities
+        val step1 = html.replace("&nbsp;", " ")
+            .replace("&amp;", "&")
+            .replace("&lt;", "<")
+            .replace("&gt;", ">")
+            .replace("&quot;", "\"")
+            .replace("&apos;", "'")
+            .replace("<pre>", "")
+            .replace("`", "")
+            .replace("~", "")
+
+        val step2 = step1.replace("(?s)___(.*?)___".toRegex(), "<br><em><strong>$1</strong></em><br>")
+        val step3 = step2.replace("(?s)__(.*?)__".toRegex(), "<br><strong>$1</strong><br>")
+
+
         return """
             <html>
 <head>
@@ -233,6 +249,10 @@ class ProfileFragment() : Fragment() {
                 max-width: 100%;
                 height: auto; /* Maintain aspect ratio */
             }
+            video {
+                max-width: 100%;
+                height: auto; /* Maintain aspect ratio */
+            }
             a {
                 color: ${textColor.toCssColor()};
             }
@@ -240,7 +260,7 @@ class ProfileFragment() : Fragment() {
         </style>
 </head>
 <body>
-    $html
+    $step3
 </body>
 
     """.trimIndent()

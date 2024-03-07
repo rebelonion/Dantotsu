@@ -58,6 +58,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|bottom"
+                    android:layout_marginBottom="8dp"
                     android:orientation="vertical">
 
                     <com.google.android.material.card.MaterialCardView
@@ -96,14 +97,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:backgroundTint="?attr/colorOnSecondary"
+                        android:backgroundTint="?attr/colorSecondaryContainer"
                         android:enabled="true"
                         android:fontFamily="@font/poppins_bold"
                         android:text="Follow"
                         android:textColor="@color/bg_opp"
                         android:textSize="14sp"
                         app:cornerRadius="8dp"
-                        app:strokeColor="?attr/colorOnSecondary"
+                        app:strokeColor="?attr/colorSecondaryContainer"
                         tools:ignore="HardcodedText,SpeakableTextPresentCheck" />
 
                 </LinearLayout>
