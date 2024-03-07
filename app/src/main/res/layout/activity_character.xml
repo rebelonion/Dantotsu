@@ -66,6 +66,38 @@
             android:textSize="16sp"
             android:transitionName="characterTitle" />
 
+        <LinearLayout
+            android:id="@+id/mediaAccessContainer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp">
+
+            <ImageView
+                android:id="@+id/charFav"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginStart="8dp"
+                android:padding="8dp"
+                android:tintMode="src_atop"
+                app:srcCompat="@drawable/ic_round_favorite_border_24"
+                app:tint="@color/bg_opp"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            <ImageView
+                android:id="@+id/charNotify"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_round_share_24"
+                app:tint="@color/bg_opp"
+                app:tintMode="src_atop"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+        </LinearLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <ProgressBar

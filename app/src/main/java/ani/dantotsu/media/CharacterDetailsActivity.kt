@@ -31,7 +31,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
-class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
+class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener, CharacterAdapter.CharacterClickListener {
     private lateinit var binding: ActivityCharacterBinding
     private val scope = lifecycleScope
     private val model: OtherDetailsViewModel by viewModels()
@@ -85,10 +85,10 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
 
                 val roles = character.roles
                 if (roles != null) {
-                    val mediaAdaptor = MediaAdaptor(0, roles, this, matchParent = true)
-                    val concatAdaptor =
-                        ConcatAdapter(CharacterDetailsAdapter(character, this), mediaAdaptor)
-
+                    val adapter = CharacterAdapter(roles)
+                    adapter.listener = this // Set the listener
+                    binding.characterRecyclerView.adapter = adapter
+                    val concatAdapter = ConcatAdapter(adapter)
                     val gridSize = (screenWidth / 124f).toInt()
                     val gridLayoutManager = GridLayoutManager(this, gridSize)
                     gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -99,7 +99,6 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
                             }
                         }
                     }
-                    binding.characterRecyclerView.adapter = concatAdaptor
                     binding.characterRecyclerView.layoutManager = gridLayoutManager
                 }
             }
@@ -147,5 +146,9 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
                 ContextCompat.getColor(this, R.color.transparent)
             binding.characterAppBar.setBackgroundResource(R.color.bg)
         }
+    }
+
+    override fun onFavoriteClicked(character: Character) {
+        // testing rn
     }
 }
