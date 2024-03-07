@@ -670,6 +670,8 @@
     <string name="view_following">View Following</string>
     <string name="menu">menu</string>
     <string name="view_followers">View Followers</string>
+    <string name="time_stamps_auto_hide">Auto Hide Time Stamps</string>
+    <string name="time_stamps_auto_hide_desc">Make the skip time stamp button disappear after 5 seconds</string>
 
 
 </resources>

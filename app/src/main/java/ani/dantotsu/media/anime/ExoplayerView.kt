@@ -16,18 +16,33 @@ import android.graphics.Color
 import android.graphics.drawable.Animatable
 import android.hardware.SensorManager
 import android.media.AudioManager
-import android.media.AudioManager.*
+import android.media.AudioManager.AUDIOFOCUS_GAIN
+import android.media.AudioManager.AUDIOFOCUS_LOSS
+import android.media.AudioManager.AUDIOFOCUS_LOSS_TRANSIENT
+import android.media.AudioManager.STREAM_MUSIC
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings.System
 import android.util.AttributeSet
 import android.util.Rational
 import android.util.TypedValue
-import android.view.*
-import android.view.KeyEvent.*
+import android.view.GestureDetector
+import android.view.KeyEvent
+import android.view.KeyEvent.ACTION_UP
+import android.view.KeyEvent.KEYCODE_B
+import android.view.KeyEvent.KEYCODE_DPAD_LEFT
+import android.view.KeyEvent.KEYCODE_DPAD_RIGHT
+import android.view.KeyEvent.KEYCODE_N
+import android.view.KeyEvent.KEYCODE_SPACE
+import android.view.MotionEvent
+import android.view.OrientationEventListener
+import android.view.View
+import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import android.widget.ImageButton
@@ -44,9 +59,16 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.cast.CastPlayer
 import androidx.media3.cast.SessionAvailabilityListener
-import androidx.media3.common.*
+import androidx.media3.common.C
 import androidx.media3.common.C.AUDIO_CONTENT_TYPE_MOVIE
 import androidx.media3.common.C.TRACK_TYPE_VIDEO
+import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
+import androidx.media3.common.PlaybackException
+import androidx.media3.common.PlaybackParameters
+import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionOverride
+import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.common.util.Util
 import androidx.media3.datasource.DataSource
@@ -54,17 +76,27 @@ import androidx.media3.datasource.DefaultDataSourceFactory
 import androidx.media3.datasource.HttpDataSource
 import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
+import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.session.MediaSession
-import androidx.media3.ui.*
-import androidx.media3.ui.CaptionStyleCompat.*
-import androidx.media3.exoplayer.DefaultLoadControl
+import androidx.media3.ui.AspectRatioFrameLayout
+import androidx.media3.ui.CaptionStyleCompat
+import androidx.media3.ui.CaptionStyleCompat.EDGE_TYPE_DEPRESSED
+import androidx.media3.ui.CaptionStyleCompat.EDGE_TYPE_DROP_SHADOW
+import androidx.media3.ui.CaptionStyleCompat.EDGE_TYPE_NONE
+import androidx.media3.ui.CaptionStyleCompat.EDGE_TYPE_OUTLINE
+import androidx.media3.ui.DefaultTimeBar
+import androidx.media3.ui.PlayerView
+import androidx.media3.ui.SubtitleView
 import androidx.mediarouter.app.MediaRouteButton
-import ani.dantotsu.*
+import ani.dantotsu.GesturesListener
+import ani.dantotsu.NoPaddingArrayAdapter
 import ani.dantotsu.R
+import ani.dantotsu.brightnessConverter
+import ani.dantotsu.circularReveal
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.connections.discord.Discord
@@ -73,19 +105,38 @@ import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
+import ani.dantotsu.defaultHeaders
 import ani.dantotsu.download.video.Helper
+import ani.dantotsu.dp
+import ani.dantotsu.getCurrentBrightnessValue
+import ani.dantotsu.hideSystemBars
+import ani.dantotsu.isOnline
+import ani.dantotsu.logError
+import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.SubtitleDownloader
+import ani.dantotsu.okHttpClient
 import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
 import ani.dantotsu.others.ResettableTimer
 import ani.dantotsu.others.getSerialized
-import ani.dantotsu.parsers.*
+import ani.dantotsu.parsers.AnimeSources
+import ani.dantotsu.parsers.HAnimeSources
+import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.parsers.SubtitleType
+import ani.dantotsu.parsers.Video
+import ani.dantotsu.parsers.VideoExtractor
+import ani.dantotsu.parsers.VideoType
+import ani.dantotsu.px
 import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
+import ani.dantotsu.startMainActivity
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.toast
+import ani.dantotsu.tryWithSuspend
 import com.bumptech.glide.Glide
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
@@ -100,11 +151,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.util.*
-import java.util.concurrent.*
+import java.util.Calendar
+import java.util.Timer
+import java.util.TimerTask
+import java.util.concurrent.TimeUnit
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
+
 
 @UnstableApi
 @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
@@ -114,6 +168,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private val resumePosition = "resumePosition"
     private val playerFullscreen = "playerFullscreen"
     private val playerOnPlay = "playerOnPlay"
+    private var dissappeared = 0
 
     private lateinit var exoPlayer: ExoPlayer
     private var castPlayer: CastPlayer? = null
@@ -1700,26 +1755,58 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
             val new = currentTimeStamp
             timeStampText.text = if (new != null) {
-                if (PrefManager.getVal(PrefName.ShowTimeStampButton)) {
+                fun DissapearSkip(){
                     skipTimeButton.visibility = View.VISIBLE
                     exoSkip.visibility = View.GONE
                     skipTimeText.text = new.skipType.getType()
                     skipTimeButton.setOnClickListener {
                         exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                     }
+                    val timer = object: CountDownTimer(5000, 1000) {
+                        override fun onTick(millisUntilFinished: Long) {
+                            if (new == null) {
+                                skipTimeButton.visibility = View.GONE
+                                exoSkip.visibility = View.VISIBLE
+                                dissappeared = 0
+                                return
+                            }
+                        }
+
+                        override fun onFinish() {
+                            val skip = currentTimeStamp
+                            skipTimeButton.visibility = View.GONE
+                            exoSkip.visibility = View.VISIBLE
+                            dissappeared = 1
+                        }
+                    }
+                    timer.start()
+                }
+                if (PrefManager.getVal(PrefName.ShowTimeStampButton)) {
+
+                    if (dissappeared == 0 && PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
+                        DissapearSkip()
+                    } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)){
+                        skipTimeButton.visibility = View.VISIBLE
+                        exoSkip.visibility = View.GONE
+                        skipTimeText.text = new.skipType.getType()
+                        skipTimeButton.setOnClickListener {
+                            exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
+                        }
+                    }
                 }
                 if (PrefManager.getVal(PrefName.AutoSkipOPED) && (new.skipType == "op" || new.skipType == "ed") && !skippedTimeStamps.contains(
-                        new
-                    )
+                                new
+                        )
                 ) {
                     exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                     skippedTimeStamps.add(new)
                 }
                 new.skipType.getType()
             } else {
+                dissappeared = 0
                 skipTimeButton.visibility = View.GONE
                 if (PrefManager.getVal<Int>(PrefName.SkipTime) > 0) exoSkip.visibility =
-                    View.VISIBLE
+                        View.VISIBLE
                 ""
             }
         }
