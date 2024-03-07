@@ -101,7 +101,7 @@
                         android:backgroundTint="?attr/colorSecondaryContainer"
                         android:enabled="true"
                         android:fontFamily="@font/poppins_bold"
-                        android:text="Follow"
+                        android:text="@string/follow"
                         android:textColor="@color/bg_opp"
                         android:textSize="14sp"
                         app:cornerRadius="8dp"
