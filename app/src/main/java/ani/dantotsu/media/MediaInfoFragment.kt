@@ -411,23 +411,6 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bind.root)
                 }
 
-                if (!media.characters.isNullOrEmpty() && !offline) {
-                    val bind = ItemTitleRecyclerBinding.inflate(
-                        LayoutInflater.from(context),
-                        parent,
-                        false
-                    )
-                    bind.itemTitle.setText(R.string.characters)
-                    bind.itemRecycler.adapter =
-                        CharacterAdapter(media.characters!!)
-                    bind.itemRecycler.layoutManager = LinearLayoutManager(
-                        requireContext(),
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                    parent.addView(bind.root)
-                }
-
                 if (!media.relations.isNullOrEmpty() && !offline) {
                     if (media.sequel != null || media.prequel != null) {
                         val bind = ItemQuelsBinding.inflate(
@@ -490,7 +473,38 @@ class MediaInfoFragment : Fragment() {
                     )
                     parent.addView(bindi.root)
                 }
-
+                if (!media.characters.isNullOrEmpty() && !offline) {
+                    val bind = ItemTitleRecyclerBinding.inflate(
+                        LayoutInflater.from(context),
+                        parent,
+                        false
+                    )
+                    bind.itemTitle.setText(R.string.characters)
+                    bind.itemRecycler.adapter =
+                        CharacterAdapter(media.characters!!)
+                    bind.itemRecycler.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    parent.addView(bind.root)
+                }
+                if (!media.staff.isNullOrEmpty() && !offline) {
+                    val bind = ItemTitleRecyclerBinding.inflate(
+                        LayoutInflater.from(context),
+                        parent,
+                        false
+                    )
+                    bind.itemTitle.setText(R.string.staff)
+                    bind.itemRecycler.adapter =
+                        AuthorAdapter(media.staff!!)
+                    bind.itemRecycler.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    parent.addView(bind.root)
+                }
                 if (!media.recommendations.isNullOrEmpty() && !offline) {
                     val bind = ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),

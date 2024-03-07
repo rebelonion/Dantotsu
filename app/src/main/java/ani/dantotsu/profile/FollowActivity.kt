@@ -2,23 +2,17 @@ package ani.dantotsu.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
 import android.view.ViewGroup.MarginLayoutParams
-import android.view.Window
-import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.User
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.navBarHeight
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -40,24 +34,8 @@ class FollowActivity : AppCompatActivity(){
         ThemeManager(this).applyTheme()
         initActivity(this)
         binding = ActivityFollowBinding.inflate(layoutInflater)
+        binding.listToolbar.updateLayoutParams<MarginLayoutParams> { topMargin = statusBarHeight }
         setContentView(binding.root)
-
-        if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
-            this.window.statusBarColor =
-                ContextCompat.getColor(this, R.color.nav_bg_inv)
-            binding.root.fitsSystemWindows = true
-
-        } else {
-            binding.root.fitsSystemWindows = false
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-            binding.listTitle.updateLayoutParams<MarginLayoutParams> {
-                topMargin = statusBarHeight
-            }
-        }
         val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)
         selected = getSelected(layoutType)
         binding.followerGrid.alpha = 0.33f

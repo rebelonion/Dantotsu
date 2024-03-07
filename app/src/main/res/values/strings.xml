@@ -123,6 +123,7 @@
     <string name="description">Synopsis</string>
     <string name="characters">Characters</string>
     <string name="relations">Relations</string>
+    <string name="staff">Staff</string>
 
     <string name="roles">Roles</string>
     <string name="details">Details</string>

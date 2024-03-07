@@ -13,7 +13,6 @@ import ani.dantotsu.MainActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
 import ani.dantotsu.download.anime.OfflineAnimeFragment
 import ani.dantotsu.download.manga.OfflineMangaFragment
@@ -24,9 +23,8 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.incognitoNotification
 import ani.dantotsu.loadImage
+import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.offline.OfflineFragment
-import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.others.imagesearch.ImageSearchActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -79,32 +77,35 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
                 Anilist.loginIntent(requireActivity())
             }
         }
+        binding.settingsNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.settingsNotificationCount.text = Anilist.unreadNotificationCount.toString()
         binding.settingsUserAvatar.setOnClickListener{
             ContextCompat.startActivity(
-                currContext()!!, Intent(currContext()!!, ProfileActivity::class.java)
+                requireContext(), Intent(requireContext(), ProfileActivity::class.java)
                     .putExtra("userId", Anilist.userid), null
             )
         }
-        binding.settingsIncognito.isChecked =
-            PrefManager.getVal(PrefName.Incognito)
 
+        binding.settingsIncognito.isChecked = PrefManager.getVal(PrefName.Incognito)
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.Incognito, isChecked)
             incognitoNotification(requireContext())
         }
+
         binding.settingsExtensionSettings.setSafeOnClickListener {
             startActivity(Intent(activity, ExtensionsActivity::class.java))
             dismiss()
         }
+
         binding.settingsSettings.setSafeOnClickListener {
             startActivity(Intent(activity, SettingsActivity::class.java))
             dismiss()
         }
-        binding.settingsAnilistSettings.setOnClickListener {
-            openLinkInBrowser("https://anilist.co/settings/lists")
+
+        binding.settingsNotification.setOnClickListener {
+            startActivity(Intent(activity, NotificationActivity::class.java))
             dismiss()
         }
-
         binding.settingsDownloads.isChecked = PrefManager.getVal(PrefName.OfflineMode)
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
             Timer().schedule(300) {

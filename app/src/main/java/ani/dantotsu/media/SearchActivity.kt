@@ -199,7 +199,9 @@ class SearchActivity : AppCompatActivity() {
 
     var state: Parcelable? = null
     override fun onPause() {
-        headerAdaptor.addHistory()
+        if (this::headerAdaptor.isInitialized) {
+            headerAdaptor.addHistory()
+        }
         super.onPause()
         state = binding.searchRecyclerView.layoutManager?.onSaveInstanceState()
     }

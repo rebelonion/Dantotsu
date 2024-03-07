@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="24dp"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/activityAvatarContainer"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="16dp"
+            android:backgroundTint="@color/bg_white"
+            app:cardCornerRadius="64dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/activityUserAvatar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_round_add_circle_24"
+                tools:ignore="ContentDescription,ImageContrastCheck"
+                tools:tint="@color/transparent" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/activityUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Username"
+                android:textSize="15sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/activityTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Wed,06 March 2024, 7:00PM"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_round_favorite_24"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
+        android:layout_marginTop="8dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:backgroundTint="@color/bg_white"
+            app:cardCornerRadius="24dp">
+
+            <ImageView
+                android:id="@+id/activityBannerImage"
+                android:layout_width="match_parent"
+                android:layout_height="153dp"
+                android:scaleType="centerCrop"
+                tools:srcCompat="@tools:sample/backgrounds/scenic"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="153dp"
+                app:srcCompat="@drawable/linear_gradient_nav"
+                tools:ignore="ContentDescription" />
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/activityCoverContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="16dp"
+                android:backgroundTint="@color/bg_white"
+                app:cardCornerRadius="16dp">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/activityCover"
+                    android:layout_width="102dp"
+                    android:layout_height="154dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_round_add_circle_24"
+                    tools:ignore="ContentDescription,ImageContrastCheck"
+                    tools:tint="@color/transparent" />
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="128dp"
+                android:layout_marginEnd="8dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/activityMediaName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:maxLines="2"
+                    android:text="@string/anime"
+                    android:textColor="@color/bg_white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+
+                <TextView
+                    android:id="@+id/activityText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="@string/slogan"
+                    android:textColor="@color/bg_white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    tools:ignore="HardcodedText" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+    </FrameLayout>
+</LinearLayout>

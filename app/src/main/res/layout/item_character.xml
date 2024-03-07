@@ -64,7 +64,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:alpha="0.58"
-            android:ellipsize="marquee"
+            android:ellipsize="end"
             android:includeFontPadding="false"
             android:singleLine="true"
             android:textAlignment="textEnd"
@@ -73,7 +73,7 @@
             android:textStyle="italic"
             android:transitionName="mediaTitle"
             tools:ignore="TextContrastCheck"
-            tools:text="SOURCE " />
+            tools:text="SOURCE" />
 
     </LinearLayout>
 

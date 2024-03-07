@@ -7,6 +7,8 @@ import ani.dantotsu.checkId
 import ani.dantotsu.connections.anilist.Anilist.authorRoles
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.anilist.api.Notification
+import ani.dantotsu.connections.anilist.api.NotificationResponse
 import ani.dantotsu.connections.anilist.api.Page
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.currContext
@@ -36,7 +38,7 @@ class AnilistQueries {
         val response: Query.Viewer?
         measureTimeMillis {
             response =
-                executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}}}""")
+                executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}unreadNotificationCount}}""")
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
@@ -49,6 +51,7 @@ class AnilistQueries {
         Anilist.episodesWatched = user.statistics?.anime?.episodesWatched
         Anilist.chapterRead = user.statistics?.manga?.chaptersRead
         Anilist.adult = user.options?.displayAdultContent ?: false
+        Anilist.unreadNotificationCount = user.unreadNotificationCount?:0
         return true
     }
 
@@ -65,7 +68,7 @@ class AnilistQueries {
         media.cameFromContinue = false
 
         val query =
-            """{Media(id:${media.id}){id mediaListEntry{id status score(format:POINT_100) progress private notes repeat customLists updatedAt startedAt{year month day}completedAt{year month day}}isFavourite siteUrl idMal nextAiringEpisode{episode airingAt}source countryOfOrigin format duration season seasonYear startDate{year month day}endDate{year month day}genres studios(isMain:true){nodes{id name siteUrl}}description trailer { site id } synonyms tags { name rank isMediaSpoiler } characters(sort:[ROLE,FAVOURITES_DESC],perPage:25,page:1){edges{role node{id image{medium}name{userPreferred}}}}relations{edges{relationType(version:2)node{id idMal mediaListEntry{progress private score(format:POINT_100) status} episodes chapters nextAiringEpisode{episode} popularity meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}staffPreview: staff(perPage: 8, sort: [RELEVANCE, ID]) {edges{role node{id name{userPreferred}}}}recommendations(sort:RATING_DESC){nodes{mediaRecommendation{id idMal mediaListEntry{progress private score(format:POINT_100) status} episodes chapters nextAiringEpisode{episode}meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}externalLinks{url site}}}"""
+            """{Media(id:${media.id}){id mediaListEntry{id status score(format:POINT_100) progress private notes repeat customLists updatedAt startedAt{year month day}completedAt{year month day}}isFavourite siteUrl idMal nextAiringEpisode{episode airingAt}source countryOfOrigin format duration season seasonYear startDate{year month day}endDate{year month day}genres studios(isMain:true){nodes{id name siteUrl}}description trailer { site id } synonyms tags { name rank isMediaSpoiler } characters(sort:[ROLE,FAVOURITES_DESC],perPage:25,page:1){edges{role node{id image{medium}name{userPreferred}}}}relations{edges{relationType(version:2)node{id idMal mediaListEntry{progress private score(format:POINT_100) status} episodes chapters nextAiringEpisode{episode} popularity meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}staffPreview: staff(perPage: 8, sort: [RELEVANCE, ID]) {edges{role node{id image{large,medium} name{userPreferred}}}}recommendations(sort:RATING_DESC){nodes{mediaRecommendation{id idMal mediaListEntry{progress private score(format:POINT_100) status} episodes chapters nextAiringEpisode{episode}meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}externalLinks{url site}}}"""
         runBlocking {
             val anilist = async {
                 var response = executeQuery<Query.Media>(query, force = true, show = true)
@@ -122,6 +125,29 @@ class AnilistQueries {
                                             name = i.node?.name?.userPreferred,
                                             image = i.node?.image?.medium,
                                             banner = media.banner ?: media.cover,
+                                            role = when (i.role.toString()) {
+                                                "MAIN" -> currContext()?.getString(R.string.main_role)
+                                                    ?: "MAIN"
+
+                                                "SUPPORTING" -> currContext()?.getString(R.string.supporting_role)
+                                                    ?: "SUPPORTING"
+
+                                                else -> i.role.toString()
+                                            }
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                        if (fetchedMedia.staff != null) {
+                            media.staff = arrayListOf()
+                            fetchedMedia.staff?.edges?.forEach { i ->
+                                i.node?.apply {
+                                    media.staff?.add(
+                                        Author(
+                                            id = id,
+                                            name = i.node?.name?.userPreferred,
+                                            image = i.node?.image?.medium,
                                             role = when (i.role.toString()) {
                                                 "MAIN" -> currContext()?.getString(R.string.main_role)
                                                     ?: "MAIN"
@@ -212,8 +238,10 @@ class AnilistQueries {
 
                             fetchedMedia.staff?.edges?.find { authorRoles.contains(it.role?.trim()) }?.node?.let {
                                 media.anime.author = Author(
-                                    it.id.toString(),
-                                    it.name?.userPreferred ?: "N/A"
+                                    it.id,
+                                    it.name?.userPreferred ?: "N/A",
+                                    it.image?.medium,
+                                    "AUTHOR"
                                 )
                             }
 
@@ -232,8 +260,10 @@ class AnilistQueries {
                         } else if (media.manga != null) {
                             fetchedMedia.staff?.edges?.find { authorRoles.contains(it.role?.trim()) }?.node?.let {
                                 media.manga.author = Author(
-                                    it.id.toString(),
-                                    it.name?.userPreferred ?: "N/A"
+                                    it.id,
+                                    it.name?.userPreferred ?: "N/A",
+                                    it.image?.medium,
+                                    "AUTHOR"
                                 )
                             }
                         }
@@ -1309,5 +1339,13 @@ Page(page:$page,perPage:50) {
         default[0] = userBannerImage("ANIME", id)
         default[1] = userBannerImage("MANGA",id)
         return default
+    }
+
+    suspend fun getNotifications(id: Int): NotificationResponse? {
+        val res = executeQuery<NotificationResponse>("""{User(id:$id){unreadNotificationCount}Page{notifications(resetNotificationCount:true){__typename...on AiringNotification{id,type,animeId,episode,contexts,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}},}...on FollowingNotification{id,userId,type,context,createdAt,user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMessageNotification{id,userId,type,activityId,context,createdAt,message{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMentionNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplySubscribedNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentMentionNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentReplyNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentSubscribedNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentLikeNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadLikeNotification{id,userId,type,threadId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on RelatedMediaAdditionNotification{id,type,context,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDataChangeNotification{id,type,mediaId,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaMergeNotification{id,type,mediaId,deletedMediaTitles,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDeletionNotification{id,type,deletedMediaTitle,context,reason,createdAt,}}}}""", force = true)
+        if (res != null) {
+            Anilist.unreadNotificationCount = 0
+        }
+        return res
     }
 }

@@ -143,10 +143,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
-            android:padding="8dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/stats"
-            android:textSize="18sp"/>
+            android:padding="8dp"
+            android:textSize="18sp"
+            tools:ignore="HardcodedText" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -332,8 +333,8 @@
         android:id="@+id/userInfoContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/profileUserBioTitle"
@@ -342,21 +343,22 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
-            android:padding="8dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/about_me"
+            android:padding="8dp"
+            android:text="Bio"
             android:textSize="18sp"/>
 
         <WebView
             android:id="@+id/profileUserBio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:textAlignment="textStart"
             android:ellipsize="end"
             android:padding="16dp"
+            android:textAlignment="textStart"
             tools:text="@string/slogan" />
     </LinearLayout>
 
@@ -365,8 +367,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:visibility="gone">
 
 
         <TextView
@@ -381,36 +382,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="250dp">
-
-            <LinearLayout
-                android:id="@+id/profileFavAnimeEmpty"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_round_heart_broken_24"
-                    app:tint="?attr/colorPrimary"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.58"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/no_fav_anime"
-                    android:textAlignment="center"
-                    tools:ignore="TextContrastCheck" />
-
-            </LinearLayout>
+            android:layout_height="wrap_content">
 
             <ProgressBar
                 android:id="@+id/profileFavAnimeProgressBar"
@@ -442,7 +414,6 @@
         android:orientation="vertical"
         android:visibility="gone">
 
-
         <TextView
             android:id="@+id/profileFavManga"
             android:layout_width="wrap_content"
@@ -455,36 +426,7 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="250dp">
-
-            <LinearLayout
-                android:id="@+id/profileFavMangaEmpty"
-                android:layout_width="match_parent"
-                android:layout_height="250dp"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:ignore="UseCompoundDrawables">
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_round_heart_broken_24"
-                    app:tint="?attr/colorPrimary"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.58"
-                    android:paddingStart="32dp"
-                    android:paddingEnd="32dp"
-                    android:text="@string/no_fav_manga"
-                    android:textAlignment="center"
-                    tools:ignore="TextContrastCheck" />
-
-            </LinearLayout>
+            android:layout_height="wrap_content">
 
             <ProgressBar
                 android:id="@+id/profileFavMangaProgressBar"
@@ -508,21 +450,23 @@
                 tools:orientation="horizontal" />
         </FrameLayout>
     </LinearLayout>
+
     <LinearLayout
         android:id="@+id/profileFavCharactersContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:visibility="gone">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
-            android:padding="8dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/fav_character"
+            android:padding="8dp"
             android:textSize="18sp" />
 
         <ani.dantotsu.FadingEdgeRecyclerView
@@ -546,15 +490,16 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:visibility="gone">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
-            android:padding="8dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/fav_staff"
+            android:padding="8dp"
             android:textSize="18sp" />
 
         <ani.dantotsu.FadingEdgeRecyclerView

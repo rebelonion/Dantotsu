@@ -94,9 +94,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:layout_marginBottom="4dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
         android:gravity="center"
-        android:orientation="horizontal"
         android:visibility="gone"
+        android:orientation="horizontal"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView
@@ -113,7 +115,7 @@
             android:layout_height="wrap_content"
             android:alpha="0.58"
             android:ellipsize="end"
-            android:maxLines="1"
+            android:maxLines="2"
             android:paddingStart="4dp"
             android:paddingEnd="4dp"
             android:singleLine="true"
@@ -123,7 +125,7 @@
             android:textStyle="italic"
             android:transitionName="mediaTitle"
             tools:ignore="TextContrastCheck"
-            tools:text="Relation  " />
+            tools:text="Relation" />
 
     </LinearLayout>
 
@@ -149,6 +151,7 @@
             tools:text="@string/get_recommendations" />
 
         <LinearLayout
+            android:id="@+id/itemCompactProgressContainer"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">

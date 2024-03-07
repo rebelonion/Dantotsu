@@ -43,6 +43,7 @@ class MediaAdaptor(
     private val activity: FragmentActivity,
     private val matchParent: Boolean = false,
     private val viewPager: ViewPager2? = null,
+    private val fav: Boolean = false,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -128,6 +129,7 @@ class MediaAdaptor(
                         )
                         b.itemCompactTotal.text = " | ${media.manga.totalChapters ?: "~"}"
                     }
+                    b.itemCompactProgressContainer.visibility = if (fav) View.GONE else View.VISIBLE
                 }
             }
 
