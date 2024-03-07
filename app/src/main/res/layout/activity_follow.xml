@@ -15,6 +15,7 @@
         android:visibility="gone" />
 
     <FrameLayout
+        android:id="@+id/listToolbar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal">

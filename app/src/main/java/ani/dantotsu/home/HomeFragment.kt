@@ -79,8 +79,8 @@ class HomeFragment : Fragment() {
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.homeUserBg.pause()
                 binding.homeUserBg.loadImage(Anilist.bg)
                 binding.homeUserDataProgressBar.visibility = View.GONE
-
-                binding.homeNotificationDot.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+                binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+                binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
                 binding.homeAnimeList.setOnClickListener {
                     ContextCompat.startActivity(
@@ -360,11 +360,12 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
     override fun onResume() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
-        if (_binding != null)
-            binding.homeNotificationDot.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        if (_binding != null) {
+            binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+            binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
+        }
         super.onResume()
     }
 }

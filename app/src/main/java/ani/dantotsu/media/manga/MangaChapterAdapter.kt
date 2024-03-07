@@ -369,7 +369,7 @@ class MangaChapterAdapter(
             }
             1L -> "1 day ago"
             in 2..6 -> "$daysDifference days ago"
-            else -> SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH).format(targetDate)
+            else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(targetDate)
         }
     }
 

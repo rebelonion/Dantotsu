@@ -74,7 +74,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         }
 
         updateAvatar()
-
+        binding.mangaNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.mangaNotificationCount.text = Anilist.unreadNotificationCount.toString()
         binding.mangaSearchBar.hint = "MANGA"
         binding.mangaSearchBarText.setOnClickListener {
             ContextCompat.startActivity(

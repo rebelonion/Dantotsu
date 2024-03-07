@@ -85,16 +85,18 @@
             <ImageView
                 android:id="@+id/activityBannerImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="153dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/linear_gradient_bg"
+                tools:srcCompat="@tools:sample/backgrounds/scenic"
                 tools:ignore="ContentDescription" />
 
-            <View
+            <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/bg_black_50"
+                android:layout_height="153dp"
+                app:srcCompat="@drawable/linear_gradient_nav"
                 tools:ignore="ContentDescription" />
+
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/activityCoverContainer"

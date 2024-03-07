@@ -157,12 +157,20 @@
 
                             </com.google.android.material.card.MaterialCardView>
 
-                            <View
-                                android:id="@+id/homeNotificationDot"
-                                android:layout_width="20dp"
-                                android:layout_height="20dp"
-                                android:background="@drawable/notification_circle"/>
-
+                            <TextView
+                                android:id="@+id/homeNotificationCount"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="end|bottom"
+                                android:background="@drawable/notification_circle"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:gravity="center"
+                                android:textColor="#F3F3F3"
+                                android:textSize="12sp"
+                                android:visibility="gone"
+                                tools:ignore="SmallSp"
+                                tools:text="1"
+                                tools:visibility="visible" />
                         </FrameLayout>
 
                     </LinearLayout>

@@ -67,6 +67,7 @@
                         android:layout_height="82dp"
                         android:layout_gravity="center"
                         android:backgroundTint="@color/transparent"
+                        app:strokeColor="@color/transparent"
                         app:cardCornerRadius="64dp">
 
                         <com.google.android.material.imageview.ShapeableImageView

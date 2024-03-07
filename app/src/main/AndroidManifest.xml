@@ -120,7 +120,7 @@
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity
-            android:name=".notifications.NotificationActivity"
+            android:name=".profile.activity.NotificationActivity"
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" >
         </activity>

@@ -94,6 +94,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.ANIME)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
+        binding.animeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.animeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
         listOf(
             binding.animePreviousSeason,

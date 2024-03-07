@@ -283,7 +283,6 @@ class AnimeFragment : Fragment() {
             binding.root.requestApplyInsets()
             binding.root.requestLayout()
         }
-
         super.onResume()
     }
 }
