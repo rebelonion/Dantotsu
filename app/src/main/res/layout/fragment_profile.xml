@@ -146,8 +146,7 @@
             android:fontFamily="@font/poppins_bold"
             android:text="@string/stats"
             android:padding="8dp"
-            android:textSize="18sp"
-            tools:ignore="HardcodedText" />
+            android:textSize="18sp"/>
 
         <TableLayout
             android:layout_width="match_parent"
@@ -346,7 +345,6 @@
             android:fontFamily="@font/poppins_bold"
             android:text="@string/about_me"
             android:padding="8dp"
-            android:text="Bio"
             android:textSize="18sp"/>
 
         <WebView
