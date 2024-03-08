@@ -73,32 +73,36 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/notificationText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
-            android:layout_marginStart="128dp"
-            android:padding="8dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:maxLines="3"
-            android:textSize="14dp"
-            android:transitionName="mediaTitle"
-            tools:ignore="SpUsage"
-            tools:text="@string/slogan" />
-
-        <TextView
-            android:id="@+id/notificationDate"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="20dp"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="Wed,06 March 2024, 7:00PM"
-            android:textSize="10sp"
-            tools:ignore="HardcodedText" />
+            android:layout_gravity="start|center"
+            android:orientation="vertical"
+            android:layout_marginStart="125dp">
+
+            <TextView
+                android:id="@+id/notificationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:maxLines="3"
+                android:textSize="14dp"
+                android:transitionName="mediaTitle"
+                tools:ignore="SpUsage"
+                tools:text="@string/slogan" />
+
+            <TextView
+                android:id="@+id/notificationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Wed,06 March 2024, 7:00PM"
+                android:textSize="10sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>
