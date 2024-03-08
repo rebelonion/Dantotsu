@@ -89,6 +89,7 @@ jobs:
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
+      if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       shell: bash
       run: |
         #Discord
