@@ -353,6 +353,11 @@ class ProfileViewModel : ViewModel(){
         mangaFav.postValue(Anilist.query.userFavMedia(false, id))
         animeFav.postValue(Anilist.query.userFavMedia(true, id))
         listImages.postValue(Anilist.query.getUserBannerImages(id))
+    }
 
+    fun refresh() {
+        mangaFav.postValue(mangaFav.value)
+        animeFav.postValue(animeFav.value)
+        listImages.postValue(listImages.value)
     }
 }
