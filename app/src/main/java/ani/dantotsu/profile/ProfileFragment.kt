@@ -36,6 +36,8 @@ class ProfileFragment() : Fragment() {
     lateinit var binding: FragmentProfileBinding
     private lateinit var activity: ProfileActivity
     private lateinit var user: Query.UserProfile
+    private val favStaff = arrayListOf<Author>()
+    private val favCharacter = arrayListOf<Character>()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -132,24 +134,27 @@ class ProfileFragment() : Fragment() {
             binding.profileFavManga
         )
 
-        val favCharacter = arrayListOf<Character>()
         user.favourites?.characters?.nodes?.forEach { i ->
             favCharacter.add(Character(i.id, i.name.full, i.image.large, i.image.large, ""))
         }
-        if (favCharacter.isEmpty()) {
-            binding.profileFavCharactersContainer.visibility = View.GONE
-        }
-        binding.profileFavCharactersRecycler.adapter = CharacterAdapter(favCharacter)
-        binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
-            requireContext(),
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
 
-        val favStaff = arrayListOf<Author>()
         user.favourites?.staff?.nodes?.forEach { i ->
             favStaff.add(Author(i.id, i.name.full, i.image.large , "" ))
         }
+
+        setFavPeople()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (this::binding.isInitialized) {
+            binding.root.requestLayout()
+            setFavPeople()
+            model.refresh()
+        }
+    }
+
+    private fun setFavPeople() {
         if (favStaff.isEmpty()) {
             binding.profileFavStaffContainer.visibility = View.GONE
         }
@@ -159,15 +164,15 @@ class ProfileFragment() : Fragment() {
             LinearLayoutManager.HORIZONTAL,
             false
         )
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (this::binding.isInitialized) {
-            binding.root.requestLayout()
-
+        if (favCharacter.isEmpty()) {
+            binding.profileFavCharactersContainer.visibility = View.GONE
         }
+        binding.profileFavCharactersRecycler.adapter = CharacterAdapter(favCharacter)
+        binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL,
+            false
+        )
     }
 
     private fun convertMarkdownToHtml(markdown: String): String {

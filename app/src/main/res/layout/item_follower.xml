@@ -3,44 +3,47 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="120dp"
+    android:layout_height="wrap_content"
     android:layout_marginTop="16dp"
     android:orientation="horizontal">
 
     <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="90dp"
         android:layout_gravity="start|center_vertical"
         android:backgroundTint="@color/bg_white"
-        app:cardCornerRadius="16dp">
+        app:cardCornerRadius="24dp">
 
         <ImageView
             android:id="@+id/profileBannerImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/linear_gradient_bg"
+            tools:srcCompat="@tools:sample/backgrounds/scenic"
             tools:ignore="ContentDescription" />
 
-        <View
+        <ImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/bg_black_50"
+            app:srcCompat="@drawable/linear_gradient_nav"
             tools:ignore="ContentDescription" />
+
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/profileUserAvatarContainer"
-            android:layout_width="82dp"
-            android:layout_height="82dp"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="16dp"
-            android:backgroundTint="@color/bg_white"
+            android:backgroundTint="@color/transparent"
+            app:strokeColor="@color/transparent"
             app:cardCornerRadius="64dp">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/profileUserAvatar"
-                android:layout_width="82dp"
-                android:layout_height="82dp"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/ic_round_add_circle_24"
                 tools:ignore="ContentDescription,ImageContrastCheck"
@@ -54,10 +57,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="120dp"
-            android:text="Username"
+            android:text="@string/username"
             android:textColor="@color/bg_white"
             android:textSize="18sp"
-            android:textStyle="bold"
-            tools:ignore="HardcodedText" />
+            android:textStyle="bold"/>
     </com.google.android.material.card.MaterialCardView>
 </FrameLayout>

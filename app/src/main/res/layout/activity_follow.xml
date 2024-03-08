@@ -6,15 +6,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
+    <LinearLayout
         android:id="@+id/listProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <FrameLayout
+        android:id="@+id/listToolbar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal">

@@ -32,6 +32,7 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
@@ -79,8 +80,8 @@ class HomeFragment : Fragment() {
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.homeUserBg.pause()
                 binding.homeUserBg.loadImage(Anilist.bg)
                 binding.homeUserDataProgressBar.visibility = View.GONE
-
-                binding.homeNotificationDot.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+                binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+                binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
                 binding.homeAnimeList.setOnClickListener {
                     ContextCompat.startActivity(
@@ -119,6 +120,13 @@ class HomeFragment : Fragment() {
                 (it.context as androidx.appcompat.app.AppCompatActivity).supportFragmentManager,
                 "dialog"
             )
+        }
+        binding.homeUserAvatarContainer.setOnLongClickListener {
+            ContextCompat.startActivity(
+                requireContext(), Intent(requireContext(), ProfileActivity::class.java)
+                    .putExtra("userId", Anilist.userid), null
+            )
+            false
         }
 
         binding.homeContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
@@ -360,11 +368,12 @@ class HomeFragment : Fragment() {
             }
         }
     }
-
     override fun onResume() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
-        if (_binding != null)
-            binding.homeNotificationDot.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        if (_binding != null) {
+            binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+            binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
+        }
         super.onResume()
     }
 }

@@ -18,8 +18,9 @@
             android:layout_height="64dp"
             android:layout_gravity="start|center_vertical"
             android:layout_marginStart="16dp"
-            android:backgroundTint="@color/bg_white"
-            app:cardCornerRadius="64dp">
+            android:backgroundTint="@color/transparent"
+            app:cardCornerRadius="64dp"
+            app:strokeColor="@color/transparent">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/activityUserAvatar"
@@ -60,20 +61,35 @@
 
         </LinearLayout>
 
-        <ImageView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_round_favorite_24"
-            tools:ignore="ContentDescription" />
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/activityFavorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_round_favorite_24"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/activityFavoriteCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textSize="15sp"
+                tools:text="12" />
+        </LinearLayout>
 
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp"
-        android:layout_marginTop="8dp">
+        android:layout_height="180dp">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -85,16 +101,18 @@
             <ImageView
                 android:id="@+id/activityBannerImage"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="169dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/linear_gradient_bg"
+                tools:ignore="ContentDescription"
+                tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                app:srcCompat="@drawable/linear_gradient_nav"
                 tools:ignore="ContentDescription" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/bg_black_50"
-                tools:ignore="ContentDescription" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/activityCoverContainer"
@@ -110,6 +128,7 @@
                     android:layout_width="102dp"
                     android:layout_height="154dp"
                     android:layout_gravity="center"
+                    android:scaleType="centerCrop"
                     app:srcCompat="@drawable/ic_round_add_circle_24"
                     tools:ignore="ContentDescription,ImageContrastCheck"
                     tools:tint="@color/transparent" />

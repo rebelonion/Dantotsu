@@ -2,23 +2,18 @@ package ani.dantotsu.profile
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.ViewGroup
+import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
-import android.view.Window
-import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.User
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.navBarHeight
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -36,31 +31,11 @@ class FollowActivity : AppCompatActivity(){
     private lateinit var selected: ImageButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val immersiveMode = PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)
-        if (immersiveMode) {
-            requestWindowFeature(Window.FEATURE_NO_TITLE)
-        }
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
         initActivity(this)
         binding = ActivityFollowBinding.inflate(layoutInflater)
-
-        if (!immersiveMode) {
-            this.window.statusBarColor =
-                ContextCompat.getColor(this, R.color.nav_bg_inv)
-            binding.root.fitsSystemWindows = true
-
-        } else {
-            binding.root.fitsSystemWindows = false
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
-            binding.listTitle.updateLayoutParams<MarginLayoutParams> {
-                topMargin = statusBarHeight
-            }
-        }
-
+        binding.listToolbar.updateLayoutParams<MarginLayoutParams> { topMargin = statusBarHeight }
         setContentView(binding.root)
         val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)
         selected = getSelected(layoutType)
@@ -73,7 +48,7 @@ class FollowActivity : AppCompatActivity(){
             false
         )
         binding.listRecyclerView.adapter = adapter
-
+        binding.listProgressBar.visibility = View.VISIBLE
         binding.listBack.setOnClickListener { finish() }
 
         val title = intent.getStringExtra("title")
@@ -89,6 +64,7 @@ class FollowActivity : AppCompatActivity(){
             users = respond
             withContext(Dispatchers.Main) {
                 fillList()
+                binding.listProgressBar.visibility = View.GONE
             }
         }
         binding.followerList.setOnClickListener {
@@ -112,7 +88,7 @@ class FollowActivity : AppCompatActivity(){
         }
         users?.forEach { user ->
             if (getLayoutType(selected) == 0) {
-                adapter.add(FollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium, user.bannerImage) { onUserClick(it) })
+                adapter.add(FollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium, user.bannerImage ?: user.avatar?.medium ) { onUserClick(it) })
             } else {
                 adapter.add(GridFollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium) { onUserClick(it) })
             }

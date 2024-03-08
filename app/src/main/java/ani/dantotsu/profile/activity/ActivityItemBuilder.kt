@@ -5,63 +5,7 @@ import ani.dantotsu.connections.anilist.api.NotificationType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-/*
-* ACTIVITY_MESSAGE
-
-A user has sent you message
-ACTIVITY_REPLY
-
-A user has replied to your activity
-FOLLOWING
-
-A user has followed you
-ACTIVITY_MENTION
-
-A user has mentioned you in their activity
-THREAD_COMMENT_MENTION
-
-A user has mentioned you in a forum comment
-THREAD_SUBSCRIBED
-
-A user has commented in one of your subscribed forum threads
-THREAD_COMMENT_REPLY
-
-A user has replied to your forum comment
-AIRING
-
-An anime you are currently watching has aired
-ACTIVITY_LIKE
-
-A user has liked your activity
-ACTIVITY_REPLY_LIKE
-
-A user has liked your activity reply
-THREAD_LIKE
-
-A user has liked your forum thread
-THREAD_COMMENT_LIKE
-
-A user has liked your forum comment
-ACTIVITY_REPLY_SUBSCRIBED
-
-A user has replied to activity you have also replied to
-RELATED_MEDIA_ADDITION
-
-A new anime or manga has been added to the site where its related media is on the user's list
-MEDIA_DATA_CHANGE
-
-An anime or manga has had a data change that affects how a user may track it in their lists
-MEDIA_MERGE
-
-Anime or manga entries on the user's list have been merged into a single entry
-MEDIA_DELETION
-
-An anime or manga on the user's list has been deleted from the site
-
-* */
-
-interface NotificationItemBuilder {
+class ActivityItemBuilder {
 
     companion object {
         fun getContent(notification: Notification): String {
@@ -138,11 +82,33 @@ interface NotificationItemBuilder {
             }
         }
 
-        fun getDateTime(time: Int): String {
-            val date = Date(time * 1000L)
-            val sdf = SimpleDateFormat("dd/MM/yyyy hh:mm a", Locale.getDefault())
-            return sdf.format(date)
-        }
 
+        fun getDateTime(timestamp: Int): String {
+
+            val targetDate = Date(timestamp * 1000L)
+
+            if (targetDate < Date(946684800000L)) { // January 1, 2000 (who want dates before that?)
+                return ""
+            }
+
+            val currentDate = Date()
+            val difference = currentDate.time - targetDate.time
+
+            return when (val daysDifference = difference / (1000 * 60 * 60 * 24)) {
+                0L -> {
+                    val hoursDifference = difference / (1000 * 60 * 60)
+                    val minutesDifference = (difference / (1000 * 60)) % 60
+
+                    when {
+                        hoursDifference > 0 -> "$hoursDifference hour${if (hoursDifference > 1) "s" else ""} ago"
+                        minutesDifference > 0 -> "$minutesDifference minute${if (minutesDifference > 1) "s" else ""} ago"
+                        else -> "Just now"
+                    }
+                }
+                1L -> "1 day ago"
+                in 2..6 -> "$daysDifference days ago"
+                else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(targetDate)
+            }
+        }
     }
 }

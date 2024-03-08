@@ -115,12 +115,12 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".profile.ActivityActivity"
+            android:name=".profile.activity.ActivityActivity"
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity
-            android:name=".notifications.NotificationActivity"
+            android:name=".profile.activity.NotificationActivity"
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" >
         </activity>
