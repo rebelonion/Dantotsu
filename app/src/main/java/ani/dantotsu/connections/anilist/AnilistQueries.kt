@@ -6,6 +6,7 @@ import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
 import ani.dantotsu.connections.anilist.Anilist.authorRoles
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
+import ani.dantotsu.connections.anilist.api.FeedResponse
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.connections.anilist.api.NotificationResponse
@@ -1346,6 +1347,14 @@ Page(page:$page,perPage:50) {
         if (res != null) {
             Anilist.unreadNotificationCount = 0
         }
+        return res
+    }
+
+    suspend fun getFeed(userId: Int?, global: Boolean = false, page: Int = 1): FeedResponse? {
+        val filter = if (userId != null) "userId:$userId,"
+        else if (global) "isFollowing:false,"
+        else "isFollowing:true,"
+        val res = executeQuery<FeedResponse>("""{Page(page:$page,perPage:25){activities(${filter}sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}}""")
         return res
     }
 }

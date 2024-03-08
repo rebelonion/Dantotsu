@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.util.TypedValue
 import android.view.View
-import android.view.ViewGroup
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.connections.anilist.api.NotificationType
@@ -73,8 +72,8 @@ class NotificationItem(
     private fun setBinding() {
         val notificationType: NotificationType =
             NotificationType.valueOf(notification.notificationType)
-        binding.notificationText.text = NotificationItemBuilder.getContent(notification)
-        binding.notificationDate.text = NotificationItemBuilder.getDateTime(notification.createdAt)
+        binding.notificationText.text = ActivityItemBuilder.getContent(notification)
+        binding.notificationDate.text = ActivityItemBuilder.getDateTime(notification.createdAt)
         binding.root.setOnClickListener { clickCallback(id, clickType) }
         
         when (notificationType) {
