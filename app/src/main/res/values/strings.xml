@@ -685,8 +685,4 @@
     <string name="about_me">About me</string>
     <string name="follow">Follow</string>
 
-    <string name="time_stamps_auto_hide">Auto Hide Time Stamps</string>
-    <string name="time_stamps_auto_hide_desc">Make the skip time stamp button disappear after 5 seconds</string>
-
-
 </resources>

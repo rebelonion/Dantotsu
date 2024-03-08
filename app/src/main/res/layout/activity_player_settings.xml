@@ -452,7 +452,7 @@
                     android:minHeight="64dp"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:text="@string/time_stamps_auto_hide"
+                    android:text="Auto Hide Time Stamps"
                     android:textAlignment="viewStart"
                     android:textColor="@color/bg_opp"
                     app:cornerRadius="0dp"
@@ -469,7 +469,7 @@
                     android:fontFamily="@font/poppins_family"
                     android:paddingStart="32dp"
                     android:paddingEnd="32dp"
-                    android:text="@string/time_stamps_auto_hide_desc"
+                    android:text="Make the skip time stamp button disappear after 5 seconds"
                     android:textSize="14sp" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
