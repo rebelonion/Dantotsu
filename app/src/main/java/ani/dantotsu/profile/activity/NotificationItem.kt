@@ -2,20 +2,14 @@ package ani.dantotsu.profile.activity
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.databinding.ItemNotificationBinding
 import ani.dantotsu.loadImage
-import ani.dantotsu.navBarHeight
-import ani.dantotsu.settings.saving.PrefManager
-import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.statusBarHeight
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
@@ -51,22 +45,28 @@ class NotificationItem(
                 Glide.with(context as Context)
                     .load(GlideUrl(cover))
                     .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
-                    .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 6)))
+                    .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
                     .into(binding.notificationBannerImage)
         } else {
             binding.notificationBannerImage.setImageResource(R.drawable.linear_gradient_bg)
         }
+        val defaultHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 170f, context.resources.displayMetrics).toInt()
+        val userHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80f, context.resources.displayMetrics).toInt()
+
         if (user) {
             binding.notificationCover.visibility = View.GONE
+            binding.notificationCoverUser.visibility = View.VISIBLE
             binding.notificationCoverUserContainer.visibility = View.VISIBLE
             binding.notificationCoverUser.loadImage(notification.user?.avatar?.large)
-            val height = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80f, context.resources.displayMetrics).toInt()
-            binding.notificationBannerImage.layoutParams.height = height
-            binding.notificationBannerGradient.layoutParams.height = height
+            binding.notificationBannerImage.layoutParams.height = userHeight
+            binding.notificationBannerGradient.layoutParams.height = userHeight
         } else{
+            binding.notificationCover.visibility = View.VISIBLE
             binding.notificationCoverUser.visibility = View.VISIBLE
             binding.notificationCoverUserContainer.visibility = View.GONE
             binding.notificationCover.loadImage(notification.media?.coverImage?.large)
+            binding.notificationBannerImage.layoutParams.height = defaultHeight
+            binding.notificationBannerGradient.layoutParams.height = defaultHeight
         }
     }
 

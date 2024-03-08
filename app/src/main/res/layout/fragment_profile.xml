@@ -346,7 +346,6 @@
             android:fontFamily="@font/poppins_bold"
             android:text="@string/about_me"
             android:padding="8dp"
-            android:text="Bio"
             android:textSize="18sp"/>
 
         <WebView
