@@ -78,13 +78,14 @@
 
                 <FrameLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="16dp">
 
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="52dp"
                         android:layout_height="52dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="16dp"
+
                         android:backgroundTint="@color/nav_bg_inv"
                         app:cardCornerRadius="26dp">
 

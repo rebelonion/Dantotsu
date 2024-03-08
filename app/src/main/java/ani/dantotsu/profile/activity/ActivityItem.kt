@@ -1,5 +1,6 @@
 package ani.dantotsu.profile.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -19,6 +20,7 @@ class ActivityItem(
     val clickCallback: (Int) -> Unit
 ): BindableItem<ItemActivityBinding>() {
     private lateinit var binding: ItemActivityBinding
+    @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
         when (activity.typename) {
@@ -31,19 +33,20 @@ class ActivityItem(
                 else
                     ContextCompat.getColor(binding.root.context, R.color.bg_opp)
                 binding.activityFavorite.setColorFilter(color)
-
+                binding.activityFavoriteCount.text = activity.likeCount.toString()
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
-                binding.activityText.text = "${activity.user!!.name} ${activity.status} ${activity.media!!.title!!.userPreferred}"
-                binding.activityCover.loadImage(activity.media.coverImage?.medium)
+                binding.activityText.text = "${activity.user!!.name} ${activity.status} ${activity.progress ?: ""}"
+                binding.activityCover.loadImage(activity.media?.coverImage?.large)
                 val context = binding.root.context
-                val banner = activity.media.bannerImage
+                val banner = activity.media?.bannerImage ?: activity.media?.coverImage?.large
                 if (banner != null) {
-                if (!(context as android.app.Activity).isDestroyed)
-                    Glide.with(context as Context)
-                        .load(GlideUrl(banner))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
-                        .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
-                        .into(binding.activityBannerImage)
+                    if (!(context as android.app.Activity).isDestroyed) {
+                        Glide.with(context as Context)
+                            .load(GlideUrl(banner))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
+                            .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
+                            .into(binding.activityBannerImage)
+                    }
                 } else {
                     binding.activityBannerImage.setImageResource(R.drawable.linear_gradient_bg)
                 }

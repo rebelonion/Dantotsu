@@ -1,4 +1,4 @@
-package ani.dantotsu.profile
+package ani.dantotsu.profile.activity
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -11,11 +11,12 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.profile.activity.ActivityItem
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.xwray.groupie.GroupieAdapter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ActivityActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
@@ -39,16 +40,20 @@ class ActivityActivity : AppCompatActivity() {
         binding.listBack.setOnClickListener {
             onBackPressed()
         }
-
+        binding.listProgressBar.visibility = ViewGroup.VISIBLE
         var userId: Int? = intent.getIntExtra("userId", -1)
         if (userId == -1) userId = null
         val global = intent.getBooleanExtra("global", false)
 
-        lifecycleScope.launch {
+        lifecycleScope.launch(Dispatchers.IO) {
             val res = Anilist.query.getFeed(userId, global)
-            res?.data?.page?.activities?.let { activities ->
-                activityList = activities
-                adapter.update(activityList.map { ActivityItem(it){} })
+
+            withContext(Dispatchers.Main){
+                res?.data?.page?.activities?.let { activities ->
+                    activityList = activities
+                    adapter.update(activityList.map { ActivityItem(it){} })
+                }
+                binding.listProgressBar.visibility = ViewGroup.GONE
             }
         }
     }

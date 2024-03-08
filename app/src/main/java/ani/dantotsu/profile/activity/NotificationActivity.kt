@@ -18,7 +18,9 @@ import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.xwray.groupie.GroupieAdapter
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
@@ -41,12 +43,15 @@ class NotificationActivity : AppCompatActivity() {
         binding.listBack.setOnClickListener {
             onBackPressed()
         }
-
+        binding.listProgressBar.visibility = ViewGroup.VISIBLE
         lifecycleScope.launch {
             val res = Anilist.query.getNotifications(Anilist.userid?:0)
             res?.data?.page?.notifications?.let { notifications ->
                 notificationList = notifications
                 adapter.update(notificationList.map { NotificationItem(it, ::onNotificationClick) })
+            }
+            withContext(Dispatchers.Main){
+                binding.listProgressBar.visibility = ViewGroup.GONE
             }
         }
     }

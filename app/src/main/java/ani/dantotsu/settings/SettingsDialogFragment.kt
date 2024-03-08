@@ -65,7 +65,6 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             R.drawable.ic_round_notifications_none_24
         }
         binding.settingsNotification.setImageResource(notificationIcon)
-        binding.settingsNotification.visibility = View.VISIBLE
 
         if (Anilist.token != null) {
             binding.settingsLogin.setText(R.string.logout)
