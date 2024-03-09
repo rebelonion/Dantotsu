@@ -33,7 +33,7 @@ class FollowerItem(
                 Glide.with(context as Context)
                     .load(GlideUrl(banner))
                     .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
-                    .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 6)))
+                    .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
                     .into(binding.profileBannerImage)
         } else {
             binding.profileBannerImage.setImageResource(R.drawable.linear_gradient_bg)

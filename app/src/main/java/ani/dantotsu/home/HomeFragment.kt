@@ -32,6 +32,7 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
@@ -119,6 +120,13 @@ class HomeFragment : Fragment() {
                 (it.context as androidx.appcompat.app.AppCompatActivity).supportFragmentManager,
                 "dialog"
             )
+        }
+        binding.homeUserAvatarContainer.setOnLongClickListener {
+            ContextCompat.startActivity(
+                requireContext(), Intent(requireContext(), ProfileActivity::class.java)
+                    .putExtra("userId", Anilist.userid), null
+            )
+            false
         }
 
         binding.homeContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {

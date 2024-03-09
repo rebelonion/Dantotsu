@@ -2,6 +2,7 @@ package ani.dantotsu.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
@@ -47,7 +48,7 @@ class FollowActivity : AppCompatActivity(){
             false
         )
         binding.listRecyclerView.adapter = adapter
-
+        binding.listProgressBar.visibility = View.VISIBLE
         binding.listBack.setOnClickListener { finish() }
 
         val title = intent.getStringExtra("title")
@@ -63,6 +64,7 @@ class FollowActivity : AppCompatActivity(){
             users = respond
             withContext(Dispatchers.Main) {
                 fillList()
+                binding.listProgressBar.visibility = View.GONE
             }
         }
         binding.followerList.setOnClickListener {
@@ -86,7 +88,7 @@ class FollowActivity : AppCompatActivity(){
         }
         users?.forEach { user ->
             if (getLayoutType(selected) == 0) {
-                adapter.add(FollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium, user.bannerImage) { onUserClick(it) })
+                adapter.add(FollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium, user.bannerImage ?: user.avatar?.medium ) { onUserClick(it) })
             } else {
                 adapter.add(GridFollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium) { onUserClick(it) })
             }

@@ -1,5 +1,6 @@
 package ani.dantotsu.profile.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -20,6 +21,7 @@ class ActivityItem(
     val clickCallback: (Int) -> Unit
 ): BindableItem<ItemActivityBinding>() {
     private lateinit var binding: ItemActivityBinding
+    @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
 
@@ -45,12 +47,13 @@ class ActivityItem(
                 binding.activityCover.loadImage(activity.media.coverImage?.medium)
                 val banner = activity.media.bannerImage
                 if (banner != null) {
-                if (!(context as android.app.Activity).isDestroyed)
-                    Glide.with(context as Context)
-                        .load(GlideUrl(banner))
-                        .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
-                        .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
-                        .into(binding.activityBannerImage)
+                    if (!(context as android.app.Activity).isDestroyed) {
+                        Glide.with(context as Context)
+                            .load(GlideUrl(banner))
+                            .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
+                            .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
+                            .into(binding.activityBannerImage)
+                    }
                 } else {
                     binding.activityBannerImage.setImageResource(R.drawable.linear_gradient_bg)
                 }

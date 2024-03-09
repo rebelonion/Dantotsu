@@ -38,7 +38,7 @@ class NotificationItem(
 
     private fun image(user: Boolean = false) {
         val context = binding.notificationBannerImage.context
-        val cover = if (user) notification.user?.bannerImage else notification.media?.bannerImage
+        val cover = if (user) notification.user?.bannerImage ?: notification.user?.avatar?.medium else notification.media?.bannerImage ?: notification.media?.coverImage?.large
         if (cover != null) {
             if (!(context as Activity).isDestroyed)
                 Glide.with(context as Context)
@@ -50,7 +50,7 @@ class NotificationItem(
             binding.notificationBannerImage.setImageResource(R.drawable.linear_gradient_bg)
         }
         val defaultHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 170f, context.resources.displayMetrics).toInt()
-        val userHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 80f, context.resources.displayMetrics).toInt()
+        val userHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90f, context.resources.displayMetrics).toInt()
 
         if (user) {
             binding.notificationCover.visibility = View.GONE
@@ -58,14 +58,12 @@ class NotificationItem(
             binding.notificationCoverUserContainer.visibility = View.VISIBLE
             binding.notificationCoverUser.loadImage(notification.user?.avatar?.large)
             binding.notificationBannerImage.layoutParams.height = userHeight
-            binding.notificationBannerGradient.layoutParams.height = userHeight
         } else{
             binding.notificationCover.visibility = View.VISIBLE
             binding.notificationCoverUser.visibility = View.VISIBLE
             binding.notificationCoverUserContainer.visibility = View.GONE
             binding.notificationCover.loadImage(notification.media?.coverImage?.large)
             binding.notificationBannerImage.layoutParams.height = defaultHeight
-            binding.notificationBannerGradient.layoutParams.height = defaultHeight
         }
     }
 
