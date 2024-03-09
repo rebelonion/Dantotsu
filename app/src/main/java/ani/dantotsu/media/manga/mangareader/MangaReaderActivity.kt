@@ -285,16 +285,26 @@ class MangaReaderActivity : AppCompatActivity() {
             binding.mangaReaderNextChapter.performClick()
         }
         binding.mangaReaderNextChapter.setOnClickListener {
-            if (chaptersArr.size > currentChapterIndex + 1) progress { change(currentChapterIndex + 1) }
-            else snackString(getString(R.string.next_chapter_not_found))
+            if (defaultSettings.direction == RIGHT_TO_LEFT) {
+                if (currentChapterIndex > 0) change(currentChapterIndex - 1)
+                else snackString(getString(R.string.first_chapter))
+            } else {
+                if (chaptersArr.size > currentChapterIndex + 1) progress { change(currentChapterIndex + 1) }
+                else snackString(getString(R.string.next_chapter_not_found))
+            }
         }
         //Prev Chapter
         binding.mangaReaderPrevChap.setOnClickListener {
             binding.mangaReaderPreviousChapter.performClick()
         }
         binding.mangaReaderPreviousChapter.setOnClickListener {
-            if (currentChapterIndex > 0) change(currentChapterIndex - 1)
-            else snackString(getString(R.string.first_chapter))
+            if (defaultSettings.direction == RIGHT_TO_LEFT) {
+                if (chaptersArr.size > currentChapterIndex + 1) progress { change(currentChapterIndex + 1) }
+                else snackString(getString(R.string.next_chapter_not_found))
+            } else {
+                if (currentChapterIndex > 0) change(currentChapterIndex - 1)
+                else snackString(getString(R.string.first_chapter))
+            }
         }
 
         model.getMangaChapter().observe(this) { chap ->
@@ -305,10 +315,17 @@ class MangaReaderActivity : AppCompatActivity() {
                 PrefManager.setCustomVal("${media.id}_current_chp", chap.number)
                 currentChapterIndex = chaptersArr.indexOf(chap.number)
                 binding.mangaReaderChapterSelect.setSelection(currentChapterIndex)
-                binding.mangaReaderNextChap.text =
-                    chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
-                binding.mangaReaderPrevChap.text =
-                    chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
+                if (defaultSettings.direction == RIGHT_TO_LEFT) {
+                    binding.mangaReaderNextChap.text =
+                        chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
+                    binding.mangaReaderPrevChap.text =
+                        chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
+                } else {
+                    binding.mangaReaderNextChap.text =
+                        chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
+                    binding.mangaReaderPrevChap.text =
+                        chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
+                }
                 applySettings()
                 val context = this
                 val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
@@ -459,6 +476,10 @@ class MangaReaderActivity : AppCompatActivity() {
         } else {
             binding.mangaReaderSwipy.vertical = false
             if (defaultSettings.direction == RIGHT_TO_LEFT) {
+                binding.mangaReaderNextChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
+                binding.mangaReaderPrevChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
                 binding.LeftSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
                     ?: getString(R.string.no_chapter)
                 binding.RightSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
@@ -470,6 +491,10 @@ class MangaReaderActivity : AppCompatActivity() {
                     binding.mangaReaderPreviousChapter.performClick()
                 }
             } else {
+                binding.mangaReaderNextChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
+                binding.mangaReaderPrevChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 binding.LeftSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
                     ?: getString(R.string.no_chapter)
                 binding.RightSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
