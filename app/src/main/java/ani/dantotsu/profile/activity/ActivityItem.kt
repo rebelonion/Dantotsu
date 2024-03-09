@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import androidx.core.content.ContextCompat
 import ani.dantotsu.R
+import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.ItemActivityBinding
 import ani.dantotsu.loadImage
@@ -21,21 +22,27 @@ class ActivityItem(
     private lateinit var binding: ItemActivityBinding
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
+
+        binding.activityUserName.text = activity.user?.name
+        binding.activityUserAvatar.loadImage(activity.user?.avatar?.medium)
+        binding.activityTime.text = ActivityItemBuilder.getDateTime(activity.createdAt)
+        val color = if (activity.isLiked == true)
+            ContextCompat.getColor(binding.root.context, R.color.yt_red)
+        else
+            ContextCompat.getColor(binding.root.context, R.color.bg_opp)
+        binding.activityFavorite.setColorFilter(color)
+        binding.commentRepliesContainer.visibility = if (activity.replyCount > 0) View.VISIBLE else View.GONE
+
+        val context = binding.root.context
+
         when (activity.typename) {
             "ListActivity" ->{
-                binding.activityUserName.text = activity.user?.name
-                binding.activityUserAvatar.loadImage(activity.user?.avatar?.medium)
-                binding.activityTime.text = ActivityItemBuilder.getDateTime(activity.createdAt)
-                val color = if (activity.isLiked == true)
-                    ContextCompat.getColor(binding.root.context, R.color.yt_red)
-                else
-                    ContextCompat.getColor(binding.root.context, R.color.bg_opp)
-                binding.activityFavorite.setColorFilter(color)
+                binding.activityContent.visibility = View.GONE
+                binding.activityBannerContainer.visibility = View.VISIBLE
 
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
                 binding.activityText.text = "${activity.user!!.name} ${activity.status} ${activity.media!!.title!!.userPreferred}"
                 binding.activityCover.loadImage(activity.media.coverImage?.medium)
-                val context = binding.root.context
                 val banner = activity.media.bannerImage
                 if (banner != null) {
                 if (!(context as android.app.Activity).isDestroyed)
@@ -46,6 +53,14 @@ class ActivityItem(
                         .into(binding.activityBannerImage)
                 } else {
                     binding.activityBannerImage.setImageResource(R.drawable.linear_gradient_bg)
+                }
+            }
+            "TextActivity" -> {
+                binding.activityBannerContainer.visibility = View.GONE
+                binding.activityContent.visibility = View.VISIBLE
+                if (!(context as android.app.Activity).isDestroyed) {
+                    val markwon = buildMarkwon(context, false)
+                    markwon.setMarkdown(binding.activityContent, activity.text ?: "")
                 }
             }
         }
