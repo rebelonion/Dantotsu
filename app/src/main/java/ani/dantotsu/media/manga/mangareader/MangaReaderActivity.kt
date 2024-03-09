@@ -484,12 +484,6 @@ class MangaReaderActivity : AppCompatActivity() {
                     ?: getString(R.string.no_chapter)
                 binding.RightSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
                     ?: getString(R.string.no_chapter)
-                binding.mangaReaderSwipy.onLeftSwiped = {
-                    binding.mangaReaderNextChapter.performClick()
-                }
-                binding.mangaReaderSwipy.onRightSwiped = {
-                    binding.mangaReaderPreviousChapter.performClick()
-                }
             } else {
                 binding.mangaReaderNextChap.text =
                     chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
@@ -499,18 +493,18 @@ class MangaReaderActivity : AppCompatActivity() {
                     ?: getString(R.string.no_chapter)
                 binding.RightSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
                     ?: getString(R.string.no_chapter)
-                binding.mangaReaderSwipy.onLeftSwiped = {
-                    binding.mangaReaderPreviousChapter.performClick()
-                }
-                binding.mangaReaderSwipy.onRightSwiped = {
-                    binding.mangaReaderNextChapter.performClick()
-                }
+            }
+            binding.mangaReaderSwipy.onLeftSwiped = {
+                binding.mangaReaderPreviousChapter.performClick()
             }
             binding.mangaReaderSwipy.leftBeingSwiped = { value ->
                 binding.LeftSwipeContainer.apply {
                     alpha = value
                     translationX = -width.dp * (1 - min(value, 1f))
                 }
+            }
+            binding.mangaReaderSwipy.onRightSwiped = {
+                binding.mangaReaderNextChapter.performClick()
             }
             binding.mangaReaderSwipy.rightBeingSwiped = { value ->
                 binding.RightSwipeContainer.apply {
