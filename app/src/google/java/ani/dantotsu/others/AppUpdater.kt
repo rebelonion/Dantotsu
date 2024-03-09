@@ -161,21 +161,8 @@ object AppUpdater {
                             DownloadManager.EXTRA_DOWNLOAD_ID, id
                         ) ?: id
 
-                        val query = DownloadManager.Query()
-                        query.setFilterById(downloadId)
-                        val c = downloadManager.query(query)
-
-                        if (c.moveToFirst()) {
-                            val columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS)
-                            if (DownloadManager.STATUS_SUCCESSFUL == c
-                                    .getInt(columnIndex)
-                            ) {
-                                c.getColumnIndex(DownloadManager.COLUMN_MEDIAPROVIDER_URI)
-                                val uri = Uri.parse(
-                                    c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-                                )
-                                openApk(this@downloadUpdate, uri)
-                            }
+                        downloadManager.getUriForDownloadedFile(downloadId)?.let {
+                            openApk(this@downloadUpdate, it)
                         }
                     } catch (e: Exception) {
                         logError(e)
@@ -190,16 +177,11 @@ object AppUpdater {
     private fun openApk(context: Context, uri: Uri) {
         try {
             uri.path?.let {
-                val contentUri = FileProvider.getUriForFile(
-                    context,
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    File(it)
-                )
                 val installIntent = Intent(Intent.ACTION_VIEW).apply {
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
-                    data = contentUri
+                    data = uri
                 }
                 context.startActivity(installIntent)
             }
