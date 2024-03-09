@@ -124,7 +124,7 @@ class HomeFragment : Fragment() {
         binding.homeUserAvatarContainer.setOnLongClickListener {
             ContextCompat.startActivity(
                 requireContext(), Intent(requireContext(), ProfileActivity::class.java)
-                    .putExtra("userId", Anilist.userid), null
+                    .putExtra("userId", Anilist.userid),null
             )
             false
         }
