@@ -26,6 +26,7 @@ import ani.dantotsu.media.CalendarActivity
 import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.SearchActivity
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
@@ -94,6 +95,15 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.ANIME)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
+        binding.animeUserAvatar.setOnLongClickListener { view ->
+            ContextCompat.startActivity(
+                view.context,
+                Intent(view.context, ProfileActivity::class.java)
+                    .putExtra("userId", Anilist.userid),null
+            )
+            false
+        }
+
         binding.animeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
         binding.animeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
