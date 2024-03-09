@@ -285,7 +285,7 @@ class MangaReaderActivity : AppCompatActivity() {
             binding.mangaReaderNextChapter.performClick()
         }
         binding.mangaReaderNextChapter.setOnClickListener {
-            if (defaultSettings.direction == RIGHT_TO_LEFT) {
+            if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
                 if (currentChapterIndex > 0) change(currentChapterIndex - 1)
                 else snackString(getString(R.string.first_chapter))
             } else {
@@ -298,7 +298,7 @@ class MangaReaderActivity : AppCompatActivity() {
             binding.mangaReaderPreviousChapter.performClick()
         }
         binding.mangaReaderPreviousChapter.setOnClickListener {
-            if (defaultSettings.direction == RIGHT_TO_LEFT) {
+            if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
                 if (chaptersArr.size > currentChapterIndex + 1) progress { change(currentChapterIndex + 1) }
                 else snackString(getString(R.string.next_chapter_not_found))
             } else {
@@ -315,7 +315,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 PrefManager.setCustomVal("${media.id}_current_chp", chap.number)
                 currentChapterIndex = chaptersArr.indexOf(chap.number)
                 binding.mangaReaderChapterSelect.setSelection(currentChapterIndex)
-                if (defaultSettings.direction == RIGHT_TO_LEFT) {
+                if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
                     binding.mangaReaderNextChap.text =
                         chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                     binding.mangaReaderPrevChap.text =
@@ -439,6 +439,10 @@ class MangaReaderActivity : AppCompatActivity() {
         if ((defaultSettings.direction == TOP_TO_BOTTOM || defaultSettings.direction == BOTTOM_TO_TOP)) {
             binding.mangaReaderSwipy.vertical = true
             if (defaultSettings.direction == TOP_TO_BOTTOM) {
+                binding.mangaReaderNextChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
+                binding.mangaReaderPrevChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 binding.BottomSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
                     ?: getString(R.string.no_chapter)
                 binding.TopSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
@@ -450,6 +454,10 @@ class MangaReaderActivity : AppCompatActivity() {
                     binding.mangaReaderNextChapter.performClick()
                 }
             } else {
+                binding.mangaReaderNextChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
+                binding.mangaReaderPrevChap.text =
+                    chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
                 binding.BottomSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1)
                     ?: getString(R.string.no_chapter)
                 binding.TopSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
@@ -729,7 +737,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 val screenWidth = Resources.getSystem().displayMetrics.widthPixels
                 //if in the 1st 1/5th of the screen width, left and lower than 1/5th of the screen height, left
                 if (screenWidth / 5 in x + 1..<y) {
-                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT) {
+                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
                         pressPos.RIGHT
                     } else {
                         pressPos.LEFT
@@ -737,7 +745,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 }
                 //if in the last 1/5th of the screen width, right and lower than 1/5th of the screen height, right
                 else if (x > screenWidth - screenWidth / 5 && y > screenWidth / 5) {
-                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT) {
+                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
                         pressPos.LEFT
                     } else {
                         pressPos.RIGHT
