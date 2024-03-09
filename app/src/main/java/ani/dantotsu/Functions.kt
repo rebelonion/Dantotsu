@@ -904,16 +904,16 @@ fun toast(string: String?) {
     }
 }
 
-fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null) {
+fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null) : Snackbar? {
     try { //I have no idea why this sometimes crashes for some people...
         if (s != null) {
             (activity ?: currActivity())?.apply {
+                val snackBar = Snackbar.make(
+                    window.decorView.findViewById(android.R.id.content),
+                    s,
+                    Snackbar.LENGTH_SHORT
+                )
                 runOnUiThread {
-                    val snackBar = Snackbar.make(
-                        window.decorView.findViewById(android.R.id.content),
-                        s,
-                        Snackbar.LENGTH_SHORT
-                    )
                     snackBar.view.apply {
                         updateLayoutParams<FrameLayout.LayoutParams> {
                             gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
@@ -933,6 +933,7 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
                     }
                     snackBar.show()
                 }
+                return snackBar
             }
             logger(s)
         }
@@ -940,6 +941,7 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
         logger(e.stackTraceToString())
         Injekt.get<CrashlyticsInterface>().logException(e)
     }
+    return null
 }
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :
