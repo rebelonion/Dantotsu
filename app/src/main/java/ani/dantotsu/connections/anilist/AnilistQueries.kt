@@ -281,7 +281,7 @@ class AnilistQueries {
                 } else {
                     if (currContext()?.let { isOnline(it) } == true) {
                         snackString(currContext()?.getString(R.string.error_getting_data))
-                    }
+                    } else { }
                 }
             }
             val mal = async {
