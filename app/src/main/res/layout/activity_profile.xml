@@ -20,6 +20,7 @@
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/profileScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="72dp"
@@ -117,15 +118,6 @@
                     android:layout_marginTop="20dp"
                     android:layout_marginEnd="16dp"
                     android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/profileActivityButton"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_marginEnd="8dp"
-                        android:contentDescription="@string/menu"
-                        android:src="@drawable/inbox_empty"
-                        app:tint="@color/bg_opp" />
 
                     <ImageView
                         android:id="@+id/profileMenuButton"

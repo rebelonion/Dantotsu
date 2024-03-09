@@ -28,6 +28,7 @@ import android.telephony.TelephonyManager
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.AttributeSet
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -129,7 +130,8 @@ var loadIsMAL = false
 
 fun logger(e: Any?, print: Boolean = true) {
     if (print)
-        println(e)
+        //println(e)
+        Log.d("Logger", e.toString())
 }
 
 

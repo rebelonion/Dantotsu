@@ -14,6 +14,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.User
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -36,6 +37,7 @@ class FollowActivity : AppCompatActivity(){
         initActivity(this)
         binding = ActivityFollowBinding.inflate(layoutInflater)
         binding.listToolbar.updateLayoutParams<MarginLayoutParams> { topMargin = statusBarHeight }
+        binding.listFrameLayout.updateLayoutParams<MarginLayoutParams> { bottomMargin = navBarHeight }
         setContentView(binding.root)
         val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)
         selected = getSelected(layoutType)

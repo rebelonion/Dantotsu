@@ -1,19 +1,13 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/listProgressBar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
     <FrameLayout
+        android:id="@+id/listToolbar"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal">
@@ -38,18 +32,38 @@
             android:fontFamily="@font/poppins_bold"
             android:gravity="center|start"
             android:singleLine="true"
-            android:text="Activity"
             android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
             android:textColor="?attr/colorOnBackground"
             android:textSize="18sp"
-            tools:ignore="HardcodedText" />
+            tools:text="Activities" />
+
     </FrameLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listRecyclerView"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/feedViewPager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        tools:listitem="@layout/item_activity" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="72dp"
+        android:layout_marginTop="48dp"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <nl.joery.animatedbottombar.AnimatedBottomBar
+        android:id="@+id/feedNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="?attr/colorSurface"
+        android:padding="0dp"
+        app:abb_animationInterpolator="@anim/over_shoot"
+        app:abb_indicatorAppearance="round"
+        app:abb_indicatorLocation="top"
+        app:abb_selectedTabType="text"
+        app:abb_textAppearance="@style/NavBarText"
+        app:itemActiveIndicatorStyle="@style/BottomNavBar"
+        app:itemIconTint="@color/tab_layout_icon"
+        app:itemRippleColor="#00000000"
+        app:itemTextAppearanceActive="@style/NavBarText"
+        app:itemTextAppearanceInactive="@style/NavBarText"
+        app:itemTextColor="@color/tab_layout_icon" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

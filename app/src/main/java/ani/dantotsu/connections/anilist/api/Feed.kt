@@ -7,19 +7,19 @@ import kotlinx.serialization.Serializable
 data class FeedResponse(
     @SerialName("data")
     val data: Data
-) {
+) : java.io.Serializable {
     @Serializable
     data class Data(
         @SerialName("Page")
         val page: ActivityPage
-    )
+    ) : java.io.Serializable
 }
 
 @Serializable
 data class ActivityPage(
     @SerialName("activities")
     val activities: List<Activity>
-)
+) : java.io.Serializable
 
 @Serializable
 data class Activity(
@@ -52,9 +52,9 @@ data class Activity(
     @SerialName("isSubscribed")
     val isSubscribed: Boolean,
     @SerialName("likeCount")
-    val likeCount: Int?,
+    var likeCount: Int?,
     @SerialName("isLiked")
-    val isLiked: Boolean?,
+    var isLiked: Boolean?,
     @SerialName("isPinned")
     val isPinned: Boolean?,
     @SerialName("isPrivate")
@@ -69,7 +69,7 @@ data class Activity(
     val replies: List<Reply>?,
     @SerialName("likes")
     val likes: List<User>?,
-)
+) : java.io.Serializable
 
 @Serializable
 data class Reply(
@@ -89,4 +89,22 @@ data class Reply(
     val user: User,
     @SerialName("likes")
     val likes: List<User>?,
-)
+) : java.io.Serializable
+
+@Serializable
+data class ToggleLike(
+    @SerialName("data")
+    val data: Data
+) : java.io.Serializable {
+    @Serializable
+    data class Data(
+        @SerialName("ToggleLikeV2")
+        val toggleLike: LikeData
+    ) : java.io.Serializable
+}
+
+@Serializable
+data class LikeData(
+    @SerialName("__typename")
+    val typename: String
+) : java.io.Serializable

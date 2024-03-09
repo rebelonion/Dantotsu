@@ -115,7 +115,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".profile.activity.ActivityActivity"
+            android:name=".profile.activity.FeedActivity"
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" >
         </activity>
