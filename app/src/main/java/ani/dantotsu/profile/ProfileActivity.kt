@@ -22,7 +22,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.ImageViewDialog
-import ani.dantotsu.profile.activity.ActivityActivity
+import ani.dantotsu.profile.activity.FeedFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -36,8 +36,8 @@ import nl.joery.animatedbottombar.AnimatedBottomBar
 
 
 class ProfileActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityProfileBinding
-    private var selected: Int = 0
+    lateinit var binding: ActivityProfileBinding
+    private var selected: Int = 1
     private lateinit var navBar: AnimatedBottomBar
 
     @SuppressLint("SetTextI18n")
@@ -49,8 +49,10 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(binding.root)
         navBar = binding.profileNavBar
         navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
+        val feedTab = navBar.createTab(R.drawable.ic_round_filter_24, "Feed")
         val profileTab = navBar.createTab(R.drawable.ic_round_person_24, "Profile")
         val statsTab = navBar.createTab(R.drawable.ic_stats_24, "Stats")
+        navBar.addTab(feedTab)
         navBar.addTab(profileTab)
         navBar.addTab(statsTab)
         navBar.visibility = View.GONE
@@ -70,6 +72,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 binding.profileViewPager.adapter =
                     ViewPagerAdapter(supportFragmentManager, lifecycle, user)
+                binding.profileViewPager.setCurrentItem(selected, false)
                 navBar.visibility = View.VISIBLE
                 navBar.selectTabAt(selected)
                 navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
@@ -106,15 +109,6 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 binding.profileProgressBar.visibility = View.GONE
                 binding.profileTopContainer.visibility = View.VISIBLE
-                binding.profileActivityButton.setOnClickListener {
-                    ContextCompat.startActivity(
-                        this@ProfileActivity,
-                        Intent(this@ProfileActivity, ActivityActivity::class.java)
-                            .putExtra("userId", user.id)
-                            .putExtra("username", user.name),
-                        null
-                    )
-                }
                 binding.profileMenuButton.setOnClickListener {
                     val popup = PopupMenu(this@ProfileActivity, binding.profileMenuButton)
                     popup.menuInflater.inflate(R.menu.menu_profile, popup.menu)
@@ -161,7 +155,6 @@ class ProfileActivity : AppCompatActivity() {
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
                 binding.profileBannerGradient.updateLayoutParams { height += statusBarHeight }
                 binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
-                binding.profileActivityButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                 binding.profileBannerImage.setOnLongClickListener {
                     ImageViewDialog.newInstance(
                         this@ProfileActivity,
@@ -188,10 +181,11 @@ class ProfileActivity : AppCompatActivity() {
     ) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
 
-        override fun getItemCount(): Int = 2
+        override fun getItemCount(): Int = 3
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> ProfileFragment.newInstance(user)
-            1 -> StatsFragment.newInstance(user)
+            0 -> FeedFragment.newInstance(user.id, false)
+            1 -> ProfileFragment.newInstance(user)
+            2 -> StatsFragment.newInstance(user)
             else -> ProfileFragment.newInstance(user)
         }
     }

@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
+    android:background="?attr/colorSurface"
     android:orientation="vertical">
 
     <LinearLayout
@@ -69,14 +70,14 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/activityFavorite"
+                android:id="@+id/activityLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_round_favorite_24"
                 tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/activityFavoriteCount"
+                android:id="@+id/activityLikeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -87,9 +88,23 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/activityContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:text="@string/lorem_ipsum"
+        android:textAlignment="center"
+        android:textSize="14sp" />
+
     <FrameLayout
+        android:id="@+id/activityBannerContainer"
         android:layout_width="match_parent"
-        android:layout_height="180dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp">
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -170,4 +185,34 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
     </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/commentRepliesContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:orientation="horizontal">
+
+        <View
+            android:id="@+id/commentRepliesDivider"
+            android:layout_width="32dp"
+            android:layout_height="3dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/nav_tab" />
+
+        <TextView
+            android:id="@+id/commentTotalReplies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:alpha="0.8"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="View replies"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
 </LinearLayout>

@@ -32,7 +32,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class ProfileFragment() : Fragment() {
+class ProfileFragment : Fragment() {
     lateinit var binding: FragmentProfileBinding
     private lateinit var activity: ProfileActivity
     private lateinit var user: Query.UserProfile

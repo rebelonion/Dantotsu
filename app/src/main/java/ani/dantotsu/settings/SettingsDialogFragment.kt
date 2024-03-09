@@ -25,6 +25,7 @@ import ani.dantotsu.incognitoNotification
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.offline.OfflineFragment
+import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -105,6 +106,11 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
 
         binding.settingsSettings.setSafeOnClickListener {
             startActivity(Intent(activity, SettingsActivity::class.java))
+            dismiss()
+        }
+
+        binding.settingsActivity.setSafeOnClickListener {
+            startActivity(Intent(activity, FeedActivity::class.java))
             dismiss()
         }
 

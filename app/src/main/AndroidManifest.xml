@@ -16,7 +16,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -115,7 +114,7 @@
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".profile.activity.ActivityActivity"
+            android:name=".profile.activity.FeedActivity"
             android:label="Inbox Activity"
             android:parentActivityName=".MainActivity" >
         </activity>
