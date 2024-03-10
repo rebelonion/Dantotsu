@@ -7,10 +7,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
-import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
-import ani.dantotsu.media.Character
 import ani.dantotsu.media.Media
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.settings.saving.PrefManager
@@ -335,24 +333,57 @@ class GenresViewModel : ViewModel() {
     }
 }
 
-class ProfileViewModel : ViewModel(){
+class ProfileViewModel : ViewModel() {
 
     private val mangaFav: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
+
     fun getMangaFav(): LiveData<ArrayList<Media>> = mangaFav
 
     private val animeFav: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
+
     fun getAnimeFav(): LiveData<ArrayList<Media>> = animeFav
 
     private val listImages: MutableLiveData<ArrayList<String?>> =
         MutableLiveData<ArrayList<String?>>(arrayListOf())
+
     fun getListImages(): LiveData<ArrayList<String?>> = listImages
 
     suspend fun setData(id: Int) {
-        mangaFav.postValue(Anilist.query.userFavMedia(false, id))
-        animeFav.postValue(Anilist.query.userFavMedia(true, id))
-        listImages.postValue(Anilist.query.getUserBannerImages(id))
+        val res = Anilist.query.initProfilePage(id)
+        val mangaList = res?.data?.favoriteManga?.favourites?.manga?.edges?.mapNotNull {
+            it.node?.let { i ->
+                Media(i).apply { isFav = true }
+            }
+        }
+        mangaFav.postValue(ArrayList(mangaList ?: arrayListOf()))
+        val animeList = res?.data?.favoriteAnime?.favourites?.anime?.edges?.mapNotNull {
+            it.node?.let { i ->
+                Media(i).apply { isFav = true }
+            }
+        }
+        animeFav.postValue(ArrayList(animeList ?: arrayListOf()))
+
+        val bannerImages = arrayListOf<String?>(null, null)
+        val animeRandom = res?.data?.animeMediaList?.lists?.mapNotNull {
+            it.entries?.mapNotNull { entry ->
+                val imageUrl = entry.media?.bannerImage
+                if (imageUrl != null && imageUrl != "null") imageUrl
+                else null
+            }
+        }?.flatten()?.randomOrNull()
+        bannerImages[0] = animeRandom
+        val mangaRandom = res?.data?.mangaMediaList?.lists?.mapNotNull {
+            it.entries?.mapNotNull { entry ->
+                val imageUrl = entry.media?.bannerImage
+                if (imageUrl != null && imageUrl != "null") imageUrl
+                else null
+            }
+        }?.flatten()?.randomOrNull()
+        bannerImages[1] = mangaRandom
+        listImages.postValue(bannerImages)
+
     }
 
     fun refresh() {

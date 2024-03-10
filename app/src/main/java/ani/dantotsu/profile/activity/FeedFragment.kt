@@ -28,6 +28,9 @@ class FeedFragment : Fragment() {
     private var activityList: List<Activity> = emptyList()
     private lateinit var activity: androidx.activity.ComponentActivity
     private var page: Int = 1
+    private var loadedFirstTime = false
+    private var userId: Int? = null
+    private var global: Boolean = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +41,6 @@ class FeedFragment : Fragment() {
         return binding.root
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity()
@@ -46,52 +48,55 @@ class FeedFragment : Fragment() {
         binding.listRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
-        var userId: Int? = arguments?.getInt("userId", -1)
+        userId = arguments?.getInt("userId", -1)
         if (userId == -1) userId = null
-        val global = arguments?.getBoolean("global", false) ?: false
-
-        activity.lifecycleScope.launch(Dispatchers.IO) {
-            val res = Anilist.query.getFeed(userId, global)
-            withContext(Dispatchers.Main) {
-                res?.data?.page?.activities?.let { activities ->
-                    activityList = activities
-                    adapter.update(activityList.map { ActivityItem(it) { _, _ -> } })
-                }
-                binding.listProgressBar.visibility = ViewGroup.GONE
-                val scrollView = binding.listRecyclerView
-
-                binding.listRecyclerView.setOnTouchListener { _, event ->
-                    if (event?.action == MotionEvent.ACTION_UP) {
-                       if (adapter.itemCount % AnilistQueries.ITEMS_PER_PAGE != 0 && !global) {
-                           snackString("No more activities")
-                        } else if (!scrollView.canScrollVertically(1) && !binding.feedRefresh.isVisible
-                            && binding.listRecyclerView.adapter!!.itemCount != 0 &&
-                            (binding.listRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() == (binding.listRecyclerView.adapter!!.itemCount - 1)
-                        ) {
-                            page++
-                            binding.feedRefresh.visibility = ViewGroup.VISIBLE
-                            activity.lifecycleScope.launch(Dispatchers.IO) {
-                                val res = Anilist.query.getFeed(userId, global, page)
-                                withContext(Dispatchers.Main) {
-                                    res?.data?.page?.activities?.let { activities ->
-                                        activityList += activities
-                                        adapter.addAll(activities.map { ActivityItem(it) { _, _ -> } })
-                                    }
-                                    binding.feedRefresh.visibility = ViewGroup.GONE
-                                }
-                            }
-                        }
-                    }
-                    false
-                }
-            }
-        }
+        global = arguments?.getBoolean("global", false) ?: false
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onResume() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
+            if (!loadedFirstTime) {
+                activity.lifecycleScope.launch(Dispatchers.IO) {
+                    val res = Anilist.query.getFeed(userId, global)
+                    withContext(Dispatchers.Main) {
+                        res?.data?.page?.activities?.let { activities ->
+                            activityList = activities
+                            adapter.update(activityList.map { ActivityItem(it) { _, _ -> } })
+                        }
+                        binding.listProgressBar.visibility = ViewGroup.GONE
+                        val scrollView = binding.listRecyclerView
+
+                        binding.listRecyclerView.setOnTouchListener { _, event ->
+                            if (event?.action == MotionEvent.ACTION_UP) {
+                                if (adapter.itemCount % AnilistQueries.ITEMS_PER_PAGE != 0 && !global) {
+                                    snackString("No more activities")
+                                } else if (!scrollView.canScrollVertically(1) && !binding.feedRefresh.isVisible
+                                    && binding.listRecyclerView.adapter!!.itemCount != 0 &&
+                                    (binding.listRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() == (binding.listRecyclerView.adapter!!.itemCount - 1)
+                                ) {
+                                    page++
+                                    binding.feedRefresh.visibility = ViewGroup.VISIBLE
+                                    activity.lifecycleScope.launch(Dispatchers.IO) {
+                                        val res = Anilist.query.getFeed(userId, global, page)
+                                        withContext(Dispatchers.Main) {
+                                            res?.data?.page?.activities?.let { activities ->
+                                                activityList += activities
+                                                adapter.addAll(activities.map { ActivityItem(it) { _, _ -> } })
+                                            }
+                                            binding.feedRefresh.visibility = ViewGroup.GONE
+                                        }
+                                    }
+                                }
+                            }
+                            false
+                        }
+                    }
+                }
+                loadedFirstTime = true
+            }
         }
     }
 

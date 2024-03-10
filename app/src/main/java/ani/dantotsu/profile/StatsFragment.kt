@@ -34,6 +34,7 @@ class StatsFragment :
     private var statType: StatType = StatType.COUNT
     private lateinit var user: Query.UserProfile
     private lateinit var activity: ProfileActivity
+    private var loadedFirstTime = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -101,29 +102,32 @@ class StatsFragment :
         }
 
         binding.filterContainer.visibility = View.GONE
-        activity.lifecycleScope.launch {
-            stats.clear()
-            stats.add(Anilist.query.getUserStatistics(user.id)?.data?.user)
-            withContext(Dispatchers.Main) {
-                binding.filterContainer.visibility = View.VISIBLE
-                binding.sourceType.setOnItemClickListener { _, _, i, _ ->
-                    type = MediaType.entries.toTypedArray()[i]
-                    loadStats(type == MediaType.ANIME)
-                }
-                binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->
-                    statType = StatType.entries.toTypedArray()[i]
-                    loadStats(type == MediaType.ANIME)
-                }
-                loadStats(type == MediaType.ANIME)
-                binding.statisticProgressBar.visibility = View.GONE
-            }
-        }
     }
 
     override fun onResume() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
+            if (!loadedFirstTime) {
+                activity.lifecycleScope.launch {
+                    stats.clear()
+                    stats.add(Anilist.query.getUserStatistics(user.id)?.data?.user)
+                    withContext(Dispatchers.Main) {
+                        binding.filterContainer.visibility = View.VISIBLE
+                        binding.sourceType.setOnItemClickListener { _, _, i, _ ->
+                            type = MediaType.entries.toTypedArray()[i]
+                            loadStats(type == MediaType.ANIME)
+                        }
+                        binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->
+                            statType = StatType.entries.toTypedArray()[i]
+                            loadStats(type == MediaType.ANIME)
+                        }
+                        loadStats(type == MediaType.ANIME)
+                        binding.statisticProgressBar.visibility = View.GONE
+                    }
+                }
+                loadedFirstTime = true
+            }
         }
         loadStats(type == MediaType.ANIME)
     }
