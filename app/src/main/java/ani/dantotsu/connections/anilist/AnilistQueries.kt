@@ -52,7 +52,7 @@ class AnilistQueries {
         Anilist.episodesWatched = user.statistics?.anime?.episodesWatched
         Anilist.chapterRead = user.statistics?.manga?.chaptersRead
         Anilist.adult = user.options?.displayAdultContent ?: false
-        Anilist.unreadNotificationCount = user.unreadNotificationCount?:0
+        Anilist.unreadNotificationCount = user.unreadNotificationCount ?: 0
         return true
     }
 
@@ -281,7 +281,8 @@ class AnilistQueries {
                 } else {
                     if (currContext()?.let { isOnline(it) } == true) {
                         snackString(currContext()?.getString(R.string.error_getting_data))
-                    } else { }
+                    } else {
+                    }
                 }
             }
             val mal = async {
@@ -335,7 +336,11 @@ class AnilistQueries {
             returnArray.addAll(map.values)
             return returnArray
         }
-        val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+        val list = PrefManager.getNullableCustomVal(
+            "continueAnimeList",
+            listOf<Int>(),
+            List::class.java
+        ) as List<Int>
         if (list.isNotEmpty()) {
             list.reversed().forEach {
                 if (map.containsKey(it)) returnArray.add(map[it]!!)
@@ -351,7 +356,7 @@ class AnilistQueries {
         return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: $status , sort: UPDATED_TIME ) { lists { entries { progress private score(format:POINT_100) status media { id idMal type isAdult status chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } } """
     }
 
-    suspend fun favMedia(anime: Boolean, id: Int? = Anilist.userid ): ArrayList<Media> {
+    suspend fun favMedia(anime: Boolean, id: Int? = Anilist.userid): ArrayList<Media> {
         var hasNextPage = true
         var page = 0
 
@@ -375,7 +380,7 @@ class AnilistQueries {
         return responseArray
     }
 
-    private fun favMediaQuery(anime: Boolean, page: Int, id: Int?= Anilist.userid ): String {
+    private fun favMediaQuery(anime: Boolean, page: Int, id: Int? = Anilist.userid): String {
         return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
     }
 
@@ -487,7 +492,11 @@ class AnilistQueries {
                 returnMap["current$type"] = returnArray
                 return
             }
-            val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+            val list = PrefManager.getNullableCustomVal(
+                "continueAnimeList",
+                listOf<Int>(),
+                List::class.java
+            ) as List<Int>
             if (list.isNotEmpty()) {
                 list.reversed().forEach {
                     if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
@@ -512,7 +521,11 @@ class AnilistQueries {
                     subMap[m.id] = m
                 }
             }
-            val list = PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>
+            val list = PrefManager.getNullableCustomVal(
+                "continueAnimeList",
+                listOf<Int>(),
+                List::class.java
+            ) as List<Int>
             if (list.isNotEmpty()) {
                 list.reversed().forEach {
                     if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
@@ -1291,64 +1304,44 @@ Page(page:$page,perPage:50) {
         )
     }
 
-    suspend fun userFavMedia(anime: Boolean, id: Int): ArrayList<Media> {
-        var hasNextPage = true
-        var page = 0
-
-        suspend fun getNextPage(page: Int): List<Media> {
-            val response = executeQuery<Query.User>("""{${userFavMediaQuery(anime, page, id)}}""")
-            val favourites = response?.data?.user?.favourites
-            val apiMediaList = if (anime) favourites?.anime else favourites?.manga
-            hasNextPage = apiMediaList?.pageInfo?.hasNextPage ?: false
-            return apiMediaList?.edges?.mapNotNull {
-                it.node?.let { i ->
-                    Media(i).apply { isFav = true }
-                }
-            } ?: return listOf()
-        }
-
-        val responseArray = arrayListOf<Media>()
-        while (hasNextPage) {
-            page++
-            responseArray.addAll(getNextPage(page))
-        }
-        return responseArray
-    }
-
     private fun userFavMediaQuery(anime: Boolean, page: Int, id: Int): String {
         return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
     }
 
-    suspend fun userFollowing(id: Int): Query.Following?{
-        return executeQuery<Query.Following>("""{Page {following(userId:${id},sort:[USERNAME]){id name avatar{large medium}bannerImage}}}""", force = true)
+    suspend fun userFollowing(id: Int): Query.Following? {
+        return executeQuery<Query.Following>(
+            """{Page {following(userId:${id},sort:[USERNAME]){id name avatar{large medium}bannerImage}}}""",
+            force = true
+        )
     }
 
-    suspend fun userFollowers(id: Int): Query.Follower?{
-        return executeQuery<Query.Follower>("""{Page {followers(userId:${id},sort:[USERNAME]){id name avatar{large medium}bannerImage}}}""", force = true)
+    suspend fun userFollowers(id: Int): Query.Follower? {
+        return executeQuery<Query.Follower>(
+            """{Page {followers(userId:${id},sort:[USERNAME]){id name avatar{large medium}bannerImage}}}""",
+            force = true
+        )
     }
 
-    private suspend fun userBannerImage(type: String,id: Int?): String? {
-            val response =
-                executeQuery<Query.MediaListCollection>("""{ MediaListCollection(userId: ${id}, type: $type, chunk:1,perChunk:25, sort: [SCORE_DESC,UPDATED_TIME_DESC]) { lists { entries{ media { id bannerImage } } } } } """)
-            val random = response?.data?.mediaListCollection?.lists?.mapNotNull {
-                it.entries?.mapNotNull { entry ->
-                    val imageUrl = entry.media?.bannerImage
-                    if (imageUrl != null && imageUrl != "null") imageUrl
-                    else null
-                }
-            }?.flatten()?.randomOrNull() ?: return null
-            return random
+    suspend fun initProfilePage(id: Int): Query.ProfilePageMedia? {
+        return executeQuery<Query.ProfilePageMedia>(
+            """{
+            favoriteAnime:${userFavMediaQuery(true, 1, id)}
+            favoriteManga:${userFavMediaQuery(false, 1, id)}
+            animeMediaList:${bannerImageQuery("ANIME", id)}
+            mangaMediaList:${bannerImageQuery("MANGA", id)}
+            }""".trimIndent(), force = true
+        )
     }
 
-    suspend fun getUserBannerImages(id: Int? = Anilist.userid): ArrayList<String?> {
-        val default = arrayListOf<String?>(null, null)
-        default[0] = userBannerImage("ANIME", id)
-        default[1] = userBannerImage("MANGA",id)
-        return default
+    private fun bannerImageQuery(type: String, id: Int?): String {
+        return """MediaListCollection(userId: ${id}, type: $type, chunk:1,perChunk:25, sort: [SCORE_DESC,UPDATED_TIME_DESC]) { lists { entries{ media { id bannerImage } } } }"""
     }
 
     suspend fun getNotifications(id: Int, page: Int = 1): NotificationResponse? {
-        val res = executeQuery<NotificationResponse>("""{User(id:$id){unreadNotificationCount}Page(page:$page,perPage:$ITEMS_PER_PAGE){notifications(resetNotificationCount:true){__typename...on AiringNotification{id,type,animeId,episode,contexts,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}},}...on FollowingNotification{id,userId,type,context,createdAt,user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMessageNotification{id,userId,type,activityId,context,createdAt,message{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMentionNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplySubscribedNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentMentionNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentReplyNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentSubscribedNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentLikeNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadLikeNotification{id,userId,type,threadId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on RelatedMediaAdditionNotification{id,type,context,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDataChangeNotification{id,type,mediaId,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaMergeNotification{id,type,mediaId,deletedMediaTitles,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDeletionNotification{id,type,deletedMediaTitle,context,reason,createdAt,}}}}""", force = true)
+        val res = executeQuery<NotificationResponse>(
+            """{User(id:$id){unreadNotificationCount}Page(page:$page,perPage:$ITEMS_PER_PAGE){notifications(resetNotificationCount:true){__typename...on AiringNotification{id,type,animeId,episode,contexts,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}},}...on FollowingNotification{id,userId,type,context,createdAt,user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMessageNotification{id,userId,type,activityId,context,createdAt,message{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMentionNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplySubscribedNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentMentionNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentReplyNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentSubscribedNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentLikeNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadLikeNotification{id,userId,type,threadId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on RelatedMediaAdditionNotification{id,type,context,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDataChangeNotification{id,type,mediaId,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaMergeNotification{id,type,mediaId,deletedMediaTitles,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDeletionNotification{id,type,deletedMediaTitle,context,reason,createdAt,}}}}""",
+            force = true
+        )
         if (res != null) {
             Anilist.unreadNotificationCount = 0
         }
@@ -1359,7 +1352,9 @@ Page(page:$page,perPage:50) {
         val filter = if (userId != null) "userId:$userId,"
         else if (global) "isFollowing:false,"
         else "isFollowing:true,"
-        val res = executeQuery<FeedResponse>("""{Page(page:$page,perPage:$ITEMS_PER_PAGE){activities(${filter}sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}}""")
+        val res = executeQuery<FeedResponse>(
+            """{Page(page:$page,perPage:$ITEMS_PER_PAGE){activities(${filter}sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}}"""
+        )
         return res
     }
 

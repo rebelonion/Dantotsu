@@ -63,6 +63,10 @@ data class Activity(
     val createdAt: Int,
     @SerialName("user")
     val user: User?,
+    @SerialName("recipient")
+    val recipient: User?,
+    @SerialName("messenger")
+    val messenger: User?,
     @SerialName("media")
     val media: Media?,
     @SerialName("replies")

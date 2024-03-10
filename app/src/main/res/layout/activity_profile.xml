@@ -19,17 +19,18 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/profileScrollView"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/profileAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="72dp"
-        android:scrollbars="none">
+        android:translationZ="5dp">
 
-        <LinearLayout
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="false"
+            app:contentScrim="?android:colorBackground"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <FrameLayout
                 android:id="@+id/profileTopContainer"
@@ -129,15 +130,24 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/profileViewPager"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:ignore="SpeakableTextPresentCheck" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginBottom="72dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/profileViewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:nestedScrollingEnabled="true"
+        tools:ignore="SpeakableTextPresentCheck" />
+    </LinearLayout>
 
 
     <nl.joery.animatedbottombar.AnimatedBottomBar

@@ -5,13 +5,12 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
@@ -27,36 +26,15 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentResponse
 import ani.dantotsu.connections.comments.CommentsAPI
-import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.FragmentCommentsBinding
 import ani.dantotsu.loadImage
-import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
-import com.bumptech.glide.Glide
-import com.bumptech.glide.RequestBuilder
-import com.bumptech.glide.RequestManager
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.load.resource.gif.GifDrawable
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
-import io.noties.markwon.AbstractMarkwonPlugin
-import io.noties.markwon.Markwon
-import io.noties.markwon.MarkwonConfiguration
-import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
-import io.noties.markwon.ext.tables.TablePlugin
-import io.noties.markwon.ext.tasklist.TaskListPlugin
-import io.noties.markwon.html.HtmlPlugin
-import io.noties.markwon.html.TagHandlerNoOp
-import io.noties.markwon.image.AsyncDrawable
-import io.noties.markwon.image.glide.GlideImagesPlugin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -64,6 +42,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.TimeZone
 
+@SuppressLint("ClickableViewAccessibility")
 class CommentsFragment : Fragment() {
     lateinit var binding: FragmentCommentsBinding
     lateinit var activity: AppCompatActivity
@@ -193,8 +172,68 @@ class CommentsFragment : Fragment() {
         }
 
         var isFetching = false
+        binding.commentsList.setOnTouchListener(
+            object : View.OnTouchListener {
+                override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                    if (event?.action == MotionEvent.ACTION_UP) {
+                        if (!binding.commentsList.canScrollVertically(1) && !isFetching &&
+                            (binding.commentsList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() == (binding.commentsList.adapter!!.itemCount - 1)
+                        ) {
+                            if (pagesLoaded < totalPages) {
+                                binding.commentBottomRefresh.visibility = View.VISIBLE
+                                loadMoreComments()
+                                lifecycleScope.launch {
+                                    kotlinx.coroutines.delay(1000)
+                                    withContext(Dispatchers.Main) {
+                                        binding.commentBottomRefresh.visibility = View.GONE
+                                    }
+                                }
+                            } else {
+                                snackString("No more comments")
+                            }
+                        }
+                    }
+                    return false
+                }
+
+                private fun loadMoreComments() {
+                    isFetching = true
+                    lifecycleScope.launch {
+                        val comments = fetchComments()
+                        comments?.comments?.forEach { comment ->
+                            updateUIWithComment(comment)
+                        }
+                        totalPages = comments?.totalPages ?: 1
+                        pagesLoaded++
+                        isFetching = false
+                    }
+                }
+
+                private suspend fun fetchComments(): CommentResponse? {
+                    return withContext(Dispatchers.IO) {
+                        CommentsAPI.getCommentsForId(mediaId, pagesLoaded + 1, filterTag)
+                    }
+                }
+
+                //adds additional comments to the section
+                private suspend fun updateUIWithComment(comment: Comment) {
+                    withContext(Dispatchers.Main) {
+                        section.add(
+                            CommentItem(
+                                comment,
+                                buildMarkwon(activity),
+                                section,
+                                this@CommentsFragment,
+                                backgroundColor,
+                                0
+                            )
+                        )
+                    }
+                }
+            })
+
         //if we have scrolled to the bottom of the list, load more comments
-        binding.commentsList.addOnScrollListener(object :
+        /*binding.commentsList.addOnScrollListener(object :
             androidx.recyclerview.widget.RecyclerView.OnScrollListener() {
             override fun onScrolled(
                 recyclerView: androidx.recyclerview.widget.RecyclerView,
@@ -245,7 +284,7 @@ class CommentsFragment : Fragment() {
                     )
                 }
             }
-        })
+        })*/
 
 
         binding.commentInput.addTextChangedListener(object : TextWatcher {

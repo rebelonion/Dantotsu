@@ -1,8 +1,10 @@
 package ani.dantotsu.profile
 
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -29,13 +31,15 @@ import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
+import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import kotlin.math.abs
 
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
     lateinit var binding: ActivityProfileBinding
     private var selected: Int = 1
     private lateinit var navBar: AnimatedBottomBar
@@ -47,6 +51,7 @@ class ProfileActivity : AppCompatActivity() {
         initActivity(this)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        screenWidth = resources.displayMetrics.widthPixels.toFloat()
         navBar = binding.profileNavBar
         navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
         val feedTab = navBar.createTab(R.drawable.ic_round_filter_24, "Feed")
@@ -57,6 +62,7 @@ class ProfileActivity : AppCompatActivity() {
         navBar.addTab(statsTab)
         navBar.visibility = View.GONE
         binding.profileViewPager.isUserInputEnabled = false
+
         lifecycleScope.launch(Dispatchers.IO) {
             val userid = intent.getIntExtra("userId", 0)
             val respond = Anilist.query.getUserProfile(userid)
@@ -72,6 +78,7 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 binding.profileViewPager.adapter =
                     ViewPagerAdapter(supportFragmentManager, lifecycle, user)
+                binding.profileViewPager.setOffscreenPageLimit(3)
                 binding.profileViewPager.setCurrentItem(selected, false)
                 navBar.visibility = View.VISIBLE
                 navBar.selectTabAt(selected)
@@ -163,7 +170,47 @@ class ProfileActivity : AppCompatActivity() {
                     )
                 }
 
+                mMaxScrollSize = binding.profileAppBar.totalScrollRange
+                binding.profileAppBar.addOnOffsetChangedListener(this@ProfileActivity)
             }
+        }
+    }
+
+    //Collapsing UI Stuff
+    private var isCollapsed = false
+    private val percent = 45
+    private var mMaxScrollSize = 0
+    private var screenWidth: Float = 0f
+
+    override fun onOffsetChanged(appBar: AppBarLayout, i: Int) {
+        if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange
+        val percentage = abs(i) * 100 / mMaxScrollSize
+
+        binding.profileUserAvatarContainer.visibility =
+            if (binding.profileUserAvatarContainer.scaleX == 0f) View.GONE else View.VISIBLE
+        val duration = (200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
+        val typedValue = TypedValue()
+        this@ProfileActivity.theme.resolveAttribute(
+            com.google.android.material.R.attr.colorSecondary,
+            typedValue,
+            true
+        )
+        val color = typedValue.data
+        if (percentage >= percent && !isCollapsed) {
+            isCollapsed = true
+            ObjectAnimator.ofFloat(binding.profileUserDataContainer, "translationX", screenWidth)
+                .setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.profileUserAvatarContainer, "translationX", screenWidth)
+                .setDuration(duration).start()
+            binding.profileBannerImage.pause()
+        }
+        if (percentage <= percent && isCollapsed) {
+            isCollapsed = false
+            ObjectAnimator.ofFloat(binding.profileUserDataContainer, "translationX", 0f)
+                .setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.profileUserAvatarContainer, "translationX", 0f).setDuration(duration)
+                .start()
+            if (PrefManager.getVal(PrefName.BannerAnimations)) binding.profileBannerImage.resume()
         }
     }
 

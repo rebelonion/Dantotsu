@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:nestedScrollingEnabled="true"
     android:orientation="vertical">
 
     <LinearLayout
@@ -144,8 +149,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/stats"
             android:padding="8dp"
+            android:text="@string/stats"
             android:textSize="18sp"
             tools:ignore="HardcodedText" />
 
@@ -344,9 +349,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/about_me"
             android:padding="8dp"
-            android:textSize="18sp"/>
+            android:text="@string/about_me"
+            android:textSize="18sp" />
 
         <WebView
             android:id="@+id/profileUserBio"
@@ -356,6 +361,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
+            android:nestedScrollingEnabled="true"
             android:padding="16dp"
             android:textAlignment="textStart"
             tools:text="@string/slogan" />
@@ -464,8 +470,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/fav_character"
             android:padding="8dp"
+            android:text="@string/fav_character"
             android:textSize="18sp" />
 
         <ani.dantotsu.FadingEdgeRecyclerView
@@ -497,8 +503,8 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/fav_staff"
             android:padding="8dp"
+            android:text="@string/fav_staff"
             android:textSize="18sp" />
 
         <ani.dantotsu.FadingEdgeRecyclerView
@@ -516,3 +522,4 @@
             tools:orientation="horizontal" />
     </LinearLayout>
 </LinearLayout>
+</androidx.core.widget.NestedScrollView>
