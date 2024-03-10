@@ -1,11 +1,14 @@
 package ani.dantotsu.home
 
 import android.animation.ObjectAnimator
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
+import android.view.GestureDetector
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
@@ -33,6 +36,8 @@ import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.ProfileActivity
+import ani.dantotsu.profile.activity.FeedActivity
+import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
@@ -45,6 +50,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -52,6 +58,7 @@ import kotlin.math.min
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+    private lateinit var gestureDetector: GestureDetector
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -69,8 +76,29 @@ class HomeFragment : Fragment() {
 
     val model: AnilistHomeViewModel by activityViewModels()
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val scope = lifecycleScope
+        gestureDetector = GestureDetector(requireContext(), object : GestureDetector.SimpleOnGestureListener() {
+            override fun onFling(e1: MotionEvent?, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+                val distanceX = e2.x - (e1?.x ?: 0f)
+                val distanceY = e2.y - (e1?.y ?: 0f)
+                if (e1 != null && e1.x < e2.x && abs(distanceX) > abs(distanceY) && abs(distanceX) > abs(velocityY)) {
+                    startActivity(Intent(activity, FeedActivity::class.java))
+                    return true
+                }
+                return false
+            }
+            override fun onScroll(e1: MotionEvent?, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+                val distanceX = e2.x - (e1?.x ?: 0f)
+                val distanceY = e2.y - (e1?.y ?: 0f)
+                if (e1 != null && e1.x > e2.x && abs(distanceX) > abs(distanceY) && abs(distanceX) > abs(distanceY)) {
+                    startActivity(Intent(activity, NotificationActivity::class.java))
+                    return true
+                }
+                return false
+            }
+        })
         fun load() {
             if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
                 binding.homeUserName.text = Anilist.username
@@ -126,6 +154,10 @@ class HomeFragment : Fragment() {
                 requireContext(), Intent(requireContext(), ProfileActivity::class.java)
                     .putExtra("userId", Anilist.userid), null
             )
+            false
+        }
+        binding.homeUserAvatarContainer.setOnTouchListener { _, event ->
+            gestureDetector.onTouchEvent(event)
             false
         }
 
