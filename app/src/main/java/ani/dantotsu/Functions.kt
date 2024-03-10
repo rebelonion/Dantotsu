@@ -156,7 +156,7 @@ fun initActivity(a: Activity) {
                     navBarHeight = this.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
                 }
         }
-        a.hideStatusBar()
+        WindowInsetsControllerCompat(window, window.decorView).hide(WindowInsetsCompat.Type.statusBars())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0 && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             window.decorView.rootWindowInsets?.displayCutout?.apply {
                 if (boundingRects.size > 0) {
@@ -176,40 +176,38 @@ fun initActivity(a: Activity) {
         }
 }
 
-@Suppress("DEPRECATION")
 fun Activity.hideSystemBars() {
-    window.decorView.systemUiVisibility = (
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            )
-}
-
-@Suppress("DEPRECATION")
-fun Activity.hideStatusBar() {
-    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+    WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+    }
 }
 
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
-        val window = dialog?.window
-        val decorView: View = window?.decorView ?: return
-        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
-            val behavior = BottomSheetBehavior.from(requireView().parent as View)
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog?.window?.let { window ->
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
+            if (immersiveMode) {
+                WindowInsetsControllerCompat(
+                    window, window.decorView
+                ).hide(WindowInsetsCompat.Type.statusBars())
+            }
+            if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
+                val behavior = BottomSheetBehavior.from(requireView().parent as View)
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+            val typedValue = TypedValue()
+            val theme = requireContext().theme
+            theme.resolveAttribute(
+                com.google.android.material.R.attr.colorSurface,
+                typedValue,
+                true
+            )
+            window.navigationBarColor = typedValue.data
         }
-        val typedValue = TypedValue()
-        val theme = requireContext().theme
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorSurface,
-            typedValue,
-            true
-        )
-        window.navigationBarColor = typedValue.data
     }
 
     override fun show(manager: FragmentManager, tag: String?) {
