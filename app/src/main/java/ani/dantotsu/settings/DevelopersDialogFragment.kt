@@ -26,6 +26,12 @@ class DevelopersDialogFragment : BottomSheetDialogFragment() {
             "https://github.com/aayush2622"
         ),
         Developer(
+            "AbandonedCart",
+            "https://avatars.githubusercontent.com/u/1173913?v=4",
+            "Contributor",
+            "https://github.com/AbandonedCart"
+        ),
+        Developer(
             "Sadwhy",
             "https://avatars.githubusercontent.com/u/99601717?v=4",
             "Contributor",

@@ -140,6 +140,20 @@ class Query {
     }
 
     @Serializable
+    data class ProfilePageMedia(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("favoriteAnime") val favoriteAnime: ani.dantotsu.connections.anilist.api.User?,
+            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?,
+            @SerialName("animeMediaList") val animeMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("mangaMediaList") val mangaMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?
+        )
+    }
+
+    @Serializable
     data class ToggleFollow(
         @SerialName("data")
         val data: Data?

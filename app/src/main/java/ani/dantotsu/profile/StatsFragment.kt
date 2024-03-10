@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import ani.dantotsu.profile.ChartBuilder.Companion.ChartPacket
 import ani.dantotsu.profile.ChartBuilder.Companion.ChartType
 import ani.dantotsu.profile.ChartBuilder.Companion.MediaType
 import ani.dantotsu.profile.ChartBuilder.Companion.StatType
+import ani.dantotsu.statusBarHeight
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
@@ -32,6 +34,7 @@ class StatsFragment :
     private var statType: StatType = StatType.COUNT
     private lateinit var user: Query.UserProfile
     private lateinit var activity: ProfileActivity
+    private var loadedFirstTime = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,10 +52,11 @@ class StatsFragment :
 
         binding.statisticList.adapter = adapter
         binding.statisticList.setHasFixedSize(true)
-        binding.statisticList.isNestedScrollingEnabled = false
+        binding.statisticList.isNestedScrollingEnabled = true
         binding.statisticList.layoutManager = LinearLayoutManager(requireContext())
         binding.statisticProgressBar.visibility = View.VISIBLE
         binding.compare.visibility = if (user.id == Anilist.userid) View.GONE else View.VISIBLE
+        binding.filterContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin = statusBarHeight }
 
         binding.sourceType.setAdapter(
             ArrayAdapter(
@@ -98,29 +102,32 @@ class StatsFragment :
         }
 
         binding.filterContainer.visibility = View.GONE
-        activity.lifecycleScope.launch {
-            stats.clear()
-            stats.add(Anilist.query.getUserStatistics(user.id)?.data?.user)
-            withContext(Dispatchers.Main) {
-                binding.filterContainer.visibility = View.VISIBLE
-                binding.sourceType.setOnItemClickListener { _, _, i, _ ->
-                    type = MediaType.entries.toTypedArray()[i]
-                    loadStats(type == MediaType.ANIME)
-                }
-                binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->
-                    statType = StatType.entries.toTypedArray()[i]
-                    loadStats(type == MediaType.ANIME)
-                }
-                loadStats(type == MediaType.ANIME)
-                binding.statisticProgressBar.visibility = View.GONE
-            }
-        }
     }
 
     override fun onResume() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
+            if (!loadedFirstTime) {
+                activity.lifecycleScope.launch {
+                    stats.clear()
+                    stats.add(Anilist.query.getUserStatistics(user.id)?.data?.user)
+                    withContext(Dispatchers.Main) {
+                        binding.filterContainer.visibility = View.VISIBLE
+                        binding.sourceType.setOnItemClickListener { _, _, i, _ ->
+                            type = MediaType.entries.toTypedArray()[i]
+                            loadStats(type == MediaType.ANIME)
+                        }
+                        binding.sourceFilter.setOnItemClickListener { _, _, i, _ ->
+                            statType = StatType.entries.toTypedArray()[i]
+                            loadStats(type == MediaType.ANIME)
+                        }
+                        loadStats(type == MediaType.ANIME)
+                        binding.statisticProgressBar.visibility = View.GONE
+                    }
+                }
+                loadedFirstTime = true
+            }
         }
         loadStats(type == MediaType.ANIME)
     }
