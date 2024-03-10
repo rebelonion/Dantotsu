@@ -146,24 +146,14 @@ class MainActivity : AppCompatActivity() {
                 finish()
             }
             doubleBackToExitPressedOnce = true
-            WindowInsetsControllerCompat(window, window.decorView)
-                .show(WindowInsetsCompat.Type.navigationBars())
             snackString(this@MainActivity.getString(R.string.back_to_exit)).apply {
                 this?.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
                     override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
                         super.onDismissed(transientBottomBar, event)
-                        WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-                            controller.systemBarsBehavior =
-                                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                            controller.hide(WindowInsetsCompat.Type.navigationBars())
-                        }
+                        doubleBackToExitPressedOnce = false
                     }
                 })
             }
-            Handler(Looper.getMainLooper()).postDelayed(
-                { doubleBackToExitPressedOnce = false },
-                2000
-            )
         }
 
         val preferences: SourcePreferences = Injekt.get()
@@ -219,7 +209,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.root.doOnAttach {
-            initActivity(this)
+            initActivityTheme(this)
             selectedOption = if (fragment != null) {
                 when (fragment) {
                     AnimeFragment::class.java.name -> 0
@@ -369,13 +359,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-
-        WindowInsetsControllerCompat(window, window.decorView).let { controller ->
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-            controller.hide(WindowInsetsCompat.Type.navigationBars())
+        initActivityTheme(this)
+        binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarHeight
         }
+        window.navigationBarColor = getColor(android.R.color.transparent)
     }
 
     //ViewPager
