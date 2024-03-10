@@ -135,7 +135,7 @@ fun logger(e: Any?, print: Boolean = true) {
 }
 
 
-fun initActivityTheme(a: Activity) {
+fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
     val darkMode = PrefManager.getVal<Int>(PrefName.DarkMode)
