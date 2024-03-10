@@ -173,64 +173,64 @@ class CommentsFragment : Fragment() {
 
         var isFetching = false
         binding.commentsList.setOnTouchListener(
-        object : View.OnTouchListener {
-            override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                if (event?.action == MotionEvent.ACTION_UP) {
-                    if (pagesLoaded < totalPages) {
+            object : View.OnTouchListener {
+                override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+                    if (event?.action == MotionEvent.ACTION_UP) {
                         if (!binding.commentsList.canScrollVertically(1) && !isFetching &&
                             (binding.commentsList.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() == (binding.commentsList.adapter!!.itemCount - 1)
                         ) {
-                            binding.commentBottomRefresh.visibility = View.VISIBLE
-                            loadMoreComments()
-                            lifecycleScope.launch {
-                                kotlinx.coroutines.delay(1000)
-                                withContext(Dispatchers.Main) {
-                                    binding.commentBottomRefresh.visibility = View.GONE
+                            if (pagesLoaded < totalPages) {
+                                binding.commentBottomRefresh.visibility = View.VISIBLE
+                                loadMoreComments()
+                                lifecycleScope.launch {
+                                    kotlinx.coroutines.delay(1000)
+                                    withContext(Dispatchers.Main) {
+                                        binding.commentBottomRefresh.visibility = View.GONE
+                                    }
                                 }
+                            } else {
+                                snackString("No more comments")
                             }
                         }
-                    } else {
-                        snackString("No more comments")
+                    }
+                    return false
+                }
+
+                private fun loadMoreComments() {
+                    isFetching = true
+                    lifecycleScope.launch {
+                        val comments = fetchComments()
+                        comments?.comments?.forEach { comment ->
+                            updateUIWithComment(comment)
+                        }
+                        totalPages = comments?.totalPages ?: 1
+                        pagesLoaded++
+                        isFetching = false
                     }
                 }
-                return false
-            }
 
-            private fun loadMoreComments() {
-                isFetching = true
-                lifecycleScope.launch {
-                    val comments = fetchComments()
-                    comments?.comments?.forEach { comment ->
-                        updateUIWithComment(comment)
+                private suspend fun fetchComments(): CommentResponse? {
+                    return withContext(Dispatchers.IO) {
+                        CommentsAPI.getCommentsForId(mediaId, pagesLoaded + 1, filterTag)
                     }
-                    totalPages = comments?.totalPages ?: 1
-                    pagesLoaded++
-                    isFetching = false
                 }
-            }
 
-            private suspend fun fetchComments(): CommentResponse? {
-                return withContext(Dispatchers.IO) {
-                    CommentsAPI.getCommentsForId(mediaId, pagesLoaded + 1, filterTag)
-                }
-            }
-
-            //adds additional comments to the section
-            private suspend fun updateUIWithComment(comment: Comment) {
-                withContext(Dispatchers.Main) {
-                    section.add(
-                        CommentItem(
-                            comment,
-                            buildMarkwon(activity),
-                            section,
-                            this@CommentsFragment,
-                            backgroundColor,
-                            0
+                //adds additional comments to the section
+                private suspend fun updateUIWithComment(comment: Comment) {
+                    withContext(Dispatchers.Main) {
+                        section.add(
+                            CommentItem(
+                                comment,
+                                buildMarkwon(activity),
+                                section,
+                                this@CommentsFragment,
+                                backgroundColor,
+                                0
+                            )
                         )
-                    )
+                    }
                 }
-            }
-        })
+            })
 
         //if we have scrolled to the bottom of the list, load more comments
         /*binding.commentsList.addOnScrollListener(object :
