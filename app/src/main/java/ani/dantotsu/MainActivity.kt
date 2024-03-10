@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity() {
 
 
         binding.root.doOnAttach {
-            initActivity(this)
+            initActivityTheme(this)
             selectedOption = if (fragment != null) {
                 when (fragment) {
                     AnimeFragment::class.java.name -> 0
@@ -359,6 +359,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        initActivityTheme(this)
+        binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
         window.navigationBarColor = getColor(android.R.color.transparent)
     }
 
