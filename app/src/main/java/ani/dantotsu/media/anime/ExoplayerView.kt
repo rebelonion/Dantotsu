@@ -1719,6 +1719,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     fun cancelTimer() {
                         timer?.cancel()
                         timer = null
+                        return
                     }
                     if (timer == null) {
                         timer = object : CountDownTimer(5000, 1000) {
@@ -1729,7 +1730,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                                     exoSkip.visibility = View.VISIBLE
                                     disappeared = false
                                     cancelTimer()
-                                    return
                                 }
                             }
 
