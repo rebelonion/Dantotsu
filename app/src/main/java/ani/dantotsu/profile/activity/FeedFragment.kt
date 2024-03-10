@@ -58,14 +58,11 @@ class FeedFragment : Fragment() {
                     adapter.update(activityList.map { ActivityItem(it) { _, _ -> } })
                 }
                 binding.listProgressBar.visibility = ViewGroup.GONE
-                val scrollView = if (activity is ProfileActivity) {
-                    (activity as ProfileActivity).binding.profileScrollView
-                } else {
-                    binding.listRecyclerView
-                }
+                val scrollView = binding.listRecyclerView
+
                 binding.listRecyclerView.setOnTouchListener { _, event ->
                     if (event?.action == MotionEvent.ACTION_UP) {
-                       if (adapter.itemCount % AnilistQueries.ITEMS_PER_PAGE != 0) {
+                       if (adapter.itemCount % AnilistQueries.ITEMS_PER_PAGE != 0 && !global) {
                            snackString("No more activities")
                         } else if (!scrollView.canScrollVertically(1) && !binding.feedRefresh.isVisible
                             && binding.listRecyclerView.adapter!!.itemCount != 0 &&
