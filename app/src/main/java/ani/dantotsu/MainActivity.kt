@@ -357,6 +357,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        window.navigationBarColor = getColor(android.R.color.transparent)
+    }
+
     //ViewPager
     private class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
