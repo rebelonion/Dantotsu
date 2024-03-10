@@ -33,15 +33,15 @@ class ActivityItem(
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
 
-        binding.activityUserName.text = activity.user?.name
-        binding.activityUserAvatar.loadImage(activity.user?.avatar?.medium)
+        binding.activityUserName.text = activity.user?.name ?: activity.messenger?.name
+        binding.activityUserAvatar.loadImage(activity.user?.avatar?.medium ?: activity.messenger?.avatar?.medium)
         binding.activityTime.text = ActivityItemBuilder.getDateTime(activity.createdAt)
         val likeColor = ContextCompat.getColor(binding.root.context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(binding.root.context, R.color.bg_opp)
         binding.activityLike.setColorFilter(if (activity.isLiked == true) likeColor else notLikeColor)
         binding.commentRepliesContainer.visibility =
             if (activity.replyCount > 0) View.VISIBLE else View.GONE
-        binding.activityLikeCount.text = activity.likeCount.toString()
+        binding.activityLikeCount.text = (activity.likeCount?:0).toString()
 
         binding.activityLike.setOnClickListener {
             val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
@@ -55,7 +55,7 @@ class ActivityItem(
                         } else {
                             activity.likeCount = activity.likeCount?.plus(1)
                         }
-                        binding.activityLikeCount.text = activity.likeCount.toString()
+                        binding.activityLikeCount.text = (activity.likeCount?:0).toString()
                         activity.isLiked = !activity.isLiked!!
                         binding.activityLike.setColorFilter(if (activity.isLiked == true) likeColor else notLikeColor)
 
@@ -97,6 +97,15 @@ class ActivityItem(
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(binding.activityContent, activity.text ?: "")
+                }
+            }
+
+            "MessageActivity" -> {
+                binding.activityBannerContainer.visibility = View.GONE
+                binding.activityContent.visibility = View.VISIBLE
+                if (!(context as android.app.Activity).isDestroyed) {
+                    val markwon = buildMarkwon(context, false)
+                    markwon.setMarkdown(binding.activityContent, activity.message ?: "")
                 }
             }
         }
