@@ -115,7 +115,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private val resumePosition = "resumePosition"
     private val playerFullscreen = "playerFullscreen"
     private val playerOnPlay = "playerOnPlay"
-    private var dissappeared = 0
+    private var disappeared: Boolean = false
 
     private lateinit var exoPlayer: ExoPlayer
     private var castPlayer: CastPlayer? = null
@@ -967,7 +967,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         episodeTitle.setSelection(currentEpisodeIndex)
         episodeTitle.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                if (position != currentEpisodeIndex) change(position)
+                if (position != currentEpisodeIndex) {
+                    disappeared = false
+                    change(position)
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {}
@@ -979,6 +982,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             if (isInitialized) {
                 nextEpisode { i ->
                     updateAniProgress()
+                    disappeared = false
                     change(currentEpisodeIndex + i)
                 }
             }
@@ -987,6 +991,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         exoPrev = playerView.findViewById(R.id.exo_prev_ep)
         exoPrev.setOnClickListener {
             if (currentEpisodeIndex > 0) {
+                disappeared = false
                 change(currentEpisodeIndex - 1)
             } else
                 snackString(getString(R.string.first_episode))
@@ -1529,6 +1534,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private fun releasePlayer() {
         isPlayerPlaying = exoPlayer.playWhenReady
         playbackPosition = exoPlayer.currentPosition
+        disappeared = false
         exoPlayer.release()
         VideoCache.release()
         mediaSession?.release()
@@ -1709,28 +1715,38 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     skipTimeButton.setOnClickListener {
                         exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                     }
-                    val timer = object: CountDownTimer(5000, 1000) {
-                        override fun onTick(millisUntilFinished: Long) {
-                            if (new == null) {
+                    var timer: CountDownTimer? = null
+                    fun cancelTimer() {
+                        timer?.cancel()
+                        timer = null
+                    }
+                    if (timer == null) {
+                        timer = object : CountDownTimer(5000, 1000) {
+                            override fun onTick(millisUntilFinished: Long) {
+                                println(millisUntilFinished)
+                                if (new == null){
+                                    skipTimeButton.visibility = View.GONE
+                                    exoSkip.visibility = View.VISIBLE
+                                    disappeared = false
+                                    cancelTimer()
+                                    return
+                                }
+                            }
+
+                            override fun onFinish() {
                                 skipTimeButton.visibility = View.GONE
                                 exoSkip.visibility = View.VISIBLE
-                                dissappeared = 0
-                                return
+                                disappeared = true
+                                cancelTimer()
                             }
                         }
-
-                        override fun onFinish() {
-                            val skip = currentTimeStamp
-                            skipTimeButton.visibility = View.GONE
-                            exoSkip.visibility = View.VISIBLE
-                            dissappeared = 1
-                        }
+                        timer?.start()
                     }
-                    timer.start()
+
                 }
                 if (PrefManager.getVal(PrefName.ShowTimeStampButton)) {
 
-                    if (dissappeared == 0 && PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
+                    if (!disappeared && PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
                         DissapearSkip()
                     } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)){
                         skipTimeButton.visibility = View.VISIBLE
@@ -1750,7 +1766,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
                 new.skipType.getType()
             } else {
-                dissappeared = 0
+                disappeared = false
                 skipTimeButton.visibility = View.GONE
                 if (PrefManager.getVal<Int>(PrefName.SkipTime) > 0) exoSkip.visibility =
                         View.VISIBLE
@@ -1874,6 +1890,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         if (isInitialized) {
             updateAniProgress()
+            disappeared = false
             releasePlayer()
         }
 
