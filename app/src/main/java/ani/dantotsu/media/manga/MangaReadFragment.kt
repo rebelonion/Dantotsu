@@ -601,6 +601,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         super.onResume()
         binding.mediaInfoProgressBar.visibility = progress
         binding.animeSourceRecycler.layoutManager?.onRestoreInstanceState(state)
+
         requireActivity().setNavigationTheme()
     }
 
