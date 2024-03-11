@@ -1110,7 +1110,7 @@ fun logToFile(context: Context, message: String) {
  * Builds the markwon instance with all the plugins
  * @return the markwon instance
  */
-fun buildMarkwon(activity: Activity, userInputContent: Boolean = true): Markwon {
+fun buildMarkwon(activity: Context, userInputContent: Boolean = true): Markwon {
     val markwon = Markwon.builder(activity)
         .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {

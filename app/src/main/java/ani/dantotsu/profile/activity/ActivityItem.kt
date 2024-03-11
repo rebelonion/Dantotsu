@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.Anilist
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.request.RequestOptions
+import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.CoroutineScope
@@ -29,11 +31,19 @@ class ActivityItem(
     val clickCallback: (Int, type: String) -> Unit
 ) : BindableItem<ItemActivityBinding>() {
     private lateinit var binding: ItemActivityBinding
+    private lateinit var repliesAdapter: GroupieAdapter
 
     @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
 
+        repliesAdapter = GroupieAdapter()
+        binding.activityReplies.adapter = repliesAdapter
+        binding.activityReplies.layoutManager = LinearLayoutManager(
+            binding.root.context,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         binding.activityUserName.text = activity.user?.name ?: activity.messenger?.name
         binding.activityUserAvatar.loadImage(activity.user?.avatar?.medium ?: activity.messenger?.avatar?.medium)
         binding.activityTime.text = ActivityItemBuilder.getDateTime(activity.createdAt)
@@ -42,8 +52,24 @@ class ActivityItem(
         binding.activityLike.setColorFilter(if (activity.isLiked == true) likeColor else notLikeColor)
         binding.commentRepliesContainer.visibility =
             if (activity.replyCount > 0) View.VISIBLE else View.GONE
-        binding.activityLikeCount.text = (activity.likeCount?:0).toString()
+        binding.commentRepliesContainer.setOnClickListener {
+            when (binding.activityReplies.visibility) {
+                View.GONE -> {
+                    repliesAdapter.addAll(
+                        activity.replies?.map { ActivityReplyItem(it) } ?: emptyList()
+                    )
+                    binding.activityReplies.visibility = View.VISIBLE
+                    binding.commentTotalReplies.text = "Hide replies"
+                }
+                else -> {
+                    repliesAdapter.clear()
+                    binding.activityReplies.visibility = View.GONE
+                    binding.commentTotalReplies.text = "View replies"
 
+                }
+            }
+        }
+        binding.activityLikeCount.text = (activity.likeCount?:0).toString()
         binding.activityLike.setOnClickListener {
             val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
             scope.launch {
@@ -106,7 +132,7 @@ class ActivityItem(
                 binding.activityContent.visibility = View.VISIBLE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
-                    markwon.setMarkdown(binding.activityContent, activity.message ?: "")
+                    markwon.setMarkdown(binding.activityContent, getBasicAniHTML(activity.message ?: ""))
                 }
             }
         }

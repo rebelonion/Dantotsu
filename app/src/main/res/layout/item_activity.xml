@@ -214,4 +214,11 @@
             tools:ignore="HardcodedText" />
     </LinearLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activityReplies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_marginStart="16dp"/>
+
 </LinearLayout>
