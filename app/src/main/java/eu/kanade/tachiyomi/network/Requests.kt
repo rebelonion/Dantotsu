@@ -19,8 +19,7 @@ fun GET(
     cache: CacheControl = DEFAULT_CACHE_CONTROL,
 ): Request {
     val nUrl = url.toHttpUrl()
-    val g = GET(nUrl, headers, cache)
-    return g
+    return GET(nUrl, headers, cache)
 }
 
 /**

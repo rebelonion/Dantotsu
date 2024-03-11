@@ -21,7 +21,7 @@
         android:end="32dp"
         android:gravity="end|center_vertical"
         tools:ignore="UnusedAttribute"
-        tools:targetApi="m">
+        >
         <rotate
             android:drawable="@drawable/ic_round_arrow_back_ios_new_24"
             android:fromDegrees="180.0"

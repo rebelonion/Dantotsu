@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.animation.doOnEnd
 import androidx.core.content.res.ResourcesCompat
@@ -274,7 +273,7 @@ class CommentsFragment : Fragment() {
 
             activity.binding.commentLabel.setOnClickListener {
                 //alert dialog to enter a number, with a cancel and ok button
-                val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+                val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
                     .setTitle("Enter a chapter/episode number tag")
                     .setView(R.layout.dialog_edittext)
                     .setPositiveButton("OK") { dialog, _ ->
@@ -542,7 +541,7 @@ class CommentsFragment : Fragment() {
      * Called when the user tries to comment for the first time
      */
     private fun showCommentRulesDialog() {
-        val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+        val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
             .setTitle("Commenting Rules")
             .setMessage(
                 "I WILL BAN YOU WITHOUT HESITATION\n" +

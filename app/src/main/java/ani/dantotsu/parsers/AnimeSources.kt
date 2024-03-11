@@ -37,7 +37,7 @@ object AnimeSources : WatchSources() {
     }
 
     fun performReorderAnimeSources() {
-        //remove the downloaded source from the list to avoid duplicates
+        // remove the downloaded source from the list to avoid duplicates
         list = list.filter { it.name != "Downloaded" }
         list = sortPinnedAnimeSources(list, pinnedAnimeSources) + Lazier(
             { OfflineAnimeParser() },
@@ -68,8 +68,6 @@ object AnimeSources : WatchSources() {
 
 
 object HAnimeSources : WatchSources() {
-    private val aList: List<Lazier<BaseParser>> = lazyList(
-    )
-
+    private val aList: List<Lazier<BaseParser>> = lazyList()
     override val list = listOf(aList, AnimeSources.list).flatten()
 }

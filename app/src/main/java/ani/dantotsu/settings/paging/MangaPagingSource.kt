@@ -41,13 +41,14 @@ import kotlinx.coroutines.withContext
 class MangaExtensionsViewModelFactory(
     private val mangaExtensionManager: MangaExtensionManager
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return MangaExtensionsViewModel(mangaExtensionManager) as T
     }
 }
 
 class MangaExtensionsViewModel(
-    private val mangaExtensionManager: MangaExtensionManager
+    mangaExtensionManager: MangaExtensionManager
 ) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
     private var currentPagingSource: MangaExtensionPagingSource? = null

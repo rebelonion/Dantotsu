@@ -39,13 +39,12 @@ import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivitySettingsBinding
-import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.downloadsPermission
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
-import ani.dantotsu.util.Logger
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.CommentNotificationWorker
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
@@ -70,6 +69,7 @@ import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
+import ani.dantotsu.util.Logger
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import eltos.simpledialogfragment.SimpleDialog
@@ -124,13 +124,13 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                                             salt
                                         )
                                     } catch (e: Exception) {
-                                        toast("Incorrect password")
+                                        toast(getString(R.string.incorrect_password))
                                         return@passwordAlertDialog
                                     }
                                     if (PreferencePackager.unpack(decryptedJson))
                                         restartApp()
                                 } else {
-                                    toast("Password cannot be empty")
+                                    toast(getString(R.string.password_cannot_be_empty))
                                 }
                             }
                         } else if (name.endsWith(".ani")) {
@@ -138,11 +138,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                             if (PreferencePackager.unpack(decryptedJson))
                                 restartApp()
                         } else {
-                            toast("Unknown file type")
+                            toast(getString(R.string.unknown_file_type))
                         }
                     } catch (e: Exception) {
                         e.printStackTrace()
-                        toast("Error importing settings")
+                        toast(getString(R.string.error_importing_settings))
                     }
                 }
             }
@@ -227,7 +227,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             val tag = "colorPicker"
-            CustomColorDialog().title("Custom Theme")
+            CustomColorDialog().title(R.string.custom_theme)
                 .colorPreset(originalColor)
                 .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET)
                 .allowCustom(true)
@@ -244,7 +244,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         val managers = arrayOf("Default", "1DM", "ADM")
         val downloadManagerDialog =
-            AlertDialog.Builder(this, R.style.MyPopup).setTitle("Download Manager")
+            AlertDialog.Builder(this, R.style.MyPopup).setTitle(R.string.download_manager)
         var downloadManager: Int = PrefManager.getVal(PrefName.DownloadManager)
         binding.settingsDownloadManager.setOnClickListener {
             val dialog = downloadManagerDialog.setSingleChoiceItems(
@@ -264,7 +264,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val filteredLocations = Location.entries.filter { it.exportable }
             selectedArray.addAll(List(filteredLocations.size - 1) { false })
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Import/Export Settings")
+                .setTitle(R.string.import_export_settings)
                 .setMultiChoiceItems(
                     filteredLocations.map { it.name }.toTypedArray(),
                     selectedArray.toBooleanArray()
@@ -315,11 +315,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.purgeAnimeDownloads.setOnClickListener {
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Purge Anime Downloads")
-                .setMessage("Are you sure you want to purge all anime downloads?")
-                .setPositiveButton("Yes") { dialog, _ ->
+                .setTitle(R.string.purge_anime_downloads)
+                .setMessage(getString(R.string.purge_anime_confirm))
+                .setPositiveButton(R.string.yes) { dialog, _ ->
                     val downloadsManager = Injekt.get<DownloadsManager>()
-                    downloadsManager.purgeDownloads(DownloadedType.Type.ANIME)
+                    downloadsManager.purgeDownloads(MediaType.ANIME)
                     DownloadService.sendRemoveAllDownloads(
                         this,
                         ExoplayerDownloadService::class.java,
@@ -327,7 +327,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     )
                     dialog.dismiss()
                 }
-                .setNegativeButton("No") { dialog, _ ->
+                .setNegativeButton(R.string.no) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()
@@ -337,14 +337,14 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.purgeMangaDownloads.setOnClickListener {
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Purge Manga Downloads")
-                .setMessage("Are you sure you want to purge all manga downloads?")
-                .setPositiveButton("Yes") { dialog, _ ->
+                .setTitle(R.string.purge_manga_downloads)
+                .setMessage(getString(R.string.purge_manga_confirm))
+                .setPositiveButton(R.string.yes) { dialog, _ ->
                     val downloadsManager = Injekt.get<DownloadsManager>()
-                    downloadsManager.purgeDownloads(DownloadedType.Type.MANGA)
+                    downloadsManager.purgeDownloads(MediaType.MANGA)
                     dialog.dismiss()
                 }
-                .setNegativeButton("No") { dialog, _ ->
+                .setNegativeButton(R.string.no) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()
@@ -354,14 +354,14 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.purgeNovelDownloads.setOnClickListener {
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Purge Novel Downloads")
-                .setMessage("Are you sure you want to purge all novel downloads?")
-                .setPositiveButton("Yes") { dialog, _ ->
+                .setTitle(R.string.purge_novel_downloads)
+                .setMessage(getString(R.string.purge_novel_confirm))
+                .setPositiveButton(R.string.yes) { dialog, _ ->
                     val downloadsManager = Injekt.get<DownloadsManager>()
-                    downloadsManager.purgeDownloads(DownloadedType.Type.NOVEL)
+                    downloadsManager.purgeDownloads(MediaType.NOVEL)
                     dialog.dismiss()
                 }
-                .setNegativeButton("No") { dialog, _ ->
+                .setNegativeButton(R.string.no) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()
@@ -396,16 +396,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle("User Agent")
                 .setView(dialogView)
-                .setPositiveButton("OK") { dialog, _ ->
+                .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                     PrefManager.setVal(PrefName.DefaultUserAgent, editText.text.toString())
                     dialog.dismiss()
                 }
-                .setNeutralButton("Reset") { dialog, _ ->
+                .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
                     PrefManager.removeVal(PrefName.DefaultUserAgent)
                     editText.setText("")
                     dialog.dismiss()
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.dismiss()
                 }
                 .create()
@@ -436,7 +436,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         binding.settingsExtensionDns.setOnItemClickListener { _, _, i, _ ->
             PrefManager.setVal(PrefName.DohProvider, i)
             binding.settingsExtensionDns.clearFocus()
-            Toast.makeText(this, "Restart app to apply changes", Toast.LENGTH_LONG).show()
+            restartApp()
         }
 
         binding.settingsDownloadInSd.isChecked = PrefManager.getVal(PrefName.SdDl)
@@ -586,7 +586,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             lifecycleScope.launch {
                 it.pop()
             }
-            openLinkInBrowser("https://www.buymeacoffee.com/rebelonion")
+            openLinkInBrowser(getString(R.string.coffee))
         }
         lifecycleScope.launch {
             binding.settingBuyMeCoffee.pop()
@@ -617,7 +617,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             (binding.settingsLogo.drawable as Animatable).start()
             if (cursedCounter % 7 == 0) {
                 Toast.makeText(this, "youwu have been cuwsed :pwayge:", Toast.LENGTH_LONG).show()
-                val url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                val url = getString(R.string.cursed_yt)
                 openLinkInBrowser(url)
                 //PrefManager.setVal(PrefName.ImageUrl, !PrefManager.getVal(PrefName.ImageUrl, false))
             } else {
@@ -845,7 +845,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 if (MAL.token != null) {
                     binding.settingsMALLogin.setText(R.string.logout)
                     binding.settingsMALLogin.setOnClickListener {
-                        MAL.removeSavedToken(it.context)
+                        MAL.removeSavedToken()
                         restartMainActivity.isEnabled = true
                         reload()
                     }
@@ -1000,7 +1000,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         box?.setSingleLine()
 
         val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle("Enter Password")
+            .setTitle(getString(R.string.enter_password))
             .setView(dialogView)
             .setPositiveButton("OK", null)
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -1016,7 +1016,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 dialog.dismiss()
                 callback(password)
             } else {
-                toast("Password cannot be empty")
+                toast(getString(R.string.password_cannot_be_empty))
             }
         }
         box?.setOnEditorActionListener { _, actionId, _ ->
@@ -1030,7 +1030,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
         subtitleTextView?.visibility = View.VISIBLE
         if (!isExporting)
-            subtitleTextView?.text = "Enter your password to decrypt the file"
+            subtitleTextView?.text = getString(R.string.enter_password_to_decrypt_file)
 
 
         dialog.window?.setDimAmount(0.8f)

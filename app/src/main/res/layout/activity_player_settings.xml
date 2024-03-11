@@ -1140,7 +1140,7 @@
                 android:minHeight="64dp"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
-                android:text="Show Rotate Button"
+                android:text="@string/show_rotate_button"
                 android:textAlignment="viewStart"
                 android:textColor="@color/bg_opp"
                 app:cornerRadius="0dp"

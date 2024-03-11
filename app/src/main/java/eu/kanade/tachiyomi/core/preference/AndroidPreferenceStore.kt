@@ -65,7 +65,6 @@ class AndroidPreferenceStore(
     }
 }
 
-@OptIn(ExperimentalCoroutinesApi::class)
 private val SharedPreferences.keyFlow
     get() = callbackFlow {
         val listener =

@@ -255,7 +255,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.playerResizeMode.setOnClickListener {
             val dialog = resizeDialog.setSingleChoiceItems(
                 resizeModes,
-                PrefManager.getVal<Int>(PrefName.Resize)
+                PrefManager.getVal(PrefName.Resize)
             ) { dialog, count ->
                 PrefManager.setVal(PrefName.Resize, count)
                 dialog.dismiss()

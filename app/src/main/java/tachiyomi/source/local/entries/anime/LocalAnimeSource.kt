@@ -21,8 +21,8 @@ class LocalAnimeSource(
     private val context: Context,
 ) : AnimeCatalogueSource, UnmeteredSource {
 
-    private val POPULAR_FILTERS = AnimeFilterList(AnimeOrderBy.Popular(context))
-    private val LATEST_FILTERS = AnimeFilterList(AnimeOrderBy.Latest(context))
+    private val POPULAR_FILTERS = AnimeFilterList(AnimeOrderBy.Popular())
+    private val LATEST_FILTERS = AnimeFilterList(AnimeOrderBy.Latest())
 
     override val name = "Local anime source"
 
@@ -61,7 +61,7 @@ class LocalAnimeSource(
     }
 
     // Filters
-    override fun getFilterList() = AnimeFilterList(AnimeOrderBy.Popular(context))
+    override fun getFilterList() = AnimeFilterList(AnimeOrderBy.Popular())
 
     // Unused stuff
     override suspend fun getVideoList(episode: SEpisode) =

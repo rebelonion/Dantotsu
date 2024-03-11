@@ -22,7 +22,6 @@ import kotlinx.coroutines.withTimeoutOrNull
 class SubscriptionHelper {
     companion object {
         private fun loadSelected(
-            context: Context,
             mediaId: Int,
             isAdult: Boolean,
             isAnime: Boolean
@@ -37,13 +36,13 @@ class SubscriptionHelper {
             return data
         }
 
-        private fun saveSelected(context: Context, mediaId: Int, data: Selected) {
+        private fun saveSelected(mediaId: Int, data: Selected) {
             PrefManager.setCustomVal("${mediaId}-select", data)
         }
 
-        fun getAnimeParser(context: Context, isAdult: Boolean, id: Int): AnimeParser {
+        fun getAnimeParser(isAdult: Boolean, id: Int): AnimeParser {
             val sources = if (isAdult) HAnimeSources else AnimeSources
-            val selected = loadSelected(context, id, isAdult, true)
+            val selected = loadSelected(id, isAdult, true)
             val parser = sources[selected.sourceIndex]
             parser.selectDub = selected.preferDub
             return parser
@@ -56,7 +55,7 @@ class SubscriptionHelper {
             isAdult: Boolean
         ): Episode? {
 
-            val selected = loadSelected(context, id, isAdult, true)
+            val selected = loadSelected(id, isAdult, true)
             val ep = withTimeoutOrNull(10 * 1000) {
                 tryWithSuspend {
                     val show = parser.loadSavedShowResponse(id) ?: throw Exception(
@@ -76,23 +75,22 @@ class SubscriptionHelper {
 
             return ep?.apply {
                 selected.latest = number.toFloat()
-                saveSelected(context, id, selected)
+                saveSelected(id, selected)
             }
         }
 
-        fun getMangaParser(context: Context, isAdult: Boolean, id: Int): MangaParser {
+        fun getMangaParser(isAdult: Boolean, id: Int): MangaParser {
             val sources = if (isAdult) HMangaSources else MangaSources
-            val selected = loadSelected(context, id, isAdult, false)
+            val selected = loadSelected(id, isAdult, false)
             return sources[selected.sourceIndex]
         }
 
         suspend fun getChapter(
-            context: Context,
             parser: MangaParser,
             id: Int,
             isAdult: Boolean
         ): MangaChapter? {
-            val selected = loadSelected(context, id, isAdult, true)
+            val selected = loadSelected(id, isAdult, true)
             val chp = withTimeoutOrNull(10 * 1000) {
                 tryWithSuspend {
                     val show = parser.loadSavedShowResponse(id) ?: throw Exception(
@@ -112,7 +110,7 @@ class SubscriptionHelper {
 
             return chp?.apply {
                 selected.latest = MangaNameAdapter.findChapterNumber(number) ?: 0f
-                saveSelected(context, id, selected)
+                saveSelected(id, selected)
             }
         }
 

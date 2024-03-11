@@ -17,7 +17,7 @@ import ani.dantotsu.settings.saving.PrefName
 
 
 class OfflineAnimeAdapter(
-    private val context: Context,
+    context: Context,
     private var items: List<OfflineAnimeModel>,
     private val searchListener: OfflineAnimeSearchListener
 ) : BaseAdapter() {

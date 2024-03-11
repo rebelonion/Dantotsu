@@ -11,7 +11,7 @@ class AndroidBug5497Workaround private constructor(activity: Activity, private v
     private val frameLayoutParams: FrameLayout.LayoutParams
 
     init {
-        val content = activity.findViewById(android.R.id.content) as FrameLayout
+        val content: FrameLayout = activity.findViewById(android.R.id.content)
         mChildOfContent = content.getChildAt(0)
         mChildOfContent.viewTreeObserver.addOnGlobalLayoutListener { possiblyResizeChildOfContent() }
         frameLayoutParams = mChildOfContent.layoutParams as FrameLayout.LayoutParams

@@ -17,13 +17,8 @@ import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.request.RequestOptions
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
-import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob

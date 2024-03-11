@@ -167,8 +167,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
-            binding.animeTrendingViewPager.currentItem =
-                binding.animeTrendingViewPager.currentItem + 1
+            binding.animeTrendingViewPager.currentItem += 1
         }
         binding.animeTrendingViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {

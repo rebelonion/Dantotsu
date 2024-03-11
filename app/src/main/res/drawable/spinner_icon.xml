@@ -20,5 +20,5 @@
         android:end="12dp"
         android:gravity="end|center_vertical"
         tools:ignore="UnusedAttribute"
-        tools:targetApi="m" />
+         />
 </layer-list>

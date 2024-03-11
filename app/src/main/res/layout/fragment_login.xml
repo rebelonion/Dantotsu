@@ -97,15 +97,16 @@
               	android:padding="8dp"
               	android:gravity="center">
 
-      	<TextView
-            		android:id="@+id/importSettingsButton"
-            		android:clickable="true"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:text="@string/import_settings_underline"
-            		android:textSize="11sp"
-            		android:textColor="?attr/colorOutline"
-            		android:fontFamily="@font/poppins_bold"/>
+			<TextView
+				android:id="@+id/importSettingsButton"
+				android:clickable="true"
+				android:focusable="true"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/import_settings_underline"
+				android:textSize="11sp"
+				android:textColor="?attr/colorOutline"
+				android:fontFamily="@font/poppins_bold" />
 
         </LinearLayout>
 

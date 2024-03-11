@@ -7,6 +7,7 @@ import kotlin.math.pow
 // https://github.com/cylonu87/JsUnpacker
 // https://github.com/recloudstream/cloudstream/blob/master/app/src/main/java/com/lagradost/cloudstream3/utils/JsUnpacker.kt
 
+@Suppress("unused")
 class JsUnpacker(packedJS: String?) {
     private var packedJS: String? = null
 

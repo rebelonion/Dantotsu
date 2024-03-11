@@ -7,7 +7,6 @@ import java.net.URLEncoder
 
 object AniSkip {
 
-    @Suppress("BlockingMethodInNonBlockingContext")
     suspend fun getResult(
         malId: Int,
         episodeNumber: Int,

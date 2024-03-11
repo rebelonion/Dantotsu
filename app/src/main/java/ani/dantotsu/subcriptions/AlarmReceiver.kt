@@ -7,13 +7,13 @@ import android.content.Context
 import android.content.Intent
 import ani.dantotsu.currContext
 import ani.dantotsu.isOnline
-import ani.dantotsu.util.Logger
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.tryWith
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

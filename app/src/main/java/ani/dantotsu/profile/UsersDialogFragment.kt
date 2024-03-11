@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.databinding.BottomSheetUsersBinding
 import ani.dantotsu.profile.activity.UsersAdapter
-import ani.dantotsu.settings.DevelopersAdapter
 
 
 class UsersDialogFragment : BottomSheetDialogFragment() {

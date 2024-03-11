@@ -27,14 +27,15 @@ import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.download.video.Helper
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.media.anime.AnimeWatchFragment
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -241,7 +242,7 @@ class AnimeDownloaderService : Service() {
                         DownloadedType(
                             task.title,
                             task.episode,
-                            DownloadedType.Type.ANIME,
+                            MediaType.ANIME,
                         )
                     )
                 }
@@ -272,7 +273,7 @@ class AnimeDownloaderService : Service() {
                                 DownloadedType(
                                     task.title,
                                     task.episode,
-                                    DownloadedType.Type.ANIME,
+                                    MediaType.ANIME,
                                 )
                             )
                             Injekt.get<CrashlyticsInterface>().logException(
@@ -301,7 +302,7 @@ class AnimeDownloaderService : Service() {
                                 DownloadedType(
                                     task.title,
                                     task.episode,
-                                    DownloadedType.Type.ANIME,
+                                    MediaType.ANIME,
                                 )
                             )
                             currentTasks.removeAll { it.getTaskName() == task.getTaskName() }

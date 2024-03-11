@@ -27,29 +27,34 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.*
+import ani.dantotsu.FileUrl
+import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.video.ExoplayerDownloadService
+import ani.dantotsu.dp
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaType
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
+import ani.dantotsu.setNavigationTheme
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.subcriptions.Notifications
 import ani.dantotsu.subcriptions.Notifications.Group.ANIME_GROUP
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import ani.dantotsu.subcriptions.SubscriptionHelper
 import ani.dantotsu.subcriptions.SubscriptionHelper.Companion.saveSubscription
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.navigationrail.NavigationRailView
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import kotlinx.coroutines.Dispatchers
@@ -448,7 +453,7 @@ class AnimeWatchFragment : Fragment() {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.ANIME
+                MediaType.ANIME
             )
         )
         episodeAdapter.purgeDownload(i)
@@ -460,7 +465,7 @@ class AnimeWatchFragment : Fragment() {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.ANIME
+                MediaType.ANIME
             )
         )
         val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)

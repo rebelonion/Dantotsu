@@ -42,6 +42,7 @@ import kotlinx.coroutines.withContext
 class AnimeExtensionsViewModelFactory(
     private val animeExtensionManager: AnimeExtensionManager
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return AnimeExtensionsViewModel(animeExtensionManager) as T
     }
@@ -49,7 +50,7 @@ class AnimeExtensionsViewModelFactory(
 
 
 class AnimeExtensionsViewModel(
-    private val animeExtensionManager: AnimeExtensionManager
+    animeExtensionManager: AnimeExtensionManager
 ) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
     private var currentPagingSource: AnimeExtensionPagingSource? = null

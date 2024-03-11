@@ -101,7 +101,6 @@ import java.lang.reflect.Field
 import java.util.*
 import kotlin.math.*
 
-
 var statusBarHeight = 0
 var navBarHeight = 0
 val Int.dp: Float get() = (this / getSystem().displayMetrics.density)
@@ -289,7 +288,7 @@ class DatePickerFragment(activity: Activity, var date: FuzzyDate = FuzzyDate().g
         dialog.setButton(
             DialogInterface.BUTTON_NEUTRAL,
             activity.getString(R.string.remove)
-        ) { dialog, which ->
+        ) { _, which ->
             if (which == DialogInterface.BUTTON_NEUTRAL) {
                 date = FuzzyDate()
             }
@@ -337,7 +336,7 @@ class InputFilterMinMax(
 }
 
 
-class ZoomOutPageTransformer() :
+class ZoomOutPageTransformer :
     ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
         if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {

@@ -10,7 +10,7 @@ abstract class SharedPreferenceLiveData<T>(
 ) : LiveData<T>() {
 
     private val preferenceChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+        SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
             if (key == this.key) {
                 value = getValueFromPreferences(key, defValue)
             }

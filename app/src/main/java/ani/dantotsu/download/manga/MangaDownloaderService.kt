@@ -21,8 +21,8 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FAILED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FINISHED
@@ -30,6 +30,7 @@ import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_PROG
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_STARTED
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.EXTRA_CHAPTER_NUMBER
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_DOWNLOADER_PROGRESS
@@ -209,8 +210,7 @@ class MangaDownloaderService : Service() {
                         while (bitmap == null && retryCount < task.retries) {
                             bitmap = image.fetchAndProcessImage(
                                 image.page,
-                                image.source,
-                                this@MangaDownloaderService
+                                image.source
                             )
                             retryCount++
                         }
@@ -244,7 +244,7 @@ class MangaDownloaderService : Service() {
                     DownloadedType(
                         task.title,
                         task.chapter,
-                        DownloadedType.Type.MANGA
+                        MediaType.MANGA
                     )
                 )
                 broadcastDownloadFinished(task.chapter)

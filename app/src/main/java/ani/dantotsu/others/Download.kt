@@ -25,7 +25,6 @@ import kotlinx.coroutines.launch
 import java.io.File
 
 object Download {
-    @Suppress("DEPRECATION")
     private fun isPackageInstalled(packageName: String, packageManager: PackageManager): Boolean {
         return try {
             packageManager.getPackageInfo(packageName, 0)

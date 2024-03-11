@@ -10,7 +10,6 @@ import kotlinx.serialization.json.Json
 import kotlin.coroutines.CoroutineContext
 import ani.dantotsu.client as app
 
-@Suppress("MemberVisibilityCanBePrivate")
 open class RPC(val token: String, val coroutineContext: CoroutineContext) {
 
     private val json = Json {

@@ -5,11 +5,16 @@ import android.app.Notification
 import android.content.Context
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import ani.dantotsu.*
+import ani.dantotsu.App
+import ani.dantotsu.FileUrl
+import ani.dantotsu.R
+import ani.dantotsu.currActivity
+import ani.dantotsu.currContext
 import ani.dantotsu.parsers.Episode
 import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.tryWithSuspend
 import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -74,7 +79,7 @@ class Subscription {
                     val media = it.second
                     val text = if (media.isAnime) {
                         val parser =
-                            SubscriptionHelper.getAnimeParser(context, media.isAdult, media.id)
+                            SubscriptionHelper.getAnimeParser(media.isAdult, media.id)
                         progress(index[it.first]!!, parser.name, media.name)
                         val ep: Episode? =
                             SubscriptionHelper.getEpisode(context, parser, media.id, media.isAdult)
@@ -86,10 +91,10 @@ class Subscription {
                         else null
                     } else {
                         val parser =
-                            SubscriptionHelper.getMangaParser(context, media.isAdult, media.id)
+                            SubscriptionHelper.getMangaParser(media.isAdult, media.id)
                         progress(index[it.first]!!, parser.name, media.name)
                         val ep: MangaChapter? =
-                            SubscriptionHelper.getChapter(context, parser, media.id, media.isAdult)
+                            SubscriptionHelper.getChapter(parser, media.id, media.isAdult)
                         if (ep != null) ep.number + " " + currActivity()!!.getString(R.string.just_released) to null
                         else null
                     } ?: return@map

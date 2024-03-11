@@ -3,7 +3,6 @@ package ani.dantotsu.connections.anilist
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.browser.customtabs.CustomTabsIntent
 import ani.dantotsu.R
 import ani.dantotsu.client
@@ -13,7 +12,6 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
-import ani.dantotsu.tryWithSuspend
 import ani.dantotsu.util.Logger
 import java.util.Calendar
 

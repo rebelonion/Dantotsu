@@ -18,6 +18,7 @@ import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.anime.AndroidAnimeSourceManager
 import eu.kanade.tachiyomi.source.manga.AndroidMangaSourceManager
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.domain.source.anime.service.AnimeSourceManager
@@ -29,7 +30,7 @@ import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
 
 class AppModule(val app: Application) : InjektModule {
-    @OptIn(UnstableApi::class)
+    @OptIn(UnstableApi::class) @kotlin.OptIn(ExperimentalSerializationApi::class)
     override fun InjektRegistrar.registerInjectables() {
         addSingleton(app)
 

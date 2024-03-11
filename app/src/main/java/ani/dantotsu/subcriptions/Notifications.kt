@@ -18,7 +18,7 @@ import com.bumptech.glide.load.model.GlideUrl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-@Suppress("MemberVisibilityCanBePrivate", "unused")
+@Suppress("MemberVisibilityCanBePrivate")
 class Notifications {
     enum class Group(val title: String, val icon: Int) {
         ANIME_GROUP("New Episodes", R.drawable.ic_round_movie_filter_24),
@@ -50,11 +50,7 @@ class Notifications {
                 }
             return PendingIntent.getActivity(
                 context, 0, notifyIntent,
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
-                } else {
-                    PendingIntent.FLAG_ONE_SHOT
-                }
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT
             )
         }
 

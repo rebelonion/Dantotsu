@@ -185,6 +185,7 @@ abstract class HttpSource : CatalogueSource {
      *
      * @param manga the manga to be updated.
      */
+    @Deprecated("Use the 1.x API instead", replaceWith = ReplaceWith("getMangaDetails"))
     override fun fetchMangaDetails(manga: SManga): Observable<SManga> {
         return client.newCall(mangaDetailsRequest(manga))
             .asObservableSuccess()
@@ -216,6 +217,7 @@ abstract class HttpSource : CatalogueSource {
      *
      * @param manga the manga to look for chapters.
      */
+    @Deprecated("Use the 1.x API instead", replaceWith = ReplaceWith("getChapterList"))
     override fun fetchChapterList(manga: SManga): Observable<List<SChapter>> {
         return if (manga.status != SManga.LICENSED) {
             client.newCall(chapterListRequest(manga))
@@ -250,6 +252,7 @@ abstract class HttpSource : CatalogueSource {
      *
      * @param chapter the chapter whose page list has to be fetched.
      */
+    @Deprecated("Use the 1.x API instead", replaceWith = ReplaceWith("getPageList"))
     override fun fetchPageList(chapter: SChapter): Observable<List<Page>> {
         return client.newCall(pageListRequest(chapter))
             .asObservableSuccess()

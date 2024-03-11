@@ -56,7 +56,7 @@ class NotificationActivity : AppCompatActivity() {
         binding.followerGrid.visibility = ViewGroup.GONE
         binding.followerList.visibility = ViewGroup.GONE
         binding.listBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
         val activityId = intent.getIntExtra("activityId", -1)

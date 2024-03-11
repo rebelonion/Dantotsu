@@ -1,6 +1,5 @@
 package ani.dantotsu.profile
 
-
 import android.view.View
 import ani.dantotsu.R
 import ani.dantotsu.blurImage

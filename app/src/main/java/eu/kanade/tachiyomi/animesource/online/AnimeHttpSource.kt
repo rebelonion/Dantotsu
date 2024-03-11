@@ -185,6 +185,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param anime the anime to be updated.
      */
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getAnimeDetails"))
     override fun fetchAnimeDetails(anime: SAnime): Observable<SAnime> {
         return client.newCall(animeDetailsRequest(anime))
             .asObservableSuccess()
@@ -216,6 +217,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param anime the anime to look for episodes.
      */
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getEpisodeList"))
     override fun fetchEpisodeList(anime: SAnime): Observable<List<SEpisode>> {
         return if (anime.status != SAnime.LICENSED) {
             client.newCall(episodeListRequest(anime))
@@ -250,6 +252,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      *
      * @param episode the episode whose video list has to be fetched.
      */
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getVideoList"))
     override fun fetchVideoList(episode: SEpisode): Observable<List<Video>> {
         return client.newCall(videoListRequest(episode))
             .asObservableSuccess()
@@ -405,7 +408,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * @return url of the episode
      */
     open fun getChapterUrl(episode: SEpisode): String {
-        return episode.url.toString()
+        return episode.url
     }
 
     /**

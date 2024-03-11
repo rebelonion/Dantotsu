@@ -2,8 +2,8 @@ package ani.dantotsu.parsers.novel
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import ani.dantotsu.util.Logger
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.InstallStep
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

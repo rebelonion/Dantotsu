@@ -1,4 +1,4 @@
-@file:Suppress("UNCHECKED_CAST", "DEPRECATION")
+@file:Suppress("DEPRECATION")
 
 package ani.dantotsu.others
 

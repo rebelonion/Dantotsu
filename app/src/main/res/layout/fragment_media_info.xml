@@ -328,7 +328,7 @@
                             android:layout_height="wrap_content"
                             android:breakStrategy="balanced"
                             android:fontFamily="@font/poppins_bold"
-                            tools:targetApi="m" />
+                             />
                     </LinearLayout>
 
                     <LinearLayout
@@ -350,7 +350,7 @@
                             android:layout_height="wrap_content"
                             android:breakStrategy="balanced"
                             android:fontFamily="@font/poppins_bold"
-                            tools:targetApi="m" />
+                             />
                     </LinearLayout>
                 </TableLayout>
 

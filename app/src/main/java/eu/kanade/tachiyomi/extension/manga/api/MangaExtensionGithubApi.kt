@@ -7,7 +7,7 @@ import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.AvailableMangaSources
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
-import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionLoader
+import eu.kanade.tachiyomi.extension.util.ExtensionLoader
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -87,7 +87,7 @@ internal class MangaExtensionGithubApi {
             findExtensions().also { lastExtCheck.set(Date().time) }
         }
 
-        val installedExtensions = MangaExtensionLoader.loadMangaExtensions(context)
+        val installedExtensions = ExtensionLoader.loadMangaExtensions(context)
             .filterIsInstance<MangaLoadResult.Success>()
             .map { it.extension }
 
@@ -114,7 +114,7 @@ internal class MangaExtensionGithubApi {
         return this
             .filter {
                 val libVersion = it.extractLibVersion()
-                libVersion >= MangaExtensionLoader.LIB_VERSION_MIN && libVersion <= MangaExtensionLoader.LIB_VERSION_MAX
+                libVersion >= ExtensionLoader.MANGA_LIB_VERSION_MIN && libVersion <= ExtensionLoader.MANGA_LIB_VERSION_MAX
             }
             .map {
                 MangaExtension.Available(

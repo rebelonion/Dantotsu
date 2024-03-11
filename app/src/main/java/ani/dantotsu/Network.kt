@@ -1,6 +1,5 @@
 package ani.dantotsu
 
-import android.content.Context
 import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.others.webview.CloudFlare
@@ -35,7 +34,7 @@ lateinit var defaultHeaders: Map<String, String>
 lateinit var okHttpClient: OkHttpClient
 lateinit var client: Requests
 
-fun initializeNetwork(context: Context) {
+fun initializeNetwork() {
 
     val networkHelper = Injekt.get<NetworkHelper>()
 

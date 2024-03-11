@@ -120,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="Sort" />
+                    android:text="@string/sort" />
 
                 <TextView
                     android:id="@+id/sortText"
@@ -169,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="Download" />
+                    android:text="@string/download" />
 
                 <TextView
                     android:id="@+id/downloadNo"
@@ -215,7 +215,7 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="Scanlator" />
+                    android:text="@string/scanlator" />
 
                 <TextView
                     android:id="@+id/scanlatorNo"
@@ -263,13 +263,13 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.58"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="Set Cookies" />
+                    android:text="@string/set_cookies" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_bold"
-                    android:text="Open Website"
+                    android:text="@string/open_website"
                     android:textColor="?attr/colorSecondary"
                     tools:ignore="TextContrastCheck" />
 

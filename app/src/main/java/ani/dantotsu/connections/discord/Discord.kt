@@ -20,14 +20,14 @@ object Discord {
     var avatar: String? = null
 
 
-    fun getSavedToken(context: Context): Boolean {
+    fun getSavedToken(): Boolean {
         token = PrefManager.getVal(
             PrefName.DiscordToken, null as String?
         )
         return token != null
     }
 
-    fun saveToken(context: Context, token: String) {
+    fun saveToken(token: String) {
         PrefManager.setVal(PrefName.DiscordToken, token)
     }
 
@@ -79,7 +79,7 @@ object Discord {
                     "Dantotsu",
                     small_Image
                 )
-                buttons.add(RPC.Link("Stream on Dantotsu", "https://github.com/rebelonion/Dantotsu/"))
+                buttons.add(RPC.Link("Stream on Dantotsu", getString(R.string.github)))
             }
         }
     }*/

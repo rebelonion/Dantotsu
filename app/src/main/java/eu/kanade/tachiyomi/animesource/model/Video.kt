@@ -104,6 +104,7 @@ open class Video(
     @Throws(IOException::class, ClassNotFoundException::class)
     private fun readObject(input: ObjectInputStream) {
         input.defaultReadObject()
+        @Suppress("UNCHECKED_CAST")
         val headersMap = input.readObject() as? Map<String, List<String>>
         headers = headersMap?.let { map ->
             val builder = Headers.Builder()

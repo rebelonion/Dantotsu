@@ -143,7 +143,6 @@ private fun Context.defaultBrowserPackageName(): String? {
             PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
         )
     } else {
-        @Suppress("DEPRECATION")
         packageManager.resolveActivity(browserIntent, PackageManager.MATCH_DEFAULT_ONLY)
     }
     return resolveInfo
@@ -185,7 +184,7 @@ fun Context.getUriSize(uri: Uri): Long? {
 
 val Context.hasMiuiPackageInstaller get() = isPackageInstalled("com.miui.packageinstaller")
 
-val Context.isShizukuInstalled get() = false
+val isShizukuInstalled get() = false
 
 
 fun Context.getApplicationIcon(pkgName: String): Drawable? {

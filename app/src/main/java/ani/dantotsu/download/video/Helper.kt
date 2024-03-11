@@ -9,7 +9,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import androidx.annotation.OptIn
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -37,6 +36,7 @@ import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.anime.AnimeServiceDataSingleton
 import ani.dantotsu.logError
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.okHttpClient
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.SubtitleType
@@ -49,13 +49,14 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.*
+import java.util.concurrent.Executors
 
+@SuppressLint("UnsafeOptInUsageError")
 object Helper {
+
 
     private var simpleCache: SimpleCache? = null
 
-    @SuppressLint("UnsafeOptInUsageError")
     fun downloadVideo(context: Context, video: Video, subtitle: Subtitle?) {
         val dataSourceFactory = DataSource.Factory {
             val dataSource: HttpDataSource =
@@ -157,16 +158,14 @@ object Helper {
                         download: Download,
                         finalException: Exception?
                     ) {
-                        if (download.state == Download.STATE_COMPLETED) {
-                            Logger.log("Download Completed")
-                        } else if (download.state == Download.STATE_FAILED) {
-                            Logger.log("Download Failed")
-                        } else if (download.state == Download.STATE_STOPPED) {
-                            Logger.log("Download Stopped")
-                        } else if (download.state == Download.STATE_QUEUED) {
-                            Logger.log("Download Queued")
-                        } else if (download.state == Download.STATE_DOWNLOADING) {
-                            Logger.log("Download Downloading")
+                        when (download.state) {
+                            Download.STATE_COMPLETED -> Logger.log("Download Completed")
+                            Download.STATE_FAILED -> Logger.log("Download Failed")
+                            Download.STATE_STOPPED -> Logger.log("Download Stopped")
+                            Download.STATE_QUEUED -> Logger.log("Download Queued")
+                            Download.STATE_DOWNLOADING -> Logger.log("Download Downloading")
+                            Download.STATE_REMOVING -> Logger.log("Download Removing")
+                            Download.STATE_RESTARTING -> Logger.log("Download Restarting")
                         }
                     }
                 }
@@ -220,7 +219,7 @@ object Helper {
 
         val downloadsManger = Injekt.get<DownloadsManager>()
         val downloadCheck = downloadsManger
-            .queryDownload(title, episode, DownloadedType.Type.ANIME)
+            .queryDownload(title, episode, MediaType.ANIME)
 
         if (downloadCheck) {
             AlertDialog.Builder(context, R.style.MyPopup)
@@ -243,7 +242,7 @@ object Helper {
                         DownloadedType(
                             title,
                             episode,
-                            DownloadedType.Type.ANIME
+                            MediaType.ANIME
                         )
                     )
                     AnimeServiceDataSingleton.downloadQueue.offer(animeDownloadTask)

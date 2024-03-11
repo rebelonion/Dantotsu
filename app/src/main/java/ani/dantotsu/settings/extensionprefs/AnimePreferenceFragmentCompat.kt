@@ -92,7 +92,7 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
 }
 
 class InitialAnimeSourcePreferencesFragment(
-    val sharedPreferences: SharedPreferences,
+    private val sharedPreferences: SharedPreferences,
     val source: ConfigurableAnimeSource,
     val currContext: Context
 ) : PreferenceFragmentCompat() {

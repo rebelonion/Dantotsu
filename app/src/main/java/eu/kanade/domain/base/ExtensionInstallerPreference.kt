@@ -20,7 +20,7 @@ class ExtensionInstallerPreference(
 
 
     val entries
-        get() = ExtensionInstaller.values().run {
+        get() = ExtensionInstaller.entries.toTypedArray().run {
             if (context.hasMiuiPackageInstaller) {
                 filter { it != ExtensionInstaller.PACKAGEINSTALLER }
             } else {
@@ -41,7 +41,7 @@ class ExtensionInstallerPreference(
             }
 
             ExtensionInstaller.SHIZUKU -> {
-                if (!context.isShizukuInstalled) return defaultValue()
+                if (!isShizukuInstalled) return defaultValue()
             }
 
             else -> {}

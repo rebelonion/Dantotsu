@@ -13,14 +13,16 @@ import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
-import androidx.core.view.children
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
-import ani.dantotsu.connections.comments.CommentsAPI
+import ani.dantotsu.R
+import ani.dantotsu.currActivity
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
+import ani.dantotsu.isOnline
+import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.SourceSearchDialogFragment
@@ -30,11 +32,13 @@ import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.px
 import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
 import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
+import ani.dantotsu.toast
 import com.google.android.material.chip.Chip
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.WebViewUtil
@@ -226,7 +230,7 @@ class MangaReadAdapter(
                         refresh = true
                         val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
                             .putExtra("url", url)
-                        ContextCompat.startActivity(fragment.requireContext(), intent, null)
+                        startActivity(fragment.requireContext(), intent, null)
                     }
                 }
             }

@@ -14,7 +14,7 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.SharedPreferenceStringSetLiveData
 import java.util.Locale
 
-class SearchHistoryAdapter(private val type: String, private val searchClicked: (String) -> Unit) :
+class SearchHistoryAdapter(type: String, private val searchClicked: (String) -> Unit) :
     ListAdapter<String, SearchHistoryAdapter.SearchHistoryViewHolder>(
         DIFF_CALLBACK_INSTALLED
     ) {

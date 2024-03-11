@@ -17,20 +17,28 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
+import ani.dantotsu.BottomSheetDialogFragment
+import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
+import ani.dantotsu.copyToClipboard
+import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
 import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
 import ani.dantotsu.download.video.Helper
+import ani.dantotsu.hideSystemBars
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
+import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
+import ani.dantotsu.tryWith
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -336,7 +344,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             .setSingleChoiceItems(
                                 subtitleNames.toTypedArray(),
                                 -1
-                            ) { dialog, which ->
+                            ) { _, which ->
                                 subtitleToDownload = subtitles[which]
                             }
                             .setPositiveButton("Download") { _, _ ->

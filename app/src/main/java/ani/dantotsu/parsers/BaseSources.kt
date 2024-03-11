@@ -1,11 +1,11 @@
 package ani.dantotsu.parsers
 
 import ani.dantotsu.Lazier
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.manga.MangaChapter
 import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.source.model.SManga
 
