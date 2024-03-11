@@ -750,7 +750,7 @@ class AnilistQueries {
             }
         }
         return if (!genres.isNullOrEmpty() && tags != null) {
-            Anilist.genres = genres
+            Anilist.genres = genres?.sortedBy { it }?.toMutableList() as ArrayList<String>
             Anilist.tags = tags
             true
         } else false

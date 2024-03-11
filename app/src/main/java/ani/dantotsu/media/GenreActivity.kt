@@ -67,11 +67,12 @@ class GenreActivity : AppCompatActivity() {
 
     private fun loadLocalGenres(): ArrayList<String>? {
         val genres = PrefManager.getVal<Set<String>>(PrefName.GenresList)
-            .toMutableList() as ArrayList<String>?
-        return if (genres.isNullOrEmpty()) {
+            .toMutableList()
+        return if (genres.isEmpty()) {
             null
         } else {
-            genres
+            //sort alphabetically
+            genres.sort().let { genres as ArrayList<String> }
         }
     }
 }
