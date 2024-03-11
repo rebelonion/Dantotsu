@@ -149,7 +149,7 @@ fun initActivity(a: Activity) {
         if (navBarHeight == 0) {
             ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
                 ?.apply {
-                    navBarHeight = this.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+                    navBarHeight = this.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
                 }
         }
         WindowInsetsControllerCompat(window, window.decorView).hide(WindowInsetsCompat.Type.statusBars())
@@ -165,9 +165,8 @@ fun initActivity(a: Activity) {
             val windowInsets =
                 ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
             if (windowInsets != null) {
-                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-                statusBarHeight = insets.top
-                navBarHeight = insets.bottom
+                statusBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                navBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
             }
         }
     if (a !is MainActivity) a.setNavigationTheme()
@@ -179,6 +178,23 @@ fun Activity.hideSystemBars() {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         controller.hide(WindowInsetsCompat.Type.systemBars())
     }
+}
+
+fun Activity.hideSystemBarsExtendView() {
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    hideSystemBars()
+}
+
+fun Activity.showSystemBars() {
+    WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+        controller.show(WindowInsetsCompat.Type.systemBars())
+    }
+}
+
+fun Activity.showSystemBarsRetractView() {
+    WindowCompat.setDecorFitsSystemWindows(window, true)
+    showSystemBars()
 }
 
 fun Activity.setNavigationTheme() {

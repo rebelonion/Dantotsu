@@ -358,9 +358,6 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         initActivity(this)
-        binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin = navBarHeight
-        }
         window.navigationBarColor = getColor(android.R.color.transparent)
     }
 
