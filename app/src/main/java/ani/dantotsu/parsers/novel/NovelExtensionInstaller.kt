@@ -15,13 +15,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.util.storage.getUriCompat
-import logcat.LogPriority
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
-import tachiyomi.core.util.system.logcat
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -77,12 +76,12 @@ internal class NovelExtensionInstaller(private val context: Context) {
         val fileToDelete = File("$sourcePath/${url.toUri().lastPathSegment}")
         if (fileToDelete.exists()) {
             if (fileToDelete.delete()) {
-                Log.i("Install APK", "APK file deleted successfully.")
+                Logger.log("APK file deleted successfully.")
             } else {
-                Log.e("Install APK", "Failed to delete APK file.")
+                Logger.log("Failed to delete APK file.")
             }
         } else {
-            Log.e("Install APK", "APK file not found.")
+            Logger.log("APK file not found.")
         }
 
         // Register the receiver after removing (and unregistering) the previous download
@@ -161,7 +160,7 @@ internal class NovelExtensionInstaller(private val context: Context) {
 
         // Check if source path is obtained correctly
         if (sourcePath == null) {
-            Log.e("Install APK", "Source APK path not found.")
+            Logger.log("Source APK path not found.")
             downloadsRelay.call(downloadId to InstallStep.Error)
             return InstallStep.Error
         }
@@ -172,14 +171,14 @@ internal class NovelExtensionInstaller(private val context: Context) {
             destinationDir.mkdirs()
         }
         if (destinationDir?.setWritable(true) == false) {
-            Log.e("Install APK", "Failed to set destinationDir to writable.")
+            Logger.log("Failed to set destinationDir to writable.")
             downloadsRelay.call(downloadId to InstallStep.Error)
             return InstallStep.Error
         }
 
         // Copy the file to the new location
         copyFileToInternalStorage(sourcePath, destinationPath)
-        Log.i("Install APK", "APK moved to $destinationPath")
+        Logger.log("APK moved to $destinationPath")
         downloadsRelay.call(downloadId to InstallStep.Installed)
         return InstallStep.Installed
     }
@@ -198,9 +197,9 @@ internal class NovelExtensionInstaller(private val context: Context) {
         val fileToDelete = File(apkPath)
         //give write permission to the file
         if (fileToDelete.exists() && !fileToDelete.canWrite()) {
-            Log.i("Uninstall APK", "File is not writable. Giving write permission.")
+            Logger.log("File is not writable. Giving write permission.")
             val a = fileToDelete.setWritable(true)
-            Log.i("Uninstall APK", "Success: $a")
+            Logger.log("Success: $a")
         }
         //set the directory to writable
         val destinationDir = File(apkPath).parentFile
@@ -208,27 +207,27 @@ internal class NovelExtensionInstaller(private val context: Context) {
             destinationDir.mkdirs()
         }
         val s = destinationDir?.setWritable(true)
-        Log.i("Uninstall APK", "Success destinationDir: $s")
+        Logger.log("Success destinationDir: $s")
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             try {
                 Files.delete(fileToDelete.toPath())
             } catch (e: Exception) {
-                Log.e("Uninstall APK", "Failed to delete APK file.")
-                Log.e("Uninstall APK", e.toString())
+                Logger.log("Failed to delete APK file.")
+                Logger.log(e)
                 snackString("Failed to delete APK file.")
             }
         } else {
             if (fileToDelete.exists()) {
                 if (fileToDelete.delete()) {
-                    Log.i("Uninstall APK", "APK file deleted successfully.")
+                    Logger.log("APK file deleted successfully.")
                     snackString("APK file deleted successfully.")
                 } else {
-                    Log.e("Uninstall APK", "Failed to delete APK file.")
+                    Logger.log("Failed to delete APK file.")
                     snackString("Failed to delete APK file.")
                 }
             } else {
-                Log.e("Uninstall APK", "APK file not found.")
+                Logger.log("APK file not found.")
                 snackString("APK file not found.")
             }
         }
@@ -242,9 +241,9 @@ internal class NovelExtensionInstaller(private val context: Context) {
         //delete the file if it already exists
         if (destination.exists()) {
             if (destination.delete()) {
-                Log.i("File Copy", "File deleted successfully.")
+                Logger.log("File deleted successfully.")
             } else {
-                Log.e("File Copy", "Failed to delete file.")
+                Logger.log("Failed to delete file.")
             }
         }
 
@@ -262,7 +261,7 @@ internal class NovelExtensionInstaller(private val context: Context) {
             outputChannel?.close()
         }
 
-        Log.i("File Copy", "File copied to internal storage.")
+        Logger.log("File copied to internal storage.")
     }
 
     private fun getRealPathFromURI(context: Context, contentUri: Uri): String? {
@@ -350,7 +349,7 @@ internal class NovelExtensionInstaller(private val context: Context) {
 
             // Set next installation step
             if (uri == null) {
-                logcat(LogPriority.ERROR) { "Couldn't locate downloaded APK" }
+                Logger.log("Couldn't locate downloaded APK")
                 downloadsRelay.call(id to InstallStep.Error)
                 return
             }
@@ -371,7 +370,7 @@ internal class NovelExtensionInstaller(private val context: Context) {
             val uri = Uri.parse(localUri)
             val path = uri.path
             val pkgName = path?.substring(path.lastIndexOf('/') + 1)?.removeSuffix(".apk")
-            Log.i("Install APK", "Package name: $pkgName")
+            Logger.log("Package name: $pkgName")
             return pkgName ?: ""
         }
     }

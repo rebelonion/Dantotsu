@@ -87,6 +87,7 @@ import ani.dantotsu.settings.PlayerSettingsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.google.android.gms.cast.framework.CastButtonFactory
 import com.google.android.gms.cast.framework.CastContext
@@ -1382,8 +1383,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         mediaItem = if (downloadedMediaItem == null) {
             val builder = MediaItem.Builder().setUri(video!!.file.url).setMimeType(mimeType)
-            logger("url: ${video!!.file.url}")
-            logger("mimeType: $mimeType")
+            Logger.log("url: ${video!!.file.url}")
+            Logger.log("mimeType: $mimeType")
 
             if (sub != null) {
                 val listofnotnullsubs = listOfNotNull(sub)

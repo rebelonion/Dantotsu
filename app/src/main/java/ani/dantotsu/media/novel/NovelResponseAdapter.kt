@@ -11,6 +11,7 @@ import ani.dantotsu.databinding.ItemNovelResponseBinding
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 
@@ -181,7 +182,7 @@ class NovelResponseAdapter(
         if (position != -1) {
             list[position].extra?.remove("0")
             list[position].extra?.set("0", "Downloading: $progress%")
-            Log.d("NovelResponseAdapter", "updateDownloadProgress: $progress, position: $position")
+            Logger.log( "updateDownloadProgress: $progress, position: $position")
             notifyItemChanged(position)
         }
     }

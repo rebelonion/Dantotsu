@@ -21,6 +21,8 @@ import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.FinalExceptionHandler
+import ani.dantotsu.util.Logger
 import com.google.android.material.color.DynamicColors
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -83,7 +85,8 @@ class App : MultiDexApplication() {
         }
         crashlytics.setCustomKey("device Info", SettingsActivity.getDeviceInfo())
 
-
+        Logger.init(this)
+        Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
 
         initializeNetwork(baseContext)
 
@@ -99,19 +102,19 @@ class App : MultiDexApplication() {
         val animeScope = CoroutineScope(Dispatchers.Default)
         animeScope.launch {
             animeExtensionManager.findAvailableExtensions()
-            logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
+            Logger.log("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
             AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
         }
         val mangaScope = CoroutineScope(Dispatchers.Default)
         mangaScope.launch {
             mangaExtensionManager.findAvailableExtensions()
-            logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
+            Logger.log("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
             MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
         val novelScope = CoroutineScope(Dispatchers.Default)
         novelScope.launch {
             novelExtensionManager.findAvailableExtensions()
-            logger("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
+            Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }
         val commentsScope = CoroutineScope(Dispatchers.Default)
@@ -138,7 +141,8 @@ class App : MultiDexApplication() {
         try {
             Notifications.createChannels(this)
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e) { "Failed to modify notification channels" }
+            Logger.log("Failed to modify notification channels")
+            Logger.log(e)
         }
     }
 

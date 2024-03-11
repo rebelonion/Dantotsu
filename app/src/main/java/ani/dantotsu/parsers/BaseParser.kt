@@ -3,7 +3,7 @@ package ani.dantotsu.parsers
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.currContext
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.settings.saving.PrefManager
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -59,11 +59,11 @@ abstract class BaseParser {
             saveShowResponse(mediaObj.id, response, true)
         } else {
             setUserText("Searching : ${mediaObj.mainName()}")
-            logger("Searching : ${mediaObj.mainName()}")
+            Logger.log("Searching : ${mediaObj.mainName()}")
             val results = search(mediaObj.mainName())
             //log all results
             results.forEach {
-                logger("Result: ${it.name}")
+                Logger.log("Result: ${it.name}")
             }
             val sortedResults = if (results.isNotEmpty()) {
                 results.sortedByDescending {
@@ -83,7 +83,7 @@ abstract class BaseParser {
                 ) < 100
             ) {
                 setUserText("Searching : ${mediaObj.nameRomaji}")
-                logger("Searching : ${mediaObj.nameRomaji}")
+                Logger.log("Searching : ${mediaObj.nameRomaji}")
                 val romajiResults = search(mediaObj.nameRomaji)
                 val sortedRomajiResults = if (romajiResults.isNotEmpty()) {
                     romajiResults.sortedByDescending {
@@ -96,10 +96,10 @@ abstract class BaseParser {
                     emptyList()
                 }
                 val closestRomaji = sortedRomajiResults.firstOrNull()
-                logger("Closest match from RomajiResults: ${closestRomaji?.name ?: "None"}")
+                Logger.log("Closest match from RomajiResults: ${closestRomaji?.name ?: "None"}")
 
                 response = if (response == null) {
-                    logger("No exact match found in results. Using closest match from RomajiResults.")
+                    Logger.log("No exact match found in results. Using closest match from RomajiResults.")
                     closestRomaji
                 } else {
                     val romajiRatio = FuzzySearch.ratio(
@@ -110,14 +110,14 @@ abstract class BaseParser {
                         response.name.lowercase(),
                         mediaObj.mainName().lowercase()
                     )
-                    logger("Fuzzy ratio for closest match in results: $mainNameRatio for ${response.name.lowercase()}")
-                    logger("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name?.lowercase() ?: "None"}")
+                    Logger.log("Fuzzy ratio for closest match in results: $mainNameRatio for ${response.name.lowercase()}")
+                    Logger.log("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name?.lowercase() ?: "None"}")
 
                     if (romajiRatio > mainNameRatio) {
-                        logger("RomajiResults has a closer match. Replacing response.")
+                        Logger.log("RomajiResults has a closer match. Replacing response.")
                         closestRomaji
                     } else {
-                        logger("Results has a closer or equal match. Keeping existing response.")
+                        Logger.log("Results has a closer or equal match. Keeping existing response.")
                         response
                     }
                 }

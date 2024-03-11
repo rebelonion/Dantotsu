@@ -7,7 +7,7 @@ import android.content.Context
 import android.content.Intent
 import ani.dantotsu.currContext
 import ani.dantotsu.isOnline
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
@@ -22,7 +22,7 @@ class AlarmReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         when (intent?.action) {
             Intent.ACTION_BOOT_COMPLETED -> tryWith(true) {
-                logger("Starting Dantotsu Subscription Service on Boot")
+                Logger.log("Starting Dantotsu Subscription Service on Boot")
                 context?.startSubscription()
             }
         }

@@ -15,6 +15,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -99,6 +100,7 @@ class AnilistHomeViewModel : ViewModel() {
 
     suspend fun initHomePage() {
         val res = Anilist.query.initHomePage()
+        Logger.log("AnilistHomeViewModel : res=$res")
         res["currentAnime"]?.let { animeContinue.postValue(it) }
         res["favoriteAnime"]?.let { animeFav.postValue(it) }
         res["plannedAnime"]?.let { animePlanned.postValue(it) }

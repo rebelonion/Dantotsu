@@ -1,7 +1,7 @@
 package ani.dantotsu.parsers
 
 import ani.dantotsu.Lazier
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.manga.MangaChapter
@@ -96,7 +96,7 @@ abstract class MangaReadSources : BaseSources() {
         }
         //must be downloaded
         if (show.sManga == null) {
-            logger("sManga is null")
+            Logger.log("sManga is null")
         }
         if (parser is OfflineMangaParser && show.sManga == null) {
             tryWithSuspend(true) {
@@ -106,11 +106,11 @@ abstract class MangaReadSources : BaseSources() {
                 }
             }
         } else {
-            logger("Parser is not an instance of OfflineMangaParser")
+            Logger.log("Parser is not an instance of OfflineMangaParser")
         }
 
 
-        logger("map size ${map.size}")
+        Logger.log("map size ${map.size}")
         return map
     }
 }

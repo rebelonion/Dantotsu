@@ -110,7 +110,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:backgroundTint="@color/bg_white"
+            android:backgroundTint="?attr/colorSurface"
             app:cardCornerRadius="24dp">
 
             <ImageView
@@ -153,9 +153,10 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start|center_vertical"
+                android:layout_gravity="start|bottom"
                 android:layout_marginStart="128dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -166,8 +167,7 @@
                     android:fontFamily="@font/poppins_semi_bold"
                     android:maxLines="2"
                     android:text="@string/anime"
-                    android:textColor="@color/bg_white"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
 
@@ -175,10 +175,9 @@
                     android:id="@+id/activityText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/slogan"
-                    android:textColor="@color/bg_white"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -214,5 +213,12 @@
             android:textSize="12sp"
             tools:ignore="HardcodedText" />
     </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/activityReplies"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:layout_marginStart="16dp"/>
 
 </LinearLayout>

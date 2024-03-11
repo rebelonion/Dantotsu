@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.os.Build
 import android.view.Window
 import android.view.WindowManager
 import ani.dantotsu.R
@@ -54,7 +55,10 @@ class ThemeManager(private val context: Activity) {
         }
 
         val window = context.window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            @Suppress("DEPRECATION")
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        }
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = 0x00000000
         context.setTheme(themeToApply)
@@ -137,7 +141,7 @@ class ThemeManager(private val context: Activity) {
 
             companion object {
                 fun fromString(value: String): Theme {
-                    return values().find { it.theme == value } ?: PURPLE
+                    return entries.find { it.theme == value } ?: PURPLE
                 }
             }
         }

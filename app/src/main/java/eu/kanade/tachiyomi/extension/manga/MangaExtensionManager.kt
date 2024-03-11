@@ -3,6 +3,7 @@ package eu.kanade.tachiyomi.extension.manga
 import android.content.Context
 import android.graphics.drawable.Drawable
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
@@ -16,11 +17,9 @@ import eu.kanade.tachiyomi.util.preference.plusAssign
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import logcat.LogPriority
 import rx.Observable
 import tachiyomi.core.util.lang.launchNow
 import tachiyomi.core.util.lang.withUIContext
-import tachiyomi.core.util.system.logcat
 import tachiyomi.domain.source.manga.model.MangaSourceData
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -117,7 +116,7 @@ class MangaExtensionManager(
         val extensions: List<MangaExtension.Available> = try {
             api.findExtensions()
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e)
+            Logger.log(e)
             withUIContext { snackString("Failed to get manga extensions") }
             emptyList()
         }

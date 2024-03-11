@@ -29,7 +29,7 @@ class FeedActivity: AppCompatActivity() {
         setContentView(binding.root)
         navBar = binding.feedNavBar
         navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
-        val personalTab = navBar.createTab(R.drawable.ic_round_person_24, "Personal")
+        val personalTab = navBar.createTab(R.drawable.ic_round_person_24, "Following")
         val globalTab = navBar.createTab(R.drawable.ic_globe_24, "Global")
         navBar.addTab(personalTab)
         navBar.addTab(globalTab)

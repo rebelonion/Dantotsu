@@ -70,13 +70,13 @@ data class Activity(
     @SerialName("media")
     val media: Media?,
     @SerialName("replies")
-    val replies: List<Reply>?,
+    val replies: List<ActivityReply>?,
     @SerialName("likes")
     val likes: List<User>?,
 ) : java.io.Serializable
 
 @Serializable
-data class Reply(
+data class ActivityReply(
     @SerialName("id")
     val id: Int,
     @SerialName("userId")

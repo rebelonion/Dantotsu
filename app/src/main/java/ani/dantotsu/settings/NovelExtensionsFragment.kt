@@ -59,7 +59,6 @@ class NovelExtensionsFragment : Fragment(),
 
         lifecycleScope.launch {
             viewModel.pagerFlow.collectLatest { pagingData ->
-                Log.d("NovelExtensionsFragment", "collectLatest")
                 adapter.submitData(pagingData)
             }
         }

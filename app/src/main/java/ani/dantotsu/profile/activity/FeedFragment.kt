@@ -14,7 +14,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistQueries
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.FragmentFeedBinding
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
@@ -64,14 +64,17 @@ class FeedFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         res?.data?.page?.activities?.let { activities ->
                             activityList = activities
-                            adapter.update(activityList.map { ActivityItem(it) { _, _ -> } })
+                            val filtered = activities.filterNot {  //filter out messages that are not directed to the user
+                                it.recipient?.id != null && it.recipient.id != Anilist.userid
+                            }
+                            adapter.update(filtered.map { ActivityItem(it) { _, _ -> } })
                         }
                         binding.listProgressBar.visibility = ViewGroup.GONE
                         val scrollView = binding.listRecyclerView
 
                         binding.listRecyclerView.setOnTouchListener { _, event ->
                             if (event?.action == MotionEvent.ACTION_UP) {
-                                if (adapter.itemCount % AnilistQueries.ITEMS_PER_PAGE != 0 && !global) {
+                                if (activityList.size % AnilistQueries.ITEMS_PER_PAGE != 0 && !global) {
                                     snackString("No more activities")
                                 } else if (!scrollView.canScrollVertically(1) && !binding.feedRefresh.isVisible
                                     && binding.listRecyclerView.adapter!!.itemCount != 0 &&
@@ -84,7 +87,10 @@ class FeedFragment : Fragment() {
                                         withContext(Dispatchers.Main) {
                                             res?.data?.page?.activities?.let { activities ->
                                                 activityList += activities
-                                                adapter.addAll(activities.map { ActivityItem(it) { _, _ -> } })
+                                                val filtered = activities.filterNot {
+                                                    it.recipient?.id != null && it.recipient.id != Anilist.userid
+                                                }
+                                                adapter.addAll(filtered.map { ActivityItem(it) { _, _ -> } })
                                             }
                                             binding.feedRefresh.visibility = ViewGroup.GONE
                                         }

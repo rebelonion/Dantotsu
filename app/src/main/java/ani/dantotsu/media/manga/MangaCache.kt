@@ -10,7 +10,7 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.LruCache
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.snackString
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
@@ -32,8 +32,8 @@ data class ImageData(
             try {
                 // Fetch the image
                 val response = httpSource.getImage(page)
-                logger("Response: ${response.code}")
-                logger("Response: ${response.message}")
+                Logger.log("Response: ${response.code}")
+                Logger.log("Response: ${response.message}")
 
                 // Convert the Response to an InputStream
                 val inputStream = response.body.byteStream()
@@ -47,7 +47,7 @@ data class ImageData(
                 return@withContext bitmap
             } catch (e: Exception) {
                 // Handle any exceptions
-                logger("An error occurred: ${e.message}")
+                Logger.log("An error occurred: ${e.message}")
                 snackString("An error occurred: ${e.message}")
                 return@withContext null
             }
