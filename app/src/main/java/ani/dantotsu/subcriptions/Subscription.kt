@@ -10,6 +10,7 @@ import ani.dantotsu.parsers.Episode
 import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -27,7 +28,7 @@ class Subscription {
                 alreadyStarted = true
                 SubscriptionWorker.enqueue(this)
                 AlarmReceiver.alarm(this)
-            } else logger("Already Subscribed")
+            } else Logger.log("Already Subscribed")
         }
 
         private var currentlyPerforming = false

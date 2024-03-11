@@ -8,6 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import ani.dantotsu.R
+import ani.dantotsu.util.Logger
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.manga.installer.InstallerManga
@@ -15,8 +16,6 @@ import eu.kanade.tachiyomi.extension.manga.installer.PackageInstallerInstallerMa
 import eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstaller.Companion.EXTRA_DOWNLOAD_ID
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
-import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
 
 class MangaExtensionInstallService : Service() {
 
@@ -60,7 +59,7 @@ class MangaExtensionInstallService : Service() {
                 )
 
                 else -> {
-                    logcat(LogPriority.ERROR) { "Not implemented for installer $installerUsed" }
+                    Logger.log("Not implemented for installer $installerUsed")
                     stopSelf()
                     return START_NOT_STICKY
                 }

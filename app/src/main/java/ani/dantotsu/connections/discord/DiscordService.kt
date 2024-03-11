@@ -15,7 +15,6 @@ import android.os.Environment
 import android.os.IBinder
 import android.os.PowerManager
 import android.provider.MediaStore
-import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -26,6 +25,7 @@ import ani.dantotsu.connections.discord.serializers.User
 import ani.dantotsu.isOnline
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
@@ -274,7 +274,7 @@ class DiscordService : Service() {
                     return
                 }
             }
-            t.message?.let { Log.d("WebSocket", "onFailure() $it") }
+            t.message?.let { Logger.log("onFailure() $it") }
             log("WebSocket: Error, onFailure() reason: ${t.message}")
             client = OkHttpClient()
             client.newWebSocket(
@@ -289,7 +289,7 @@ class DiscordService : Service() {
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosing(webSocket, code, reason)
-            Log.d("WebSocket", "onClosing() $code $reason")
+            Logger.log("onClosing() $code $reason")
             if (::heartbeatThread.isInitialized && !heartbeatThread.isInterrupted) {
                 heartbeatThread.interrupt()
             }
@@ -297,7 +297,7 @@ class DiscordService : Service() {
 
         override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
             super.onClosed(webSocket, code, reason)
-            Log.d("WebSocket", "onClosed() $code $reason")
+            Logger.log("onClosed() $code $reason")
             if (code >= 4000) {
                 log("WebSocket: Error, code: $code reason: $reason")
                 client = OkHttpClient()
@@ -382,52 +382,7 @@ class DiscordService : Service() {
     }
 
     fun log(string: String) {
-        Log.d("WebSocket_Discord", string)
-        //log += "${SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().time)} $string\n"
-    }
-
-    fun saveLogToFile() {
-        val fileName = "log_${System.currentTimeMillis()}.txt"
-
-        // ContentValues to store file metadata
-        val values = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, fileName)
-            put(MediaStore.MediaColumns.MIME_TYPE, "text/plain")
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                put(MediaStore.MediaColumns.RELATIVE_PATH, "Download/")
-            }
-        }
-
-        // Inserting the file in the MediaStore
-        val resolver = baseContext.contentResolver
-        val uri = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
-        } else {
-            val directory =
-                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-            val file = File(directory, fileName)
-
-            // Make sure the Downloads directory exists
-            if (!directory.exists()) {
-                directory.mkdirs()
-            }
-
-            // Use FileProvider to get the URI for the file
-            val authority =
-                "${baseContext.packageName}.provider" // Adjust with your app's package name
-            Uri.fromFile(file)
-        }
-
-        // Writing to the file
-        uri?.let {
-            resolver.openOutputStream(it).use { outputStream ->
-                OutputStreamWriter(outputStream).use { writer ->
-                    writer.write(log)
-                }
-            }
-        } ?: run {
-            log("Error saving log file")
-        }
+        //Logger.log(string)
     }
 
     fun resume() {

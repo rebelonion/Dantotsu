@@ -28,7 +28,6 @@ import android.telephony.TelephonyManager
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.AttributeSet
-import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
@@ -60,6 +59,7 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
 import ani.dantotsu.subcriptions.NotificationClickReceiver
+import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
@@ -127,13 +127,6 @@ fun currActivity(): Activity? {
 
 var loadMedia: Int? = null
 var loadIsMAL = false
-
-fun logger(e: Any?, print: Boolean = true) {
-    if (print)
-        //println(e)
-        Log.d("Logger", e.toString())
-}
-
 
 fun initActivity(a: Activity) {
     val window = a.window
@@ -306,7 +299,7 @@ class InputFilterMinMax(
             val input = (dest.toString() + source.toString()).toDouble()
             if (isInRange(min, max, input)) return null
         } catch (nfe: NumberFormatException) {
-            logger(nfe.stackTraceToString())
+            Logger.log(nfe)
         }
         return ""
     }
@@ -761,7 +754,7 @@ fun saveImage(image: Bitmap, path: String, imageFileName: String): File? {
 
 private fun scanFile(path: String, context: Context) {
     MediaScannerConnection.scanFile(context, arrayOf(path), null) { p, _ ->
-        logger("Finished scanning $p")
+        Logger.log("Finished scanning $p")
     }
 }
 
@@ -903,7 +896,7 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
 
 fun toast(string: String?) {
     if (string != null) {
-        logger(string)
+        Logger.log(string)
         MainScope().launch {
             Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT)
                 .show()
@@ -942,10 +935,10 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
                 }
                 return snackBar
             }
-            logger(s)
+            Logger.log(s)
         }
     } catch (e: Exception) {
-        logger(e.stackTraceToString())
+        Logger.log(e)
         Injekt.get<CrashlyticsInterface>().logException(e)
     }
     return null

@@ -14,7 +14,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistQueries
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.FragmentFeedBinding
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter

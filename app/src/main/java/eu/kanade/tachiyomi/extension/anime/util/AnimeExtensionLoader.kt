@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
+import ani.dantotsu.util.Logger
 import dalvik.system.PathClassLoader
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
@@ -17,8 +18,6 @@ import eu.kanade.tachiyomi.util.lang.Hash
 import eu.kanade.tachiyomi.util.system.getApplicationIcon
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -91,11 +90,11 @@ internal object AnimeExtensionLoader {
             context.packageManager.getPackageInfo(pkgName, PACKAGE_FLAGS)
         } catch (error: PackageManager.NameNotFoundException) {
             // Unlikely, but the package may have been uninstalled at this point
-            logcat(LogPriority.ERROR, error)
+            Logger.log(error)
             return AnimeLoadResult.Error
         }
         if (!isPackageAnExtension(pkgInfo)) {
-            logcat(LogPriority.WARN) { "Tried to load a package that wasn't a extension ($pkgName)" }
+            Logger.log("Tried to load a package that wasn't a extension ($pkgName)")
             return AnimeLoadResult.Error
         }
         return loadExtension(context, pkgName, pkgInfo)
@@ -119,7 +118,7 @@ internal object AnimeExtensionLoader {
             pkgManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA)
         } catch (error: PackageManager.NameNotFoundException) {
             // Unlikely, but the package may have been uninstalled at this point
-            logcat(LogPriority.ERROR, error)
+            Logger.log(error)
             return AnimeLoadResult.Error
         }
 
@@ -128,24 +127,23 @@ internal object AnimeExtensionLoader {
         val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
 
         if (versionName.isNullOrEmpty()) {
-            logcat(LogPriority.WARN) { "Missing versionName for extension $extName" }
+            Logger.log("Missing versionName for extension $extName")
             return AnimeLoadResult.Error
         }
 
         // Validate lib version
         val libVersion = versionName.substringBeforeLast('.').toDoubleOrNull()
         if (libVersion == null || libVersion < LIB_VERSION_MIN || libVersion > LIB_VERSION_MAX) {
-            logcat(LogPriority.WARN) {
-                "Lib version is $libVersion, while only versions " +
+            Logger.log("Lib version is $libVersion, while only versions " +
                         "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
-            }
+            )
             return AnimeLoadResult.Error
         }
 
         val signatureHash = getSignatureHash(pkgInfo)
 
         if (signatureHash == null) {
-            logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
+            Logger.log("Package $pkgName isn't signed")
             return AnimeLoadResult.Error
         } else if (signatureHash !in trustedSignatures) {
             val extension = AnimeExtension.Untrusted(
@@ -156,13 +154,13 @@ internal object AnimeExtensionLoader {
                 libVersion,
                 signatureHash
             )
-            logcat(LogPriority.WARN, message = { "Extension $pkgName isn't trusted" })
+            Logger.log("Extension $pkgName isn't trusted")
             return AnimeLoadResult.Untrusted(extension)
         }
 
         val isNsfw = appInfo.metaData.getInt(METADATA_NSFW) == 1
         if (!loadNsfwSource && isNsfw) {
-            logcat(LogPriority.WARN) { "NSFW extension $pkgName not allowed" }
+            Logger.log("NSFW extension $pkgName not allowed")
             return AnimeLoadResult.Error
         }
 
@@ -189,7 +187,7 @@ internal object AnimeExtensionLoader {
                         else -> throw Exception("Unknown source class type! ${obj.javaClass}")
                     }
                 } catch (e: Throwable) {
-                    logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($it)" }
+                    Logger.log("Extension load error: $extName ($it)")
                     return AnimeLoadResult.Error
                 }
             }

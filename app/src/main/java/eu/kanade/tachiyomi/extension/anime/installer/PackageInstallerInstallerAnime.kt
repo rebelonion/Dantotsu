@@ -10,12 +10,11 @@ import android.content.pm.PackageInstaller
 import android.os.Build
 import androidx.core.content.ContextCompat
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.util.lang.use
 import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
 import eu.kanade.tachiyomi.util.system.getUriSize
-import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
 
 class PackageInstallerInstallerAnime(private val service: Service) : InstallerAnime(service) {
 
@@ -30,7 +29,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                 PackageInstaller.STATUS_PENDING_USER_ACTION -> {
                     val userAction = intent.getParcelableExtraCompat<Intent>(Intent.EXTRA_INTENT)
                     if (userAction == null) {
-                        logcat(LogPriority.ERROR) { "Fatal error for $intent" }
+                        Logger.log("Fatal error for $intent")
                         continueQueue(InstallStep.Error)
                         return
                     }
@@ -89,11 +88,8 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                 session.commit(intentSender)
             }
         } catch (e: Exception) {
-            logcat(
-                LogPriority.ERROR,
-                e
-            ) { "Failed to install extension ${entry.downloadId} ${entry.uri}" }
-            logcat(LogPriority.ERROR) { "Exception: $e" }
+            Logger.log(e)
+            Logger.log("Failed to install extension ${entry.downloadId} ${entry.uri}")
             snackString("Failed to install extension ${entry.downloadId} ${entry.uri}")
             activeSession?.let { (_, sessionId) ->
                 packageInstaller.abandonSession(sessionId)

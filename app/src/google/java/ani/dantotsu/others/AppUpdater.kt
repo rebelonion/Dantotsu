@@ -14,8 +14,18 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
-import ani.dantotsu.*
+import ani.dantotsu.BuildConfig
+import ani.dantotsu.Mapper
+import ani.dantotsu.R
+import ani.dantotsu.client
+import ani.dantotsu.currContext
+import ani.dantotsu.logError
+import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.snackString
+import ani.dantotsu.toast
+import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +60,7 @@ object AppUpdater {
                 res to res.substringAfter("# ").substringBefore("\n")
             }
 
-            logger("Git Version : $version")
+            Logger.log("Git Version : $version")
             val dontShow = PrefManager.getCustomVal("dont_ask_for_update_$version", false)
             if (compareVersion(version) && !dontShow && !activity.isDestroyed) activity.runOnUiThread {
                 CustomBottomDialog.newInstance().apply {

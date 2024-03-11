@@ -5,15 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import androidx.core.content.ContextCompat
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import logcat.LogPriority
 import tachiyomi.core.util.lang.launchNow
-import tachiyomi.core.util.system.logcat
 
 /**
  * Broadcast receiver that listens for the system's packages installed, updated or removed, and only
@@ -103,7 +102,7 @@ internal class AnimeExtensionInstallReceiver(private val listener: Listener) :
     private suspend fun getExtensionFromIntent(context: Context, intent: Intent?): AnimeLoadResult {
         val pkgName = getPackageNameFromIntent(intent)
         if (pkgName == null) {
-            logcat(LogPriority.WARN) { "Package name not found" }
+            Logger.log("Package name not found")
             return AnimeLoadResult.Error
         }
         return GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {

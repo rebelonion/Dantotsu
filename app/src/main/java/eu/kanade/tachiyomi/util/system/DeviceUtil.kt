@@ -2,8 +2,7 @@ package eu.kanade.tachiyomi.util.system
 
 import android.annotation.SuppressLint
 import android.os.Build
-import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
+import ani.dantotsu.util.Logger
 
 object DeviceUtil {
 
@@ -72,7 +71,7 @@ object DeviceUtil {
                 .getDeclaredMethod("get", String::class.java)
                 .invoke(null, key) as String
         } catch (e: Exception) {
-            logcat(LogPriority.WARN, e) { "Unable to use SystemProperties.get()" }
+            Logger.log("Unable to use SystemProperties.get()")
             null
         }
     }

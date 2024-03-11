@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModel
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.currContext
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.anime.SelectorDialogFragment
 import ani.dantotsu.media.manga.MangaChapter
@@ -223,7 +223,7 @@ class MediaDetailsViewModel : ViewModel() {
     }
 
     fun setEpisode(ep: Episode?, who: String) {
-        logger("set episode ${ep?.number} - $who", false)
+        Logger.log("set episode ${ep?.number} - $who")
         episode.postValue(ep)
         MainScope().launch(Dispatchers.Main) {
             episode.value = null
@@ -270,7 +270,7 @@ class MediaDetailsViewModel : ViewModel() {
         mangaChapters
 
     suspend fun loadMangaChapters(media: Media, i: Int, invalidate: Boolean = false) {
-        logger("Loading Manga Chapters : $mangaLoaded")
+        Logger.log("Loading Manga Chapters : $mangaLoaded")
         if (!mangaLoaded.containsKey(i) || invalidate) tryWithSuspend {
             mangaLoaded[i] =
                 mangaReadSources?.loadChaptersFromMedia(i, media) ?: return@tryWithSuspend

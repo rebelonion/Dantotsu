@@ -21,7 +21,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FAILED
@@ -251,7 +251,7 @@ class MangaDownloaderService : Service() {
                 snackString("${task.title} - ${task.chapter} Download finished")
             }
         } catch (e: Exception) {
-            logger("Exception while downloading file: ${e.message}")
+            Logger.log("Exception while downloading file: ${e.message}")
             snackString("Exception while downloading file: ${e.message}")
             Injekt.get<CrashlyticsInterface>().logException(e)
             broadcastDownloadFailed(task.chapter)

@@ -1,6 +1,6 @@
 package ani.dantotsu.parsers
 
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 
 class StringMatcher {
     companion object {
@@ -54,10 +54,10 @@ class StringMatcher {
             val closestShowAndIndex = closestShow(target, shows)
             val closestIndex = closestShowAndIndex.second
             if (closestIndex == -1) {
-                logger("No closest show found for $target")
+                Logger.log("No closest show found for $target")
                 return shows // Return original list if no closest show found
             }
-            logger("Closest show found for $target is ${closestShowAndIndex.first.name}")
+            Logger.log("Closest show found for $target is ${closestShowAndIndex.first.name}")
             return listOf(shows[closestIndex]) + shows.subList(0, closestIndex) + shows.subList(
                 closestIndex + 1,
                 shows.size

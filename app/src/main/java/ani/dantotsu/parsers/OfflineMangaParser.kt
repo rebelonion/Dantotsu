@@ -3,7 +3,7 @@ package ani.dantotsu.parsers
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.manga.MangaNameAdapter
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
@@ -68,7 +68,7 @@ class OfflineMangaParser : MangaParser() {
                 matchResult?.groups?.get(1)?.value?.toIntOrNull() ?: Int.MAX_VALUE
             }
             for (image in images) {
-                logger("imageNumber: ${image.url.url}")
+                Logger.log("imageNumber: ${image.url.url}")
             }
             return images
         }

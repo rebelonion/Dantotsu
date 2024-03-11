@@ -1,6 +1,6 @@
 package ani.dantotsu.others
 
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import java.util.regex.Pattern
 import kotlin.math.pow
 
@@ -64,7 +64,7 @@ class JsUnpacker(packedJS: String?) {
                 return decoded.toString()
             }
         } catch (e: Exception) {
-            logger(e)
+            Logger.log(e)
         }
         return null
     }
