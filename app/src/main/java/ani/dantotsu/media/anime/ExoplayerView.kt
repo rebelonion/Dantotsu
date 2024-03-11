@@ -116,6 +116,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private val playerFullscreen = "playerFullscreen"
     private val playerOnPlay = "playerOnPlay"
     private var disappeared: Boolean = false
+    private var functionstarted: Boolean = false
 
     private lateinit var exoPlayer: ExoPlayer
     private var castPlayer: CastPlayer? = null
@@ -969,6 +970,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 if (position != currentEpisodeIndex) {
                     disappeared = false
+                    functionstarted = false
                     change(position)
                 }
             }
@@ -983,6 +985,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 nextEpisode { i ->
                     updateAniProgress()
                     disappeared = false
+                    functionstarted = false
                     change(currentEpisodeIndex + i)
                 }
             }
@@ -1535,6 +1538,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         isPlayerPlaying = exoPlayer.playWhenReady
         playbackPosition = exoPlayer.currentPosition
         disappeared = false
+        functionstarted = false
         exoPlayer.release()
         VideoCache.release()
         mediaSession?.release()
@@ -1709,6 +1713,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             val new = currentTimeStamp
             timeStampText.text = if (new != null) {
                 fun DissapearSkip(){
+                    functionstarted = true
                     skipTimeButton.visibility = View.VISIBLE
                     exoSkip.visibility = View.GONE
                     skipTimeText.text = new.skipType.getType()
@@ -1729,6 +1734,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                                     skipTimeButton.visibility = View.GONE
                                     exoSkip.visibility = View.VISIBLE
                                     disappeared = false
+                                    functionstarted = false
                                     cancelTimer()
                                 }
                             }
@@ -1737,6 +1743,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                                 skipTimeButton.visibility = View.GONE
                                 exoSkip.visibility = View.VISIBLE
                                 disappeared = true
+                                functionstarted = false
                                 cancelTimer()
                             }
                         }
@@ -1746,7 +1753,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
                 if (PrefManager.getVal(PrefName.ShowTimeStampButton)) {
 
-                    if (!disappeared && PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
+                    if (!functionstarted && !disappeared && PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
                         DissapearSkip()
                     } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)){
                         skipTimeButton.visibility = View.VISIBLE
@@ -1767,6 +1774,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 new.skipType.getType()
             } else {
                 disappeared = false
+                functionstarted = false
                 skipTimeButton.visibility = View.GONE
                 if (PrefManager.getVal<Int>(PrefName.SkipTime) > 0) exoSkip.visibility =
                         View.VISIBLE
@@ -1891,6 +1899,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if (isInitialized) {
             updateAniProgress()
             disappeared = false
+            functionstarted = false
             releasePlayer()
         }
 
