@@ -10,16 +10,15 @@ import android.os.Environment
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import ani.dantotsu.util.Logger
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.manga.installer.InstallerManga
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.util.storage.getUriCompat
-import logcat.LogPriority
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
-import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -245,7 +244,7 @@ internal class MangaExtensionInstaller(private val context: Context) {
 
             // Set next installation step
             if (uri == null) {
-                logcat(LogPriority.ERROR) { "Couldn't locate downloaded APK" }
+                Logger.log("Couldn't locate downloaded APK")
                 downloadsRelay.call(id to InstallStep.Error)
                 return
             }

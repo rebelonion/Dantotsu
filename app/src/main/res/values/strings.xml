@@ -692,5 +692,7 @@ Et magni quasi vel nemo omnis et voluptate quisquam vel corporis fuga ut consequ
 
 Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exercitationem adipisci quo nemo aliquam ea numquam beatae. Eum Quis dolore aut quia accusantium sed vero autem vel quaerat eaque et beatae dicta non delectus galisum non ullam nulla.
 </string>
+    <string name="log_to_file">Log to File</string>
+    <string name="logging_warning">Logging to a file will slow down the app. Only enable if you are experiencing issues.</string>
 
 </resources>

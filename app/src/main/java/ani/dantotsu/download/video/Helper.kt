@@ -43,6 +43,7 @@ import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoType
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.network.NetworkHelper
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -157,15 +158,15 @@ object Helper {
                         finalException: Exception?
                     ) {
                         if (download.state == Download.STATE_COMPLETED) {
-                            Log.e("Downloader", "Download Completed")
+                            Logger.log("Download Completed")
                         } else if (download.state == Download.STATE_FAILED) {
-                            Log.e("Downloader", "Download Failed")
+                            Logger.log("Download Failed")
                         } else if (download.state == Download.STATE_STOPPED) {
-                            Log.e("Downloader", "Download Stopped")
+                            Logger.log("Download Stopped")
                         } else if (download.state == Download.STATE_QUEUED) {
-                            Log.e("Downloader", "Download Queued")
+                            Logger.log("Download Queued")
                         } else if (download.state == Download.STATE_DOWNLOADING) {
-                            Log.e("Downloader", "Download Downloading")
+                            Logger.log("Download Downloading")
                         }
                     }
                 }

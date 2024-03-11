@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
+import ani.dantotsu.util.Logger
 import dalvik.system.PathClassLoader
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
@@ -17,8 +18,6 @@ import eu.kanade.tachiyomi.util.lang.Hash
 import eu.kanade.tachiyomi.util.system.getApplicationIcon
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
-import logcat.LogPriority
-import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 
 /**
@@ -91,11 +90,11 @@ internal object MangaExtensionLoader {
             context.packageManager.getPackageInfo(pkgName, PACKAGE_FLAGS)
         } catch (error: PackageManager.NameNotFoundException) {
             // Unlikely, but the package may have been uninstalled at this point
-            logcat(LogPriority.ERROR, error)
+            Logger.log(error)
             return MangaLoadResult.Error
         }
         if (!isPackageAnExtension(pkgInfo)) {
-            logcat(LogPriority.WARN) { "Tried to load a package that wasn't a extension ($pkgName)" }
+            Logger.log("Tried to load a package that wasn't a extension ($pkgName)")
             return MangaLoadResult.Error
         }
         return loadMangaExtension(context, pkgName, pkgInfo)
@@ -119,7 +118,7 @@ internal object MangaExtensionLoader {
             pkgManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA)
         } catch (error: PackageManager.NameNotFoundException) {
             // Unlikely, but the package may have been uninstalled at this point
-            logcat(LogPriority.ERROR, error)
+            Logger.log(error)
             return MangaLoadResult.Error
         }
 
@@ -129,17 +128,16 @@ internal object MangaExtensionLoader {
         val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
 
         if (versionName.isNullOrEmpty()) {
-            logcat(LogPriority.WARN) { "Missing versionName for extension $extName" }
+            Logger.log("Missing versionName for extension $extName")
             return MangaLoadResult.Error
         }
 
         // Validate lib version
         val libVersion = versionName.substringBeforeLast('.').toDoubleOrNull()
         if (libVersion == null || libVersion < LIB_VERSION_MIN || libVersion > LIB_VERSION_MAX) {
-            logcat(LogPriority.WARN) {
-                "Lib version is $libVersion, while only versions " +
+            Logger.log("Lib version is $libVersion, while only versions " +
                         "$LIB_VERSION_MIN to $LIB_VERSION_MAX are allowed"
-            }
+            )
             return MangaLoadResult.Error
         }
 
@@ -147,18 +145,18 @@ internal object MangaExtensionLoader {
 
         /*  temporarily disabling signature check TODO: remove?
         if (signatureHash == null) {
-            logcat(LogPriority.WARN) { "Package $pkgName isn't signed" }
+            Logger.log("Package $pkgName isn't signed")
             return MangaLoadResult.Error
         } else if (signatureHash !in trustedSignatures) {
             val extension = MangaExtension.Untrusted(extName, pkgName, versionName, versionCode, libVersion, signatureHash)
-            logcat(LogPriority.WARN) { "Extension $pkgName isn't trusted" }
+            Logger.log("Extension $pkgName isn't trusted")
             return MangaLoadResult.Untrusted(extension)
         }
         */
 
         val isNsfw = appInfo.metaData.getInt(METADATA_NSFW) == 1
         if (!loadNsfwSource && isNsfw) {
-            logcat(LogPriority.WARN) { "NSFW extension $pkgName not allowed" }
+            Logger.log("NSFW extension $pkgName not allowed")
             return MangaLoadResult.Error
         }
 
@@ -185,7 +183,7 @@ internal object MangaExtensionLoader {
                         else -> throw Exception("Unknown source class type! ${obj.javaClass}")
                     }
                 } catch (e: Throwable) {
-                    logcat(LogPriority.ERROR, e) { "Extension load error: $extName ($it)" }
+                    Logger.log("Extension load error: $extName ($it)")
                     return MangaLoadResult.Error
                 }
             }

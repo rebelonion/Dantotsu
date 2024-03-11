@@ -61,11 +61,7 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
             pref.isIconSpaceReserved = false
             if (pref is DialogPreference) {
                 pref.dialogTitle = pref.title
-                //println("pref.dialogTitle: ${pref.dialogTitle}")  //TODO: could be useful for dub/sub selection
             }
-            /*for (entry in sharedPreferences.all.entries) {
-                Log.d("Preferences", "Key: ${entry.key}, Value: ${entry.value}")
-            }*/
 
             // Apply incognito IME for EditTextPreference
             if (pref is EditTextPreference) {

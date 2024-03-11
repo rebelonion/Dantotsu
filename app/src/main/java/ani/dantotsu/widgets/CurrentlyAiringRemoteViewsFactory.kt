@@ -7,7 +7,7 @@ import android.graphics.BitmapFactory
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import ani.dantotsu.R
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -19,7 +19,7 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context, intent: In
     override fun onCreate() {
         // 4 items for testing
         widgetItems.clear()
-        logger("CurrentlyAiringRemoteViewsFactory onCreate")
+        Logger.log("CurrentlyAiringRemoteViewsFactory onCreate")
         widgetItems = List(4) {
             WidgetItem(
                 "Show $it",
@@ -31,7 +31,7 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context, intent: In
 
     override fun onDataSetChanged() {
         // 4 items for testing
-        logger("CurrentlyAiringRemoteViewsFactory onDataSetChanged")
+        Logger.log("CurrentlyAiringRemoteViewsFactory onDataSetChanged")
         widgetItems.clear()
         widgetItems.add(
             WidgetItem(
@@ -79,7 +79,7 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context, intent: In
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        logger("CurrentlyAiringRemoteViewsFactory getViewAt")
+        Logger.log("CurrentlyAiringRemoteViewsFactory getViewAt")
         val item = widgetItems[position]
         val rv = RemoteViews(context.packageName, R.layout.item_currently_airing_widget).apply {
             setTextViewText(R.id.text_show_title, item.title)

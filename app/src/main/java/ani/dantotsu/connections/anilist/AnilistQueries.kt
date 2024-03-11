@@ -23,6 +23,7 @@ import ani.dantotsu.others.MalScraper
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -464,7 +465,8 @@ class AnilistQueries {
         }, recommendationPlannedQueryManga: ${recommendationPlannedQuery("MANGA")}"""
         query += """}""".trimEnd(',')
 
-        val response = executeQuery<Query.HomePageMedia>(query)
+        val response = executeQuery<Query.HomePageMedia>(query, show = true)
+        Logger.log(response.toString())
         val returnMap = mutableMapOf<String, ArrayList<Media>>()
         fun current(type: String) {
             val subMap = mutableMapOf<Int, Media>()
@@ -750,7 +752,7 @@ class AnilistQueries {
             }
         }
         return if (!genres.isNullOrEmpty() && tags != null) {
-            Anilist.genres = genres
+            Anilist.genres = genres?.sortedBy { it }?.toMutableList() as ArrayList<String>
             Anilist.tags = tags
             true
         } else false
@@ -1350,10 +1352,10 @@ Page(page:$page,perPage:50) {
 
     suspend fun getFeed(userId: Int?, global: Boolean = false, page: Int = 1): FeedResponse? {
         val filter = if (userId != null) "userId:$userId,"
-        else if (global) "isFollowing:false,"
-        else "isFollowing:true,"
+        else if (global) "isFollowing:false,type:TEXT,"
+        else "isFollowing:true,type_not:MESSAGE,"
         val res = executeQuery<FeedResponse>(
-            """{Page(page:$page,perPage:$ITEMS_PER_PAGE){activities(${filter}sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}}"""
+            """{Page(page:$page,perPage:$ITEMS_PER_PAGE){activities(${filter}sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount likeCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}}"""
         )
         return res
     }

@@ -6,6 +6,7 @@ import ani.dantotsu.parsers.novel.DynamicNovelParser
 import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 
@@ -47,8 +48,8 @@ object NovelSources : NovelReadSources() {
     }
 
     private fun createParsersFromExtensions(extensions: List<NovelExtension.Installed>): List<Lazier<BaseParser>> {
-        Log.d("NovelSources", "createParsersFromExtensions")
-        Log.d("NovelSources", extensions.toString())
+        Logger.log("createParsersFromExtensions")
+        Logger.log(extensions.toString())
         return extensions.map { extension ->
             val name = extension.name
             Lazier({ DynamicNovelParser(extension) }, name)

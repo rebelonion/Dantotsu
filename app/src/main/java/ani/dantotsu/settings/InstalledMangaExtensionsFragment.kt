@@ -32,6 +32,7 @@ import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -143,7 +144,7 @@ class InstalledMangaExtensionsFragment : Fragment(), SearchQueryHandler {
                             },
                             { error ->
                                 Injekt.get<CrashlyticsInterface>().logException(error)
-                                Log.e("MangaExtensionsAdapter", "Error: ", error)  // Log the error
+                                Logger.log(error)  // Log the error
                                 val builder = NotificationCompat.Builder(
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_ERROR

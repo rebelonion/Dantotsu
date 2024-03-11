@@ -7,7 +7,7 @@ import android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES
 import android.os.Build
 import android.util.Log
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.parsers.NovelInterface
 import ani.dantotsu.snackString
 import dalvik.system.PathClassLoader
@@ -26,21 +26,20 @@ internal object NovelExtensionLoader {
         val installDir = context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/"
         val results = mutableListOf<NovelLoadResult>()
         //the number of files
-        Log.e("NovelExtensionLoader", "Loading extensions from $installDir")
-        Log.e(
-            "NovelExtensionLoader",
+        Logger.log("Loading extensions from $installDir")
+        Logger.log(
             "Loading extensions from ${File(installDir).listFiles()?.size}"
         )
         File(installDir).setWritable(false)
         File(installDir).listFiles()?.forEach {
             //set the file to read only
             it.setWritable(false)
-            Log.e("NovelExtensionLoader", "Loading extension ${it.name}")
+            Logger.log("Loading extension ${it.name}")
             val extension = loadExtension(context, it)
             if (extension is NovelLoadResult.Success) {
                 results.add(extension)
             } else {
-                logger("Failed to load extension ${it.name}")
+                Logger.log("Failed to load extension ${it.name}")
             }
         }
         return results
@@ -62,7 +61,7 @@ internal object NovelExtensionLoader {
             context.packageManager.getPackageArchiveInfo(path, 0)
         } catch (error: Exception) {
             // Unlikely, but the package may have been uninstalled at this point
-            logger("Failed to load extension $pkgName")
+            Logger.log("Failed to load extension $pkgName")
             return NovelLoadResult.Error(Exception("Failed to load extension"))
         }
         return loadExtension(context, File(path))
@@ -88,8 +87,8 @@ internal object NovelExtensionLoader {
         val signatureHash = getSignatureHash(packageInfo)
 
         if ((signatureHash == null) || !signatureHash.contains(officialSignature)) {
-            logger("Package ${packageInfo.packageName} isn't signed")
-            logger("signatureHash: $signatureHash")
+            Logger.log("Package ${packageInfo.packageName} isn't signed")
+            Logger.log("signatureHash: $signatureHash")
             snackString("Package ${packageInfo.packageName} isn't signed")
             //return NovelLoadResult.Error(Exception("Extension not signed"))
         }
@@ -128,12 +127,12 @@ internal object NovelExtensionLoader {
 
     private fun loadSources(context: Context, file: File, className: String): List<NovelInterface> {
         return try {
-            Log.e("NovelExtensionLoader", "isFileWritable: ${file.canWrite()}")
+            Logger.log("isFileWritable: ${file.canWrite()}")
             if (file.canWrite()) {
                 val a = file.setWritable(false)
-                Log.e("NovelExtensionLoader", "success: $a")
+                Logger.log("success: $a")
             }
-            Log.e("NovelExtensionLoader", "isFileWritable: ${file.canWrite()}")
+            Logger.log("isFileWritable: ${file.canWrite()}")
             val classLoader = PathClassLoader(file.absolutePath, null, context.classLoader)
             val className =
                 "some.random.novelextensions.${className.lowercase(Locale.getDefault())}.$className"

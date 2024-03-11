@@ -31,6 +31,7 @@ import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.novel.novelreader.NovelReaderActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.parsers.ShowResponse
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,7 +60,7 @@ class NovelReadFragment : Fragment(),
     var loaded = false
 
     override fun downloadTrigger(novelDownloadPackage: NovelDownloadPackage) {
-        Log.e("downloadTrigger", novelDownloadPackage.link)
+        Logger.log("novel link: ${novelDownloadPackage.link}")
         val downloadTask = NovelDownloaderService.DownloadTask(
             title = media.mainName(),
             chapter = novelDownloadPackage.novelName,

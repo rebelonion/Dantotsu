@@ -45,7 +45,7 @@ import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.downloadsPermission
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.AppUpdater
@@ -730,6 +730,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             binding.settingsShareUsername.isChecked = false
         }
 
+        binding.settingsLogToFile.isChecked = PrefManager.getVal(PrefName.LogToFile)
+        binding.settingsLogToFile.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.LogToFile, isChecked)
+            restartApp()
+        }
+
+        binding.settingsShareLog.setOnClickListener {
+            Logger.shareLog(this)
+        }
+
         binding.settingsAccountHelp.setOnClickListener {
             val title = getString(R.string.account_help)
             val full = getString(R.string.full_account_help)
@@ -884,7 +894,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             if (dialogTag == "colorPicker") {
                 val color = extras.getInt(SimpleColorDialog.COLOR)
                 PrefManager.setVal(PrefName.CustomThemeInt, color)
-                logger("Custom Theme: $color")
+                Logger.log("Custom Theme: $color")
             }
         }
         return true

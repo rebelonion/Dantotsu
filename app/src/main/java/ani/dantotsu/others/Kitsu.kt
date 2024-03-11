@@ -2,7 +2,7 @@ package ani.dantotsu.others
 
 import ani.dantotsu.FileUrl
 import ani.dantotsu.client
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.tryWithSuspend
@@ -41,8 +41,7 @@ object Kitsu {
     }
 
     suspend fun getKitsuEpisodesDetails(media: Media): Map<String, Episode>? {
-        val print = false
-        logger("Kitsu : title=${media.mainName()}", print)
+        Logger.log("Kitsu : title=${media.mainName()}")
         val query =
             """
 query {
@@ -70,7 +69,7 @@ query {
 
 
         val result = getKitsuData(query) ?: return null
-        logger("Kitsu : result=$result", print)
+        //Logger.log("Kitsu : result=$result")
         media.idKitsu = result.data?.lookupMapping?.id
         val a = (result.data?.lookupMapping?.episodes?.nodes ?: return null).mapNotNull { ep ->
             val num = ep?.number?.toString() ?: return@mapNotNull null
@@ -81,7 +80,7 @@ query {
                 thumb = FileUrl[ep.thumbnail?.original?.url],
             )
         }.toMap()
-        logger("Kitsu : a=$a", print)
+        //Logger.log("Kitsu : a=$a")
         return a
     }
 
