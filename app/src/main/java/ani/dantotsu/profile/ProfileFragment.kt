@@ -27,7 +27,7 @@ import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
-import ani.dantotsu.util.ColorEditor.Companion.toCssColor
+import ani.dantotsu.util.AniMarkdown.Companion.getFullAniHTML
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -72,8 +72,8 @@ class ProfileFragment : Fragment() {
         binding.profileUserBio.settings.loadWithOverviewMode = true
         binding.profileUserBio.settings.useWideViewPort = true
         binding.profileUserBio.setInitialScale(1)
-        val styledHtml = styled(
-            convertMarkdownToHtml(user.about ?: ""),
+        val styledHtml = getFullAniHTML(
+            user.about ?: "",
             backGroundColorTypedValue.data,
             textColorTypedValue.data
         )
@@ -175,16 +175,6 @@ class ProfileFragment : Fragment() {
         )
     }
 
-    private fun convertMarkdownToHtml(markdown: String): String {
-        val regex = """\[\!\[(.*?)\]\((.*?)\)\]\((.*?)\)""".toRegex()
-        return regex.replace(markdown) { matchResult ->
-            val altText = matchResult.groupValues[1]
-            val imageUrl = matchResult.groupValues[2]
-            val linkUrl = matchResult.groupValues[3]
-            """<a href="$linkUrl"><img src="$imageUrl" alt="$altText"></a>"""
-        }
-    }
-
     private fun initRecyclerView(
         mode: LiveData<ArrayList<Media>>,
         container: View,
@@ -219,56 +209,6 @@ class ProfileFragment : Fragment() {
                 progress.visibility = View.GONE
             }
         }
-    }
-
-    private fun styled(html: String, backGroundColor: Int, textColor: Int): String {  //istg anilist has the worst api
-        //remove some of the html entities
-        val step1 = html.replace("&nbsp;", " ")
-            .replace("&amp;", "&")
-            .replace("&lt;", "<")
-            .replace("&gt;", ">")
-            .replace("&quot;", "\"")
-            .replace("&apos;", "'")
-            .replace("<pre>", "")
-            .replace("`", "")
-            .replace("~", "")
-
-        val step2 = step1.replace("(?s)___(.*?)___".toRegex(), "<br><em><strong>$1</strong></em><br>")
-        val step3 = step2.replace("(?s)__(.*?)__".toRegex(), "<br><strong>$1</strong><br>")
-
-
-        return """
-            <html>
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, charset=UTF-8">
-        <style>
-            body {
-                background-color: ${backGroundColor.toCssColor()};
-                color: ${textColor.toCssColor()};
-                margin: 0;
-                padding: 0;
-                max-width: 100%;
-                overflow-x: hidden; /* Prevent horizontal scrolling */
-            }
-            img {
-                max-width: 100%;
-                height: auto; /* Maintain aspect ratio */
-            }
-            video {
-                max-width: 100%;
-                height: auto; /* Maintain aspect ratio */
-            }
-            a {
-                color: ${textColor.toCssColor()};
-            }
-            /* Add responsive design elements for other content as needed */
-        </style>
-</head>
-<body>
-    $step3
-</body>
-
-    """.trimIndent()
     }
 
     companion object {

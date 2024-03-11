@@ -11,6 +11,7 @@ import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.ItemActivityBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.snackString
+import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
@@ -96,7 +97,7 @@ class ActivityItem(
                 binding.activityContent.visibility = View.VISIBLE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
-                    markwon.setMarkdown(binding.activityContent, activity.text ?: "")
+                    markwon.setMarkdown(binding.activityContent, getBasicAniHTML(activity.text ?: ""))
                 }
             }
 
