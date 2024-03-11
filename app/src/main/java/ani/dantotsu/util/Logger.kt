@@ -94,7 +94,7 @@ object Logger {
             if (file == null) e.printStackTrace() else {
                 file?.appendText("---------------------------Exception---------------------------\n")
                 file?.appendText("date/time: ${Date()} |  ${e.message}\n")
-                file?.appendText("trace: ${e.stackTrace}\n")
+                file?.appendText("trace: ${e.stackTraceToString()}\n")
             }
         }
     }
@@ -104,7 +104,7 @@ object Logger {
             if (file == null) e.printStackTrace() else {
                 file?.appendText("---------------------------Exception---------------------------\n")
                 file?.appendText("date/time: ${Date()} |  ${e.message}\n")
-                file?.appendText("trace: ${e.stackTrace}\n")
+                file?.appendText("trace: ${e.stackTraceToString()}\n")
             }
         }
     }
