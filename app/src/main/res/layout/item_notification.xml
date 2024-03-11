@@ -75,8 +75,9 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start|center"
+            android:layout_gravity="start|bottom"
             android:layout_marginStart="125dp"
+            android:layout_marginBottom="4dp"
             android:orientation="vertical">
 
             <TextView
@@ -95,8 +96,8 @@
                 android:id="@+id/notificationDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:layout_marginTop="4dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="Wed,06 March 2024, 7:00PM"
                 android:textSize="10sp"
