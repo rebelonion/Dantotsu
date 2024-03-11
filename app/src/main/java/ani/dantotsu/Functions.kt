@@ -167,6 +167,7 @@ fun initActivity(a: Activity) {
                 navBarHeight = insets.bottom
             }
         }
+    if (a !is MainActivity) a.setNavigationTheme()
 }
 
 fun Activity.hideSystemBars() {
@@ -178,11 +179,11 @@ fun Activity.hideSystemBars() {
 }
 
 fun Activity.setNavigationTheme() {
-    val a = TypedValue()
-    theme.resolveAttribute(android.R.attr.colorBackground, a, true)
-    if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && a.isColorType)
-        || (a.type >= TypedValue.TYPE_FIRST_COLOR_INT && a.type <= TypedValue.TYPE_LAST_COLOR_INT)) {
-        window.navigationBarColor = a.data
+    val tv = TypedValue()
+    theme.resolveAttribute(android.R.attr.colorBackground, tv, true)
+    if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && tv.isColorType)
+        || (tv.type >= TypedValue.TYPE_FIRST_COLOR_INT && tv.type <= TypedValue.TYPE_LAST_COLOR_INT)) {
+        window.navigationBarColor = tv.data
     }
 }
 
