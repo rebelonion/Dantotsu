@@ -23,6 +23,7 @@ import ani.dantotsu.others.MalScraper
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -464,7 +465,8 @@ class AnilistQueries {
         }, recommendationPlannedQueryManga: ${recommendationPlannedQuery("MANGA")}"""
         query += """}""".trimEnd(',')
 
-        val response = executeQuery<Query.HomePageMedia>(query)
+        val response = executeQuery<Query.HomePageMedia>(query, show = true)
+        Logger.log(response.toString())
         val returnMap = mutableMapOf<String, ArrayList<Media>>()
         fun current(type: String) {
             val subMap = mutableMapOf<Int, Media>()

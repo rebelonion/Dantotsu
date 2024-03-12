@@ -163,7 +163,7 @@ object Anilist {
                     throw Exception("Rate limited after $retry seconds")
                 }
                 if (!json.text.startsWith("{")) {throw Exception(currContext()?.getString(R.string.anilist_down))}
-                if (show) println("Response : ${json.text}")
+                if (show) Logger.log("Anilist Query: ${json.text}")
                 json.parsed()
             } else null
         } catch (e: Exception) {
