@@ -1730,7 +1730,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     if (timer == null) {
                         timer = object : CountDownTimer(5000, 1000) {
                             override fun onTick(millisUntilFinished: Long) {
-                                println(millisUntilFinished)
                                 if (new == null){
                                     skipTimeButton.visibility = View.GONE
                                     exoSkip.visibility = View.VISIBLE
