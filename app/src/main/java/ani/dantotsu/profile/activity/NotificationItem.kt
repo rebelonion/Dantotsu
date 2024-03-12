@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.TypedValue
 import android.view.View
 import ani.dantotsu.R
+import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.databinding.ItemNotificationBinding
@@ -37,20 +38,11 @@ class NotificationItem(
     }
 
     private fun image(user: Boolean = false) {
-        val context = binding.notificationBannerImage.context
+
         val cover = if (user) notification.user?.bannerImage ?: notification.user?.avatar?.medium else notification.media?.bannerImage ?: notification.media?.coverImage?.large
-        if (cover != null) {
-            if (!(context as Activity).isDestroyed)
-                Glide.with(context as Context)
-                    .load(GlideUrl(cover))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
-                    .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
-                    .into(binding.notificationBannerImage)
-        } else {
-            binding.notificationBannerImage.setImageResource(R.drawable.linear_gradient_bg)
-        }
-        val defaultHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 170f, context.resources.displayMetrics).toInt()
-        val userHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90f, context.resources.displayMetrics).toInt()
+        blurImage(binding.notificationBannerImage, cover)
+        val defaultHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 170f, binding.root.context.resources.displayMetrics).toInt()
+        val userHeight = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 90f, binding.root.context.resources.displayMetrics).toInt()
 
         if (user) {
             binding.notificationCover.visibility = View.GONE

@@ -6,6 +6,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
+import ani.dantotsu.blurImage
 import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Activity
@@ -97,25 +98,16 @@ class ActivityItem(
 
         when (activity.typename) {
             "ListActivity" -> {
+                val cover = activity.media?.coverImage?.large
+                val banner = activity.media?.bannerImage
                 binding.activityContent.visibility = View.GONE
                 binding.activityBannerContainer.visibility = View.VISIBLE
-
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
                 binding.activityText.text =
                     """${activity.user!!.name} ${activity.status} ${activity.progress ?: ""}"""
-                binding.activityCover.loadImage(activity.media?.coverImage?.medium)
-                val banner = activity.media?.bannerImage
-                if (banner != null) {
-                    if (!(context as android.app.Activity).isDestroyed) {
-                        Glide.with(context as Context)
-                            .load(GlideUrl(banner))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
-                            .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
-                            .into(binding.activityBannerImage)
-                    }
-                } else {
-                    binding.activityBannerImage.setImageResource(R.drawable.linear_gradient_bg)
-                }
+                binding.activityCover.loadImage(cover)
+                blurImage(binding.activityBannerImage, banner ?: cover)
+
             }
 
             "TextActivity" -> {

@@ -17,6 +17,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ani.dantotsu.R
+import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityProfileBinding
@@ -158,7 +159,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
                 binding.profileUserName.text = "${user.name} $userLevel"
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.profileBannerImage.pause()
-                binding.profileBannerImage.loadImage(user.bannerImage)
+                blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
                 binding.profileBannerGradient.updateLayoutParams { height += statusBarHeight }
                 binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }

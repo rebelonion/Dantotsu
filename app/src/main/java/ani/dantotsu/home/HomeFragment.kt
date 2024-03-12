@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
+import ani.dantotsu.blurImage
 import ani.dantotsu.bottomBar
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
@@ -78,7 +79,7 @@ class HomeFragment : Fragment() {
                 binding.homeUserChaptersRead.text = Anilist.chapterRead.toString()
                 binding.homeUserAvatar.loadImage(Anilist.avatar)
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.homeUserBg.pause()
-                binding.homeUserBg.loadImage(Anilist.bg)
+                blurImage(binding.homeUserBg, Anilist.bg)
                 binding.homeUserDataProgressBar.visibility = View.GONE
                 binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
