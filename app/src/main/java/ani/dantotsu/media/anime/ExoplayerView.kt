@@ -389,30 +389,37 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }, AUDIO_CONTENT_TYPE_MOVIE, AUDIOFOCUS_GAIN)
 
         if (System.getInt(contentResolver, System.ACCELEROMETER_ROTATION, 0) != 1) {
-            if (PrefManager.getVal(PrefName.RotationPlayer)) {
-                orientationListener =
-                    object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
-                        override fun onOrientationChanged(orientation: Int) {
-                            if (orientation in 45..135) {
-                                if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) exoRotate.visibility =
-                                    View.VISIBLE
-                                rotation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-                            } else if (orientation in 225..315) {
-                                if (rotation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) exoRotate.visibility =
-                                    View.VISIBLE
-                                rotation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                            }
+    if (PrefManager.getVal(PrefName.RotationPlayer)) {
+        orientationListener =
+            object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
+                override fun onOrientationChanged(orientation: Int) {
+                    if (orientation in 45..135) {
+                        if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
+                            exoRotate.visibility = View.VISIBLE
                         }
+                        rotation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                    } else if (orientation in 225..315) {
+                        if (rotation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                            exoRotate.visibility = View.VISIBLE
+                        }
+                        rotation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                    } else if (orientation in 315..360 || orientation in 0..45) {
+                        if (rotation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                            exoRotate.visibility = View.VISIBLE
+                        }
+                        rotation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                     }
-                orientationListener?.enable()
+                }
             }
+        orientationListener?.enable()
+    }
 
-            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-            exoRotate.setOnClickListener {
-                requestedOrientation = rotation
-                it.visibility = View.GONE
-            }
-        }
+    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+    exoRotate.setOnClickListener {
+        requestedOrientation = rotation
+        it.visibility = View.GONE
+    }
+}
 
         setupSubFormatting(playerView)
 
