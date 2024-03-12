@@ -127,6 +127,12 @@ class ReaderSettingsDialogFragment : BottomSheetDialogFragment() {
             activity.applySettings()
         }
 
+        binding.readerHideScrollBar.isChecked = settings.hideScrollBar
+        binding.readerHideScrollBar.setOnCheckedChangeListener { _, isChecked ->
+            settings.hideScrollBar = isChecked
+            activity.applySettings()
+        }
+
         binding.readerHidePageNumbers.isChecked = settings.hidePageNumbers
         binding.readerHidePageNumbers.setOnCheckedChangeListener { _, isChecked ->
             settings.hidePageNumbers = isChecked
