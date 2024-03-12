@@ -96,8 +96,21 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.AnimationSpeed, map[value] ?: 1f)
             restartApp()
         }
-
-
+        binding.uiSettingsBlurBanners.isChecked = PrefManager.getVal(PrefName.BlurBanners)
+        binding.uiSettingsBlurBanners.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.BlurBanners, isChecked)
+            restartApp()
+        }
+        binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as  Float)
+        binding.uiSettingsBlurRadius.addOnChangeListener { _, value, _ ->
+            PrefManager.setVal(PrefName.BlurRadius, value)
+            restartApp()
+        }
+        binding.uiSettingsBlurSampling.value = (PrefManager.getVal(PrefName.BlurSampling) as Float)
+        binding.uiSettingsBlurSampling.addOnChangeListener { _, value, _ ->
+            PrefManager.setVal(PrefName.BlurSampling, value)
+            restartApp()
+        }
     }
 
     private fun restartApp() {

@@ -694,5 +694,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
 </string>
     <string name="log_to_file">Log to File</string>
     <string name="logging_warning">Logging to a file will slow down the app. Only enable if you are experiencing issues.</string>
-
+    <string name="radius">Radius</string>
+    <string name="sampling">Sampling</string>
+    <string name="blur_banners">Blur Banners</string>
+    <string name="blur">Blur</string>
 </resources>

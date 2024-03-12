@@ -155,8 +155,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         binding.mangaTrendingViewPager.setPageTransformer(MediaPageTransformer())
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
-            binding.mangaTrendingViewPager.currentItem =
-                binding.mangaTrendingViewPager.currentItem + 1
+            binding.mangaTrendingViewPager.currentItem += 1
         }
         binding.mangaTrendingViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
