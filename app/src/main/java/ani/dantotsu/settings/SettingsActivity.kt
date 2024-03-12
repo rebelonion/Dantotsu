@@ -873,12 +873,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                                 "Consider donating!"
                         })
 
-                        setNegativeButton("no moners :(") {
+                        setNegativeButton("no moners \uD83D\uDE2D") {
                             snackString("That's alright, you'll be a rich man soon :prayge:")
                             dismiss()
                         }
 
-                        setPositiveButton("denote :)") {
+                        setPositiveButton("denote \uD83D\uDE0D") {
                             binding.settingBuyMeCoffee.performClick()
                             dismiss()
                         }
