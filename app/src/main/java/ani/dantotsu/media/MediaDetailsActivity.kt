@@ -34,6 +34,7 @@ import ani.dantotsu.GesturesListener
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.ZoomOutPageTransformer
+import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityMediaBinding
@@ -162,7 +163,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 media.cover
             )
         }
-        banner.loadImage(media.banner ?: media.cover, 400)
+
+        blurImage(banner, media.banner ?: media.cover)
         val gestureDetector = GestureDetector(this, object : GesturesListener() {
             override fun onDoubleClick(event: MotionEvent) {
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean))

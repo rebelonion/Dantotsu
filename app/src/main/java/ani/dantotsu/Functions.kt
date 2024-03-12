@@ -64,11 +64,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
 import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -88,6 +90,7 @@ import io.noties.markwon.html.HtmlPlugin
 import io.noties.markwon.html.TagHandlerNoOp
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.glide.GlideImagesPlugin
+import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.*
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
@@ -1099,6 +1102,19 @@ suspend fun View.pop() {
     delay(100)
 }
 
+fun blurImage(imageView: ImageView, banner: String?){
+    if (banner != null) {
+        val context = imageView.context
+        if (!(context as Activity).isDestroyed)
+            Glide.with(context as Context)
+                .load(GlideUrl(banner))
+                .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 2)))
+                .into(imageView)
+    } else {
+        imageView.setImageResource(R.drawable.linear_gradient_bg)
+    }
+}
 
 fun logToFile(context: Context, message: String) {
     val externalFilesDir = context.getExternalFilesDir(null)

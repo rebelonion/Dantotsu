@@ -139,7 +139,7 @@ class MediaAdaptor(
                 val media = mediaList?.get(position)
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
-                    b.itemCompactBanner.loadImage(media.banner ?: media.cover)
+                    blurImage(b.itemCompactBanner, media.banner ?: media.cover)
                     b.itemCompactOngoing.visibility =
                         if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName
