@@ -148,6 +148,12 @@ class ReaderSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.KeepScreenOn, isChecked)
         }
 
+        binding.readerSettingsHideScrollBar.isChecked = defaultSettings.hideScrollBar
+        binding.readerSettingsHideScrollBar.setOnCheckedChangeListener { _, isChecked ->
+            defaultSettings.hideScrollBar = isChecked
+            PrefManager.setVal(PrefName.HideScrollBar, isChecked)
+        }
+
         binding.readerSettingsHidePageNumbers.isChecked = defaultSettings.hidePageNumbers
         binding.readerSettingsHidePageNumbers.setOnCheckedChangeListener { _, isChecked ->
             defaultSettings.hidePageNumbers = isChecked

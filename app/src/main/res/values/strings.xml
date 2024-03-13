@@ -698,4 +698,5 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="sampling">Sampling</string>
     <string name="blur_banners">Blur Banners</string>
     <string name="blur">Blur</string>
+    <string name="hide_scroll_bar">Hide Scroll Bar</string>
 </resources>

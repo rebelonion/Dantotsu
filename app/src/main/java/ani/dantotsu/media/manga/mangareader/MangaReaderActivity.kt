@@ -88,6 +88,7 @@ class MangaReaderActivity : AppCompatActivity() {
 
     private var isContVisible = false
     private var showProgressDialog = true
+    private var hidescrollbar = false
 
     private var maxChapterPage = 0L
     private var currentChapterPage = 0L
@@ -780,6 +781,38 @@ class MangaReaderActivity : AppCompatActivity() {
             if (!PrefManager.getVal<Boolean>(PrefName.ShowSystemBars)) {
                 hideBars()
                 checkNotch()
+            }
+            // Hide the scrollbar completely
+            if (defaultSettings.hideScrollBar) {
+                binding.mangaReaderSliderContainer.visibility = View.GONE
+            } else {
+                if (defaultSettings.horizontalScrollBar) {
+                    binding.mangaReaderSliderContainer.updateLayoutParams {
+                        height = ViewGroup.LayoutParams.WRAP_CONTENT
+                        width = ViewGroup.LayoutParams.WRAP_CONTENT
+                    }
+
+                    binding.mangaReaderSlider.apply {
+                        updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                            width = ViewGroup.LayoutParams.MATCH_PARENT
+                        }
+                        rotation = 0f
+                    }
+
+                } else {
+                    binding.mangaReaderSliderContainer.updateLayoutParams {
+                        height = ViewGroup.LayoutParams.MATCH_PARENT
+                        width = 48f.px
+                    }
+
+                    binding.mangaReaderSlider.apply {
+                        updateLayoutParams {
+                            width = binding.mangaReaderSliderContainer.height - 16f.px
+                        }
+                        rotation = 90f
+                    }
+                }
+                binding.mangaReaderSliderContainer.visibility = View.VISIBLE
             }
             //horizontal scrollbar
             if (defaultSettings.horizontalScrollBar) {
