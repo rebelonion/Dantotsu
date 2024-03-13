@@ -85,6 +85,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     FontSize(Pref(Location.Player, Int::class, 20)),
     Locale(Pref(Location.Player, Int::class, 2)),
     TimeStampsEnabled(Pref(Location.Player, Boolean::class, true)),
+    AutoHideTimeStamps(Pref(Location.Player, Boolean::class, true)),
     UseProxyForTimeStamps(Pref(Location.Player, Boolean::class, false)),
     ShowTimeStampButton(Pref(Location.Player, Boolean::class, true)),
     AutoSkipOPED(Pref(Location.Player, Boolean::class, false)),
