@@ -272,12 +272,14 @@ class MainActivity : AppCompatActivity() {
                                     mainViewPager.setCurrentItem(newIndex, false)
                                 }
                             })
-                            navbar.selectTabAt(selectedOption)
-                            mainViewPager.post {
-                                mainViewPager.setCurrentItem(
-                                    selectedOption,
-                                    false
-                                )
+                            if (mainViewPager.getCurrentItem() != selectedOption) {
+                                navbar.selectTabAt(selectedOption)
+                                mainViewPager.post {
+                                    mainViewPager.setCurrentItem(
+                                        selectedOption,
+                                        false
+                                    )
+                                }
                             }
                         } else {
                             binding.mainProgressBar.visibility = View.GONE
