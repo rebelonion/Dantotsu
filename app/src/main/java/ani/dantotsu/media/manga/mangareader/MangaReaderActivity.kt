@@ -122,8 +122,11 @@ class MangaReaderActivity : AppCompatActivity() {
         }
     }
 
-    private fun hideBars() {
-        if (!PrefManager.getVal<Boolean>(PrefName.ShowSystemBars)) hideSystemBars()
+    private fun hideSystemBars() {
+        if (PrefManager.getVal<Boolean>(PrefName.ShowSystemBars))
+            showSystemBarsRetractView()
+        else
+            hideSystemBarsExtendView()
     }
 
     override fun onDestroy() {
@@ -153,7 +156,7 @@ class MangaReaderActivity : AppCompatActivity() {
 
         controllerDuration = (PrefManager.getVal<Float>(PrefName.AnimationSpeed) * 200).toLong()
 
-        hideBars()
+        hideSystemBars()
 
         var pageSliderTimer = Timer()
         fun pageSliderHide() {
@@ -395,7 +398,7 @@ class MangaReaderActivity : AppCompatActivity() {
     fun applySettings() {
 
         saveReaderSettings("${media.id}_current_settings", defaultSettings)
-        hideBars()
+        hideSystemBars()
 
         //true colors
         SubsamplingScaleImageView.setPreferredBitmapConfig(
@@ -779,7 +782,7 @@ class MangaReaderActivity : AppCompatActivity() {
             }
 
             if (!PrefManager.getVal<Boolean>(PrefName.ShowSystemBars)) {
-                hideBars()
+                hideSystemBars()
                 checkNotch()
             }
             // Hide the scrollbar completely
@@ -937,7 +940,7 @@ class MangaReaderActivity : AppCompatActivity() {
                         dialog.dismiss()
                         runnable.run()
                     }
-                    .setOnCancelListener { hideBars() }
+                    .setOnCancelListener { hideSystemBars() }
                     .create()
                     .show()
             } else {
