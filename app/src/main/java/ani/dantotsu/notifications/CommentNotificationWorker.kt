@@ -19,6 +19,7 @@ import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,45 +35,75 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
             PrefManager.init(applicationContext) //make sure prefs are initialized
             val client = OkHttpClient()
             CommentsAPI.fetchAuthToken(client)
-            val notifications = CommentsAPI.getNotifications(client)
+            val notificationResponse = CommentsAPI.getNotifications(client)
+            var notifications = notificationResponse?.notifications?.toMutableList()
             //if we have at least one reply notification, we need to fetch the media titles
             var names = emptyMap<Int, MediaNameFetch.Companion.ReturnedData>()
-            if (notifications?.notifications?.any { it.type == 1 || it.type == null } == true) {
-                val mediaIds = notifications.notifications.filter { it.type == 1 || it.type == null }.map { it.mediaId }
+            if (notifications?.any { it.type == 1 || it.type == null } == true) {
+                val mediaIds = notifications.filter { it.type == 1 || it.type == null }.map { it.mediaId }
                 names = MediaNameFetch.fetchMediaTitles(mediaIds)
             }
 
-            notifications?.notifications?.forEach {
+            val recentGlobal = PrefManager.getVal<Int>(
+                PrefName.RecentGlobalNotification)
+
+            notifications = notifications?.filter { it.type != 3 || it.notificationId > recentGlobal }?.toMutableList()
+
+            val newRecentGlobal = notifications?.filter { it.type == 3 }?.maxOfOrNull { it.notificationId }
+            if (newRecentGlobal != null) {
+                PrefManager.setVal(PrefName.RecentGlobalNotification, newRecentGlobal)
+            }
+
+            notifications?.forEach {
                 val type: NotificationType = when (it.type) {
                     1 -> NotificationType.COMMENT_REPLY
                     2 -> NotificationType.COMMENT_WARNING
+                    3 -> NotificationType.APP_GLOBAL
                     else -> NotificationType.COMMENT_REPLY
                 }
-                val notification = if (it.type == 2) {
-                    val title = "You received a warning"
-                    val message = it.content ?: "Be more thoughtful with your comments"
-                    createNotification(
-                        NotificationType.COMMENT_WARNING,
-                        message,
-                        title,
-                        it.mediaId,
-                        it.commentId,
-                        "",
-                         ""
-                    )
-                } else {
-                    val title = "New CommentNotificationWorker Reply"
-                    val mediaName = names[it.mediaId]?.title ?: "Unknown"
-                    val message = "${it.username} replied to your comment in $mediaName"
-                    createNotification(
-                        NotificationType.COMMENT_REPLY,
-                        message,
-                        title,
-                        it.mediaId,
-                        it.commentId,
-                        names[it.mediaId]?.color ?: "#222222",
-                        names[it.mediaId]?.coverImage ?: ""
-                    )
+                val notification = when (type) {
+                    NotificationType.COMMENT_WARNING -> {
+                        val title = "You received a warning"
+                        val message = it.content ?: "Be more thoughtful with your comments"
+                        createNotification(
+                            NotificationType.COMMENT_WARNING,
+                            message,
+                            title,
+                            it.mediaId,
+                            it.commentId,
+                            "",
+                            ""
+                        )
+                    }
+
+                    NotificationType.COMMENT_REPLY -> {
+                        val title = "New CommentNotificationWorker Reply"
+                        val mediaName = names[it.mediaId]?.title ?: "Unknown"
+                        val message = "${it.username} replied to your comment in $mediaName"
+                        createNotification(
+                            NotificationType.COMMENT_REPLY,
+                            message,
+                            title,
+                            it.mediaId,
+                            it.commentId,
+                            names[it.mediaId]?.color ?: "#222222",
+                            names[it.mediaId]?.coverImage ?: ""
+                        )
+                    }
+
+                    NotificationType.APP_GLOBAL -> {
+                        val title = "Update from Dantotsu"
+                        val message = it.content ?: "New feature available"
+                        createNotification(
+                            NotificationType.APP_GLOBAL,
+                            message,
+                            title,
+                            0,
+                            0,
+                            "",
+                            ""
+                        )
+                    }
                 }
 
                 if (ActivityCompat.checkSelfPermission(
@@ -141,7 +172,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     .setContentTitle(title)
                     .setContentText(message)
                     .setSmallIcon(R.drawable.notification_icon)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
                 if (imageUrl.isNotEmpty()) {
@@ -153,6 +184,25 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                 if (color.isNotEmpty()) {
                     builder.color = Color.parseColor(color)
                 }
+                builder.build()
+            }
+            NotificationType.APP_GLOBAL -> {
+                val intent = Intent(applicationContext, MainActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                val pendingIntent = PendingIntent.getActivity(
+                    applicationContext,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+                val builder = NotificationCompat.Builder(applicationContext, notificationType.id)
+                    .setContentTitle(title)
+                    .setContentText(message)
+                    .setSmallIcon(R.drawable.notification_icon)
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true)
                 builder.build()
             }
         }
@@ -182,7 +232,8 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
 
     enum class NotificationType(val id: String) {
         COMMENT_REPLY(Notifications.CHANNEL_COMMENTS),
-        COMMENT_WARNING(Notifications.CHANNEL_COMMENT_WARING)
+        COMMENT_WARNING(Notifications.CHANNEL_COMMENT_WARING),
+        APP_GLOBAL(Notifications.CHANNEL_APP_GLOBAL)
     }
 
     companion object {

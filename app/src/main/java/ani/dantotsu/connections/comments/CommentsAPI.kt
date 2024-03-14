@@ -412,7 +412,9 @@ data class Notification(
     @SerialName("type")
     val type: Int? = null,
     @SerialName("content")
-    val content: String? = null
+    val content: String? = null,
+    @SerialName("notification_id")
+    val notificationId: Int
 )
 
 

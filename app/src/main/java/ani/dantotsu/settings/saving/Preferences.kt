@@ -168,6 +168,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CommentAuthResponse(Pref(Location.Irrelevant, AuthResponse::class, "")),
     CommentTokenExpiry(Pref(Location.Irrelevant, Long::class, 0L)),
     LogToFile(Pref(Location.Irrelevant, Boolean::class, false)),
+    RecentGlobalNotification(Pref(Location.Irrelevant, Int::class, 0)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

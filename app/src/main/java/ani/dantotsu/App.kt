@@ -167,7 +167,7 @@ class App : MultiDexApplication() {
             //run once
             androidx.work.WorkManager.getInstance(this).enqueue(OneTimeWorkRequest.Companion.from(AnilistNotificationWorker::class.java))
         }
-        androidx.work.WorkManager.getInstance(this).cancelUniqueWork("ani.dantotsu.notifications.NotificationWorker")
+        androidx.work.WorkManager.getInstance(this).cancelUniqueWork("ani.dantotsu.notifications.NotificationWorker")  //legacy worker
     }
 
 
