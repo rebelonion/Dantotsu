@@ -59,12 +59,12 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
         binding.mediaListContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
         val scope = viewLifecycleOwner.lifecycleScope
         binding.mediaListDelete.setOnClickListener {
-            val id = media.userListId
-            if (id != null) {
-                viewLifecycleOwner.lifecycleScope.launch {
-                    withContext(Dispatchers.IO) {
+            var id = media.userListId
+            viewLifecycleOwner.lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    if (id != null) {
                         try {
-                            Anilist.mutation.deleteList(id)
+                            Anilist.mutation.deleteList(id!!)
                             MAL.query.deleteList(media.anime != null, media.idMAL)
                         } catch (e: Exception) {
                             withContext(Dispatchers.Main) {
@@ -72,16 +72,24 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
                             }
                             return@withContext
                         }
+                    } else {
+                        val profile = Anilist.query.mediaProfile(media)
+                        profile.userListId?.let { listId ->
+                            id = listId
+                            Anilist.mutation.deleteList(listId)
+                            MAL.query.deleteList(media.anime != null, media.idMAL)
+                        }
                     }
-                    withContext(Dispatchers.Main) {
+                }
+                withContext(Dispatchers.Main) {
+                    if (id != null) {
                         Refresh.all()
                         snackString(getString(R.string.deleted_from_list))
                         dismissAllowingStateLoss()
+                    } else {
+                        snackString(getString(R.string.no_list_id))
                     }
                 }
-            } else {
-                snackString(getString(R.string.no_list_id))
-                Refresh.all()
             }
         }
 

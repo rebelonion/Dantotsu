@@ -66,6 +66,52 @@ class AnilistQueries {
         return Media(fetchedMedia)
     }
 
+    fun mediaProfile(media: Media): Media {
+        val query =
+            """{Media(id:${media.id}){id mediaListEntry{id status progress private repeat customLists updatedAt startedAt{year month day}completedAt{year month day}}isFavourite idMal}}"""
+        runBlocking {
+            val anilist = async {
+                var response = executeQuery<Query.Media>(query, force = true, show = true)
+                if (response != null) {
+                    fun parse() {
+                        val fetchedMedia = response?.data?.media ?: return
+
+                        if (fetchedMedia.mediaListEntry != null) {
+                            fetchedMedia.mediaListEntry?.apply {
+                                media.userProgress = progress
+                                media.isListPrivate = private ?: false
+                                media.userListId = id
+                                media.userStatus = status?.toString()
+                                media.inCustomListsOf = customLists?.toMutableMap()
+                                media.userRepeat = repeat ?: 0
+                                media.userUpdatedAt = updatedAt?.toString()?.toLong()?.times(1000)
+                                media.userCompletedAt = completedAt ?: FuzzyDate()
+                                media.userStartedAt = startedAt ?: FuzzyDate()
+                            }
+                        } else {
+                            media.isListPrivate = false
+                            media.userStatus = null
+                            media.userListId = null
+                            media.userProgress = null
+                            media.userRepeat = 0
+                            media.userUpdatedAt = null
+                            media.userCompletedAt = FuzzyDate()
+                            media.userStartedAt = FuzzyDate()
+                        }
+                    }
+
+                    if (response.data?.media != null) parse()
+                    else {
+                        response = executeQuery(query, force = true, useToken = false)
+                        if (response?.data?.media != null) parse()
+                    }
+                }
+            }
+            awaitAll(anilist)
+        }
+        return media
+    }
+
     fun mediaDetails(media: Media): Media {
         media.cameFromContinue = false
 

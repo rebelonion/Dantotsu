@@ -433,7 +433,7 @@
     <string name="episode_not_found">Couldn\'t find episode : %1$s</string>
     <string name="list_updated">List Updated</string>
     <string name="deleted_from_list">Deleted from List</string>
-    <string name="no_list_id">No List ID found, reloading…</string>
+    <string name="no_list_id">No List ID found…</string>
     <string name="checking_for_update">Checking for Update</string>
     <string name="dont_show_again">Don\'t show again for version %1$s</string>
     <string name="no_update_found">No Update Found</string>
