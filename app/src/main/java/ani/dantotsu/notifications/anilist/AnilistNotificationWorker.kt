@@ -10,6 +10,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.profile.activity.ActivityItemBuilder
@@ -43,7 +44,7 @@ class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     newNotifications?.forEach {
                         if (!filteredTypes.contains(it.notificationType)) {
                             val content = ActivityItemBuilder.getContent(it)
-                            val notification = createNotification(applicationContext, content)
+                            val notification = createNotification(applicationContext, content, it.id)
                             if (ActivityCompat.checkSelfPermission(
                                     applicationContext,
                                     Manifest.permission.POST_NOTIFICATIONS
@@ -70,11 +71,17 @@ class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParamet
 
     private fun createNotification(
         context: Context,
-        content: String
+        content: String,
+        activityId: Int? = null
     ): android.app.Notification {
         val title = "New Anilist Notification"
-        val intent = Intent(applicationContext, FeedActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        val intent = Intent(applicationContext, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
+            if (activityId != null) {
+                putExtra("activityId", activityId)
+            }
+        }
         val pendingIntent = PendingIntent.getActivity(
             applicationContext,
             0,

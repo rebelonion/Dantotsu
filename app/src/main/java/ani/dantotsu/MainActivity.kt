@@ -43,6 +43,8 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.profile.activity.FeedActivity
+import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.PrefName
@@ -226,6 +228,7 @@ class MainActivity : AppCompatActivity() {
             val fragmentToLoad = extras.getString("FRAGMENT_TO_LOAD")
             val mediaId = extras.getInt("mediaId", -1)
             val commentId = extras.getInt("commentId", -1)
+            val activityId = extras.getInt("activityId", -1)
 
             if (fragmentToLoad != null && mediaId != -1 && commentId != -1) {
                 val detailIntent = Intent(this, MediaDetailsActivity::class.java).apply {
@@ -234,7 +237,19 @@ class MainActivity : AppCompatActivity() {
                     putExtra("commentId", commentId)
                 }
                 startActivity(detailIntent)
-                return
+            } else if (fragmentToLoad == "FEED" && activityId != -1) {
+                val feedIntent = Intent(this, FeedActivity::class.java).apply {
+                    putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
+                    putExtra("activityId", activityId)
+
+                }
+                startActivity(feedIntent)
+            } else if (fragmentToLoad == "NOTIFICATIONS" && activityId != -1) {
+                val notificationIntent = Intent(this, NotificationActivity::class.java).apply {
+                    putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
+                    putExtra("activityId", activityId)
+                }
+                startActivity(notificationIntent)
             }
         }
         val offlineMode: Boolean = PrefManager.getVal(PrefName.OfflineMode)

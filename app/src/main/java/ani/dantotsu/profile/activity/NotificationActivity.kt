@@ -51,10 +51,16 @@ class NotificationActivity : AppCompatActivity() {
             onBackPressed()
         }
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
+        val activityId = intent.getIntExtra("activityId", -1)
         lifecycleScope.launch {
-            val res = Anilist.query.getNotifications(Anilist.userid?:0)
+            val resetNotification = activityId == -1
+            val res = Anilist.query.getNotifications(Anilist.userid?:0, resetNotification = resetNotification)
             res?.data?.page?.notifications?.let { notifications ->
-                notificationList = notifications
+                notificationList = if (activityId != -1) {
+                    notifications.filter { it.id == activityId }
+                } else {
+                    notifications
+                }
                 adapter.update(notificationList.map { NotificationItem(it, ::onNotificationClick) })
             }
             withContext(Dispatchers.Main){
