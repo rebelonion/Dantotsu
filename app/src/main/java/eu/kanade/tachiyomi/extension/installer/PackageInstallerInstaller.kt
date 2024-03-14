@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.extension.anime.installer
+package eu.kanade.tachiyomi.extension.installer
 
 import android.app.PendingIntent
 import android.app.Service
@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageInstaller
 import android.os.Build
 import androidx.core.content.ContextCompat
+import androidx.core.content.IntentSanitizer
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.InstallStep
@@ -16,7 +17,7 @@ import eu.kanade.tachiyomi.util.lang.use
 import eu.kanade.tachiyomi.util.system.getParcelableExtraCompat
 import eu.kanade.tachiyomi.util.system.getUriSize
 
-class PackageInstallerInstallerAnime(private val service: Service) : InstallerAnime(service) {
+class PackageInstallerInstaller(private val service: Service) : Installer(service) {
 
     private val packageInstaller = service.packageManager.packageInstaller
 
@@ -27,7 +28,18 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                 PackageInstaller.STATUS_FAILURE
             )) {
                 PackageInstaller.STATUS_PENDING_USER_ACTION -> {
-                    val userAction = intent.getParcelableExtraCompat<Intent>(Intent.EXTRA_INTENT)
+                    val userAction = intent.getParcelableExtraCompat<Intent>(Intent.EXTRA_INTENT)?.run {
+                        IntentSanitizer.Builder()
+                            .allowAction(this.action!!)
+                            .allowExtra(PackageInstaller.EXTRA_SESSION_ID) { id -> id == activeSession?.second }
+                            .allowAnyComponent()
+                            .allowPackage {
+                                // There is no way to check the actual installer name so allow all.
+                                true
+                            }
+                            .build()
+                            .sanitizeByFiltering(this)
+                    }
                     if (userAction == null) {
                         Logger.log("Fatal error for $intent")
                         continueQueue(InstallStep.Error)
@@ -78,7 +90,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                 val intentSender = PendingIntent.getBroadcast(
                     service,
                     activeSession!!.second,
-                    Intent(INSTALL_ACTION),
+                    Intent(INSTALL_ACTION).setPackage(service.packageName),
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                         PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_ALLOW_UNSAFE_IMPLICIT_INTENT
                     } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -88,8 +100,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
                 session.commit(intentSender)
             }
         } catch (e: Exception) {
-            Logger.log(e)
-            Logger.log("Failed to install extension ${entry.downloadId} ${entry.uri}")
+            Logger.log("Failed to install extension ${entry.downloadId} ${entry.uri}\n$e")
             snackString("Failed to install extension ${entry.downloadId} ${entry.uri}")
             activeSession?.let { (_, sessionId) ->
                 packageInstaller.abandonSession(sessionId)
@@ -118,7 +129,7 @@ class PackageInstallerInstallerAnime(private val service: Service) : InstallerAn
             service,
             packageActionReceiver,
             IntentFilter(INSTALL_ACTION),
-            ContextCompat.RECEIVER_EXPORTED
+            ContextCompat.RECEIVER_EXPORTED,
         )
     }
 }

@@ -29,6 +29,7 @@ import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
+import java.util.Locale
 import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -258,6 +259,7 @@ class CommentItem(val comment: Comment,
 
     private fun removeSubCommentIds(){
         subCommentIds.forEach { id ->
+            @Suppress("UNCHECKED_CAST")
             val parentComments = parentSection.groups as? List<CommentItem> ?: emptyList()
             val commentToRemove = parentComments.find { it.comment.commentId == id }
             commentToRemove?.let {
@@ -290,7 +292,7 @@ class CommentItem(val comment: Comment,
     @SuppressLint("SimpleDateFormat")
     private fun formatTimestamp(timestamp: String): String {
         return try {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT)
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             val parsedDate = dateFormat.parse(timestamp)
             val currentDate = Date()
@@ -315,7 +317,7 @@ class CommentItem(val comment: Comment,
     companion object {
         @SuppressLint("SimpleDateFormat")
         fun timestampToMillis(timestamp: String): Long {
-            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.ROOT)
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")
             val parsedDate = dateFormat.parse(timestamp)
             return parsedDate?.time ?: 0

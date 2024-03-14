@@ -86,7 +86,7 @@ class App : MultiDexApplication() {
         Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
         Logger.log("App: Logging started")
 
-        initializeNetwork(baseContext)
+        initializeNetwork()
 
         setupNotificationChannels()
         if (!LogcatLogger.isInstalled) {

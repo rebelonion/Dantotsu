@@ -66,8 +66,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         currContext()?.theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
         val color = typedValue.data
 
-        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
-        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
+        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000
+        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000)
 
         binding.mangaTitleContainer.updatePadding(top = statusBarHeight)
 

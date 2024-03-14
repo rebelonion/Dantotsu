@@ -7,7 +7,7 @@ import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.extension.anime.model.AvailableAnimeSources
-import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
+import eu.kanade.tachiyomi.extension.util.ExtensionLoader
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -87,7 +87,7 @@ internal class AnimeExtensionGithubApi {
             findExtensions().also { lastExtCheck.set(Date().time) }
         }
 
-        val installedExtensions = AnimeExtensionLoader.loadExtensions(context)
+        val installedExtensions = ExtensionLoader.loadAnimeExtensions(context)
             .filterIsInstance<AnimeLoadResult.Success>()
             .map { it.extension }
 
@@ -115,7 +115,7 @@ internal class AnimeExtensionGithubApi {
         return this
             .filter {
                 val libVersion = it.extractLibVersion()
-                libVersion >= AnimeExtensionLoader.LIB_VERSION_MIN && libVersion <= AnimeExtensionLoader.LIB_VERSION_MAX
+                libVersion >= ExtensionLoader.ANIME_LIB_VERSION_MIN && libVersion <= ExtensionLoader.ANIME_LIB_VERSION_MAX
             }
             .map {
                 AnimeExtension.Available(

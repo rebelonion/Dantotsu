@@ -112,8 +112,8 @@ class AnilistHomeViewModel : ViewModel() {
 
     suspend fun loadMain(context: FragmentActivity) {
         Anilist.getSavedToken()
-        MAL.getSavedToken(context)
-        Discord.getSavedToken(context)
+        MAL.getSavedToken()
+        Discord.getSavedToken()
         if (!BuildConfig.FLAVOR.contains("fdroid")) {
             if (PrefManager.getVal(PrefName.CheckUpdate)) AppUpdater.check(context)
         }
@@ -159,7 +159,7 @@ class AnilistAnimeViewModel : ViewModel() {
     fun getPopular(): LiveData<SearchResults?> = animePopular
     suspend fun loadPopular(
         type: String,
-        search_val: String? = null,
+        searchVal: String? = null,
         genres: ArrayList<String>? = null,
         sort: String = Anilist.sortBy[1],
         onList: Boolean = true,
@@ -167,7 +167,7 @@ class AnilistAnimeViewModel : ViewModel() {
         animePopular.postValue(
             Anilist.query.search(
                 type,
-                search = search_val,
+                search = searchVal,
                 onList = if (onList) null else false,
                 sort = sort,
                 genres = genres
@@ -231,7 +231,7 @@ class AnilistMangaViewModel : ViewModel() {
     fun getPopular(): LiveData<SearchResults?> = mangaPopular
     suspend fun loadPopular(
         type: String,
-        search_val: String? = null,
+        searchVal: String? = null,
         genres: ArrayList<String>? = null,
         sort: String = Anilist.sortBy[1],
         onList: Boolean = true,
@@ -239,7 +239,7 @@ class AnilistMangaViewModel : ViewModel() {
         mangaPopular.postValue(
             Anilist.query.search(
                 type,
-                search = search_val,
+                search = searchVal,
                 onList = if (onList) null else false,
                 sort = sort,
                 genres = genres

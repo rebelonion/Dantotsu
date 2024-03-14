@@ -20,10 +20,11 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -335,7 +336,7 @@ class NovelDownloaderService : Service() {
                     DownloadedType(
                         task.title,
                         task.chapter,
-                        DownloadedType.Type.NOVEL
+                        MediaType.NOVEL
                     )
                 )
                 broadcastDownloadFinished(task.originalLink)

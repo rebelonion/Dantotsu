@@ -34,15 +34,16 @@ import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
@@ -188,8 +189,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         gridView.setOnItemLongClickListener { _, _, position, _ ->
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
-            val type: DownloadedType.Type =
-                DownloadedType.Type.ANIME
+            val type: MediaType = MediaType.ANIME
 
             // Alert dialog to confirm deletion
             val builder =
@@ -293,11 +293,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     }
 
     private fun getMedia(downloadedType: DownloadedType): Media? {
-        val type = when (downloadedType.type) {
-            DownloadedType.Type.MANGA -> "Manga"
-            DownloadedType.Type.ANIME -> "Anime"
-            else -> "Novel"
-        }
+        val type = downloadedType.type.asText()
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             "Dantotsu/$type/${downloadedType.title}"
@@ -327,11 +323,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     }
 
     private fun loadOfflineAnimeModel(downloadedType: DownloadedType): OfflineAnimeModel {
-        val type = when (downloadedType.type) {
-            DownloadedType.Type.MANGA -> "Manga"
-            DownloadedType.Type.ANIME -> "Anime"
-            else -> "Novel"
-        }
+        val type = downloadedType.type.asText()
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             "Dantotsu/$type/${downloadedType.title}"

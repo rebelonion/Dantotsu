@@ -61,7 +61,7 @@ class FeedActivity : AppCompatActivity() {
             }
         })
         binding.listBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 

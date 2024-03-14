@@ -30,21 +30,25 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.*
+import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.manga.MangaDownloaderService
 import ani.dantotsu.download.manga.MangaServiceDataSingleton
+import ani.dantotsu.dp
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.setNavigationTheme
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -492,7 +496,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.MANGA
+                MediaType.MANGA
             )
         )
         chapterAdapter.deleteDownload(i)
@@ -510,7 +514,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.MANGA
+                MediaType.MANGA
             )
         )
         chapterAdapter.purgeDownload(i)

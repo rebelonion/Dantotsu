@@ -10,7 +10,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -63,7 +62,7 @@ internal class NovelExtensionInstaller(private val context: Context) {
      * @param url The url of the apk.
      * @param extension The extension to install.
      */
-    fun downloadAndInstall(url: String, extension: NovelExtension) = Observable.defer {
+    fun downloadAndInstall(url: String, extension: NovelExtension): Observable<InstallStep> = Observable.defer {
         val pkgName = extension.pkgName
 
         val oldDownload = activeDownloads[pkgName]

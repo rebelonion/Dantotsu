@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.extension.manga.installer
+package eu.kanade.tachiyomi.extension.installer
 
 import android.app.Service
 import android.content.BroadcastReceiver
@@ -8,7 +8,10 @@ import android.content.IntentFilter
 import android.net.Uri
 import androidx.annotation.CallSuper
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
+import ani.dantotsu.media.MediaType
+import ani.dantotsu.parsers.novel.NovelExtensionManager
 import eu.kanade.tachiyomi.extension.InstallStep
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import uy.kohesive.injekt.injectLazy
 import java.util.Collections
@@ -17,9 +20,11 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * Base implementation class for extension installer. To be used inside a foreground [Service].
  */
-abstract class InstallerManga(private val service: Service) {
+abstract class Installer(private val service: Service) {
 
-    private val extensionManager: MangaExtensionManager by injectLazy()
+    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
+    private val mangaExtensionManager: MangaExtensionManager by injectLazy()
+    private val novelExtensionManager: NovelExtensionManager by injectLazy()
 
     private var waitingInstall = AtomicReference<Entry>(null)
     private val queue = Collections.synchronizedList(mutableListOf<Entry>())
@@ -41,11 +46,11 @@ abstract class InstallerManga(private val service: Service) {
     /**
      * Add an item to install queue.
      *
-     * @param downloadId Download ID as known by [MangaExtensionManager]
+     * @param downloadId Download ID as known by [ExtensionManager]
      * @param uri Uri of APK to install
      */
-    fun addToQueue(downloadId: Long, uri: Uri) {
-        queue.add(Entry(downloadId, uri))
+    fun addToQueue(type: MediaType, downloadId: Long, uri: Uri) {
+        queue.add(Entry(type, downloadId, uri))
         checkQueue()
     }
 
@@ -58,7 +63,11 @@ abstract class InstallerManga(private val service: Service) {
      */
     @CallSuper
     open fun processEntry(entry: Entry) {
-        extensionManager.setInstalling(entry.downloadId)
+        when (entry.type) {
+            MediaType.ANIME -> animeExtensionManager.setInstalling(entry.downloadId)
+            MediaType.MANGA -> mangaExtensionManager.setInstalling(entry.downloadId)
+            MediaType.NOVEL -> novelExtensionManager.setInstalling(entry.downloadId)
+        }
     }
 
     /**
@@ -73,7 +82,7 @@ abstract class InstallerManga(private val service: Service) {
 
     /**
      * Tells the queue to continue processing the next entry and updates the install step
-     * of the completed entry ([waitingInstall]) to [MangaExtensionManager].
+     * of the completed entry ([waitingInstall]) to [ExtensionManager].
      *
      * @param resultStep new install step for the processed entry.
      * @see waitingInstall
@@ -81,7 +90,19 @@ abstract class InstallerManga(private val service: Service) {
     fun continueQueue(resultStep: InstallStep) {
         val completedEntry = waitingInstall.getAndSet(null)
         if (completedEntry != null) {
-            extensionManager.updateInstallStep(completedEntry.downloadId, resultStep)
+            when (completedEntry.type) {
+                MediaType.ANIME -> {
+                    animeExtensionManager.updateInstallStep(completedEntry.downloadId, resultStep)
+                }
+
+                MediaType.MANGA -> {
+                    mangaExtensionManager.updateInstallStep(completedEntry.downloadId, resultStep)
+                }
+
+                MediaType.NOVEL -> {
+                    novelExtensionManager.updateInstallStep(completedEntry.downloadId, resultStep)
+                }
+            }
             checkQueue()
         }
     }
@@ -113,7 +134,19 @@ abstract class InstallerManga(private val service: Service) {
     @CallSuper
     open fun onDestroy() {
         LocalBroadcastManager.getInstance(service).unregisterReceiver(cancelReceiver)
-        queue.forEach { extensionManager.updateInstallStep(it.downloadId, InstallStep.Error) }
+        queue.forEach {
+            when (it.type) {
+                MediaType.ANIME -> {
+                    animeExtensionManager.updateInstallStep(it.downloadId, InstallStep.Error)
+                }
+                MediaType.MANGA -> {
+                    mangaExtensionManager.updateInstallStep(it.downloadId, InstallStep.Error)
+                }
+                MediaType.NOVEL -> {
+                    novelExtensionManager.updateInstallStep(it.downloadId, InstallStep.Error)
+                }
+            }
+        }
         queue.clear()
         waitingInstall.set(null)
     }
@@ -123,7 +156,7 @@ abstract class InstallerManga(private val service: Service) {
     /**
      * Cancels queue for the provided download ID if exists.
      *
-     * @param downloadId Download ID as known by [MangaExtensionManager]
+     * @param downloadId Download ID as known by [ExtensionManager]
      */
     private fun cancelQueue(downloadId: Long) {
         val waitingInstall = this.waitingInstall.get()
@@ -135,17 +168,27 @@ abstract class InstallerManga(private val service: Service) {
                 this.waitingInstall.set(null)
                 checkQueue()
             }
-            extensionManager.updateInstallStep(downloadId, InstallStep.Idle)
+            when (toCancel.type) {
+                MediaType.ANIME -> {
+                    animeExtensionManager.updateInstallStep(downloadId, InstallStep.Idle)
+                }
+                MediaType.MANGA -> {
+                    mangaExtensionManager.updateInstallStep(downloadId, InstallStep.Idle)
+                }
+                MediaType.NOVEL -> {
+                    novelExtensionManager.updateInstallStep(downloadId, InstallStep.Idle)
+                }
+            }
         }
     }
 
     /**
      * Install item to queue.
      *
-     * @param downloadId Download ID as known by [MangaExtensionManager]
+     * @param downloadId Download ID as known by [ExtensionManager]
      * @param uri Uri of APK to install
      */
-    data class Entry(val downloadId: Long, val uri: Uri)
+    data class Entry(val type: MediaType, val downloadId: Long, val uri: Uri)
 
     init {
         val filter = IntentFilter(ACTION_CANCEL_QUEUE)
@@ -159,7 +202,7 @@ abstract class InstallerManga(private val service: Service) {
         /**
          * Attempts to cancel the installation entry for the provided download ID.
          *
-         * @param downloadId Download ID as known by [MangaExtensionManager]
+         * @param downloadId Download ID as known by [ExtensionManager]
          */
         fun cancelInstallQueue(context: Context, downloadId: Long) {
             val intent = Intent(ACTION_CANCEL_QUEUE)

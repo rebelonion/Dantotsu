@@ -5,11 +5,10 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager.GET_SIGNATURES
 import android.content.pm.PackageManager.GET_SIGNING_CERTIFICATES
 import android.os.Build
-import android.util.Log
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.util.Logger
 import ani.dantotsu.parsers.NovelInterface
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import dalvik.system.PathClassLoader
 import eu.kanade.tachiyomi.util.lang.Hash
 import uy.kohesive.injekt.Injekt
@@ -134,10 +133,10 @@ internal object NovelExtensionLoader {
             }
             Logger.log("isFileWritable: ${file.canWrite()}")
             val classLoader = PathClassLoader(file.absolutePath, null, context.classLoader)
-            val className =
+            val extensionClassName =
                 "some.random.novelextensions.${className.lowercase(Locale.getDefault())}.$className"
-            val loadedClass = classLoader.loadClass(className)
-            val instance = loadedClass.newInstance()
+            val loadedClass = classLoader.loadClass(extensionClassName)
+            val instance = loadedClass.getDeclaredConstructor().newInstance()
             val novelInterfaceInstance = instance as? NovelInterface
             listOfNotNull(novelInterfaceInstance)
         } catch (e: Exception) {

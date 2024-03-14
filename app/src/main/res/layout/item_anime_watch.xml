@@ -103,7 +103,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/animeSourceLanguageContainer"
@@ -176,10 +177,11 @@
                     android:ellipsize="marquee"
                     android:fontFamily="@font/poppins_bold"
                     android:marqueeRepeatLimit="marquee_forever"
-                    android:paddingLeft="5dp"
+                    android:paddingStart="5dp"
                     android:singleLine="true"
                     android:textSize="14sp"
-                    tools:text="Dubbed" />
+                    tools:text="Dubbed"
+                    tools:ignore="RtlSymmetry" />
 
             </LinearLayout>
 
@@ -356,7 +358,7 @@
         android:text="@string/source_not_found"
         android:textAlignment="center"
         android:textSize="16sp"
-        android:visibility="gone"/>  
+        android:visibility="gone"/>
 
        <Button
         android:id="@+id/faqbutton"
@@ -375,4 +377,4 @@
     </LinearLayout>
 
 </LinearLayout>
-                
+

@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="@font/poppins"
-        android:text="Exporting credentials requires a password for encryption."
+        android:text="@string/exporting_requires_encryption"
         android:textSize="18sp"
         android:visibility="gone" />
 
