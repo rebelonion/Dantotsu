@@ -12,14 +12,16 @@ import androidx.lifecycle.coroutineScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadIndex
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
+import ani.dantotsu.R
 import ani.dantotsu.connections.updateProgress
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.databinding.ItemEpisodeGridBinding
 import ani.dantotsu.databinding.ItemEpisodeListBinding
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
+import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
@@ -429,7 +431,7 @@ class EpisodeAdapter(
         if (bytes < 0) return null
         val unit = 1000
         if (bytes < unit) return "$bytes B"
-        val exp = (Math.log(bytes.toDouble()) / ln(unit.toDouble())).toInt()
+        val exp = (ln(bytes.toDouble()) / ln(unit.toDouble())).toInt()
         val pre = ("KMGTPE")[exp - 1]
         return String.format("%.1f %sB", bytes / unit.toDouble().pow(exp.toDouble()), pre)
     }

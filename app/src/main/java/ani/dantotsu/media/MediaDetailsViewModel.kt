@@ -52,12 +52,16 @@ class MediaDetailsViewModel : ViewModel() {
                     it
                 }
         if (isDownload) {
-            data.sourceIndex = if (media.anime != null) {
-                AnimeSources.list.size - 1
-            } else if (media.format == "MANGA" || media.format == "ONE_SHOT") {
-                MangaSources.list.size - 1
-            } else {
-                NovelSources.list.size - 1
+            data.sourceIndex = when {
+                media.anime != null -> {
+                    AnimeSources.list.size - 1
+                }
+                media.format == "MANGA" || media.format == "ONE_SHOT" -> {
+                    MangaSources.list.size - 1
+                }
+                else -> {
+                    NovelSources.list.size - 1
+                }
             }
         }
         return data
@@ -152,10 +156,10 @@ class MediaDetailsViewModel : ViewModel() {
             watchSources?.get(i)?.apply {
                 if (!post && !allowsPreloading) return@apply
                 ep.sEpisode?.let {
-                    loadByVideoServers(link, ep.extra, it) {
-                        if (it.videos.isNotEmpty()) {
-                            list.add(it)
-                            ep.extractorCallback?.invoke(it)
+                    loadByVideoServers(link, ep.extra, it) { extractor ->
+                        if (extractor.videos.isNotEmpty()) {
+                            list.add(extractor)
+                            ep.extractorCallback?.invoke(extractor)
                         }
                     }
                 }

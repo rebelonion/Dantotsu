@@ -161,16 +161,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
+        val bottomNavBar = findViewById<AnimatedBottomBar>(R.id.navbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-            val backgroundDrawable = _bottomBar.background as GradientDrawable
+            val backgroundDrawable = bottomNavBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
             val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xF9000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
-            _bottomBar.background = backgroundDrawable
+            bottomNavBar.background = backgroundDrawable
         }
-        _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        bottomNavBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
         val offset = try {
             val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -339,7 +339,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, NoInternet::class.java))
             } else {
                 val model: AnilistHomeViewModel by viewModels()
-                model.genres.observe(this) { it ->
+                model.genres.observe(this) {
                     if (it != null) {
                         if (it) {
                             val navbar = binding.includedNavbar.navbar
@@ -364,7 +364,7 @@ class MainActivity : AppCompatActivity() {
                                     mainViewPager.setCurrentItem(newIndex, false)
                                 }
                             })
-                            if (mainViewPager.getCurrentItem() != selectedOption) {
+                            if (mainViewPager.currentItem != selectedOption) {
                                 navbar.selectTabAt(selectedOption)
                                 mainViewPager.post {
                                     mainViewPager.setCurrentItem(

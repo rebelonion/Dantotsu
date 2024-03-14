@@ -10,8 +10,19 @@ import android.content.res.Resources
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Bundle
-import android.view.*
-import android.view.KeyEvent.*
+import android.view.HapticFeedbackConstants
+import android.view.KeyEvent
+import android.view.KeyEvent.ACTION_DOWN
+import android.view.KeyEvent.KEYCODE_DPAD_DOWN
+import android.view.KeyEvent.KEYCODE_DPAD_UP
+import android.view.KeyEvent.KEYCODE_PAGE_DOWN
+import android.view.KeyEvent.KEYCODE_PAGE_UP
+import android.view.KeyEvent.KEYCODE_VOLUME_DOWN
+import android.view.KeyEvent.KEYCODE_VOLUME_UP
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.OvershootInterpolator
 import android.widget.AdapterView
 import android.widget.CheckBox
@@ -26,7 +37,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.*
+import ani.dantotsu.GesturesListener
+import ani.dantotsu.NoPaddingArrayAdapter
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.connections.discord.Discord
@@ -34,7 +47,12 @@ import ani.dantotsu.connections.discord.DiscordService
 import ani.dantotsu.connections.discord.DiscordServiceRunningSingleton
 import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityMangaReaderBinding
+import ani.dantotsu.dp
+import ani.dantotsu.hideSystemBarsExtendView
+import ani.dantotsu.isOnline
+import ani.dantotsu.logError
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaSingleton
@@ -45,14 +63,25 @@ import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaImage
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.px
+import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.CurrentReaderSettings
 import ani.dantotsu.settings.CurrentReaderSettings.Companion.applyWebtoon
-import ani.dantotsu.settings.CurrentReaderSettings.Directions.*
-import ani.dantotsu.settings.CurrentReaderSettings.DualPageModes.*
-import ani.dantotsu.settings.CurrentReaderSettings.Layouts.*
+import ani.dantotsu.settings.CurrentReaderSettings.Directions.BOTTOM_TO_TOP
+import ani.dantotsu.settings.CurrentReaderSettings.Directions.LEFT_TO_RIGHT
+import ani.dantotsu.settings.CurrentReaderSettings.Directions.RIGHT_TO_LEFT
+import ani.dantotsu.settings.CurrentReaderSettings.Directions.TOP_TO_BOTTOM
+import ani.dantotsu.settings.CurrentReaderSettings.DualPageModes.Automatic
+import ani.dantotsu.settings.CurrentReaderSettings.DualPageModes.Force
+import ani.dantotsu.settings.CurrentReaderSettings.DualPageModes.No
+import ani.dantotsu.settings.CurrentReaderSettings.Layouts.CONTINUOUS_PAGED
+import ani.dantotsu.settings.CurrentReaderSettings.Layouts.PAGED
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.showSystemBarsRetractView
+import ani.dantotsu.snackString
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.tryWith
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
@@ -65,7 +94,8 @@ import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
-import java.util.*
+import java.util.Timer
+import java.util.TimerTask
 import kotlin.math.min
 import kotlin.properties.Delegates
 
@@ -88,7 +118,6 @@ class MangaReaderActivity : AppCompatActivity() {
 
     private var isContVisible = false
     private var showProgressDialog = true
-    private var hidescrollbar = false
 
     private var maxChapterPage = 0L
     private var currentChapterPage = 0L
@@ -123,7 +152,7 @@ class MangaReaderActivity : AppCompatActivity() {
     }
 
     private fun hideSystemBars() {
-        if (PrefManager.getVal<Boolean>(PrefName.ShowSystemBars))
+        if (PrefManager.getVal(PrefName.ShowSystemBars))
             showSystemBarsRetractView()
         else
             hideSystemBarsExtendView()
@@ -369,7 +398,7 @@ class MangaReaderActivity : AppCompatActivity() {
                                     RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
                                     RPC.Link(
                                         "Stream on Dantotsu",
-                                        "https://github.com/rebelonion/Dantotsu/"
+                                        getString(R.string.github)
                                     )
                                 )
                             )
@@ -741,12 +770,12 @@ class MangaReaderActivity : AppCompatActivity() {
         goneTimer.schedule(timerTask, controllerDuration)
     }
 
-    enum class pressPos {
+    enum class PressPos {
         LEFT, RIGHT, CENTER
     }
 
     fun handleController(shouldShow: Boolean? = null, event: MotionEvent? = null) {
-        var pressLocation = pressPos.CENTER
+        var pressLocation = PressPos.CENTER
         if (!sliding) {
             if (event != null && defaultSettings.layout == PAGED) {
                 if (event.action != MotionEvent.ACTION_UP) return
@@ -756,23 +785,23 @@ class MangaReaderActivity : AppCompatActivity() {
                 //if in the 1st 1/5th of the screen width, left and lower than 1/5th of the screen height, left
                 if (screenWidth / 5 in x + 1..<y) {
                     pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
-                        pressPos.RIGHT
+                        PressPos.RIGHT
                     } else {
-                        pressPos.LEFT
+                        PressPos.LEFT
                     }
                 }
                 //if in the last 1/5th of the screen width, right and lower than 1/5th of the screen height, right
                 else if (x > screenWidth - screenWidth / 5 && y > screenWidth / 5) {
                     pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
-                        pressPos.LEFT
+                        PressPos.LEFT
                     } else {
-                        pressPos.RIGHT
+                        PressPos.RIGHT
                     }
                 }
             }
 
             // if pressLocation is left or right go to previous or next page (paged mode only)
-            if (pressLocation == pressPos.LEFT) {
+            if (pressLocation == PressPos.LEFT) {
 
                 if (binding.mangaReaderPager.currentItem > 0) {
                     //if  the current images zoomed in, go back to normal before going to previous page
@@ -783,7 +812,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     return
                 }
 
-            } else if (pressLocation == pressPos.RIGHT) {
+            } else if (pressLocation == PressPos.RIGHT) {
                 if (binding.mangaReaderPager.currentItem < maxChapterPage - 1) {
                     //if  the current images zoomed in, go back to normal before going to next page
                     if (imageAdapter?.isZoomed() == true) {
@@ -961,7 +990,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 if (!incognito && PrefManager.getCustomVal(
                         "${media.id}_save_progress",
                         true
-                    ) && if (media.isAdult) PrefManager.getVal<Boolean>(PrefName.UpdateForHReader) else true
+                    ) && if (media.isAdult) PrefManager.getVal(PrefName.UpdateForHReader) else true
                 )
                     updateProgress(
                         media,

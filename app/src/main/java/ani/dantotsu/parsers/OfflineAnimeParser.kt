@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.tryWithSuspend
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -132,16 +133,16 @@ class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
         currContext()?.let {
             DownloadsManager.getDirectory(
                 it,
-                ani.dantotsu.download.DownloadedType.Type.ANIME,
+                MediaType.ANIME,
                 title,
                 episode
-            ).listFiles()?.forEach {
-                if (it.name.contains("subtitle")) {
+            ).listFiles()?.forEach { file ->
+                if (file.name.contains("subtitle")) {
                     return listOf(
                         Subtitle(
                             "Downloaded Subtitle",
-                            Uri.fromFile(it).toString(),
-                            determineSubtitletype(it.absolutePath)
+                            Uri.fromFile(file).toString(),
+                            determineSubtitletype(file.absolutePath)
                         )
                     )
                 }

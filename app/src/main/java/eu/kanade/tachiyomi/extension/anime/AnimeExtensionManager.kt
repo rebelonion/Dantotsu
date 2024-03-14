@@ -10,10 +10,11 @@ import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.extension.anime.model.AvailableAnimeSources
-import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallReceiver
-import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller
-import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionLoader
+import eu.kanade.tachiyomi.extension.util.ExtensionInstallReceiver
+import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
+import eu.kanade.tachiyomi.extension.util.ExtensionLoader
 import eu.kanade.tachiyomi.util.preference.plusAssign
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -51,7 +52,7 @@ class AnimeExtensionManager(
     /**
      * The installer which installs, updates and uninstalls the anime extensions.
      */
-    private val installer by lazy { AnimeExtensionInstaller(context) }
+    private val installer by lazy { ExtensionInstaller(context) }
 
     private val iconMap = mutableMapOf<String, Drawable>()
 
@@ -92,14 +93,14 @@ class AnimeExtensionManager(
 
     init {
         initAnimeExtensions()
-        AnimeExtensionInstallReceiver(AnimeInstallationListener()).register(context)
+        ExtensionInstallReceiver().setAnimeListener(InstallationListener()).register(context)
     }
 
     /**
      * Loads and registers the installed animeextensions.
      */
     private fun initAnimeExtensions() {
-        val animeextensions = AnimeExtensionLoader.loadExtensions(context)
+        val animeextensions = ExtensionLoader.loadAnimeExtensions(context)
 
         _installedAnimeExtensionsFlow.value = animeextensions
             .filterIsInstance<AnimeLoadResult.Success>()
@@ -254,12 +255,13 @@ class AnimeExtensionManager(
      *
      * @param signature The signature to whitelist.
      */
+    @OptIn(DelicateCoroutinesApi::class)
     fun trustSignature(signature: String) {
         val untrustedSignatures =
             _untrustedAnimeExtensionsFlow.value.map { it.signatureHash }.toSet()
         if (signature !in untrustedSignatures) return
 
-        AnimeExtensionLoader.trustedSignatures += signature
+        ExtensionLoader.trustedSignaturesAnime += signature
         preferences.trustedSignatures() += signature
 
         val nowTrustedAnimeExtensions =
@@ -271,7 +273,7 @@ class AnimeExtensionManager(
             nowTrustedAnimeExtensions
                 .map { animeextension ->
                     async {
-                        AnimeExtensionLoader.loadExtensionFromPkgName(
+                        ExtensionLoader.loadAnimeExtensionFromPkgName(
                             ctx,
                             animeextension.pkgName
                         )
@@ -333,7 +335,7 @@ class AnimeExtensionManager(
     /**
      * Listener which receives events of the anime extensions being installed, updated or removed.
      */
-    private inner class AnimeInstallationListener : AnimeExtensionInstallReceiver.Listener {
+    private inner class InstallationListener : ExtensionInstallReceiver.AnimeListener {
 
         override fun onExtensionInstalled(extension: AnimeExtension.Installed) {
             registerNewExtension(extension.withUpdateCheck())

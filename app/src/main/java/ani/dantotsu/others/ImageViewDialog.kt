@@ -14,7 +14,7 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.BottomSheetImageBinding
 import ani.dantotsu.downloadsPermission
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmap
-import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmap_old
+import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmapOld
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.mergeBitmap
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.saveImageToDownloads
@@ -84,9 +84,9 @@ class ImageViewDialog : BottomSheetDialogFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             val binding = _binding ?: return@launch
 
-            var bitmap = context.loadBitmap_old(image, trans1 ?: listOf())
+            var bitmap = context.loadBitmapOld(image, trans1 ?: listOf())
             var bitmap2 =
-                if (image2 != null) context.loadBitmap_old(image2, trans2 ?: listOf()) else null
+                if (image2 != null) context.loadBitmapOld(image2, trans2 ?: listOf()) else null
             if (bitmap == null) {
                 bitmap = context.loadBitmap(image, trans1 ?: listOf())
                 bitmap2 =

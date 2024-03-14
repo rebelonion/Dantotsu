@@ -12,6 +12,7 @@
     <string name="discord">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github">https://github.com/rebelonion/Dantotsu</string>
     <string name="telegram" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
+    <string name="coffee">https://www.buymeacoffee.com/rebelonion</string>
     <string name="home">Home</string>
     <string name="anime">Anime</string>
     <string name="browse_anime">Browse Anime</string>
@@ -333,6 +334,7 @@
     <string name="skip">Skip</string>
     <string name="show_skip_time_stamp_button">Show Skip Time Stamp Button</string>
     <string name="always_load_time_stamps">Always Load Time Stamps</string>
+    <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>string
     <string name="timestamps">Time Stamps</string>
     <string name="other">Other</string>
     <string name="auto_skip_op_ed">Auto Skip OP / ED</string>
@@ -416,7 +418,7 @@
     <string name="reset_auto_update">You can long click List Editor button to Reset Auto Update</string>
     <string name="autoplay_cancelled">Autoplay cancelled, no Interaction for more than 1 Hour.</string>
     <string name="auto_select_server_error">Couldn\'t auto select the server, Please try again!</string>
-    <string name="stream_selection_empty">No streams available for content. Try another source.</string>
+    <string name="stream_selection_empty">No streams available! Try another source.</string>
     <string name="logging_in_mal">Logging in MAL</string>
     <string name="getting_user_data">Getting User Data</string>
     <string name="no_next_episode">No next Episode Found!</string>
@@ -513,6 +515,8 @@
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="reset">Reset</string>
     <string name="close">Close</string>
     <string name="no_chapter">No Chapter</string>
     <string name="content_18">Turn on 18+ Content from your Anilist Settings</string>
@@ -679,6 +683,7 @@
     <string name="no_fav_manga">User has no favorite Manga</string>
     <string name="fav_character">Favourite Characters</string>
     <string name="fav_staff">Favorite Staff</string>
+
     <string name="stats">Stats</string>
     <string name="days_watched">Days watched</string>
     <string name="total_anime">Total Anime</string>
@@ -688,6 +693,27 @@
     <string name="manga_mean_score">Manga Mean Score</string>
     <string name="about_me">About me</string>
     <string name="follow">Follow</string>
+
+    <string name="currently_airing">Currently Airing</string>
+    <string name="no_shows_to_display">No shows to display</string>
+    <string name="extension_name">Extension Name</string>
+    <string name="extension_version">version</string>
+    <string name="enter_password_to_decrypt_file">Enter your password to decrypt the file</string>
+    <string name="show_rotate_button">Show Rotate Button</string>
+    <string name="default_manga_settings">Default Manga Settings</string>
+    <string name="use_dark_theme">Use Dark Theme</string>
+    <string name="use_oled_theme">Use OLED Theme</string>
+    <string name="scanlators">Scanlators</string>
+    <string name="exporting_requires_encryption">Exporting credentials requires a password for encryption.</string>
+    <string name="manga_queue">Manga Queue (WIP)</string>
+    <string name="anime_queue">Anime Queue (WIP)</string>
+    <string name="no_offline_manga_found">No offline manga found</string>
+    <string name="sort">Sort</string>
+    <string name="download">Download</string>
+    <string name="scanlator">Scanlator</string>
+    <string name="set_cookies">Set Cookies</string>
+    <string name="open_website">Open Website</string>
+
     <string name="lorem_ipsum">
 
 Lorem ipsum dolor sit amet. Est consectetur sint qui internos optio nam Quis excepturi qui voluptatem animi. Qui labore quasi vel suscipit deleniti et doloremque omnis in velit suscipit et quasi eaque. Et doloribus recusandae id laudantium Quis qui natus velit in voluptatem voluptatem!
@@ -708,4 +734,10 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
     <string name="activities">Activities</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="password_cannot_be_empty">Password cannot be empty</string>
+    <string name="unknown_file_type">Unknown file type</string>
+    <string name="error_importing_settings">Error importing settings</string>
+    <string name="download_manager">Download Manager</string>
+    <string name="enter_password">Enter Password</string>
 </resources>

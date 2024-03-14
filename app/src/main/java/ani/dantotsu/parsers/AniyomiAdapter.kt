@@ -11,11 +11,11 @@ import android.os.Environment
 import android.provider.MediaStore
 import ani.dantotsu.FileUrl
 import ani.dantotsu.currContext
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
@@ -59,8 +59,6 @@ class AniyomiAdapter {
     fun aniyomiToAnimeParser(extension: AnimeExtension.Installed): DynamicAnimeParser {
         return DynamicAnimeParser(extension)
     }
-
-
 }
 
 class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
@@ -192,7 +190,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                 // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
                 val seasonGroups =
                     res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
-                seasonGroups.keys.sortedBy { it.toInt() }
+                seasonGroups.keys.sortedBy { it }
                     .flatMap { season ->
                         seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
                             if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
@@ -209,7 +207,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                         } ?: emptyList()
                     }
             }
-            return sortedEpisodes.map { SEpisodeToEpisode(it) }
+            return sortedEpisodes.map { sEpisodeToEpisode(it) }
         } catch (e: Exception) {
             Logger.log("Exception: $e")
         }
@@ -244,7 +242,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
 
         return try {
             val videos = source.getVideoList(sEpisode)
-            videos.map { VideoToVideoServer(it) }
+            videos.map { videoToVideoServer(it) }
         } catch (e: Exception) {
             Logger.log("Exception occurred: ${e.message}")
             emptyList()
@@ -296,7 +294,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         }
     }
 
-    private fun SEpisodeToEpisode(sEpisode: SEpisode): Episode {
+    private fun sEpisodeToEpisode(sEpisode: SEpisode): Episode {
         //if the float episode number is a whole number, convert it to an int
         val episodeNumberInt =
             if (sEpisode.episode_number % 1 == 0f) {
@@ -324,7 +322,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         )
     }
 
-    private fun VideoToVideoServer(video: Video): VideoServer {
+    private fun videoToVideoServer(video: Video): VideoServer {
         return VideoServer(
             video.quality,
             video.url,
@@ -363,7 +361,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         return try {
             val res = source.getChapterList(sManga)
             val reversedRes = res.reversed()
-            val chapterList = reversedRes.map { SChapterToMangaChapter(it) }
+            val chapterList = reversedRes.map { sChapterToMangaChapter(it) }
             Logger.log("chapterList size: ${chapterList.size}")
             Logger.log("chapterList: ${chapterList[1].title}")
             Logger.log("chapterList: ${chapterList[1].description}")
@@ -382,7 +380,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         } as? HttpSource ?: return emptyList()
-        var imageDataList: List<ImageData> = listOf()
+        val imageDataList: MutableList<ImageData> = mutableListOf()
         val ret = coroutineScope {
             try {
                 Logger.log("source.name " + source.name)
@@ -632,7 +630,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
     }
 
 
-    private fun SChapterToMangaChapter(sChapter: SChapter): MangaChapter {
+    private fun sChapterToMangaChapter(sChapter: SChapter): MangaChapter {
         return MangaChapter(
             sChapter.name,
             sChapter.url,
@@ -676,8 +674,8 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         get() = videoServer
 
     override suspend fun extract(): VideoContainer {
-        val vidList = listOfNotNull(videoServer.video?.let { AniVideoToSaiVideo(it) })
-        val subList = videoServer.video?.subtitleTracks?.map { TrackToSubtitle(it) } ?: emptyList()
+        val vidList = listOfNotNull(videoServer.video?.let { aniVideoToSaiVideo(it) })
+        val subList = videoServer.video?.subtitleTracks?.map { trackToSubtitle(it) } ?: emptyList()
 
         return if (vidList.isNotEmpty()) {
             VideoContainer(vidList, subList)
@@ -686,7 +684,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         }
     }
 
-    private fun AniVideoToSaiVideo(aniVideo: Video): ani.dantotsu.parsers.Video {
+    private fun aniVideoToSaiVideo(aniVideo: Video): ani.dantotsu.parsers.Video {
         // Find the number value from the .quality string
         val number = Regex("""\d+""").find(aniVideo.quality)?.value?.toInt() ?: 0
 
@@ -789,9 +787,9 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
     }
 
-    private fun TrackToSubtitle(track: Track): Subtitle {
+    private fun trackToSubtitle(track: Track): Subtitle {
         //use Dispatchers.IO to make a HTTP request to determine the subtitle type
-        var type: SubtitleType? = null
+        var type: SubtitleType?
         runBlocking {
             type = findSubtitleType(track.url)
         }

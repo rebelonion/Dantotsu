@@ -5,16 +5,12 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
 import android.os.PowerManager
-import android.provider.MediaStore
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -37,7 +33,6 @@ import okhttp3.Response
 import okhttp3.WebSocket
 import okhttp3.WebSocketListener
 import java.io.File
-import java.io.OutputStreamWriter
 
 class DiscordService : Service() {
     private var heartbeat: Int = 0
@@ -162,8 +157,8 @@ class DiscordService : Service() {
 
     inner class DiscordWebSocketListener : WebSocketListener() {
 
-        var retryAttempts = 0
-        val maxRetryAttempts = 10
+        private var retryAttempts = 0
+        private val maxRetryAttempts = 10
         override fun onOpen(webSocket: WebSocket, response: Response) {
             super.onOpen(webSocket, response)
             this@DiscordService.webSocket = webSocket
@@ -232,7 +227,7 @@ class DiscordService : Service() {
                         resume()
                         resume = false
                     } else {
-                        identify(webSocket, baseContext)
+                        identify(webSocket)
                         log("WebSocket: Identified")
                     }
                 }
@@ -245,13 +240,13 @@ class DiscordService : Service() {
             }
         }
 
-        fun identify(webSocket: WebSocket, context: Context) {
+        private fun identify(webSocket: WebSocket) {
             val properties = JsonObject()
             properties.addProperty("os", "linux")
             properties.addProperty("browser", "unknown")
             properties.addProperty("device", "unknown")
             val d = JsonObject()
-            d.addProperty("token", getToken(context))
+            d.addProperty("token", getToken())
             d.addProperty("intents", 0)
             d.add("properties", properties)
             val payload = JsonObject()
@@ -311,7 +306,7 @@ class DiscordService : Service() {
         }
     }
 
-    fun getToken(context: Context): String {
+    fun getToken(): String {
         val token = PrefManager.getVal(PrefName.DiscordToken, null as String?)
         return if (token == null) {
             log("WebSocket: Token not found")
@@ -375,10 +370,10 @@ class DiscordService : Service() {
         log("WebSocket: Simple Test Presence Saved")
     }
 
-    fun setPresence(String: String) {
+    fun setPresence(string: String) {
         log("WebSocket: Sending Presence payload")
-        log(String)
-        webSocket.send(String)
+        log(string)
+        webSocket.send(string)
     }
 
     fun log(string: String) {
@@ -388,7 +383,7 @@ class DiscordService : Service() {
     fun resume() {
         log("Sending Resume payload")
         val d = JsonObject()
-        d.addProperty("token", getToken(baseContext))
+        d.addProperty("token", getToken())
         d.addProperty("session_id", sessionId)
         d.addProperty("seq", sequence)
         val json = JsonObject()
@@ -404,8 +399,7 @@ class DiscordService : Service() {
                 Thread.sleep(heartbeat.toLong())
                 heartbeatSend(webSocket, sequence)
                 log("WebSocket: Heartbeat Sent")
-            } catch (e: InterruptedException) {
-            }
+            } catch (ignored: InterruptedException) { }
         }
     }
 

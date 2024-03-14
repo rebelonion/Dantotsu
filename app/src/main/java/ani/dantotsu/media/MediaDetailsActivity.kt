@@ -2,9 +2,7 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Rect
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.TypedValue
@@ -12,9 +10,7 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -246,13 +242,13 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         @SuppressLint("ResourceType")
         fun total() {
             val text = SpannableStringBuilder().apply {
-                val typedValue = TypedValue()
+                val mediaTypedValue = TypedValue()
                 this@MediaDetailsActivity.theme.resolveAttribute(
                     com.google.android.material.R.attr.colorOnBackground,
-                    typedValue,
+                    mediaTypedValue,
                     true
                 )
-                val white = typedValue.data
+                val white = mediaTypedValue.data
                 if (media.userStatus != null) {
                     append(if (media.anime != null) getString(R.string.watched_num) else getString(R.string.read_num))
                     val typedValue = TypedValue()

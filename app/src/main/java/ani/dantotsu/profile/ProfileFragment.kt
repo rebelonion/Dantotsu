@@ -33,6 +33,7 @@ import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.util.AniMarkdown.Companion.getFullAniHTML
 import ani.dantotsu.util.Logger
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -57,7 +58,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
 
-        user = arguments?.getSerializable("user") as Query.UserProfile
+        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             model.setData(user.id)
         }

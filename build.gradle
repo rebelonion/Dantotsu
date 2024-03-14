@@ -26,7 +26,7 @@ tasks.register('clean', Delete) {
     delete getLayout().getBuildDirectory()
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+tasks.withType(KotlinCompile).configureEach {
     kotlinOptions {
         freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
     }

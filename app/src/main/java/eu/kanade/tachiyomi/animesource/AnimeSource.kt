@@ -58,8 +58,7 @@ interface AnimeSource {
      */
     @Suppress("DEPRECATION")
     suspend fun getVideoList(episode: SEpisode): List<Video> {
-        val list = fetchVideoList(episode).awaitSingle()
-        return list
+        return fetchVideoList(episode).awaitSingle()
     }
 
     @Deprecated(

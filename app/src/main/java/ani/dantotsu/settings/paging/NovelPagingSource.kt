@@ -41,13 +41,14 @@ import kotlinx.coroutines.withContext
 class NovelExtensionsViewModelFactory(
     private val novelExtensionManager: NovelExtensionManager
 ) : ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return NovelExtensionsViewModel(novelExtensionManager) as T
     }
 }
 
 class NovelExtensionsViewModel(
-    private val novelExtensionManager: NovelExtensionManager
+    novelExtensionManager: NovelExtensionManager
 ) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
     private var currentPagingSource: NovelExtensionPagingSource? = null
@@ -102,21 +103,20 @@ class NovelExtensionPagingSource(
         } else {
             availableExtensions.filter { it.name.contains(query, ignoreCase = true) }
         }
-        val filternfsw = filteredExtensions
         /*val filternfsw = if(isNsfwEnabled) {  currently not implemented
             filteredExtensions
         } else {
             filteredExtensions.filterNot { it.isNsfw }
         }*/
         return try {
-            val sublist = filternfsw.subList(
+            val sublist = filteredExtensions.subList(
                 fromIndex = position,
-                toIndex = (position + params.loadSize).coerceAtMost(filternfsw.size)
+                toIndex = (position + params.loadSize).coerceAtMost(filteredExtensions.size)
             )
             LoadResult.Page(
                 data = sublist,
                 prevKey = if (position == 0) null else position - params.loadSize,
-                nextKey = if (position + params.loadSize >= filternfsw.size) null else position + params.loadSize
+                nextKey = if (position + params.loadSize >= filteredExtensions.size) null else position + params.loadSize
             )
         } catch (e: Exception) {
             LoadResult.Error(e)

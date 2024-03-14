@@ -7,7 +7,7 @@ import java.util.regex.Pattern
 class AnimeNameAdapter {
     companion object {
         const val episodeRegex =
-            "(episode|episodio|ep|e)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*\\(?\\s*(sub|subbed|dub|dubbed)*\\s*\\)?\\s*"
+            "(episode|episodio|ep|e)[\\s:.\\-]*(\\d+\\.?\\d*)[\\s:.\\-]*\\(?\\s*(sub|subbed|dub|dubbed)*\\s*\\)?\\s*"
         const val failedEpisodeNumberRegex =
             "(?<!part\\s)\\b(\\d+)\\b"
         const val seasonRegex = "(season|s)[\\s:.\\-]*(\\d+)[\\s:.\\-]*"
@@ -114,7 +114,7 @@ class AnimeNameAdapter {
             val regexPattern = Regex(episodeRegex, RegexOption.IGNORE_CASE)
             val removedNumber = text.replace(regexPattern, "")
             return if (removedNumber.equals(text, true)) {  // if nothing was removed
-                val failedEpisodeNumberPattern: Regex =
+                val failedEpisodeNumberPattern =
                     Regex(failedEpisodeNumberRegex, RegexOption.IGNORE_CASE)
                 failedEpisodeNumberPattern.replace(removedNumber) { mr ->
                     mr.value.replaceFirst(mr.groupValues[1], "")

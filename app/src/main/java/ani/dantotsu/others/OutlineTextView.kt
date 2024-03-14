@@ -1,9 +1,11 @@
 package ani.dantotsu.others
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.TypedValue
 import androidx.appcompat.widget.AppCompatTextView
 import ani.dantotsu.R
 
@@ -54,13 +56,13 @@ class OutlineTextView : AppCompatTextView {
         setStrokeWidth(strokeWidth)
     }
 
+    private val Float.toPx get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics
+    )
 
     private fun setStrokeWidth(width: Float) {
-        strokeWidth = width.toPx(context)
+        strokeWidth = width.toPx
     }
-
-    private fun Float.toPx(context: Context) =
-        (this * context.resources.displayMetrics.scaledDensity + 0.5F)
 
     override fun invalidate() {
         if (isDrawing) return
