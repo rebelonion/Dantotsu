@@ -109,6 +109,7 @@ data class Media(
         this.userScore = mediaList.score?.toInt() ?: 0
         this.userStatus = mediaList.status?.toString()
         this.userUpdatedAt = mediaList.updatedAt?.toLong()
+        this.genres = mediaList.media?.genres?.toMutableList() as? ArrayList<String>? ?: arrayListOf()
     }
 
     constructor(mediaEdge: MediaEdge) : this(mediaEdge.node!!) {

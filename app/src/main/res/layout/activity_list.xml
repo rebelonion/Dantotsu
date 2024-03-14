@@ -56,6 +56,15 @@
                     app:tint="?attr/colorOnBackground" />
 
                 <ImageButton
+                    android:id="@+id/filter"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:contentDescription="@string/filter"
+                    app:srcCompat="@drawable/ic_round_filter_alt_24"
+                    app:tint="?attr/colorOnBackground" />
+
+                <ImageButton
                     android:id="@+id/listSort"
                     android:layout_width="48dp"
                     android:layout_height="48dp"

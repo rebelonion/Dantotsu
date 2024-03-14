@@ -170,6 +170,21 @@ class ListActivity : AppCompatActivity() {
             popup.show()
         }
 
+        binding.filter.setOnClickListener {
+            val genres = PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()
+            val popup = PopupMenu(this, it)
+            popup.menu.add("All")
+            genres.forEach { genre ->
+                popup.menu.add(genre)
+            }
+            popup.setOnMenuItemClickListener { menuItem ->
+                val selectedGenre = menuItem.title.toString()
+                model.filterLists(selectedGenre)
+                true
+            }
+            popup.show()
+        }
+
         binding.random.setOnClickListener {
             //get the current tab
             val currentTab =
