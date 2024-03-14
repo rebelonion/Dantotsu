@@ -40,16 +40,21 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
             //if we have at least one reply notification, we need to fetch the media titles
             var names = emptyMap<Int, MediaNameFetch.Companion.ReturnedData>()
             if (notifications?.any { it.type == 1 || it.type == null } == true) {
-                val mediaIds = notifications.filter { it.type == 1 || it.type == null }.map { it.mediaId }
+                val mediaIds =
+                    notifications.filter { it.type == 1 || it.type == null }.map { it.mediaId }
                 names = MediaNameFetch.fetchMediaTitles(mediaIds)
             }
 
             val recentGlobal = PrefManager.getVal<Int>(
-                PrefName.RecentGlobalNotification)
+                PrefName.RecentGlobalNotification
+            )
 
-            notifications = notifications?.filter { it.type != 3 || it.notificationId > recentGlobal }?.toMutableList()
+            notifications =
+                notifications?.filter { it.type != 3 || it.notificationId > recentGlobal }
+                    ?.toMutableList()
 
-            val newRecentGlobal = notifications?.filter { it.type == 3 }?.maxOfOrNull { it.notificationId }
+            val newRecentGlobal =
+                notifications?.filter { it.type == 3 }?.maxOfOrNull { it.notificationId }
             if (newRecentGlobal != null) {
                 PrefManager.setVal(PrefName.RecentGlobalNotification, newRecentGlobal)
             }
@@ -59,7 +64,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     1 -> NotificationType.COMMENT_REPLY
                     2 -> NotificationType.COMMENT_WARNING
                     3 -> NotificationType.APP_GLOBAL
-                    else -> NotificationType.COMMENT_REPLY
+                    else -> NotificationType.UNKNOWN
                 }
                 val notification = when (type) {
                     NotificationType.COMMENT_WARNING -> {
@@ -104,6 +109,10 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                             ""
                         )
                     }
+
+                    NotificationType.UNKNOWN -> {
+                        null
+                    }
                 }
 
                 if (ActivityCompat.checkSelfPermission(
@@ -111,12 +120,14 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                         Manifest.permission.POST_NOTIFICATIONS
                     ) == PackageManager.PERMISSION_GRANTED
                 ) {
-                    NotificationManagerCompat.from(applicationContext)
-                        .notify(
-                            type.id,
-                            System.currentTimeMillis().toInt(),
-                            notification
-                        )
+                    if (notification != null) {
+                        NotificationManagerCompat.from(applicationContext)
+                            .notify(
+                                type.id,
+                                System.currentTimeMillis().toInt(),
+                                notification
+                            )
+                    }
                 }
             }
         }
@@ -131,7 +142,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
         commentId: Int,
         color: String,
         imageUrl: String
-    ): android.app.Notification {
+    ): android.app.Notification? {
         val notification = when (notificationType) {
             NotificationType.COMMENT_WARNING -> {
                 val intent = Intent(applicationContext, MainActivity::class.java).apply {
@@ -155,6 +166,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     .setAutoCancel(true)
                 builder.build()
             }
+
             NotificationType.COMMENT_REPLY -> {
                 val intent = Intent(applicationContext, MainActivity::class.java).apply {
                     putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
@@ -186,6 +198,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                 }
                 builder.build()
             }
+
             NotificationType.APP_GLOBAL -> {
                 val intent = Intent(applicationContext, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -204,6 +217,10 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true)
                 builder.build()
+            }
+
+            NotificationType.UNKNOWN -> {
+                null
             }
         }
         return notification
@@ -233,7 +250,8 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
     enum class NotificationType(val id: String) {
         COMMENT_REPLY(Notifications.CHANNEL_COMMENTS),
         COMMENT_WARNING(Notifications.CHANNEL_COMMENT_WARING),
-        APP_GLOBAL(Notifications.CHANNEL_APP_GLOBAL)
+        APP_GLOBAL(Notifications.CHANNEL_APP_GLOBAL),
+        UNKNOWN("unknown")
     }
 
     companion object {
