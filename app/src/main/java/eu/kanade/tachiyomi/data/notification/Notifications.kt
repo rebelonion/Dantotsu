@@ -53,6 +53,13 @@ object Notifications {
     const val CHANNEL_COMMENT_WARING = "comment_warning_channel"
     const val ID_COMMENT_REPLY = -801
 
+    /**
+     * Notification channel and ids used for anilist updates.
+     */
+    const val GROUP_ANILIST = "group_anilist"
+    const val CHANNEL_ANILIST = "anilist_channel"
+    const val ID_ANILIST = -901
+
 
     /**
      * Notification channel and ids used for app and extension updates.
@@ -105,6 +112,9 @@ object Notifications {
                 buildNotificationChannelGroup(GROUP_COMMENTS) {
                     setName("Comments")
                 },
+                buildNotificationChannelGroup(GROUP_ANILIST) {
+                    setName("Anilist")
+                },
             ),
         )
 
@@ -134,8 +144,12 @@ object Notifications {
                     setGroup(GROUP_COMMENTS)
                 },
                 buildNotificationChannel(CHANNEL_COMMENT_WARING, IMPORTANCE_HIGH) {
-                    setName("Comment Warnings")
+                    setName("CommentNotificationWorker Warnings")
                     setGroup(GROUP_COMMENTS)
+                },
+                buildNotificationChannel(CHANNEL_ANILIST, IMPORTANCE_DEFAULT) {
+                    setName("Anilist")
+                    setGroup(GROUP_ANILIST)
                 },
                 buildNotificationChannel(CHANNEL_APP_UPDATE, IMPORTANCE_DEFAULT) {
                     setGroup(GROUP_APK_UPDATES)

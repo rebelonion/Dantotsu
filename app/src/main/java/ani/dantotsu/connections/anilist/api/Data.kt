@@ -699,7 +699,7 @@ class Query {
 //    // Activity reply query
 //    val ActivityReply: ActivityReply?,
 
-//    // Comment query
+//    // CommentNotificationWorker query
 //    val ThreadComment: List<ThreadComment>?,
 
 //    // Notification query

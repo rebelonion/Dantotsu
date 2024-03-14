@@ -270,7 +270,7 @@ class CommentsFragment : Fragment() {
             }
 
             //adds additional comments to the section
-            private suspend fun updateUIWithComment(comment: Comment) {
+            private suspend fun updateUIWithComment(comment: CommentNotificationWorker) {
                 withContext(Dispatchers.Main) {
                     section.add(
                         CommentItem(
@@ -297,7 +297,7 @@ class CommentsFragment : Fragment() {
             override fun afterTextChanged(s: android.text.Editable?) {
                 if (binding.commentInput.text.length > 300) {
                     binding.commentInput.text.delete(300, binding.commentInput.text.length)
-                    snackString("Comment cannot be longer than 300 characters")
+                    snackString("CommentNotificationWorker cannot be longer than 300 characters")
                 }
             }
         })
@@ -626,7 +626,7 @@ class CommentsFragment : Fragment() {
     private fun processComment() {
         val commentText = binding.commentInput.text.toString()
         if (commentText.isEmpty()) {
-            snackString("Comment cannot be empty")
+            snackString("CommentNotificationWorker cannot be empty")
             return
         }
 
@@ -662,7 +662,7 @@ class CommentsFragment : Fragment() {
         groups.forEach { item ->
             if (item is CommentItem && item.comment.commentId == commentWithInteraction?.comment?.commentId) {
                 updateCommentItem(item, commentText)
-                snackString("Comment edited")
+                snackString("CommentNotificationWorker edited")
             }
         }
     }

@@ -24,10 +24,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
-import java.util.Locale
 
 
-class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
+class CommentNotificationWorker(appContext: Context, workerParams: WorkerParameters) :
     Worker(appContext, workerParams) {
     override fun doWork(): Result {
         val scope = CoroutineScope(Dispatchers.IO)
@@ -62,7 +61,7 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
                          ""
                     )
                 } else {
-                    val title = "New Comment Reply"
+                    val title = "New CommentNotificationWorker Reply"
                     val mediaName = names[it.mediaId]?.title ?: "Unknown"
                     val message = "${it.username} replied to your comment in $mediaName"
                     createNotification(
@@ -187,6 +186,7 @@ class NotificationWorker(appContext: Context, workerParams: WorkerParameters) :
     }
 
     companion object {
-        const val WORK_NAME = "ani.dantotsu.notifications.NotificationWorker"
+        val checkIntervals = arrayOf(0L, 720, 1440)
+        const val WORK_NAME = "ani.dantotsu.notifications.CommentNotificationWorker"
     }
 }

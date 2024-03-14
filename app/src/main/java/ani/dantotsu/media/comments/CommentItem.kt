@@ -129,12 +129,12 @@ class CommentItem(val comment: Comment,
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
         viewBinding.commentDelete.setOnClickListener {
-            dialogBuilder("Delete Comment", "Are you sure you want to delete this comment?") {
+            dialogBuilder("Delete CommentNotificationWorker", "Are you sure you want to delete this comment?") {
                 val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
                 scope.launch {
                     val success = CommentsAPI.deleteComment(comment.commentId)
                     if (success) {
-                        snackString("Comment Deleted")
+                        snackString("CommentNotificationWorker Deleted")
                         parentSection.remove(this@CommentItem)
                     }
                 }
@@ -152,12 +152,12 @@ class CommentItem(val comment: Comment,
             }
         }
         viewBinding.commentReport.setOnClickListener {
-            dialogBuilder("Report Comment", "Only report comments that violate the rules. Are you sure you want to report this comment?") {
+            dialogBuilder("Report CommentNotificationWorker", "Only report comments that violate the rules. Are you sure you want to report this comment?") {
                 val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
                 scope.launch {
                     val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsFragment.mediaName, comment.userId)
                     if (success) {
-                        snackString("Comment Reported")
+                        snackString("CommentNotificationWorker Reported")
                     }
                 }
             }

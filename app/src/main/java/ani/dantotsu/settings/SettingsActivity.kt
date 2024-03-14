@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
@@ -34,6 +33,7 @@ import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.copyToClipboard
@@ -47,6 +47,8 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.util.Logger
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.notifications.CommentNotificationWorker
+import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
@@ -671,6 +673,75 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         binding.settingsSubscriptionsTime.setOnLongClickListener {
             startSubscription(true)
             true
+        }
+
+        val aTimeNames = AnilistNotificationWorker.checkIntervals.map { it.toInt() }
+        val aItems = aTimeNames.map {
+            val mins = it % 60
+            val hours = it / 60
+            if (it > 0) "${if (hours > 0) "$hours hrs " else ""}${if (mins > 0) "$mins mins" else ""}"
+            else getString(R.string.do_not_update)
+        }
+        binding.settingsAnilistSubscriptionsTime.text =
+            getString(R.string.anilist_notifications_checking_time, aItems[PrefManager.getVal(PrefName.AnilistNotificationInterval)])
+        binding.settingsAnilistSubscriptionsTime.setOnClickListener {
+
+            val selected = PrefManager.getVal<Int>(PrefName.AnilistNotificationInterval)
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle(R.string.subscriptions_checking_time)
+                .setSingleChoiceItems(aItems.toTypedArray(), selected) { dialog, i ->
+                    PrefManager.setVal(PrefName.AnilistNotificationInterval, i)
+                    binding.settingsAnilistSubscriptionsTime.text =
+                        getString(R.string.anilist_notifications_checking_time, aItems[i])
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
+        }
+
+        binding.settingsAnilistNotifications.setOnClickListener {
+            val types = NotificationType.entries.map { it.name }
+            val filteredTypes = PrefManager.getVal<Set<String>>(PrefName.AnilistFilteredTypes).toMutableSet()
+            val selected = types.map { filteredTypes.contains(it) }.toBooleanArray()
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle(R.string.anilist_notification_filters)
+                .setMultiChoiceItems(types.toTypedArray(), selected) { _, which, isChecked ->
+                    val type = types[which]
+                    if (isChecked) {
+                        filteredTypes.add(type)
+                    } else {
+                        filteredTypes.remove(type)
+                    }
+                    PrefManager.setVal(PrefName.AnilistFilteredTypes, filteredTypes)
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
+        }
+
+        val cTimeNames = CommentNotificationWorker.checkIntervals.map { it.toInt() }
+        val cItems = cTimeNames.map {
+            val mins = it % 60
+            val hours = it / 60
+            if (it > 0) "${if (hours > 0) "$hours hrs " else ""}${if (mins > 0) "$mins mins" else ""}"
+            else getString(R.string.do_not_update)
+        }
+        binding.settingsCommentSubscriptionsTime.text =
+            getString(R.string.comment_notification_checking_time, cItems[PrefManager.getVal(PrefName.CommentNotificationInterval)])
+        binding.settingsCommentSubscriptionsTime.setOnClickListener {
+            val selected = PrefManager.getVal<Int>(PrefName.CommentNotificationInterval)
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle(R.string.subscriptions_checking_time)
+                .setSingleChoiceItems(cItems.toTypedArray(), selected) { dialog, i ->
+                    PrefManager.setVal(PrefName.CommentNotificationInterval, i)
+                    binding.settingsCommentSubscriptionsTime.text =
+                        getString(R.string.comment_notification_checking_time, cItems[i])
+                    dialog.dismiss()
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
         }
 
         binding.settingsNotificationsCheckingSubscriptions.isChecked =
