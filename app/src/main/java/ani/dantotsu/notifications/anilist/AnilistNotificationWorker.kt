@@ -59,7 +59,7 @@ class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParamet
                         }
                     }
                     if (newNotifications?.isNotEmpty() == true) {
-                        PrefManager.setVal(PrefName.LastAnilistNotificationId, 0)
+                        PrefManager.setVal(PrefName.LastAnilistNotificationId, newNotifications.last().id)
                     }
                 }
             }
