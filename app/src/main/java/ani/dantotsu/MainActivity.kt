@@ -49,7 +49,6 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.SharedPreferenceBooleanLiveData
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.util.Logger
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import eu.kanade.domain.source.service.SourcePreferences
@@ -208,6 +207,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
+            window.navigationBarColor = getColor(android.R.color.transparent)
             selectedOption = if (fragment != null) {
                 when (fragment) {
                     AnimeFragment::class.java.name -> 0
@@ -272,12 +272,14 @@ class MainActivity : AppCompatActivity() {
                                     mainViewPager.setCurrentItem(newIndex, false)
                                 }
                             })
-                            navbar.selectTabAt(selectedOption)
-                            mainViewPager.post {
-                                mainViewPager.setCurrentItem(
-                                    selectedOption,
-                                    false
-                                )
+                            if (mainViewPager.getCurrentItem() != selectedOption) {
+                                navbar.selectTabAt(selectedOption)
+                                mainViewPager.post {
+                                    mainViewPager.setCurrentItem(
+                                        selectedOption,
+                                        false
+                                    )
+                                }
                             }
                         } else {
                             binding.mainProgressBar.visibility = View.GONE
@@ -355,9 +357,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        initActivity(this)
+    override fun onRestart() {
+        super.onRestart()
         window.navigationBarColor = getColor(android.R.color.transparent)
     }
 
