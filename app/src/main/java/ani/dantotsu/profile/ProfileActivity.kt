@@ -24,6 +24,7 @@ import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.activity.FeedFragment
 import ani.dantotsu.settings.saving.PrefManager
@@ -140,6 +141,10 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                                         .putExtra("userId", user.id),
                                     null
                                 )
+                                true
+                            }
+                            R.id.action_view_on_anilist -> {
+                                openLinkInBrowser("https://anilist.co/user/${user.name}")
                                 true
                             }
                             else -> false
