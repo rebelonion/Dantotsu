@@ -151,7 +151,21 @@ class MangaReaderActivity : AppCompatActivity() {
         defaultSettings = loadReaderSettings("reader_settings") ?: defaultSettings
 
         onBackPressedDispatcher.addCallback(this) {
-            progress { finish() }
+            val chapter = (MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
+                ?.minus(1L) ?: 0).toString()
+            if (chapter == "0.0" && PrefManager.getVal(PrefName.ChapterZeroReader)
+                // Not asking individually or incognito
+                && !showProgressDialog && !PrefManager.getVal<Boolean>(PrefName.Incognito)
+                // Not ...opted out ...already? Somehow?
+                && PrefManager.getCustomVal("${media.id}_save_progress", true)
+                //  Allowing Doujin updates or not one
+                && if (media.isAdult) PrefManager.getVal(PrefName.UpdateForHReader) else true
+            ) {
+                updateProgress(media, chapter)
+                finish()
+            } else {
+                progress { finish() }
+            }
         }
 
         controllerDuration = (PrefManager.getVal<Float>(PrefName.AnimationSpeed) * 200).toLong()
