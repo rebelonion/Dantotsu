@@ -39,7 +39,8 @@ class FeedActivity: AppCompatActivity() {
             topMargin += statusBarHeight
         }
         binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
-        binding.feedViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
+        val activityId = intent.getIntExtra("activityId", -1)
+        binding.feedViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, activityId)
         binding.feedViewPager.setCurrentItem(selected, false)
         binding.feedViewPager.isUserInputEnabled = false
         navBar.selectTabAt(selected)
@@ -67,14 +68,15 @@ class FeedActivity: AppCompatActivity() {
 
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
-        lifecycle: Lifecycle
+        lifecycle: Lifecycle,
+        private val activityId: Int
     ) : FragmentStateAdapter(fragmentManager, lifecycle) {
         override fun getItemCount(): Int = 2
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> FeedFragment.newInstance(null, false)
-                else -> FeedFragment.newInstance(null, true)
+                0 -> FeedFragment.newInstance(null, false, activityId)
+                else -> FeedFragment.newInstance(null, true, -1)
             }
         }
     }

@@ -31,6 +31,7 @@ class FeedFragment : Fragment() {
     private var loadedFirstTime = false
     private var userId: Int? = null
     private var global: Boolean = false
+    private var activityId: Int = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +50,7 @@ class FeedFragment : Fragment() {
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
         userId = arguments?.getInt("userId", -1)
+        activityId = arguments?.getInt("activityId", -1) ?: -1
         if (userId == -1) userId = null
         global = arguments?.getBoolean("global", false) ?: false
     }
@@ -60,11 +62,12 @@ class FeedFragment : Fragment() {
             binding.root.requestLayout()
             if (!loadedFirstTime) {
                 activity.lifecycleScope.launch(Dispatchers.IO) {
-                    val res = Anilist.query.getFeed(userId, global)
+                    val nulledId = if (activityId == -1) null else activityId
+                    val res = Anilist.query.getFeed(userId, global, activityId = nulledId)
                     withContext(Dispatchers.Main) {
                         res?.data?.page?.activities?.let { activities ->
                             activityList = activities
-                            val filtered = activities.filterNot {  //filter out messages that are not directed to the user
+                            val filtered = activityList.filterNot {  //filter out messages that are not directed to the user
                                 it.recipient?.id != null && it.recipient.id != Anilist.userid
                             }
                             adapter.update(filtered.map { ActivityItem(it) { _, _ -> } })
@@ -107,11 +110,12 @@ class FeedFragment : Fragment() {
     }
 
     companion object {
-        fun newInstance(userId: Int?, global: Boolean): FeedFragment {
+        fun newInstance(userId: Int?, global: Boolean, activityId: Int): FeedFragment {
             val fragment = FeedFragment()
             val args = Bundle()
             args.putInt("userId", userId ?: -1)
             args.putBoolean("global", global)
+            args.putInt("activityId", activityId)
             fragment.arguments = args
             return fragment
         }

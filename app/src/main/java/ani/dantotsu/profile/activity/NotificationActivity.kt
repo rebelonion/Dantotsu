@@ -107,6 +107,12 @@ class NotificationActivity : AppCompatActivity() {
                         .putExtra("mediaId", id), null
                 )
             }
+            NotificationClickType.ACTIVITY -> {
+                ContextCompat.startActivity(
+                    this, Intent(this, FeedActivity::class.java)
+                        .putExtra("activityId", id), null
+                )
+            }
             NotificationClickType.UNDEFINED -> {
                 // Do nothing
             }
@@ -115,7 +121,7 @@ class NotificationActivity : AppCompatActivity() {
 
     companion object {
         enum class NotificationClickType {
-            USER, MEDIA, UNDEFINED
+            USER, MEDIA, ACTIVITY, UNDEFINED
         }
     }
 }

@@ -236,7 +236,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
         override fun getItemCount(): Int = 3
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> FeedFragment.newInstance(user.id, false)
+            0 -> FeedFragment.newInstance(user.id, false, -1)
             1 -> ProfileFragment.newInstance(user)
             2 -> StatsFragment.newInstance(user)
             else -> ProfileFragment.newInstance(user)

@@ -1351,8 +1351,9 @@ Page(page:$page,perPage:50) {
         return res
     }
 
-    suspend fun getFeed(userId: Int?, global: Boolean = false, page: Int = 1): FeedResponse? {
-        val filter = if (userId != null) "userId:$userId,"
+    suspend fun getFeed(userId: Int?, global: Boolean = false, page: Int = 1, activityId: Int? = null): FeedResponse? {
+        val filter = if (activityId != null) "id:$activityId,"
+        else if (userId != null) "userId:$userId,"
         else if (global) "isFollowing:false,type:TEXT,"
         else "isFollowing:true,type_not:MESSAGE,"
         return executeQuery<FeedResponse>(
