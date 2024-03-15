@@ -16,16 +16,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listRecyclerView"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/feedSwipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:nestedScrollingEnabled="true"
-            android:visibility="visible"
-            tools:listitem="@layout/item_activity" />
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <ani.dantotsu.FadingEdgeRecyclerView
+                android:id="@+id/listRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:nestedScrollingEnabled="true"
+                android:requiresFadingEdge="vertical"
+                android:visibility="visible"
+                tools:listitem="@layout/item_activity" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
         <ProgressBar

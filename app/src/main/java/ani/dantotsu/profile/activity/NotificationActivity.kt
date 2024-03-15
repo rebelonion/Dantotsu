@@ -88,25 +88,34 @@ class NotificationActivity : AppCompatActivity() {
                         ) {
                             page++
                             binding.followRefresh.visibility = ViewGroup.VISIBLE
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                val res = Anilist.query.getNotifications(Anilist.userid ?: 0, page)
-                                withContext(Dispatchers.Main) {
-                                    res?.data?.page?.notifications?.let { notifications ->
-                                        notificationList += notifications
-                                        adapter.addAll(notifications.map {
-                                            NotificationItem(
-                                                it,
-                                                ::onNotificationClick
-                                            )
-                                        })
-                                    }
-                                    binding.followRefresh.visibility = ViewGroup.GONE
-                                }
+                            loadPage {
+                                binding.followRefresh.visibility = ViewGroup.GONE
                             }
                         }
                     }
                     false
                 }
+
+                binding.followSwipeRefresh.setOnRefreshListener {
+                    page = 1
+                    adapter.clear()
+                    notificationList = emptyList()
+                    loadPage()
+                }
+            }
+        }
+    }
+
+    private fun loadPage(onFinish: () -> Unit = {}) {
+        lifecycleScope.launch(Dispatchers.IO) {
+            val res = Anilist.query.getNotifications(Anilist.userid ?: 0, page)
+            withContext(Dispatchers.Main) {
+                res?.data?.page?.notifications?.let { notifications ->
+                    notificationList += notifications
+                    adapter.addAll(notifications.map { NotificationItem(it, ::onNotificationClick) })
+                }
+                binding.followSwipeRefresh.isRefreshing = false
+                onFinish()
             }
         }
     }

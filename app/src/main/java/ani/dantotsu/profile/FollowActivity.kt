@@ -79,6 +79,9 @@ class FollowActivity : AppCompatActivity(){
             PrefManager.setVal(PrefName.FollowerLayout, 1)
             fillList()
         }
+        binding.followSwipeRefresh.setOnRefreshListener {
+            binding.followSwipeRefresh.isRefreshing = false
+        }
     }
 
     private fun fillList() {

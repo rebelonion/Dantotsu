@@ -87,26 +87,40 @@ class FeedFragment : Fragment() {
                                 ) {
                                     page++
                                     binding.feedRefresh.visibility = ViewGroup.VISIBLE
-                                    activity.lifecycleScope.launch(Dispatchers.IO) {
-                                        val newRes = Anilist.query.getFeed(userId, global, page)
-                                        withContext(Dispatchers.Main) {
-                                            newRes?.data?.page?.activities?.let { activities ->
-                                                activityList += activities
-                                                val filtered = activities.filterNot {
-                                                    it.recipient?.id != null && it.recipient.id != Anilist.userid
-                                                }
-                                                adapter.addAll(filtered.map { ActivityItem(it, ::onActivityClick,requireActivity()) })
-                                            }
-                                            binding.feedRefresh.visibility = ViewGroup.GONE
-                                        }
+                                    loadPage {
+                                        binding.feedRefresh.visibility = ViewGroup.GONE
                                     }
                                 }
                             }
                             false
                         }
+
+                        binding.feedSwipeRefresh.setOnRefreshListener {
+                            page = 1
+                            adapter.clear()
+                            activityList = emptyList()
+                            loadPage()
+                        }
                     }
                 }
                 loadedFirstTime = true
+            }
+        }
+    }
+
+    private fun loadPage(onFinish: () -> Unit = {}) {
+        activity.lifecycleScope.launch(Dispatchers.IO) {
+            val newRes = Anilist.query.getFeed(userId, global, page)
+            withContext(Dispatchers.Main) {
+                newRes?.data?.page?.activities?.let { activities ->
+                    activityList += activities
+                    val filtered = activities.filterNot {
+                        it.recipient?.id != null && it.recipient.id != Anilist.userid
+                    }
+                    adapter.addAll(filtered.map { ActivityItem(it, ::onActivityClick,requireActivity()) })
+                }
+                binding.feedSwipeRefresh.isRefreshing = false
+                onFinish()
             }
         }
     }
