@@ -19,9 +19,12 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.ProfileActivity
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.Logger
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -41,10 +44,15 @@ class NotificationActivity : AppCompatActivity() {
         binding = ActivityFollowBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.listTitle.text = "Notifications"
-        binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin = statusBarHeight }
-        binding.listFrameLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
+        binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight
+        }
+        binding.listFrameLayout.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
         binding.listRecyclerView.adapter = adapter
-        binding.listRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.listRecyclerView.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         binding.followerGrid.visibility = ViewGroup.GONE
         binding.followerList.visibility = ViewGroup.GONE
         binding.listBack.setOnClickListener {
@@ -54,8 +62,13 @@ class NotificationActivity : AppCompatActivity() {
         val activityId = intent.getIntExtra("activityId", -1)
         lifecycleScope.launch {
             val resetNotification = activityId == -1
-            val res = Anilist.query.getNotifications(Anilist.userid?:0, resetNotification = resetNotification)
+            val res = Anilist.query.getNotifications(
+                Anilist.userid ?: PrefManager.getVal<String>(PrefName.AnilistUserId).toIntOrNull()
+                ?: 0,
+                resetNotification = resetNotification
+            )
             res?.data?.page?.notifications?.let { notifications ->
+                Logger.log("Notifications: $notifications")
                 notificationList = if (activityId != -1) {
                     notifications.filter { it.id == activityId }
                 } else {
@@ -63,7 +76,7 @@ class NotificationActivity : AppCompatActivity() {
                 }
                 adapter.update(notificationList.map { NotificationItem(it, ::onNotificationClick) })
             }
-            withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
                 binding.listProgressBar.visibility = ViewGroup.GONE
                 binding.listRecyclerView.setOnTouchListener { _, event ->
                     if (event?.action == MotionEvent.ACTION_UP) {
@@ -76,11 +89,16 @@ class NotificationActivity : AppCompatActivity() {
                             page++
                             binding.followRefresh.visibility = ViewGroup.VISIBLE
                             lifecycleScope.launch(Dispatchers.IO) {
-                                val res = Anilist.query.getNotifications(Anilist.userid?:0, page)
+                                val res = Anilist.query.getNotifications(Anilist.userid ?: 0, page)
                                 withContext(Dispatchers.Main) {
                                     res?.data?.page?.notifications?.let { notifications ->
                                         notificationList += notifications
-                                        adapter.addAll(notifications.map { NotificationItem(it, ::onNotificationClick) })
+                                        adapter.addAll(notifications.map {
+                                            NotificationItem(
+                                                it,
+                                                ::onNotificationClick
+                                            )
+                                        })
                                     }
                                     binding.followRefresh.visibility = ViewGroup.GONE
                                 }
@@ -101,18 +119,21 @@ class NotificationActivity : AppCompatActivity() {
                         .putExtra("userId", id), null
                 )
             }
+
             NotificationClickType.MEDIA -> {
                 ContextCompat.startActivity(
                     this, Intent(this, MediaDetailsActivity::class.java)
                         .putExtra("mediaId", id), null
                 )
             }
+
             NotificationClickType.ACTIVITY -> {
                 ContextCompat.startActivity(
                     this, Intent(this, FeedActivity::class.java)
                         .putExtra("activityId", id), null
                 )
             }
+
             NotificationClickType.UNDEFINED -> {
                 // Do nothing
             }

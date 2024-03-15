@@ -128,6 +128,7 @@ object Anilist {
         cache: Int? = null
     ): T? {
         return try {
+            if (show) Logger.log("Anilist Query: $query")
             if (rateLimitReset > System.currentTimeMillis() / 1000) {
                 toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
                 throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
@@ -163,7 +164,7 @@ object Anilist {
                     throw Exception("Rate limited after $retry seconds")
                 }
                 if (!json.text.startsWith("{")) {throw Exception(currContext()?.getString(R.string.anilist_down))}
-                if (show) Logger.log("Anilist Query: ${json.text}")
+                if (show) Logger.log("Anilist Response: ${json.text}")
                 json.parsed()
             } else null
         } catch (e: Exception) {

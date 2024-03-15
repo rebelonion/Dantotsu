@@ -51,6 +51,7 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.SharedPreferenceBooleanLiveData
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.Logger
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import eu.kanade.domain.source.service.SourcePreferences
@@ -224,6 +225,7 @@ class MainActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
         }
+
         intent.extras?.let { extras ->
             val fragmentToLoad = extras.getString("FRAGMENT_TO_LOAD")
             val mediaId = extras.getInt("mediaId", -1)
@@ -245,6 +247,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 startActivity(feedIntent)
             } else if (fragmentToLoad == "NOTIFICATIONS" && activityId != -1) {
+                Logger.log("MainActivity, onCreate: $activityId")
                 val notificationIntent = Intent(this, NotificationActivity::class.java).apply {
                     putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
                     putExtra("activityId", activityId)

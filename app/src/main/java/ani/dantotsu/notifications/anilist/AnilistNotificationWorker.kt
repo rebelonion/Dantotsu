@@ -14,7 +14,6 @@ import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.profile.activity.ActivityItemBuilder
-import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import eu.kanade.tachiyomi.data.notification.Notifications
@@ -72,14 +71,14 @@ class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParamet
     private fun createNotification(
         context: Context,
         content: String,
-        activityId: Int? = null
+        notificationId: Int? = null
     ): android.app.Notification {
         val title = "New Anilist Notification"
         val intent = Intent(applicationContext, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
-            if (activityId != null) {
-                putExtra("activityId", activityId)
+            if (notificationId != null) {
+                putExtra("activityId", notificationId)
             }
         }
         val pendingIntent = PendingIntent.getActivity(

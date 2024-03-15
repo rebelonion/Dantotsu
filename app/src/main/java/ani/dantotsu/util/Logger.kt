@@ -2,6 +2,7 @@ package ani.dantotsu.util
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import androidx.core.content.FileProvider
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
@@ -78,7 +79,7 @@ object Logger {
     fun log(message: String) {
         val trace = Thread.currentThread().stackTrace[3]
         loggerExecutor.execute {
-            if (file == null) println(message)
+            if (file == null) Log.d("Internal Logger", "$message)")
             else {
                 val className = trace.className
                 val methodName = trace.methodName
