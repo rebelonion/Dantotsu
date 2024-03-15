@@ -413,6 +413,7 @@
     <string name="reset_auto_update">You can long click List Editor button to Reset Auto Update</string>
     <string name="autoplay_cancelled">Autoplay cancelled, no Interaction for more than 1 Hour.</string>
     <string name="auto_select_server_error">Couldn\'t auto select the server, Please try again!</string>
+    <string name="stream_selection_emoty">No streams available for content. Try another source.</string>
     <string name="logging_in_mal">Logging in MAL</string>
     <string name="getting_user_data">Getting User Data</string>
     <string name="no_next_episode">No next Episode Found!</string>
