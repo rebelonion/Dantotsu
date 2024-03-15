@@ -1,18 +1,12 @@
 package ani.dantotsu.profile
 
-import android.app.Activity
-import android.content.Context
+
 import android.view.View
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.databinding.ItemFollowerBinding
 import ani.dantotsu.loadImage
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.request.RequestOptions
 import com.xwray.groupie.viewbinding.BindableItem
-import jp.wasabeef.glide.transformations.BlurTransformation
 
 class FollowerItem(
     private val id: Int,

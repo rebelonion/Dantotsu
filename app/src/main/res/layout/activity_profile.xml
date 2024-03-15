@@ -23,9 +23,12 @@
         android:id="@+id/profileAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:translationZ="5dp">
+        android:translationZ="5dp"
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="false"
@@ -33,12 +36,8 @@
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
 
             <FrameLayout
-                android:id="@+id/profileTopContainer"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:layout_height="wrap_content">
 
                 <com.flaviofaria.kenburnsview.KenBurnsView
                     android:id="@+id/profileBannerImage"
@@ -69,8 +68,8 @@
                         android:layout_height="82dp"
                         android:layout_gravity="center"
                         android:backgroundTint="@color/transparent"
-                        app:strokeColor="@color/transparent"
-                        app:cardCornerRadius="64dp">
+                        app:cardCornerRadius="64dp"
+                        app:strokeColor="@color/transparent">
 
                         <com.google.android.material.imageview.ShapeableImageView
                             android:id="@+id/profileUserAvatar"
@@ -131,22 +130,21 @@
             </FrameLayout>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
         android:layout_marginBottom="72dp"
+        android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/profileViewPager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:nestedScrollingEnabled="true"
-        tools:ignore="SpeakableTextPresentCheck" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/profileViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="true"
+            tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>
 
 

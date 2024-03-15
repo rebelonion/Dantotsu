@@ -18,7 +18,7 @@
             android:layout_width="64dp"
             android:layout_height="64dp"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="12dp"
             android:backgroundTint="@color/transparent"
             app:cardCornerRadius="64dp"
             app:strokeColor="@color/transparent">
@@ -66,8 +66,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|center"
-            android:layout_marginEnd="16dp"
-            android:orientation="vertical">
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
 
             <ImageView
                 android:id="@+id/activityLike"
@@ -92,13 +93,14 @@
         android:id="@+id/activityContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginEnd="18dp"
+        android:layout_marginTop="3dp"
         android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/lorem_ipsum"
         android:textAlignment="center"
-        android:textSize="14sp" />
+        android:background="?android:colorBackground"
+        android:textSize="12sp" />
 
     <FrameLayout
         android:id="@+id/activityBannerContainer"

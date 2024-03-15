@@ -1,9 +1,9 @@
 package ani.dantotsu.profile.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
@@ -12,6 +12,8 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.ItemActivityBinding
 import ani.dantotsu.loadImage
+import ani.dantotsu.profile.User
+import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
 import com.bumptech.glide.Glide
@@ -29,7 +31,8 @@ import kotlinx.coroutines.withContext
 
 class ActivityItem(
     private val activity: Activity,
-    val clickCallback: (Int, type: String) -> Unit
+    val clickCallback: (Int, type: String) -> Unit,
+    private val FragActivity: FragmentActivity
 ) : BindableItem<ItemActivityBinding>() {
     private lateinit var binding: ItemActivityBinding
     private lateinit var repliesAdapter: GroupieAdapter
@@ -102,8 +105,18 @@ class ActivityItem(
                 }
             }
         }
-
         val context = binding.root.context
+        val userList = arrayListOf<User>()
+        activity.likes?.forEach{ i ->
+            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
+        }
+        binding.activityLike.setOnLongClickListener{
+            UsersDialogFragment().apply { userList(userList)
+                show(FragActivity.supportFragmentManager, "dialog")
+            }
+            true
+        }
+
 
         when (activity.typename) {
             "ListActivity" -> {

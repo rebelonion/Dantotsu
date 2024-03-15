@@ -43,7 +43,7 @@ import kotlin.math.abs
 
 class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
     lateinit var binding: ActivityProfileBinding
-    private var selected: Int = 1
+    private var selected: Int = 0
     private lateinit var navBar: AnimatedBottomBar
 
     @SuppressLint("SetTextI18n")
@@ -59,8 +59,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         val feedTab = navBar.createTab(R.drawable.ic_round_filter_24, "Feed")
         val profileTab = navBar.createTab(R.drawable.ic_round_person_24, "Profile")
         val statsTab = navBar.createTab(R.drawable.ic_stats_24, "Stats")
-        navBar.addTab(feedTab)
         navBar.addTab(profileTab)
+        navBar.addTab(feedTab)
         navBar.addTab(statsTab)
         navBar.visibility = View.GONE
         binding.profileViewPager.isUserInputEnabled = false
@@ -117,7 +117,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     }
                 }
                 binding.profileProgressBar.visibility = View.GONE
-                binding.profileTopContainer.visibility = View.VISIBLE
+                binding.profileAppBar.visibility = View.VISIBLE
                 binding.profileMenuButton.setOnClickListener {
                     val popup = PopupMenu(this@ProfileActivity, binding.profileMenuButton)
                     popup.menuInflater.inflate(R.menu.menu_profile, popup.menu)
@@ -240,8 +240,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
         override fun getItemCount(): Int = 3
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> FeedFragment.newInstance(user.id, false, -1)
-            1 -> ProfileFragment.newInstance(user)
+            0 -> ProfileFragment.newInstance(user)
+            1 -> FeedFragment.newInstance(user.id, false, -1)
             2 -> StatsFragment.newInstance(user)
             else -> ProfileFragment.newInstance(user)
         }

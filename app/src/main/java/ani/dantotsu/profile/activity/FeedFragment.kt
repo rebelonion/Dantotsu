@@ -72,7 +72,7 @@ class FeedFragment : Fragment() {
                             val filtered = activityList.filterNot {  //filter out messages that are not directed to the user
                                 it.recipient?.id != null && it.recipient.id != Anilist.userid
                             }
-                            adapter.update(filtered.map { ActivityItem(it, ::onActivityClick) })
+                            adapter.update(filtered.map { ActivityItem(it, ::onActivityClick,requireActivity()) })
                         }
                         binding.listProgressBar.visibility = ViewGroup.GONE
                         val scrollView = binding.listRecyclerView
@@ -95,7 +95,7 @@ class FeedFragment : Fragment() {
                                                 val filtered = activities.filterNot {
                                                     it.recipient?.id != null && it.recipient.id != Anilist.userid
                                                 }
-                                                adapter.addAll(filtered.map { ActivityItem(it, ::onActivityClick) })
+                                                adapter.addAll(filtered.map { ActivityItem(it, ::onActivityClick,requireActivity()) })
                                             }
                                             binding.feedRefresh.visibility = ViewGroup.GONE
                                         }
