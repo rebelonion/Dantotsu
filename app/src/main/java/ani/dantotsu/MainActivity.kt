@@ -3,6 +3,8 @@ package ani.dantotsu
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -11,6 +13,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -24,6 +27,7 @@ import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -378,6 +382,20 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         window.navigationBarColor = getColor(android.R.color.transparent)
+    }
+
+    private val Int.toPx get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
+    ).toInt()
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val params : ViewGroup.MarginLayoutParams =
+            binding.includedNavbar.navbar.layoutParams as ViewGroup.MarginLayoutParams
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
+            params.updateMargins(bottom = 8.toPx)
+        else
+            params.updateMargins(bottom = 32.toPx)
     }
 
     //ViewPager
