@@ -191,6 +191,12 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             }
                             binding.selectorProgressBar.visibility = View.GONE
                         }
+                        if (adapter.itemCount == 0) {
+                            snackString(getString(R.string.stream_selection_emoty))
+                            tryWith {
+                                dismiss()
+                            }
+                        }
                     }
                 }
             }
