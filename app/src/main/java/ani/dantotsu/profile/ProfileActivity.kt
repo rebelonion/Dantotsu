@@ -133,6 +133,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                                 )
                                 true
                             }
+
                             R.id.action_view_followers -> {
                                 ContextCompat.startActivity(
                                     this@ProfileActivity,
@@ -143,10 +144,12 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                                 )
                                 true
                             }
+
                             R.id.action_view_on_anilist -> {
                                 openLinkInBrowser("https://anilist.co/user/${user.name}")
                                 true
                             }
+
                             else -> false
                         }
                     }
@@ -214,7 +217,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
             isCollapsed = false
             ObjectAnimator.ofFloat(binding.profileUserDataContainer, "translationX", 0f)
                 .setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.profileUserAvatarContainer, "translationX", 0f).setDuration(duration)
+            ObjectAnimator.ofFloat(binding.profileUserAvatarContainer, "translationX", 0f)
+                .setDuration(duration)
                 .start()
             if (PrefManager.getVal(PrefName.BannerAnimations)) binding.profileBannerImage.resume()
         }

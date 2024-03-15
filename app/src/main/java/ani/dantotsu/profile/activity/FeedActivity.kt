@@ -16,7 +16,7 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
-class FeedActivity: AppCompatActivity() {
+class FeedActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFeedBinding
     private var selected: Int = 0
     private lateinit var navBar: AnimatedBottomBar
@@ -33,14 +33,15 @@ class FeedActivity: AppCompatActivity() {
         val globalTab = navBar.createTab(R.drawable.ic_globe_24, "Global")
         navBar.addTab(personalTab)
         navBar.addTab(globalTab)
-        binding.listTitle.text = "Activities"
+        binding.listTitle.text = getString(R.string.activities)
         binding.feedViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin += navBarHeight
             topMargin += statusBarHeight
         }
         binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
         val activityId = intent.getIntExtra("activityId", -1)
-        binding.feedViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, activityId)
+        binding.feedViewPager.adapter =
+            ViewPagerAdapter(supportFragmentManager, lifecycle, activityId)
         binding.feedViewPager.setCurrentItem(selected, false)
         binding.feedViewPager.isUserInputEnabled = false
         navBar.selectTabAt(selected)
@@ -64,7 +65,6 @@ class FeedActivity: AppCompatActivity() {
         super.onResume()
         navBar.selectTabAt(selected)
     }
-
 
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,

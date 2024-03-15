@@ -46,7 +46,9 @@ class ActivityItem(
             false
         )
         binding.activityUserName.text = activity.user?.name ?: activity.messenger?.name
-        binding.activityUserAvatar.loadImage(activity.user?.avatar?.medium ?: activity.messenger?.avatar?.medium)
+        binding.activityUserAvatar.loadImage(
+            activity.user?.avatar?.medium ?: activity.messenger?.avatar?.medium
+        )
         binding.activityTime.text = ActivityItemBuilder.getDateTime(activity.createdAt)
         val likeColor = ContextCompat.getColor(binding.root.context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(binding.root.context, R.color.bg_opp)
@@ -56,12 +58,19 @@ class ActivityItem(
         binding.commentRepliesContainer.setOnClickListener {
             when (binding.activityReplies.visibility) {
                 View.GONE -> {
-                    repliesAdapter.addAll(
-                        activity.replies?.map { ActivityReplyItem(it) } ?: emptyList()
-                    )
+                    val replyItems = activity.replies?.map {
+                        ActivityReplyItem(it) { id, type ->
+                            clickCallback(
+                                id,
+                                type
+                            )
+                        }
+                    } ?: emptyList()
+                    repliesAdapter.addAll(replyItems)
                     binding.activityReplies.visibility = View.VISIBLE
                     binding.commentTotalReplies.text = "Hide replies"
                 }
+
                 else -> {
                     repliesAdapter.clear()
                     binding.activityReplies.visibility = View.GONE
@@ -70,7 +79,7 @@ class ActivityItem(
                 }
             }
         }
-        binding.activityLikeCount.text = (activity.likeCount?:0).toString()
+        binding.activityLikeCount.text = (activity.likeCount ?: 0).toString()
         binding.activityLike.setOnClickListener {
             val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
             scope.launch {
@@ -83,7 +92,7 @@ class ActivityItem(
                         } else {
                             activity.likeCount = activity.likeCount?.plus(1)
                         }
-                        binding.activityLikeCount.text = (activity.likeCount?:0).toString()
+                        binding.activityLikeCount.text = (activity.likeCount ?: 0).toString()
                         activity.isLiked = !activity.isLiked!!
                         binding.activityLike.setColorFilter(if (activity.isLiked == true) likeColor else notLikeColor)
 
@@ -107,7 +116,18 @@ class ActivityItem(
                     """${activity.user!!.name} ${activity.status} ${activity.progress ?: ""}"""
                 binding.activityCover.loadImage(cover)
                 blurImage(binding.activityBannerImage, banner ?: cover)
-
+                binding.activityAvatarContainer.setOnClickListener {
+                    clickCallback(activity.userId ?: -1, "USER")
+                }
+                binding.activityUserName.setOnClickListener {
+                    clickCallback(activity.userId ?: -1, "USER")
+                }
+                binding.activityCoverContainer.setOnClickListener {
+                    clickCallback(activity.media?.id ?: -1, "MEDIA")
+                }
+                binding.activityMediaName.setOnClickListener {
+                    clickCallback(activity.media?.id ?: -1, "MEDIA")
+                }
             }
 
             "TextActivity" -> {
@@ -115,7 +135,16 @@ class ActivityItem(
                 binding.activityContent.visibility = View.VISIBLE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
-                    markwon.setMarkdown(binding.activityContent, getBasicAniHTML(activity.text ?: ""))
+                    markwon.setMarkdown(
+                        binding.activityContent,
+                        getBasicAniHTML(activity.text ?: "")
+                    )
+                }
+                binding.activityAvatarContainer.setOnClickListener {
+                    clickCallback(activity.userId ?: -1, "USER")
+                }
+                binding.activityUserName.setOnClickListener {
+                    clickCallback(activity.userId ?: -1, "USER")
                 }
             }
 
@@ -124,7 +153,16 @@ class ActivityItem(
                 binding.activityContent.visibility = View.VISIBLE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
-                    markwon.setMarkdown(binding.activityContent, getBasicAniHTML(activity.message ?: ""))
+                    markwon.setMarkdown(
+                        binding.activityContent,
+                        getBasicAniHTML(activity.message ?: "")
+                    )
+                }
+                binding.activityAvatarContainer.setOnClickListener {
+                    clickCallback(activity.messengerId ?: -1, "USER")
+                }
+                binding.activityUserName.setOnClickListener {
+                    clickCallback(activity.messengerId ?: -1, "USER")
                 }
             }
         }

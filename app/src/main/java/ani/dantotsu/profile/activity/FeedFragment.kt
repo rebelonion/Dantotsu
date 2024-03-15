@@ -1,11 +1,13 @@
 package ani.dantotsu.profile.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -14,7 +16,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistQueries
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.FragmentFeedBinding
-import ani.dantotsu.util.Logger
+import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.snackString
 import com.xwray.groupie.GroupieAdapter
@@ -70,7 +72,7 @@ class FeedFragment : Fragment() {
                             val filtered = activityList.filterNot {  //filter out messages that are not directed to the user
                                 it.recipient?.id != null && it.recipient.id != Anilist.userid
                             }
-                            adapter.update(filtered.map { ActivityItem(it) { _, _ -> } })
+                            adapter.update(filtered.map { ActivityItem(it, ::onActivityClick) })
                         }
                         binding.listProgressBar.visibility = ViewGroup.GONE
                         val scrollView = binding.listRecyclerView
@@ -86,14 +88,14 @@ class FeedFragment : Fragment() {
                                     page++
                                     binding.feedRefresh.visibility = ViewGroup.VISIBLE
                                     activity.lifecycleScope.launch(Dispatchers.IO) {
-                                        val res = Anilist.query.getFeed(userId, global, page)
+                                        val newRes = Anilist.query.getFeed(userId, global, page)
                                         withContext(Dispatchers.Main) {
-                                            res?.data?.page?.activities?.let { activities ->
+                                            newRes?.data?.page?.activities?.let { activities ->
                                                 activityList += activities
                                                 val filtered = activities.filterNot {
                                                     it.recipient?.id != null && it.recipient.id != Anilist.userid
                                                 }
-                                                adapter.addAll(filtered.map { ActivityItem(it) { _, _ -> } })
+                                                adapter.addAll(filtered.map { ActivityItem(it, ::onActivityClick) })
                                             }
                                             binding.feedRefresh.visibility = ViewGroup.GONE
                                         }
@@ -105,6 +107,23 @@ class FeedFragment : Fragment() {
                     }
                 }
                 loadedFirstTime = true
+            }
+        }
+    }
+
+    private fun onActivityClick(id: Int, type: String) {
+        when (type) {
+            "USER" -> {
+                ContextCompat.startActivity(
+                    activity, Intent(activity, ProfileActivity::class.java)
+                        .putExtra("userId", id), null
+                )
+            }
+            "MEDIA" -> {
+                ContextCompat.startActivity(
+                    activity, Intent(activity, MediaDetailsActivity::class.java)
+                        .putExtra("mediaId", id), null
+                )
             }
         }
     }

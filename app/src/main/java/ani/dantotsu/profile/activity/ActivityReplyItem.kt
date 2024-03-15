@@ -11,7 +11,8 @@ import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
 import com.xwray.groupie.viewbinding.BindableItem
 
 class ActivityReplyItem(
-    private val reply: ActivityReply
+    private val reply: ActivityReply,
+    private val clickCallback: (Int, type: String) -> Unit
 ) : BindableItem<ItemActivityReplyBinding>() {
     private lateinit var binding: ItemActivityReplyBinding
 
@@ -27,7 +28,12 @@ class ActivityReplyItem(
         binding.activityLike.setColorFilter(if (reply.isLiked) likeColor else notLikeColor)
         val markwon = buildMarkwon(binding.root.context)
         markwon.setMarkdown(binding.activityContent, getBasicAniHTML(reply.text))
-
+        binding.activityAvatarContainer.setOnClickListener {
+            clickCallback(reply.userId, "USER")
+        }
+        binding.activityUserName.setOnClickListener {
+            clickCallback(reply.userId, "USER")
+        }
     }
 
     override fun getLayout(): Int {
