@@ -208,10 +208,21 @@ class Query {
     ) : java.io.Serializable {
         @Serializable
         data class Data(
+            @SerialName("followerPage")
+            val followerPage: UserProfilePage?,
+            @SerialName("followingPage")
+            val followingPage: UserProfilePage?,
             @SerialName("user")
             val user: UserProfile?
         ) : java.io.Serializable
     }
+
+    @Serializable
+    data class UserProfilePage(
+        @SerialName("pageInfo")
+        val pageInfo: PageInfo,
+    ) : java.io.Serializable
+
     @Serializable
     data class Following(
         @SerialName("data")

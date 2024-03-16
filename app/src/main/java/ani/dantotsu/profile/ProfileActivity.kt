@@ -75,8 +75,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 finish()
                 return@launch
             }
-            val following = Anilist.query.userFollowers(userid)?.data?.page?.followers
-            val followers = Anilist.query.userFollowing(userid)?.data?.page?.following
+            val following = respond.data.followingPage?.pageInfo?.total?:0
+            val followers = respond.data.followerPage?.pageInfo?.total?:0
             withContext(Dispatchers.Main) {
                 binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = navBarHeight
@@ -185,9 +185,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 mMaxScrollSize = binding.profileAppBar.totalScrollRange
                 binding.profileAppBar.addOnOffsetChangedListener(this@ProfileActivity)
 
-                followers?.count()?.let {
-                    binding.profileFollowerCount.text = it.toString()
-                }
+
+                binding.profileFollowerCount.text = followers.toString()
                 binding.profileFollowerCountContainer.setOnClickListener {
                     ContextCompat.startActivity(
                         this@ProfileActivity,
@@ -198,9 +197,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     )
                 }
 
-                following?.count()?.let {
-                    binding.profileFollowingCount.text = it.toString()
-                }
+                binding.profileFollowingCount.text = following.toString()
                 binding.profileFollowingCountContainer.setOnClickListener {
                     ContextCompat.startActivity(
                         this@ProfileActivity,

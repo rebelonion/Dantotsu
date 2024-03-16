@@ -1293,7 +1293,7 @@ Page(page:$page,perPage:50) {
 
     suspend fun getUserProfile(id: Int): Query.UserProfileResponse? {
         return executeQuery<Query.UserProfileResponse>(
-            """{user:User(id:$id){id,name,about(asHtml:true)avatar{medium,large},bannerImage,isFollowing,isFollower,isBlocked,favourites{anime{nodes{id,coverImage{extraLarge,large,medium,color}}}manga{nodes{id,coverImage{extraLarge,large,medium,color}}}characters{nodes{id,name{first,middle,last,full,native,alternative,userPreferred},image{large,medium}}}staff{nodes{id,name{first,middle,last,full,native,alternative,userPreferred},image{large,medium}}}studios{nodes{id,name}}}statistics{anime{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}manga{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}}siteUrl}}""",
+            """{followerPage:Page{followers(userId:$id){id}pageInfo{total}}followingPage:Page{following(userId:$id){id}pageInfo{total}}user:User(id:$id){id,name,about(asHtml:true)avatar{medium,large},bannerImage,isFollowing,isFollower,isBlocked,favourites{anime{nodes{id,coverImage{extraLarge,large,medium,color}}}manga{nodes{id,coverImage{extraLarge,large,medium,color}}}characters{nodes{id,name{first,middle,last,full,native,alternative,userPreferred},image{large,medium}}}staff{nodes{id,name{first,middle,last,full,native,alternative,userPreferred},image{large,medium}}}studios{nodes{id,name}}}statistics{anime{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}manga{count,meanScore,standardDeviation,minutesWatched,episodesWatched,chaptersRead,volumesRead}}siteUrl}}""",
             force = true
         )
     }
