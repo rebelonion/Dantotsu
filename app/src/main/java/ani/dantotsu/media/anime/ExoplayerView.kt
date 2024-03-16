@@ -40,6 +40,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.math.MathUtils.clamp
+import androidx.core.view.isVisible
 import androidx.core.view.WindowCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
@@ -1471,7 +1472,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val DEFAULT_MAX_BUFFER_MS = 600000
         val BUFFER_FOR_PLAYBACK_MS = 2500
         val BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 5000
-        
+
         val loadControl = DefaultLoadControl.Builder()
             .setBackBuffer(1000 * 60 * 2, true)
             .setBufferDurationsMs(
@@ -1481,7 +1482,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS
             )
             .build()
-            
+
         hideSystemBars()
         exoPlayer = ExoPlayer.Builder(this)
             .setMediaSourceFactory(DefaultMediaSourceFactory(cacheFactory))
@@ -1720,7 +1721,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
             val new = currentTimeStamp
             timeStampText.text = if (new != null) {
-                fun DissapearSkip(){
+                fun disappearSkip() {
                     functionstarted = true
                     skipTimeButton.visibility = View.VISIBLE
                     exoSkip.visibility = View.GONE
@@ -1761,7 +1762,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 if (PrefManager.getVal(PrefName.ShowTimeStampButton)) {
 
                     if (!functionstarted && !disappeared && PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
-                        DissapearSkip()
+                        disappearSkip()
                     } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)){
                         skipTimeButton.visibility = View.VISIBLE
                         exoSkip.visibility = View.GONE
@@ -1771,9 +1772,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                         }
                     }
                 }
-                if (PrefManager.getVal(PrefName.AutoSkipOPED) && (new.skipType == "op" || new.skipType == "ed") && !skippedTimeStamps.contains(
-                                new
-                        )
+                if (PrefManager.getVal(PrefName.AutoSkipOPED) && (new.skipType == "op" || new.skipType == "ed")
+                    && !skippedTimeStamps.contains(new)
                 ) {
                     exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                     skippedTimeStamps.add(new)
@@ -1783,8 +1783,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 disappeared = false
                 functionstarted = false
                 skipTimeButton.visibility = View.GONE
-                if (PrefManager.getVal<Int>(PrefName.SkipTime) > 0) exoSkip.visibility =
-                        View.VISIBLE
+                exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
                 ""
             }
         }
