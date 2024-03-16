@@ -32,6 +32,7 @@ class ChartItem(
             }
         }
         binding.chartView.callBack = callback
+        binding.chartView.reload()
         binding.chartView.aa_drawChartWithChartOptions(aaOptions)
         binding.openButton.setOnClickListener {
             SingleStatActivity.chartOptions = aaOptions
