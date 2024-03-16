@@ -33,7 +33,7 @@ import kotlinx.coroutines.withContext
 class ActivityItem(
     private val activity: Activity,
     val clickCallback: (Int, type: String) -> Unit,
-    private val FragActivity: FragmentActivity
+    private val fragActivity: FragmentActivity
 ) : BindableItem<ItemActivityBinding>() {
     private lateinit var binding: ItemActivityBinding
     private lateinit var repliesAdapter: GroupieAdapter
@@ -114,7 +114,7 @@ class ActivityItem(
         }
         binding.activityLike.setOnLongClickListener{
             UsersDialogFragment().apply { userList(userList)
-                show(FragActivity.supportFragmentManager, "dialog")
+                show(fragActivity.supportFragmentManager, "dialog")
             }
             true
         }
@@ -127,8 +127,7 @@ class ActivityItem(
                 binding.activityContent.visibility = View.GONE
                 binding.activityBannerContainer.visibility = View.VISIBLE
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
-                binding.activityText.text =
-                    """${activity.user!!.name} ${activity.status} ${activity.progress ?: ""}"""
+                binding.activityText.text = "${activity.user!!.name} ${activity.status} ${activity.progress ?: activity.media?.title?.userPreferred}"
                 binding.activityCover.loadImage(cover)
                 blurImage(binding.activityBannerImage, banner ?: cover)
                 binding.activityAvatarContainer.setOnClickListener {

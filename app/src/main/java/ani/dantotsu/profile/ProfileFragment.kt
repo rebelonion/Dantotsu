@@ -87,37 +87,14 @@ class ProfileFragment : Fragment() {
         binding.userInfoContainer.visibility =
             if (user.about != null) View.VISIBLE else View.GONE
 
-        binding.profileAnimeList.setOnClickListener {
-            ContextCompat.startActivity(
-                activity, Intent(activity, ListActivity::class.java)
-                    .putExtra("anime", true)
-                    .putExtra("userId", user.id)
-                    .putExtra("username", user.name), null
-            )
-        }
-        binding.profileMangaList.setOnClickListener {
-            ContextCompat.startActivity(
-                activity, Intent(activity, ListActivity::class.java)
-                    .putExtra("anime", false)
-                    .putExtra("userId", user.id)
-                    .putExtra("username", user.name), null
-            )
-        }
+
         binding.statsEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()
         binding.statsDaysWatched.text =
             (user.statistics.anime.minutesWatched / (24 * 60)).toString()
-        binding.statsTotalAnime.text = user.statistics.anime.count.toString()
         binding.statsAnimeMeanScore.text = user.statistics.anime.meanScore.toString()
         binding.statsChaptersRead.text = user.statistics.manga.chaptersRead.toString()
         binding.statsVolumeRead.text = (user.statistics.manga.volumesRead).toString()
-        binding.statsTotalManga.text = user.statistics.manga.count.toString()
         binding.statsMangaMeanScore.text = user.statistics.manga.meanScore.toString()
-        model.getListImages().observe(viewLifecycleOwner) {
-            if (it.isNotEmpty()) {
-                binding.profileAnimeListImage.loadImage(it[0] ?: "https://bit.ly/31bsIHq")
-                binding.profileMangaListImage.loadImage(it[1] ?: "https://bit.ly/2ZGfcuG")
-            }
-        }
         initRecyclerView(
             model.getAnimeFav(),
             binding.profileFavAnimeContainer,

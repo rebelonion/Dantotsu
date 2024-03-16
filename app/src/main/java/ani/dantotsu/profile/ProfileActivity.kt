@@ -23,6 +23,7 @@ import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityProfileBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
+import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
@@ -74,6 +75,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 finish()
                 return@launch
             }
+            val following = Anilist.query.userFollowers(userid)?.data?.page?.followers
+            val followers = Anilist.query.userFollowing(userid)?.data?.page?.following
             withContext(Dispatchers.Main) {
                 binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = navBarHeight
@@ -181,6 +184,52 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
                 mMaxScrollSize = binding.profileAppBar.totalScrollRange
                 binding.profileAppBar.addOnOffsetChangedListener(this@ProfileActivity)
+
+                followers?.count()?.let {
+                    binding.profileFollowerCount.text = it.toString()
+                }
+                binding.profileFollowerCountContainer.setOnClickListener {
+                    ContextCompat.startActivity(
+                        this@ProfileActivity,
+                        Intent(this@ProfileActivity, FollowActivity::class.java)
+                            .putExtra("title", "Followers")
+                            .putExtra("userId", user.id),
+                        null
+                    )
+                }
+
+                following?.count()?.let {
+                    binding.profileFollowingCount.text = it.toString()
+                }
+                binding.profileFollowingCountContainer.setOnClickListener {
+                    ContextCompat.startActivity(
+                        this@ProfileActivity,
+                        Intent(this@ProfileActivity, FollowActivity::class.java)
+                            .putExtra("title", "Following")
+                            .putExtra("userId", user.id),
+                        null
+                    )
+                }
+
+                binding.profileAnimeCount.text = user.statistics.anime.count.toString()
+                binding.profileAnimeCountContainer.setOnClickListener {
+                    ContextCompat.startActivity(
+                        this@ProfileActivity, Intent(this@ProfileActivity, ListActivity::class.java)
+                            .putExtra("anime", true)
+                            .putExtra("userId", user.id)
+                            .putExtra("username", user.name), null
+                    )
+                }
+
+                binding.profileMangaCount.text = user.statistics.manga.count.toString()
+                binding.profileMangaCountContainer.setOnClickListener {
+                    ContextCompat.startActivity(
+                       this@ProfileActivity, Intent(this@ProfileActivity, ListActivity::class.java)
+                            .putExtra("anime", false)
+                            .putExtra("userId", user.id)
+                            .putExtra("username", user.name), null
+                    )
+                }
             }
         }
     }
@@ -211,6 +260,9 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 .setDuration(duration).start()
             ObjectAnimator.ofFloat(binding.profileUserAvatarContainer, "translationX", screenWidth)
                 .setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.profileButtonContainer, "translationX", screenWidth)
+                .setDuration(duration).start()
+            binding.profileButtonContainer.updateLayoutParams { height = 0 }
             binding.profileBannerImage.pause()
         }
         if (percentage <= percent && isCollapsed) {
@@ -218,8 +270,11 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
             ObjectAnimator.ofFloat(binding.profileUserDataContainer, "translationX", 0f)
                 .setDuration(duration).start()
             ObjectAnimator.ofFloat(binding.profileUserAvatarContainer, "translationX", 0f)
-                .setDuration(duration)
-                .start()
+                .setDuration(duration).start()
+            ObjectAnimator.ofFloat(binding.profileButtonContainer, "translationX", 0f)
+                .setDuration(duration).start()
+            binding.profileButtonContainer.updateLayoutParams { height = ViewGroup.LayoutParams.WRAP_CONTENT }
+
             if (PrefManager.getVal(PrefName.BannerAnimations)) binding.profileBannerImage.resume()
         }
     }

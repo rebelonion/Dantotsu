@@ -99,6 +99,7 @@
         android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/lorem_ipsum"
         android:textAlignment="center"
+        tools:visibility="gone"
         android:background="?android:colorBackground"
         android:textSize="12sp" />
 
