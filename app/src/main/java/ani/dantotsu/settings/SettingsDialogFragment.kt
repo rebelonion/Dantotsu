@@ -1,5 +1,6 @@
 package ani.dantotsu.settings
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -70,9 +71,18 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         if (Anilist.token != null) {
             binding.settingsLogin.setText(R.string.logout)
             binding.settingsLogin.setOnClickListener {
-                Anilist.removeSavedToken()
-                dismiss()
-                startMainActivity(requireActivity())
+                val alertDialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Yes") { _, _ ->
+                    Anilist.removeSavedToken()
+                    dismiss()
+                    startMainActivity(requireActivity())
+                }
+                .setNegativeButton("No") { _, _ -> }
+                .create()
+                alertDialog.window?.setDimAmount(0.8f)
+                alertDialog.show()
             }
             binding.settingsUsername.text = Anilist.username
             binding.settingsUserAvatar.loadImage(Anilist.avatar)
