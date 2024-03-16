@@ -4,6 +4,8 @@ import android.content.Intent
 import android.view.View
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemChartBinding
+import com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+import com.github.aachartmodel.aainfographics.aachartcreator.AAMoveOverEventMessageModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
 import com.xwray.groupie.viewbinding.BindableItem
 
@@ -15,6 +17,21 @@ class ChartItem(
     override fun bind(viewBinding: ItemChartBinding, position: Int) {
         binding = viewBinding
         binding.typeText.text = title
+        binding.root.visibility = View.INVISIBLE
+        binding.chartView.clipToPadding = true
+        val callback: AAChartView.AAChartViewCallBack = object : AAChartView.AAChartViewCallBack {
+
+            override fun chartViewDidFinishLoad(aaChartView: AAChartView) {
+                binding.root.visibility = View.VISIBLE
+            }
+
+            override fun chartViewMoveOverEventMessage(
+                aaChartView: AAChartView,
+                messageModel: AAMoveOverEventMessageModel
+            ) {
+            }
+        }
+        binding.chartView.callBack = callback
         binding.chartView.aa_drawChartWithChartOptions(aaOptions)
         binding.openButton.setOnClickListener {
             SingleStatActivity.chartOptions = aaOptions

@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -84,6 +86,26 @@ class ProfileFragment : Fragment() {
             "UTF-8",
             null
         )
+        binding.profileUserBio.setBackgroundColor(
+            ContextCompat.getColor(
+                requireContext(),
+                android.R.color.transparent
+            )
+        )
+        binding.profileUserBio.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        binding.profileUserBio.webViewClient = object : WebViewClient() {
+            override fun onPageFinished(view: WebView?, url: String?) {
+                super.onPageFinished(view, url)
+                binding.profileUserBio.setBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        android.R.color.transparent
+                    )
+                )
+                binding.profileUserBio.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+            }
+        }
+
         binding.userInfoContainer.visibility =
             if (user.about != null) View.VISIBLE else View.GONE
 
