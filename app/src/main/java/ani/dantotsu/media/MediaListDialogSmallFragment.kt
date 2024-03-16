@@ -73,7 +73,7 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
                             return@withContext
                         }
                     } else {
-                        val profile = Anilist.query.mediaProfile(media)
+                        val profile = Anilist.query.userMediaDetails(media)
                         profile.userListId?.let { listId ->
                             id = listId
                             Anilist.mutation.deleteList(listId)
