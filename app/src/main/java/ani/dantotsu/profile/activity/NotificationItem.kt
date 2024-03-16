@@ -9,6 +9,7 @@ import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.databinding.ItemNotificationBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.activity.NotificationActivity.Companion.NotificationClickType
+import ani.dantotsu.setAnimation
 import com.xwray.groupie.viewbinding.BindableItem
 
 class NotificationItem(
@@ -18,6 +19,7 @@ class NotificationItem(
     private lateinit var binding: ItemNotificationBinding
     override fun bind(viewBinding: ItemNotificationBinding, position: Int) {
         binding = viewBinding
+        setAnimation(binding.root.context, binding.root)
         setBinding()
     }
 

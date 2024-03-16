@@ -14,6 +14,7 @@ import ani.dantotsu.databinding.ItemActivityBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.User
 import ani.dantotsu.profile.UsersDialogFragment
+import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
 import com.bumptech.glide.Glide
@@ -40,6 +41,7 @@ class ActivityItem(
     @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
+        setAnimation(binding.root.context, binding.root)
 
         repliesAdapter = GroupieAdapter()
         binding.activityReplies.adapter = repliesAdapter

@@ -14,6 +14,7 @@ import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
+import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.ColorEditor.Companion.adjustColorForContrast
 import ani.dantotsu.util.ColorEditor.Companion.getContrastRatio
@@ -55,6 +56,7 @@ class CommentItem(val comment: Comment,
     @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
         binding = viewBinding
+        setAnimation(binding!!.root.context, binding!!.root)
         viewBinding.commentRepliesList.layoutManager = LinearLayoutManager(commentsFragment.activity)
         viewBinding.commentRepliesList.adapter = adapter
         val isUserComment = CommentsAPI.userId == comment.userId
