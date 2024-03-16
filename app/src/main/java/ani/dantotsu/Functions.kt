@@ -490,6 +490,7 @@ fun ImageView.loadImage(url: String?, size: Int = 0) {
 }
 
 fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
+    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
     if (file?.url?.isNotEmpty() == true) {
         tryWith {
             val glideUrl = GlideUrl(file.url) { file.headers }
@@ -1124,25 +1125,20 @@ fun blurImage(imageView: ImageView, banner: String?){
         val sampling = PrefManager.getVal<Float>(PrefName.BlurSampling).toInt()
         if (PrefManager.getVal(PrefName.BlurBanners)){
             val context = imageView.context
-            if (!(context as Activity).isDestroyed)
+            if (!(context as Activity).isDestroyed) {
+                val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
                 Glide.with(context as Context)
-                    .load(GlideUrl(banner))
+                    .load(GlideUrl(url))
                     .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
                     .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))
                     .into(imageView)
+            }
         }else{
             imageView.loadImage(banner)
         }
     } else {
         imageView.setImageResource(R.drawable.linear_gradient_bg)
     }
-}
-
-fun logToFile(context: Context, message: String) {
-    val externalFilesDir = context.getExternalFilesDir(null)
-    val file = File(externalFilesDir, "notifications.log")
-    file.appendText(message)
-    file.appendText("\n")
 }
 
 /**

@@ -136,7 +136,7 @@ suspend fun <T> tryWithSuspend(
  * A url, which can also have headers
  * **/
 data class FileUrl(
-    val url: String,
+    var url: String,
     val headers: Map<String, String> = mapOf()
 ) : Serializable {
     companion object {

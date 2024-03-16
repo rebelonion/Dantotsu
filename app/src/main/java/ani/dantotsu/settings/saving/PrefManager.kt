@@ -7,6 +7,7 @@ import ani.dantotsu.settings.saving.internal.Compat
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -374,6 +375,7 @@ object PrefManager {
             pref.edit().putString(key, serialized).apply()
         } catch (e: Exception) {
             snackString("Error serializing preference: ${e.message}")
+            Logger.log(e)
         }
     }
 
@@ -392,8 +394,7 @@ object PrefManager {
                 default
             }
         } catch (e: Exception) {
-            snackString("Error deserializing preference: ${e.message}")
-            e.printStackTrace()
+            Logger.log(e)
             default
         }
     }

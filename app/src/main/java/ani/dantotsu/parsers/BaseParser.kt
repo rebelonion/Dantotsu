@@ -3,9 +3,9 @@ package ani.dantotsu.parsers
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.currContext
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -216,8 +216,7 @@ data class ShowResponse(
         otherNames: List<String> = listOf(),
         total: Int? = null,
         extra: MutableMap<String, String>? = null
-    )
-            : this(name, link, FileUrl(coverUrl), otherNames, total, extra)
+    ) : this(name, link, FileUrl(coverUrl), otherNames, total, extra)
 
     constructor(
         name: String,
@@ -225,8 +224,7 @@ data class ShowResponse(
         coverUrl: String,
         otherNames: List<String> = listOf(),
         total: Int? = null
-    )
-            : this(name, link, FileUrl(coverUrl), otherNames, total)
+    ) : this(name, link, FileUrl(coverUrl), otherNames, total)
 
     constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf())
             : this(name, link, FileUrl(coverUrl), otherNames)
@@ -239,6 +237,10 @@ data class ShowResponse(
 
     constructor(name: String, link: String, coverUrl: String, sManga: SManga)
             : this(name, link, FileUrl(coverUrl), sManga = sManga)
+
+    companion object {
+        private const val serialVersionUID = 1L
+    }
 }
 
 

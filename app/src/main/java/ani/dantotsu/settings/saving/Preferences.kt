@@ -155,7 +155,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     DiscordStatus(Pref(Location.Irrelevant, String::class, "online")),
     DownloadsKeys(Pref(Location.Irrelevant, String::class, "")),
     NovelLastExtCheck(Pref(Location.Irrelevant, Long::class, 0L)),
-    SomethingSpecial(Pref(Location.Irrelevant, Boolean::class, false)),
+    ImageUrl(Pref(Location.Irrelevant, String::class, "")),
     AllowOpeningLinks(Pref(Location.Irrelevant, Boolean::class, false)),
     SearchStyle(Pref(Location.Irrelevant, Int::class, 0)),
     HasUpdatedPrefs(Pref(Location.Irrelevant, Boolean::class, false)),

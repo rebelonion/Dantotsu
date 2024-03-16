@@ -619,7 +619,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 Toast.makeText(this, "youwu have been cuwsed :pwayge:", Toast.LENGTH_LONG).show()
                 val url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                 openLinkInBrowser(url)
-                //PrefManager.setVal(PrefName.SomethingSpecial, !PrefManager.getVal(PrefName.SomethingSpecial, false))
+                //PrefManager.setVal(PrefName.ImageUrl, !PrefManager.getVal(PrefName.ImageUrl, false))
             } else {
                 snackString(array[(Math.random() * array.size).toInt()], this)
             }

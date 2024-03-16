@@ -370,6 +370,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         binding.mediaTitle.translationX = -screenWidth
 
         tabLayout.selectionListener = { selected, newId ->
+            binding.commentInputLayout.visibility = if (selected == 2) View.VISIBLE else View.GONE
             this.selected = selected
             selectFromID(newId)
             viewPager.setCurrentItem(selected, false)

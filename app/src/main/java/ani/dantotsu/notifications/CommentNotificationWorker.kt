@@ -64,6 +64,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     1 -> NotificationType.COMMENT_REPLY
                     2 -> NotificationType.COMMENT_WARNING
                     3 -> NotificationType.APP_GLOBAL
+                    420 -> NotificationType.NO_NOTIFICATION
                     else -> NotificationType.UNKNOWN
                 }
                 val notification = when (type) {
@@ -108,6 +109,11 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                             "",
                             ""
                         )
+                    }
+
+                    NotificationType.NO_NOTIFICATION -> {
+                        PrefManager.setVal(PrefName.ImageUrl, it.content ?: "")
+                        null
                     }
 
                     NotificationType.UNKNOWN -> {
@@ -219,7 +225,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                 builder.build()
             }
 
-            NotificationType.UNKNOWN -> {
+            else -> {
                 null
             }
         }
@@ -251,6 +257,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
         COMMENT_REPLY(Notifications.CHANNEL_COMMENTS),
         COMMENT_WARNING(Notifications.CHANNEL_COMMENT_WARING),
         APP_GLOBAL(Notifications.CHANNEL_APP_GLOBAL),
+        NO_NOTIFICATION("no_notification"),
         UNKNOWN("unknown")
     }
 
