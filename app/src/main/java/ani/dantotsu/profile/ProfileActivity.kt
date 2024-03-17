@@ -57,6 +57,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
         navBar = binding.profileNavBar
         navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
+
         val feedTab = navBar.createTab(R.drawable.ic_round_filter_24, "Feed")
         val profileTab = navBar.createTab(R.drawable.ic_round_person_24, "Profile")
         val statsTab = navBar.createTab(R.drawable.ic_stats_24, "Stats")
@@ -174,6 +175,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
                 binding.profileBannerGradient.updateLayoutParams { height += statusBarHeight }
                 binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+                binding.profileButtonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                 binding.profileBannerImage.setOnLongClickListener {
                     ImageViewDialog.newInstance(
                         this@ProfileActivity,
@@ -233,7 +235,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
     //Collapsing UI Stuff
     private var isCollapsed = false
-    private val percent = 45
+    private val percent = 65
     private var mMaxScrollSize = 0
     private var screenWidth: Float = 0f
 
@@ -259,7 +261,6 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 .setDuration(duration).start()
             ObjectAnimator.ofFloat(binding.profileButtonContainer, "translationX", screenWidth)
                 .setDuration(duration).start()
-            binding.profileButtonContainer.updateLayoutParams { height = 0 }
             binding.profileBannerImage.pause()
         }
         if (percentage <= percent && isCollapsed) {
@@ -270,9 +271,6 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 .setDuration(duration).start()
             ObjectAnimator.ofFloat(binding.profileButtonContainer, "translationX", 0f)
                 .setDuration(duration).start()
-            binding.profileButtonContainer.updateLayoutParams {
-                height = ViewGroup.LayoutParams.WRAP_CONTENT
-            }
 
             if (PrefManager.getVal(PrefName.BannerAnimations)) binding.profileBannerImage.resume()
         }

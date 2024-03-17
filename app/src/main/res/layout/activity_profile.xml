@@ -128,143 +128,144 @@
                         app:tint="@color/bg_opp" />
                 </LinearLayout>
             </FrameLayout>
+            <LinearLayout
+                android:id="@+id/profileButtonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="210dp"
+                android:layout_marginBottom="6dp"
+                android:background="?attr/colorSurface"
+                android:baselineAligned="false"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                tools:ignore="HardcodedText">
 
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:id="@+id/profileFollowerCountContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileFollowerCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        tools:text="1"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Follower" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:id="@+id/profileFollowingCountContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileFollowingCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        tools:text="2"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Following" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:id="@+id/profileAnimeCountContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileAnimeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        tools:text="3"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Anime" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:id="@+id/profileMangaCountContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileMangaCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        tools:text="4"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Manga" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="2dp"
+                    android:background="?android:attr/listDivider" />
+            </LinearLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <LinearLayout
-            android:id="@+id/profileButtonContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:layout_marginBottom="6dp"
-            android:background="?attr/colorSurface"
-            android:baselineAligned="false"
-            android:orientation="horizontal"
-            tools:ignore="HardcodedText">
 
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="2dp"
-                android:background="?android:attr/listDivider" />
-
-            <LinearLayout
-                android:id="@+id/profileFollowerCountContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/profileFollowerCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    tools:text="1"
-                    android:textColor="?attr/colorPrimary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:text="Follower" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:background="?android:attr/listDivider" />
-
-            <LinearLayout
-                android:id="@+id/profileFollowingCountContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/profileFollowingCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    tools:text="2"
-                    android:textColor="?attr/colorPrimary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:text="Following" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:background="?android:attr/listDivider" />
-
-            <LinearLayout
-                android:id="@+id/profileAnimeCountContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/profileAnimeCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    tools:text="3"
-                    android:textColor="?attr/colorPrimary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:text="Anime" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:background="?android:attr/listDivider" />
-
-            <LinearLayout
-                android:id="@+id/profileMangaCountContainer"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/profileMangaCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    tools:text="4"
-                    android:textColor="?attr/colorPrimary" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:text="Manga" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="3dp"
-                android:layout_height="match_parent"
-                android:layout_marginEnd="2dp"
-                android:background="?android:attr/listDivider" />
-        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
