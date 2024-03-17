@@ -11,12 +11,12 @@ import android.net.Uri
 import android.os.Environment
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.Mapper
 import ani.dantotsu.R
+import ani.dantotsu.buildMarkwon
 import ani.dantotsu.client
 import ani.dantotsu.currContext
 import ani.dantotsu.logError
@@ -26,8 +26,6 @@ import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.tryWithSuspend
 import ani.dantotsu.util.Logger
-import io.noties.markwon.Markwon
-import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -35,9 +33,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
-import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 object AppUpdater {
     suspend fun check(activity: FragmentActivity, post: Boolean = false) {
@@ -49,9 +46,10 @@ object AppUpdater {
                     .parsed<JsonArray>().map {
                         Mapper.json.decodeFromJsonElement<GithubResponse>(it)
                     }
-                val r = res.filter { it.prerelease }.filter { !it.tagName.contains("fdroid") }.maxByOrNull {
-                    it.timeStamp()
-                } ?: throw Exception("No Pre Release Found")
+                val r = res.filter { it.prerelease }.filter { !it.tagName.contains("fdroid") }
+                    .maxByOrNull {
+                        it.timeStamp()
+                    } ?: throw Exception("No Pre Release Found")
                 val v = r.tagName.substringAfter("v", "")
                 (r.body ?: "") to v.ifEmpty { throw Exception("Weird Version : ${r.tagName}") }
             } else {
@@ -71,8 +69,7 @@ object AppUpdater {
                     )
                     addView(
                         TextView(activity).apply {
-                            val markWon = Markwon.builder(activity)
-                                .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
+                            val markWon = buildMarkwon(activity, false)
                             markWon.setMarkdown(this, md)
                         }
                     )
