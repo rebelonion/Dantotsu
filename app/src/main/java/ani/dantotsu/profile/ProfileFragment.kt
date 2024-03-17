@@ -121,7 +121,7 @@ class ProfileFragment : Fragment() {
         )
 
         user.favourites?.characters?.nodes?.forEach { i ->
-            favCharacter.add(Character(i.id, i.name.full, i.image.large, i.image.large, ""))
+            favCharacter.add(Character(i.id, i.name.full, i.image.large, i.image.large, "", true))
         }
 
         user.favourites?.staff?.nodes?.forEach { i ->

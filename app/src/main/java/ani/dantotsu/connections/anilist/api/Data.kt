@@ -343,7 +343,9 @@ class Query {
         @SerialName("name")
         val name: CharacterName,
         @SerialName("image")
-        val image: CharacterImage
+        val image: CharacterImage,
+        @SerialName("isFavourite")
+        val isFavourite: Boolean
     ): java.io.Serializable
 
     @Serializable

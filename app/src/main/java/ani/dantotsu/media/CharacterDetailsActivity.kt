@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
+import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.anilist.AnilistMutations
 import ani.dantotsu.databinding.ActivityCharacterBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
@@ -26,6 +28,7 @@ import ani.dantotsu.others.getSerialized
 import ani.dantotsu.px
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.appbar.AppBarLayout
@@ -87,6 +90,21 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
         binding.characterShare.setOnLongClickListener {
             openLinkInBrowser(link)
             true
+        }
+        binding.characterFav.setImageResource(
+            if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24
+        )
+        binding.characterFav.setOnClickListener {
+            lifecycleScope.launch {
+                if (Anilist.mutation.toggleFav(AnilistMutations.FavType.CHARACTER, character.id)) {
+                    character.isFav = !character.isFav
+                    binding.characterFav.setImageResource(
+                        if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24
+                    )
+                } else {
+                    snackString("Failed to toggle favorite")
+                }
+            }
         }
         model.getCharacter().observe(this) {
             if (it != null && !loaded) {

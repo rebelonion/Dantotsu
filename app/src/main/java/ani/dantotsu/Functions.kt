@@ -1182,7 +1182,6 @@ fun buildMarkwon(activity: Context, userInputContent: Boolean = true, fragment: 
                         if (resource is GifDrawable) {
                             resource.start()
                         }
-                        Logger.log("Image loaded successfully: $model")
                         return false
                     }
 
