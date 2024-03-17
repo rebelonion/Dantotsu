@@ -1,6 +1,7 @@
 package ani.dantotsu.util
 
 import ani.dantotsu.util.ColorEditor.Companion.toCssColor
+import ani.dantotsu.util.ColorEditor.Companion.toHexColor
 
 class AniMarkdown { //istg anilist has the worst api
     companion object {
@@ -60,7 +61,7 @@ class AniMarkdown { //istg anilist has the worst api
             return underlineToHtml(step3)
         }
 
-        fun getFullAniHTML(html: String, backGroundColor: Int, textColor: Int): String {
+        fun getFullAniHTML(html: String, textColor: Int): String {
             val basicHtml = getBasicAniHTML(html)
 
 
@@ -95,7 +96,6 @@ class AniMarkdown { //istg anilist has the worst api
 </body>
 
     """.trimIndent()
-            Logger.log(returnHtml)
             return returnHtml
         }
     }

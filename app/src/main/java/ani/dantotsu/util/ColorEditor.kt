@@ -91,8 +91,11 @@ class ColorEditor {
             base += "${Color.green(this)}, "
             base += "${Color.blue(this)}, "
             base += "${Color.alpha(this) / 255.0})"
-            Logger.log("Color: $base")
             return base
+        }
+
+        fun Int.toHexColor(): String {
+            return String.format("#%06X", 0xFFFFFF and this)
         }
     }
 }

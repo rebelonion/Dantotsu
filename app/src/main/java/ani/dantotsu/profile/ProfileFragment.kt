@@ -16,6 +16,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.ProfileViewModel
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentProfileBinding
@@ -59,27 +60,12 @@ class ProfileFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             model.setData(user.id)
         }
-        val backGroundColorTypedValue = TypedValue()
-        val textColorTypedValue = TypedValue()
-        activity.theme.resolveAttribute(
-            android.R.attr.windowBackground,
-            backGroundColorTypedValue,
-            true
-        )
-        activity.theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOnBackground,
-            textColorTypedValue,
-            true
-        )
-
         binding.profileUserBio.settings.loadWithOverviewMode = true
         binding.profileUserBio.settings.useWideViewPort = true
         binding.profileUserBio.setInitialScale(1)
-        Logger.log("Text color: ${textColorTypedValue.data} Background color: ${backGroundColorTypedValue.data}")
         val styledHtml = getFullAniHTML(
             user.about ?: "",
-            backGroundColorTypedValue.data,
-            textColorTypedValue.data
+            activity.getColor(R.color.bg_opp)
         )
         binding.profileUserBio.loadDataWithBaseURL(
             null,
