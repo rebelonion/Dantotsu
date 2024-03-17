@@ -31,6 +31,7 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -42,6 +43,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okio.buffer
 import okio.sink
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -347,8 +349,9 @@ class NovelDownloaderService : Service() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: DownloadTask) {
-        GlobalScope.launch(Dispatchers.IO) {
+        launchIO {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                 "Dantotsu/Novel/${task.title}"
