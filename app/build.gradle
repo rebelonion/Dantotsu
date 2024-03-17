@@ -6,10 +6,6 @@ plugins {
     id 'com.google.devtools.ksp'
 }
 
-def gitCommitHash = providers.exec {
-    commandLine("git", "rev-parse", "--verify", "--short", "HEAD")
-}.standardOutput.asText.get().trim()
-
 android {
     compileSdk 34
 
