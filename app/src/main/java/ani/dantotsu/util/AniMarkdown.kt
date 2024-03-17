@@ -64,7 +64,7 @@ class AniMarkdown { //istg anilist has the worst api
             val basicHtml = getBasicAniHTML(html)
 
 
-            return """
+            val returnHtml = """
             <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, charset=UTF-8">
@@ -95,6 +95,8 @@ class AniMarkdown { //istg anilist has the worst api
 </body>
 
     """.trimIndent()
+            Logger.log(returnHtml)
+            return returnHtml
         }
     }
 }

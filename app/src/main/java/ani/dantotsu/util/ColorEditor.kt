@@ -91,6 +91,7 @@ class ColorEditor {
             base += "${Color.green(this)}, "
             base += "${Color.blue(this)}, "
             base += "${Color.alpha(this) / 255.0})"
+            Logger.log("Color: $base")
             return base
         }
     }

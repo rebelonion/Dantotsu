@@ -30,6 +30,7 @@ import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.util.AniMarkdown.Companion.getFullAniHTML
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -74,6 +75,7 @@ class ProfileFragment : Fragment() {
         binding.profileUserBio.settings.loadWithOverviewMode = true
         binding.profileUserBio.settings.useWideViewPort = true
         binding.profileUserBio.setInitialScale(1)
+        Logger.log("Text color: ${textColorTypedValue.data} Background color: ${backGroundColorTypedValue.data}")
         val styledHtml = getFullAniHTML(
             user.about ?: "",
             backGroundColorTypedValue.data,
