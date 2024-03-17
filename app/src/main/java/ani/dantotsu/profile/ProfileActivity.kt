@@ -75,8 +75,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 finish()
                 return@launch
             }
-            val following = respond.data.followingPage?.pageInfo?.total?:0
-            val followers = respond.data.followerPage?.pageInfo?.total?:0
+            val following = respond.data.followingPage?.pageInfo?.total ?: 0
+            val followers = respond.data.followerPage?.pageInfo?.total ?: 0
             withContext(Dispatchers.Main) {
                 binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = navBarHeight
@@ -221,7 +221,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 binding.profileMangaCount.text = user.statistics.manga.count.toString()
                 binding.profileMangaCountContainer.setOnClickListener {
                     ContextCompat.startActivity(
-                       this@ProfileActivity, Intent(this@ProfileActivity, ListActivity::class.java)
+                        this@ProfileActivity, Intent(this@ProfileActivity, ListActivity::class.java)
                             .putExtra("anime", false)
                             .putExtra("userId", user.id)
                             .putExtra("username", user.name), null
@@ -270,7 +270,9 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 .setDuration(duration).start()
             ObjectAnimator.ofFloat(binding.profileButtonContainer, "translationX", 0f)
                 .setDuration(duration).start()
-            binding.profileButtonContainer.updateLayoutParams { height = ViewGroup.LayoutParams.WRAP_CONTENT }
+            binding.profileButtonContainer.updateLayoutParams {
+                height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
 
             if (PrefManager.getVal(PrefName.BannerAnimations)) binding.profileBannerImage.resume()
         }
