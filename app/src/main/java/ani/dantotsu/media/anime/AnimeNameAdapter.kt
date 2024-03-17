@@ -7,7 +7,7 @@ import java.util.regex.Pattern
 class AnimeNameAdapter {
     companion object {
         const val episodeRegex =
-            "(episode|ep|e)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*\\(?\\s*(sub|subbed|dub|dubbed)*\\s*\\)?\\s*"
+            "(episode|episodio|ep|e)[\\s:.\\-]*([\\d]+\\.?[\\d]*)[\\s:.\\-]*\\(?\\s*(sub|subbed|dub|dubbed)*\\s*\\)?\\s*"
         const val failedEpisodeNumberRegex =
             "(?<!part\\s)\\b(\\d+)\\b"
         const val seasonRegex = "(season|s)[\\s:.\\-]*(\\d+)[\\s:.\\-]*"
