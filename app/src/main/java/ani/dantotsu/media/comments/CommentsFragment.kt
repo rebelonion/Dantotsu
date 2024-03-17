@@ -33,6 +33,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
+import com.bumptech.glide.Glide
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import io.noties.markwon.editor.MarkwonEditor
@@ -82,7 +83,7 @@ class CommentsFragment : Fragment() {
         this.mediaId = mediaId
         backgroundColor = (binding.root.background as? ColorDrawable)?.color ?: 0
 
-        val markwon = buildMarkwon(activity)
+        val markwon = buildMarkwon(activity, fragment = this@CommentsFragment)
 
         activity.binding.commentUserAvatar.loadImage(Anilist.avatar)
         val markwonEditor = MarkwonEditor.create(markwon)
@@ -228,7 +229,7 @@ class CommentsFragment : Fragment() {
                         section.add(
                             CommentItem(
                                 comment,
-                                buildMarkwon(activity),
+                                buildMarkwon(activity, fragment = this@CommentsFragment),
                                 section,
                                 this@CommentsFragment,
                                 backgroundColor,
@@ -353,7 +354,11 @@ class CommentsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         tag = null
-        adapter.notifyDataSetChanged()
+        section.groups.forEach {
+            if (it is CommentItem && it.containsGif()) {
+                it.notifyChanged()
+            }
+        }
     }
 
     enum class InteractionState {
@@ -381,7 +386,7 @@ class CommentsFragment : Fragment() {
                 section.add(
                     CommentItem(
                         it,
-                        buildMarkwon(activity),
+                        buildMarkwon(activity, fragment = this@CommentsFragment),
                         section,
                         this@CommentsFragment,
                         backgroundColor,
@@ -411,7 +416,7 @@ class CommentsFragment : Fragment() {
                 section.add(
                     CommentItem(
                         comment,
-                        buildMarkwon(activity),
+                        buildMarkwon(activity, fragment = this@CommentsFragment),
                         section,
                         this@CommentsFragment,
                         backgroundColor,
@@ -534,7 +539,7 @@ class CommentsFragment : Fragment() {
                 if (depth >= comment.MAX_DEPTH) comment.registerSubComment(it.commentId)
                 val newCommentItem = CommentItem(
                     it,
-                    buildMarkwon(activity),
+                    buildMarkwon(activity, fragment = this@CommentsFragment),
                     section,
                     this@CommentsFragment,
                     backgroundColor,
@@ -659,7 +664,7 @@ class CommentsFragment : Fragment() {
                     if (commentWithInteraction!!.commentDepth + 1 > commentWithInteraction!!.MAX_DEPTH) 0 else section.itemCount,
                     CommentItem(
                         it,
-                        buildMarkwon(activity),
+                        buildMarkwon(activity, fragment = this@CommentsFragment),
                         section,
                         this@CommentsFragment,
                         backgroundColor,
@@ -671,7 +676,7 @@ class CommentsFragment : Fragment() {
                     0,
                     CommentItem(
                         it,
-                        buildMarkwon(activity),
+                        buildMarkwon(activity, fragment = this@CommentsFragment),
                         section,
                         this@CommentsFragment,
                         backgroundColor,

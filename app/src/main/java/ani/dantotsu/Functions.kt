@@ -43,6 +43,7 @@ import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
 import androidx.core.view.*
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -1145,7 +1146,8 @@ fun blurImage(imageView: ImageView, banner: String?){
  * Builds the markwon instance with all the plugins
  * @return the markwon instance
  */
-fun buildMarkwon(activity: Context, userInputContent: Boolean = true): Markwon {
+fun buildMarkwon(activity: Context, userInputContent: Boolean = true, fragment: Fragment? = null): Markwon {
+    val glideContext = fragment?.let { Glide.with(it) } ?: Glide.with(activity)
     val markwon = Markwon.builder(activity)
         .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
@@ -1168,38 +1170,41 @@ fun buildMarkwon(activity: Context, userInputContent: Boolean = true): Markwon {
         })
         .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
 
-            private val requestManager: RequestManager =
-                Glide.with(activity).apply {
-                    addDefaultRequestListener(object : RequestListener<Any> {
-                        override fun onResourceReady(
-                            resource: Any,
-                            model: Any,
-                            target: Target<Any>,
-                            dataSource: DataSource,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            if (resource is GifDrawable) {
-                                resource.start()
-                            }
-                            return false
+            private val requestManager: RequestManager = glideContext.apply {
+                addDefaultRequestListener(object : RequestListener<Any> {
+                    override fun onResourceReady(
+                        resource: Any,
+                        model: Any,
+                        target: Target<Any>,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        if (resource is GifDrawable) {
+                            resource.start()
                         }
+                        Logger.log("Image loaded successfully: $model")
+                        return false
+                    }
 
-                        override fun onLoadFailed(
-                            e: GlideException?,
-                            model: Any?,
-                            target: Target<Any>,
-                            isFirstResource: Boolean
-                        ): Boolean {
-                            return false
-                        }
-                    })
-                }
-
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Any>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Logger.log("Image failed to load: $model")
+                        Logger.log(e as Exception)
+                        return false
+                    }
+                })
+            }
             override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
+                Logger.log("Loading image: ${drawable.destination}")
                 return requestManager.load(drawable.destination)
             }
 
             override fun cancel(target: Target<*>) {
+                Logger.log("Cancelling image load")
                 requestManager.clear(target)
             }
         }))

@@ -30,7 +30,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.TimeZone
 import kotlin.math.abs
-import kotlin.math.pow
 import kotlin.math.sqrt
 
 class CommentItem(val comment: Comment,
@@ -40,7 +39,7 @@ class CommentItem(val comment: Comment,
                   private val backgroundColor: Int,
                   val commentDepth: Int
 ) : BindableItem<ItemCommentsBinding>() {
-    var binding: ItemCommentsBinding? = null
+    lateinit var binding: ItemCommentsBinding
     val adapter = GroupieAdapter()
     private var subCommentIds: MutableList<Int> = mutableListOf()
     val repliesSection = Section()
@@ -56,7 +55,7 @@ class CommentItem(val comment: Comment,
     @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
         binding = viewBinding
-        setAnimation(binding!!.root.context, binding!!.root)
+        setAnimation(binding.root.context, binding.root)
         viewBinding.commentRepliesList.layoutManager = LinearLayoutManager(commentsFragment.activity)
         viewBinding.commentRepliesList.adapter = adapter
         val isUserComment = CommentsAPI.userId == comment.userId
@@ -222,17 +221,21 @@ class CommentItem(val comment: Comment,
         return R.layout.item_comments
     }
 
+    fun containsGif(): Boolean {
+        return comment.content.contains(".gif")
+    }
+
     override fun initializeViewBinding(view: View): ItemCommentsBinding {
         return ItemCommentsBinding.bind(view)
     }
 
     fun replying(isReplying: Boolean) {
-        binding?.commentReply?.text = if (isReplying) commentsFragment.activity.getString(R.string.cancel) else "Reply"
+        binding.commentReply.text = if (isReplying) commentsFragment.activity.getString(R.string.cancel) else "Reply"
         this.isReplying = isReplying
     }
 
     fun editing(isEditing: Boolean) {
-        binding?.commentEdit?.text = if (isEditing) commentsFragment.activity.getString(R.string.cancel) else commentsFragment.activity.getString(R.string.edit)
+        binding.commentEdit.text = if (isEditing) commentsFragment.activity.getString(R.string.cancel) else commentsFragment.activity.getString(R.string.edit)
         this.isEditing = isEditing
     }
 
