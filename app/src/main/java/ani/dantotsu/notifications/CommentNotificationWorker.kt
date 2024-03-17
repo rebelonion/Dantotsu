@@ -20,6 +20,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -152,6 +153,8 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
         color: String,
         imageUrl: String
     ): android.app.Notification? {
+        Logger.log("Creating notification of type $notificationType" +
+                ", message: $message, title: $title, mediaId: $mediaId, commentId: $commentId")
         val notification = when (notificationType) {
             NotificationType.COMMENT_WARNING -> {
                 val intent = Intent(applicationContext, MainActivity::class.java).apply {
@@ -162,7 +165,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                 }
                 val pendingIntent = PendingIntent.getActivity(
                     applicationContext,
-                    0,
+                    commentId,
                     intent,
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
@@ -185,7 +188,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                 }
                 val pendingIntent = PendingIntent.getActivity(
                     applicationContext,
-                    0,
+                    commentId,
                     intent,
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )
@@ -214,7 +217,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                 }
                 val pendingIntent = PendingIntent.getActivity(
                     applicationContext,
-                    0,
+                    System.currentTimeMillis().toInt(),
                     intent,
                     PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
                 )

@@ -16,6 +16,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -78,12 +79,13 @@ class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParamet
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
             if (notificationId != null) {
+                Logger.log("notificationId: $notificationId")
                 putExtra("activityId", notificationId)
             }
         }
         val pendingIntent = PendingIntent.getActivity(
             applicationContext,
-            0,
+            notificationId ?: 0,
             intent,
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
