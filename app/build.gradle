@@ -23,7 +23,7 @@ android {
         signingConfig signingConfigs.debug
     }
 
-    flavorDimensions "store"
+    flavorDimensions += "store"
     productFlavors {
         fdroid {
             // F-Droid specific configuration
@@ -43,18 +43,21 @@ android {
         alpha {
             applicationIdSuffix ".beta" // keep as beta by popular request
             versionNameSuffix "-alpha04"
-            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_alpha", icon_placeholder_round: "@mipmap/ic_launcher_alpha_round"]
+            manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_alpha"
+            manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_alpha_round"
             debuggable System.getenv("CI") == null
             isDefault true
         }
         debug {
             applicationIdSuffix ".beta"
             versionNameSuffix "-beta03"
-            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta", icon_placeholder_round: "@mipmap/ic_launcher_beta_round"]
+            manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_beta"
+            manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_beta_round"
             debuggable false
         }
         release {
-            manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher", icon_placeholder_round: "@mipmap/ic_launcher_round"]
+            manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher"
+            manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_round"
             debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-gson.pro', 'proguard-rules.pro'
         }
@@ -77,12 +80,12 @@ android {
 dependencies {
 
     //    FireBase
-    googleImplementation platform('com.google.firebase:firebase-bom:32.2.3')
-    googleImplementation 'com.google.firebase:firebase-analytics-ktx:21.5.0'
-    googleImplementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.1'
+    googleImplementation platform('com.google.firebase:firebase-bom:32.7.4')
+    googleImplementation 'com.google.firebase:firebase-analytics-ktx:21.5.1'
+    googleImplementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.2'
 //    Core
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.browser:browser:1.7.0'
+    implementation 'androidx.browser:browser:1.8.0'
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.fragment:fragment-ktx:1.6.2'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
@@ -91,9 +94,9 @@ dependencies {
     implementation "androidx.work:work-runtime-ktx:2.9.0"
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.code.gson:gson:2.10'
+    implementation 'com.google.code.gson:gson:2.10.1'
     implementation 'com.github.Blatzar:NiceHttp:0.4.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3'
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.webkit:webkit:1.10.0'
 
@@ -106,7 +109,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
 
 //    Exoplayer
-    ext.exo_version = '1.2.1'
+    ext.exo_version = '1.3.0'
     implementation "androidx.media3:media3-exoplayer:$exo_version"
     implementation "androidx.media3:media3-ui:$exo_version"
     implementation "androidx.media3:media3-exoplayer-hls:$exo_version"
@@ -157,10 +160,10 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.12'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.12'
     implementation 'com.squareup.okhttp3:okhttp-dnsoverhttps'
-    implementation 'com.squareup.okio:okio:3.7.0'
+    implementation 'com.squareup.okio:okio:3.8.0'
     implementation 'com.squareup.okhttp3:okhttp-brotli:5.0.0-alpha.12'
-    implementation 'org.jsoup:jsoup:1.15.4'
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-okio:1.6.2'
+    implementation 'org.jsoup:jsoup:1.16.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json-okio:1.6.3'
     implementation 'com.jakewharton.rxrelay:rxrelay:1.2.0'
     implementation 'com.github.tachiyomiorg:unifile:17bec43'
     implementation 'com.github.gpanther:java-nat-sort:natural-comparator-1.1'
