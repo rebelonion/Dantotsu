@@ -80,7 +80,7 @@ class ProfileFragment : Fragment() {
                 android.R.color.transparent
             )
         )
-        binding.profileUserBio.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
+        binding.profileUserBio.setLayerType(View.LAYER_TYPE_HARDWARE, null)
         binding.profileUserBio.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
@@ -90,7 +90,6 @@ class ProfileFragment : Fragment() {
                         android.R.color.transparent
                     )
                 )
-                binding.profileUserBio.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
             }
         }
 
