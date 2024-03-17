@@ -46,25 +46,52 @@
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-        <TextView
-            android:id="@+id/characterTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/characterAccessContainer"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginStart="64dp"
-            android:layout_marginEnd="64dp"
-            android:ellipsize="marquee"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:fontFamily="@font/poppins_bold"
-            android:gravity="center_vertical"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:minHeight="60dp"
-            android:scrollHorizontally="true"
-            android:singleLine="true"
-            android:text="@string/slogan"
-            android:textSize="16sp"
-            android:transitionName="characterTitle" />
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/characterTitle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:layout_marginStart="24dp"
+                android:focusableInTouchMode="true"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"
+                android:text="@string/slogan"
+                android:textSize="16sp"
+                android:transitionName="characterTitle" />
+
+            <ImageView
+                android:id="@+id/characterFav"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                android:tintMode="src_atop"
+                app:srcCompat="@drawable/ic_round_favorite_border_24"
+                app:tint="@color/bg_opp"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            <ImageView
+                android:id="@+id/characterShare"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_round_share_24"
+                app:tint="@color/bg_opp"
+                app:tintMode="src_atop"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+        </LinearLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -120,7 +147,7 @@
         android:translationZ="4dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="16dp"
-        app:layout_anchor="@id/characterTitle"
+        app:layout_anchor="@id/characterAccessContainer"
         app:layout_anchorGravity="center_horizontal">
 
         <com.google.android.material.imageview.ShapeableImageView

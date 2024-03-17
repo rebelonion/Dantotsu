@@ -1,5 +1,6 @@
 package ani.dantotsu.media
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,7 @@ import ani.dantotsu.databinding.ActivityCharacterBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.px
@@ -75,7 +77,17 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
                 character.image
             )
         }
-
+        val link = "https://anilist.co/character/${character.id}"
+        binding.characterShare.setOnClickListener {
+            val i = Intent(Intent.ACTION_SEND)
+            i.type = "text/plain"
+            i.putExtra(Intent.EXTRA_TEXT, link)
+            startActivity(Intent.createChooser(i, character.name))
+        }
+        binding.characterShare.setOnLongClickListener {
+            openLinkInBrowser(link)
+            true
+        }
         model.getCharacter().observe(this) {
             if (it != null && !loaded) {
                 character = it
@@ -139,13 +151,11 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
             isCollapsed = true
             if (immersiveMode) this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.nav_bg)
-            binding.characterAppBar.setBackgroundResource(R.color.nav_bg)
         }
         if (percentage <= percent && isCollapsed) {
             isCollapsed = false
             if (immersiveMode) this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.transparent)
-            binding.characterAppBar.setBackgroundResource(R.color.bg)
         }
     }
 }
