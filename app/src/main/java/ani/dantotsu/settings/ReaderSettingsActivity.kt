@@ -355,6 +355,14 @@ class ReaderSettingsActivity : AppCompatActivity() {
             PrefManager.getVal(PrefName.AskIndividualReader)
         binding.readerSettingsAskUpdateProgress.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.AskIndividualReader, isChecked)
+            binding.readerSettingsAskChapterZero.isEnabled = !isChecked
+        }
+        binding.readerSettingsAskChapterZero.isChecked =
+            PrefManager.getVal(PrefName.ChapterZeroReader)
+        binding.readerSettingsAskChapterZero.isEnabled =
+            !PrefManager.getVal<Boolean>(PrefName.AskIndividualReader)
+        binding.readerSettingsAskChapterZero.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.ChapterZeroReader, isChecked)
         }
         binding.readerSettingsAskUpdateDoujins.isChecked =
             PrefManager.getVal(PrefName.UpdateForHReader)

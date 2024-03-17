@@ -254,20 +254,28 @@ class MediaListDialogFragment : BottomSheetDialogFragment() {
                 }
 
                 binding.mediaListDelete.setOnClickListener {
-                    val id = media!!.userListId
-                    if (id != null) {
-                        scope.launch {
-                            withContext(Dispatchers.IO) {
-                                Anilist.mutation.deleteList(id)
+                    var id = media!!.userListId
+                    scope.launch {
+                        withContext(Dispatchers.IO) {
+                            if (id != null) {
+                                Anilist.mutation.deleteList(id!!)
                                 MAL.query.deleteList(media?.anime != null, media?.idMAL)
+                            } else {
+                                val profile = Anilist.query.userMediaDetails(media!!)
+                                profile.userListId?.let { listId ->
+                                    id = listId
+                                    Anilist.mutation.deleteList(listId)
+                                    MAL.query.deleteList(media?.anime != null, media?.idMAL)
+                                }
                             }
-                            Refresh.all()
-                            snackString(getString(R.string.deleted_from_list))
-                            dismissAllowingStateLoss()
                         }
+                    }
+                    if (id != null) {
+                        Refresh.all()
+                        snackString(getString(R.string.deleted_from_list))
+                        dismissAllowingStateLoss()
                     } else {
                         snackString(getString(R.string.no_list_id))
-                        Refresh.all()
                     }
                 }
             }
