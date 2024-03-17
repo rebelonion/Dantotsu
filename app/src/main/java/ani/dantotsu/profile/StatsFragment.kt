@@ -52,6 +52,7 @@ class StatsFragment :
 
         binding.statisticList.adapter = adapter
         binding.statisticList.setHasFixedSize(true)
+        binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0)
         binding.statisticList.isNestedScrollingEnabled = true
         binding.statisticList.layoutManager = LinearLayoutManager(requireContext())
         binding.statisticProgressBar.visibility = View.VISIBLE
