@@ -32,6 +32,7 @@ import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.toast
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import io.noties.markwon.editor.MarkwonEditor
@@ -102,13 +103,18 @@ class CommentsFragment : Fragment() {
         binding.commentsList.adapter = adapter
         binding.commentsList.layoutManager = LinearLayoutManager(activity)
 
-        lifecycleScope.launch {
-            val commentId = arguments?.getInt("commentId")
-            if (commentId != null && commentId > 0) {
-                loadSingleComment(commentId)
-            } else {
-                loadAndDisplayComments()
+        if (CommentsAPI.authToken != null) {
+            lifecycleScope.launch {
+                val commentId = arguments?.getInt("commentId")
+                if (commentId != null && commentId > 0) {
+                    loadSingleComment(commentId)
+                } else {
+                    loadAndDisplayComments()
+                }
             }
+        } else {
+            toast("Not logged in")
+            activity.binding.commentMessageContainer.visibility = View.GONE
         }
 
         binding.commentSort.setOnClickListener { sortView ->
@@ -242,7 +248,10 @@ class CommentsFragment : Fragment() {
 
             override fun afterTextChanged(s: android.text.Editable?) {
                 if ((activity.binding.commentInput.text.length) > 300) {
-                    activity.binding.commentInput.text.delete(300, activity.binding.commentInput.text.length)
+                    activity.binding.commentInput.text.delete(
+                        300,
+                        activity.binding.commentInput.text.length
+                    )
                     snackString("CommentNotificationWorker cannot be longer than 300 characters")
                 }
             }
@@ -251,9 +260,9 @@ class CommentsFragment : Fragment() {
         activity.binding.commentInput.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus) {
                 val targetWidth = activity.binding.commentInputLayout.width -
-                activity.binding.commentLabel.width -
-                activity.binding.commentSend.width -
-                activity.binding.commentUserAvatar.width - 12 + 16
+                        activity.binding.commentLabel.width -
+                        activity.binding.commentSend.width -
+                        activity.binding.commentUserAvatar.width - 12 + 16
                 val anim = ValueAnimator.ofInt(activity.binding.commentInput.width, targetWidth)
                 anim.addUpdateListener { valueAnimator ->
                     val layoutParams = activity.binding.commentInput.layoutParams
@@ -266,7 +275,8 @@ class CommentsFragment : Fragment() {
                 anim.doOnEnd {
                     activity.binding.commentLabel.visibility = View.VISIBLE
                     activity.binding.commentSend.visibility = View.VISIBLE
-                    activity.binding.commentLabel.animate().translationX(0f).setDuration(300).start()
+                    activity.binding.commentLabel.animate().translationX(0f).setDuration(300)
+                        .start()
                     activity.binding.commentSend.animate().translationX(0f).setDuration(300).start()
 
                 }
