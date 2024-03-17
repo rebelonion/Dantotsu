@@ -42,14 +42,14 @@ android {
     buildTypes {
         alpha {
             applicationIdSuffix ".beta" // keep as beta by popular request
-            versionNameSuffix "-alpha03"
+            versionNameSuffix "-alpha04"
             manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_alpha", icon_placeholder_round: "@mipmap/ic_launcher_alpha_round"]
             debuggable System.getenv("CI") == null
             isDefault true
         }
         debug {
             applicationIdSuffix ".beta"
-            versionNameSuffix "-beta02"
+            versionNameSuffix "-beta03"
             manifestPlaceholders = [icon_placeholder: "@mipmap/ic_launcher_beta", icon_placeholder_round: "@mipmap/ic_launcher_beta_round"]
             debuggable false
         }
