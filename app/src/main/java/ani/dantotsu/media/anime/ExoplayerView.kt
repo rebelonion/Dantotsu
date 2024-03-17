@@ -1854,17 +1854,23 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     private fun updateAniProgress() {
         val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
-        if (!incognito && exoPlayer.currentPosition / episodeLength > PrefManager.getVal<Float>(
-                PrefName.WatchPercentage
-            ) && Anilist.userid != null
+        val episodeEnd = exoPlayer.currentPosition / episodeLength > PrefManager.getVal<Float>(
+            PrefName.WatchPercentage
+        )
+        val episode0 = currentEpisodeIndex == 0 && PrefManager.getVal(PrefName.ChapterZeroPlayer)
+        if (!incognito && (episodeEnd || episode0) && Anilist.userid != null
         )
             if (PrefManager.getCustomVal(
                     "${media.id}_save_progress",
                     true
                 ) && (if (media.isAdult) PrefManager.getVal(PrefName.UpdateForHPlayer) else true)
             ) {
-                media.anime!!.selectedEpisode?.apply {
-                    updateProgress(media, this)
+                if (episode0) {
+                    updateProgress(media, "0")
+                } else {
+                    media.anime!!.selectedEpisode?.apply {
+                        updateProgress(media, this)
+                    }
                 }
             }
     }
