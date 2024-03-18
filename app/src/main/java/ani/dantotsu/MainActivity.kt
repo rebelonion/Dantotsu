@@ -50,6 +50,7 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.settings.saving.PrefManager
@@ -389,6 +390,22 @@ class MainActivity : AppCompatActivity() {
                                 snackString(this@MainActivity.getString(R.string.anilist_not_found))
                             }
                         }
+                        val username = intent.extras?.getString("username")
+                        if (username != null) {
+                            val nameInt = username.toIntOrNull()
+                            if (nameInt != null) {
+                                startActivity(
+                                    Intent(this@MainActivity, ProfileActivity::class.java)
+                                        .putExtra("userId", nameInt)
+                                )
+                            } else {
+                                startActivity(
+                                    Intent(this@MainActivity, ProfileActivity::class.java)
+                                        .putExtra("username", username)
+                                )
+                            }
+                        }
+
                         delay(500)
                         startSubscription()
                     }

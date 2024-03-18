@@ -67,8 +67,11 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         binding.profileViewPager.isUserInputEnabled = false
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val userid = intent.getIntExtra("userId", 0)
-            val respond = Anilist.query.getUserProfile(userid)
+            val userid = intent.getIntExtra("userId", -1)
+            val username = intent.getStringExtra("username") ?: ""
+            val respond =
+                if (userid != -1) Anilist.query.getUserProfile(userid) else
+                    Anilist.query.getUserProfile(username)
             val user = respond?.data?.user
             if (user == null) {
                 toast("User not found")

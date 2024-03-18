@@ -1347,6 +1347,18 @@ Page(page:$page,perPage:50) {
         )
     }
 
+    suspend fun getUserProfile(username: String): Query.UserProfileResponse? {
+        val id = getUserId(username) ?: return null
+        return getUserProfile(id)
+    }
+
+    suspend fun getUserId(username: String): Int? {
+        return executeQuery<Query.User>(
+            """{User(name:"$username"){id}}""",
+            force = true
+        )?.data?.user?.id
+    }
+
     suspend fun getUserStatistics(id: Int, sort: String = "ID"): Query.StatisticsResponse? {
         return executeQuery<Query.StatisticsResponse>(
             """{User(id:$id){id name mediaListOptions{scoreFormat}statistics{anime{...UserStatistics}manga{...UserStatistics}}}}fragment UserStatistics on UserStatistics{count meanScore standardDeviation minutesWatched episodesWatched chaptersRead volumesRead formats(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds format}statuses(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds status}scores(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds score}lengths(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds length}releaseYears(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds releaseYear}startYears(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds startYear}genres(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds genre}tags(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds tag{id name}}countries(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds country}voiceActors(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds voiceActor{id name{first middle last full native alternative userPreferred}}characterIds}staff(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds staff{id name{first middle last full native alternative userPreferred}}}studios(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds studio{id name isAnimationStudio}}}""",
