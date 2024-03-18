@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -356,7 +357,7 @@ class AnimeDownloaderService : Service() {
     }
 
     private fun saveMediaInfo(task: AnimeDownloadTask) {
-        CoroutineScope(Dispatchers.IO).launch {
+        launchIO {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                 "${DownloadsManager.animeLocation}/${task.title}"
