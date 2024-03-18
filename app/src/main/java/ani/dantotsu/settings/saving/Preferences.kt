@@ -3,6 +3,7 @@ package ani.dantotsu.settings.saving
 import android.graphics.Color
 import ani.dantotsu.connections.comments.AuthResponse
 import ani.dantotsu.connections.mal.MAL
+import ani.dantotsu.notifications.comment.CommentStore
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.Pref
 
@@ -171,6 +172,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CommentTokenExpiry(Pref(Location.Irrelevant, Long::class, 0L)),
     LogToFile(Pref(Location.Irrelevant, Boolean::class, false)),
     RecentGlobalNotification(Pref(Location.Irrelevant, Int::class, 0)),
+    CommentNotificationStore(Pref(Location.Irrelevant, List::class, listOf<CommentStore>())),
+    UnreadCommentNotifications(Pref(Location.Irrelevant, Int::class, 0)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

@@ -261,6 +261,17 @@
                 <data android:host="myanimelist.net" />
                 <data android:pathPrefix="/anime" />
             </intent-filter>
+            <intent-filter android:label="@string/view_profile_in_dantotsu">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="anilist.co" />
+                <data android:pathPrefix="/user" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
@@ -275,6 +286,15 @@
                 <action android:name="android.intent.action.Main" />
 
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:pathPattern=".*\\.ani" />
+                <data android:pathPattern=".*\\.sani" />
+                <data android:scheme="file" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
             </intent-filter>
         </activity>
         <activity

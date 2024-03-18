@@ -7,7 +7,10 @@ import ani.dantotsu.databinding.ItemChartBinding
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
 import com.github.aachartmodel.aainfographics.aachartcreator.AAMoveOverEventMessageModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
+import com.xwray.groupie.OnItemClickListener
+import com.xwray.groupie.OnItemLongClickListener
 import com.xwray.groupie.viewbinding.BindableItem
+import com.xwray.groupie.viewbinding.GroupieViewHolder
 
 class ChartItem(
     private val title: String,
@@ -31,6 +34,7 @@ class ChartItem(
             ) {
             }
         }
+        binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         binding.chartView.callBack = callback
         binding.chartView.reload()
         binding.chartView.aa_drawChartWithChartOptions(aaOptions)
@@ -48,5 +52,33 @@ class ChartItem(
 
     override fun initializeViewBinding(view: View): ItemChartBinding {
         return ItemChartBinding.bind(view)
+    }
+
+    override fun bind(viewHolder: GroupieViewHolder<ItemChartBinding>, position: Int) {
+        viewHolder.setIsRecyclable(false)
+        super.bind(viewHolder, position)
+    }
+
+    override fun bind(
+        viewHolder: GroupieViewHolder<ItemChartBinding>,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+        viewHolder.setIsRecyclable(false)
+        super.bind(viewHolder, position, payloads)
+    }
+
+    override fun bind(
+        viewHolder: GroupieViewHolder<ItemChartBinding>,
+        position: Int,
+        payloads: MutableList<Any>,
+        onItemClickListener: OnItemClickListener?,
+        onItemLongClickListener: OnItemLongClickListener?
+    ) {
+        viewHolder.setIsRecyclable(false)
+        super.bind(viewHolder, position, payloads, onItemClickListener, onItemLongClickListener)
+    }
+    override fun getViewType(): Int {
+        return 0
     }
 }

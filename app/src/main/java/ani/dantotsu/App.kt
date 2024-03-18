@@ -13,7 +13,7 @@ import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.notifications.CommentNotificationWorker
+import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
@@ -134,7 +134,8 @@ class App : MultiDexApplication() {
         // CommentNotificationWorker
         val commentInterval = CommentNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.CommentNotificationInterval)]
         if (commentInterval.toInt() != 0) {
-            val recurringWork = PeriodicWorkRequest.Builder(CommentNotificationWorker::class.java,
+            val recurringWork = PeriodicWorkRequest.Builder(
+                CommentNotificationWorker::class.java,
                 commentInterval, java.util.concurrent.TimeUnit.MINUTES)
                 .setConstraints(constraints)
                 .build()
@@ -146,7 +147,8 @@ class App : MultiDexApplication() {
         } else {
             androidx.work.WorkManager.getInstance(this).cancelUniqueWork(CommentNotificationWorker.WORK_NAME)
             //run once
-            androidx.work.WorkManager.getInstance(this).enqueue(OneTimeWorkRequest.Companion.from(CommentNotificationWorker::class.java))
+            androidx.work.WorkManager.getInstance(this).enqueue(OneTimeWorkRequest.Companion.from(
+                CommentNotificationWorker::class.java))
         }
 
         // AnilistNotificationWorker

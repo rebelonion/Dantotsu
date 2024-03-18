@@ -79,6 +79,10 @@ class ActivityItemBuilder {
                 NotificationType.MEDIA_DELETION -> {
                     "${notification.deletedMediaTitle} has been deleted from the site"
                 }
+
+                NotificationType.COMMENT_REPLY -> {
+                    notification.context ?: "You should not see this"
+                }
             }
         }
 

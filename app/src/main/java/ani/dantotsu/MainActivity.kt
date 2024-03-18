@@ -2,6 +2,7 @@ package ani.dantotsu
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
 import android.content.res.Resources
@@ -14,6 +15,7 @@ import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -28,6 +30,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.doOnAttach
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
+import androidx.documentfile.provider.DocumentFile
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -47,17 +50,21 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.SharedPreferenceBooleanLiveData
+import ani.dantotsu.settings.saving.internal.PreferenceKeystore
+import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.Logger
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import eu.kanade.domain.source.service.SourcePreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
@@ -90,6 +97,60 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val action = intent.action
+        val type = intent.type
+        if (Intent.ACTION_VIEW == action && type != null) {
+            val uri: Uri? = intent.data
+            try {
+                if (uri == null) {
+                    throw Exception("Uri is null")
+                }
+                val jsonString =
+                    contentResolver.openInputStream(uri)?.readBytes()
+                        ?: throw Exception("Error reading file")
+                val name =
+                    DocumentFile.fromSingleUri(this, uri)?.name ?: "settings"
+                //.sani is encrypted, .ani is not
+                if (name.endsWith(".sani")) {
+                    passwordAlertDialog { password ->
+                        if (password != null) {
+                            val salt = jsonString.copyOfRange(0, 16)
+                            val encrypted = jsonString.copyOfRange(16, jsonString.size)
+                            val decryptedJson = try {
+                                PreferenceKeystore.decryptWithPassword(
+                                    password,
+                                    encrypted,
+                                    salt
+                                )
+                            } catch (e: Exception) {
+                                toast("Incorrect password")
+                                return@passwordAlertDialog
+                            }
+                            if (PreferencePackager.unpack(decryptedJson)) {
+                                val intent = Intent(this, this.javaClass)
+                                this.finish()
+                                startActivity(intent)
+                            }
+                        } else {
+                            toast("Password cannot be empty")
+                        }
+                    }
+                } else if (name.endsWith(".ani")) {
+                    val decryptedJson = jsonString.toString(Charsets.UTF_8)
+                    if (PreferencePackager.unpack(decryptedJson)) {
+                        val intent = Intent(this, this.javaClass)
+                        this.finish()
+                        startActivity(intent)
+                    }
+                } else {
+                    toast("Invalid file type")
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                toast("Error importing settings")
+            }
+        }
 
         val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -214,7 +275,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
-            window.navigationBarColor = getColor(android.R.color.transparent)
+            window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
             selectedOption = if (fragment != null) {
                 when (fragment) {
                     AnimeFragment::class.java.name -> 0
@@ -329,6 +390,22 @@ class MainActivity : AppCompatActivity() {
                                 snackString(this@MainActivity.getString(R.string.anilist_not_found))
                             }
                         }
+                        val username = intent.extras?.getString("username")
+                        if (username != null) {
+                            val nameInt = username.toIntOrNull()
+                            if (nameInt != null) {
+                                startActivity(
+                                    Intent(this@MainActivity, ProfileActivity::class.java)
+                                        .putExtra("userId", nameInt)
+                                )
+                            } else {
+                                startActivity(
+                                    Intent(this@MainActivity, ProfileActivity::class.java)
+                                        .putExtra("username", username)
+                                )
+                            }
+                        }
+
                         delay(500)
                         startSubscription()
                     }
@@ -381,7 +458,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        window.navigationBarColor = getColor(android.R.color.transparent)
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
     }
 
     private val Int.toPx get() = TypedValue.applyDimension(
@@ -396,6 +473,44 @@ class MainActivity : AppCompatActivity() {
             params.updateMargins(bottom = 8.toPx)
         else
             params.updateMargins(bottom = 32.toPx)
+    }
+
+    private fun passwordAlertDialog(callback: (CharArray?) -> Unit) {
+        val password = CharArray(16).apply { fill('0') }
+
+        // Inflate the dialog layout
+        val dialogView =
+            LayoutInflater.from(this).inflate(R.layout.dialog_user_agent, null)
+        dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)?.hint = "Password"
+        val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
+        subtitleTextView?.visibility = View.VISIBLE
+        subtitleTextView?.text = "Enter your password to decrypt the file"
+
+        val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+            .setTitle("Enter Password")
+            .setView(dialogView)
+            .setPositiveButton("OK", null)
+            .setNegativeButton("Cancel") { dialog, _ ->
+                password.fill('0')
+                dialog.dismiss()
+                callback(null)
+            }
+            .create()
+
+        dialog.window?.setDimAmount(0.8f)
+        dialog.show()
+
+        // Override the positive button here
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val editText = dialog.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+            if (editText?.text?.isNotBlank() == true) {
+                editText.text?.toString()?.trim()?.toCharArray(password)
+                dialog.dismiss()
+                callback(password)
+            } else {
+                toast("Password cannot be empty")
+            }
+        }
     }
 
     //ViewPager

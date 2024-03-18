@@ -1,4 +1,4 @@
-package ani.dantotsu.notifications
+package ani.dantotsu.notifications.comment
 
 import ani.dantotsu.client
 import com.google.gson.Gson

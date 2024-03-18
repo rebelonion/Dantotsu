@@ -10,6 +10,7 @@ import androidx.core.app.NotificationChannelGroupCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.NotificationManagerCompat.NotificationWithIdAndTag
+import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.core.content.getSystemService
 
@@ -65,7 +66,7 @@ fun Context.notificationBuilder(
     block: (NotificationCompat.Builder.() -> Unit)? = null
 ): NotificationCompat.Builder {
     val builder = NotificationCompat.Builder(this, channelId)
-        .setColor(getColor(android.R.color.holo_blue_dark))
+        .setColor(ContextCompat.getColor(this, android.R.color.holo_blue_dark))
     if (block != null) {
         builder.block()
     }

@@ -65,7 +65,7 @@ class ProfileFragment : Fragment() {
         binding.profileUserBio.setInitialScale(1)
         val styledHtml = getFullAniHTML(
             user.about ?: "",
-            activity.getColor(R.color.bg_opp)
+            ContextCompat.getColor(activity, R.color.bg_opp)
         )
         binding.profileUserBio.loadDataWithBaseURL(
             null,
@@ -76,7 +76,7 @@ class ProfileFragment : Fragment() {
         )
         binding.profileUserBio.setBackgroundColor(
             ContextCompat.getColor(
-                requireContext(),
+                activity,
                 android.R.color.transparent
             )
         )
@@ -86,7 +86,7 @@ class ProfileFragment : Fragment() {
                 super.onPageFinished(view, url)
                 binding.profileUserBio.setBackgroundColor(
                     ContextCompat.getColor(
-                        requireContext(),
+                        activity,
                         android.R.color.transparent
                     )
                 )
@@ -146,7 +146,7 @@ class ProfileFragment : Fragment() {
         }
         binding.profileFavStaffRecycler.adapter = AuthorAdapter(favStaff)
         binding.profileFavStaffRecycler.layoutManager = LinearLayoutManager(
-            requireContext(),
+            activity,
             LinearLayoutManager.HORIZONTAL,
             false
         )
@@ -155,7 +155,7 @@ class ProfileFragment : Fragment() {
         }
         binding.profileFavCharactersRecycler.adapter = CharacterAdapter(favCharacter)
         binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
-            requireContext(),
+            activity,
             LinearLayoutManager.HORIZONTAL,
             false
         )
@@ -177,9 +177,9 @@ class ProfileFragment : Fragment() {
             recyclerView.visibility = View.GONE
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    recyclerView.adapter = MediaAdaptor(0, it, requireActivity(), fav=true)
+                    recyclerView.adapter = MediaAdaptor(0, it, activity, fav=true)
                     recyclerView.layoutManager = LinearLayoutManager(
-                        requireContext(),
+                        activity,
                         LinearLayoutManager.HORIZONTAL,
                         false
                     )

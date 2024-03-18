@@ -31,11 +31,14 @@ object CommentsAPI {
     var isMod: Boolean = false
     var totalVotes: Int = 0
 
-    suspend fun getCommentsForId(id: Int, page: Int = 1, tag: Int?): CommentResponse? {
+    suspend fun getCommentsForId(id: Int, page: Int = 1, tag: Int?, sort: String?): CommentResponse? {
         var url = "$address/comments/$id/$page"
         val request = requestBuilder()
         tag?.let {
             url += "?tag=$it"
+        }
+        sort?.let {
+            url += if (tag != null) "&sort=$it" else "?sort=$it"
         }
         val json = try {
             request.get(url)

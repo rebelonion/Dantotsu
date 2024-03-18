@@ -18,6 +18,7 @@ import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.notifications.comment.CommentStore
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -29,6 +30,7 @@ import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.Locale
 
 class NotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
@@ -73,7 +75,25 @@ class NotificationActivity : AppCompatActivity() {
                     notifications.filter { it.id == activityId }
                 } else {
                     notifications
+                }.toMutableList()
+                val commentStore = PrefManager.getNullableVal<List<CommentStore>>(
+                    PrefName.CommentNotificationStore,
+                    null
+                ) ?: listOf()
+                commentStore.forEach {
+                    val notification = Notification(
+                        "COMMENT_REPLY",
+                        System.currentTimeMillis().toInt(),
+                        commentId = it.commentId,
+                        notificationType = "COMMENT_REPLY",
+                        mediaId = it.mediaId,
+                        context = it.title + "\n" + it.content,
+                        createdAt = (it.time / 1000L).toInt(),
+                    )
+                    notificationList = notificationList + notification
                 }
+                notificationList = notificationList.sortedByDescending { it.createdAt }
+
                 adapter.update(notificationList.map { NotificationItem(it, ::onNotificationClick) })
             }
             withContext(Dispatchers.Main) {
@@ -81,7 +101,8 @@ class NotificationActivity : AppCompatActivity() {
                 binding.listRecyclerView.setOnTouchListener { _, event ->
                     if (event?.action == MotionEvent.ACTION_UP) {
                         if (adapter.itemCount % AnilistQueries.ITEMS_PER_PAGE != 0) {
-                            snackString("No more notifications")
+                            //snackString("No more notifications") fix spam?
+                            Logger.log("No more notifications")
                         } else if (!binding.listRecyclerView.canScrollVertically(1) && !binding.followRefresh.isVisible
                             && binding.listRecyclerView.adapter!!.itemCount != 0 &&
                             (binding.listRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() == (binding.listRecyclerView.adapter!!.itemCount - 1)
@@ -105,7 +126,6 @@ class NotificationActivity : AppCompatActivity() {
             }
         }
     }
-
     private fun loadPage(onFinish: () -> Unit = {}) {
         lifecycleScope.launch(Dispatchers.IO) {
             val res = Anilist.query.getNotifications(Anilist.userid ?: 0, page)
@@ -120,7 +140,7 @@ class NotificationActivity : AppCompatActivity() {
         }
     }
 
-    private fun onNotificationClick(id: Int, type: NotificationClickType) {
+    private fun onNotificationClick(id: Int, optional: Int?, type: NotificationClickType) {
         when (type) {
             NotificationClickType.USER -> {
                 ContextCompat.startActivity(
@@ -143,6 +163,16 @@ class NotificationActivity : AppCompatActivity() {
                 )
             }
 
+            NotificationClickType.COMMENT -> {
+                ContextCompat.startActivity(this, Intent(this, MediaDetailsActivity::class.java)
+                    .putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
+                    .putExtra("mediaId", id)
+                    .putExtra("commentId", optional ?: -1),
+                    null
+                )
+
+            }
+
             NotificationClickType.UNDEFINED -> {
                 // Do nothing
             }
@@ -151,7 +181,7 @@ class NotificationActivity : AppCompatActivity() {
 
     companion object {
         enum class NotificationClickType {
-            USER, MEDIA, ACTIVITY, UNDEFINED
+            USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED
         }
     }
 }

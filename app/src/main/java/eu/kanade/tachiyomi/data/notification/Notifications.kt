@@ -147,7 +147,7 @@ object Notifications {
                     setGroup(GROUP_COMMENTS)
                 },
                 buildNotificationChannel(CHANNEL_COMMENT_WARING, IMPORTANCE_HIGH) {
-                    setName("CommentNotificationWorker Warnings")
+                    setName("Comment Warnings")
                     setGroup(GROUP_COMMENTS)
                 },
                 buildNotificationChannel(CHANNEL_ANILIST, IMPORTANCE_DEFAULT) {
