@@ -65,7 +65,7 @@ class ProfileFragment : Fragment() {
         binding.profileUserBio.setInitialScale(1)
         val styledHtml = getFullAniHTML(
             user.about ?: "",
-            activity.getColor(R.color.bg_opp)
+            ContextCompat.getColor(activity, R.color.bg_opp)
         )
         binding.profileUserBio.loadDataWithBaseURL(
             null,

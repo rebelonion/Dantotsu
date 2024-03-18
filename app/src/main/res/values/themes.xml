@@ -29,10 +29,6 @@
         </item>
     </style>
 
-    <style name="Theme.Dantotsu" parent="Theme.Base">
-        <item name="android:windowLightStatusBar">false</item>
-    </style>
-
     <style name="Theme.Dantotsu.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

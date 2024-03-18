@@ -275,7 +275,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
-            window.navigationBarColor = getColor(android.R.color.transparent)
+            window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
             selectedOption = if (fragment != null) {
                 when (fragment) {
                     AnimeFragment::class.java.name -> 0
@@ -458,7 +458,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
-        window.navigationBarColor = getColor(android.R.color.transparent)
+        window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
     }
 
     private val Int.toPx get() = TypedValue.applyDimension(
