@@ -44,17 +44,15 @@ object Logger {
             )
             file?.appendText(
                 "app version code: ${
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        context.packageManager.getPackageInfo(
-                            context.packageName,
-                            0
-                        ).longVersionCode
-                    } else {
-                        @Suppress("DEPRECATION")
-                        context.packageManager.getPackageInfo(
-                            context.packageName,
-                            0
-                        ).versionCode
+                    context.packageManager.getPackageInfo(
+                        context.packageName,
+                        0
+                    ).run {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                            longVersionCode
+                        else
+                            @Suppress("DEPRECATION") versionCode
+
                     }
                 }\n"
             )
