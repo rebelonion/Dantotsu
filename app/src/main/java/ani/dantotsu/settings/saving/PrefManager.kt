@@ -16,6 +16,7 @@ import java.io.ObjectOutputStream
 object PrefManager {
 
     private var generalPreferences: SharedPreferences? = null
+    private var uiPreferences: SharedPreferences? = null
     private var playerPreferences: SharedPreferences? = null
     private var readerPreferences: SharedPreferences? = null
     private var irrelevantPreferences: SharedPreferences? = null
@@ -25,6 +26,8 @@ object PrefManager {
     fun init(context: Context) {  //must be called in Application class or will crash
         generalPreferences =
             context.getSharedPreferences(Location.General.location, Context.MODE_PRIVATE)
+        uiPreferences =
+            context.getSharedPreferences(Location.UI.location, Context.MODE_PRIVATE)
         playerPreferences =
             context.getSharedPreferences(Location.Player.location, Context.MODE_PRIVATE)
         readerPreferences =
@@ -353,7 +356,7 @@ object PrefManager {
     private fun getPrefLocation(prefLoc: Location): SharedPreferences {
         return when (prefLoc) {
             Location.General -> generalPreferences
-            Location.UI -> generalPreferences
+            Location.UI -> uiPreferences
             Location.Player -> playerPreferences
             Location.Reader -> readerPreferences
             Location.NovelReader -> readerPreferences

@@ -41,7 +41,7 @@ class PreferencePackager {
                     val value = typeValueMap["value"]
 
                     innerMap[key] =
-                        when (typeName) {  //wierdly null sometimes so cast to string
+                        when (typeName) {  //weirdly null sometimes so cast to string
                             "kotlin.Int" -> (value as? Double)?.toInt()
                             "kotlin.String" -> value.toString()
                             "kotlin.Boolean" -> value as? Boolean
