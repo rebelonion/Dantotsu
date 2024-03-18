@@ -17,6 +17,7 @@ import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.toast
+import ani.dantotsu.util.Logger
 import com.google.android.material.textfield.TextInputEditText
 
 class LoginFragment : Fragment() {
@@ -50,7 +51,7 @@ class LoginFragment : Fragment() {
                             DocumentFile.fromSingleUri(requireActivity(), uri)?.name ?: "settings"
                         //.sani is encrypted, .ani is not
                         if (name.endsWith(".sani")) {
-                            passwordAlertDialog() { password ->
+                            passwordAlertDialog { password ->
                                 if (password != null) {
                                     val salt = jsonString.copyOfRange(0, 16)
                                     val encrypted = jsonString.copyOfRange(16, jsonString.size)
@@ -78,7 +79,7 @@ class LoginFragment : Fragment() {
                             toast("Invalid file type")
                         }
                     } catch (e: Exception) {
-                        e.printStackTrace()
+                        Logger.log(e)
                         toast("Error importing settings")
                     }
                 }
