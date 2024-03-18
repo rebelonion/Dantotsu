@@ -11,7 +11,7 @@ class CloudFlare(override val location: FileUrl) : WebViewBottomDialog() {
     override var title = "Cloudflare Bypass"
     override val webViewClient = object : WebViewClient() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-            val cookie = cookies.getCookie(url.toString())
+            val cookie = cookies?.getCookie(url.toString())
             if (cookie?.contains(cfTag) == true) {
                 val clearance = cookie.substringAfter("$cfTag=").substringBefore(";")
                 privateCallback.invoke(mapOf(cfTag to clearance))

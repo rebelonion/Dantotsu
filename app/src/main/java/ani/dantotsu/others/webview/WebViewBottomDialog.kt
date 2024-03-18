@@ -33,7 +33,7 @@ abstract class WebViewBottomDialog : BottomSheetDialogFragment() {
         dismiss()
     }
 
-    val cookies: CookieManager = Injekt.get<NetworkHelper>().cookieJar.manager
+    val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager
     //CookieManager.getInstance()
 
     override fun onCreateView(
@@ -52,7 +52,7 @@ abstract class WebViewBottomDialog : BottomSheetDialogFragment() {
             javaScriptEnabled = true
             userAgentString = defaultHeaders["User-Agent"]
         }
-        cookies.setAcceptThirdPartyCookies(binding.webView, true)
+        cookies?.setAcceptThirdPartyCookies(binding.webView, true)
         binding.webView.webViewClient = webViewClient
         binding.webView.loadUrl(location.url, location.headers)
         this.dismiss()

@@ -34,8 +34,8 @@ class CookieCatcher : AppCompatActivity() {
 
         val webView = findViewById<WebView>(R.id.discordWebview)
 
-        val cookies: CookieManager = Injekt.get<NetworkHelper>().cookieJar.manager
-        cookies.setAcceptThirdPartyCookies(webView, true)
+        val cookies: CookieManager? = Injekt.get<NetworkHelper>().cookieJar.manager
+        cookies?.setAcceptThirdPartyCookies(webView, true)
 
         webView.apply {
             settings.javaScriptEnabled = true
