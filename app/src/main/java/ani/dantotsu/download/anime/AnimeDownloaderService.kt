@@ -355,15 +355,13 @@ class AnimeDownloaderService : Service() {
         return false
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: AnimeDownloadTask) {
-        GlobalScope.launch(Dispatchers.IO) {
+        CoroutineScope(Dispatchers.IO).launch {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                 "${DownloadsManager.animeLocation}/${task.title}"
             )
             val episodeDirectory = File(directory, task.episode)
-            if (!directory.exists()) directory.mkdirs()
             if (!episodeDirectory.exists()) episodeDirectory.mkdirs()
 
             val file = File(directory, "media.json")
