@@ -235,7 +235,6 @@
             android:id="@+id/mediaViewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="72dp"
             android:nestedScrollingEnabled="true"
             tools:ignore="SpeakableTextPresentCheck" />
     </LinearLayout>

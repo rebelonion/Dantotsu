@@ -467,18 +467,12 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
     }
 
-    private val Int.toPx get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
-    ).toInt()
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 8 else 32
         val params : ViewGroup.MarginLayoutParams =
             binding.includedNavbar.navbar.layoutParams as ViewGroup.MarginLayoutParams
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            params.updateMargins(bottom = 8.toPx)
-        else
-            params.updateMargins(bottom = 32.toPx)
+        params.updateMargins(bottom = margin.toPx)
     }
 
     private fun passwordAlertDialog(callback: (CharArray?) -> Unit) {

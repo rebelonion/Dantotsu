@@ -6,71 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="horizontal">
 
-    <LinearLayout
-        android:id="@+id/mediaTabContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center|bottom"
-        android:orientation="vertical">
-
-        <nl.joery.animatedbottombar.AnimatedBottomBar
-            android:id="@+id/mediaTab1"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal|bottom"
-            android:background="?attr/colorSurface"
-            android:padding="0dp"
-            app:abb_animationInterpolator="@anim/over_shoot"
-            app:abb_selectedTabType="text"
-            app:abb_textAppearance="@style/NavBarText"
-            app:itemActiveIndicatorStyle="@style/BottomNavBar"
-            app:itemIconTint="@color/tab_layout_icon"
-            app:itemRippleColor="#00000000"
-            app:itemTextAppearanceActive="@style/NavBarText"
-            app:itemTextAppearanceInactive="@style/NavBarText"
-            app:itemTextColor="@color/tab_layout_icon" />
-
-        <nl.joery.animatedbottombar.AnimatedBottomBar
-            android:id="@+id/mediaTab2"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal|bottom"
-            android:background="?attr/colorSurface"
-            android:padding="0dp"
-            app:abb_animationInterpolator="@anim/over_shoot"
-            app:abb_selectedTabType="text"
-            app:abb_textAppearance="@style/NavBarText"
-            app:itemActiveIndicatorStyle="@style/BottomNavBar"
-            app:itemIconTint="@color/tab_layout_icon"
-            app:itemRippleColor="#00000000"
-            app:itemTextAppearanceActive="@style/NavBarText"
-            app:itemTextAppearanceInactive="@style/NavBarText"
-            app:itemTextColor="@color/tab_layout_icon" />
-
-        <nl.joery.animatedbottombar.AnimatedBottomBar
-            android:id="@+id/mediaTab3"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="center_horizontal|bottom"
-            android:background="?attr/colorSurface"
-            android:padding="0dp"
-            app:abb_animationInterpolator="@anim/over_shoot"
-            app:abb_selectedTabType="text"
-            app:abb_textAppearance="@style/NavBarText"
-            app:itemActiveIndicatorStyle="@style/BottomNavBar"
-            app:itemIconTint="@color/tab_layout_icon"
-            app:itemRippleColor="#00000000"
-            app:itemTextAppearanceActive="@style/NavBarText"
-            app:itemTextAppearanceInactive="@style/NavBarText"
-            app:itemTextColor="@color/tab_layout_icon" />
-    </LinearLayout>
-
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_weight="1">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/mediaAppBar"
@@ -480,5 +419,68 @@
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/mediaTabContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0"
+        android:layout_gravity="center|bottom"
+        android:orientation="vertical">
+
+        <nl.joery.animatedbottombar.AnimatedBottomBar
+            android:id="@+id/mediaTab1"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="?attr/colorSurface"
+            android:padding="0dp"
+            app:abb_animationInterpolator="@anim/over_shoot"
+            app:abb_selectedTabType="text"
+            app:abb_textAppearance="@style/NavBarText"
+            app:itemActiveIndicatorStyle="@style/BottomNavBar"
+            app:itemIconTint="@color/tab_layout_icon"
+            app:itemRippleColor="#00000000"
+            app:itemTextAppearanceActive="@style/NavBarText"
+            app:itemTextAppearanceInactive="@style/NavBarText"
+            app:itemTextColor="@color/tab_layout_icon" />
+
+        <nl.joery.animatedbottombar.AnimatedBottomBar
+            android:id="@+id/mediaTab2"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="?attr/colorSurface"
+            android:padding="0dp"
+            app:abb_animationInterpolator="@anim/over_shoot"
+            app:abb_selectedTabType="text"
+            app:abb_textAppearance="@style/NavBarText"
+            app:itemActiveIndicatorStyle="@style/BottomNavBar"
+            app:itemIconTint="@color/tab_layout_icon"
+            app:itemRippleColor="#00000000"
+            app:itemTextAppearanceActive="@style/NavBarText"
+            app:itemTextAppearanceInactive="@style/NavBarText"
+            app:itemTextColor="@color/tab_layout_icon" />
+
+        <nl.joery.animatedbottombar.AnimatedBottomBar
+            android:id="@+id/mediaTab3"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center_horizontal|bottom"
+            android:background="?attr/colorSurface"
+            android:padding="0dp"
+            app:abb_animationInterpolator="@anim/over_shoot"
+            app:abb_selectedTabType="text"
+            app:abb_textAppearance="@style/NavBarText"
+            app:itemActiveIndicatorStyle="@style/BottomNavBar"
+            app:itemIconTint="@color/tab_layout_icon"
+            app:itemRippleColor="#00000000"
+            app:itemTextAppearanceActive="@style/NavBarText"
+            app:itemTextAppearanceInactive="@style/NavBarText"
+            app:itemTextColor="@color/tab_layout_icon" />
+    </LinearLayout>
 
 </LinearLayout>

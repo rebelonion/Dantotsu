@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Rect
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.TypedValue
@@ -24,6 +25,7 @@ import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -105,7 +107,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         //Ui init
 
         initActivity(this)
-        binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
+        binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
         val oldMargin = binding.mediaViewPager.marginBottom
         AndroidBug5497Workaround.assistActivity(this) {
             if (it) {
@@ -120,6 +122,9 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 binding.mediaTabContainer.visibility = View.VISIBLE
             }
         }
+        val navBarMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
+        binding.mediaTabContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { rightMargin = navBarMargin }
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
         binding.mediaClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
@@ -430,6 +435,14 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             2 -> return R.id.comment
         }
         return R.id.info
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
+        val params : ViewGroup.MarginLayoutParams =
+            binding.mediaTabContainer.layoutParams as ViewGroup.MarginLayoutParams
+        params.updateMargins(right = margin)
     }
 
     override fun onResume() {
