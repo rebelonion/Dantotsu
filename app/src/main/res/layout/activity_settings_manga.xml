@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <ani.dantotsu.others.Xpandable
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center_vertical"
+            android:text="@string/manga"
+            android:textColor="?attr/colorSecondary"
+            app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
+            tools:ignore="TextContrastCheck" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:alpha="0.58"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/default_chp_view" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/nav_bg_inv"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <ImageButton
+                    android:id="@+id/settingsChpList"
+                    android:layout_width="48dp"
+                    android:layout_height="64dp"
+                    android:alpha="0.33"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_round_view_list_24"
+                    app:tint="?attr/colorOnBackground"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/nav_bg_inv"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <ImageButton
+                    android:id="@+id/settingsChpCompact"
+                    android:layout_width="48dp"
+                    android:layout_height="64dp"
+                    android:alpha="0.33"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:src="@drawable/ic_round_view_comfy_24"
+                    app:tint="?attr/colorOnBackground"
+                    tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck,DuplicateSpeakableTextCheck" />
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
+        <Button
+            android:id="@+id/settingsReader"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="31dp"
+            android:paddingEnd="31dp"
+            android:text="@string/reader_settings"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_round_reader_settings"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
+        <Button
+            android:id="@+id/purgeMangaDownloads"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="31dp"
+            android:paddingEnd="31dp"
+            android:text="@string/purge_manga_downloads"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_round_delete_24"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
+        <Button
+            android:id="@+id/purgeNovelDownloads"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="31dp"
+            android:paddingEnd="31dp"
+            android:text="@string/purge_novel_downloads"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_round_delete_24"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+    </ani.dantotsu.others.Xpandable>
+</merge>
