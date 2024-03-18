@@ -264,7 +264,7 @@ class CommentsFragment : Fragment() {
                         300,
                         activity.binding.commentInput.text.length
                     )
-                    snackString("CommentNotificationWorker cannot be longer than 300 characters")
+                    snackString("Comment cannot be longer than 300 characters")
                 }
             }
         })
@@ -475,6 +475,7 @@ class CommentsFragment : Fragment() {
             }
 
             InteractionState.REPLY -> {
+                activity.binding.commentReplyToContainer.visibility = View.GONE
                 activity.binding.commentInput.setText("")
                 val imm = activity.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(activity.binding.commentInput.windowToken, 0)
@@ -602,7 +603,7 @@ class CommentsFragment : Fragment() {
     private fun processComment() {
         val commentText = activity.binding.commentInput.text.toString()
         if (commentText.isEmpty()) {
-            snackString("CommentNotificationWorker cannot be empty")
+            snackString("Comment cannot be empty")
             return
         }
 
@@ -619,6 +620,7 @@ class CommentsFragment : Fragment() {
                     null
                 )
             }
+            resetOldState()
         }
     }
 
@@ -638,7 +640,7 @@ class CommentsFragment : Fragment() {
         groups.forEach { item ->
             if (item is CommentItem && item.comment.commentId == commentWithInteraction?.comment?.commentId) {
                 updateCommentItem(item, commentText)
-                snackString("CommentNotificationWorker edited")
+                snackString("Comment edited")
             }
         }
     }

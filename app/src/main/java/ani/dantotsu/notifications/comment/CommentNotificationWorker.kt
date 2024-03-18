@@ -97,7 +97,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     }
 
                     NotificationType.COMMENT_REPLY -> {
-                        val title = "New CommentNotificationWorker Reply"
+                        val title = "New Comment Reply"
                         val mediaName = names[it.mediaId]?.title ?: "Unknown"
                         val message = "${it.username} replied to your comment in $mediaName"
 
