@@ -20,7 +20,9 @@ enum class NotificationType(val value: String) {
     RELATED_MEDIA_ADDITION("RELATED_MEDIA_ADDITION"),
     MEDIA_DATA_CHANGE("MEDIA_DATA_CHANGE"),
     MEDIA_MERGE("MEDIA_MERGE"),
-    MEDIA_DELETION("MEDIA_DELETION")
+    MEDIA_DELETION("MEDIA_DELETION"),
+    //custom
+    COMMENT_REPLY("COMMENT_REPLY"),
 }
 
 @Serializable
@@ -40,7 +42,7 @@ data class NotificationResponse(
 @Serializable
 data class NotificationUser(
     @SerialName("unreadNotificationCount")
-    val unreadNotificationCount: Int,
+    var unreadNotificationCount: Int,
 ) : java.io.Serializable
 
 @Serializable
@@ -56,41 +58,41 @@ data class Notification(
     @SerialName("id")
     val id: Int,
     @SerialName("userId")
-    val userId: Int?,
+    val userId: Int? = null,
     @SerialName("CommentId")
     val commentId: Int?,
     @SerialName("type")
     val notificationType: String,
     @SerialName("activityId")
-    val activityId: Int?,
+    val activityId: Int? = null,
     @SerialName("animeId")
-    val mediaId: Int?,
+    val mediaId: Int? = null,
     @SerialName("episode")
-    val episode: Int?,
+    val episode: Int? = null,
     @SerialName("contexts")
-    val contexts: List<String>?,
+    val contexts: List<String>? = null,
     @SerialName("context")
-    val context: String?,
+    val context: String? = null,
     @SerialName("reason")
-    val reason: String?,
+    val reason: String? = null,
     @SerialName("deletedMediaTitle")
-    val deletedMediaTitle: String?,
+    val deletedMediaTitle: String? = null,
     @SerialName("deletedMediaTitles")
-    val deletedMediaTitles: List<String>?,
+    val deletedMediaTitles: List<String>? = null,
     @SerialName("createdAt")
     val createdAt: Int,
     @SerialName("media")
-    val media: ani.dantotsu.connections.anilist.api.Media?,
+    val media: ani.dantotsu.connections.anilist.api.Media? = null,
     @SerialName("user")
-    val user: ani.dantotsu.connections.anilist.api.User?,
+    val user: ani.dantotsu.connections.anilist.api.User? = null,
     @SerialName("message")
-    val message: MessageActivity?,
+    val message: MessageActivity? = null,
     @SerialName("activity")
-    val activity: ActivityUnion?,
+    val activity: ActivityUnion? = null,
     @SerialName("Thread")
-    val thread: Thread?,
+    val thread: Thread? = null,
     @SerialName("comment")
-    val comment: ThreadComment?,
+    val comment: ThreadComment? = null,
 ) : java.io.Serializable
 
 @Serializable

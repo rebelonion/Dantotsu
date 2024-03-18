@@ -47,7 +47,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.util.Logger
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.notifications.CommentNotificationWorker
+import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.AppUpdater

@@ -33,6 +33,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
+import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -197,7 +198,8 @@ class CommentsFragment : Fragment() {
                                     }
                                 }
                             } else {
-                                snackString("No more comments")
+                                //snackString("No more comments") fix spam?
+                                Logger.log("No more comments")
                             }
                         }
                     }

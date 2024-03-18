@@ -1,4 +1,4 @@
-package ani.dantotsu.notifications
+package ani.dantotsu.notifications.comment
 
 import android.Manifest
 import android.app.PendingIntent
@@ -59,8 +59,12 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
             if (newRecentGlobal != null) {
                 PrefManager.setVal(PrefName.RecentGlobalNotification, newRecentGlobal)
             }
+            if (notifications.isNullOrEmpty()) return@launch
+            PrefManager.setVal(PrefName.UnreadCommentNotifications,
+                PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + (notifications?.size ?: 0)
+            )
 
-            notifications?.forEach {
+            notifications.forEach {
                 val type: NotificationType = when (it.type) {
                     1 -> NotificationType.COMMENT_REPLY
                     2 -> NotificationType.COMMENT_WARNING
@@ -72,6 +76,15 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     NotificationType.COMMENT_WARNING -> {
                         val title = "You received a warning"
                         val message = it.content ?: "Be more thoughtful with your comments"
+
+                        val commentStore = CommentStore(
+                            title,
+                            message,
+                            it.mediaId,
+                            it.commentId
+                        )
+                        addNotificationToStore(commentStore)
+
                         createNotification(
                             NotificationType.COMMENT_WARNING,
                             message,
@@ -87,6 +100,15 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                         val title = "New CommentNotificationWorker Reply"
                         val mediaName = names[it.mediaId]?.title ?: "Unknown"
                         val message = "${it.username} replied to your comment in $mediaName"
+
+                        val commentStore = CommentStore(
+                            title,
+                            message,
+                            it.mediaId,
+                            it.commentId
+                        )
+                        addNotificationToStore(commentStore)
+
                         createNotification(
                             NotificationType.COMMENT_REPLY,
                             message,
@@ -101,6 +123,15 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
                     NotificationType.APP_GLOBAL -> {
                         val title = "Update from Dantotsu"
                         val message = it.content ?: "New feature available"
+
+                        val commentStore = CommentStore(
+                            title,
+                            message,
+                            null,
+                            null
+                        )
+                        addNotificationToStore(commentStore)
+
                         createNotification(
                             NotificationType.APP_GLOBAL,
                             message,
@@ -144,6 +175,22 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
         return Result.success()
     }
 
+    private fun addNotificationToStore(notification: CommentStore) {
+        val notificationStore = PrefManager.getNullableVal<List<CommentStore>>(
+            PrefName.CommentNotificationStore,
+            null
+        ) ?: listOf()
+        val newStore = notificationStore.toMutableList()
+        if (newStore.size > 10) {
+            newStore.remove(newStore.minByOrNull { it.time })
+        }
+        if (newStore.any { it.content == notification.content }) {
+            return
+        }
+        newStore.add(notification)
+        PrefManager.setVal(PrefName.CommentNotificationStore, newStore)
+    }
+
     private fun createNotification(
         notificationType: NotificationType,
         message: String,
@@ -153,8 +200,10 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
         color: String,
         imageUrl: String
     ): android.app.Notification? {
-        Logger.log("Creating notification of type $notificationType" +
-                ", message: $message, title: $title, mediaId: $mediaId, commentId: $commentId")
+        Logger.log(
+            "Creating notification of type $notificationType" +
+                    ", message: $message, title: $title, mediaId: $mediaId, commentId: $commentId"
+        )
         val notification = when (notificationType) {
             NotificationType.COMMENT_WARNING -> {
                 val intent = Intent(applicationContext, MainActivity::class.java).apply {
@@ -269,6 +318,6 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
 
     companion object {
         val checkIntervals = arrayOf(0L, 720, 1440)
-        const val WORK_NAME = "ani.dantotsu.notifications.CommentNotificationWorker"
+        const val WORK_NAME = "ani.dantotsu.notifications.comment.CommentNotificationWorker"
     }
 }

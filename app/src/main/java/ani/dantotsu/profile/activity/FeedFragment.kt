@@ -19,6 +19,7 @@ import ani.dantotsu.databinding.FragmentFeedBinding
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -80,7 +81,8 @@ class FeedFragment : Fragment() {
                         binding.listRecyclerView.setOnTouchListener { _, event ->
                             if (event?.action == MotionEvent.ACTION_UP) {
                                 if (activityList.size % AnilistQueries.ITEMS_PER_PAGE != 0 && !global) {
-                                    snackString("No more activities")
+                                    //snackString("No more activities") fix spam?
+                                    Logger.log("No more activities")
                                 } else if (!scrollView.canScrollVertically(1) && !binding.feedRefresh.isVisible
                                     && binding.listRecyclerView.adapter!!.itemCount != 0 &&
                                     (binding.listRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() == (binding.listRecyclerView.adapter!!.itemCount - 1)

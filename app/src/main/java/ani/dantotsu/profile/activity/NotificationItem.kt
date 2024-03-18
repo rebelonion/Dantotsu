@@ -14,7 +14,7 @@ import com.xwray.groupie.viewbinding.BindableItem
 
 class NotificationItem(
     private val notification: Notification,
-    val clickCallback: (Int, NotificationClickType) -> Unit
+    val clickCallback: (Int, Int?, NotificationClickType) -> Unit
 ) : BindableItem<ItemNotificationBinding>() {
     private lateinit var binding: ItemNotificationBinding
     override fun bind(viewBinding: ItemNotificationBinding, position: Int) {
@@ -31,7 +31,7 @@ class NotificationItem(
         return ItemNotificationBinding.bind(view)
     }
 
-    private fun image(user: Boolean = false) {
+    private fun image(user: Boolean = false, commentNotification: Boolean = false) {
 
         val cover = if (user) notification.user?.bannerImage
             ?: notification.user?.avatar?.medium else notification.media?.bannerImage
@@ -52,7 +52,13 @@ class NotificationItem(
             binding.notificationCover.visibility = View.GONE
             binding.notificationCoverUser.visibility = View.VISIBLE
             binding.notificationCoverUserContainer.visibility = View.VISIBLE
-            binding.notificationCoverUser.loadImage(notification.user?.avatar?.large)
+            if (commentNotification) {
+                binding.notificationCoverUser.setImageResource(R.drawable.ic_dantotsu_round)
+                binding.notificationCoverUser.scaleX = 1.4f
+                binding.notificationCoverUser.scaleY = 1.4f
+            } else {
+                binding.notificationCoverUser.loadImage(notification.user?.avatar?.large)
+            }
             binding.notificationBannerImage.layoutParams.height = userHeight
         } else {
             binding.notificationCover.visibility = View.VISIBLE
@@ -75,12 +81,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.activityId ?: 0, NotificationClickType.ACTIVITY
+                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY
                     )
                 }
             }
@@ -90,12 +96,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.activityId ?: 0, NotificationClickType.ACTIVITY
+                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY
                     )
                 }
             }
@@ -105,12 +111,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.userId ?: 0, NotificationClickType.USER
+                        notification.userId ?: 0, null, NotificationClickType.USER
                     )
                 }
             }
@@ -120,12 +126,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.activityId ?: 0, NotificationClickType.ACTIVITY
+                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY
                     )
                 }
             }
@@ -135,12 +141,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
             }
@@ -150,12 +156,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
             }
@@ -165,12 +171,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
             }
@@ -180,7 +186,7 @@ class NotificationItem(
                 image()
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.media?.id ?: 0, NotificationClickType.MEDIA
+                        notification.media?.id ?: 0, null, NotificationClickType.MEDIA
                     )
                 }
             }
@@ -190,12 +196,12 @@ class NotificationItem(
                 binding.notificationCover.loadImage(notification.user?.avatar?.large)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.activityId ?: 0, NotificationClickType.ACTIVITY
+                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY
                     )
                 }
             }
@@ -205,12 +211,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.activityId ?: 0, NotificationClickType.ACTIVITY
+                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY
                     )
                 }
             }
@@ -220,12 +226,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
             }
@@ -235,12 +241,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
             }
@@ -250,12 +256,12 @@ class NotificationItem(
                 image(true)
                 binding.notificationCoverUser.setOnClickListener {
                     clickCallback(
-                        notification.user?.id ?: 0, NotificationClickType.USER
+                        notification.user?.id ?: 0, null, NotificationClickType.USER
                     )
                 }
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.activityId ?: 0, NotificationClickType.ACTIVITY
+                        notification.activityId ?: 0, null, NotificationClickType.ACTIVITY
                     )
                 }
             }
@@ -265,7 +271,7 @@ class NotificationItem(
                 image()
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.media?.id ?: 0, NotificationClickType.MEDIA
+                        notification.media?.id ?: 0, null, NotificationClickType.MEDIA
                     )
                 }
             }
@@ -275,7 +281,7 @@ class NotificationItem(
                 image()
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.media?.id ?: 0, NotificationClickType.MEDIA
+                        notification.media?.id ?: 0, null, NotificationClickType.MEDIA
                     )
                 }
             }
@@ -285,13 +291,24 @@ class NotificationItem(
                 image()
                 binding.notificationBannerImage.setOnClickListener {
                     clickCallback(
-                        notification.media?.id ?: 0, NotificationClickType.MEDIA
+                        notification.media?.id ?: 0, null, NotificationClickType.MEDIA
                     )
                 }
             }
 
             NotificationType.MEDIA_DELETION -> {
                 binding.notificationCover.visibility = View.GONE
+            }
+
+            NotificationType.COMMENT_REPLY -> {
+                image(user = true, commentNotification = true)
+                if (notification.commentId != null && notification.mediaId != null) {
+                    binding.notificationBannerImage.setOnClickListener {
+                        clickCallback(
+                            notification.mediaId, notification.commentId, NotificationClickType.COMMENT
+                        )
+                    }
+                }
             }
         }
     }
