@@ -2,6 +2,7 @@ package ani.dantotsu.util
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import androidx.core.content.FileProvider
 import ani.dantotsu.BuildConfig
@@ -31,8 +32,8 @@ object Logger {
             }
             file?.writeText("log started\n")
             file?.appendText("date/time: ${Date()}\n")
-            file?.appendText("device: ${android.os.Build.MODEL}\n")
-            file?.appendText("os version: ${android.os.Build.VERSION.RELEASE}\n")
+            file?.appendText("device: ${Build.MODEL}\n")
+            file?.appendText("os version: ${Build.VERSION.RELEASE}\n")
             file?.appendText(
                 "app version: ${
                     context.packageManager.getPackageInfo(
@@ -46,29 +47,35 @@ object Logger {
                     context.packageManager.getPackageInfo(
                         context.packageName,
                         0
-                    ).versionCode
+                    ).run {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
+                            longVersionCode
+                        else
+                            @Suppress("DEPRECATION") versionCode
+
+                    }
                 }\n"
             )
-            file?.appendText("sdk version: ${android.os.Build.VERSION.SDK_INT}\n")
-            file?.appendText("manufacturer: ${android.os.Build.MANUFACTURER}\n")
-            file?.appendText("brand: ${android.os.Build.BRAND}\n")
-            file?.appendText("product: ${android.os.Build.PRODUCT}\n")
-            file?.appendText("device: ${android.os.Build.DEVICE}\n")
-            file?.appendText("hardware: ${android.os.Build.HARDWARE}\n")
-            file?.appendText("host: ${android.os.Build.HOST}\n")
-            file?.appendText("id: ${android.os.Build.ID}\n")
-            file?.appendText("type: ${android.os.Build.TYPE}\n")
-            file?.appendText("user: ${android.os.Build.USER}\n")
-            file?.appendText("tags: ${android.os.Build.TAGS}\n")
-            file?.appendText("time: ${android.os.Build.TIME}\n")
-            file?.appendText("radio: ${android.os.Build.RADIO}\n")
-            file?.appendText("bootloader: ${android.os.Build.BOOTLOADER}\n")
-            file?.appendText("board: ${android.os.Build.BOARD}\n")
-            file?.appendText("fingerprint: ${android.os.Build.FINGERPRINT}\n")
-            file?.appendText("supported_abis: ${android.os.Build.SUPPORTED_ABIS.joinToString()}\n")
-            file?.appendText("supported_32_bit_abis: ${android.os.Build.SUPPORTED_32_BIT_ABIS.joinToString()}\n")
-            file?.appendText("supported_64_bit_abis: ${android.os.Build.SUPPORTED_64_BIT_ABIS.joinToString()}\n")
-            file?.appendText("is emulator: ${android.os.Build.FINGERPRINT.contains("generic")}\n")
+            file?.appendText("sdk version: ${Build.VERSION.SDK_INT}\n")
+            file?.appendText("manufacturer: ${Build.MANUFACTURER}\n")
+            file?.appendText("brand: ${Build.BRAND}\n")
+            file?.appendText("product: ${Build.PRODUCT}\n")
+            file?.appendText("device: ${Build.DEVICE}\n")
+            file?.appendText("hardware: ${Build.HARDWARE}\n")
+            file?.appendText("host: ${Build.HOST}\n")
+            file?.appendText("id: ${Build.ID}\n")
+            file?.appendText("type: ${Build.TYPE}\n")
+            file?.appendText("user: ${Build.USER}\n")
+            file?.appendText("tags: ${Build.TAGS}\n")
+            file?.appendText("time: ${Build.TIME}\n")
+            file?.appendText("radio: ${Build.getRadioVersion()}\n")
+            file?.appendText("bootloader: ${Build.BOOTLOADER}\n")
+            file?.appendText("board: ${Build.BOARD}\n")
+            file?.appendText("fingerprint: ${Build.FINGERPRINT}\n")
+            file?.appendText("supported_abis: ${Build.SUPPORTED_ABIS.joinToString()}\n")
+            file?.appendText("supported_32_bit_abis: ${Build.SUPPORTED_32_BIT_ABIS.joinToString()}\n")
+            file?.appendText("supported_64_bit_abis: ${Build.SUPPORTED_64_BIT_ABIS.joinToString()}\n")
+            file?.appendText("is emulator: ${Build.FINGERPRINT.contains("generic")}\n")
             file?.appendText("--------------------------------\n")
         } catch (e: Exception) {
             Injekt.get<CrashlyticsInterface>().logException(e)
