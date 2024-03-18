@@ -105,9 +105,15 @@ class StatsFragment :
         binding.filterContainer.visibility = View.GONE
     }
 
+    override fun onPause() {
+        super.onPause()
+        binding.statisticList.visibility = View.GONE
+    }
+
     override fun onResume() {
         super.onResume()
         if (this::binding.isInitialized) {
+            binding.statisticList.visibility = View.VISIBLE
             binding.root.requestLayout()
             if (!loadedFirstTime) {
                 activity.lifecycleScope.launch {
