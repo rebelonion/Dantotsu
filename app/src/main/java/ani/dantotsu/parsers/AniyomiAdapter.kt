@@ -82,6 +82,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         }
 
     private fun getDub(): Boolean {
+        if (sourceLanguage >= extension.sources.size) {
+            sourceLanguage = extension.sources.size - 1
+        }
         val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
             ?: return false
         currContext()?.let { context ->
@@ -103,6 +106,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     }
 
     fun setDub(setDub: Boolean) {
+        if (sourceLanguage >= extension.sources.size) {
+            sourceLanguage = extension.sources.size - 1
+        }
         val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
             ?: return
         val type = when (setDub) {
