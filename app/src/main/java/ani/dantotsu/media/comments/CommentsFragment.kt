@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.animation.doOnEnd
 import androidx.core.content.res.ResourcesCompat
@@ -34,7 +33,6 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
-import com.bumptech.glide.Glide
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import io.noties.markwon.editor.MarkwonEditor
@@ -140,9 +138,15 @@ class CommentsFragment : Fragment() {
                     R.id.comment_sort_lowest_rated -> "lowest_rated"
                     else -> return@setOnMenuItemClickListener false
                 }
-
                 PrefManager.setVal(PrefName.CommentSortOrder, sortOrder)
-                sortComments(sortOrder)
+                if (totalPages > pagesLoaded) {
+                    lifecycleScope.launch {
+                        loadAndDisplayComments()
+                        activity.binding.commentReplyToContainer.visibility = View.GONE
+                    }
+                } else {
+                    sortComments(sortOrder)
+                }
                 binding.commentsList.scrollToPosition(0)
                 true
             }
@@ -221,7 +225,12 @@ class CommentsFragment : Fragment() {
 
                 private suspend fun fetchComments(): CommentResponse? {
                     return withContext(Dispatchers.IO) {
-                        CommentsAPI.getCommentsForId(mediaId, pagesLoaded + 1, filterTag)
+                        CommentsAPI.getCommentsForId(
+                            mediaId,
+                            pagesLoaded + 1,
+                            filterTag,
+                            PrefManager.getVal(PrefName.CommentSortOrder, "newest")
+                        )
                     }
                 }
 
@@ -379,7 +388,11 @@ class CommentsFragment : Fragment() {
         section.clear()
 
         val comments = withContext(Dispatchers.IO) {
-            CommentsAPI.getCommentsForId(mediaId, tag = filterTag)
+            CommentsAPI.getCommentsForId(
+                mediaId,
+                tag = filterTag,
+                sort = PrefManager.getVal(PrefName.CommentSortOrder, "newest")
+            )
         }
 
         val sortedComments = sortComments(comments?.comments)
