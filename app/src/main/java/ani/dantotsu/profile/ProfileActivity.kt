@@ -3,6 +3,7 @@ package ani.dantotsu.profile
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -11,6 +12,7 @@ import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -56,7 +58,9 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
         navBar = binding.profileNavBar
-        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
+        val navBarMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarMargin }
 
         val feedTab = navBar.createTab(R.drawable.ic_round_filter_24, "Feed")
         val profileTab = navBar.createTab(R.drawable.ic_round_person_24, "Profile")
@@ -277,6 +281,13 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
             if (PrefManager.getVal(PrefName.BannerAnimations)) binding.profileBannerImage.resume()
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+        val params : ViewGroup.MarginLayoutParams = navBar.layoutParams as ViewGroup.MarginLayoutParams
+        params.updateMargins(bottom = margin)
     }
 
     override fun onResume() {
