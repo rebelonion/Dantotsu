@@ -138,17 +138,20 @@ class HomeFragment : Fragment() {
 
         var reached = false
         val duration = ((PrefManager.getVal(PrefName.AnimationSpeed) as Float) * 200).toLong()
-        binding.homeScroll.setOnScrollChangeListener { _, _, _, _, _ ->
-            if (!binding.homeScroll.canScrollVertically(1)) {
-                reached = true
-                bottomBar.animate().translationZ(0f).setDuration(duration).start()
-                ObjectAnimator.ofFloat(bottomBar, "elevation", 4f, 0f).setDuration(duration)
-                    .start()
-            } else {
-                if (reached) {
-                    bottomBar.animate().translationZ(12f).setDuration(duration).start()
-                    ObjectAnimator.ofFloat(bottomBar, "elevation", 0f, 4f).setDuration(duration)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            binding.homeScroll.setOnScrollChangeListener { _, _, _, _, _ ->
+                if (!binding.homeScroll.canScrollVertically(1)) {
+                    reached = true
+                    bottomBar.animate().translationZ(0f).setDuration(duration).start()
+                    ObjectAnimator.ofFloat(bottomBar, "elevation", 4f, 0f).setDuration(duration)
                         .start()
+                } else {
+                    if (reached) {
+                        bottomBar.animate().translationZ(12f).setDuration(duration).start()
+                        ObjectAnimator.ofFloat(bottomBar, "elevation", 0f, 4f).setDuration(duration)
+                            .start()
+                    }
                 }
             }
         }
