@@ -34,6 +34,7 @@ class ChartItem(
             ) {
             }
         }
+        binding.chartView.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
         binding.chartView.callBack = callback
         binding.chartView.reload()
         binding.chartView.aa_drawChartWithChartOptions(aaOptions)

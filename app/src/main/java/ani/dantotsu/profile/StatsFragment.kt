@@ -51,10 +51,9 @@ class StatsFragment :
         user = arguments?.getSerializable("user") as Query.UserProfile
 
         binding.statisticList.adapter = adapter
-        binding.statisticList.setHasFixedSize(true)
         binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0)
         binding.statisticList.isNestedScrollingEnabled = true
-        binding.statisticList.layoutManager = LinearLayoutManager(requireContext())
+        binding.statisticList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.statisticProgressBar.visibility = View.VISIBLE
         binding.compare.visibility = if (user.id == Anilist.userid) View.GONE else View.VISIBLE
         binding.filterContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin = statusBarHeight }
