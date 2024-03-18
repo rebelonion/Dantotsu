@@ -7,6 +7,7 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -20,19 +21,51 @@ import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities.*
+import android.net.NetworkCapabilities.TRANSPORT_BLUETOOTH
+import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
+import android.net.NetworkCapabilities.TRANSPORT_ETHERNET
+import android.net.NetworkCapabilities.TRANSPORT_LOWPAN
+import android.net.NetworkCapabilities.TRANSPORT_USB
+import android.net.NetworkCapabilities.TRANSPORT_VPN
+import android.net.NetworkCapabilities.TRANSPORT_WIFI
+import android.net.NetworkCapabilities.TRANSPORT_WIFI_AWARE
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
+import android.os.PowerManager
+import android.os.SystemClock
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.*
+import android.view.GestureDetector
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.animation.*
-import android.widget.*
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.OvershootInterpolator
+import android.view.animation.ScaleAnimation
+import android.view.animation.TranslateAnimation
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.DatePicker
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
@@ -41,7 +74,12 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
-import androidx.core.view.*
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -92,15 +130,25 @@ import io.noties.markwon.html.TagHandlerNoOp
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.glide.GlideImagesPlugin
 import jp.wasabeef.glide.transformations.BlurTransformation
-import kotlinx.coroutines.*
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.*
-import java.lang.Runnable
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.lang.reflect.Field
-import java.util.*
-import kotlin.math.*
+import java.util.Calendar
+import java.util.TimeZone
+import java.util.Timer
+import java.util.TimerTask
+import kotlin.collections.set
+import kotlin.math.log2
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
 
 
 var statusBarHeight = 0
@@ -153,7 +201,10 @@ fun initActivity(a: Activity) {
                     navBarHeight = this.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
                 }
         }
-        WindowInsetsControllerCompat(window, window.decorView).hide(WindowInsetsCompat.Type.statusBars())
+        WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        ).hide(WindowInsetsCompat.Type.statusBars())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0 && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             window.decorView.rootWindowInsets?.displayCutout?.apply {
                 if (boundingRects.size > 0) {
@@ -167,7 +218,8 @@ fun initActivity(a: Activity) {
                 ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
             if (windowInsets != null) {
                 statusBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()).top
-                navBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+                navBarHeight =
+                    windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
             }
         }
     if (a !is MainActivity) a.setNavigationTheme()
@@ -202,7 +254,8 @@ fun Activity.setNavigationTheme() {
     val tv = TypedValue()
     theme.resolveAttribute(android.R.attr.colorBackground, tv, true)
     if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && tv.isColorType)
-        || (tv.type >= TypedValue.TYPE_FIRST_COLOR_INT && tv.type <= TypedValue.TYPE_LAST_COLOR_INT)) {
+        || (tv.type >= TypedValue.TYPE_FIRST_COLOR_INT && tv.type <= TypedValue.TYPE_LAST_COLOR_INT)
+    ) {
         window.navigationBarColor = tv.data
     }
 }
@@ -636,9 +689,24 @@ fun View.circularReveal(ex: Int, ey: Int, subX: Boolean, time: Long) {
 }
 
 fun openLinkInBrowser(link: String?) {
-    tryWith {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-        currContext()?.startActivity(intent)
+    link?.let {
+        try {
+            val emptyBrowserIntent = Intent(Intent.ACTION_VIEW).apply {
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.fromParts("http", "", null)
+            }
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.parse(link)
+                selector = emptyBrowserIntent
+            }
+            currContext()!!.startActivity(sendIntent)
+        } catch (e: ActivityNotFoundException) {
+            snackString("No browser found")
+        } catch (e: Exception) {
+            Logger.log(e)
+        }
     }
 }
 
@@ -940,7 +1008,7 @@ fun toast(string: String?) {
     }
 }
 
-fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null) : Snackbar? {
+fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
     try { //I have no idea why this sometimes crashes for some people...
         if (s != null) {
             (activity ?: currActivity())?.apply {
@@ -1134,11 +1202,11 @@ suspend fun View.pop() {
     delay(100)
 }
 
-fun blurImage(imageView: ImageView, banner: String?){
+fun blurImage(imageView: ImageView, banner: String?) {
     if (banner != null) {
         val radius = PrefManager.getVal<Float>(PrefName.BlurRadius).toInt()
         val sampling = PrefManager.getVal<Float>(PrefName.BlurSampling).toInt()
-        if (PrefManager.getVal(PrefName.BlurBanners)){
+        if (PrefManager.getVal(PrefName.BlurBanners)) {
             val context = imageView.context
             if (!(context as Activity).isDestroyed) {
                 val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
@@ -1148,7 +1216,7 @@ fun blurImage(imageView: ImageView, banner: String?){
                     .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))
                     .into(imageView)
             }
-        }else{
+        } else {
             imageView.loadImage(banner)
         }
     } else {
@@ -1160,7 +1228,11 @@ fun blurImage(imageView: ImageView, banner: String?){
  * Builds the markwon instance with all the plugins
  * @return the markwon instance
  */
-fun buildMarkwon(activity: Context, userInputContent: Boolean = true, fragment: Fragment? = null): Markwon {
+fun buildMarkwon(
+    activity: Context,
+    userInputContent: Boolean = true,
+    fragment: Fragment? = null
+): Markwon {
     val glideContext = fragment?.let { Glide.with(it) } ?: Glide.with(activity)
     val markwon = Markwon.builder(activity)
         .usePlugin(object : AbstractMarkwonPlugin() {
@@ -1211,6 +1283,7 @@ fun buildMarkwon(activity: Context, userInputContent: Boolean = true, fragment: 
                     }
                 })
             }
+
             override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
                 Logger.log("Loading image: ${drawable.destination}")
                 return requestManager.load(drawable.destination)
