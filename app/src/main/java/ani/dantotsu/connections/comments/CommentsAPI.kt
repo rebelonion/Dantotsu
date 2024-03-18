@@ -387,8 +387,9 @@ object CommentsAPI {
             null
         }
         val message = parsed?.message ?: reason ?: error
+        val fullMessage = if(code == 500) message else "$code: $message"
 
-        snackString("Error $code: $message")
+        snackString(fullMessage)
     }
 }
 
