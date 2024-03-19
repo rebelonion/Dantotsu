@@ -34,6 +34,7 @@ import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
@@ -91,9 +92,16 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
             openLinkInBrowser(link)
             true
         }
-        binding.characterFav.setImageResource(
-            if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24
-        )
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                character.isFav = Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)
+            }
+            withContext(Dispatchers.Main) {
+                binding.characterFav.setImageResource(
+                    if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24
+                )
+            }
+        }
         binding.characterFav.setOnClickListener {
             lifecycleScope.launch {
                 if (Anilist.mutation.toggleFav(AnilistMutations.FavType.CHARACTER, character.id)) {

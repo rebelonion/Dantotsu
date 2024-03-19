@@ -1426,6 +1426,17 @@ Page(page:$page,perPage:50) {
         )
     }
 
+    suspend fun isUserFav(favType: AnilistMutations.FavType, id: Int): Boolean {   //anilist isFavourite is broken, so we need to check it manually
+        val res = getUserProfile(Anilist.userid?: return false)
+        return when (favType) {
+            AnilistMutations.FavType.ANIME -> res?.data?.user?.favourites?.anime?.nodes?.any { it.id == id } ?: false
+            AnilistMutations.FavType.MANGA -> res?.data?.user?.favourites?.manga?.nodes?.any { it.id == id } ?: false
+            AnilistMutations.FavType.CHARACTER -> res?.data?.user?.favourites?.characters?.nodes?.any { it.id == id } ?: false
+            AnilistMutations.FavType.STAFF -> res?.data?.user?.favourites?.staff?.nodes?.any { it.id == id } ?: false
+            AnilistMutations.FavType.STUDIO -> res?.data?.user?.favourites?.studios?.nodes?.any { it.id == id } ?: false
+        }
+    }
+
     companion object {
         const val ITEMS_PER_PAGE = 25
     }
