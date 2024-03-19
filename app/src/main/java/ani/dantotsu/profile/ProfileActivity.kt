@@ -58,10 +58,14 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
         navBar = binding.profileNavBar
-        val navBarMargin = if (resources.configuration.orientation ==
+        val navBarRightMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
+        val navBarBottomMargin = if (resources.configuration.orientation ==
             Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
-        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarMargin }
-
+        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            rightMargin = navBarRightMargin
+            bottomMargin = navBarBottomMargin
+        }
         val feedTab = navBar.createTab(R.drawable.ic_round_filter_24, "Feed")
         val profileTab = navBar.createTab(R.drawable.ic_round_person_24, "Profile")
         val statsTab = navBar.createTab(R.drawable.ic_stats_24, "Stats")
@@ -285,9 +289,13 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
-        val params : ViewGroup.MarginLayoutParams = navBar.layoutParams as ViewGroup.MarginLayoutParams
-        params.updateMargins(bottom = margin)
+        val rightMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
+        val bottomMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+        val params : ViewGroup.MarginLayoutParams =
+            navBar.layoutParams as ViewGroup.MarginLayoutParams
+        params.updateMargins(right = rightMargin, bottom = bottomMargin)
     }
 
     override fun onResume() {

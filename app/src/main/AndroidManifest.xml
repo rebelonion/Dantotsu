@@ -108,7 +108,6 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".profile.ProfileActivity"
-            android:configChanges="orientation|screenSize|screenLayout"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".MainActivity" />
         <activity
