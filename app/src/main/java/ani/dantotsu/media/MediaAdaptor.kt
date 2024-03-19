@@ -17,6 +17,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
@@ -94,8 +95,8 @@ class MediaAdaptor(
                 val media = mediaList?.getOrNull(position)
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
-                    b.itemCompactOngoing.visibility =
-                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.isVisible =
+                        media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore
@@ -140,8 +141,8 @@ class MediaAdaptor(
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
                     blurImage(b.itemCompactBanner, media.banner ?: media.cover)
-                    b.itemCompactOngoing.visibility =
-                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.isVisible =
+                        media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore
@@ -188,8 +189,8 @@ class MediaAdaptor(
                             )
                         )
                     blurImage(b.itemCompactBanner, media.banner ?: media.cover)
-                    b.itemCompactOngoing.visibility =
-                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.isVisible =
+                        media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore
@@ -237,8 +238,8 @@ class MediaAdaptor(
                             )
                         )
                     blurImage(b.itemCompactBanner, media.banner ?: media.cover)
-                    b.itemCompactOngoing.visibility =
-                        if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
+                    b.itemCompactOngoing.isVisible =
+                        media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
                     b.itemCompactScore.text =
                         ((if (media.userScore == 0) (media.meanScore

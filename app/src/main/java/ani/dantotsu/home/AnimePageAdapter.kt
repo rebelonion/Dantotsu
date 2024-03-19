@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
@@ -134,8 +135,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             )
         }
 
-        binding.animeIncludeList.visibility =
-            if (Anilist.userid != null) View.VISIBLE else View.GONE
+        binding.animeIncludeList.isVisible = Anilist.userid != null
 
         binding.animeIncludeList.isChecked = PrefManager.getVal(PrefName.PopularAnimeList)
 

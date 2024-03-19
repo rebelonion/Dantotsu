@@ -6,6 +6,7 @@ import android.os.Parcelable
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
@@ -137,7 +138,7 @@ class SearchActivity : AppCompatActivity() {
                 model.searchResults.results.addAll(it.results)
                 mediaAdaptor.notifyItemRangeInserted(prev, it.results.size)
 
-                progressAdapter.bar?.visibility = if (it.hasNextPage) View.VISIBLE else View.GONE
+                progressAdapter.bar?.isVisible = it.hasNextPage
             }
         }
 

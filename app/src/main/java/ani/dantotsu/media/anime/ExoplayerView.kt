@@ -1293,7 +1293,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
 
         //Subtitles
-        exoSubtitle.visibility = if (ext.subtitles.isNotEmpty()) View.VISIBLE else View.GONE
+        exoSubtitle.isVisible = ext.subtitles.isNotEmpty()
         exoSubtitle.setOnClickListener {
             subClick()
         }

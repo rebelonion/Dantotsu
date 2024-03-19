@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
@@ -77,14 +79,12 @@ class MangaReadAdapter(
                 null
             )
         }
-        val offline =
-            if (!isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
-            ) View.GONE else View.VISIBLE
+        val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
 
-        binding.animeSourceNameContainer.visibility = offline
-        binding.animeSourceSettings.visibility = offline
-        binding.animeSourceSearch.visibility = offline
-        binding.animeSourceTitle.visibility = offline
+        binding.animeSourceNameContainer.isGone = offline
+        binding.animeSourceSettings.isGone = offline
+        binding.animeSourceSearch.isGone = offline
+        binding.animeSourceTitle.isGone = offline
         //Source Selection
         var source =
             media.selected!!.sourceIndex.let { if (it >= mangaReadSources.names.size) 0 else it }
@@ -249,8 +249,7 @@ class MangaReadAdapter(
             }
 
             //Scanlator
-            dialogBinding.animeScanlatorContainer.visibility =
-                if (options.count() > 1) View.VISIBLE else View.GONE
+            dialogBinding.animeScanlatorContainer.isVisible = options.count() > 1
             dialogBinding.scanlatorNo.text = "${options.count()}"
             dialogBinding.animeScanlatorTop.setOnClickListener {
                 val dialogView2 = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
@@ -481,13 +480,9 @@ class MangaReadAdapter(
                     binding.animeSourceContinue.visibility = View.GONE
                 }
                 binding.animeSourceProgressBar.visibility = View.GONE
-                if (media.manga.chapters!!.isNotEmpty()) {
-                    binding.animeSourceNotFound.visibility = View.GONE
-                    binding.faqbutton.visibility = View.GONE
-                } else {
-                    binding.animeSourceNotFound.visibility = View.VISIBLE
-                    binding.faqbutton.visibility = View.VISIBLE
-                }
+                val sourceFound = media.manga.chapters!!.isNotEmpty()
+                binding.animeSourceNotFound.isGone = sourceFound
+                binding.faqbutton.isGone = sourceFound
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE
@@ -519,8 +514,7 @@ class MangaReadAdapter(
                     parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
                 )
                 val items = adapter.count
-                binding?.animeSourceLanguageContainer?.visibility =
-                    if (items > 1) View.VISIBLE else View.GONE
+                binding?.animeSourceLanguageContainer?.isVisible = items > 1
 
                 binding?.animeSourceLanguage?.setAdapter(adapter)
 

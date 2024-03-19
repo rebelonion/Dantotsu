@@ -16,6 +16,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -63,8 +65,8 @@ class MediaInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
         val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
-        binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
-        binding.mediaInfoContainer.visibility = if (loaded) View.VISIBLE else View.GONE
+        binding.mediaInfoProgressBar.isGone = loaded
+        binding.mediaInfoContainer.isVisible = loaded
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }
 
         model.scrolledToTop.observe(viewLifecycleOwner) {
@@ -548,7 +550,7 @@ class MediaInfoFragment : Fragment() {
     }
 
     override fun onResume() {
-        binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
+        binding.mediaInfoProgressBar.isGone = loaded
         super.onResume()
     }
 

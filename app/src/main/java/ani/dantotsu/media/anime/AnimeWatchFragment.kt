@@ -17,6 +17,8 @@ import androidx.annotation.OptIn
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -340,16 +342,12 @@ class AnimeWatchFragment : Fragment() {
         val changeUIVisibility: (Boolean) -> Unit = { show ->
             val activity = activity
             if (activity is MediaDetailsActivity && isAdded) {
-                val visibility = if (show) View.VISIBLE else View.GONE
-                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).visibility = visibility
-                activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
-                activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
-                activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-
-                activity.navBar.setVisibility(visibility)
-
-                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                    if (show) View.GONE else View.VISIBLE
+                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).isVisible = show
+                activity.findViewById<ViewPager2>(R.id.mediaViewPager).isVisible = show
+                activity.findViewById<CardView>(R.id.mediaCover).isVisible = show
+                activity.findViewById<CardView>(R.id.mediaClose).isVisible = show
+                activity.navBar.isVisible = show
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).isGone = show
             }
         }
         var itemSelected = false

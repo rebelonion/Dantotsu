@@ -3,6 +3,7 @@ package ani.dantotsu.profile.activity
 import android.annotation.SuppressLint
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
@@ -58,8 +59,7 @@ class ActivityItem(
         val likeColor = ContextCompat.getColor(binding.root.context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(binding.root.context, R.color.bg_opp)
         binding.activityLike.setColorFilter(if (activity.isLiked == true) likeColor else notLikeColor)
-        binding.commentRepliesContainer.visibility =
-            if (activity.replyCount > 0) View.VISIBLE else View.GONE
+        binding.commentRepliesContainer.isVisible = activity.replyCount > 0
         binding.commentRepliesContainer.setOnClickListener {
             when (binding.activityReplies.visibility) {
                 View.GONE -> {

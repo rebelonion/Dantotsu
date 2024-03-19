@@ -13,6 +13,8 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
@@ -97,15 +99,12 @@ class AnimeWatchAdapter(
                 null
             )
         }
-        val offline = if (!isOnline(binding.root.context) || PrefManager.getVal(
-                PrefName.OfflineMode
-            )
-        ) View.GONE else View.VISIBLE
+        val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
 
-        binding.animeSourceNameContainer.visibility = offline
-        binding.animeSourceSettings.visibility = offline
-        binding.animeSourceSearch.visibility = offline
-        binding.animeSourceTitle.visibility = offline
+        binding.animeSourceNameContainer.isGone = offline
+        binding.animeSourceSettings.isGone = offline
+        binding.animeSourceSearch.isGone = offline
+        binding.animeSourceTitle.isGone = offline
 
         //Source Selection
         var source =
@@ -117,8 +116,7 @@ class AnimeWatchAdapter(
                 this.selectDub = media.selected!!.preferDub
                 binding.animeSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
-                binding.animeSourceDubbedCont.visibility =
-                    if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
+                binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
             }
         }
 
@@ -137,8 +135,7 @@ class AnimeWatchAdapter(
                 changing = true
                 binding.animeSourceDubbed.isChecked = selectDub
                 changing = false
-                binding.animeSourceDubbedCont.visibility =
-                    if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
+                binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
                 source = i
                 setLanguageList(0, i)
             }
@@ -158,8 +155,7 @@ class AnimeWatchAdapter(
                     changing = true
                     binding.animeSourceDubbed.isChecked = selectDub
                     changing = false
-                    binding.animeSourceDubbedCont.visibility =
-                        if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
+                    binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
                     setLanguageList(i, source)
                 }
                 subscribeButton(false)
@@ -428,13 +424,10 @@ class AnimeWatchAdapter(
                 }
 
                 binding.animeSourceProgressBar.visibility = View.GONE
-                if (media.anime.episodes!!.isNotEmpty()) {
-                    binding.animeSourceNotFound.visibility = View.GONE
-                    binding.faqbutton.visibility = View.GONE}
-                else {
-                    binding.animeSourceNotFound.visibility = View.VISIBLE
-                    binding.faqbutton.visibility = View.VISIBLE
-                    }
+
+                val sourceFound = media.anime.episodes!!.isNotEmpty()
+                binding.animeSourceNotFound.isGone = sourceFound
+                binding.faqbutton.isGone = sourceFound
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE

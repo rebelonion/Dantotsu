@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.MainActivity
 import ani.dantotsu.profile.ProfileActivity
@@ -94,7 +95,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
                 Anilist.loginIntent(requireActivity())
             }
         }
-        binding.settingsNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.settingsNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
         binding.settingsNotificationCount.text = Anilist.unreadNotificationCount.toString()
         binding.settingsUserAvatar.setOnClickListener{
             ContextCompat.startActivity(

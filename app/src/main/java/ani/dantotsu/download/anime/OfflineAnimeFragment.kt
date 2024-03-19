@@ -22,6 +22,7 @@ import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import androidx.media3.common.util.UnstableApi
@@ -250,7 +251,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 val visibility = first != null && first.top < 0
                 scrollTop.translationY =
                     -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
-                scrollTop.visibility = if (visibility) View.VISIBLE else View.GONE
+                scrollTop.isVisible = visibility
             }
         })
         initActivity(requireActivity())

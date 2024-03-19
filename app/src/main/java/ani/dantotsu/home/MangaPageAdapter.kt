@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
@@ -75,7 +76,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         }
 
         updateAvatar()
-        binding.mangaNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.mangaNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
         binding.mangaNotificationCount.text = Anilist.unreadNotificationCount.toString()
         binding.mangaSearchBar.hint = "MANGA"
         binding.mangaSearchBarText.setOnClickListener {
@@ -125,8 +126,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             )
         }
 
-        binding.mangaIncludeList.visibility =
-            if (Anilist.userid != null) View.VISIBLE else View.GONE
+        binding.mangaIncludeList.isVisible = Anilist.userid != null
 
         binding.mangaIncludeList.isChecked = PrefManager.getVal(PrefName.PopularMangaList)
 

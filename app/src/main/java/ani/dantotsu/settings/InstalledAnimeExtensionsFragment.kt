@@ -14,6 +14,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -59,15 +61,13 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             val name = pkg.name
             val changeUIVisibility: (Boolean) -> Unit = { show ->
                 val activity = requireActivity() as ExtensionsActivity
-                val visibility = if (show) View.VISIBLE else View.GONE
-                activity.findViewById<ViewPager2>(R.id.viewPager).visibility = visibility
-                activity.findViewById<TabLayout>(R.id.tabLayout).visibility = visibility
-                activity.findViewById<TextInputLayout>(R.id.searchView).visibility = visibility
-                activity.findViewById<ImageView>(R.id.languageselect).visibility = visibility
+                activity.findViewById<ViewPager2>(R.id.viewPager).isVisible = show
+                activity.findViewById<TabLayout>(R.id.tabLayout).isVisible = show
+                activity.findViewById<TextInputLayout>(R.id.searchView).isVisible = show
+                activity.findViewById<ImageView>(R.id.languageselect).isVisible = show
                 activity.findViewById<TextView>(R.id.extensions).text =
                     if (show) getString(R.string.extensions) else name
-                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                    if (show) View.GONE else View.VISIBLE
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).isGone = show
             }
             var itemSelected = false
             val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>()
