@@ -710,6 +710,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 PrefManager.setVal(PrefName.ContinueMedia, isChecked)
             }
 
+            settingsSearchSources.isChecked = PrefManager.getVal(PrefName.SearchSources)
+            settingsSearchSources.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.SearchSources, isChecked)
+            }
+
             settingsRecentlyListOnly.isChecked = PrefManager.getVal(PrefName.RecentlyListOnly)
             settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.RecentlyListOnly, isChecked)
