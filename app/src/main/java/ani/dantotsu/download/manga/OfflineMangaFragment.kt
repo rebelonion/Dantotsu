@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
@@ -234,7 +235,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             ) {
                 val first = view.getChildAt(0)
                 val visibility = first != null && first.top < 0
-                scrollTop.visibility = if (visibility) View.VISIBLE else View.GONE
+                scrollTop.isVisible = visibility
                 scrollTop.translationY =
                     -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
             }

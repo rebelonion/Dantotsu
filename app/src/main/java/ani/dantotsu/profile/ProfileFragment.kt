@@ -11,6 +11,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
@@ -101,8 +102,7 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        binding.userInfoContainer.visibility =
-            if (user.about != null) View.VISIBLE else View.GONE
+        binding.userInfoContainer.isVisible = user.about != null
 
 
         binding.statsEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()

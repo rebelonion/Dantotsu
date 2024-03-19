@@ -12,6 +12,7 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -401,7 +402,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 dismiss()
             }
             if (video.format == VideoType.CONTAINER) {
-                binding.urlSize.visibility = if (video.size != null) View.VISIBLE else View.GONE
+                binding.urlSize.isVisible = video.size != null
                 binding.urlSize.text =
                         // if video size is null or 0, show "Unknown Size" else show the size in MB
                     (if (video.extraNote != null) " : " else "") + (if (video.size == 0.0) "Unknown Size" else (DecimalFormat(

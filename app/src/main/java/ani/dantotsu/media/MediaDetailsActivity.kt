@@ -23,6 +23,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
@@ -375,14 +376,14 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 newTab: AnimatedBottomBar.Tab
             ) {
                 selected = newIndex
-                binding.commentInputLayout.visibility = if (selected == 2) View.VISIBLE else View.GONE
+                binding.commentInputLayout.isVisible = selected == 2
                 viewPager.setCurrentItem(selected, true)
                 val sel = model.loadSelected(media, isDownload)
                 sel.window = selected
                 model.saveSelected(media.id, sel)
             }
         })
-        binding.commentInputLayout.visibility = if (selected == 2) View.VISIBLE else View.GONE
+        binding.commentInputLayout.isVisible = selected == 2
         viewPager.setCurrentItem(selected, false)
 
         if (model.continueMedia == null && media.cameFromContinue) {

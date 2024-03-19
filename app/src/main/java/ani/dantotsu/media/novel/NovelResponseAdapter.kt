@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemNovelResponseBinding
@@ -71,8 +72,7 @@ class NovelResponseAdapter(
         }
         binding.itemEpisodeDesc2.text = novel.extra?.get("1") ?: ""
         val desc = novel.extra?.get("2")
-        binding.itemEpisodeDesc.visibility =
-            if (desc != null && desc.trim(' ') != "") View.VISIBLE else View.GONE
+        binding.itemEpisodeDesc.isVisible = !desc.isNullOrBlank()
         binding.itemEpisodeDesc.text = desc ?: ""
 
         binding.root.setOnClickListener {

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import androidx.annotation.OptIn
+import androidx.core.view.isVisible
 import androidx.lifecycle.coroutineScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadIndex
@@ -125,8 +126,7 @@ class EpisodeAdapter(
                     binding.itemEpisodeFiller.visibility = View.GONE
                     binding.itemEpisodeFillerView.visibility = View.GONE
                 }
-                binding.itemEpisodeDesc.visibility =
-                    if (ep.desc != null && ep.desc?.trim(' ') != "") View.VISIBLE else View.GONE
+                binding.itemEpisodeDesc.isVisible = !ep.desc.isNullOrBlank()
                 binding.itemEpisodeDesc.text = ep.desc ?: ""
                 holder.bind(ep.number, ep.downloadProgress, ep.desc)
 
@@ -203,8 +203,7 @@ class EpisodeAdapter(
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemEpisodeNumber.text = ep.number
-                binding.itemEpisodeFillerView.visibility =
-                    if (ep.filler) View.VISIBLE else View.GONE
+                binding.itemEpisodeFillerView.isVisible = ep.filler
                 if (media.userProgress != null) {
                     if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat())
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE

@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
@@ -114,7 +115,7 @@ class StudioActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        binding.studioProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
+        binding.studioProgressBar.isGone = loaded
         super.onResume()
     }
 }
