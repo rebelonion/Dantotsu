@@ -346,7 +346,7 @@ class AnimeWatchFragment : Fragment() {
                 activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
                 activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
 
-                activity.tabLayout.setVisibility(visibility)
+                activity.navBar.setVisibility(visibility)
 
                 activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
                     if (show) View.GONE else View.VISIBLE
