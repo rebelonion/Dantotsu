@@ -92,6 +92,7 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
+import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -1247,6 +1248,7 @@ fun buildMarkwon(
         .usePlugin(StrikethroughPlugin.create())
         .usePlugin(TablePlugin.create(activity))
         .usePlugin(TaskListPlugin.create(activity))
+        .usePlugin(SpoilerPlugin())
         .usePlugin(HtmlPlugin.create { plugin ->
             if (userInputContent) {
                 plugin.addHandler(

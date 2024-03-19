@@ -44,7 +44,7 @@ class SpoilerPlugin : AbstractMarkwonPlugin() {
     }
 
     companion object {
-        private val RE = Pattern.compile("~!.+?!~")
+        private val RE = Pattern.compile("\\|\\|.+?\\|\\|")
         private fun applySpoilerSpans(spannable: Spannable) {
             val text = spannable.toString()
             val matcher = RE.matcher(text)

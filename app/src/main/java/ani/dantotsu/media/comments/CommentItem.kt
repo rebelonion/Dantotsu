@@ -59,10 +59,8 @@ class CommentItem(val comment: Comment,
         viewBinding.commentRepliesList.layoutManager = LinearLayoutManager(commentsFragment.activity)
         viewBinding.commentRepliesList.adapter = adapter
         val isUserComment = CommentsAPI.userId == comment.userId
-        val node = markwon.parse(comment.content)
-        val spanned = markwon.render(node)
         val levelColor = getAvatarColor(comment.totalVotes, backgroundColor)
-        markwon.setParsedMarkdown(viewBinding.commentText, viewBinding.commentText.setSpoilerText(spanned, markwon))
+        markwon.setMarkdown(viewBinding.commentText, comment.content)
         viewBinding.commentDelete.visibility = if (isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
         viewBinding.commentBanUser.visibility = if ((CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentReport.visibility = if (!isUserComment) View.VISIBLE else View.GONE

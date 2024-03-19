@@ -148,7 +148,7 @@
             tools:ignore="ContentDescription,RtlSymmetry" />
     </LinearLayout>
 
-    <ani.dantotsu.media.comments.SpoilerTextView
+    <TextView
         android:id="@+id/commentText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
