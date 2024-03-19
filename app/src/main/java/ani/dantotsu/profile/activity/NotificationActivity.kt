@@ -12,7 +12,6 @@ import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.connections.anilist.AnilistQueries
 import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
@@ -30,13 +29,13 @@ import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Locale
 
 class NotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
     private var adapter: GroupieAdapter = GroupieAdapter()
     private var notificationList: List<Notification> = emptyList()
-    private var page: Int = 1
+    private var currentPage: Int = 1
+    private var hasNextPage: Boolean = true
 
     @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,77 +62,86 @@ class NotificationActivity : AppCompatActivity() {
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
         val activityId = intent.getIntExtra("activityId", -1)
         lifecycleScope.launch {
-            val resetNotification = activityId == -1
-            val res = Anilist.query.getNotifications(
-                Anilist.userid ?: PrefManager.getVal<String>(PrefName.AnilistUserId).toIntOrNull()
-                ?: 0,
-                resetNotification = resetNotification
-            )
-            res?.data?.page?.notifications?.let { notifications ->
-                Logger.log("Notifications: $notifications")
-                notificationList = if (activityId != -1) {
-                    notifications.filter { it.id == activityId }
-                } else {
-                    notifications
-                }.toMutableList()
-                val commentStore = PrefManager.getNullableVal<List<CommentStore>>(
-                    PrefName.CommentNotificationStore,
-                    null
-                ) ?: listOf()
-                commentStore.forEach {
-                    val notification = Notification(
-                        "COMMENT_REPLY",
-                        System.currentTimeMillis().toInt(),
-                        commentId = it.commentId,
-                        notificationType = "COMMENT_REPLY",
-                        mediaId = it.mediaId,
-                        context = it.title + "\n" + it.content,
-                        createdAt = (it.time / 1000L).toInt(),
-                    )
-                    notificationList = notificationList + notification
-                }
-                notificationList = notificationList.sortedByDescending { it.createdAt }
-
-                adapter.update(notificationList.map { NotificationItem(it, ::onNotificationClick) })
+            loadPage(activityId) {
+                binding.listProgressBar.visibility = ViewGroup.GONE
             }
             withContext(Dispatchers.Main) {
                 binding.listProgressBar.visibility = ViewGroup.GONE
                 binding.listRecyclerView.setOnTouchListener { _, event ->
                     if (event?.action == MotionEvent.ACTION_UP) {
-                        if (adapter.itemCount % AnilistQueries.ITEMS_PER_PAGE != 0) {
-                            //snackString("No more notifications") fix spam?
-                            Logger.log("No more notifications")
-                        } else if (!binding.listRecyclerView.canScrollVertically(1) && !binding.followRefresh.isVisible
+                        if (hasNextPage && !binding.listRecyclerView.canScrollVertically(1) && !binding.followRefresh.isVisible
                             && binding.listRecyclerView.adapter!!.itemCount != 0 &&
                             (binding.listRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() == (binding.listRecyclerView.adapter!!.itemCount - 1)
                         ) {
-                            page++
                             binding.followRefresh.visibility = ViewGroup.VISIBLE
-                            loadPage {
+                            loadPage(-1) {
                                 binding.followRefresh.visibility = ViewGroup.GONE
                             }
                         }
+                        Logger.log("No more notifications")
+                        snackString("No more notifications")
                     }
                     false
                 }
 
                 binding.followSwipeRefresh.setOnRefreshListener {
-                    page = 1
+                    currentPage = 1
+                    hasNextPage = true
                     adapter.clear()
                     notificationList = emptyList()
-                    loadPage()
+                    loadPage(-1) {
+                        binding.followSwipeRefresh.isRefreshing = false
+                    }
                 }
             }
         }
     }
-    private fun loadPage(onFinish: () -> Unit = {}) {
+
+    private fun loadPage(activityId: Int, onFinish: () -> Unit = {}) {
         lifecycleScope.launch(Dispatchers.IO) {
-            val res = Anilist.query.getNotifications(Anilist.userid ?: 0, page)
+            val resetNotification = activityId == -1
+            val res = Anilist.query.getNotifications(
+                Anilist.userid ?: PrefManager.getVal<String>(PrefName.AnilistUserId).toIntOrNull()
+                ?: 0, currentPage, resetNotification = resetNotification
+            )
             withContext(Dispatchers.Main) {
+                val newNotifications: MutableList<Notification> = mutableListOf()
                 res?.data?.page?.notifications?.let { notifications ->
-                    notificationList += notifications
-                    adapter.addAll(notifications.map { NotificationItem(it, ::onNotificationClick) })
+                    Logger.log("Notifications: $notifications")
+                    newNotifications += if (activityId != -1) {
+                        notifications.filter { it.id == activityId }
+                    } else {
+                        notifications
+                    }.toMutableList()
                 }
+                if (activityId == -1 && currentPage == 1) {
+                    val commentStore = PrefManager.getNullableVal<List<CommentStore>>(
+                        PrefName.CommentNotificationStore,
+                        null
+                    ) ?: listOf()
+                    commentStore.forEach {
+                        val notification = Notification(
+                            "COMMENT_REPLY",
+                            System.currentTimeMillis().toInt(),
+                            commentId = it.commentId,
+                            notificationType = "COMMENT_REPLY",
+                            mediaId = it.mediaId,
+                            context = it.title + "\n" + it.content,
+                            createdAt = (it.time / 1000L).toInt(),
+                        )
+                        newNotifications += notification
+                    }
+                }
+
+                notificationList += newNotifications
+                adapter.addAll(newNotifications.map {
+                    NotificationItem(
+                        it,
+                        ::onNotificationClick
+                    )
+                })
+                currentPage = res?.data?.page?.pageInfo?.currentPage?.plus(1) ?: 1
+                hasNextPage = res?.data?.page?.pageInfo?.hasNextPage ?: false
                 binding.followSwipeRefresh.isRefreshing = false
                 onFinish()
             }
@@ -164,10 +172,11 @@ class NotificationActivity : AppCompatActivity() {
             }
 
             NotificationClickType.COMMENT -> {
-                ContextCompat.startActivity(this, Intent(this, MediaDetailsActivity::class.java)
-                    .putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
-                    .putExtra("mediaId", id)
-                    .putExtra("commentId", optional ?: -1),
+                ContextCompat.startActivity(
+                    this, Intent(this, MediaDetailsActivity::class.java)
+                        .putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
+                        .putExtra("mediaId", id)
+                        .putExtra("commentId", optional ?: -1),
                     null
                 )
 

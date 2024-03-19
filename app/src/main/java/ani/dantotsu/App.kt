@@ -135,7 +135,6 @@ class App : MultiDexApplication() {
 
         androidx.work.WorkManager.getInstance(this)
             .enqueue(OneTimeWorkRequest.Companion.from(AnilistNotificationWorker::class.java))
-
     }
 
 

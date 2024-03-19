@@ -47,6 +47,8 @@ data class NotificationUser(
 
 @Serializable
 data class NotificationPage(
+    @SerialName("pageInfo")
+    val pageInfo: PageInfo,
     @SerialName("notifications")
     val notifications: List<Notification>,
 ) : java.io.Serializable
