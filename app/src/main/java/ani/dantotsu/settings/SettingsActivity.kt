@@ -1,9 +1,13 @@
 package ani.dantotsu.settings
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
+import android.net.Uri
+import android.os.Build
 import android.os.Build.BRAND
 import android.os.Build.DEVICE
 import android.os.Build.SUPPORTED_ABIS
@@ -47,6 +51,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.util.Logger
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
 import ani.dantotsu.openLinkInBrowser
@@ -762,6 +767,40 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.settingsNotificationsCheckingSubscriptions.setOnLongClickListener {
             openSettings(this, null)
+        }
+
+        binding.settingsNotificationsUseAlarmManager.isChecked =
+            PrefManager.getVal(PrefName.UseAlarmManager)
+
+        binding.settingsNotificationsUseAlarmManager.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
+                    .setTitle("Use Alarm Manager")
+                    .setMessage("Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.")
+                    .setPositiveButton("Use") { dialog, _ ->
+                        PrefManager.setVal(PrefName.UseAlarmManager, true)
+                        if (SDK_INT >= Build.VERSION_CODES.S) {
+                            if (!(getSystemService(Context.ALARM_SERVICE) as AlarmManager).canScheduleExactAlarms()) {
+                                val intent = Intent("android.settings.REQUEST_SCHEDULE_EXACT_ALARM")
+                                startActivity(intent)
+                                binding.settingsNotificationsCheckingSubscriptions.isChecked = true
+                            }
+                        }
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        binding.settingsNotificationsCheckingSubscriptions.isChecked = false
+                        PrefManager.setVal(PrefName.UseAlarmManager, false)
+                        dialog.dismiss()
+                    }
+                    .create()
+                alertDialog.window?.setDimAmount(0.8f)
+                alertDialog.show()
+            } else {
+                PrefManager.setVal(PrefName.UseAlarmManager, false)
+                TaskScheduler.create(this, true).cancelAllTasks()
+                TaskScheduler.create(this, false).scheduleAllTasks(this)
+            }
         }
 
         if (!BuildConfig.FLAVOR.contains("fdroid")) {

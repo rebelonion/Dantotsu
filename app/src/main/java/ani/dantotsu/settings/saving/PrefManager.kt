@@ -24,6 +24,7 @@ object PrefManager {
     private var protectedPreferences: SharedPreferences? = null
 
     fun init(context: Context) {  //must be called in Application class or will crash
+        if (generalPreferences != null) return
         generalPreferences =
             context.getSharedPreferences(Location.General.location, Context.MODE_PRIVATE)
         uiPreferences =

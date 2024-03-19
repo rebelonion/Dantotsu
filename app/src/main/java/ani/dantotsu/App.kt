@@ -6,15 +6,14 @@ import android.content.Context
 import android.os.Bundle
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import androidx.work.Constraints
 import androidx.work.OneTimeWorkRequest
-import androidx.work.PeriodicWorkRequest
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.notifications.comment.CommentNotificationWorker
+import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
+import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
@@ -127,49 +126,16 @@ class App : MultiDexApplication() {
     }
 
     private fun startWorkers() {
-        val constraints = Constraints.Builder()
-            .setRequiredNetworkType(androidx.work.NetworkType.CONNECTED)
-            .build()
+        val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
 
-        // CommentNotificationWorker
-        val commentInterval = CommentNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.CommentNotificationInterval)]
-        if (commentInterval.toInt() != 0) {
-            val recurringWork = PeriodicWorkRequest.Builder(
-                CommentNotificationWorker::class.java,
-                commentInterval, java.util.concurrent.TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build()
-            androidx.work.WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                CommentNotificationWorker.WORK_NAME,
-                androidx.work.ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-                recurringWork
-            )
-        } else {
-            androidx.work.WorkManager.getInstance(this).cancelUniqueWork(CommentNotificationWorker.WORK_NAME)
-            //run once
-            androidx.work.WorkManager.getInstance(this).enqueue(OneTimeWorkRequest.Companion.from(
-                CommentNotificationWorker::class.java))
-        }
+        TaskScheduler.create(this, useAlarmManager).scheduleAllTasks(this)
 
-        // AnilistNotificationWorker
-        val anilistInterval = AnilistNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.AnilistNotificationInterval)]
-        if (anilistInterval.toInt() != 0) {
-            val recurringWork = PeriodicWorkRequest.Builder(
-                AnilistNotificationWorker::class.java,
-                anilistInterval, java.util.concurrent.TimeUnit.MINUTES)
-                .setConstraints(constraints)
-                .build()
-            androidx.work.WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-                AnilistNotificationWorker.WORK_NAME,
-                androidx.work.ExistingPeriodicWorkPolicy.CANCEL_AND_REENQUEUE,
-                recurringWork
-            )
-        } else {
-            androidx.work.WorkManager.getInstance(this).cancelUniqueWork(AnilistNotificationWorker.WORK_NAME)
-            //run once
-            androidx.work.WorkManager.getInstance(this).enqueue(OneTimeWorkRequest.Companion.from(AnilistNotificationWorker::class.java))
-        }
-        androidx.work.WorkManager.getInstance(this).cancelUniqueWork("ani.dantotsu.notifications.NotificationWorker")  //legacy worker
+        androidx.work.WorkManager.getInstance(this)
+            .enqueue(OneTimeWorkRequest.Companion.from(CommentNotificationWorker::class.java))
+
+        androidx.work.WorkManager.getInstance(this)
+            .enqueue(OneTimeWorkRequest.Companion.from(AnilistNotificationWorker::class.java))
+
     }
 
 

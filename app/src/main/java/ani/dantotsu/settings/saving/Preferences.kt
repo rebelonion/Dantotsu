@@ -38,6 +38,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AnilistNotificationInterval(Pref(Location.General, Int::class, 3)),
     LastAnilistNotificationId(Pref(Location.General, Int::class, 0)),
     AnilistFilteredTypes(Pref(Location.General, Set::class, setOf<String>())),
+    UseAlarmManager(Pref(Location.General, Boolean::class, false)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),
