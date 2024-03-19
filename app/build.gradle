@@ -75,11 +75,11 @@ android {
 
 dependencies {
 
-    //    FireBase
+//  FireBase
     googleImplementation platform('com.google.firebase:firebase-bom:32.7.4')
     googleImplementation 'com.google.firebase:firebase-analytics-ktx:21.5.1'
     googleImplementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.2'
-//    Core
+//  Core
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.browser:browser:1.8.0'
     implementation 'androidx.core:core-ktx:1.12.0'
@@ -96,7 +96,7 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.webkit:webkit:1.10.0'
 
-//    Glide
+//  Glide
     ext.glide_version = '4.16.0'
     api "com.github.bumptech.glide:glide:$glide_version"
     implementation "com.github.bumptech.glide:glide:$glide_version"
@@ -104,7 +104,7 @@ dependencies {
     implementation "com.github.bumptech.glide:okhttp3-integration:$glide_version"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
 
-//    Exoplayer
+//  Exoplayer
     ext.exo_version = '1.3.0'
     implementation "androidx.media3:media3-exoplayer:$exo_version"
     implementation "androidx.media3:media3-ui:$exo_version"
@@ -116,10 +116,9 @@ dependencies {
     implementation "androidx.media3:media3-cast:$exo_version"
     implementation "androidx.mediarouter:mediarouter:1.6.0"
 
-//    UI
+//  UI
     implementation 'com.google.android.material:material:1.11.0'
-    //implementation 'nl.joery.animatedbottombar:library:1.1.0'
-    implementation 'com.github.rebelonion:AnimatedBottomBar:v1.1.0'
+    implementation 'com.github.RepoDevil:AnimatedBottomBar:514389d135'
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     implementation 'com.alexvasilkov:gesture-views:2.8.3'
@@ -128,7 +127,7 @@ dependencies {
     implementation 'com.github.eltos:simpledialogfragments:v3.7'
     implementation 'com.github.AAChartModel:AAChartCore-Kotlin:93972bc'
 
-    //   Markwon
+//  Markwon
     ext.markwon_version = '4.6.2'
     implementation  "io.noties.markwon:core:$markwon_version"
     implementation  "io.noties.markwon:editor:$markwon_version"
@@ -138,15 +137,15 @@ dependencies {
     implementation  "io.noties.markwon:html:$markwon_version"
     implementation  "io.noties.markwon:image-glide:$markwon_version"
 
-//    Groupie
+//  Groupie
     ext.groupie_version = '2.10.1'
     implementation "com.github.lisawray.groupie:groupie:$groupie_version"
     implementation "com.github.lisawray.groupie:groupie-viewbinding:$groupie_version"
 
-//    string matching
+//  String Matching
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
-//    Aniyomi
+//  Aniyomi
     implementation 'io.reactivex:rxjava:1.3.8'
     implementation 'io.reactivex:rxandroid:1.2.1'
     implementation 'ru.beryukhov:flowreactivenetwork:1.0.4'
