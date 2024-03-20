@@ -999,6 +999,10 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
     inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
 
+fun getAppString(res: Int?): String? {
+    return res?.let { App.instance?.getString(it) }
+}
+
 fun toast(string: String?) {
     if (string != null) {
         Logger.log(string)
@@ -1047,6 +1051,10 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
         Injekt.get<CrashlyticsInterface>().logException(e)
     }
     return null
+}
+
+fun snackString(r: Int?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
+    snackString(getAppString(r), activity, clipboard)
 }
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :

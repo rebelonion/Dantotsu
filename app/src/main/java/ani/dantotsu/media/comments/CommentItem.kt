@@ -11,6 +11,7 @@ import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ItemCommentsBinding
+import ani.dantotsu.getAppString
 import ani.dantotsu.loadImage
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
@@ -76,8 +77,15 @@ class CommentItem(val comment: Comment,
         if ((comment.replyCount ?: 0) > 0) {
             viewBinding.commentTotalReplies.visibility = View.VISIBLE
             viewBinding.commentRepliesDivider.visibility = View.VISIBLE
-            viewBinding.commentTotalReplies.text = if(repliesVisible) "Hide Replies" else
-                "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
+            viewBinding.commentTotalReplies.context.run {
+                viewBinding.commentTotalReplies.text = if (repliesVisible)
+                    getString(R.string.hide_replies)
+                else
+                    if (comment.replyCount == 1)
+                        getString(R.string.view_reply)
+                    else
+                        getString(R.string.view_replies, comment.replyCount)
+            }
         } else {
             viewBinding.commentTotalReplies.visibility = View.GONE
             viewBinding.commentRepliesDivider.visibility = View.GONE
@@ -128,12 +136,12 @@ class CommentItem(val comment: Comment,
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
         viewBinding.commentDelete.setOnClickListener {
-            dialogBuilder("Delete Comment", "Are you sure you want to delete this comment?") {
+            dialogBuilder(getAppString(R.string.delete_comment), getAppString(R.string.delete_comment_confirm)) {
                 val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
                 scope.launch {
                     val success = CommentsAPI.deleteComment(comment.commentId)
                     if (success) {
-                        snackString("Comment Deleted")
+                        snackString(R.string.comment_deleted)
                         parentSection.remove(this@CommentItem)
                     }
                 }

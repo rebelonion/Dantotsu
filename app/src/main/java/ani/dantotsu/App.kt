@@ -151,7 +151,7 @@ class App : MultiDexApplication() {
     }
 
     companion object {
-        private var instance: App? = null
+        var instance: App? = null
         var context: Context? = null
         fun currentContext(): Context? {
             return instance?.mFTActivityLifecycleCallbacks?.currentActivity ?: context
