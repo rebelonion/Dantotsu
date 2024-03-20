@@ -4,6 +4,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.toast
 import com.lagradost.nicehttp.NiceResponse
 import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -389,7 +390,7 @@ object CommentsAPI {
         val message = parsed?.message ?: reason ?: error
         val fullMessage = if(code == 500) message else "$code: $message"
 
-        snackString(fullMessage)
+        toast(fullMessage)
     }
 }
 
