@@ -200,6 +200,14 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         }
     }
 
+    fun updateNotificationCount() {
+        if (this::binding.isInitialized) {
+            binding.mangaNotificationCount.visibility =
+                if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+            binding.mangaNotificationCount.text = Anilist.unreadNotificationCount.toString()
+        }
+    }
+
     inner class MangaPageViewHolder(val binding: ItemMangaPageBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

@@ -258,6 +258,9 @@ class MangaFragment : Fragment() {
             binding.root.requestApplyInsets()
             binding.root.requestLayout()
         }
+        if (this::mangaPageAdapter.isInitialized && _binding != null) {
+            mangaPageAdapter.updateNotificationCount()
+        }
         super.onResume()
     }
 
