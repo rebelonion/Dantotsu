@@ -10,6 +10,7 @@ import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -718,6 +719,23 @@ fun openLinkInBrowser(link: String?) {
     }
 }
 
+fun openLinkInYouTube(link: String?) {
+    link?.let {
+        try {
+            val videoIntent = Intent(Intent.ACTION_VIEW).apply {
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.parse(link)
+                setPackage("com.google.android.youtube")
+            }
+            currContext()!!.startActivity(videoIntent)
+        } catch (e: ActivityNotFoundException) {
+            openLinkInBrowser(link)
+        } catch (e: Exception) {
+            Logger.log(e)
+        }
+    }
+}
+
 fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Activity) {
     FileProvider.getUriForFile(
         context,
@@ -1007,7 +1025,7 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
 }
 
 fun getAppString(res: Int): String {
-    return App.instance?.getString(res) ?: ""
+    return currContext()!!.getString(res) ?: ""
 }
 
 fun toast(string: String?) {
