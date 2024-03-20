@@ -151,6 +151,9 @@ class App : MultiDexApplication() {
     }
 
     companion object {
+        /** Reference to the application context.
+         *
+         * USE WITH EXTREME CAUTION!**/
         var instance: App? = null
         var context: Context? = null
         fun currentContext(): Context? {
