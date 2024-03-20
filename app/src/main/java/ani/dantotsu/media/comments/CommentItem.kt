@@ -83,7 +83,7 @@ class CommentItem(val comment: Comment,
                     if (comment.replyCount == 1)
                         getString(R.string.view_reply)
                     else
-                        getString(R.string.view_replies, comment.replyCount)
+                        getString(R.string.view_replies_count, comment.replyCount)
             }
         } else {
             viewBinding.commentTotalReplies.visibility = View.GONE
@@ -98,7 +98,7 @@ class CommentItem(val comment: Comment,
                     viewBinding.commentTotalReplies.text = if (comment.replyCount == 1)
                         getString(R.string.view_reply)
                     else
-                        getString(R.string.view_replies, comment.replyCount)
+                        getString(R.string.view_replies_count, comment.replyCount)
                 }
                 repliesVisible = false
             } else {

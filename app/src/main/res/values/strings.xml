@@ -72,6 +72,9 @@
         <item>All</item>
     </string-array>
 
+    <string name="no_notifications">No more notifications</string>
+    <string name="followers">Followers</string>
+
     <string name="status">STATUS</string>
     <string-array name="status" translatable="false">
         <item>PLANNING</item>
@@ -693,6 +696,10 @@
     <string name="manga_mean_score">Manga Mean Score</string>
     <string name="about_me">About me</string>
     <string name="follow">Follow</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="follows_you">Follows you</string>
+    <string name="mutual">Mutual</string>
+    <string name="success">Success</string>
     <string name="lorem_ipsum">
 
 Lorem ipsum dolor sit amet. Est consectetur sint qui internos optio nam Quis excepturi qui voluptatem animi. Qui labore quasi vel suscipit deleniti et doloremque omnis in velit suscipit et quasi eaque. Et doloribus recusandae id laudantium Quis qui natus velit in voluptatem voluptatem!
@@ -718,9 +725,10 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
 
     <string name="delete_fail_reason">Failed to delete because of… %1$s</string>
 
-    <string name="hide_replies">Hide Replies</string>
+    <string name="hide_replies">Hide replies</string>
     <string name="view_reply">View reply</string>
-    <string name="view_replies">View %1$d replies</string>
+    <string name="view_replies">View replies</string>
+    <string name="view_replies_count">View %1$d replies</string>
     <string name="replying_to">Replying to %1$s</string>
 
     <string name="delete_comment">Delete Comment</string>

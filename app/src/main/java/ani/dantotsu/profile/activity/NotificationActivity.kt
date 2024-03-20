@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.databinding.ActivityFollowBinding
@@ -37,14 +38,14 @@ class NotificationActivity : AppCompatActivity() {
     private var currentPage: Int = 1
     private var hasNextPage: Boolean = true
 
-    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
         initActivity(this)
         binding = ActivityFollowBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.listTitle.text = "Notifications"
+        binding.listTitle.text = getString(R.string.notifications)
         binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
         }
