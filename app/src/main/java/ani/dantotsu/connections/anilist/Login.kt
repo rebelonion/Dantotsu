@@ -16,7 +16,6 @@ class Login : AppCompatActivity() {
 
         ThemeManager(this).applyTheme()
         val data: Uri? = intent?.data
-        Logger.log(data.toString())
         try {
             Anilist.token =
                 Regex("""(?<=access_token=).+(?=&token_type)""").find(data.toString())!!.value

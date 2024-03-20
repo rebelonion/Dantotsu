@@ -126,7 +126,7 @@ dependencies {
     implementation 'com.github.VipulOG:ebook-reader:0.1.6'
     implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
     implementation 'com.github.eltos:simpledialogfragments:v3.7'
-    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:-SNAPSHOT'
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:93972bc'
 
     //   Markwon
     ext.markwon_version = '4.6.2'
