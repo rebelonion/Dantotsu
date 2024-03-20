@@ -114,6 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:backgroundTint="?attr/colorSurface"
+            app:strokeColor="@color/transparent"
             app:cardCornerRadius="24dp">
 
             <ImageView

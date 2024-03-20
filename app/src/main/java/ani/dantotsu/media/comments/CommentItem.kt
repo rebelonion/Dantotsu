@@ -101,14 +101,14 @@ class CommentItem(val comment: Comment,
             ContextCompat.startActivity(
                 commentsFragment.activity, Intent(commentsFragment.activity, ProfileActivity::class.java)
                     .putExtra("userId", comment.userId.toInt())
-                    .putExtra("username","[${levelColor.second}]"), null
+                    .putExtra("userLVL","[${levelColor.second}]"), null
             )
         }
         viewBinding.commentUserAvatar.setOnClickListener {
             ContextCompat.startActivity(
                 commentsFragment.activity, Intent(commentsFragment.activity, ProfileActivity::class.java)
                     .putExtra("userId", comment.userId.toInt())
-                    .putExtra("username","[${levelColor.second}]"), null
+                    .putExtra("userLVL","[${levelColor.second}]"), null
             )
         }
         viewBinding.commentText.setOnLongClickListener {

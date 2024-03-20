@@ -102,7 +102,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         binding.profileViewPager.setCurrentItem(selected, true)
                     }
                 })
-                val userLevel = intent.getStringExtra("username") ?: ""
+                val userLevel = intent.getStringExtra("userLVL") ?: ""
                 binding.followButton.visibility =
                     if (user.id == Anilist.userid || Anilist.userid == null) View.GONE else View.VISIBLE
                 binding.followButton.text =

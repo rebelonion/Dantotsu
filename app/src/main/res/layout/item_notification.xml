@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
         app:cardBackgroundColor="@color/nav_bg"
+        app:strokeColor="@color/transparent"
         app:cardCornerRadius="24dp">
 
         <ImageView
