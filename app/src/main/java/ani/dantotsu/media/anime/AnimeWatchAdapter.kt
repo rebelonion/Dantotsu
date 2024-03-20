@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
+import ani.dantotsu.settings.FAQActivity
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
@@ -28,10 +29,9 @@ import ani.dantotsu.parsers.DynamicAnimeParser
 import ani.dantotsu.parsers.WatchSources
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
-import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
+import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_SUBSCRIPTION_CHECK
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -59,15 +59,21 @@ class AnimeWatchAdapter(
         val binding = holder.binding
         _binding = binding
 
+        binding.faqbutton.setOnClickListener {
+            startActivity(
+                fragment.requireContext(),
+                Intent(fragment.requireContext(), FAQActivity::class.java),
+                null
+            )
+        }
         //Youtube
-        if (media.anime!!.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
+        if (media.anime?.youtube != null && PrefManager.getVal(PrefName.ShowYtButton)) {
             binding.animeSourceYT.visibility = View.VISIBLE
             binding.animeSourceYT.setOnClickListener {
                 val intent = Intent(Intent.ACTION_VIEW, Uri.parse(media.anime.youtube))
                 fragment.requireContext().startActivity(intent)
             }
         }
-
         binding.animeSourceDubbed.isChecked = media.selected!!.preferDub
         binding.animeSourceDubbedText.text =
             if (media.selected!!.preferDub) currActivity()!!.getString(R.string.dubbed) else currActivity()!!.getString(
@@ -179,7 +185,8 @@ class AnimeWatchAdapter(
             R.drawable.ic_round_notifications_none_24,
             R.color.bg_opp,
             R.color.violet_400,
-            fragment.subscribed
+            fragment.subscribed,
+            true
         ) {
             fragment.onNotificationPressed(it, binding.animeSource.text.toString())
         }
@@ -187,7 +194,7 @@ class AnimeWatchAdapter(
         subscribeButton(false)
 
         binding.animeSourceSubscribe.setOnLongClickListener {
-            openSettings(fragment.requireContext(), getChannelId(true, media.id))
+            openSettings(fragment.requireContext(), CHANNEL_SUBSCRIPTION_CHECK)
         }
 
         //Nested Button
@@ -421,13 +428,17 @@ class AnimeWatchAdapter(
                 }
 
                 binding.animeSourceProgressBar.visibility = View.GONE
-                if (media.anime.episodes!!.isNotEmpty())
+                if (media.anime.episodes!!.isNotEmpty()) {
                     binding.animeSourceNotFound.visibility = View.GONE
-                else
+                    binding.faqbutton.visibility = View.GONE}
+                else {
                     binding.animeSourceNotFound.visibility = View.VISIBLE
+                    binding.faqbutton.visibility = View.VISIBLE
+                    }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE
+                binding.faqbutton.visibility = View.GONE
                 clearChips()
                 binding.animeSourceProgressBar.visibility = View.VISIBLE
             }

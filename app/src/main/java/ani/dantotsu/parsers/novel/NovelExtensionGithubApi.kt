@@ -2,7 +2,7 @@ package ani.dantotsu.parsers.novel
 
 
 import android.content.Context
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
@@ -14,9 +14,7 @@ import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import logcat.LogPriority
 import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
 import kotlin.time.Duration.Companion.days
@@ -41,20 +39,20 @@ class NovelExtensionGithubApi {
                         .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
                         .awaitSuccess()
                 } catch (e: Throwable) {
-                    logcat(LogPriority.ERROR, e) { "Failed to get extensions from GitHub" }
+                    Logger.log("Failed to get extensions from GitHub")
                     requiresFallbackSource = true
                     null
                 }
             }
 
             val response = githubResponse ?: run {
-                logger("using fallback source")
+                Logger.log("using fallback source")
                 networkService.client
                     .newCall(GET("${FALLBACK_REPO_URL_PREFIX}index.min.json"))
                     .awaitSuccess()
             }
 
-            logger("response: $response")
+            Logger.log("response: $response")
 
             val extensions = with(json) {
                 response
@@ -67,7 +65,7 @@ class NovelExtensionGithubApi {
             /*if (extensions.size < 10) {  //TODO: uncomment when more extensions are added
                 throw Exception()
             }*/
-            logger("extensions: $extensions")
+            Logger.log("extensions: $extensions")
             extensions
         }
     }

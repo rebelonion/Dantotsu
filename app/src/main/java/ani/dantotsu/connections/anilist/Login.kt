@@ -4,7 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import ani.dantotsu.logError
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.startMainActivity
@@ -16,7 +16,6 @@ class Login : AppCompatActivity() {
 
         ThemeManager(this).applyTheme()
         val data: Uri? = intent?.data
-        logger(data.toString())
         try {
             Anilist.token =
                 Regex("""(?<=access_token=).+(?=&token_type)""").find(data.toString())!!.value

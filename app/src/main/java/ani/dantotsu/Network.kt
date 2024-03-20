@@ -5,6 +5,7 @@ import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.others.webview.CloudFlare
 import ani.dantotsu.others.webview.WebViewBottomDialog
+import ani.dantotsu.util.Logger
 import com.lagradost.nicehttp.Requests
 import com.lagradost.nicehttp.ResponseParser
 import com.lagradost.nicehttp.addGenericDns
@@ -104,6 +105,7 @@ fun logError(e: Throwable, post: Boolean = true, snackbar: Boolean = true) {
             toast(e.localizedMessage)
     }
     e.printStackTrace()
+    Logger.log(e)
 }
 
 fun <T> tryWith(post: Boolean = false, snackbar: Boolean = true, call: () -> T): T? {
@@ -134,7 +136,7 @@ suspend fun <T> tryWithSuspend(
  * A url, which can also have headers
  * **/
 data class FileUrl(
-    val url: String,
+    var url: String,
     val headers: Map<String, String> = mapOf()
 ) : Serializable {
     companion object {

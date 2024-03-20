@@ -46,13 +46,9 @@ import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.subcriptions.Notifications
-import ani.dantotsu.subcriptions.Notifications.Group.MANGA_GROUP
-import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
-import ani.dantotsu.subcriptions.SubscriptionHelper
-import ani.dantotsu.subcriptions.SubscriptionHelper.Companion.saveSubscription
+import ani.dantotsu.notifications.subscription.SubscriptionHelper
+import ani.dantotsu.notifications.subscription.SubscriptionHelper.Companion.saveSubscription
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.navigationrail.NavigationRailView
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
 import kotlinx.coroutines.CoroutineScope
@@ -347,16 +343,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     var subscribed = false
     fun onNotificationPressed(subscribed: Boolean, source: String) {
         this.subscribed = subscribed
-        saveSubscription(requireContext(), media, subscribed)
-        if (!subscribed)
-            Notifications.deleteChannel(requireContext(), getChannelId(true, media.id))
-        else
-            Notifications.createChannel(
-                requireContext(),
-                MANGA_GROUP,
-                getChannelId(true, media.id),
-                media.userPreferredName
-            )
+        saveSubscription(media, subscribed)
         snackString(
             if (subscribed) getString(R.string.subscribed_notification, source)
             else getString(R.string.unsubscribed_notification)
@@ -372,11 +359,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                 activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
                 activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
                 activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-                try {
-                    activity.findViewById<CustomBottomNavBar>(R.id.mediaTab).visibility = visibility
-                } catch (e: ClassCastException) {
-                    activity.findViewById<NavigationRailView>(R.id.mediaTab).visibility = visibility
-                }
+                activity.tabLayout.setVisibility(visibility)
                 activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
                     if (show) View.GONE else View.VISIBLE
             }
@@ -605,6 +588,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         super.onResume()
         binding.mediaInfoProgressBar.visibility = progress
         binding.animeSourceRecycler.layoutManager?.onRestoreInstanceState(state)
+
+        requireActivity().setNavigationTheme()
     }
 
     override fun onPause() {

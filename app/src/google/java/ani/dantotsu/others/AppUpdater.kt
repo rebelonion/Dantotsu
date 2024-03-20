@@ -11,13 +11,21 @@ import android.net.Uri
 import android.os.Environment
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.content.getSystemService
 import androidx.fragment.app.FragmentActivity
-import ani.dantotsu.*
+import ani.dantotsu.BuildConfig
+import ani.dantotsu.Mapper
+import ani.dantotsu.R
+import ani.dantotsu.buildMarkwon
+import ani.dantotsu.client
+import ani.dantotsu.currContext
+import ani.dantotsu.logError
+import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.PrefManager
-import io.noties.markwon.Markwon
-import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import ani.dantotsu.snackString
+import ani.dantotsu.toast
+import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
@@ -25,9 +33,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
-import java.io.File
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 
 object AppUpdater {
     suspend fun check(activity: FragmentActivity, post: Boolean = false) {
@@ -39,9 +46,10 @@ object AppUpdater {
                     .parsed<JsonArray>().map {
                         Mapper.json.decodeFromJsonElement<GithubResponse>(it)
                     }
-                val r = res.filter { it.prerelease }.filter { !it.tagName.contains("fdroid") }.maxByOrNull {
-                    it.timeStamp()
-                } ?: throw Exception("No Pre Release Found")
+                val r = res.filter { it.prerelease }.filter { !it.tagName.contains("fdroid") }
+                    .maxByOrNull {
+                        it.timeStamp()
+                    } ?: throw Exception("No Pre Release Found")
                 val v = r.tagName.substringAfter("v", "")
                 (r.body ?: "") to v.ifEmpty { throw Exception("Weird Version : ${r.tagName}") }
             } else {
@@ -50,7 +58,7 @@ object AppUpdater {
                 res to res.substringAfter("# ").substringBefore("\n")
             }
 
-            logger("Git Version : $version")
+            Logger.log("Git Version : $version")
             val dontShow = PrefManager.getCustomVal("dont_ask_for_update_$version", false)
             if (compareVersion(version) && !dontShow && !activity.isDestroyed) activity.runOnUiThread {
                 CustomBottomDialog.newInstance().apply {
@@ -61,8 +69,7 @@ object AppUpdater {
                     )
                     addView(
                         TextView(activity).apply {
-                            val markWon = Markwon.builder(activity)
-                                .usePlugin(SoftBreakAddsNewLinePlugin.create()).build()
+                            val markWon = buildMarkwon(activity, false)
                             markWon.setMarkdown(this, md)
                         }
                     )
@@ -161,21 +168,8 @@ object AppUpdater {
                             DownloadManager.EXTRA_DOWNLOAD_ID, id
                         ) ?: id
 
-                        val query = DownloadManager.Query()
-                        query.setFilterById(downloadId)
-                        val c = downloadManager.query(query)
-
-                        if (c.moveToFirst()) {
-                            val columnIndex = c.getColumnIndex(DownloadManager.COLUMN_STATUS)
-                            if (DownloadManager.STATUS_SUCCESSFUL == c
-                                    .getInt(columnIndex)
-                            ) {
-                                c.getColumnIndex(DownloadManager.COLUMN_MEDIAPROVIDER_URI)
-                                val uri = Uri.parse(
-                                    c.getString(c.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI))
-                                )
-                                openApk(this@downloadUpdate, uri)
-                            }
+                        downloadManager.getUriForDownloadedFile(downloadId)?.let {
+                            openApk(this@downloadUpdate, it)
                         }
                     } catch (e: Exception) {
                         logError(e)
@@ -190,16 +184,11 @@ object AppUpdater {
     private fun openApk(context: Context, uri: Uri) {
         try {
             uri.path?.let {
-                val contentUri = FileProvider.getUriForFile(
-                    context,
-                    BuildConfig.APPLICATION_ID + ".provider",
-                    File(it)
-                )
                 val installIntent = Intent(Intent.ACTION_VIEW).apply {
                     addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     putExtra(Intent.EXTRA_NOT_UNKNOWN_SOURCE, true)
-                    data = contentUri
+                    data = uri
                 }
                 context.startActivity(installIntent)
             }

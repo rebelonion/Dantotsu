@@ -148,6 +148,12 @@ class ReaderSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.KeepScreenOn, isChecked)
         }
 
+        binding.readerSettingsHideScrollBar.isChecked = defaultSettings.hideScrollBar
+        binding.readerSettingsHideScrollBar.setOnCheckedChangeListener { _, isChecked ->
+            defaultSettings.hideScrollBar = isChecked
+            PrefManager.setVal(PrefName.HideScrollBar, isChecked)
+        }
+
         binding.readerSettingsHidePageNumbers.isChecked = defaultSettings.hidePageNumbers
         binding.readerSettingsHidePageNumbers.setOnCheckedChangeListener { _, isChecked ->
             defaultSettings.hidePageNumbers = isChecked
@@ -349,6 +355,14 @@ class ReaderSettingsActivity : AppCompatActivity() {
             PrefManager.getVal(PrefName.AskIndividualReader)
         binding.readerSettingsAskUpdateProgress.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.AskIndividualReader, isChecked)
+            binding.readerSettingsAskChapterZero.isEnabled = !isChecked
+        }
+        binding.readerSettingsAskChapterZero.isChecked =
+            PrefManager.getVal(PrefName.ChapterZeroReader)
+        binding.readerSettingsAskChapterZero.isEnabled =
+            !PrefManager.getVal<Boolean>(PrefName.AskIndividualReader)
+        binding.readerSettingsAskChapterZero.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.ChapterZeroReader, isChecked)
         }
         binding.readerSettingsAskUpdateDoujins.isChecked =
             PrefManager.getVal(PrefName.UpdateForHReader)

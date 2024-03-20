@@ -36,18 +36,20 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val views = resources.getStringArray(R.array.home_layouts)
         binding.uiSettingsHomeLayout.setOnClickListener {
+            val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toMutableList()
+            val views = resources.getStringArray(R.array.home_layouts)
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.home_layout_show)).apply {
                     setMultiChoiceItems(
                         views,
                         PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toBooleanArray()
                     ) { _, i, value ->
-                        val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow)
-                            .toMutableList()
                         set[i] = value
+                    }
+                    setPositiveButton("Done") { _, _ ->
                         PrefManager.setVal(PrefName.HomeLayoutShow, set)
+                        restartApp()
                     }
                 }.show()
             dialog.window?.setDimAmount(0.8f)
@@ -94,8 +96,21 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.AnimationSpeed, map[value] ?: 1f)
             restartApp()
         }
-
-
+        binding.uiSettingsBlurBanners.isChecked = PrefManager.getVal(PrefName.BlurBanners)
+        binding.uiSettingsBlurBanners.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.BlurBanners, isChecked)
+            restartApp()
+        }
+        binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as  Float)
+        binding.uiSettingsBlurRadius.addOnChangeListener { _, value, _ ->
+            PrefManager.setVal(PrefName.BlurRadius, value)
+            restartApp()
+        }
+        binding.uiSettingsBlurSampling.value = (PrefManager.getVal(PrefName.BlurSampling) as Float)
+        binding.uiSettingsBlurSampling.addOnChangeListener { _, value, _ ->
+            PrefManager.setVal(PrefName.BlurSampling, value)
+            restartApp()
+        }
     }
 
     private fun restartApp() {

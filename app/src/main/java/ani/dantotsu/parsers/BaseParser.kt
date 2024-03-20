@@ -3,9 +3,9 @@ package ani.dantotsu.parsers
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.currContext
-import ani.dantotsu.logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
@@ -59,11 +59,11 @@ abstract class BaseParser {
             saveShowResponse(mediaObj.id, response, true)
         } else {
             setUserText("Searching : ${mediaObj.mainName()}")
-            logger("Searching : ${mediaObj.mainName()}")
+            Logger.log("Searching : ${mediaObj.mainName()}")
             val results = search(mediaObj.mainName())
             //log all results
             results.forEach {
-                logger("Result: ${it.name}")
+                Logger.log("Result: ${it.name}")
             }
             val sortedResults = if (results.isNotEmpty()) {
                 results.sortedByDescending {
@@ -83,7 +83,7 @@ abstract class BaseParser {
                 ) < 100
             ) {
                 setUserText("Searching : ${mediaObj.nameRomaji}")
-                logger("Searching : ${mediaObj.nameRomaji}")
+                Logger.log("Searching : ${mediaObj.nameRomaji}")
                 val romajiResults = search(mediaObj.nameRomaji)
                 val sortedRomajiResults = if (romajiResults.isNotEmpty()) {
                     romajiResults.sortedByDescending {
@@ -96,10 +96,10 @@ abstract class BaseParser {
                     emptyList()
                 }
                 val closestRomaji = sortedRomajiResults.firstOrNull()
-                logger("Closest match from RomajiResults: ${closestRomaji?.name ?: "None"}")
+                Logger.log("Closest match from RomajiResults: ${closestRomaji?.name ?: "None"}")
 
                 response = if (response == null) {
-                    logger("No exact match found in results. Using closest match from RomajiResults.")
+                    Logger.log("No exact match found in results. Using closest match from RomajiResults.")
                     closestRomaji
                 } else {
                     val romajiRatio = FuzzySearch.ratio(
@@ -110,14 +110,14 @@ abstract class BaseParser {
                         response.name.lowercase(),
                         mediaObj.mainName().lowercase()
                     )
-                    logger("Fuzzy ratio for closest match in results: $mainNameRatio for ${response.name.lowercase()}")
-                    logger("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name?.lowercase() ?: "None"}")
+                    Logger.log("Fuzzy ratio for closest match in results: $mainNameRatio for ${response.name.lowercase()}")
+                    Logger.log("Fuzzy ratio for closest match in RomajiResults: $romajiRatio for ${closestRomaji?.name?.lowercase() ?: "None"}")
 
                     if (romajiRatio > mainNameRatio) {
-                        logger("RomajiResults has a closer match. Replacing response.")
+                        Logger.log("RomajiResults has a closer match. Replacing response.")
                         closestRomaji
                     } else {
-                        logger("Results has a closer or equal match. Keeping existing response.")
+                        Logger.log("Results has a closer or equal match. Keeping existing response.")
                         response
                     }
                 }
@@ -216,8 +216,7 @@ data class ShowResponse(
         otherNames: List<String> = listOf(),
         total: Int? = null,
         extra: MutableMap<String, String>? = null
-    )
-            : this(name, link, FileUrl(coverUrl), otherNames, total, extra)
+    ) : this(name, link, FileUrl(coverUrl), otherNames, total, extra)
 
     constructor(
         name: String,
@@ -225,8 +224,7 @@ data class ShowResponse(
         coverUrl: String,
         otherNames: List<String> = listOf(),
         total: Int? = null
-    )
-            : this(name, link, FileUrl(coverUrl), otherNames, total)
+    ) : this(name, link, FileUrl(coverUrl), otherNames, total)
 
     constructor(name: String, link: String, coverUrl: String, otherNames: List<String> = listOf())
             : this(name, link, FileUrl(coverUrl), otherNames)
@@ -239,6 +237,10 @@ data class ShowResponse(
 
     constructor(name: String, link: String, coverUrl: String, sManga: SManga)
             : this(name, link, FileUrl(coverUrl), sManga = sManga)
+
+    companion object {
+        private const val serialVersionUID = 1L
+    }
 }
 
 

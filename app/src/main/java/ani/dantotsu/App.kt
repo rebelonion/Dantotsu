@@ -8,7 +8,9 @@ import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
+import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
+import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.MangaSources
@@ -17,6 +19,8 @@ import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.SettingsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.FinalExceptionHandler
+import ani.dantotsu.util.Logger
 import com.google.android.material.color.DynamicColors
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -28,7 +32,6 @@ import kotlinx.coroutines.launch
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
-import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -79,7 +82,9 @@ class App : MultiDexApplication() {
         }
         crashlytics.setCustomKey("device Info", SettingsActivity.getDeviceInfo())
 
-
+        Logger.init(this)
+        Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
+        Logger.log("App: Logging started")
 
         initializeNetwork(baseContext)
 
@@ -95,29 +100,36 @@ class App : MultiDexApplication() {
         val animeScope = CoroutineScope(Dispatchers.Default)
         animeScope.launch {
             animeExtensionManager.findAvailableExtensions()
-            logger("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
+            Logger.log("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
             AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
         }
         val mangaScope = CoroutineScope(Dispatchers.Default)
         mangaScope.launch {
             mangaExtensionManager.findAvailableExtensions()
-            logger("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
+            Logger.log("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
             MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
         val novelScope = CoroutineScope(Dispatchers.Default)
         novelScope.launch {
             novelExtensionManager.findAvailableExtensions()
-            logger("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
+            Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }
-    }
+        val commentsScope = CoroutineScope(Dispatchers.Default)
+        commentsScope.launch {
+            CommentsAPI.fetchAuthToken()
+        }
 
+        val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
+        TaskScheduler.create(this, useAlarmManager).scheduleAllTasks(this)
+    }
 
     private fun setupNotificationChannels() {
         try {
             Notifications.createChannels(this)
         } catch (e: Exception) {
-            logcat(LogPriority.ERROR, e) { "Failed to modify notification channels" }
+            Logger.log("Failed to modify notification channels")
+            Logger.log(e)
         }
     }
 

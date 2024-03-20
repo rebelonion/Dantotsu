@@ -11,7 +11,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import ani.dantotsu.FileUrl
 import ani.dantotsu.currContext
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.anime.AnimeNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
@@ -82,6 +82,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         }
 
     private fun getDub(): Boolean {
+        if (sourceLanguage >= extension.sources.size) {
+            sourceLanguage = extension.sources.size - 1
+        }
         val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
             ?: return false
         currContext()?.let { context ->
@@ -103,6 +106,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     }
 
     fun setDub(setDub: Boolean) {
+        if (sourceLanguage >= extension.sources.size) {
+            sourceLanguage = extension.sources.size - 1
+        }
         val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
             ?: return
         val type = when (setDub) {
@@ -129,7 +135,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
             ?: return false
         currContext()?.let { context ->
-            logger("isDubAvailableSeparately: ${configurableSource.getPreferenceKey()}")
+            Logger.log("isDubAvailableSeparately: ${configurableSource.getPreferenceKey()}")
             val sharedPreferences =
                 context.getSharedPreferences(
                     configurableSource.getPreferenceKey(),
@@ -205,7 +211,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             }
             return sortedEpisodes.map { SEpisodeToEpisode(it) }
         } catch (e: Exception) {
-            logger("Exception: $e")
+            Logger.log("Exception: $e")
         }
         return emptyList()
     }
@@ -240,7 +246,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             val videos = source.getVideoList(sEpisode)
             videos.map { VideoToVideoServer(it) }
         } catch (e: Exception) {
-            logger("Exception occurred: ${e.message}")
+            Logger.log("Exception occurred: ${e.message}")
             emptyList()
         }
     }
@@ -260,16 +266,16 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             ?: return emptyList())
         return try {
             val res = source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
-            logger("query: $query")
+            Logger.log("query: $query")
             convertAnimesPageToShowResponse(res)
         } catch (e: CloudflareBypassException) {
-            logger("Exception in search: $e")
+            Logger.log("Exception in search: $e")
             withContext(Dispatchers.Main) {
                 snackString("Failed to bypass Cloudflare")
             }
             emptyList()
         } catch (e: Exception) {
-            logger("General exception in search: $e")
+            Logger.log("General exception in search: $e")
             emptyList()
         }
     }
@@ -358,12 +364,12 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             val res = source.getChapterList(sManga)
             val reversedRes = res.reversed()
             val chapterList = reversedRes.map { SChapterToMangaChapter(it) }
-            logger("chapterList size: ${chapterList.size}")
-            logger("chapterList: ${chapterList[1].title}")
-            logger("chapterList: ${chapterList[1].description}")
+            Logger.log("chapterList size: ${chapterList.size}")
+            Logger.log("chapterList: ${chapterList[1].title}")
+            Logger.log("chapterList: ${chapterList[1].description}")
             chapterList
         } catch (e: Exception) {
-            logger("loadChapters Exception: $e")
+            Logger.log("loadChapters Exception: $e")
             emptyList()
         }
     }
@@ -379,7 +385,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         var imageDataList: List<ImageData> = listOf()
         val ret = coroutineScope {
             try {
-                logger("source.name " + source.name)
+                Logger.log("source.name " + source.name)
                 val res = source.getPageList(sChapter)
                 val reIndexedPages =
                     res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
@@ -388,7 +394,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                     async(Dispatchers.IO) {
                         mangaCache.put(page.imageUrl ?: "", ImageData(page, source))
                         imageDataList += ImageData(page, source)
-                        logger("put page: ${page.imageUrl}")
+                        Logger.log("put page: ${page.imageUrl}")
                         pageToMangaImage(page)
                     }
                 }
@@ -396,7 +402,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 deferreds.awaitAll()
 
             } catch (e: Exception) {
-                logger("loadImages Exception: $e")
+                Logger.log("loadImages Exception: $e")
                 snackString("Failed to load images: $e")
                 emptyList()
             }
@@ -414,7 +420,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
         return coroutineScope {
             try {
-                logger("source.name " + source.name)
+                Logger.log("source.name " + source.name)
                 val res = source.getPageList(sChapter)
                 val reIndexedPages =
                     res.mapIndexed { index, page -> Page(index, page.url, page.imageUrl, page.uri) }
@@ -430,7 +436,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
                 deferreds.awaitAll()
             } catch (e: Exception) {
-                logger("loadImages Exception: $e")
+                Logger.log("loadImages Exception: $e")
                 snackString("Failed to load images: $e")
                 emptyList()
             }
@@ -446,8 +452,8 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             try {
                 // Fetch the image
                 val response = httpSource.getImage(page)
-                logger("Response: ${response.code}")
-                logger("Response: ${response.message}")
+                Logger.log("Response: ${response.code}")
+                Logger.log("Response: ${response.message}")
 
                 // Convert the Response to an InputStream
                 val inputStream = response.body.byteStream()
@@ -467,7 +473,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 return@withContext bitmap
             } catch (e: Exception) {
                 // Handle any exceptions
-                logger("An error occurred: ${e.message}")
+                Logger.log("An error occurred: ${e.message}")
                 return@withContext null
             }
         }
@@ -500,7 +506,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
                 inputStream.close()
             } catch (e: Exception) {
                 // Handle any exceptions
-                logger("An error occurred: ${e.message}")
+                Logger.log("An error occurred: ${e.message}")
             }
         }
     }
@@ -547,7 +553,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             }
         } catch (e: Exception) {
             // Handle exception here
-            logger("Exception while saving image: ${e.message}")
+            Logger.log("Exception while saving image: ${e.message}")
         }
     }
 
@@ -562,16 +568,16 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
         return try {
             val res = source.fetchSearchManga(1, query, source.getFilterList()).awaitSingle()
-            logger("res observable: $res")
+            Logger.log("res observable: $res")
             convertMangasPageToShowResponse(res)
         } catch (e: CloudflareBypassException) {
-            logger("Exception in search: $e")
+            Logger.log("Exception in search: $e")
             withContext(Dispatchers.Main) {
                 snackString("Failed to bypass Cloudflare")
             }
             emptyList()
         } catch (e: Exception) {
-            logger("General exception in search: $e")
+            Logger.log("General exception in search: $e")
             emptyList()
         }
     }
@@ -633,7 +639,8 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             sChapter.name,
             null,
             sChapter.scanlator,
-            sChapter
+            sChapter,
+            sChapter.date_upload
         )
     }
 
@@ -713,7 +720,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
         // If the format is still undetermined, log an error
         if (format == null) {
-            logger("Unknown video format: $videoUrl")
+            Logger.log("Unknown video format: $videoUrl")
             format = VideoType.CONTAINER
         }
         val headersMap: Map<String, String> =
@@ -745,7 +752,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
     private fun headRequest(fileName: String, networkHelper: NetworkHelper): VideoType? {
         return try {
-            logger("attempting head request for $fileName")
+            Logger.log("attempting head request for $fileName")
             val request = Request.Builder()
                 .url(fileName)
                 .head()
@@ -770,13 +777,13 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
                         else -> null
                     }
                 } else {
-                    logger("failed head request for $fileName")
+                    Logger.log("failed head request for $fileName")
                     null
                 }
 
             }
         } catch (e: Exception) {
-            logger("Exception in headRequest: $e")
+            Logger.log("Exception in headRequest: $e")
             null
         }
 

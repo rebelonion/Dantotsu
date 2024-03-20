@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/comment_sort_newest"
+        android:title="@string/newest" />
+    <item
+        android:id="@+id/comment_sort_oldest"
+        android:title="@string/oldest" />
+    <item
+        android:id="@+id/comment_sort_highest_rated"
+        android:title="@string/highest_rated" />
+    <item
+        android:id="@+id/comment_sort_lowest_rated"
+        android:title="@string/lowest_rated" />
+</menu>

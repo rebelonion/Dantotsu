@@ -2,7 +2,9 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Rect
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.util.TypedValue
@@ -10,7 +12,9 @@ import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
+import android.widget.FrameLayout
 import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +22,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
+import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -25,21 +30,23 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ani.dantotsu.CustomBottomNavBar
 import ani.dantotsu.GesturesListener
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.ZoomOutPageTransformer
+import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityMediaBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.anime.AnimeWatchFragment
+import ani.dantotsu.media.comments.CommentsFragment
 import ani.dantotsu.media.manga.MangaReadFragment
 import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.AndroidBug5497Workaround
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.settings.saving.PrefManager
@@ -49,20 +56,21 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.google.android.material.appbar.AppBarLayout
-import com.google.android.material.navigation.NavigationBarView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 
 class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
 
-    private lateinit var binding: ActivityMediaBinding
+    lateinit var binding: ActivityMediaBinding
     private val scope = lifecycleScope
     private val model: MediaDetailsViewModel by viewModels()
-    private lateinit var tabLayout: NavigationBarView
+    lateinit var tabLayout: TripleNavAdapter
     var selected = 0
     var anime = true
     private var adult = false
@@ -71,6 +79,15 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var media: Media = intent.getSerialized("media") ?: mediaSingleton ?: emptyMedia()
+        val id = intent.getIntExtra("mediaId", -1)
+        if (id != -1) {
+            runBlocking {
+                withContext(Dispatchers.IO) {
+                    media =
+                        Anilist.query.getMedia(id, false) ?: emptyMedia()
+                }
+            }
+        }
         if (media.name == "No media found") {
             snackString(media.name)
             onBackPressedDispatcher.onBackPressed()
@@ -84,19 +101,30 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
 
+        val isVertical = resources.configuration.orientation
         //Ui init
 
         initActivity(this)
-
+        binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
+        val oldMargin = binding.mediaViewPager.marginBottom
+        AndroidBug5497Workaround.assistActivity(this) {
+            if (it) {
+                binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 0
+                }
+                binding.mediaTabContainer.visibility = View.GONE
+            } else {
+                binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = oldMargin
+                }
+                binding.mediaTabContainer.visibility = View.VISIBLE
+            }
+        }
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
         binding.mediaClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
         binding.incognito.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
         binding.mediaCollapsing.minimumHeight = statusBarHeight
-
-        if (binding.mediaTab is CustomBottomNavBar) binding.mediaTab.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin = navBarHeight
-        }
 
         binding.mediaTitle.isSelected = true
 
@@ -119,7 +147,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         val banner =
             if (bannerAnimations) binding.mediaBanner else binding.mediaBannerNoKen
         val viewPager = binding.mediaViewPager
-        tabLayout = binding.mediaTab as NavigationBarView
+        //tabLayout = binding.mediaTab as AnimatedBottomBar
         viewPager.isUserInputEnabled = false
         viewPager.setPageTransformer(ZoomOutPageTransformer())
 
@@ -135,7 +163,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 media.cover
             )
         }
-        banner.loadImage(media.banner ?: media.cover, 400)
+
+        blurImage(banner, media.banner ?: media.cover)
         val gestureDetector = GestureDetector(this, object : GesturesListener() {
             override fun onDoubleClick(event: MotionEvent) {
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean))
@@ -313,48 +342,53 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 progress()
             }
         }
-
+        tabLayout = TripleNavAdapter(
+            binding.mediaTab1,
+            binding.mediaTab2,
+            binding.mediaTab3,
+            media.anime != null,
+            media.format ?: "",
+            isVertical == 1
+        )
         adult = media.isAdult
-        tabLayout.menu.clear()
         if (media.anime != null) {
             viewPager.adapter =
-                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME)
-            tabLayout.inflateMenu(R.menu.anime_menu_detail)
+                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME, media, intent.getIntExtra("commentId", -1))
         } else if (media.manga != null) {
             viewPager.adapter = ViewPagerAdapter(
                 supportFragmentManager,
                 lifecycle,
-                if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA
+                if (media.format == "NOVEL") SupportedMedia.NOVEL else SupportedMedia.MANGA,
+                media,
+                intent.getIntExtra("commentId", -1)
             )
-            if (media.format == "NOVEL") {
-                tabLayout.inflateMenu(R.menu.novel_menu_detail)
-            } else {
-                tabLayout.inflateMenu(R.menu.manga_menu_detail)
-            }
             anime = false
         }
 
 
         selected = media.selected!!.window
         binding.mediaTitle.translationX = -screenWidth
-        tabLayout.visibility = View.VISIBLE
 
-        tabLayout.setOnItemSelectedListener { item ->
-            selectFromID(item.itemId)
+        tabLayout.selectionListener = { selected, newId ->
+            binding.commentInputLayout.visibility = if (selected == 2) View.VISIBLE else View.GONE
+            this.selected = selected
+            selectFromID(newId)
             viewPager.setCurrentItem(selected, false)
             val sel = model.loadSelected(media, isDownload)
             sel.window = selected
             model.saveSelected(media.id, sel)
-            true
         }
-
-
-        tabLayout.selectedItemId = idFromSelect()
+        tabLayout.selectTab(selected)
+        selectFromID(tabLayout.selected)
         viewPager.setCurrentItem(selected, false)
 
         if (model.continueMedia == null && media.cameFromContinue) {
             model.continueMedia = PrefManager.getVal(PrefName.ContinueMedia)
             selected = 1
+        }
+        val frag = intent.getStringExtra("FRAGMENT_TO_LOAD")
+        if (frag != null) {
+            selected = 2
         }
 
         val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
@@ -368,7 +402,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         }
     }
 
-
     private fun selectFromID(id: Int) {
         when (id) {
             R.id.info -> {
@@ -378,6 +411,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             R.id.watch, R.id.read -> {
                 selected = 1
             }
+
+            R.id.comment -> {
+                selected = 2
+            }
         }
     }
 
@@ -385,17 +422,19 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         if (anime) when (selected) {
             0 -> return R.id.info
             1 -> return R.id.watch
+            2 -> return R.id.comment
         }
         else when (selected) {
             0 -> return R.id.info
             1 -> return R.id.read
+            2 -> return R.id.comment
         }
         return R.id.info
     }
 
     override fun onResume() {
         if (this::tabLayout.isInitialized) {
-            tabLayout.selectedItemId = idFromSelect()
+            tabLayout.selectTab(selected)
         }
         super.onResume()
     }
@@ -408,18 +447,29 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
-        private val media: SupportedMedia
+        private val mediaType: SupportedMedia,
+        private val media: Media,
+        private val commentId: Int
     ) :
         FragmentStateAdapter(fragmentManager, lifecycle) {
 
-        override fun getItemCount(): Int = 2
+        override fun getItemCount(): Int = 3
 
         override fun createFragment(position: Int): Fragment = when (position) {
             0 -> MediaInfoFragment()
-            1 -> when (media) {
+            1 -> when (mediaType) {
                 SupportedMedia.ANIME -> AnimeWatchFragment()
                 SupportedMedia.MANGA -> MangaReadFragment()
                 SupportedMedia.NOVEL -> NovelReadFragment()
+            }
+            2 -> {
+                val fragment = CommentsFragment()
+                val bundle = Bundle()
+                bundle.putInt("mediaId", media.id)
+                bundle.putString("mediaName", media.mainName())
+                if (commentId != -1) bundle.putInt("commentId", commentId)
+                fragment.arguments = bundle
+                fragment
             }
 
             else -> MediaInfoFragment()
@@ -484,6 +534,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         private val c1: Int,
         private val c2: Int,
         var clicked: Boolean,
+        needsInitialClick: Boolean = false,
         callback: suspend (Boolean) -> (Unit)
     ) {
         private var disabled = false
@@ -492,6 +543,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         init {
             enabled(true)
+            if (needsInitialClick) {
+                scope.launch {
+                    clicked()
+                }
+            }
             image.setOnClickListener {
                 if (pressable && !disabled) {
                     pressable = false
@@ -547,4 +603,3 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         var mediaSingleton: Media? = null
     }
 }
-

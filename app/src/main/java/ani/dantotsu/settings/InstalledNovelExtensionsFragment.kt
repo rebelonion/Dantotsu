@@ -30,6 +30,7 @@ import ani.dantotsu.parsers.novel.NovelExtensionManager
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.data.notification.Notifications
 import kotlinx.coroutines.launch
 import rx.android.schedulers.AndroidSchedulers
@@ -72,7 +73,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
                             },
                             { error ->
                                 Injekt.get<CrashlyticsInterface>().logException(error)
-                                Log.e("NovelExtensionsAdapter", "Error: ", error)  // Log the error
+                                Logger.log(error)  // Log the error
                                 val builder = NotificationCompat.Builder(
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_ERROR
@@ -216,7 +217,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_extension, parent, false)
-            Log.d("NovelExtensionsAdapter", "onCreateViewHolder: $view")
+            Logger.log("onCreateViewHolder: $view")
             return ViewHolder(view)
         }
 

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Bitmap
+import android.os.Build
 import android.view.Window
 import android.view.WindowManager
 import ani.dantotsu.R
@@ -44,6 +45,7 @@ class ThemeManager(private val context: Activity) {
             "GREEN" -> if (useOLED) R.style.Theme_Dantotsu_GreenOLED else R.style.Theme_Dantotsu_Green
             "PURPLE" -> if (useOLED) R.style.Theme_Dantotsu_PurpleOLED else R.style.Theme_Dantotsu_Purple
             "PINK" -> if (useOLED) R.style.Theme_Dantotsu_PinkOLED else R.style.Theme_Dantotsu_Pink
+            "ORIAX" -> if (useOLED) R.style.Theme_Dantotsu_OriaxOLED else R.style.Theme_Dantotsu_Oriax
             "SAIKOU" -> if (useOLED) R.style.Theme_Dantotsu_SaikouOLED else R.style.Theme_Dantotsu_Saikou
             "RED" -> if (useOLED) R.style.Theme_Dantotsu_RedOLED else R.style.Theme_Dantotsu_Red
             "LAVENDER" -> if (useOLED) R.style.Theme_Dantotsu_LavenderOLED else R.style.Theme_Dantotsu_Lavender
@@ -53,7 +55,10 @@ class ThemeManager(private val context: Activity) {
         }
 
         val window = context.window
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            @Suppress("DEPRECATION")
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        }
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.statusBarColor = 0x00000000
         context.setTheme(themeToApply)
@@ -127,6 +132,7 @@ class ThemeManager(private val context: Activity) {
             GREEN("GREEN"),
             PURPLE("PURPLE"),
             PINK("PINK"),
+            ORIAX("ORIAX"),
             SAIKOU("SAIKOU"),
             RED("RED"),
             LAVENDER("LAVENDER"),
@@ -135,7 +141,7 @@ class ThemeManager(private val context: Activity) {
 
             companion object {
                 fun fromString(value: String): Theme {
-                    return values().find { it.theme == value } ?: PURPLE
+                    return entries.find { it.theme == value } ?: PURPLE
                 }
             }
         }

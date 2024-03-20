@@ -1,5 +1,6 @@
 package ani.dantotsu.media.manga
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -16,6 +17,9 @@ import ani.dantotsu.databinding.ItemChapterListBinding
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.setAnimation
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -258,6 +262,7 @@ class MangaChapterAdapter(
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ChapterCompactViewHolder -> {
@@ -290,6 +295,23 @@ class MangaChapterAdapter(
                 holder.bind(ep.number, ep.progress)
                 setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemChapterNumber.text = ep.number
+
+                if (ep.date != null) {
+                    binding.itemChapterDateLayout.visibility = View.VISIBLE
+                    binding.itemChapterDate.text = formatDate(ep.date)
+                }
+                if (ep.scanlator != null) {
+                    binding.itemChapterDateLayout.visibility = View.VISIBLE
+                    binding.itemChapterScan.text = ep.scanlator.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.ROOT
+                        ) else it.toString()
+                    }
+                }
+                if (formatDate(ep.date) == "" || ep.scanlator == null) {
+                    binding.itemChapterDateDivider.visibility = View.GONE
+                } else binding.itemChapterDateDivider.visibility = View.VISIBLE
+
                 if (ep.progress.isNullOrEmpty()) {
                     binding.itemChapterTitle.visibility = View.GONE
                 } else binding.itemChapterTitle.visibility = View.VISIBLE
@@ -322,6 +344,33 @@ class MangaChapterAdapter(
     fun updateType(t: Int) {
         type = t
     }
+    private fun formatDate(timestamp: Long?): String {
+        timestamp ?: return "" // Return empty string if timestamp is null
 
+        val targetDate = Date(timestamp)
+
+        if (targetDate < Date(946684800000L)) { // January 1, 2000 (who want dates before that?)
+            return ""
+        }
+
+        val currentDate = Date()
+        val difference = currentDate.time - targetDate.time
+
+        return when (val daysDifference = difference / (1000 * 60 * 60 * 24)) {
+            0L -> {
+                val hoursDifference = difference / (1000 * 60 * 60)
+                val minutesDifference = (difference / (1000 * 60)) % 60
+
+                when {
+                    hoursDifference > 0 -> "$hoursDifference hour${if (hoursDifference > 1) "s" else ""} ago"
+                    minutesDifference > 0 -> "$minutesDifference minute${if (minutesDifference > 1) "s" else ""} ago"
+                    else -> "Just now"
+                }
+            }
+            1L -> "1 day ago"
+            in 2..6 -> "$daysDifference days ago"
+            else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(targetDate)
+        }
+    }
 
 }

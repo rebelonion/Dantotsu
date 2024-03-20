@@ -35,7 +35,7 @@ class CharacterDetailsAdapter(private val character: Character, private val acti
         binding.characterDesc.isTextSelectable
         val markWon = Markwon.builder(activity).usePlugin(SoftBreakAddsNewLinePlugin.create())
             .usePlugin(SpoilerPlugin()).build()
-        markWon.setMarkdown(binding.characterDesc, desc)
+        markWon.setMarkdown(binding.characterDesc, desc.replace("~!", "||").replace("!~", "||"))
 
     }
 

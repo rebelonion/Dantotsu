@@ -15,6 +15,7 @@ data class CurrentReaderSettings(
     var trueColors: Boolean = PrefManager.getVal(PrefName.TrueColors),
     var rotation: Boolean = PrefManager.getVal(PrefName.Rotation),
     var padding: Boolean = PrefManager.getVal(PrefName.Padding),
+    var hideScrollBar: Boolean = PrefManager.getVal(PrefName.HideScrollBar),
     var hidePageNumbers: Boolean = PrefManager.getVal(PrefName.HidePageNumbers),
     var horizontalScrollBar: Boolean = PrefManager.getVal(PrefName.HorizontalScrollBar),
     var keepScreenOn: Boolean = PrefManager.getVal(PrefName.KeepScreenOn),

@@ -46,7 +46,7 @@ data class User(
     @SerialName("statistics") var statistics: UserStatisticTypes?,
 
     // The number of unread notifications the user has
-    //    @SerialName("unreadNotificationCount") var unreadNotificationCount: Int?,
+    @SerialName("unreadNotificationCount") var unreadNotificationCount: Int?,
 
     // The url for the user page on the AniList website
     //    @SerialName("siteUrl") var siteUrl: String?,
@@ -111,7 +111,7 @@ data class UserAvatar(
 
     // The avatar of user at medium size
     @SerialName("medium") var medium: String?,
-)
+): java.io.Serializable
 
 @Serializable
 data class UserStatisticTypes(
@@ -164,7 +164,7 @@ data class Favourites(
 @Serializable
 data class MediaListOptions(
     // The score format the user is using for media lists
-    // @SerialName("scoreFormat") var scoreFormat: ScoreFormat?,
+    @SerialName("scoreFormat") var scoreFormat: String?,
 
     // The default order list rows should be displayed in
     @SerialName("rowOrder") var rowOrder: String?,

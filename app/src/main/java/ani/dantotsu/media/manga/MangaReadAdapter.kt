@@ -12,6 +12,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
@@ -27,11 +28,11 @@ import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
-import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
+import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_SUBSCRIPTION_CHECK
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import kotlinx.coroutines.MainScope
@@ -62,6 +63,12 @@ class MangaReadAdapter(
         val binding = holder.binding
         _binding = binding
         binding.sourceTitle.setText(R.string.chaps)
+
+        //Fuck u launch
+        binding.faqbutton.setOnClickListener {
+            val intent = Intent(fragment.requireContext(), FAQActivity::class.java)
+            startActivity(fragment.requireContext(), intent, null)
+        }
 
         //Wrong Title
         binding.animeSourceSearch.setOnClickListener {
@@ -142,7 +149,8 @@ class MangaReadAdapter(
             R.drawable.ic_round_notifications_none_24,
             R.color.bg_opp,
             R.color.violet_400,
-            fragment.subscribed
+            fragment.subscribed,
+            true
         ) {
             fragment.onNotificationPressed(it, binding.animeSource.text.toString())
         }
@@ -150,7 +158,7 @@ class MangaReadAdapter(
         subscribeButton(false)
 
         binding.animeSourceSubscribe.setOnLongClickListener {
-            openSettings(fragment.requireContext(), getChannelId(true, media.id))
+            openSettings(fragment.requireContext(), CHANNEL_SUBSCRIPTION_CHECK)
         }
 
         binding.animeNestedButton.setOnClickListener {
@@ -245,17 +253,41 @@ class MangaReadAdapter(
                 if (options.count() > 1) View.VISIBLE else View.GONE
             dialogBinding.scanlatorNo.text = "${options.count()}"
             dialogBinding.animeScanlatorTop.setOnClickListener {
-                val dialogView2 =
-                    LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
-                val checkboxContainer =
-                    dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
+                val dialogView2 = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+                val checkboxContainer = dialogView2.findViewById<LinearLayout>(R.id.checkboxContainer)
+                val tickAllButton = dialogView2.findViewById<ImageButton>(R.id.toggleButton)
+
+                // Function to get the right image resource for the toggle button
+                fun getToggleImageResource(container: ViewGroup): Int {
+                    var allChecked = true
+                    var allUnchecked = true
+
+                    for (i in 0 until container.childCount) {
+                        val checkBox = container.getChildAt(i) as CheckBox
+                        if (!checkBox.isChecked) {
+                            allChecked = false
+                        } else {
+                            allUnchecked = false
+                        }
+                    }
+                    return when {
+                        allChecked -> R.drawable.untick_all_boxes
+                        allUnchecked -> R.drawable.tick_all_boxes
+                        else -> R.drawable.invert_all_boxes
+                    }
+                }
 
                 // Dynamically add checkboxes
                 options.forEach { option ->
                     val checkBox = CheckBox(currContext()).apply {
                         text = option
+                        setOnCheckedChangeListener { _, _ ->
+                            // Update image resource when you change a checkbox
+                            tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+                        }
                     }
-                    //set checked if it's already selected
+
+                    // Set checked if its already selected
                     if (media.selected!!.scanlators != null) {
                         checkBox.isChecked = media.selected!!.scanlators?.contains(option) != true
                         scanlatorSelectionListener?.onScanlatorsSelected()
@@ -269,7 +301,6 @@ class MangaReadAdapter(
                 val dialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
                     .setView(dialogView2)
                     .setPositiveButton("OK") { _, _ ->
-                        //add unchecked to hidden
                         hiddenScanlators.clear()
                         for (i in 0 until checkboxContainer.childCount) {
                             val checkBox = checkboxContainer.getChildAt(i) as CheckBox
@@ -283,6 +314,21 @@ class MangaReadAdapter(
                     .setNegativeButton("Cancel", null)
                     .show()
                 dialog.window?.setDimAmount(0.8f)
+
+                // Standard image resource
+                tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+
+                // Listens to ticked checkboxes and changes image resource accordingly
+                tickAllButton.setOnClickListener {
+                    // Toggle checkboxes
+                    for (i in 0 until checkboxContainer.childCount) {
+                        val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                        checkBox.isChecked = !checkBox.isChecked
+                    }
+
+                    // Update image resource
+                    tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+                }
             }
 
             nestedDialog = AlertDialog.Builder(fragment.requireContext(), R.style.MyPopup)
@@ -391,7 +437,7 @@ class MangaReadAdapter(
             if (media.manga?.chapters != null) {
                 val chapters = media.manga.chapters!!.keys.toTypedArray()
                 val anilistEp = (media.userProgress ?: 0).plus(1)
-                val appEp = PrefManager.getCustomVal<String?>("${media.id}_current_chp", null)
+                val appEp = PrefManager.getNullableCustomVal("${media.id}_current_chp", null, String::class.java)
                     ?.toIntOrNull() ?: 1
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
                 val filteredChapters = chapters.filter { chapterKey ->
@@ -435,13 +481,17 @@ class MangaReadAdapter(
                     binding.animeSourceContinue.visibility = View.GONE
                 }
                 binding.animeSourceProgressBar.visibility = View.GONE
-                if (media.manga.chapters!!.isNotEmpty())
+                if (media.manga.chapters!!.isNotEmpty()) {
                     binding.animeSourceNotFound.visibility = View.GONE
-                else
+                    binding.faqbutton.visibility = View.GONE
+                } else {
                     binding.animeSourceNotFound.visibility = View.VISIBLE
+                    binding.faqbutton.visibility = View.VISIBLE
+                }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE
+                binding.faqbutton.visibility = View.GONE
                 clearChips()
                 binding.animeSourceProgressBar.visibility = View.VISIBLE
             }

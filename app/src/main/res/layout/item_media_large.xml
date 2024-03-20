@@ -9,7 +9,6 @@
     app:cardBackgroundColor="@color/nav_bg"
     app:cardCornerRadius="28dp">
 
-
     <ImageView
         android:id="@+id/itemCompactBanner"
         android:layout_width="match_parent"

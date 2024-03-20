@@ -15,7 +15,7 @@ data class Staff(
     @SerialName("languageV2") var languageV2: String?,
 
     // The staff images
-    // @SerialName("image") var image: StaffImage?,
+    @SerialName("image") var image: StaffImage?,
 
     // A general description of the staff member
     @SerialName("description") var description: String?,
@@ -93,7 +93,14 @@ data class StaffConnection(
     // The pagination information
     // @SerialName("pageInfo") var pageInfo: PageInfo?,
 )
+@Serializable
+data class StaffImage(
+    // The character's image of media at its largest size
+    @SerialName("large") var large: String?,
 
+    // The character's image of media at medium size
+    @SerialName("medium") var medium: String?,
+) : java.io.Serializable
 @Serializable
 data class StaffEdge(
     var role: String?,

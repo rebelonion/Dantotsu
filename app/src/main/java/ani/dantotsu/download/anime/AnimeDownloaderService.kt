@@ -27,7 +27,7 @@ import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.download.video.Helper
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.media.anime.AnimeWatchFragment
@@ -54,6 +54,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -249,7 +250,7 @@ class AnimeDownloaderService : Service() {
                     hasDownloadStarted(downloadManager, task, 30000) // 30 seconds timeout
 
                 if (!downloadStarted) {
-                    logger("Download failed to start")
+                    Logger.log("Download failed to start")
                     builder.setContentText("${task.title} - ${task.episode} Download failed to start")
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                     snackString("${task.title} - ${task.episode} Download failed to start")
@@ -263,11 +264,11 @@ class AnimeDownloaderService : Service() {
                     val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
                     if (download != null) {
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_FAILED) {
-                            logger("Download failed")
+                            Logger.log("Download failed")
                             builder.setContentText("${task.title} - ${task.episode} Download failed")
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download failed")
-                            logger("Download failed: ${download.failureReason}")
+                            Logger.log("Download failed: ${download.failureReason}")
                             downloadsManager.removeDownload(
                                 DownloadedType(
                                     task.title,
@@ -289,7 +290,7 @@ class AnimeDownloaderService : Service() {
                             break
                         }
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED) {
-                            logger("Download completed")
+                            Logger.log("Download completed")
                             builder.setContentText("${task.title} - ${task.episode} Download completed")
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download completed")
@@ -309,7 +310,7 @@ class AnimeDownloaderService : Service() {
                             break
                         }
                         if (download.state == androidx.media3.exoplayer.offline.Download.STATE_STOPPED) {
-                            logger("Download stopped")
+                            Logger.log("Download stopped")
                             builder.setContentText("${task.title} - ${task.episode} Download stopped")
                             notificationManager.notify(NOTIFICATION_ID, builder.build())
                             snackString("${task.title} - ${task.episode} Download stopped")
@@ -328,7 +329,7 @@ class AnimeDownloaderService : Service() {
             }
         } catch (e: Exception) {
             if (e.message?.contains("Coroutine was cancelled") == false) {  //wut
-                logger("Exception while downloading file: ${e.message}")
+                Logger.log("Exception while downloading file: ${e.message}")
                 snackString("Exception while downloading file: ${e.message}")
                 e.printStackTrace()
                 Injekt.get<CrashlyticsInterface>().logException(e)
@@ -355,15 +356,13 @@ class AnimeDownloaderService : Service() {
         return false
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: AnimeDownloadTask) {
-        GlobalScope.launch(Dispatchers.IO) {
+        launchIO {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                 "${DownloadsManager.animeLocation}/${task.title}"
             )
             val episodeDirectory = File(directory, task.episode)
-            if (!directory.exists()) directory.mkdirs()
             if (!episodeDirectory.exists()) episodeDirectory.mkdirs()
 
             val file = File(directory, "media.json")

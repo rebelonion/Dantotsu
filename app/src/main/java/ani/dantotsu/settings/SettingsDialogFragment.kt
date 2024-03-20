@@ -1,5 +1,6 @@
 package ani.dantotsu.settings
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -7,8 +8,10 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.MainActivity
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
@@ -21,9 +24,9 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.incognitoNotification
 import ani.dantotsu.loadImage
+import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.offline.OfflineFragment
-import ani.dantotsu.openLinkInBrowser
-import ani.dantotsu.others.imagesearch.ImageSearchActivity
+import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -58,13 +61,28 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         val theme = requireContext().theme
         theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
         window?.navigationBarColor = typedValue.data
+        val notificationIcon = if (Anilist.unreadNotificationCount > 0) {
+            R.drawable.ic_round_notifications_active_24
+        } else {
+            R.drawable.ic_round_notifications_none_24
+        }
+        binding.settingsNotification.setImageResource(notificationIcon)
 
         if (Anilist.token != null) {
             binding.settingsLogin.setText(R.string.logout)
             binding.settingsLogin.setOnClickListener {
-                Anilist.removeSavedToken()
-                dismiss()
-                startMainActivity(requireActivity())
+                val alertDialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
+                .setTitle("Logout")
+                .setMessage("Are you sure you want to logout?")
+                .setPositiveButton("Yes") { _, _ ->
+                    Anilist.removeSavedToken()
+                    dismiss()
+                    startMainActivity(requireActivity())
+                }
+                .setNegativeButton("No") { _, _ -> }
+                .create()
+                alertDialog.window?.setDimAmount(0.8f)
+                alertDialog.show()
             }
             binding.settingsUsername.text = Anilist.username
             binding.settingsUserAvatar.loadImage(Anilist.avatar)
@@ -76,31 +94,40 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
                 Anilist.loginIntent(requireActivity())
             }
         }
+        binding.settingsNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.settingsNotificationCount.text = Anilist.unreadNotificationCount.toString()
+        binding.settingsUserAvatar.setOnClickListener{
+            ContextCompat.startActivity(
+                requireContext(), Intent(requireContext(), ProfileActivity::class.java)
+                    .putExtra("userId", Anilist.userid), null
+            )
+        }
 
-        binding.settingsIncognito.isChecked =
-            PrefManager.getVal(PrefName.Incognito)
-
+        binding.settingsIncognito.isChecked = PrefManager.getVal(PrefName.Incognito)
         binding.settingsIncognito.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.Incognito, isChecked)
             incognitoNotification(requireContext())
         }
+
         binding.settingsExtensionSettings.setSafeOnClickListener {
             startActivity(Intent(activity, ExtensionsActivity::class.java))
             dismiss()
         }
+
         binding.settingsSettings.setSafeOnClickListener {
             startActivity(Intent(activity, SettingsActivity::class.java))
             dismiss()
         }
-        binding.settingsAnilistSettings.setOnClickListener {
-            openLinkInBrowser("https://anilist.co/settings/lists")
-            dismiss()
-        }
-        binding.imageSearch.setOnClickListener {
-            startActivity(Intent(activity, ImageSearchActivity::class.java))
+
+        binding.settingsActivity.setSafeOnClickListener {
+            startActivity(Intent(activity, FeedActivity::class.java))
             dismiss()
         }
 
+        binding.settingsNotification.setOnClickListener {
+            startActivity(Intent(activity, NotificationActivity::class.java))
+            dismiss()
+        }
         binding.settingsDownloads.isChecked = PrefManager.getVal(PrefName.OfflineMode)
         binding.settingsDownloads.setOnCheckedChangeListener { _, isChecked ->
             Timer().schedule(300) {

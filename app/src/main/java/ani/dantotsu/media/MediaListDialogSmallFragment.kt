@@ -58,6 +58,40 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.mediaListContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
         val scope = viewLifecycleOwner.lifecycleScope
+        binding.mediaListDelete.setOnClickListener {
+            var id = media.userListId
+            viewLifecycleOwner.lifecycleScope.launch {
+                withContext(Dispatchers.IO) {
+                    if (id != null) {
+                        try {
+                            Anilist.mutation.deleteList(id!!)
+                            MAL.query.deleteList(media.anime != null, media.idMAL)
+                        } catch (e: Exception) {
+                            withContext(Dispatchers.Main) {
+                                snackString("Failed to delete because of... ${e.message}")
+                            }
+                            return@withContext
+                        }
+                    } else {
+                        val profile = Anilist.query.userMediaDetails(media)
+                        profile.userListId?.let { listId ->
+                            id = listId
+                            Anilist.mutation.deleteList(listId)
+                            MAL.query.deleteList(media.anime != null, media.idMAL)
+                        }
+                    }
+                }
+                withContext(Dispatchers.Main) {
+                    if (id != null) {
+                        Refresh.all()
+                        snackString(getString(R.string.deleted_from_list))
+                        dismissAllowingStateLoss()
+                    } else {
+                        snackString(getString(R.string.no_list_id))
+                    }
+                }
+            }
+        }
 
         binding.mediaListProgressBar.visibility = View.GONE
         binding.mediaListLayout.visibility = View.VISIBLE

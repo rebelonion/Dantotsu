@@ -21,7 +21,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_FAILED
@@ -37,6 +37,7 @@ import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -47,6 +48,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -251,7 +253,7 @@ class MangaDownloaderService : Service() {
                 snackString("${task.title} - ${task.chapter} Download finished")
             }
         } catch (e: Exception) {
-            logger("Exception while downloading file: ${e.message}")
+            Logger.log("Exception while downloading file: ${e.message}")
             snackString("Exception while downloading file: ${e.message}")
             Injekt.get<CrashlyticsInterface>().logException(e)
             broadcastDownloadFailed(task.chapter)
@@ -287,8 +289,9 @@ class MangaDownloaderService : Service() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: DownloadTask) {
-        GlobalScope.launch(Dispatchers.IO) {
+        launchIO {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                 "Dantotsu/Manga/${task.title}"

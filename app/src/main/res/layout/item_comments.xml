@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/commentsCardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginBottom="4dp">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingEnd="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/commentUserAvatar"
+            style="@style/CircularImageView"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="12dp"
+            android:scaleType="center"
+            app:srcCompat="@drawable/ic_round_add_circle_24"
+            tools:ignore="ContentDescription,ImageContrastCheck" />
+
+
+        <LinearLayout
+            android:id="@+id/commentUserTagLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:alpha="0.9"
+                android:src="@drawable/ic_label_24"
+                app:tint="?attr/colorPrimary"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/commentUserTag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:alpha="0.9"
+                android:fontFamily="@font/poppins_bold"
+                android:maxLines="1"
+                android:paddingTop="2dp"
+                android:text="1095"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="12sp"
+                tools:ignore="HardcodedText,SmallSp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/commentUserDetailsLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/commentText"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/commentUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:paddingTop="1dp"
+            android:paddingBottom="0dp"
+            android:singleLine="true"
+            android:text="Username"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="15sp"
+            tools:ignore="HardcodedText,RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/commentUserLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:alpha="0.8"
+            android:fontFamily="@font/poppins_bold"
+            android:text="[1]"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:alpha="0.6"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="•"
+            android:textSize="16sp"
+            tools:ignore="HardcodedText,RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/commentUserTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="6dp"
+            android:alpha="0.6"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="Time"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText,RtlSymmetry" />
+
+        <ImageView
+            android:id="@+id/adminBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="0"
+            android:scaleX="0.9"
+            android:scaleY="0.9"
+            android:src="@drawable/ic_crown"
+            android:visibility="visible"
+            tools:ignore="ContentDescription,RtlSymmetry" />
+
+        <ImageView
+            android:id="@+id/modBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="0"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
+            android:src="@drawable/ic_shield"
+            android:visibility="visible"
+            tools:ignore="ContentDescription,RtlSymmetry" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/commentText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:maxLines="8"
+        android:scrollHorizontally="false"
+        android:text="@string/slogan"
+        android:textSize="12sp"
+
+        app:layout_constraintHeight_max="200dp"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout7"
+        app:layout_constraintTop_toBottomOf="@+id/commentUserDetailsLayout" />
+
+    <TextView
+        android:id="@+id/commentReply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/commentText"
+        android:layout_marginEnd="12dp"
+        android:paddingEnd="12dp"
+        android:layout_marginStart="10dp"
+        android:alpha="0.6"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:paddingTop="1dp"
+        android:text="Reply"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/commentEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/commentReply"
+        app:layout_constraintBottom_toBottomOf="@+id/commentReply"
+        android:layout_marginEnd="12dp"
+        android:paddingEnd="12dp"
+        android:alpha="0.6"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:paddingTop="1dp"
+        android:text="Edit"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/commentDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/commentEdit"
+        app:layout_constraintBottom_toBottomOf="@+id/commentEdit"
+        android:layout_marginEnd="12dp"
+        android:paddingEnd="12dp"
+        android:alpha="0.6"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:paddingTop="1dp"
+        android:text="Delete"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/commentReport"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/commentDelete"
+        app:layout_constraintBottom_toBottomOf="@+id/commentDelete"
+        android:layout_marginEnd="12dp"
+        android:paddingEnd="12dp"
+        android:alpha="0.6"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:paddingTop="1dp"
+        android:text="Report"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/commentBanUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@+id/commentReport"
+        app:layout_constraintBottom_toBottomOf="@+id/commentReport"
+        android:alpha="0.6"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:paddingTop="1dp"
+        android:text="Ban User"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
+
+
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:orientation="vertical"
+        android:layout_marginEnd="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/commentUpVote"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.4"
+            app:srcCompat="@drawable/ic_round_upvote_inactive_24"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/commentTotalVotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:alpha="0.6"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="100"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
+
+        <ImageView
+            android:id="@+id/commentDownVote"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:alpha="0.4"
+            android:rotation="180"
+            app:srcCompat="@drawable/ic_round_upvote_inactive_24"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+
+
+    <View
+        android:id="@+id/commentRepliesDivider"
+        android:layout_width="32dp"
+        android:layout_height="3dp"
+        app:layout_constraintTop_toBottomOf="@+id/commentReply"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="4dp"
+        android:background="@color/nav_tab" />
+
+    <TextView
+        android:id="@+id/commentTotalReplies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@+id/commentRepliesDivider"
+        app:layout_constraintBottom_toBottomOf="@+id/commentRepliesDivider"
+        app:layout_constraintStart_toEndOf="@+id/commentRepliesDivider"
+        android:layout_marginStart="4dp"
+        android:alpha="0.8"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:text="View replies"
+        android:textSize="12sp"
+        tools:ignore="HardcodedText" />
+
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/commentRepliesList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/commentRepliesDivider"
+        android:paddingStart="16dp"
+        android:visibility="visible"
+        tools:ignore="RtlSymmetry"
+        tools:visibility="visible" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

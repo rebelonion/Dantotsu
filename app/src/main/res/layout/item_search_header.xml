@@ -90,6 +90,31 @@
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp">
+        <androidx.cardview.widget.CardView
+            android:id="@+id/searchByImage"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            app:boxStrokeColor="@color/text_input_layout_stroke_color"
+            app:cardBackgroundColor="@color/nav_bg"
+            app:cardCornerRadius="16dp"
+            app:contentPadding="4dp"
+            app:contentPaddingLeft="8dp"
+            app:contentPaddingRight="8dp"
+            tools:ignore="ContentDescription,TextContrastCheck">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:drawablePadding="4dp"
+                android:fontFamily="@font/poppins_bold"
+                android:text="Image"
+                android:textColor="?attr/colorPrimary"
+                app:drawableStartCompat="@drawable/ic_round_search_24"
+                app:drawableTint="?attr/colorPrimary" />
+        </androidx.cardview.widget.CardView>
 
         <ani.dantotsu.FadingEdgeRecyclerView
             android:id="@+id/searchChipRecycler"

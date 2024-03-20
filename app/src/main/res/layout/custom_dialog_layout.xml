@@ -1,5 +1,6 @@
 <!-- custom_dialog_layout.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -16,15 +17,30 @@
         android:textColor="?attr/colorOnBackground"
         android:textSize="16sp" />
 
-    <ScrollView
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/checkboxContainer"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical" />
-    </ScrollView>
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:id="@+id/checkboxContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/toggleButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="5dp"
+            android:background="@null"
+            android:src="@drawable/untick_all_boxes"
+            app:tint="?attr/colorPrimary" />
+    </FrameLayout>
 
 </LinearLayout>

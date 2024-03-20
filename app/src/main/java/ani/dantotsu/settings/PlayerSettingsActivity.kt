@@ -129,6 +129,11 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.TimeStampsEnabled, isChecked)
         }
 
+        binding.playerSettingsTimeStampsAutoHide.isChecked = PrefManager.getVal(PrefName.AutoHideTimeStamps)
+        binding.playerSettingsTimeStampsAutoHide.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.AutoHideTimeStamps, isChecked)
+        }
+
         binding.playerSettingsTimeStampsProxy.isChecked =
             PrefManager.getVal(PrefName.UseProxyForTimeStamps)
         binding.playerSettingsTimeStampsProxy.setOnCheckedChangeListener { _, isChecked ->
@@ -162,6 +167,14 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.getVal(PrefName.AskIndividualPlayer)
         binding.playerSettingsAskUpdateProgress.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.AskIndividualPlayer, isChecked)
+            binding.playerSettingsAskChapterZero.isEnabled = !isChecked
+        }
+        binding.playerSettingsAskChapterZero.isChecked =
+            PrefManager.getVal(PrefName.ChapterZeroPlayer)
+        binding.playerSettingsAskChapterZero.isEnabled =
+            !PrefManager.getVal<Boolean>(PrefName.AskIndividualPlayer)
+        binding.playerSettingsAskChapterZero.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.ChapterZeroPlayer, isChecked)
         }
         binding.playerSettingsAskUpdateHentai.isChecked =
             PrefManager.getVal(PrefName.UpdateForHPlayer)
@@ -442,7 +455,8 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Poppins",
             "Poppins Thin",
             "Century Gothic",
-            "Century Gothic Bold"
+            "Levenim MT Bold",
+            "Blocky"
         )
         val fontDialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.subtitle_font))

@@ -25,6 +25,7 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.SearchActivity
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.setSlideIn
@@ -74,7 +75,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         }
 
         updateAvatar()
-
+        binding.mangaNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.mangaNotificationCount.text = Anilist.unreadNotificationCount.toString()
         binding.mangaSearchBar.hint = "MANGA"
         binding.mangaSearchBarText.setOnClickListener {
             ContextCompat.startActivity(
@@ -88,6 +90,14 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             val dialogFragment =
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.MANGA)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
+        }
+        binding.mangaUserAvatar.setOnLongClickListener { view ->
+            ContextCompat.startActivity(
+                view.context,
+                Intent(view.context, ProfileActivity::class.java)
+                    .putExtra("userId", Anilist.userid),null
+            )
+            false
         }
 
         binding.mangaSearchBar.setEndIconOnClickListener {
@@ -145,8 +155,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         binding.mangaTrendingViewPager.setPageTransformer(MediaPageTransformer())
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
-            binding.mangaTrendingViewPager.currentItem =
-                binding.mangaTrendingViewPager.currentItem + 1
+            binding.mangaTrendingViewPager.currentItem += 1
         }
         binding.mangaTrendingViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {

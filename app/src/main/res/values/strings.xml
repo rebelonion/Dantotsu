@@ -123,6 +123,7 @@
     <string name="description">Synopsis</string>
     <string name="characters">Characters</string>
     <string name="relations">Relations</string>
+    <string name="staff">Staff</string>
 
     <string name="roles">Roles</string>
     <string name="details">Details</string>
@@ -243,6 +244,8 @@
     <string name="ask_update_progress_manga">Ask for each Manga \"Individually\"</string>
     <string name="ask_update_progress_info_ep">Turning off will always automatically update progress when the episode is watched.</string>
     <string name="ask_update_progress_info_chap">Turning off will always automatically update progress when the chapter is read.</string>
+    <string name="ask_update_progress_chapter_zero">Update Progress for Chapter 0</string>
+    <string name="ask_update_progress_info_zero">Turning on will add newly started items to Anilist with progress set to chapter 0.</string>
     <string name="ask_update_progress_hentai">Update Progress for Hentai</string>
     <string name="ask_update_progress_doujin">Update Progress for Doujins</string>
     <string name="very_bold">very bold of you sar</string>
@@ -342,6 +345,7 @@
     <string name="year">Year</string>
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
+    <string name="edit">Edit</string>
     <string name="this_season">This Season</string>
     <string name="next_season">Next Season</string>
     <string name="previous_season">Previous Season</string>
@@ -379,6 +383,7 @@
         \n\n_It is not required to sync both MAL and Anilist accounts._
     </string>
     <string name="notification_for_checking_subscriptions">Show notification for Checking Subscriptions</string>
+    <string name="use_alarm_manager">Use Alarm Manager for reliable Notifications</string>
     <string name="checking_subscriptions">Notification for Checking Subscriptions</string>
     <string name="subscriptions_checking_time_s">Subscriptions Update Frequency : %1$s</string>
     <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
@@ -411,6 +416,7 @@
     <string name="reset_auto_update">You can long click List Editor button to Reset Auto Update</string>
     <string name="autoplay_cancelled">Autoplay cancelled, no Interaction for more than 1 Hour.</string>
     <string name="auto_select_server_error">Couldn\'t auto select the server, Please try again!</string>
+    <string name="stream_selection_empty">No streams available for content. Try another source.</string>
     <string name="logging_in_mal">Logging in MAL</string>
     <string name="getting_user_data">Getting User Data</string>
     <string name="no_next_episode">No next Episode Found!</string>
@@ -431,7 +437,7 @@
     <string name="episode_not_found">Couldn\'t find episode : %1$s</string>
     <string name="list_updated">List Updated</string>
     <string name="deleted_from_list">Deleted from List</string>
-    <string name="no_list_id">No List ID found, reloading…</string>
+    <string name="no_list_id">No List ID found…</string>
     <string name="checking_for_update">Checking for Update</string>
     <string name="dont_show_again">Don\'t show again for version %1$s</string>
     <string name="no_update_found">No Update Found</string>
@@ -481,6 +487,7 @@
 
     <string name="read_on_dantotsu">Read on Dantotsu</string>
     <string name="watch_on_dantotsu">Watch on Dantotsu</string>
+    <string name="view_profile_in_dantotsu">View Profile in Dantotsu</string>
     <string name="continue_episode">"Continue : Episode "</string>
     <string name="continue_chapter">"Continue : "</string>
     <string name="episode">"Episode "</string>
@@ -544,34 +551,35 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
 
-    <string name="question_1">What is Dantotsu?\n Why should you use Dantotsu?</string>
+    <string name="question_1">What is Dantotsu?</string>
     <string name="answer_1">Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream &amp; download Anime / Manga through extensions. \n>Dantotsu (断トツ; Dan-totsu) literally means the best of the best in Japanese. Well, we would like to say this is the best open source app for anime and manga on Android, but hey, Try it out yourself &amp; judge!</string>
 
     <string name="question_2">What are some features of Dantotsu?</string>
     <string name="answer_2">Some mentionable features of Dantotsu are\n\n- Easy and functional way to both, watch anime and read manga and light novels, Ad Free.\n- A completely open source app with a nice UI &amp; Animations\n- 3rd party plugin support \n- Synchronize anime and manga real-time with AniList. Easily categorize anime and manga based on your current status. (Powered by AniList)\n- Find all shows using thoroughly and frequently updated list of all trending, popular and ongoing anime based on scores.\n- View extensive details about anime shows, movies and manga titles. It also features ability to countdown to the next episode of airing anime. (Powered by AniList &amp; MyAnimeList)</string>
 
-    <string name="question_3">What are Artifacts?</string>
-    <string name="answer_3">Whenever a developer commits or pull requests a feature or fix, GitHub automatically makes an APK file for you to use. This APK is called an Artifact. Artifacts through pull requests may or may not be added to the main release of the app. Artifacts have a higher chance of having bugs and glitches. To know if new artifacts are available, star the Dantotsu repository and turn on notifications\n\nTo download an Artifact:\n1) Sign In/Up in GitHub\n2) Go to Dantotsu\n3) Go to actions\n4) Press on the workflow run you want to download the artifact of.\n5) Press on artifact\n6) Extract the file using a zip extractor\n7) Install and enjoy.</string>
+    <string name="question_3">Whats the difference between Stable, Beta &amp; Alpha versions?</string>
+    <string name="answer_3">A Stable release is a version that has been tested as thoroughly as possible and is as reliable as we can make it.\n\nA Beta release is a version which is meant for testing new features or providing hot fixes.\n\nAn Alpha release is like a beta version but has many bugs and you can only find it on our [discord](https://discord.gg/invite/4HPZ5nAWwM) server. It gets frequent updates and has a high chance to break.\n\nIf you want a reliable app then go for the Stable. If you want the latest and greatest features and bugs then go for Alpha.</string>
 
     <string name="question_4">Is Dantotsu available for PC?</string>
     <string name="answer_4">Currently no (for both Windows and Linux). There isn\'t any estimation when it will be available. But you can download any Android emulator and run Dantotsu on it. For Windows 11 users, they can use the Windows Subsystem for Android (WSA) to run Dantotsu in Windows.</string>
 
     <string name="question_5">Is Dantotsu available for iOS?</string>
-    <string name="answer_5">No, and currently no plans to support iOS</string>
+    <string name="answer_5">No, best we can do is carve Dantotsu on an apple.</string>
 
     <string name="question_6">Why are my stats not updating?</string>
     <string name="answer_6">This is because it updates every 48 hours automatically (by Anilist). If you really need to update your stats, you can force update your stats after going to this [link](https://anilist.co/settings/lists).</string>
 
-    <string name="question_7">How to download Episodes?</string>
-    <string name="answer_7">1. Download 1DM or ADM from Google Play Store.
+    <string name="question_7">How to download Anime?</string>
+    <string name="answer_7">There are two methods of downloading currently. One is internal and the other is external. If you download internally, then it can be viewed within the app but only the app can open that episode, you cannot move it or share it. The other option is to use external downloading. It requires a download manager to download and a separate video player to watch. External downloads can be shared but you cannot view it within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. Pick the server and the video quality.\n3. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.
         \n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))
-        \n3. Now go to Dantotsu > Settings > Common > Download Managers and choose the download manager you just set up.
+        \n3. Now go to \`Dantotsu > Settings > Common > Download Managers\` and choose the download manager you just set up.
         \n4. Go to your desired episode and press on the download icon of any server. There may be a popup to set your preferences again, just press on "Download" and it will be saved in the directed path.
 
-        \n\nNote: Direct downloads are also possible without a manager but it\'s not recommended.</string>
+        \n\nNote: Direct downloads are also possible without a manager but it\'s not recommended.
+\n\nNerd Note: Internally downloaded episodes are stored in \`Android/data/ani.dantotsu.*/files/Anime_Downloads\`\nYou cannot play those files as they are in \`.exo\` format, split into hundreds of pieces and are encrypted.</string>
 
     <string name="question_9">How to enable NSFW content?</string>
-    <string name="answer_9">You can enable nsfw content by enabling 18+ contents from this [link](https://anilist.co/settings/media).</string>
+    <string name="answer_9">You can enable NSFW content by enabling 18+ contents from this [link](https://anilist.co/settings/media). You also have to enable NSFW extensions in \`Settings > Extensions > NSFW extensions\` </string>
 
     <string name="question_10">How to import my MAL/Kitsu list to Anilist?</string>
     <string name="answer_10">Here is how you do it,\n\nExport:\n\n1. Go to this [link](https://malscraper.azurewebsites.net).\n2. Give your Kitsu/MAL username and download both anime and manga list. (They will be in XML format)\nNote: You have to write the username of the tracker you selected\n\nImport:\n\n1. After exporting your anime and manga list from Kitsu/MAL, now go [here](https://anilist.co/settings/import) \n2. Select/drop the anime XML file on the box above.\n|→Select/drop the manga XML file on the box below.</string>
@@ -586,13 +594,13 @@
     <string name="answer_13">Dantotsu itself doesn\'t host anything but relies on other sources. When showing the episodes, it chooses the 1st result given by the source after searching for the title. Dantotsu has no way of detecting if that\'s legit or not. So, for this, we have the \'Wrong Title?\' just below the source name(above layouts). You can choose the correct result/title by pressing on it and enjoy its episodes.</string>
 
     <string name="question_14">How to read coloured mangas?</string>
-    <string name="answer_14">Are you in search of coloured manga? Sorry to break it to you but an extremely small amount of mangas have coloured version. Those which has a coloured version is also available in Dantotsu. Let\'s say you want to read the coloured version of chainsaw man. Then follow the below steps ↓\n\n1) Go to Chainsaw Man\n2) Press on \'Read\'\n3) Select any working source\n4) Press on \'Wrong Title\'\n5) Select the colored version chainsaw man\n6) Enjoy\n\nNote: Many sources don\'t have the coloured version available even if it\'s available somewhere on the internet. So try a different source. If none of the sources have it, then a coloured version of your desired manga simply doesn\'t exist. If you can find it on any manga site on the internet, you can suggest that site through the Discord server.</string>
+    <string name="answer_14">Are you in search of coloured manga? Sorry to break it to you but an extremely small amount of mangas have coloured version. Those which has a coloured version is also available in Dantotsu. Let\'s say you want to read the coloured version of chainsaw man. Then follow the below steps ↓\n\n1) Go to Chainsaw Man\n2) Press on \'Read\'\n3) Select any working source\n4) Press on \'Wrong Title\'\n5) Select the colored version chainsaw man\n6) Enjoy\n\nNote: Many sources don\'t have the coloured version available even if it\'s available somewhere on the internet. So try a different source. If none of the sources have it, then a coloured version of your desired manga simply doesn\'t exist.</string>
 
     <string name="question_15">Handshake fails? Why are no timestamps not loading?</string>
     <string name="answer_15">You can fix this issue by enabling \'Proxy\' from \n\`Settings > Anime > Player Settings > Timestamps > Proxy\`.\nIf the timestamps are still not loading but the handshake failed popup is fixed, then the episode you are watching just doesn\'t have timestamps yet for it.</string>
 
-    <string name="question_16">Having trouble with a source?</string>
-    <string name="answer_16">Some basic fixes would be :\n\n• Restart the app. \n• Use a different DNS from your settings, preferably, CloudFlare. \n• VPN might work as well. \n\nIf you refuse to try the above steps then just use a different source.\n\nNote: Allanime fixes itself most of the time.</string>
+    <string name="question_16">Can\'t find anything on a source?</string>
+    <string name="answer_16">Some basic fixes would be : \n\n• Update your extensions if there are any. \n• Open Web View and wait for it to load. After loading has completed, go back. (If Web View shows error 404 or something similar, chances are that your source is down)\n• Use a different DNS from your settings, preferably, Libre. \n• Try a trustworthy VPN. (You\'ll have to repeat step 1 after this) \n\nIf none of the steps above work then use a different source or join our [discord](https://discord.gg/invite/4HPZ5nAWwM) for help.</string>
 
     <string name="question_17">Some useful tips and tricks</string>
     <string name="answer_17">The following presents some tips and tricks you may or may not know about - \n \n \n - By hold pressing the Dantotsu logo in settings, you can check if there are any new updates manually. \n \n - Hold pressing an error message/tag/synonym or title will copy it. \n \n - You can open an episode with other apps by hold pressing any server for that episode. This helps in streaming the episode using other video players or download the episode using download managers. \n \n - You can set up custom lists using this [link](https://anilist.co/settings/lists). (you need to be signed in) \n \n - If your episode/chapter is not being progressed automatically after you finish watching/reading it, then hold press the status bar(planning/repeating/watching button) of that anime/manga. The next time you start a chapter/finish an episode, you will stumble upon a popup. Press yes there. </string>
@@ -655,6 +663,49 @@
     <string name="pinned_sources">Pinned Sources</string>
     <string name="import_export_settings">Import/Export Settings</string>
     <string name="import_settings">Import Settings</string>
+    <string name="import_settings_underline"><u>Import Settings</u></string>
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
 
+    <string name="comments">Comments</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
+    <string name="highest_rated">Highest rated</string>
+    <string name="lowest_rated">Lowest rated</string>
+    <string name="compare"><u>Compare</u></string>
+    <string name="view_following">View Following</string>
+    <string name="menu">menu</string>
+    <string name="view_followers">View Followers</string>
+    <string name="no_fav_anime">User has no favorite Anime</string>
+    <string name="no_fav_manga">User has no favorite Manga</string>
+    <string name="fav_character">Favourite Characters</string>
+    <string name="fav_staff">Favorite Staff</string>
+    <string name="stats">Stats</string>
+    <string name="days_watched">Days watched</string>
+    <string name="total_anime">Total Anime</string>
+    <string name="anime_mean_score">Anime Mean Score</string>
+    <string name="volume_read">Volume read</string>
+    <string name="total_manga">Total Manga</string>
+    <string name="manga_mean_score">Manga Mean Score</string>
+    <string name="about_me">About me</string>
+    <string name="follow">Follow</string>
+    <string name="lorem_ipsum">
+
+Lorem ipsum dolor sit amet. Est consectetur sint qui internos optio nam Quis excepturi qui voluptatem animi. Qui labore quasi vel suscipit deleniti et doloremque omnis in velit suscipit et quasi eaque. Et doloribus recusandae id laudantium Quis qui natus velit in voluptatem voluptatem!
+
+Et magni quasi vel nemo omnis et voluptate quisquam vel corporis fuga ut consequatur voluptas At quis veniam. At assumenda illum id minus veritatis id consequatur ipsum est quod corrupti quo adipisci sint. Quo explicabo doloribus et excepturi internos est reiciendis laboriosam ut explicabo veniam ut culpa mollitia in ducimus sint aut autem voluptatem! In consectetur laudantium non omnis saepe nam sint fuga.
+
+Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exercitationem adipisci quo nemo aliquam ea numquam beatae. Eum Quis dolore aut quia accusantium sed vero autem vel quaerat eaque et beatae dicta non delectus galisum non ullam nulla.
+</string>
+    <string name="log_to_file">Log to File</string>
+    <string name="logging_warning">Logging to a file will slow down the app. Only enable if you are experiencing issues.</string>
+    <string name="radius">Radius</string>
+    <string name="sampling">Sampling</string>
+    <string name="blur_banners">Blur Banners</string>
+    <string name="blur">Blur</string>
+    <string name="hide_scroll_bar">Hide Scroll Bar</string>
+    <string name="view_on_anilist">View on AniList</string>
+    <string name="anilist_notification_filters">Choose category to ignore</string>
+    <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
+    <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
+    <string name="activities">Activities</string>
 </resources>

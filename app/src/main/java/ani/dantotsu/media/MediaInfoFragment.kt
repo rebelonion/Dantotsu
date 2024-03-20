@@ -3,6 +3,7 @@ package ani.dantotsu.media
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -73,6 +74,8 @@ class MediaInfoFragment : Fragment() {
         model.getMedia().observe(viewLifecycleOwner) { media ->
             if (media != null && !loaded) {
                 loaded = true
+
+
                 binding.mediaInfoProgressBar.visibility = View.GONE
                 binding.mediaInfoContainer.visibility = View.VISIBLE
                 binding.mediaInfoName.text = "\t\t\t" + (media.name ?: media.nameRomaji)
@@ -408,23 +411,6 @@ class MediaInfoFragment : Fragment() {
                     parent.addView(bind.root)
                 }
 
-                if (!media.characters.isNullOrEmpty() && !offline) {
-                    val bind = ItemTitleRecyclerBinding.inflate(
-                        LayoutInflater.from(context),
-                        parent,
-                        false
-                    )
-                    bind.itemTitle.setText(R.string.characters)
-                    bind.itemRecycler.adapter =
-                        CharacterAdapter(media.characters!!)
-                    bind.itemRecycler.layoutManager = LinearLayoutManager(
-                        requireContext(),
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                    parent.addView(bind.root)
-                }
-
                 if (!media.relations.isNullOrEmpty() && !offline) {
                     if (media.sequel != null || media.prequel != null) {
                         val bind = ItemQuelsBinding.inflate(
@@ -487,7 +473,38 @@ class MediaInfoFragment : Fragment() {
                     )
                     parent.addView(bindi.root)
                 }
-
+                if (!media.characters.isNullOrEmpty() && !offline) {
+                    val bind = ItemTitleRecyclerBinding.inflate(
+                        LayoutInflater.from(context),
+                        parent,
+                        false
+                    )
+                    bind.itemTitle.setText(R.string.characters)
+                    bind.itemRecycler.adapter =
+                        CharacterAdapter(media.characters!!)
+                    bind.itemRecycler.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    parent.addView(bind.root)
+                }
+                if (!media.staff.isNullOrEmpty() && !offline) {
+                    val bind = ItemTitleRecyclerBinding.inflate(
+                        LayoutInflater.from(context),
+                        parent,
+                        false
+                    )
+                    bind.itemTitle.setText(R.string.staff)
+                    bind.itemRecycler.adapter =
+                        AuthorAdapter(media.staff!!)
+                    bind.itemRecycler.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    parent.addView(bind.root)
+                }
                 if (!media.recommendations.isNullOrEmpty() && !offline) {
                     val bind = ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),

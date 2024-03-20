@@ -1,9 +1,12 @@
 package ani.dantotsu.settings
 
 import android.annotation.SuppressLint
+import android.app.AlarmManager
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
+import android.os.Build
 import android.os.Build.BRAND
 import android.os.Build.DEVICE
 import android.os.Build.SUPPORTED_ABIS
@@ -14,6 +17,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
@@ -32,6 +36,7 @@ import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.copyToClipboard
@@ -43,9 +48,14 @@ import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.downloadsPermission
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.notifications.TaskScheduler
+import ani.dantotsu.notifications.comment.CommentNotificationWorker
+import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
+import ani.dantotsu.notifications.subscription.SubscriptionNotificationWorker.Companion.checkIntervals
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.openSettings
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.pop
@@ -59,11 +69,6 @@ import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
-import ani.dantotsu.subcriptions.Notifications
-import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
-import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
-import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
-import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import com.google.android.material.snackbar.Snackbar
@@ -225,7 +230,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             val tag = "colorPicker"
             CustomColorDialog().title("Custom Theme")
                 .colorPreset(originalColor)
-                .colors(this, SimpleColorDialog.BEIGE_COLOR_PALLET)
+                .colors(this, SimpleColorDialog.MATERIAL_COLOR_PALLET)
                 .allowCustom(true)
                 .showOutline(0x46000000)
                 .gridNumColumn(5)
@@ -615,7 +620,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 Toast.makeText(this, "youwu have been cuwsed :pwayge:", Toast.LENGTH_LONG).show()
                 val url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
                 openLinkInBrowser(url)
-                //PrefManager.setVal(PrefName.SomethingSpecial, !PrefManager.getVal(PrefName.SomethingSpecial, false))
+                //PrefManager.setVal(PrefName.ImageUrl, !PrefManager.getVal(PrefName.ImageUrl, false))
             } else {
                 snackString(array[(Math.random() * array.size).toInt()], this)
             }
@@ -643,8 +648,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
         }
 
-        var curTime = PrefManager.getVal(PrefName.SubscriptionsTimeS, defaultTime)
-        val timeNames = timeMinutes.map {
+        var curTime = PrefManager.getVal<Int>(PrefName.SubscriptionNotificationInterval)
+        val timeNames = checkIntervals.map {
             val mins = it % 60
             val hours = it / 60
             if (it > 0) "${if (hours > 0) "$hours hrs " else ""}${if (mins > 0) "$mins mins" else ""}"
@@ -659,36 +664,139 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 curTime = i
                 binding.settingsSubscriptionsTime.text =
                     getString(R.string.subscriptions_checking_time_s, timeNames[i])
-                PrefManager.setVal(PrefName.SubscriptionsTimeS, curTime)
+                PrefManager.setVal(PrefName.SubscriptionNotificationInterval, curTime)
                 dialog.dismiss()
-                startSubscription(true)
+                TaskScheduler.create(this,
+                    PrefManager.getVal(PrefName.UseAlarmManager)
+                ).scheduleAllTasks(this)
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
 
         binding.settingsSubscriptionsTime.setOnLongClickListener {
-            startSubscription(true)
+            TaskScheduler.create(this,
+                PrefManager.getVal(PrefName.UseAlarmManager)
+            ).scheduleAllTasks(this)
             true
+        }
+
+        val aTimeNames = AnilistNotificationWorker.checkIntervals.map { it.toInt() }
+        val aItems = aTimeNames.map {
+            val mins = it % 60
+            val hours = it / 60
+            if (it > 0) "${if (hours > 0) "$hours hrs " else ""}${if (mins > 0) "$mins mins" else ""}"
+            else getString(R.string.do_not_update)
+        }
+        binding.settingsAnilistSubscriptionsTime.text =
+            getString(R.string.anilist_notifications_checking_time, aItems[PrefManager.getVal(PrefName.AnilistNotificationInterval)])
+        binding.settingsAnilistSubscriptionsTime.setOnClickListener {
+
+            val selected = PrefManager.getVal<Int>(PrefName.AnilistNotificationInterval)
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle(R.string.subscriptions_checking_time)
+                .setSingleChoiceItems(aItems.toTypedArray(), selected) { dialog, i ->
+                    PrefManager.setVal(PrefName.AnilistNotificationInterval, i)
+                    binding.settingsAnilistSubscriptionsTime.text =
+                        getString(R.string.anilist_notifications_checking_time, aItems[i])
+                    dialog.dismiss()
+                    TaskScheduler.create(this,
+                        PrefManager.getVal(PrefName.UseAlarmManager)
+                    ).scheduleAllTasks(this)
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
+        }
+
+        binding.settingsAnilistNotifications.setOnClickListener {
+            val types = NotificationType.entries.map { it.name }
+            val filteredTypes = PrefManager.getVal<Set<String>>(PrefName.AnilistFilteredTypes).toMutableSet()
+            val selected = types.map { filteredTypes.contains(it) }.toBooleanArray()
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle(R.string.anilist_notification_filters)
+                .setMultiChoiceItems(types.toTypedArray(), selected) { _, which, isChecked ->
+                    val type = types[which]
+                    if (isChecked) {
+                        filteredTypes.add(type)
+                    } else {
+                        filteredTypes.remove(type)
+                    }
+                    PrefManager.setVal(PrefName.AnilistFilteredTypes, filteredTypes)
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
+        }
+
+        val cTimeNames = CommentNotificationWorker.checkIntervals.map { it.toInt() }
+        val cItems = cTimeNames.map {
+            val mins = it % 60
+            val hours = it / 60
+            if (it > 0) "${if (hours > 0) "$hours hrs " else ""}${if (mins > 0) "$mins mins" else ""}"
+            else getString(R.string.do_not_update)
+        }
+        binding.settingsCommentSubscriptionsTime.text =
+            getString(R.string.comment_notification_checking_time, cItems[PrefManager.getVal(PrefName.CommentNotificationInterval)])
+        binding.settingsCommentSubscriptionsTime.setOnClickListener {
+            val selected = PrefManager.getVal<Int>(PrefName.CommentNotificationInterval)
+            val dialog = AlertDialog.Builder(this, R.style.MyPopup)
+                .setTitle(R.string.subscriptions_checking_time)
+                .setSingleChoiceItems(cItems.toTypedArray(), selected) { dialog, i ->
+                    PrefManager.setVal(PrefName.CommentNotificationInterval, i)
+                    binding.settingsCommentSubscriptionsTime.text =
+                        getString(R.string.comment_notification_checking_time, cItems[i])
+                    dialog.dismiss()
+                    TaskScheduler.create(this,
+                        PrefManager.getVal(PrefName.UseAlarmManager)
+                    ).scheduleAllTasks(this)
+                }
+                .create()
+            dialog.window?.setDimAmount(0.8f)
+            dialog.show()
         }
 
         binding.settingsNotificationsCheckingSubscriptions.isChecked =
             PrefManager.getVal(PrefName.SubscriptionCheckingNotifications)
         binding.settingsNotificationsCheckingSubscriptions.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.SubscriptionCheckingNotifications, isChecked)
-            if (isChecked)
-                Notifications.createChannel(
-                    this,
-                    null,
-                    "subscription_checking",
-                    getString(R.string.checking_subscriptions),
-                    false
-                )
-            else
-                Notifications.deleteChannel(this, "subscription_checking")
         }
 
         binding.settingsNotificationsCheckingSubscriptions.setOnLongClickListener {
             openSettings(this, null)
+        }
+
+        binding.settingsNotificationsUseAlarmManager.isChecked =
+            PrefManager.getVal(PrefName.UseAlarmManager)
+
+        binding.settingsNotificationsUseAlarmManager.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                val alertDialog = AlertDialog.Builder(this, R.style.MyPopup)
+                    .setTitle("Use Alarm Manager")
+                    .setMessage("Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.")
+                    .setPositiveButton("Use") { dialog, _ ->
+                        PrefManager.setVal(PrefName.UseAlarmManager, true)
+                        if (SDK_INT >= Build.VERSION_CODES.S) {
+                            if (!(getSystemService(Context.ALARM_SERVICE) as AlarmManager).canScheduleExactAlarms()) {
+                                val intent = Intent("android.settings.REQUEST_SCHEDULE_EXACT_ALARM")
+                                startActivity(intent)
+                                binding.settingsNotificationsCheckingSubscriptions.isChecked = true
+                            }
+                        }
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        binding.settingsNotificationsCheckingSubscriptions.isChecked = false
+                        PrefManager.setVal(PrefName.UseAlarmManager, false)
+                        dialog.dismiss()
+                    }
+                    .create()
+                alertDialog.window?.setDimAmount(0.8f)
+                alertDialog.show()
+            } else {
+                PrefManager.setVal(PrefName.UseAlarmManager, false)
+                TaskScheduler.create(this, true).cancelAllTasks()
+                TaskScheduler.create(this, false).scheduleAllTasks(this)
+            }
         }
 
         if (!BuildConfig.FLAVOR.contains("fdroid")) {
@@ -726,6 +834,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             binding.settingsShareUsername.isEnabled = false
             binding.settingsCheckUpdate.isChecked = false
             binding.settingsShareUsername.isChecked = false
+        }
+
+        binding.settingsLogToFile.isChecked = PrefManager.getVal(PrefName.LogToFile)
+        binding.settingsLogToFile.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.LogToFile, isChecked)
+            restartApp()
+        }
+
+        binding.settingsShareLog.setOnClickListener {
+            Logger.shareLog(this)
         }
 
         binding.settingsAccountHelp.setOnClickListener {
@@ -805,7 +923,41 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     restartMainActivity.isEnabled = true
                     reload()
                 }
+
+                binding.imageSwitcher.visibility = View.VISIBLE
+                var initialStatus = when (PrefManager.getVal<String>(PrefName.DiscordStatus)) {
+                    "online" -> R.drawable.discord_status_online
+                    "idle" -> R.drawable.discord_status_idle
+                    "dnd" -> R.drawable.discord_status_dnd
+                    else -> R.drawable.discord_status_online
+                }
+                binding.imageSwitcher.setImageResource(initialStatus)
+
+                val zoomInAnimation = AnimationUtils.loadAnimation(this, R.anim.bounce_zoom)
+                binding.imageSwitcher.setOnClickListener {
+                    var status = "online"
+                    initialStatus = when (initialStatus) {
+                        R.drawable.discord_status_online -> {
+                            status = "idle"
+                            R.drawable.discord_status_idle
+                        }
+                        R.drawable.discord_status_idle -> {
+                            status = "dnd"
+                            R.drawable.discord_status_dnd
+                        }
+                        R.drawable.discord_status_dnd -> {
+                            status = "online"
+                            R.drawable.discord_status_online
+                        }
+                        else -> R.drawable.discord_status_online
+                    }
+
+                    PrefManager.setVal(PrefName.DiscordStatus, status)
+                    binding.imageSwitcher.setImageResource(initialStatus)
+                    binding.imageSwitcher.startAnimation(zoomInAnimation)
+                }
             } else {
+                binding.imageSwitcher.visibility = View.GONE
                 binding.settingsDiscordAvatar.setImageResource(R.drawable.ic_round_person_24)
                 binding.settingsDiscordUsername.visibility = View.GONE
                 binding.settingsDiscordLogin.setText(R.string.login)
@@ -848,7 +1000,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             if (dialogTag == "colorPicker") {
                 val color = extras.getInt(SimpleColorDialog.COLOR)
                 PrefManager.setVal(PrefName.CustomThemeInt, color)
-                logger("Custom Theme: $color")
+                Logger.log("Custom Theme: $color")
             }
         }
         return true

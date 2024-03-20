@@ -1,7 +1,7 @@
 <resources>
 
     <style name="Theme.Dantotsu" parent="Theme.Base">
-        <item name="android:statusBarColor">@color/status</item>
+        <item name="android:statusBarColor">@color/transparent</item>
         <item name="colorOnPrimary">@color/bg_black</item>
         <item name="android:textColor">@color/bg_white</item>
         <item name="colorSecondaryVariant">@color/violet_400</item>
@@ -239,6 +239,35 @@
         <item name="colorPrimaryInverse">@color/md_theme_dark_8_inversePrimary</item>
     </style>
 
+    <style name="Theme.Dantotsu.Oriax" parent="Theme.Base">
+        <item name="colorPrimary">@color/md_theme_dark_9_primary</item>
+        <item name="colorOnPrimary">@color/md_theme_dark_9_onPrimary</item>
+        <item name="colorPrimaryContainer">@color/md_theme_dark_9_primaryContainer</item>
+        <item name="colorOnPrimaryContainer">@color/md_theme_dark_9_onPrimaryContainer</item>
+        <item name="colorSecondary">@color/md_theme_dark_9_secondary</item>
+        <item name="colorOnSecondary">@color/md_theme_dark_9_onSecondary</item>
+        <item name="colorSecondaryContainer">@color/md_theme_dark_9_secondaryContainer</item>
+        <item name="colorOnSecondaryContainer">@color/md_theme_dark_9_onSecondaryContainer</item>
+        <item name="colorTertiary">@color/md_theme_dark_9_tertiary</item>
+        <item name="colorOnTertiary">@color/md_theme_dark_9_onTertiary</item>
+        <item name="colorTertiaryContainer">@color/md_theme_dark_9_tertiaryContainer</item>
+        <item name="colorOnTertiaryContainer">@color/md_theme_dark_9_onTertiaryContainer</item>
+        <item name="colorError">@color/md_theme_dark_9_error</item>
+        <item name="colorErrorContainer">@color/md_theme_dark_9_errorContainer</item>
+        <item name="colorOnError">@color/md_theme_dark_9_onError</item>
+        <item name="colorOnErrorContainer">@color/md_theme_dark_9_onErrorContainer</item>
+        <item name="android:colorBackground">@color/md_theme_dark_9_background</item>
+        <item name="colorOnBackground">@color/md_theme_dark_9_onBackground</item>
+        <item name="colorSurface">@color/md_theme_dark_9_surface</item>
+        <item name="colorOnSurface">@color/md_theme_dark_9_onSurface</item>
+        <item name="colorSurfaceVariant">@color/md_theme_dark_9_surfaceVariant</item>
+        <item name="colorOnSurfaceVariant">@color/md_theme_dark_9_onSurfaceVariant</item>
+        <item name="colorOutline">@color/md_theme_dark_9_outline</item>
+        <item name="colorOnSurfaceInverse">@color/md_theme_dark_9_inverseOnSurface</item>
+        <item name="colorSurfaceInverse">@color/md_theme_dark_9_inverseSurface</item>
+        <item name="colorPrimaryInverse">@color/md_theme_dark_9_inversePrimary</item>
+    </style>
+
     <style name="Theme.Dantotsu.Monochrome" parent="Theme.Base">
         <item name="colorPrimary">@color/bg_white</item>
         <item name="colorOnPrimary">@color/bg_black</item>
@@ -304,6 +333,12 @@
         <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
 
+    <style name="Theme.Dantotsu.OriaxOLED" parent="Theme.Dantotsu.Oriax">
+        <item name="android:colorBackground">@color/darkest_Black</item>
+        <item name="colorSurface">@color/darkest_Black</item>
+        <item name="colorSurfaceVariant">@color/nav_bg</item>
+    </style>
+    
     <style name="Theme.Dantotsu.LavenderOLED" parent="Theme.Dantotsu.Lavender">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>

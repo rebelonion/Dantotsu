@@ -33,7 +33,7 @@ import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
@@ -318,8 +318,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             val mediaJson = media.readText()
             gson.fromJson(mediaJson, Media::class.java)
         } catch (e: Exception) {
-            logger("Error loading media.json: ${e.message}")
-            logger(e.printStackTrace())
+            Logger.log("Error loading media.json: ${e.message}")
+            Logger.log(e)
             Injekt.get<CrashlyticsInterface>().logException(e)
             null
         }
@@ -374,8 +374,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 bannerUri
             )
         } catch (e: Exception) {
-            logger("Error loading media.json: ${e.message}")
-            logger(e.printStackTrace())
+            Logger.log("Error loading media.json: ${e.message}")
+            Logger.log(e)
             Injekt.get<CrashlyticsInterface>().logException(e)
             return OfflineAnimeModel(
                 "unknown",

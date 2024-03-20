@@ -181,11 +181,23 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                 model.loadEpisodeVideos(ep, media!!.selected!!.sourceIndex)
                                 withContext(Dispatchers.Main) {
                                     binding.selectorProgressBar.visibility = View.GONE
+                                    if (adapter.itemCount == 0) {
+                                        snackString(getString(R.string.stream_selection_empty))
+                                        tryWith {
+                                            dismiss()
+                                        }
+                                    }
                                 }
                             }
                         } else {
                             media!!.anime?.episodes?.set(media!!.anime?.selectedEpisode!!, ep)
                             adapter.addAll(ep.extractors)
+                            if (ep.extractors?.size == 0) {
+                                snackString(getString(R.string.stream_selection_empty))
+                                tryWith {
+                                    dismiss()
+                                }
+                            }
                             if (model.watchSources!!.isDownloadedSource(media?.selected!!.sourceIndex)) {
                                 adapter.performClick(0)
                             }

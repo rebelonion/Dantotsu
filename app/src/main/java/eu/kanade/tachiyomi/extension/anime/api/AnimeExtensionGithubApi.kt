@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.extension.anime.api
 
 import android.content.Context
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
@@ -13,11 +14,9 @@ import eu.kanade.tachiyomi.network.awaitSuccess
 import eu.kanade.tachiyomi.network.parseAs
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import logcat.LogPriority
 import tachiyomi.core.preference.Preference
 import tachiyomi.core.preference.PreferenceStore
 import tachiyomi.core.util.lang.withIOContext
-import tachiyomi.core.util.system.logcat
 import uy.kohesive.injekt.injectLazy
 import java.util.Date
 import kotlin.time.Duration.Companion.days
@@ -45,7 +44,7 @@ internal class AnimeExtensionGithubApi {
                         .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
                         .awaitSuccess()
                 } catch (e: Throwable) {
-                    logcat(LogPriority.ERROR, e) { "Failed to get extensions from GitHub" }
+                    Logger.log("Failed to get extensions from GitHub")
                     requiresFallbackSource = true
                     null
                 }

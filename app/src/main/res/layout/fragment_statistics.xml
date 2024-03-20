@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:ignore="HardcodedText,RtlSymmetry">
+
+    <LinearLayout
+        android:id="@+id/filterContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:baselineAligned="false"
+        android:orientation="vertical"
+        android:paddingBottom="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sourceTypeNameContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:hint="Type"
+                android:paddingEnd="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/sourceType"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:text="@string/anime"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/sourceFilterNameContainer"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:hint="View"
+                android:paddingEnd="8dp"
+                app:boxCornerRadiusBottomEnd="8dp"
+                app:boxCornerRadiusBottomStart="8dp"
+                app:boxCornerRadiusTopEnd="8dp"
+                app:boxCornerRadiusTopStart="8dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:hintAnimationEnabled="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/sourceFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/poppins_bold"
+                    android:freezesText="false"
+                    android:inputType="none"
+                    android:maxLines="1"
+                    android:padding="8dp"
+                    android:text="COUNT"
+                    android:textAllCaps="true"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <CheckBox
+            android:id="@+id/compare"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="true"
+            android:fontFamily="@font/poppins_bold"
+            android:textColor="?attr/colorPrimary"
+            android:layout_gravity="center_horizontal"
+            android:paddingTop="4dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/compare"
+            android:textSize="12sp"
+            android:focusable="true" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/statisticProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/statisticList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:nestedScrollingEnabled="true"
+        tools:listitem="@layout/item_chart" />
+</LinearLayout>

@@ -157,6 +157,7 @@
                         android:layout_height="48dp"
                         android:backgroundTint="#00FFFFFF"
                         android:visibility="gone"
+                        app:mediaRouteButtonTint="#fff"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />

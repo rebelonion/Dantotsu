@@ -80,14 +80,13 @@ class CalendarActivity : AppCompatActivity() {
             )
             binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = statusBarHeight
-                bottomMargin = navBarHeight
             }
         }
         setContentView(binding.root)
 
         binding.listTitle.setText(R.string.release_calendar)
         binding.listSort.visibility = View.GONE
-
+        binding.random.visibility = View.GONE
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@CalendarActivity.selectedTabIdx = tab?.position ?: 1

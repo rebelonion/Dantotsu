@@ -9,7 +9,7 @@ data class Character(
     val image: String?,
     val banner: String?,
     val role: String,
-
+    var isFav: Boolean,
     var description: String? = null,
     var age: String? = null,
     var gender: String? = null,

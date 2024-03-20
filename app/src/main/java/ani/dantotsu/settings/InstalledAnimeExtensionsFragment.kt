@@ -25,7 +25,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
@@ -146,7 +146,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
                             },
                             { error ->
                                 Injekt.get<CrashlyticsInterface>().logException(error)
-                                Log.e("AnimeExtensionsAdapter", "Error: ", error)  // Log the error
+                                Logger.log(error)  // Log the error
                                 val builder = NotificationCompat.Builder(
                                     context,
                                     Notifications.CHANNEL_DOWNLOADER_ERROR

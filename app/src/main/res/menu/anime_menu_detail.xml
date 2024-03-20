@@ -11,4 +11,10 @@
         android:enabled="true"
         android:icon="@drawable/ic_round_movie_filter_24"
         android:title="@string/watch" />
+
+    <item
+        android:id="@+id/comment"
+        android:enabled="true"
+        android:icon="@drawable/ic_round_comment_24"
+        android:title="@string/comments" />
 </menu>

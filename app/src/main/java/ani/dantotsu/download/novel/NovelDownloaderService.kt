@@ -20,7 +20,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.snackString
@@ -31,6 +31,7 @@ import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -42,6 +43,7 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import okio.buffer
 import okio.sink
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.File
@@ -186,15 +188,15 @@ class NovelDownloaderService : Service() {
                     val contentType = response.header("Content-Type")
                     val contentDisposition = response.header("Content-Disposition")
 
-                    logger("Content-Type: $contentType")
-                    logger("Content-Disposition: $contentDisposition")
+                    Logger.log("Content-Type: $contentType")
+                    Logger.log("Content-Disposition: $contentDisposition")
 
                     // Return true if the Content-Type or Content-Disposition indicates an EPUB file
                     contentType == "application/epub+zip" ||
                             (contentDisposition?.contains(".epub") == true)
                 }
             } catch (e: Exception) {
-                logger("Error checking file type: ${e.message}")
+                Logger.log("Error checking file type: ${e.message}")
                 false
             }
         }
@@ -225,12 +227,12 @@ class NovelDownloaderService : Service() {
 
                 if (!isEpubFile(task.downloadLink)) {
                     if (isAlreadyDownloaded(task.originalLink)) {
-                        logger("Already downloaded")
+                        Logger.log("Already downloaded")
                         broadcastDownloadFinished(task.originalLink)
                         snackString("Already downloaded")
                         return@withContext
                     }
-                    logger("Download link is not an .epub file")
+                    Logger.log("Download link is not an .epub file")
                     broadcastDownloadFailed(task.originalLink)
                     snackString("Download link is not an .epub file")
                     return@withContext
@@ -301,7 +303,7 @@ class NovelDownloaderService : Service() {
                                         withContext(Dispatchers.Main) {
                                             val progress =
                                                 (downloadedBytes * 100 / totalBytes).toInt()
-                                            logger("Download progress: $progress")
+                                            Logger.log("Download progress: $progress")
                                             broadcastDownloadProgress(task.originalLink, progress)
                                         }
                                         lastBroadcastUpdate = downloadedBytes
@@ -316,7 +318,7 @@ class NovelDownloaderService : Service() {
                             }
                         }
                     } catch (e: Exception) {
-                        logger("Exception while downloading .epub inside request: ${e.message}")
+                        Logger.log("Exception while downloading .epub inside request: ${e.message}")
                         throw e
                     }
                 }
@@ -340,15 +342,16 @@ class NovelDownloaderService : Service() {
                 snackString("${task.title} - ${task.chapter} Download finished")
             }
         } catch (e: Exception) {
-            logger("Exception while downloading .epub: ${e.message}")
+            Logger.log("Exception while downloading .epub: ${e.message}")
             snackString("Exception while downloading .epub: ${e.message}")
             Injekt.get<CrashlyticsInterface>().logException(e)
             broadcastDownloadFailed(task.originalLink)
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: DownloadTask) {
-        GlobalScope.launch(Dispatchers.IO) {
+        launchIO {
             val directory = File(
                 getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                 "Dantotsu/Novel/${task.title}"

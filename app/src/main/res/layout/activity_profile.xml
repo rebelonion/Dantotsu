@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/profileProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/profileAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:translationZ="5dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="false"
+            app:contentScrim="?android:colorBackground"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.flaviofaria.kenburnsview.KenBurnsView
+                    android:id="@+id/profileBannerImage"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <ImageView
+                    android:id="@+id/profileBannerGradient"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/linear_gradient_bg"
+                    tools:ignore="ContentDescription" />
+
+                <LinearLayout
+                    android:id="@+id/profileUserDataContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|bottom"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/profileUserAvatarContainer"
+                        android:layout_width="82dp"
+                        android:layout_height="82dp"
+                        android:layout_gravity="center"
+                        android:backgroundTint="@color/transparent"
+                        app:cardCornerRadius="64dp"
+                        app:strokeColor="@color/transparent">
+
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/profileUserAvatar"
+                            android:layout_width="82dp"
+                            android:layout_height="82dp"
+                            android:layout_gravity="center"
+                            app:srcCompat="@drawable/ic_round_add_circle_24"
+                            tools:ignore="ContentDescription,ImageContrastCheck"
+                            tools:tint="@color/transparent" />
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/profileUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="@string/username"
+                        android:textColor="?attr/colorPrimary"
+                        android:textSize="18sp" />
+
+                    <Button
+                        android:id="@+id/followButton"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:backgroundTint="?attr/colorSecondaryContainer"
+                        android:enabled="true"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/follow"
+                        android:textColor="@color/bg_opp"
+                        android:textSize="14sp"
+                        app:cornerRadius="8dp"
+                        app:strokeColor="?attr/colorSecondaryContainer"
+                        tools:ignore="HardcodedText,SpeakableTextPresentCheck" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/profileMenuButton"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:contentDescription="@string/menu"
+                        android:src="@drawable/ic_round_dots_vertical_24"
+                        app:tint="@color/bg_opp" />
+                </LinearLayout>
+            </FrameLayout>
+            <LinearLayout
+                android:id="@+id/profileButtonContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="210dp"
+                android:layout_marginBottom="6dp"
+                android:background="?attr/colorSurface"
+                android:baselineAligned="false"
+                android:layout_gravity="bottom"
+                android:orientation="horizontal"
+                tools:ignore="HardcodedText">
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="2dp"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:id="@+id/profileFollowerCountContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileFollowerCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        tools:text="1"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Follower" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:id="@+id/profileFollowingCountContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileFollowingCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        tools:text="2"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Following" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:id="@+id/profileAnimeCountContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileAnimeCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        tools:text="3"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Anime" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/listDivider" />
+
+                <LinearLayout
+                    android:id="@+id/profileMangaCountContainer"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profileMangaCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        tools:text="4"
+                        android:textColor="?attr/colorPrimary" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins_semi_bold"
+                        android:text="Manga" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="3dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="2dp"
+                    android:background="?android:attr/listDivider" />
+            </LinearLayout>
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="72dp"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/profileViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:nestedScrollingEnabled="true"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </LinearLayout>
+
+
+    <nl.joery.animatedbottombar.AnimatedBottomBar
+        android:id="@+id/profileNavBar"
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:background="?attr/colorSurface"
+        android:padding="0dp"
+        app:abb_animationInterpolator="@anim/over_shoot"
+        app:abb_indicatorAppearance="round"
+        app:abb_indicatorLocation="top"
+        app:abb_selectedTabType="text"
+        app:abb_textAppearance="@style/NavBarText"
+        app:itemActiveIndicatorStyle="@style/BottomNavBar"
+        app:itemIconTint="@color/tab_layout_icon"
+        app:itemRippleColor="#00000000"
+        app:itemTextAppearanceActive="@style/NavBarText"
+        app:itemTextAppearanceInactive="@style/NavBarText"
+        app:itemTextColor="@color/tab_layout_icon" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

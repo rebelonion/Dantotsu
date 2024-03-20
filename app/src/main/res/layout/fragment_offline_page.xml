@@ -82,42 +82,46 @@
 
             </LinearLayout>
 
-            <LinearLayout
+        <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingRight="32dp"
+              	android:paddingLeft="32dp">
 
-                <TextView
-                    android:id="@+id/total"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/poppins_bold"
-                    android:gravity="center_vertical"
-                    android:hint="Type"
-                    android:paddingStart="24dp"
-                    android:textSize="14sp"
-                    tools:ignore="HardcodedText,RtlSymmetry" />
+          <TextView
+                 android:id="@+id/total"
+                 android:layout_width="0dp"
+                 android:layout_height="match_parent"
+                 android:layout_weight="1"
+                 android:fontFamily="@font/poppins_bold"
+                 android:gravity="center_vertical"
+                 android:hint="Type"
+                 android:textSize="14sp"
+                 tools:ignore="HardcodedText,RtlSymmetry" />
 
-                <ImageView
-                    android:id="@+id/downloadedList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.33"
-                    android:padding="8dp"
-                    app:srcCompat="@drawable/ic_round_view_list_24"
-                    app:tint="?attr/colorOnBackground"
-                    tools:ignore="ContentDescription,ImageContrastCheck" />
+          <ImageView
+                 android:id="@+id/downloadedList"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_gravity="center_vertical"
+                 android:alpha="0.33"
+                 android:padding="8dp"
+                 app:srcCompat="@drawable/ic_round_view_list_24"
+                 app:tint="?attr/colorOnBackground"
+                 tools:ignore="ContentDescription,ImageContrastCheck" />
 
-                <ImageView
-                    android:id="@+id/downloadedGrid"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.33"
-                    android:padding="8dp"
-                    app:srcCompat="@drawable/ic_round_grid_view_24"
-                    app:tint="?attr/colorOnBackground"
-                    tools:ignore="ContentDescription,ImageContrastCheck" />
+          <ImageView
+                android:id="@+id/downloadedGrid"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:alpha="0.33"
+                android:padding="8dp"
+                app:srcCompat="@drawable/ic_round_grid_view_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
 
             </LinearLayout>
             <!-- This TextView might overlap with GridView if GridView has items -->

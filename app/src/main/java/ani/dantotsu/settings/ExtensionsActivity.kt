@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
@@ -17,6 +18,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.*
 import ani.dantotsu.databinding.ActivityExtensionsBinding
+import ani.dantotsu.others.AndroidBug5497Workaround
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -34,7 +36,22 @@ class ExtensionsActivity : AppCompatActivity() {
         ThemeManager(this).applyTheme()
         binding = ActivityExtensionsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        initActivity(this)
+        AndroidBug5497Workaround.assistActivity(this) {
+            if (it) {
+                binding.searchView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = statusBarHeight
+                }
+            } else {
+                binding.searchView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = statusBarHeight + navBarHeight
+                }
+            }
+        }
 
+        binding.searchView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = statusBarHeight + navBarHeight
+        }
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
         val viewPager = findViewById<ViewPager2>(R.id.viewPager)

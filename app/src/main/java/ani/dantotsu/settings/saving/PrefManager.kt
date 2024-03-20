@@ -7,6 +7,7 @@ import ani.dantotsu.settings.saving.internal.Compat
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -15,6 +16,7 @@ import java.io.ObjectOutputStream
 object PrefManager {
 
     private var generalPreferences: SharedPreferences? = null
+    private var uiPreferences: SharedPreferences? = null
     private var playerPreferences: SharedPreferences? = null
     private var readerPreferences: SharedPreferences? = null
     private var irrelevantPreferences: SharedPreferences? = null
@@ -22,8 +24,11 @@ object PrefManager {
     private var protectedPreferences: SharedPreferences? = null
 
     fun init(context: Context) {  //must be called in Application class or will crash
+        if (generalPreferences != null) return
         generalPreferences =
             context.getSharedPreferences(Location.General.location, Context.MODE_PRIVATE)
+        uiPreferences =
+            context.getSharedPreferences(Location.UI.location, Context.MODE_PRIVATE)
         playerPreferences =
             context.getSharedPreferences(Location.Player.location, Context.MODE_PRIVATE)
         readerPreferences =
@@ -352,7 +357,7 @@ object PrefManager {
     private fun getPrefLocation(prefLoc: Location): SharedPreferences {
         return when (prefLoc) {
             Location.General -> generalPreferences
-            Location.UI -> generalPreferences
+            Location.UI -> uiPreferences
             Location.Player -> playerPreferences
             Location.Reader -> readerPreferences
             Location.NovelReader -> readerPreferences
@@ -374,6 +379,7 @@ object PrefManager {
             pref.edit().putString(key, serialized).apply()
         } catch (e: Exception) {
             snackString("Error serializing preference: ${e.message}")
+            Logger.log(e)
         }
     }
 
@@ -392,8 +398,7 @@ object PrefManager {
                 default
             }
         } catch (e: Exception) {
-            snackString("Error deserializing preference: ${e.message}")
-            e.printStackTrace()
+            Logger.log(e)
             default
         }
     }

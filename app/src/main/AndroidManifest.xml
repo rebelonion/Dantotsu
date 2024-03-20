@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
@@ -69,7 +69,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/currently_airing_widget_info" />
         </receiver>
-        <receiver android:name=".subcriptions.NotificationClickReceiver" />
+        <receiver android:name=".notifications.IncognitoNotificationClickReceiver" />
 
 
         <activity
@@ -104,7 +104,26 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".settings.ExtensionsActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".profile.FollowActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".profile.activity.FeedActivity"
+            android:label="Inbox Activity"
+            android:parentActivityName=".MainActivity" >
+        </activity>
+        <activity
+            android:name=".profile.activity.NotificationActivity"
+            android:label="Inbox Activity"
+            android:parentActivityName=".MainActivity" >
+        </activity>
         <activity
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
@@ -117,6 +136,8 @@
             android:name=".media.CalendarActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".media.user.ListActivity" />
+        <activity android:name=".profile.SingleStatActivity"
+            android:parentActivityName=".profile.ProfileActivity"/>
         <activity
             android:name=".media.manga.mangareader.MangaReaderActivity"
             android:excludeFromRecents="true"
@@ -127,7 +148,8 @@
         <activity
             android:name=".media.MediaDetailsActivity"
             android:parentActivityName=".MainActivity"
-            android:theme="@style/Theme.Dantotsu.NeverCutout" />
+            android:theme="@style/Theme.Dantotsu.NeverCutout"
+            android:windowSoftInputMode="adjustResize|stateHidden"/>
         <activity android:name=".media.CharacterDetailsActivity" />
         <activity android:name=".home.NoInternet" />
         <activity
@@ -209,6 +231,7 @@
                 <data android:host="discord.dantotsu.com" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".connections.anilist.UrlMedia"
             android:configChanges="orientation|screenSize|layoutDirection"
@@ -239,6 +262,17 @@
                 <data android:host="myanimelist.net" />
                 <data android:pathPrefix="/anime" />
             </intent-filter>
+            <intent-filter android:label="@string/view_profile_in_dantotsu">
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="http" />
+                <data android:scheme="https" />
+                <data android:host="anilist.co" />
+                <data android:pathPrefix="/user" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".MainActivity"
@@ -254,6 +288,15 @@
 
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.ani" />
+                <data android:pathPattern=".*\\.sani" />
+                <data android:host="*" />
+            </intent-filter>
         </activity>
         <activity
             android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallActivity"
@@ -264,14 +307,22 @@
             android:exported="false"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <receiver
-            android:name=".subcriptions.AlarmReceiver"
+        <receiver android:name=".notifications.AlarmPermissionStateReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <receiver android:name=".notifications.BootCompletedReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="Aani.dantotsu.ACTION_ALARM" />
             </intent-filter>
         </receiver>
+        <receiver android:name=".notifications.anilist.AnilistNotificationReceiver"/>
+        <receiver android:name=".notifications.comment.CommentNotificationReceiver"/>
+        <receiver android:name=".notifications.subscription.SubscriptionNotificationReceiver"/>
 
         <meta-data
             android:name="preloaded_fonts"

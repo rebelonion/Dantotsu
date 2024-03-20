@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/extensionCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -18,9 +19,10 @@
             android:id="@+id/searchHistoryTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_semi_bold"
+            android:fontFamily="@font/poppins_bold"
             android:text="HENTAI?????"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <ImageView
@@ -30,5 +32,6 @@
         android:layout_gravity="center_vertical"
         android:src="@drawable/ic_circle_cancel"
         android:textSize="14sp"
-        app:tint="?attr/colorOnBackground" />
+        app:tint="?attr/colorOnBackground"
+        tools:ignore="ContentDescription" />
 </LinearLayout>

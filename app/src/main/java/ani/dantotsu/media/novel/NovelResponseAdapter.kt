@@ -5,12 +5,14 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemNovelResponseBinding
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
 
@@ -58,11 +60,11 @@ class NovelResponseAdapter(
             }
         if (binding.itemEpisodeFiller.text.contains("Downloading")) {
             binding.itemEpisodeFiller.setTextColor(
-                fragment.requireContext().getColor(android.R.color.holo_blue_light)
+                ContextCompat.getColor(fragment.requireContext(), android.R.color.holo_blue_light)
             )
         } else if (binding.itemEpisodeFiller.text.contains("Downloaded")) {
             binding.itemEpisodeFiller.setTextColor(
-                fragment.requireContext().getColor(android.R.color.holo_green_light)
+                ContextCompat.getColor(fragment.requireContext(), android.R.color.holo_green_light)
             )
         } else {
             binding.itemEpisodeFiller.setTextColor(color)
@@ -181,7 +183,7 @@ class NovelResponseAdapter(
         if (position != -1) {
             list[position].extra?.remove("0")
             list[position].extra?.set("0", "Downloading: $progress%")
-            Log.d("NovelResponseAdapter", "updateDownloadProgress: $progress, position: $position")
+            Logger.log( "updateDownloadProgress: $progress, position: $position")
             notifyItemChanged(position)
         }
     }

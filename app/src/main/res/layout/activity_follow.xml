@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/listProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        tools:visibility="gone">
+
+        <ProgressBar
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/listToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/listBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="12dp"
+            android:src="@drawable/ic_round_arrow_back_ios_new_24"
+            app:tint="?attr/colorOnBackground"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/listTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="44dp"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins_bold"
+            android:gravity="center|start"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+            android:textColor="?attr/colorOnBackground"
+            android:textSize="18sp"
+            tools:text="Follow" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="8dp"
+            app:cardBackgroundColor="@color/nav_bg_inv"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <ImageButton
+                android:id="@+id/followerList"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:alpha="0.33"
+                android:background="?android:attr/selectableItemBackground"
+                android:scaleX="-1"
+                app:srcCompat="@drawable/ic_round_view_list_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="46dp"
+            app:cardBackgroundColor="@color/nav_bg_inv"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp">
+
+            <ImageButton
+                android:id="@+id/followerGrid"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:alpha="0.33"
+                android:background="?android:attr/selectableItemBackground"
+                app:srcCompat="@drawable/ic_round_grid_view_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+        </androidx.cardview.widget.CardView>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/listFrameLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/followSwipeRefresh"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="12dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <ani.dantotsu.FadingEdgeRecyclerView
+                android:id="@+id/listRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="true"
+                tools:listitem="@layout/item_follower"
+                android:requiresFadingEdge="vertical" />
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/followRefresh"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="32dp"
+            android:visibility="gone" />
+    </FrameLayout>
+</LinearLayout>

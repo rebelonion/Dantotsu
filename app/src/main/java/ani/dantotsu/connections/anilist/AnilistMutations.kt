@@ -13,6 +13,23 @@ class AnilistMutations {
         executeQuery<JsonObject>(query, variables)
     }
 
+    suspend fun toggleFav(type: FavType, id: Int): Boolean {
+        val filter = when (type) {
+            FavType.ANIME -> "animeId"
+            FavType.MANGA -> "mangaId"
+            FavType.CHARACTER -> "characterId"
+            FavType.STAFF -> "staffId"
+            FavType.STUDIO -> "studioId"
+        }
+        val query = """mutation{ToggleFavourite($filter:$id){anime{pageInfo{total}}}}"""
+        val result = executeQuery<JsonObject>(query)
+        return result?.get("errors") == null && result != null
+    }
+
+    enum class FavType {
+        ANIME, MANGA, CHARACTER, STAFF, STUDIO
+    }
+
     suspend fun editList(
         mediaID: Int,
         progress: Int? = null,

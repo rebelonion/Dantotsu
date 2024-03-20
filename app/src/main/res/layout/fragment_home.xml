@@ -94,7 +94,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/poppins_bold"
-                                        android:textColor="?attr/colorSecondaryVariant"
+                                        android:textColor="?attr/colorPrimaryVariant"
                                         android:textSize="12sp" />
                                 </LinearLayout>
 
@@ -117,7 +117,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/poppins_bold"
-                                        android:textColor="?attr/colorSecondaryVariant"
+                                        android:textColor="?attr/colorPrimaryVariant"
                                         android:textSize="12sp" />
                                 </LinearLayout>
 
@@ -135,23 +135,43 @@
 
                         </FrameLayout>
 
-                        <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/homeUserAvatarContainer"
-                            android:layout_width="52dp"
-                            android:layout_height="52dp"
-                            android:layout_marginTop="4dp"
-                            android:backgroundTint="@color/nav_bg_inv"
-                            app:cardCornerRadius="26dp">
+                        <FrameLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
-                            <com.google.android.material.imageview.ShapeableImageView
-                                android:id="@+id/homeUserAvatar"
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/homeUserAvatarContainer"
                                 android:layout_width="52dp"
                                 android:layout_height="52dp"
-                                android:scaleType="center"
-                                app:srcCompat="@drawable/ic_round_settings_24"
-                                tools:ignore="ContentDescription,ImageContrastCheck" />
+                                android:layout_marginTop="4dp"
+                                android:backgroundTint="@color/nav_bg_inv"
+                                app:cardCornerRadius="26dp">
 
-                        </com.google.android.material.card.MaterialCardView>
+                                <com.google.android.material.imageview.ShapeableImageView
+                                    android:id="@+id/homeUserAvatar"
+                                    android:layout_width="52dp"
+                                    android:layout_height="52dp"
+                                    android:scaleType="center"
+                                    app:srcCompat="@drawable/ic_round_settings_24"
+                                    tools:ignore="ContentDescription,ImageContrastCheck" />
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <TextView
+                                android:id="@+id/homeNotificationCount"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
+                                android:layout_gravity="end|bottom"
+                                android:background="@drawable/notification_circle"
+                                android:fontFamily="@font/poppins_semi_bold"
+                                android:gravity="center"
+                                android:textColor="#F3F3F3"
+                                android:textSize="12sp"
+                                android:visibility="gone"
+                                tools:ignore="SmallSp"
+                                tools:text="1"
+                                tools:visibility="visible" />
+                        </FrameLayout>
 
                     </LinearLayout>
 

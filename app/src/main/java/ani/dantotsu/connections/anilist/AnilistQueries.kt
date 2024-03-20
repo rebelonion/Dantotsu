@@ -6,9 +6,12 @@ import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
 import ani.dantotsu.connections.anilist.Anilist.authorRoles
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
+import ani.dantotsu.connections.anilist.api.FeedResponse
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.anilist.api.NotificationResponse
 import ani.dantotsu.connections.anilist.api.Page
 import ani.dantotsu.connections.anilist.api.Query
+import ani.dantotsu.connections.anilist.api.ToggleLike
 import ani.dantotsu.currContext
 import ani.dantotsu.isOnline
 import ani.dantotsu.logError
@@ -20,6 +23,7 @@ import ani.dantotsu.others.MalScraper
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -31,23 +35,27 @@ import java.io.Serializable
 import kotlin.system.measureTimeMillis
 
 class AnilistQueries {
+
     suspend fun getUserData(): Boolean {
         val response: Query.Viewer?
         measureTimeMillis {
             response =
-                executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}}}""")
+                executeQuery("""{Viewer{name options{displayAdultContent}avatar{medium}bannerImage id mediaListOptions{rowOrder animeList{sectionOrder customLists}mangaList{sectionOrder customLists}}statistics{anime{episodesWatched}manga{chaptersRead}}unreadNotificationCount}}""")
         }.also { println("time : $it") }
         val user = response?.data?.user ?: return false
 
         PrefManager.setVal(PrefName.AnilistUserName, user.name)
-
         Anilist.userid = user.id
+        PrefManager.setVal(PrefName.AnilistUserId, user.id.toString())
         Anilist.username = user.name
         Anilist.bg = user.bannerImage
         Anilist.avatar = user.avatar?.medium
         Anilist.episodesWatched = user.statistics?.anime?.episodesWatched
         Anilist.chapterRead = user.statistics?.manga?.chaptersRead
         Anilist.adult = user.options?.displayAdultContent ?: false
+        Anilist.unreadNotificationCount = user.unreadNotificationCount ?: 0
+        val unread = PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications)
+        Anilist.unreadNotificationCount += unread
         return true
     }
 
@@ -64,7 +72,7 @@ class AnilistQueries {
         media.cameFromContinue = false
 
         val query =
-            """{Media(id:${media.id}){id mediaListEntry{id status score(format:POINT_100) progress private notes repeat customLists updatedAt startedAt{year month day}completedAt{year month day}}isFavourite siteUrl idMal nextAiringEpisode{episode airingAt}source countryOfOrigin format duration season seasonYear startDate{year month day}endDate{year month day}genres studios(isMain:true){nodes{id name siteUrl}}description trailer { site id } synonyms tags { name rank isMediaSpoiler } characters(sort:[ROLE,FAVOURITES_DESC],perPage:25,page:1){edges{role node{id image{medium}name{userPreferred}}}}relations{edges{relationType(version:2)node{id idMal mediaListEntry{progress private score(format:POINT_100) status} episodes chapters nextAiringEpisode{episode} popularity meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}staffPreview: staff(perPage: 8, sort: [RELEVANCE, ID]) {edges{role node{id name{userPreferred}}}}recommendations(sort:RATING_DESC){nodes{mediaRecommendation{id idMal mediaListEntry{progress private score(format:POINT_100) status} episodes chapters nextAiringEpisode{episode}meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}externalLinks{url site}}}"""
+            """{Media(id:${media.id}){id mediaListEntry{id status score(format:POINT_100)progress private notes repeat customLists updatedAt startedAt{year month day}completedAt{year month day}}isFavourite siteUrl idMal nextAiringEpisode{episode airingAt}source countryOfOrigin format duration season seasonYear startDate{year month day}endDate{year month day}genres studios(isMain:true){nodes{id name siteUrl}}description trailer{site id}synonyms tags{name rank isMediaSpoiler}characters(sort:[ROLE,FAVOURITES_DESC],perPage:25,page:1){edges{role node{id image{medium}name{userPreferred}isFavourite}}}relations{edges{relationType(version:2)node{id idMal mediaListEntry{progress private score(format:POINT_100)status}episodes chapters nextAiringEpisode{episode}popularity meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}staffPreview:staff(perPage:8,sort:[RELEVANCE,ID]){edges{role node{id image{large medium}name{userPreferred}}}}recommendations(sort:RATING_DESC){nodes{mediaRecommendation{id idMal mediaListEntry{progress private score(format:POINT_100)status}episodes chapters nextAiringEpisode{episode}meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}externalLinks{url site}}}"""
         runBlocking {
             val anilist = async {
                 var response = executeQuery<Query.Media>(query, force = true, show = true)
@@ -121,6 +129,30 @@ class AnilistQueries {
                                             name = i.node?.name?.userPreferred,
                                             image = i.node?.image?.medium,
                                             banner = media.banner ?: media.cover,
+                                            isFav = i.node?.isFavourite ?: false,
+                                            role = when (i.role.toString()) {
+                                                "MAIN" -> currContext()?.getString(R.string.main_role)
+                                                    ?: "MAIN"
+
+                                                "SUPPORTING" -> currContext()?.getString(R.string.supporting_role)
+                                                    ?: "SUPPORTING"
+
+                                                else -> i.role.toString()
+                                            }
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                        if (fetchedMedia.staff != null) {
+                            media.staff = arrayListOf()
+                            fetchedMedia.staff?.edges?.forEach { i ->
+                                i.node?.apply {
+                                    media.staff?.add(
+                                        Author(
+                                            id = id,
+                                            name = i.node?.name?.userPreferred,
+                                            image = i.node?.image?.medium,
                                             role = when (i.role.toString()) {
                                                 "MAIN" -> currContext()?.getString(R.string.main_role)
                                                     ?: "MAIN"
@@ -211,8 +243,10 @@ class AnilistQueries {
 
                             fetchedMedia.staff?.edges?.find { authorRoles.contains(it.role?.trim()) }?.node?.let {
                                 media.anime.author = Author(
-                                    it.id.toString(),
-                                    it.name?.userPreferred ?: "N/A"
+                                    it.id,
+                                    it.name?.userPreferred ?: "N/A",
+                                    it.image?.medium,
+                                    "AUTHOR"
                                 )
                             }
 
@@ -231,8 +265,10 @@ class AnilistQueries {
                         } else if (media.manga != null) {
                             fetchedMedia.staff?.edges?.find { authorRoles.contains(it.role?.trim()) }?.node?.let {
                                 media.manga.author = Author(
-                                    it.id.toString(),
-                                    it.name?.userPreferred ?: "N/A"
+                                    it.id,
+                                    it.name?.userPreferred ?: "N/A",
+                                    it.image?.medium,
+                                    "AUTHOR"
                                 )
                             }
                         }
@@ -249,6 +285,7 @@ class AnilistQueries {
                 } else {
                     if (currContext()?.let { isOnline(it) } == true) {
                         snackString(currContext()?.getString(R.string.error_getting_data))
+                    } else {
                     }
                 }
             }
@@ -258,6 +295,52 @@ class AnilistQueries {
                 }
             }
             awaitAll(anilist, mal)
+        }
+        return media
+    }
+
+    fun userMediaDetails(media: Media): Media {
+        val query =
+            """{Media(id:${media.id}){id mediaListEntry{id status progress private repeat customLists updatedAt startedAt{year month day}completedAt{year month day}}isFavourite idMal}}"""
+        runBlocking {
+            val anilist = async {
+                var response = executeQuery<Query.Media>(query, force = true, show = true)
+                if (response != null) {
+                    fun parse() {
+                        val fetchedMedia = response?.data?.media ?: return
+
+                        if (fetchedMedia.mediaListEntry != null) {
+                            fetchedMedia.mediaListEntry?.apply {
+                                media.userProgress = progress
+                                media.isListPrivate = private ?: false
+                                media.userListId = id
+                                media.userStatus = status?.toString()
+                                media.inCustomListsOf = customLists?.toMutableMap()
+                                media.userRepeat = repeat ?: 0
+                                media.userUpdatedAt = updatedAt?.toString()?.toLong()?.times(1000)
+                                media.userCompletedAt = completedAt ?: FuzzyDate()
+                                media.userStartedAt = startedAt ?: FuzzyDate()
+                            }
+                        } else {
+                            media.isListPrivate = false
+                            media.userStatus = null
+                            media.userListId = null
+                            media.userProgress = null
+                            media.userRepeat = 0
+                            media.userUpdatedAt = null
+                            media.userCompletedAt = FuzzyDate()
+                            media.userStartedAt = FuzzyDate()
+                        }
+                    }
+
+                    if (response.data?.media != null) parse()
+                    else {
+                        response = executeQuery(query, force = true, useToken = false)
+                        if (response?.data?.media != null) parse()
+                    }
+                }
+            }
+            awaitAll(anilist)
         }
         return media
     }
@@ -299,9 +382,17 @@ class AnilistQueries {
                 }
             }
         }
-        val set = PrefManager.getCustomVal<Set<Int>>("continue_$type", setOf()).toMutableSet()
-        if (set.isNotEmpty()) {
-            set.reversed().forEach {
+        if (type != "ANIME") {
+            returnArray.addAll(map.values)
+            return returnArray
+        }
+        val list = PrefManager.getNullableCustomVal(
+            "continueAnimeList",
+            listOf<Int>(),
+            List::class.java
+        ) as List<Int>
+        if (list.isNotEmpty()) {
+            list.reversed().forEach {
                 if (map.containsKey(it)) returnArray.add(map[it]!!)
             }
             for (i in map) {
@@ -315,12 +406,12 @@ class AnilistQueries {
         return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: $status , sort: UPDATED_TIME ) { lists { entries { progress private score(format:POINT_100) status media { id idMal type isAdult status chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } } """
     }
 
-    suspend fun favMedia(anime: Boolean): ArrayList<Media> {
+    suspend fun favMedia(anime: Boolean, id: Int? = Anilist.userid): ArrayList<Media> {
         var hasNextPage = true
         var page = 0
 
         suspend fun getNextPage(page: Int): List<Media> {
-            val response = executeQuery<Query.User>("""{${favMediaQuery(anime, page)}}""")
+            val response = executeQuery<Query.User>("""{${favMediaQuery(anime, page, id)}}""")
             val favourites = response?.data?.user?.favourites
             val apiMediaList = if (anime) favourites?.anime else favourites?.manga
             hasNextPage = apiMediaList?.pageInfo?.hasNextPage ?: false
@@ -339,8 +430,8 @@ class AnilistQueries {
         return responseArray
     }
 
-    private fun favMediaQuery(anime: Boolean, page: Int): String {
-        return """User(id:${Anilist.userid}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
+    private fun favMediaQuery(anime: Boolean, page: Int, id: Int? = Anilist.userid): String {
+        return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
     }
 
     suspend fun recommendations(): ArrayList<Media> {
@@ -383,7 +474,7 @@ class AnilistQueries {
     }
 
     private fun recommendationPlannedQuery(type: String): String {
-        return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: PLANNING , sort: MEDIA_POPULARITY_DESC ) { lists { entries { media { id mediaListEntry { progress private score(format:POINT_100) status } idMal type isAdult popularity status(version: 2) chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } }"""
+        return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: PLANNING${if (type == "ANIME") ", sort: MEDIA_POPULARITY_DESC" else ""} ) { lists { entries { media { id mediaListEntry { progress private score(format:POINT_100) status } idMal type isAdult popularity status(version: 2) chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } }"""
     }
 
     suspend fun initHomePage(): Map<String, ArrayList<Media>> {
@@ -423,7 +514,8 @@ class AnilistQueries {
         }, recommendationPlannedQueryManga: ${recommendationPlannedQuery("MANGA")}"""
         query += """}""".trimEnd(',')
 
-        val response = executeQuery<Query.HomePageMedia>(query)
+        val response = executeQuery<Query.HomePageMedia>(query, show = true)
+        Logger.log(response.toString())
         val returnMap = mutableMapOf<String, ArrayList<Media>>()
         fun current(type: String) {
             val subMap = mutableMapOf<Int, Media>()
@@ -446,10 +538,18 @@ class AnilistQueries {
                     subMap[m.id] = m
                 }
             }
-            val set = PrefManager.getCustomVal<Set<Int>>("continue_${type.uppercase()}", setOf())
-                .toMutableSet()
-            if (set.isNotEmpty()) {
-                set.reversed().forEach {
+            if (type != "Anime") {
+                returnArray.addAll(subMap.values)
+                returnMap["current$type"] = returnArray
+                return
+            }
+            val list = PrefManager.getNullableCustomVal(
+                "continueAnimeList",
+                listOf<Int>(),
+                List::class.java
+            ) as List<Int>
+            if (list.isNotEmpty()) {
+                list.reversed().forEach {
                     if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
                 }
                 for (i in subMap) {
@@ -472,9 +572,13 @@ class AnilistQueries {
                     subMap[m.id] = m
                 }
             }
-            val set = PrefManager.getCustomVal<Set<Int>>("continue_$type", setOf()).toMutableSet()
-            if (set.isNotEmpty()) {
-                set.reversed().forEach {
+            val list = PrefManager.getNullableCustomVal(
+                "continueAnimeList",
+                listOf<Int>(),
+                List::class.java
+            ) as List<Int>
+            if (list.isNotEmpty()) {
+                list.reversed().forEach {
                     if (subMap.containsKey(it)) returnArray.add(subMap[it]!!)
                 }
                 for (i in subMap) {
@@ -558,12 +662,11 @@ class AnilistQueries {
 
 
     private suspend fun bannerImage(type: String): String? {
-        //var image = loadData<BannerImage>("banner_$type")
-        val image: BannerImage? = BannerImage(
-            PrefManager.getCustomVal("banner_${type}_url", null),
+        val image = BannerImage(
+            PrefManager.getCustomVal("banner_${type}_url", ""),
             PrefManager.getCustomVal("banner_${type}_time", 0L)
         )
-        if (image == null || image.checkTime()) {
+        if (image.url.isNullOrEmpty() || image.checkTime()) {
             val response =
                 executeQuery<Query.MediaListCollection>("""{ MediaListCollection(userId: ${Anilist.userid}, type: $type, chunk:1,perChunk:25, sort: [SCORE_DESC,UPDATED_TIME_DESC]) { lists { entries{ media { id bannerImage } } } } } """)
             val random = response?.data?.mediaListCollection?.lists?.mapNotNull {
@@ -592,7 +695,7 @@ class AnilistQueries {
         sortOrder: String? = null
     ): MutableMap<String, ArrayList<Media>> {
         val response =
-            executeQuery<Query.MediaListCollection>("""{ MediaListCollection(userId: $userId, type: ${if (anime) "ANIME" else "MANGA"}) { lists { name isCustomList entries { status progress private score(format:POINT_100) updatedAt media { id idMal isAdult type status chapters episodes nextAiringEpisode {episode} bannerImage meanScore isFavourite format coverImage{large} startDate{year month day} title {english romaji userPreferred } } } } user { id mediaListOptions { rowOrder animeList { sectionOrder } mangaList { sectionOrder } } } } }""")
+            executeQuery<Query.MediaListCollection>("""{ MediaListCollection(userId: $userId, type: ${if (anime) "ANIME" else "MANGA"}) { lists { name isCustomList entries { status progress private score(format:POINT_100) updatedAt media { id idMal isAdult type status chapters episodes nextAiringEpisode {episode} bannerImage genres meanScore isFavourite format coverImage{large} startDate{year month day} title {english romaji userPreferred } } } } user { id mediaListOptions { rowOrder animeList { sectionOrder } mangaList { sectionOrder } } } } }""")
         val sorted = mutableMapOf<String, ArrayList<Media>>()
         val unsorted = mutableMapOf<String, ArrayList<Media>>()
         val all = arrayListOf<Media>()
@@ -620,7 +723,7 @@ class AnilistQueries {
             if (!sorted.containsKey(it.key)) sorted[it.key] = it.value
         }
 
-        sorted["Favourites"] = favMedia(anime)
+        sorted["Favourites"] = favMedia(anime, userId)
         sorted["Favourites"]?.sortWith(compareBy { it.userFavOrder })
         //favMedia doesn't fill userProgress, so we need to fill it manually by searching :(
         sorted["Favourites"]?.forEach { fav ->
@@ -661,8 +764,8 @@ class AnilistQueries {
             PrefManager.getVal<Set<String>>(PrefName.TagsListNonAdult).toMutableList()
         var tags = if (adultTags.isEmpty() || nonAdultTags.isEmpty()) null else
             mapOf(
-                true to adultTags,
-                false to nonAdultTags
+                true to adultTags.sortedBy { it },
+                false to nonAdultTags.sortedBy { it }
             )
 
         if (genres.isNullOrEmpty()) {
@@ -698,7 +801,7 @@ class AnilistQueries {
             }
         }
         return if (!genres.isNullOrEmpty() && tags != null) {
-            Anilist.genres = genres
+            Anilist.genres = genres?.sortedBy { it }?.toMutableList() as ArrayList<String>
             Anilist.tags = tags
             true
         } else false
@@ -1225,4 +1328,116 @@ Page(page:$page,perPage:50) {
         return author
     }
 
+    suspend fun toggleFollow(id: Int): Query.ToggleFollow? {
+        return executeQuery<Query.ToggleFollow>(
+            """mutation{ToggleFollow(userId:$id){id, isFollowing, isFollower}}"""
+        )
+    }
+
+    suspend fun toggleLike(id: Int, type: String): ToggleLike? {
+        return executeQuery<ToggleLike>(
+            """mutation Like{ToggleLikeV2(id:$id,type:$type){__typename}}"""
+        )
+    }
+
+    suspend fun getUserProfile(id: Int): Query.UserProfileResponse? {
+        return executeQuery<Query.UserProfileResponse>(
+            """{followerPage:Page{followers(userId:$id){id}pageInfo{total}}followingPage:Page{following(userId:$id){id}pageInfo{total}}user:User(id:$id){id name about(asHtml:true)avatar{medium large}bannerImage isFollowing isFollower isBlocked favourites{anime{nodes{id coverImage{extraLarge large medium color}}}manga{nodes{id coverImage{extraLarge large medium color}}}characters{nodes{id name{first middle last full native alternative userPreferred}image{large medium}isFavourite}}staff{nodes{id name{first middle last full native alternative userPreferred}image{large medium}isFavourite}}studios{nodes{id name isFavourite}}}statistics{anime{count meanScore standardDeviation minutesWatched episodesWatched chaptersRead volumesRead}manga{count meanScore standardDeviation minutesWatched episodesWatched chaptersRead volumesRead}}siteUrl}}""",
+            force = true
+        )
+    }
+
+    suspend fun getUserProfile(username: String): Query.UserProfileResponse? {
+        val id = getUserId(username) ?: return null
+        return getUserProfile(id)
+    }
+
+    suspend fun getUserId(username: String): Int? {
+        return executeQuery<Query.User>(
+            """{User(name:"$username"){id}}""",
+            force = true
+        )?.data?.user?.id
+    }
+
+    suspend fun getUserStatistics(id: Int, sort: String = "ID"): Query.StatisticsResponse? {
+        return executeQuery<Query.StatisticsResponse>(
+            """{User(id:$id){id name mediaListOptions{scoreFormat}statistics{anime{...UserStatistics}manga{...UserStatistics}}}}fragment UserStatistics on UserStatistics{count meanScore standardDeviation minutesWatched episodesWatched chaptersRead volumesRead formats(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds format}statuses(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds status}scores(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds score}lengths(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds length}releaseYears(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds releaseYear}startYears(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds startYear}genres(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds genre}tags(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds tag{id name}}countries(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds country}voiceActors(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds voiceActor{id name{first middle last full native alternative userPreferred}}characterIds}staff(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds staff{id name{first middle last full native alternative userPreferred}}}studios(sort:$sort){count meanScore minutesWatched chaptersRead mediaIds studio{id name isAnimationStudio}}}""",
+            force = true,
+            show = true
+        )
+    }
+
+    private fun userFavMediaQuery(anime: Boolean, page: Int, id: Int): String {
+        return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
+    }
+
+    suspend fun userFollowing(id: Int): Query.Following? {
+        return executeQuery<Query.Following>(
+            """{Page {following(userId:${id},sort:[USERNAME]){id name avatar{large medium}bannerImage}}}""",
+            force = true
+        )
+    }
+
+    suspend fun userFollowers(id: Int): Query.Follower? {
+        return executeQuery<Query.Follower>(
+            """{Page {followers(userId:${id},sort:[USERNAME]){id name avatar{large medium}bannerImage}}}""",
+            force = true
+        )
+    }
+
+    suspend fun initProfilePage(id: Int): Query.ProfilePageMedia? {
+        return executeQuery<Query.ProfilePageMedia>(
+            """{
+            favoriteAnime:${userFavMediaQuery(true, 1, id)}
+            favoriteManga:${userFavMediaQuery(false, 1, id)}
+            animeMediaList:${bannerImageQuery("ANIME", id)}
+            mangaMediaList:${bannerImageQuery("MANGA", id)}
+            }""".trimIndent(), force = true
+        )
+    }
+
+    private fun bannerImageQuery(type: String, id: Int?): String {
+        return """MediaListCollection(userId: ${id}, type: $type, chunk:1,perChunk:25, sort: [SCORE_DESC,UPDATED_TIME_DESC]) { lists { entries{ media { id bannerImage } } } }"""
+    }
+
+    suspend fun getNotifications(id: Int, page: Int = 1, resetNotification: Boolean = true): NotificationResponse? {
+        val reset = if (resetNotification) "true" else "false"
+        val res = executeQuery<NotificationResponse>(
+            """{User(id:$id){unreadNotificationCount}Page(page:$page,perPage:$ITEMS_PER_PAGE){pageInfo{currentPage,hasNextPage}notifications(resetNotificationCount:$reset){__typename...on AiringNotification{id,type,animeId,episode,contexts,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}},}...on FollowingNotification{id,userId,type,context,createdAt,user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMessageNotification{id,userId,type,activityId,context,createdAt,message{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityMentionNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplySubscribedNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ActivityReplyLikeNotification{id,userId,type,activityId,context,createdAt,activity{__typename}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentMentionNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentReplyNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentSubscribedNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadCommentLikeNotification{id,userId,type,commentId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on ThreadLikeNotification{id,userId,type,threadId,context,createdAt,thread{id}comment{id}user{id,name,bannerImage,avatar{medium,large,}}}...on RelatedMediaAdditionNotification{id,type,context,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDataChangeNotification{id,type,mediaId,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaMergeNotification{id,type,mediaId,deletedMediaTitles,context,reason,createdAt,media{id,title{romaji,english,native,userPreferred}bannerImage,coverImage{medium,large}}}...on MediaDeletionNotification{id,type,deletedMediaTitle,context,reason,createdAt,}}}}""",
+            force = true
+        )
+        if (res != null && resetNotification) {
+            val commentNotifications = PrefManager.getVal(PrefName.UnreadCommentNotifications, 0)
+            res.data.user.unreadNotificationCount += commentNotifications
+            PrefManager.setVal(PrefName.UnreadCommentNotifications, 0)
+            Anilist.unreadNotificationCount = 0
+        }
+        return res
+    }
+
+    suspend fun getFeed(userId: Int?, global: Boolean = false, page: Int = 1, activityId: Int? = null): FeedResponse? {
+        val filter = if (activityId != null) "id:$activityId,"
+        else if (userId != null) "userId:$userId,"
+        else if (global) "isFollowing:false,hasRepliesOrTypeText:true,"
+        else "isFollowing:true,type_not:MESSAGE,"
+        return executeQuery<FeedResponse>(
+            """{Page(page:$page,perPage:$ITEMS_PER_PAGE){activities(${filter}sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount likeCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}}""",
+            force = true
+        )
+    }
+
+    suspend fun isUserFav(favType: AnilistMutations.FavType, id: Int): Boolean {   //anilist isFavourite is broken, so we need to check it manually
+        val res = getUserProfile(Anilist.userid?: return false)
+        return when (favType) {
+            AnilistMutations.FavType.ANIME -> res?.data?.user?.favourites?.anime?.nodes?.any { it.id == id } ?: false
+            AnilistMutations.FavType.MANGA -> res?.data?.user?.favourites?.manga?.nodes?.any { it.id == id } ?: false
+            AnilistMutations.FavType.CHARACTER -> res?.data?.user?.favourites?.characters?.nodes?.any { it.id == id } ?: false
+            AnilistMutations.FavType.STAFF -> res?.data?.user?.favourites?.staff?.nodes?.any { it.id == id } ?: false
+            AnilistMutations.FavType.STUDIO -> res?.data?.user?.favourites?.studios?.nodes?.any { it.id == id } ?: false
+        }
+    }
+
+    companion object {
+        const val ITEMS_PER_PAGE = 25
+    }
 }

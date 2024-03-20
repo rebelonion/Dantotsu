@@ -11,8 +11,10 @@ import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import java.util.Calendar
 
 object Anilist {
@@ -27,6 +29,7 @@ object Anilist {
     var bg: String? = null
     var episodesWatched: Int? = null
     var chapterRead: Int? = null
+    var unreadNotificationCount: Int = 0
 
     var genres: ArrayList<String>? = null
     var tags: Map<Boolean, List<String>>? = null
@@ -124,7 +127,8 @@ object Anilist {
         show: Boolean = false,
         cache: Int? = null
     ): T? {
-        return tryWithSuspend {
+        return try {
+            if (show) Logger.log("Anilist Query: $query")
             if (rateLimitReset > System.currentTimeMillis() / 1000) {
                 toast("Rate limited. Try after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
                 throw Exception("Rate limited after ${rateLimitReset - (System.currentTimeMillis() / 1000)} seconds")
@@ -148,7 +152,7 @@ object Anilist {
                     cacheTime = cache ?: 10
                 )
                 val remaining = json.headers["X-RateLimit-Remaining"]?.toIntOrNull() ?: -1
-                Log.d("AnilistQuery", "Remaining requests: $remaining")
+                Logger.log("Remaining requests: $remaining")
                 if (json.code == 429) {
                     val retry = json.headers["Retry-After"]?.toIntOrNull() ?: -1
                     val passedLimitReset = json.headers["X-RateLimit-Reset"]?.toLongOrNull() ?: 0
@@ -159,10 +163,14 @@ object Anilist {
                     toast("Rate limited. Try after $retry seconds")
                     throw Exception("Rate limited after $retry seconds")
                 }
-                if (!json.text.startsWith("{")) throw Exception(currContext()?.getString(R.string.anilist_down))
-                if (show) println("Response : ${json.text}")
+                if (!json.text.startsWith("{")) {throw Exception(currContext()?.getString(R.string.anilist_down))}
+                if (show) Logger.log("Anilist Response: ${json.text}")
                 json.parsed()
             } else null
+        } catch (e: Exception) {
+            if (show) snackString("Error fetching Anilist data: ${e.message}")
+            Logger.log("Anilist Query Error: ${e.message}")
+            null
         }
     }
 }

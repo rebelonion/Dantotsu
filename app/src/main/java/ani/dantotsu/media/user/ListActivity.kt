@@ -78,7 +78,6 @@ class ListActivity : AppCompatActivity() {
             )
             binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = statusBarHeight
-                bottomMargin = navBarHeight
             }
         }
         setContentView(binding.root)
@@ -168,6 +167,21 @@ class ListActivity : AppCompatActivity() {
                 true
             }
             popup.inflate(R.menu.list_sort_menu)
+            popup.show()
+        }
+
+        binding.filter.setOnClickListener {
+            val genres = PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()
+            val popup = PopupMenu(this, it)
+            popup.menu.add("All")
+            genres.forEach { genre ->
+                popup.menu.add(genre)
+            }
+            popup.setOnMenuItemClickListener { menuItem ->
+                val selectedGenre = menuItem.title.toString()
+                model.filterLists(selectedGenre)
+                true
+            }
             popup.show()
         }
 

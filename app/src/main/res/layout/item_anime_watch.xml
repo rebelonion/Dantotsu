@@ -34,7 +34,8 @@
             app:cornerRadius="12dp"
             app:icon="@drawable/ic_round_play_circle_24"
             app:iconTint="@color/bg_white"
-            tools:ignore="TextContrastCheck" />
+            tools:ignore="TextContrastCheck"
+            tools:visibility="visible"/>
 
         <TextView
             android:id="@+id/animeSourceTitle"
@@ -338,7 +339,13 @@
         android:layout_marginBottom="8dp"
         tools:visibility="gone" />
 
-    <TextView
+       <LinearLayout
+      	android:layout_width="match_parent"
+      	android:layout_height="match_parent"
+      	android:orientation="vertical"
+      	android:gravity="center">
+
+      <TextView
         android:id="@+id/animeSourceNotFound"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -347,6 +354,22 @@
         android:text="@string/source_not_found"
         android:textAlignment="center"
         android:textSize="16sp"
-        android:visibility="gone" />
+        android:visibility="gone"/>  
+
+       <Button
+        android:id="@+id/faqbutton"
+        android:layout_width="120dp"
+        android:layout_height="50dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="?attr/colorPrimaryContainer"
+        android:visibility="gone"
+        android:text="@string/faq"
+        android:textColor="?attr/colorOnPrimaryContainer"
+        android:fontFamily="@font/poppins_bold"
+        app:cornerRadius="12dp"
+        app:icon="@drawable/ic_round_help_outline"
+        app:iconTint="?attr/colorOnPrimaryContainer" />
+
+    </LinearLayout>
 
 </LinearLayout>

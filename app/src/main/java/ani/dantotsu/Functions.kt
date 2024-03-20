@@ -1,11 +1,13 @@
 package ani.dantotsu
 
+import android.Manifest
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.NotificationManager
 import android.app.PendingIntent
+import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
@@ -16,32 +18,71 @@ import android.content.res.Configuration
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.Manifest
+import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
-import android.net.NetworkCapabilities.*
+import android.net.NetworkCapabilities.TRANSPORT_BLUETOOTH
+import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
+import android.net.NetworkCapabilities.TRANSPORT_ETHERNET
+import android.net.NetworkCapabilities.TRANSPORT_LOWPAN
+import android.net.NetworkCapabilities.TRANSPORT_USB
+import android.net.NetworkCapabilities.TRANSPORT_VPN
+import android.net.NetworkCapabilities.TRANSPORT_WIFI
+import android.net.NetworkCapabilities.TRANSPORT_WIFI_AWARE
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.CountDownTimer
+import android.os.Environment
+import android.os.Handler
+import android.os.Looper
+import android.os.PowerManager
+import android.os.SystemClock
 import android.provider.Settings
 import android.telephony.TelephonyManager
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.AttributeSet
 import android.util.TypedValue
-import android.view.*
+import android.view.GestureDetector
+import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.MotionEvent
+import android.view.View
+import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import android.view.animation.*
-import android.widget.*
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
+import android.view.animation.AnimationSet
+import android.view.animation.OvershootInterpolator
+import android.view.animation.ScaleAnimation
+import android.view.animation.TranslateAnimation
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.DatePicker
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
-import androidx.core.view.*
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -52,15 +93,26 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
+import ani.dantotsu.notifications.IncognitoNotificationClickReceiver
+import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
-import ani.dantotsu.subcriptions.NotificationClickReceiver
+import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestBuilder
+import com.bumptech.glide.RequestManager
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions.withCrossFade
+import com.bumptech.glide.load.resource.gif.GifDrawable
+import com.bumptech.glide.request.RequestListener
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.Target
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -68,15 +120,37 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
 import eu.kanade.tachiyomi.data.notification.Notifications
-import kotlinx.coroutines.*
+import io.noties.markwon.AbstractMarkwonPlugin
+import io.noties.markwon.Markwon
+import io.noties.markwon.MarkwonConfiguration
+import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import io.noties.markwon.ext.tables.TablePlugin
+import io.noties.markwon.ext.tasklist.TaskListPlugin
+import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.html.TagHandlerNoOp
+import io.noties.markwon.image.AsyncDrawable
+import io.noties.markwon.image.glide.GlideImagesPlugin
+import jp.wasabeef.glide.transformations.BlurTransformation
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.*
-import java.lang.Runnable
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
 import java.lang.reflect.Field
-import java.util.*
-import kotlin.math.*
+import java.util.Calendar
+import java.util.TimeZone
+import java.util.Timer
+import java.util.TimerTask
+import kotlin.collections.set
+import kotlin.math.log2
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
 
 
 var statusBarHeight = 0
@@ -108,12 +182,6 @@ fun currActivity(): Activity? {
 var loadMedia: Int? = null
 var loadIsMAL = false
 
-fun logger(e: Any?, print: Boolean = true) {
-    if (print)
-        println(e)
-}
-
-
 fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -132,10 +200,13 @@ fun initActivity(a: Activity) {
         if (navBarHeight == 0) {
             ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
                 ?.apply {
-                    navBarHeight = this.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+                    navBarHeight = this.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
                 }
         }
-        a.hideStatusBar()
+        WindowInsetsControllerCompat(
+            window,
+            window.decorView
+        ).hide(WindowInsetsCompat.Type.statusBars())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0 && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             window.decorView.rootWindowInsets?.displayCutout?.apply {
                 if (boundingRects.size > 0) {
@@ -148,47 +219,73 @@ fun initActivity(a: Activity) {
             val windowInsets =
                 ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
             if (windowInsets != null) {
-                val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
-                statusBarHeight = insets.top
-                navBarHeight = insets.bottom
+                statusBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+                navBarHeight =
+                    windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
             }
         }
+    if (a !is MainActivity) a.setNavigationTheme()
 }
 
-@Suppress("DEPRECATION")
 fun Activity.hideSystemBars() {
-    window.decorView.systemUiVisibility = (
-            View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            )
+    WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+        controller.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        controller.hide(WindowInsetsCompat.Type.systemBars())
+    }
 }
 
-@Suppress("DEPRECATION")
-fun Activity.hideStatusBar() {
-    window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+fun Activity.hideSystemBarsExtendView() {
+    WindowCompat.setDecorFitsSystemWindows(window, false)
+    hideSystemBars()
+}
+
+fun Activity.showSystemBars() {
+    WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+        controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+        controller.show(WindowInsetsCompat.Type.systemBars())
+    }
+}
+
+fun Activity.showSystemBarsRetractView() {
+    WindowCompat.setDecorFitsSystemWindows(window, true)
+    showSystemBars()
+}
+
+fun Activity.setNavigationTheme() {
+    val tv = TypedValue()
+    theme.resolveAttribute(android.R.attr.colorBackground, tv, true)
+    if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && tv.isColorType)
+        || (tv.type >= TypedValue.TYPE_FIRST_COLOR_INT && tv.type <= TypedValue.TYPE_LAST_COLOR_INT)
+    ) {
+        window.navigationBarColor = tv.data
+    }
 }
 
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
-        val window = dialog?.window
-        val decorView: View = window?.decorView ?: return
-        decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
-            val behavior = BottomSheetBehavior.from(requireView().parent as View)
-            behavior.state = BottomSheetBehavior.STATE_EXPANDED
+        dialog?.window?.let { window ->
+            WindowCompat.setDecorFitsSystemWindows(window, false)
+            val immersiveMode: Boolean = PrefManager.getVal(PrefName.ImmersiveMode)
+            if (immersiveMode) {
+                WindowInsetsControllerCompat(
+                    window, window.decorView
+                ).hide(WindowInsetsCompat.Type.statusBars())
+            }
+            if (this.resources.configuration.orientation != Configuration.ORIENTATION_PORTRAIT) {
+                val behavior = BottomSheetBehavior.from(requireView().parent as View)
+                behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            }
+            val typedValue = TypedValue()
+            val theme = requireContext().theme
+            theme.resolveAttribute(
+                com.google.android.material.R.attr.colorSurface,
+                typedValue,
+                true
+            )
+            window.navigationBarColor = typedValue.data
         }
-        val typedValue = TypedValue()
-        val theme = requireContext().theme
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorSurface,
-            typedValue,
-            true
-        )
-        window.navigationBarColor = typedValue.data
     }
 
     override fun show(manager: FragmentManager, tag: String?) {
@@ -202,21 +299,35 @@ fun isOnline(context: Context): Boolean {
     val connectivityManager =
         context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
     return tryWith {
-        val cap = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        return@tryWith if (cap != null) {
-            when {
-                cap.hasTransport(TRANSPORT_BLUETOOTH) ||
-                        cap.hasTransport(TRANSPORT_CELLULAR) ||
-                        cap.hasTransport(TRANSPORT_ETHERNET) ||
-                        cap.hasTransport(TRANSPORT_LOWPAN) ||
-                        cap.hasTransport(TRANSPORT_USB) ||
-                        cap.hasTransport(TRANSPORT_VPN) ||
-                        cap.hasTransport(TRANSPORT_WIFI) ||
-                        cap.hasTransport(TRANSPORT_WIFI_AWARE) -> true
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val cap = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            return@tryWith if (cap != null) {
+                when {
+                    cap.hasTransport(TRANSPORT_BLUETOOTH) ||
+                            cap.hasTransport(TRANSPORT_CELLULAR) ||
+                            cap.hasTransport(TRANSPORT_ETHERNET) ||
+                            cap.hasTransport(TRANSPORT_LOWPAN) ||
+                            cap.hasTransport(TRANSPORT_USB) ||
+                            cap.hasTransport(TRANSPORT_VPN) ||
+                            cap.hasTransport(TRANSPORT_WIFI) ||
+                            cap.hasTransport(TRANSPORT_WIFI_AWARE) -> true
 
-                else -> false
-            }
-        } else false
+                    else -> false
+                }
+            } else false
+        } else {
+            @Suppress("DEPRECATION")
+            return@tryWith connectivityManager.activeNetworkInfo?.run {
+                type == ConnectivityManager.TYPE_BLUETOOTH ||
+                        type == ConnectivityManager.TYPE_ETHERNET ||
+                        type == ConnectivityManager.TYPE_MOBILE ||
+                        type == ConnectivityManager.TYPE_MOBILE_DUN ||
+                        type == ConnectivityManager.TYPE_MOBILE_HIPRI ||
+                        type == ConnectivityManager.TYPE_WIFI ||
+                        type == ConnectivityManager.TYPE_WIMAX ||
+                        type == ConnectivityManager.TYPE_VPN
+            } ?: false
+        }
     } ?: false
 }
 
@@ -278,7 +389,7 @@ class InputFilterMinMax(
             val input = (dest.toString() + source.toString()).toDouble()
             if (isInRange(min, max, input)) return null
         } catch (nfe: NumberFormatException) {
-            logger(nfe.stackTraceToString())
+            Logger.log(nfe)
         }
         return ""
     }
@@ -449,6 +560,7 @@ fun ImageView.loadImage(url: String?, size: Int = 0) {
 }
 
 fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
+    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
     if (file?.url?.isNotEmpty() == true) {
         tryWith {
             val glideUrl = GlideUrl(file.url) { file.headers }
@@ -579,9 +691,24 @@ fun View.circularReveal(ex: Int, ey: Int, subX: Boolean, time: Long) {
 }
 
 fun openLinkInBrowser(link: String?) {
-    tryWith {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(link))
-        currContext()?.startActivity(intent)
+    link?.let {
+        try {
+            val emptyBrowserIntent = Intent(Intent.ACTION_VIEW).apply {
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.fromParts("http", "", null)
+            }
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_VIEW
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.parse(link)
+                selector = emptyBrowserIntent
+            }
+            currContext()!!.startActivity(sendIntent)
+        } catch (e: ActivityNotFoundException) {
+            snackString("No browser found")
+        } catch (e: Exception) {
+            Logger.log(e)
+        }
     }
 }
 
@@ -677,6 +804,7 @@ fun savePrefs(
 }
 
 fun downloadsPermission(activity: AppCompatActivity): Boolean {
+    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) return true
     val permissions = arrayOf(
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
         Manifest.permission.READ_EXTERNAL_STORAGE
@@ -687,7 +815,11 @@ fun downloadsPermission(activity: AppCompatActivity): Boolean {
     }.toTypedArray()
 
     return if (requiredPermissions.isNotEmpty()) {
-        ActivityCompat.requestPermissions(activity, requiredPermissions, DOWNLOADS_PERMISSION_REQUEST_CODE)
+        ActivityCompat.requestPermissions(
+            activity,
+            requiredPermissions,
+            DOWNLOADS_PERMISSION_REQUEST_CODE
+        )
         false
     } else {
         true
@@ -728,7 +860,7 @@ fun saveImage(image: Bitmap, path: String, imageFileName: String): File? {
 
 private fun scanFile(path: String, context: Context) {
     MediaScannerConnection.scanFile(context, arrayOf(path), null) { p, _ ->
-        logger("Finished scanning $p")
+        Logger.log("Finished scanning $p")
     }
 }
 
@@ -760,7 +892,9 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
     val clipboard = getSystemService(activity, ClipboardManager::class.java)
     val clip = ClipData.newPlainText("label", string)
     clipboard?.setPrimaryClip(clip)
-    if (toast) snackString(activity.getString(R.string.copied_text, string))
+    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S_V2) {
+        if (toast) snackString(activity.getString(R.string.copied_text, string))
+    }
 }
 
 @SuppressLint("SetTextI18n")
@@ -868,7 +1002,7 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
 
 fun toast(string: String?) {
     if (string != null) {
-        logger(string)
+        Logger.log(string)
         MainScope().launch {
             Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT)
                 .show()
@@ -876,16 +1010,16 @@ fun toast(string: String?) {
     }
 }
 
-fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null) {
+fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
     try { //I have no idea why this sometimes crashes for some people...
         if (s != null) {
             (activity ?: currActivity())?.apply {
+                val snackBar = Snackbar.make(
+                    window.decorView.findViewById(android.R.id.content),
+                    s,
+                    Snackbar.LENGTH_SHORT
+                )
                 runOnUiThread {
-                    val snackBar = Snackbar.make(
-                        window.decorView.findViewById(android.R.id.content),
-                        s,
-                        Snackbar.LENGTH_SHORT
-                    )
                     snackBar.view.apply {
                         updateLayoutParams<FrameLayout.LayoutParams> {
                             gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
@@ -905,13 +1039,15 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
                     }
                     snackBar.show()
                 }
+                return snackBar
             }
-            logger(s)
+            Logger.log(s)
         }
     } catch (e: Exception) {
-        logger(e.stackTraceToString())
+        Logger.log(e)
         Injekt.get<CrashlyticsInterface>().logException(e)
     }
+    return null
 }
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :
@@ -1037,7 +1173,7 @@ fun incognitoNotification(context: Context) {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
     if (incognito) {
-        val intent = Intent(context, NotificationClickReceiver::class.java)
+        val intent = Intent(context, IncognitoNotificationClickReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             context, 0, intent,
             PendingIntent.FLAG_IMMUTABLE
@@ -1055,6 +1191,28 @@ fun incognitoNotification(context: Context) {
     }
 }
 
+fun hasNotificationPermission(context: Context): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+    } else {
+        NotificationManagerCompat.from(context).areNotificationsEnabled()
+    }
+}
+
+fun openSettings(context: Context, channelId: String?): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val intent = Intent(
+            if (channelId != null) Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS
+            else Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        ).apply {
+            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+        }
+        context.startActivity(intent)
+        true
+    } else false
+}
+
 suspend fun View.pop() {
     currActivity()?.runOnUiThread {
         ObjectAnimator.ofFloat(this@pop, "scaleX", 1f, 1.25f).setDuration(120).start()
@@ -1066,4 +1224,101 @@ suspend fun View.pop() {
         ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()
     }
     delay(100)
+}
+
+fun blurImage(imageView: ImageView, banner: String?) {
+    if (banner != null) {
+        val radius = PrefManager.getVal<Float>(PrefName.BlurRadius).toInt()
+        val sampling = PrefManager.getVal<Float>(PrefName.BlurSampling).toInt()
+        if (PrefManager.getVal(PrefName.BlurBanners)) {
+            val context = imageView.context
+            if (!(context as Activity).isDestroyed) {
+                val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
+                Glide.with(context as Context)
+                    .load(GlideUrl(url))
+                    .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
+                    .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))
+                    .into(imageView)
+            }
+        } else {
+            imageView.loadImage(banner)
+        }
+    } else {
+        imageView.setImageResource(R.drawable.linear_gradient_bg)
+    }
+}
+
+/**
+ * Builds the markwon instance with all the plugins
+ * @return the markwon instance
+ */
+fun buildMarkwon(
+    activity: Context,
+    userInputContent: Boolean = true,
+    fragment: Fragment? = null
+): Markwon {
+    val glideContext = fragment?.let { Glide.with(it) } ?: Glide.with(activity)
+    val markwon = Markwon.builder(activity)
+        .usePlugin(object : AbstractMarkwonPlugin() {
+            override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
+                builder.linkResolver { _, link ->
+                    copyToClipboard(link, true)
+                }
+            }
+        })
+
+        .usePlugin(SoftBreakAddsNewLinePlugin.create())
+        .usePlugin(StrikethroughPlugin.create())
+        .usePlugin(TablePlugin.create(activity))
+        .usePlugin(TaskListPlugin.create(activity))
+        .usePlugin(SpoilerPlugin())
+        .usePlugin(HtmlPlugin.create { plugin ->
+            if (userInputContent) {
+                plugin.addHandler(
+                    TagHandlerNoOp.create("h1", "h2", "h3", "h4", "h5", "h6", "hr", "pre", "a")
+                )
+            }
+        })
+        .usePlugin(GlideImagesPlugin.create(object : GlideImagesPlugin.GlideStore {
+
+            private val requestManager: RequestManager = glideContext.apply {
+                addDefaultRequestListener(object : RequestListener<Any> {
+                    override fun onResourceReady(
+                        resource: Any,
+                        model: Any,
+                        target: Target<Any>,
+                        dataSource: DataSource,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        if (resource is GifDrawable) {
+                            resource.start()
+                        }
+                        return false
+                    }
+
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Any>,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Logger.log("Image failed to load: $model")
+                        Logger.log(e as Exception)
+                        return false
+                    }
+                })
+            }
+
+            override fun load(drawable: AsyncDrawable): RequestBuilder<Drawable> {
+                Logger.log("Loading image: ${drawable.destination}")
+                return requestManager.load(drawable.destination)
+            }
+
+            override fun cancel(target: Target<*>) {
+                Logger.log("Cancelling image load")
+                requestManager.clear(target)
+            }
+        }))
+        .build()
+    return markwon
 }

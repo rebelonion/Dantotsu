@@ -43,6 +43,7 @@ class MediaAdaptor(
     private val activity: FragmentActivity,
     private val matchParent: Boolean = false,
     private val viewPager: ViewPager2? = null,
+    private val fav: Boolean = false,
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -128,6 +129,7 @@ class MediaAdaptor(
                         )
                         b.itemCompactTotal.text = " | ${media.manga.totalChapters ?: "~"}"
                     }
+                    b.itemCompactProgressContainer.visibility = if (fav) View.GONE else View.VISIBLE
                 }
             }
 
@@ -137,7 +139,7 @@ class MediaAdaptor(
                 val media = mediaList?.get(position)
                 if (media != null) {
                     b.itemCompactImage.loadImage(media.cover)
-                    b.itemCompactBanner.loadImage(media.banner ?: media.cover)
+                    blurImage(b.itemCompactBanner, media.banner ?: media.cover)
                     b.itemCompactOngoing.visibility =
                         if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName
@@ -185,15 +187,7 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    val banner =
-                        if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
-                    val context = b.itemCompactBanner.context
-                    if (!(context as Activity).isDestroyed)
-                        Glide.with(context as Context)
-                            .load(GlideUrl(media.banner ?: media.cover))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
-                            .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 3)))
-                            .into(banner)
+                    blurImage(b.itemCompactBanner, media.banner ?: media.cover)
                     b.itemCompactOngoing.visibility =
                         if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName
@@ -242,15 +236,7 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    val banner =
-                        if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen
-                    val context = b.itemCompactBanner.context
-                    if (!(context as Activity).isDestroyed)
-                        Glide.with(context as Context)
-                            .load(GlideUrl(media.banner ?: media.cover))
-                            .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
-                            .apply(RequestOptions.bitmapTransform(BlurTransformation(2, 3)))
-                            .into(banner)
+                    blurImage(b.itemCompactBanner, media.banner ?: media.cover)
                     b.itemCompactOngoing.visibility =
                         if (media.status == currActivity()!!.getString(R.string.status_releasing)) View.VISIBLE else View.GONE
                     b.itemCompactTitle.text = media.userPreferredName

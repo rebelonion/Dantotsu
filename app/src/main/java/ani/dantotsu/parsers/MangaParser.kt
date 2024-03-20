@@ -81,6 +81,7 @@ data class MangaChapter(
     val description: String? = null,
     val scanlator: String? = null,
     val sChapter: SChapter,
+    val date: Long? = null,
 )
 
 data class MangaImage(

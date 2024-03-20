@@ -70,19 +70,5 @@ object Discord {
 
     const val application_Id = "1163925779692912771"
     const val small_Image: String =
-        "mp:attachments/1167176318266380288/1176997397797277856/logo-best_of_both.png"
-    /*fun defaultRPC(): RPC? {
-        return token?.let {
-            RPC(it, Dispatchers.IO).apply {
-                applicationId = application_Id
-                smallImage = RPC.Link(
-                    "Dantotsu",
-                    small_Image
-                )
-                buttons.add(RPC.Link("Stream on Dantotsu", "https://github.com/rebelonion/Dantotsu/"))
-            }
-        }
-    }*/
-
-
+        "mp:external/GJEe4hKzr8w56IW6ZKQz43HFVEo8pOtA_C-dJiWwxKo/https/cdn.discordapp.com/app-icons/1163925779692912771/f6b42d41dfdf0b56fcc79d4a12d2ac66.png"
 }

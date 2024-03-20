@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/notificationContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:orientation="horizontal">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        app:cardBackgroundColor="@color/nav_bg"
+        app:strokeColor="@color/transparent"
+        app:cardCornerRadius="24dp">
+
+        <ImageView
+            android:id="@+id/notificationBannerImage"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription"
+            tools:srcCompat="@tools:sample/backgrounds/scenic" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/linear_gradient_nav"
+            tools:ignore="ContentDescription" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/notificationCoverContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="16dp"
+            android:backgroundTint="@color/transparent"
+            app:cardCornerRadius="16dp"
+            app:strokeColor="@color/transparent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/notificationCover"
+                android:layout_width="96dp"
+                android:layout_height="144dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_round_add_circle_24"
+                tools:ignore="ContentDescription,ImageContrastCheck"
+                tools:tint="@color/transparent" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/notificationCoverUserContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_marginStart="23dp"
+            android:backgroundTint="@color/transparent"
+            android:visibility="gone"
+            app:cardCornerRadius="64dp"
+            app:strokeColor="@color/transparent">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/notificationCoverUser"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_round_add_circle_24"
+                tools:ignore="ContentDescription,ImageContrastCheck"
+                tools:tint="@color/transparent" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|bottom"
+            android:layout_marginStart="125dp"
+            android:layout_marginBottom="4dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/notificationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:maxLines="3"
+                android:textSize="14dp"
+                android:transitionName="mediaTitle"
+                tools:ignore="SpUsage"
+                tools:text="@string/slogan" />
+
+            <TextView
+                android:id="@+id/notificationDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginEnd="20dp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Wed,06 March 2024, 7:00PM"
+                android:textSize="10sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+</FrameLayout>

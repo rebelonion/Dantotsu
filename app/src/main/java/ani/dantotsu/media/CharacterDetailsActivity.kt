@@ -1,5 +1,6 @@
 package ani.dantotsu.media
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -15,20 +16,25 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
+import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.connections.anilist.AnilistMutations
 import ani.dantotsu.databinding.ActivityCharacterBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.px
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.math.abs
 
 class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
@@ -48,7 +54,7 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
         initActivity(this)
         screenWidth = resources.displayMetrics.run { widthPixels / density }
         if (PrefManager.getVal(PrefName.ImmersiveMode)) this.window.statusBarColor =
-            ContextCompat.getColor(this, R.color.status)
+            ContextCompat.getColor(this, R.color.transparent)
 
         val banner =
             if (PrefManager.getVal(PrefName.BannerAnimations)) binding.characterBanner else binding.characterBannerNoKen
@@ -75,7 +81,39 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
                 character.image
             )
         }
-
+        val link = "https://anilist.co/character/${character.id}"
+        binding.characterShare.setOnClickListener {
+            val i = Intent(Intent.ACTION_SEND)
+            i.type = "text/plain"
+            i.putExtra(Intent.EXTRA_TEXT, link)
+            startActivity(Intent.createChooser(i, character.name))
+        }
+        binding.characterShare.setOnLongClickListener {
+            openLinkInBrowser(link)
+            true
+        }
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                character.isFav = Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)
+            }
+            withContext(Dispatchers.Main) {
+                binding.characterFav.setImageResource(
+                    if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24
+                )
+            }
+        }
+        binding.characterFav.setOnClickListener {
+            lifecycleScope.launch {
+                if (Anilist.mutation.toggleFav(AnilistMutations.FavType.CHARACTER, character.id)) {
+                    character.isFav = !character.isFav
+                    binding.characterFav.setImageResource(
+                        if (character.isFav) R.drawable.ic_round_favorite_24 else R.drawable.ic_round_favorite_border_24
+                    )
+                } else {
+                    snackString("Failed to toggle favorite")
+                }
+            }
+        }
         model.getCharacter().observe(this) {
             if (it != null && !loaded) {
                 character = it
@@ -139,13 +177,11 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
             isCollapsed = true
             if (immersiveMode) this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.nav_bg)
-            binding.characterAppBar.setBackgroundResource(R.color.nav_bg)
         }
         if (percentage <= percent && isCollapsed) {
             isCollapsed = false
             if (immersiveMode) this.window.statusBarColor =
-                ContextCompat.getColor(this, R.color.status)
-            binding.characterAppBar.setBackgroundResource(R.color.bg)
+                ContextCompat.getColor(this, R.color.transparent)
         }
     }
 }

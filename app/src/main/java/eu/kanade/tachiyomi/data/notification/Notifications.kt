@@ -20,18 +20,6 @@ object Notifications {
     const val ID_DOWNLOAD_IMAGE = 2
 
     /**
-     * Notification channel and ids used by the library updater.
-     */
-    private const val GROUP_LIBRARY = "group_library"
-    const val CHANNEL_LIBRARY_PROGRESS = "library_progress_channel"
-    const val ID_LIBRARY_PROGRESS = -101
-    const val ID_LIBRARY_SIZE_WARNING = -103
-    const val CHANNEL_LIBRARY_ERROR = "library_errors_channel"
-    const val ID_LIBRARY_ERROR = -102
-    const val CHANNEL_LIBRARY_SKIPPED = "library_skipped_channel"
-    const val ID_LIBRARY_SKIPPED = -104
-
-    /**
      * Notification channel and ids used by the downloader.
      */
     private const val GROUP_DOWNLOADER = "group_downloader"
@@ -52,21 +40,38 @@ object Notifications {
     const val GROUP_NEW_EPISODES = "eu.kanade.tachiyomi.NEW_EPISODES"
 
     /**
-     * Notification channel and ids used by the backup/restore system.
-     */
-    private const val GROUP_BACKUP_RESTORE = "group_backup_restore"
-    const val CHANNEL_BACKUP_RESTORE_PROGRESS = "backup_restore_progress_channel"
-    const val ID_BACKUP_PROGRESS = -501
-    const val ID_RESTORE_PROGRESS = -503
-    const val CHANNEL_BACKUP_RESTORE_COMPLETE = "backup_restore_complete_channel_v2"
-    const val ID_BACKUP_COMPLETE = -502
-    const val ID_RESTORE_COMPLETE = -504
-
-    /**
      * Notification channel used for Incognito Mode
      */
     const val CHANNEL_INCOGNITO_MODE = "incognito_mode_channel"
     const val ID_INCOGNITO_MODE = -701
+
+    /**
+     * Notification channel used for comment notifications
+     */
+    private const val GROUP_COMMENTS = "group_comments"
+    const val CHANNEL_COMMENTS = "comments_channel"
+    const val CHANNEL_COMMENT_WARING = "comment_warning_channel"
+    const val ID_COMMENT_REPLY = -801
+
+
+    const val CHANNEL_APP_GLOBAL = "app_global"
+
+    /**
+     * Notification channel and ids used for anilist updates.
+     */
+    const val GROUP_ANILIST = "group_anilist"
+    const val CHANNEL_ANILIST = "anilist_channel"
+    const val ID_ANILIST = -901
+
+    /**
+     * Notification channel and ids used subscription checks.
+     */
+    const val GROUP_SUBSCRIPTION_CHECK = "group_subscription_check"
+    const val CHANNEL_SUBSCRIPTION_CHECK = "subscription_check_channel"
+    const val CHANNEL_SUBSCRIPTION_CHECK_PROGRESS = "subscription_check_progress_channel"
+    const val ID_SUBSCRIPTION_CHECK = -1001
+    const val ID_SUBSCRIPTION_CHECK_PROGRESS = -1002
+
 
     /**
      * Notification channel and ids used for app and extension updates.
@@ -88,6 +93,12 @@ object Notifications {
         "updates_ext_channel",
         "downloader_cache_renewal",
         "crash_logs_channel",
+        "backup_restore_complete_channel_v2",
+        "backup_restore_progress_channel",
+        "group_backup_restore",
+        "library_skipped_channel",
+        "library_errors_channel",
+        "library_progress_channel",
     )
 
     /**
@@ -104,17 +115,20 @@ object Notifications {
 
         notificationManager.createNotificationChannelGroupsCompat(
             listOf(
-                buildNotificationChannelGroup(GROUP_BACKUP_RESTORE) {
-                    setName("Backup & Restore")
-                },
                 buildNotificationChannelGroup(GROUP_DOWNLOADER) {
                     setName("Downloader")
                 },
-                buildNotificationChannelGroup(GROUP_LIBRARY) {
-                    setName("Library")
-                },
                 buildNotificationChannelGroup(GROUP_APK_UPDATES) {
                     setName("App & Extension Updates")
+                },
+                buildNotificationChannelGroup(GROUP_COMMENTS) {
+                    setName("Comments")
+                },
+                buildNotificationChannelGroup(GROUP_ANILIST) {
+                    setName("Anilist")
+                },
+                buildNotificationChannelGroup(GROUP_SUBSCRIPTION_CHECK) {
+                    setName("Subscription Checks")
                 },
             ),
         )
@@ -123,21 +137,6 @@ object Notifications {
             listOf(
                 buildNotificationChannel(CHANNEL_COMMON, IMPORTANCE_LOW) {
                     setName("Common")
-                },
-                buildNotificationChannel(CHANNEL_LIBRARY_PROGRESS, IMPORTANCE_LOW) {
-                    setName("Library Progress")
-                    setGroup(GROUP_LIBRARY)
-                    setShowBadge(false)
-                },
-                buildNotificationChannel(CHANNEL_LIBRARY_ERROR, IMPORTANCE_LOW) {
-                    setName("Library Errors")
-                    setGroup(GROUP_LIBRARY)
-                    setShowBadge(false)
-                },
-                buildNotificationChannel(CHANNEL_LIBRARY_SKIPPED, IMPORTANCE_LOW) {
-                    setName("Library Skipped")
-                    setGroup(GROUP_LIBRARY)
-                    setShowBadge(false)
                 },
                 buildNotificationChannel(CHANNEL_NEW_CHAPTERS_EPISODES, IMPORTANCE_DEFAULT) {
                     setName("New Chapters & Episodes")
@@ -152,19 +151,31 @@ object Notifications {
                     setGroup(GROUP_DOWNLOADER)
                     setShowBadge(false)
                 },
-                buildNotificationChannel(CHANNEL_BACKUP_RESTORE_PROGRESS, IMPORTANCE_LOW) {
-                    setName("Backup & Restore Progress")
-                    setGroup(GROUP_BACKUP_RESTORE)
-                    setShowBadge(false)
-                },
-                buildNotificationChannel(CHANNEL_BACKUP_RESTORE_COMPLETE, IMPORTANCE_HIGH) {
-                    setName("Backup & Restore Complete")
-                    setGroup(GROUP_BACKUP_RESTORE)
-                    setShowBadge(false)
-                    setSound(null, null)
-                },
                 buildNotificationChannel(CHANNEL_INCOGNITO_MODE, IMPORTANCE_LOW) {
                     setName("Incognito Mode")
+                },
+                buildNotificationChannel(CHANNEL_COMMENTS, IMPORTANCE_HIGH) {
+                    setName("Comments")
+                    setGroup(GROUP_COMMENTS)
+                },
+                buildNotificationChannel(CHANNEL_COMMENT_WARING, IMPORTANCE_HIGH) {
+                    setName("Comment Warnings")
+                    setGroup(GROUP_COMMENTS)
+                },
+                buildNotificationChannel(CHANNEL_ANILIST, IMPORTANCE_DEFAULT) {
+                    setName("Anilist")
+                    setGroup(GROUP_ANILIST)
+                },
+                buildNotificationChannel(CHANNEL_SUBSCRIPTION_CHECK, IMPORTANCE_LOW) {
+                    setName("Subscription Checks")
+                    setGroup(GROUP_SUBSCRIPTION_CHECK)
+                },
+                buildNotificationChannel(CHANNEL_SUBSCRIPTION_CHECK_PROGRESS, IMPORTANCE_LOW) {
+                    setName("Subscription Checks Progress")
+                    setGroup(GROUP_SUBSCRIPTION_CHECK)
+                },
+                buildNotificationChannel(CHANNEL_APP_GLOBAL, IMPORTANCE_HIGH) {
+                    setName("Global Updates")
                 },
                 buildNotificationChannel(CHANNEL_APP_UPDATE, IMPORTANCE_DEFAULT) {
                     setGroup(GROUP_APK_UPDATES)

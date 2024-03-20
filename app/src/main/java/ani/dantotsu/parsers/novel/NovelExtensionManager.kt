@@ -2,7 +2,7 @@ package ani.dantotsu.parsers.novel
 
 import android.content.Context
 import android.graphics.drawable.Drawable
-import ani.dantotsu.logger
+import ani.dantotsu.util.Logger
 import ani.dantotsu.snackString
 import eu.kanade.tachiyomi.extension.InstallStep
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -70,7 +70,7 @@ class NovelExtensionManager(private val context: Context) {
         val extensions: List<NovelExtension.Available> = try {
             api.findExtensions()
         } catch (e: Exception) {
-            logger("Error finding extensions: ${e.message}")
+            Logger.log("Error finding extensions: ${e.message}")
             withUIContext { snackString("Failed to get Novel extensions list") }
             emptyList()
         }
