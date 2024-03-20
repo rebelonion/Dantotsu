@@ -215,6 +215,14 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         }
     }
 
+    fun updateNotificationCount() {
+        if (this::binding.isInitialized) {
+            binding.animeNotificationCount.visibility =
+                if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+            binding.animeNotificationCount.text = Anilist.unreadNotificationCount.toString()
+        }
+    }
+
     inner class AnimePageViewHolder(val binding: ItemAnimePageBinding) :
         RecyclerView.ViewHolder(binding.root)
 }

@@ -94,14 +94,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="18dp"
-        android:layout_marginEnd="18dp"
         android:layout_marginTop="3dp"
+        android:layout_marginEnd="18dp"
+        android:background="?android:colorBackground"
         android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/lorem_ipsum"
         android:textAlignment="center"
-        tools:visibility="gone"
-        android:background="?android:colorBackground"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:visibility="gone" />
 
     <FrameLayout
         android:id="@+id/activityBannerContainer"
@@ -114,13 +114,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
             android:backgroundTint="?attr/colorSurface"
-            app:strokeColor="@color/transparent"
-            app:cardCornerRadius="24dp">
+            app:cardCornerRadius="24dp"
+            app:strokeColor="@color/transparent">
 
             <ImageView
                 android:id="@+id/activityBannerImage"
                 android:layout_width="match_parent"
-                android:layout_height="169dp"
+                android:layout_height="152dp"
                 android:scaleType="centerCrop"
                 tools:ignore="ContentDescription"
                 tools:srcCompat="@tools:sample/backgrounds/scenic" />
@@ -128,8 +128,8 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
-                app:srcCompat="@drawable/linear_gradient_nav_inv"
+                android:layout_height="153dp"
+                app:srcCompat="@drawable/linear_gradient_nav"
                 tools:ignore="ContentDescription" />
 
 
@@ -138,14 +138,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
+                android:layout_margin="16dp"
                 android:layout_marginStart="16dp"
                 android:backgroundTint="@color/bg_white"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="16dp"
+                app:strokeColor="@color/transparent">
 
                 <com.google.android.material.imageview.ShapeableImageView
                     android:id="@+id/activityCover"
-                    android:layout_width="102dp"
-                    android:layout_height="154dp"
+                    android:layout_width="108dp"
+                    android:layout_height="160dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
                     app:srcCompat="@drawable/ic_round_add_circle_24"
@@ -161,15 +163,15 @@
                 android:layout_marginStart="128dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="8dp">
 
                 <TextView
                     android:id="@+id/activityMediaName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:textColor="@color/bg_opp"
+                    android:fontFamily="@font/poppins_bold"
                     android:maxLines="2"
                     android:text="@string/anime"
                     android:textSize="16sp"
@@ -181,9 +183,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:alpha="0.66"
+                    android:ellipsize="end"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:textColor="@color/bg_opp"
+                    android:maxLines="2"
                     android:text="@string/slogan"
+                    android:textColor="@color/bg_opp"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
@@ -224,7 +229,8 @@
         android:id="@+id/activityReplies"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        android:layout_marginStart="16dp"/>
+        android:layout_marginStart="16dp"
+        android:nestedScrollingEnabled="false"
+        android:visibility="gone" />
 
 </LinearLayout>

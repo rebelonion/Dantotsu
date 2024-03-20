@@ -66,6 +66,7 @@ class CommentsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCommentsBinding.inflate(inflater, container, false)
+        binding.commentsLayout.isNestedScrollingEnabled = true
         return binding.root
     }
 

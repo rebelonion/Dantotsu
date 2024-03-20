@@ -19,14 +19,15 @@
         <ImageView
             android:id="@+id/notificationBannerImage"
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="153dp"
             android:scaleType="centerCrop"
             tools:ignore="ContentDescription"
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
         <ImageView
+            android:id="@+id/notificationGradiant"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="153dp"
             app:srcCompat="@drawable/linear_gradient_nav"
             tools:ignore="ContentDescription" />
 
@@ -35,18 +36,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="16dp"
+            android:layout_margin="16dp"
             android:backgroundTint="@color/transparent"
             app:cardCornerRadius="16dp"
             app:strokeColor="@color/transparent">
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/notificationCover"
-                android:layout_width="96dp"
-                android:layout_height="144dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_round_add_circle_24"
+                android:layout_width="108dp"
+                android:layout_height="160dp"
+                android:scaleType="centerCrop"
+                app:shapeAppearanceOverlay="@style/roundedImageView"
                 tools:ignore="ContentDescription,ImageContrastCheck"
+                tools:srcCompat="@tools:sample/backgrounds/scenic"
                 tools:tint="@color/transparent" />
 
         </com.google.android.material.card.MaterialCardView>
@@ -74,11 +76,14 @@
         </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:id="@+id/notificationTextContainer"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start|bottom"
             android:layout_marginStart="125dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="4dp"
+            android:padding="8dp"
             android:orientation="vertical">
 
             <TextView
@@ -86,7 +91,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:fontFamily="@font/poppins_semi_bold"
+                android:fontFamily="@font/poppins_bold"
                 android:maxLines="3"
                 android:textSize="14dp"
                 android:transitionName="mediaTitle"
@@ -98,11 +103,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
-                android:layout_marginEnd="20dp"
+                android:alpha="0.66"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="Wed,06 March 2024, 7:00PM"
                 android:textSize="10sp"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText,SmallSp" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

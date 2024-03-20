@@ -129,6 +129,7 @@ class NotificationActivity : AppCompatActivity() {
                         )
                         newNotifications += notification
                     }
+                    newNotifications.sortByDescending { it.createdAt }
                 }
 
                 notificationList += newNotifications

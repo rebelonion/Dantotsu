@@ -2,6 +2,8 @@ package ani.dantotsu.profile.activity
 
 import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.api.Notification
@@ -37,14 +39,22 @@ class NotificationItem(
             ?: notification.user?.avatar?.medium else notification.media?.bannerImage
             ?: notification.media?.coverImage?.large
         blurImage(binding.notificationBannerImage, cover)
+
         val defaultHeight = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            170f,
+            153f,
             binding.root.context.resources.displayMetrics
         ).toInt()
+
         val userHeight = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
             90f,
+            binding.root.context.resources.displayMetrics
+        ).toInt()
+
+        val textMarginStart = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            125f,
             binding.root.context.resources.displayMetrics
         ).toInt()
 
@@ -60,12 +70,16 @@ class NotificationItem(
                 binding.notificationCoverUser.loadImage(notification.user?.avatar?.large)
             }
             binding.notificationBannerImage.layoutParams.height = userHeight
+            binding.notificationGradiant.layoutParams.height = userHeight
+            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart = userHeight
         } else {
             binding.notificationCover.visibility = View.VISIBLE
             binding.notificationCoverUser.visibility = View.VISIBLE
             binding.notificationCoverUserContainer.visibility = View.GONE
             binding.notificationCover.loadImage(notification.media?.coverImage?.large)
             binding.notificationBannerImage.layoutParams.height = defaultHeight
+            binding.notificationGradiant.layoutParams.height = defaultHeight
+            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart = textMarginStart
         }
     }
 
