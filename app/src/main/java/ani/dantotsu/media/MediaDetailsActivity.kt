@@ -367,7 +367,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         navBar.addTab(infoTab)
         navBar.addTab(watchTab)
         navBar.addTab(commentTab)
-        navBar.selectTabAt(selected)
         navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
             override fun onTabSelected(
                 lastIndex: Int,
@@ -383,8 +382,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 model.saveSelected(media.id, sel)
             }
         })
-        binding.commentInputLayout.isVisible = selected == 2
-        viewPager.setCurrentItem(selected, false)
 
         if (model.continueMedia == null && media.cameFromContinue) {
             model.continueMedia = PrefManager.getVal(PrefName.ContinueMedia)
@@ -394,6 +391,9 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         if (frag != null) {
             selected = 2
         }
+        navBar.selectTabAt(selected)
+        binding.commentInputLayout.isVisible = selected == 2
+        viewPager.setCurrentItem(selected, false)
 
         val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
         live.observe(this) {
