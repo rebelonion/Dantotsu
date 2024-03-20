@@ -3,6 +3,7 @@ package ani.dantotsu.settings
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlertDialog
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
@@ -51,10 +52,11 @@ import ani.dantotsu.loadImage
 import ani.dantotsu.util.Logger
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.TaskScheduler
-import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
+import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.notifications.subscription.SubscriptionNotificationWorker.Companion.checkIntervals
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.openLinkInYouTube
 import ani.dantotsu.openSettings
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
@@ -617,9 +619,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             cursedCounter++
             (binding.settingsLogo.drawable as Animatable).start()
             if (cursedCounter % 7 == 0) {
-                Toast.makeText(this, "youwu have been cuwsed :pwayge:", Toast.LENGTH_LONG).show()
-                val url = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                openLinkInBrowser(url)
+                toast(R.string.you_cursed)
+                openLinkInYouTube(getString(R.string.cursed_yt))
                 //PrefManager.setVal(PrefName.ImageUrl, !PrefManager.getVal(PrefName.ImageUrl, false))
             } else {
                 snackString(array[(Math.random() * array.size).toInt()], this)

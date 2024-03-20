@@ -721,6 +721,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
     <string name="activities">Activities</string>
 
+    <string name="you_cursed">youwu have been cuwsed :pwayge:</string>
+    <string name="cursed_yt">https://www.youtube.com/watch?v=dQw4w9WgXcQ</string>
     <string name="purge_confirm">Are you sure you want to purge all %1$s downloads?</string>
 
     <string name="delete_fail_reason">Failed to delete because of… %1$s</string>
