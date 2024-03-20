@@ -12,8 +12,8 @@
     <color name="nav_bg">#fff</color>
     <color name="nav_bg_inv">#00BFAEAE</color>
     <color name="nav_tab">#40000000</color>
-    <color name="gradiant_bg_start">#989898</color>
-    <color name="gradiant_bg_end">#00FFFFF</color>
+    <color name="gradiant_bg_start">#88989898</color>
+    <color name="gradiant_bg_end">#00FFFFFF</color>
     <color name="nav_tab_disabled">#19000000</color>
     <color name="transparent">#00000000</color>
     <color name="button_icon">#A9FFFFFF</color>

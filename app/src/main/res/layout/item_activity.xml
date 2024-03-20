@@ -129,7 +129,7 @@
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                app:srcCompat="@drawable/linear_gradient_nav"
+                app:srcCompat="@drawable/linear_gradient_nav_inv"
                 tools:ignore="ContentDescription" />
 
 
@@ -169,6 +169,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
                     android:fontFamily="@font/poppins_semi_bold"
+                    android:textColor="@color/bg_opp"
                     android:maxLines="2"
                     android:text="@string/anime"
                     android:textSize="16sp"
@@ -181,6 +182,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/poppins_semi_bold"
+                    android:textColor="@color/bg_opp"
                     android:text="@string/slogan"
                     android:textSize="14sp"
                     android:textStyle="bold"
