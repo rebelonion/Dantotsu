@@ -78,8 +78,6 @@ class NotificationActivity : AppCompatActivity() {
                                 binding.followRefresh.visibility = ViewGroup.GONE
                             }
                         }
-                        Logger.log("No more notifications")
-                        snackString("No more notifications")
                     }
                     false
                 }
