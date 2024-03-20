@@ -53,7 +53,6 @@ class CommentItem(val comment: Comment,
         adapter.add(repliesSection)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
         binding = viewBinding
         setAnimation(binding.root.context, binding.root)
@@ -95,10 +94,15 @@ class CommentItem(val comment: Comment,
             if (repliesVisible) {
                 repliesSection.clear()
                 removeSubCommentIds()
-                viewBinding.commentTotalReplies.text = "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
+                viewBinding.commentTotalReplies.context.run {
+                    viewBinding.commentTotalReplies.text = if (comment.replyCount == 1)
+                        getString(R.string.view_reply)
+                    else
+                        getString(R.string.view_replies, comment.replyCount)
+                }
                 repliesVisible = false
             } else {
-                viewBinding.commentTotalReplies.text = "Hide Replies"
+                viewBinding.commentTotalReplies.setText(R.string.hide_replies)
                 repliesSection.clear()
                 commentsFragment.viewReplyCallback(this)
                 repliesVisible = true
@@ -220,7 +224,8 @@ class CommentItem(val comment: Comment,
         }
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
-        viewBinding.commentUserLevel.text = "[${levelColor.second}]"
+        val userColor = "[${levelColor.second}]"
+        viewBinding.commentUserLevel.text = userColor
         viewBinding.commentUserLevel.setTextColor(levelColor.first)
         viewBinding.commentUserTime.text = formatTimestamp(comment.timestamp)
     }
