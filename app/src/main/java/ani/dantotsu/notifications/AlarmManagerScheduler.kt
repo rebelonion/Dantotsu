@@ -15,6 +15,10 @@ import java.util.concurrent.TimeUnit
 
 class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
     override fun scheduleRepeatingTask(taskType: TaskType, interval: Long) {
+        if (interval < TimeUnit.MINUTES.toMillis(15)) {
+            cancelTask(taskType)
+            return
+        }
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = when (taskType) {
             TaskType.COMMENT_NOTIFICATION -> Intent(
