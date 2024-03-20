@@ -12,6 +12,7 @@ import ani.dantotsu.databinding.ItemNotificationBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.activity.NotificationActivity.Companion.NotificationClickType
 import ani.dantotsu.setAnimation
+import ani.dantotsu.toPx
 import com.xwray.groupie.viewbinding.BindableItem
 
 class NotificationItem(
@@ -40,23 +41,11 @@ class NotificationItem(
             ?: notification.media?.coverImage?.large
         blurImage(binding.notificationBannerImage, cover)
 
-        val defaultHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            153f,
-            binding.root.context.resources.displayMetrics
-        ).toInt()
+        val defaultHeight = 153.toPx
 
-        val userHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            90f,
-            binding.root.context.resources.displayMetrics
-        ).toInt()
+        val userHeight = 90.toPx
 
-        val textMarginStart = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            125f,
-            binding.root.context.resources.displayMetrics
-        ).toInt()
+        val textMarginStart = 125.toPx
 
         if (user) {
             binding.notificationCover.visibility = View.GONE
