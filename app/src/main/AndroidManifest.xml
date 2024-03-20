@@ -69,7 +69,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/currently_airing_widget_info" />
         </receiver>
-        <receiver android:name=".subcriptions.NotificationClickReceiver" />
+        <receiver android:name=".notifications.IncognitoNotificationClickReceiver" />
 
 
         <activity
@@ -307,14 +307,6 @@
             android:exported="false"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <receiver
-            android:name=".subcriptions.AlarmReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="Aani.dantotsu.ACTION_ALARM" />
-            </intent-filter>
-        </receiver>
         <receiver android:name=".notifications.AlarmPermissionStateReceiver"
             android:exported="true">
             <intent-filter>
@@ -330,7 +322,7 @@
         </receiver>
         <receiver android:name=".notifications.anilist.AnilistNotificationReceiver"/>
         <receiver android:name=".notifications.comment.CommentNotificationReceiver"/>
-
+        <receiver android:name=".notifications.subscription.SubscriptionNotificationReceiver"/>
 
         <meta-data
             android:name="preloaded_fonts"

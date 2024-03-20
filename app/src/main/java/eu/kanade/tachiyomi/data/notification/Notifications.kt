@@ -63,6 +63,15 @@ object Notifications {
     const val CHANNEL_ANILIST = "anilist_channel"
     const val ID_ANILIST = -901
 
+    /**
+     * Notification channel and ids used subscription checks.
+     */
+    const val GROUP_SUBSCRIPTION_CHECK = "group_subscription_check"
+    const val CHANNEL_SUBSCRIPTION_CHECK = "subscription_check_channel"
+    const val CHANNEL_SUBSCRIPTION_CHECK_PROGRESS = "subscription_check_progress_channel"
+    const val ID_SUBSCRIPTION_CHECK = -1001
+    const val ID_SUBSCRIPTION_CHECK_PROGRESS = -1002
+
 
     /**
      * Notification channel and ids used for app and extension updates.
@@ -118,6 +127,9 @@ object Notifications {
                 buildNotificationChannelGroup(GROUP_ANILIST) {
                     setName("Anilist")
                 },
+                buildNotificationChannelGroup(GROUP_SUBSCRIPTION_CHECK) {
+                    setName("Subscription Checks")
+                },
             ),
         )
 
@@ -153,6 +165,14 @@ object Notifications {
                 buildNotificationChannel(CHANNEL_ANILIST, IMPORTANCE_DEFAULT) {
                     setName("Anilist")
                     setGroup(GROUP_ANILIST)
+                },
+                buildNotificationChannel(CHANNEL_SUBSCRIPTION_CHECK, IMPORTANCE_LOW) {
+                    setName("Subscription Checks")
+                    setGroup(GROUP_SUBSCRIPTION_CHECK)
+                },
+                buildNotificationChannel(CHANNEL_SUBSCRIPTION_CHECK_PROGRESS, IMPORTANCE_LOW) {
+                    setName("Subscription Checks Progress")
+                    setGroup(GROUP_SUBSCRIPTION_CHECK)
                 },
                 buildNotificationChannel(CHANNEL_APP_GLOBAL, IMPORTANCE_HIGH) {
                     setName("Global Updates")

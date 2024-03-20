@@ -1,4 +1,4 @@
-package ani.dantotsu.notifications.anilist
+package ani.dantotsu.notifications.subscription
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -10,17 +10,17 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.util.Logger
 import kotlinx.coroutines.runBlocking
 
-class AnilistNotificationReceiver : BroadcastReceiver() {
+class SubscriptionNotificationReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
-        Logger.log("AnilistNotificationReceiver: onReceive")
+        Logger.log("SubscriptionNotificationReceiver: onReceive")
         runBlocking {
-            AnilistNotificationTask().execute(context)
+            SubscriptionNotificationTask().execute(context)
         }
-        val anilistInterval =
-            AnilistNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.AnilistNotificationInterval)]
+        val subscriptionInterval =
+            SubscriptionNotificationWorker.checkIntervals[PrefManager.getVal(PrefName.SubscriptionNotificationInterval)]
         AlarmManagerScheduler(context).scheduleRepeatingTask(
-            TaskScheduler.TaskType.ANILIST_NOTIFICATION,
-            anilistInterval
+            TaskScheduler.TaskType.SUBSCRIPTION_NOTIFICATION,
+            subscriptionInterval
         )
     }
 }

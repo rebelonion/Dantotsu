@@ -87,6 +87,7 @@ class App : MultiDexApplication() {
 
         Logger.init(this)
         Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
+        Logger.log("App: Logging started")
 
         initializeNetwork(baseContext)
 
@@ -122,21 +123,9 @@ class App : MultiDexApplication() {
             CommentsAPI.fetchAuthToken()
         }
 
-        startWorkers()
-    }
-
-    private fun startWorkers() {
         val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
-
         TaskScheduler.create(this, useAlarmManager).scheduleAllTasks(this)
-
-        androidx.work.WorkManager.getInstance(this)
-            .enqueue(OneTimeWorkRequest.Companion.from(CommentNotificationWorker::class.java))
-
-        androidx.work.WorkManager.getInstance(this)
-            .enqueue(OneTimeWorkRequest.Companion.from(AnilistNotificationWorker::class.java))
     }
-
 
     private fun setupNotificationChannels() {
         try {

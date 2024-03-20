@@ -86,7 +86,7 @@ object Logger {
     fun log(message: String) {
         val trace = Thread.currentThread().stackTrace[3]
         loggerExecutor.execute {
-            if (file == null) Log.d("Internal Logger", "$message)")
+            if (file == null) Log.d("Internal Logger", message)
             else {
                 val className = trace.className
                 val methodName = trace.methodName

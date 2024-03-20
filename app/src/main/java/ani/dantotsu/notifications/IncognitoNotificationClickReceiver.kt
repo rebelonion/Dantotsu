@@ -1,4 +1,4 @@
-package ani.dantotsu.subcriptions
+package ani.dantotsu.notifications
 
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -9,7 +9,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 
 
-class NotificationClickReceiver : BroadcastReceiver() {
+class IncognitoNotificationClickReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
 
         PrefManager.setVal(PrefName.Incognito, false)

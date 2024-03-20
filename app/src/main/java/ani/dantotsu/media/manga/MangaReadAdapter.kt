@@ -13,11 +13,9 @@ import android.widget.LinearLayout
 import android.widget.NumberPicker
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
-import androidx.core.view.children
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.*
-import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
@@ -33,9 +31,8 @@ import ani.dantotsu.parsers.MangaSources
 import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
-import ani.dantotsu.subcriptions.Subscription.Companion.getChannelId
 import com.google.android.material.chip.Chip
+import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_SUBSCRIPTION_CHECK
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.system.WebViewUtil
 import kotlinx.coroutines.MainScope
@@ -161,7 +158,7 @@ class MangaReadAdapter(
         subscribeButton(false)
 
         binding.animeSourceSubscribe.setOnLongClickListener {
-            openSettings(fragment.requireContext(), getChannelId(true, media.id))
+            openSettings(fragment.requireContext(), CHANNEL_SUBSCRIPTION_CHECK)
         }
 
         binding.animeNestedButton.setOnClickListener {

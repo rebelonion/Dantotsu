@@ -7,12 +7,10 @@ import ani.dantotsu.util.Logger
 import kotlinx.coroutines.runBlocking
 
 class CommentNotificationReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context?, intent: Intent?) {
+    override fun onReceive(context: Context, intent: Intent?) {
         Logger.log("CommentNotificationReceiver: onReceive")
-        if (context != null) {
-            runBlocking {
-                CommentNotificationTask().execute(context)
-            }
+        runBlocking {
+            CommentNotificationTask().execute(context)
         }
     }
 }

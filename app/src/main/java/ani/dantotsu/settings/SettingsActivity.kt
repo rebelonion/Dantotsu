@@ -6,7 +6,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
-import android.net.Uri
 import android.os.Build
 import android.os.Build.BRAND
 import android.os.Build.DEVICE
@@ -54,7 +53,9 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
+import ani.dantotsu.notifications.subscription.SubscriptionNotificationWorker.Companion.checkIntervals
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.openSettings
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.pop
@@ -68,11 +69,6 @@ import ani.dantotsu.settings.saving.internal.PreferencePackager
 import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
-import ani.dantotsu.subcriptions.Notifications
-import ani.dantotsu.subcriptions.Notifications.Companion.openSettings
-import ani.dantotsu.subcriptions.Subscription.Companion.defaultTime
-import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
-import ani.dantotsu.subcriptions.Subscription.Companion.timeMinutes
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import com.google.android.material.snackbar.Snackbar
@@ -652,8 +648,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
         }
 
-        var curTime = PrefManager.getVal(PrefName.SubscriptionsTimeS, defaultTime)
-        val timeNames = timeMinutes.map {
+        var curTime = PrefManager.getVal<Int>(PrefName.SubscriptionNotificationInterval)
+        val timeNames = checkIntervals.map {
             val mins = it % 60
             val hours = it / 60
             if (it > 0) "${if (hours > 0) "$hours hrs " else ""}${if (mins > 0) "$mins mins" else ""}"
@@ -668,15 +664,19 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 curTime = i
                 binding.settingsSubscriptionsTime.text =
                     getString(R.string.subscriptions_checking_time_s, timeNames[i])
-                PrefManager.setVal(PrefName.SubscriptionsTimeS, curTime)
+                PrefManager.setVal(PrefName.SubscriptionNotificationInterval, curTime)
                 dialog.dismiss()
-                startSubscription(true)
+                TaskScheduler.create(this,
+                    PrefManager.getVal(PrefName.UseAlarmManager)
+                ).scheduleAllTasks(this)
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
 
         binding.settingsSubscriptionsTime.setOnLongClickListener {
-            startSubscription(true)
+            TaskScheduler.create(this,
+                PrefManager.getVal(PrefName.UseAlarmManager)
+            ).scheduleAllTasks(this)
             true
         }
 
@@ -699,6 +699,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     binding.settingsAnilistSubscriptionsTime.text =
                         getString(R.string.anilist_notifications_checking_time, aItems[i])
                     dialog.dismiss()
+                    TaskScheduler.create(this,
+                        PrefManager.getVal(PrefName.UseAlarmManager)
+                    ).scheduleAllTasks(this)
                 }
                 .create()
             dialog.window?.setDimAmount(0.8f)
@@ -743,6 +746,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     binding.settingsCommentSubscriptionsTime.text =
                         getString(R.string.comment_notification_checking_time, cItems[i])
                     dialog.dismiss()
+                    TaskScheduler.create(this,
+                        PrefManager.getVal(PrefName.UseAlarmManager)
+                    ).scheduleAllTasks(this)
                 }
                 .create()
             dialog.window?.setDimAmount(0.8f)
@@ -753,16 +759,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             PrefManager.getVal(PrefName.SubscriptionCheckingNotifications)
         binding.settingsNotificationsCheckingSubscriptions.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.SubscriptionCheckingNotifications, isChecked)
-            if (isChecked)
-                Notifications.createChannel(
-                    this,
-                    null,
-                    "subscription_checking",
-                    getString(R.string.checking_subscriptions),
-                    false
-                )
-            else
-                Notifications.deleteChannel(this, "subscription_checking")
         }
 
         binding.settingsNotificationsCheckingSubscriptions.setOnLongClickListener {

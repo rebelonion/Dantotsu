@@ -14,6 +14,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
         return if (CommentNotificationTask().execute(applicationContext)) {
             Result.success()
         } else {
+            Logger.log("CommentNotificationWorker: doWork failed")
             Result.retry()
         }
     }
@@ -27,7 +28,7 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
     }
 
     companion object {
-        val checkIntervals = arrayOf(0L, 720, 1440)
+        val checkIntervals = arrayOf(0L, 480, 720, 1440)
         const val WORK_NAME = "ani.dantotsu.notifications.comment.CommentNotificationWorker"
     }
 }

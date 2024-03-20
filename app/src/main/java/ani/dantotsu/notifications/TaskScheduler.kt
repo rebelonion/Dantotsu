@@ -3,6 +3,7 @@ package ani.dantotsu.notifications
 import android.content.Context
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
 import ani.dantotsu.notifications.comment.CommentNotificationWorker
+import ani.dantotsu.notifications.subscription.SubscriptionNotificationWorker
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 
@@ -23,6 +24,8 @@ interface TaskScheduler {
                     PrefName.CommentNotificationInterval)]
                 TaskType.ANILIST_NOTIFICATION -> AnilistNotificationWorker.checkIntervals[PrefManager.getVal(
                     PrefName.AnilistNotificationInterval)]
+                TaskType.SUBSCRIPTION_NOTIFICATION -> SubscriptionNotificationWorker.checkIntervals[PrefManager.getVal(
+                    PrefName.SubscriptionNotificationInterval)]
             }
             scheduleRepeatingTask(taskType, interval)
         }
@@ -39,7 +42,8 @@ interface TaskScheduler {
     }
     enum class TaskType {
         COMMENT_NOTIFICATION,
-        ANILIST_NOTIFICATION
+        ANILIST_NOTIFICATION,
+        SUBSCRIPTION_NOTIFICATION
     }
 }
 

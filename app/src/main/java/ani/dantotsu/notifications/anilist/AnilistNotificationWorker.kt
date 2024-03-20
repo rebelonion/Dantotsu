@@ -13,6 +13,7 @@ class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParamet
         return if (AnilistNotificationTask().execute(applicationContext)) {
             Result.success()
         } else {
+            Logger.log("AnilistNotificationWorker: doWork failed")
             Result.retry()
         }
     }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.first
 object MangaSources : MangaReadSources() {
     override var list: List<Lazier<BaseParser>> = emptyList()
     var pinnedMangaSources: List<String> = emptyList()
+    var isInitialized = false
 
     suspend fun init(fromExtensions: StateFlow<List<MangaExtension.Installed>>) {
         pinnedMangaSources =
@@ -23,6 +24,7 @@ object MangaSources : MangaReadSources() {
             { OfflineMangaParser() },
             "Downloaded"
         )
+        isInitialized = true
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->

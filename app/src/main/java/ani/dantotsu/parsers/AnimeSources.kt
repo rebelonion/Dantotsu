@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.first
 object AnimeSources : WatchSources() {
     override var list: List<Lazier<BaseParser>> = emptyList()
     var pinnedAnimeSources: List<String> = emptyList()
+    var isInitialized = false
 
     suspend fun init(fromExtensions: StateFlow<List<AnimeExtension.Installed>>) {
         pinnedAnimeSources =
@@ -23,6 +24,7 @@ object AnimeSources : WatchSources() {
             { OfflineAnimeParser() },
             "Downloaded"
         )
+        isInitialized = true
 
         // Update as StateFlow emits new values
         fromExtensions.collect { extensions ->

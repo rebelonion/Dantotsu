@@ -38,6 +38,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.Download
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.work.OneTimeWorkRequest
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
@@ -49,6 +50,8 @@ import ani.dantotsu.home.LoginFragment
 import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
+import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
@@ -59,7 +62,6 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.SharedPreferenceBooleanLiveData
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferencePackager
-import ani.dantotsu.subcriptions.Subscription.Companion.startSubscription
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.Logger
 import com.google.android.material.snackbar.BaseTransientBottomBar
@@ -97,6 +99,13 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+        androidx.work.WorkManager.getInstance(this)
+            .enqueue(OneTimeWorkRequest.Companion.from(CommentNotificationWorker::class.java))
+
+        androidx.work.WorkManager.getInstance(this)
+            .enqueue(OneTimeWorkRequest.Companion.from(AnilistNotificationWorker::class.java))
 
         val action = intent.action
         val type = intent.type
@@ -405,9 +414,6 @@ class MainActivity : AppCompatActivity() {
                                 )
                             }
                         }
-
-                        delay(500)
-                        startSubscription()
                     }
                     load = true
                 }

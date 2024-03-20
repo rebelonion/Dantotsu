@@ -70,6 +70,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
@@ -92,13 +93,13 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
+import ani.dantotsu.notifications.IncognitoNotificationClickReceiver
 import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
-import ani.dantotsu.subcriptions.NotificationClickReceiver
 import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -1172,7 +1173,7 @@ fun incognitoNotification(context: Context) {
         context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
     if (incognito) {
-        val intent = Intent(context, NotificationClickReceiver::class.java)
+        val intent = Intent(context, IncognitoNotificationClickReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(
             context, 0, intent,
             PendingIntent.FLAG_IMMUTABLE
@@ -1188,6 +1189,28 @@ fun incognitoNotification(context: Context) {
     } else {
         notificationManager.cancel(INCOGNITO_CHANNEL_ID)
     }
+}
+
+fun hasNotificationPermission(context: Context): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        context.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED
+    } else {
+        NotificationManagerCompat.from(context).areNotificationsEnabled()
+    }
+}
+
+fun openSettings(context: Context, channelId: String?): Boolean {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val intent = Intent(
+            if (channelId != null) Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS
+            else Settings.ACTION_APP_NOTIFICATION_SETTINGS
+        ).apply {
+            putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+            putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+        }
+        context.startActivity(intent)
+        true
+    } else false
 }
 
 suspend fun View.pop() {
