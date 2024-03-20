@@ -999,8 +999,8 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
     inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
 
-fun getAppString(res: Int?): String? {
-    return res?.let { App.instance?.getString(it) }
+fun getAppString(res: Int): String {
+    return App.instance?.getString(res) ?: ""
 }
 
 fun toast(string: String?) {
@@ -1053,8 +1053,8 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
     return null
 }
 
-fun snackString(r: Int?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
-    snackString(getAppString(r), activity, clipboard)
+fun snackString(r: Int, activity: Activity? = null, clipboard: String? = null): Snackbar? {
+    return snackString(getAppString(r), activity, clipboard)
 }
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :

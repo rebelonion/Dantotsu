@@ -137,8 +137,7 @@ class CommentItem(val comment: Comment,
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
         viewBinding.commentDelete.setOnClickListener {
             dialogBuilder(getAppString(R.string.delete_comment), getAppString(R.string.delete_comment_confirm)) {
-                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-                scope.launch {
+                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
                     val success = CommentsAPI.deleteComment(comment.commentId)
                     if (success) {
                         snackString(R.string.comment_deleted)
@@ -148,23 +147,26 @@ class CommentItem(val comment: Comment,
             }
         }
         viewBinding.commentBanUser.setOnClickListener {
-            dialogBuilder("Ban User", "Are you sure you want to ban this user?") {
-                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-                scope.launch {
+            dialogBuilder(getAppString(R.string.ban_user), getAppString(R.string.ban_user_confirm)) {
+                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
                     val success = CommentsAPI.banUser(comment.userId)
                     if (success) {
-                        snackString("User Banned")
+                        snackString(R.string.user_banned)
                     }
                 }
             }
         }
         viewBinding.commentReport.setOnClickListener {
-            dialogBuilder("Report Comment", "Only report comments that violate the rules. Are you sure you want to report this comment?") {
-                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-                scope.launch {
-                    val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsFragment.mediaName, comment.userId)
+            dialogBuilder(getAppString(R.string.report_comment), getAppString(R.string.report_comment_confirm)) {
+                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
+                    val success = CommentsAPI.reportComment(
+                        comment.commentId,
+                        comment.username,
+                        commentsFragment.mediaName,
+                        comment.userId
+                    )
                     if (success) {
-                        snackString("Comment Reported")
+                        snackString(R.string.comment_reported)
                     }
                 }
             }
@@ -280,6 +282,7 @@ class CommentItem(val comment: Comment,
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun formatTimestamp(timestamp: String): String {
         return try {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
