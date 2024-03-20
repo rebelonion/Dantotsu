@@ -2,4 +2,6 @@
 <lint>
   <issue id="InlinedApi" severity="error" />
   <issue id="NewApi" severity="error" />
+  <issue id="SetTextI18n" severity="error" />
+  <issue id="HardcodedText" severity="error" />
 </lint>
