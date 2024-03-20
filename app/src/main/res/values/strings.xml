@@ -393,7 +393,6 @@
     <string name="subscriptions_info">Amount of time for Dantotsu to periodically check for new Episodes/Chapters\n(Less time will cause more battery consumption)</string>
     <string name="do_not_update">Don\'t Update</string>
     <string name="loading_next_chap">Loading Next Chapter</string>
-    <string name="grid">Grid</string>
     <string name="sort_by_release_date">Sort by Release Date</string>
     <string name="crop_borders">Crop Borders</string>
     <string name="note">NOTE</string>
@@ -491,8 +490,9 @@
     <string name="read_on_dantotsu">Read on Dantotsu</string>
     <string name="watch_on_dantotsu">Watch on Dantotsu</string>
     <string name="view_profile_in_dantotsu">View Profile in Dantotsu</string>
-    <string name="continue_episode">"Continue : Episode "</string>
-    <string name="continue_chapter">"Continue : "</string>
+    <string name="continue_episode">Continue : Episode %1$s%2$s\n%3$s</string>
+    <string name="filler_tag"> - Filler</string>
+    <string name="continue_chapter">Continue : </string>
     <string name="episode">"Episode "</string>
     <string name="episode_num">"Episode %1$s"</string>
     <string name="chapter">"Chapter "</string>
@@ -729,4 +729,14 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="report_comment">Report Comment</string>
     <string name="report_comment_confirm">Only report comments that violate the rules. Are you sure you want to report this comment?</string>
     <string name="comment_reported">Comment Reported</string>
+
+    <string name="list">List</string>
+    <string name="grid">Grid</string>
+    <string name="compact">Compact</string>
+
+    <string name="webview_not_installed">WebView not installed</string>
+
+    <string name="video_quality">Quality: %1$dp</string>
+    <string name="size_unknown">Unknown Size</string>
+    <string name="mb_size">%1$s MB</string>
 </resources>

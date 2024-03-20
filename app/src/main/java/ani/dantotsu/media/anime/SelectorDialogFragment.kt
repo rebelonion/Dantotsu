@@ -302,7 +302,6 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             )
         }
 
-        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: UrlViewHolder, position: Int) {
             val binding = holder.binding
             val video = extractor.videos[position]
@@ -402,11 +401,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             }
             if (video.format == VideoType.CONTAINER) {
                 binding.urlSize.visibility = if (video.size != null) View.VISIBLE else View.GONE
-                binding.urlSize.text =
-                        // if video size is null or 0, show "Unknown Size" else show the size in MB
-                    (if (video.extraNote != null) " : " else "") + (if (video.size == 0.0) "Unknown Size" else (DecimalFormat(
-                        "#.##"
-                    ).format(video.size ?: 0).toString() + " MB"))
+                // if video size is null or 0, show "Unknown Size" else show the size in MB
+                val sizeText = getString(R.string.mb_size, "${if (video.extraNote != null) " : " else ""}${
+                    if (video.size == 0.0) getString(R.string.size_unknown) else DecimalFormat("#.##").format(video.size ?: 0)
+                }")
+                binding.urlSize.text = sizeText
             }
             binding.urlNote.visibility = View.VISIBLE
             binding.urlNote.text = video.format.name

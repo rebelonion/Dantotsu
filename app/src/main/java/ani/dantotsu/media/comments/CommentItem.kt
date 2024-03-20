@@ -308,6 +308,7 @@ class CommentItem(val comment: Comment,
     }
 
     companion object {
+        @SuppressLint("SimpleDateFormat")
         fun timestampToMillis(timestamp: String): Long {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")
