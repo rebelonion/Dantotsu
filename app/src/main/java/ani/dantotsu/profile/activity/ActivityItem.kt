@@ -39,7 +39,6 @@ class ActivityItem(
     private lateinit var binding: ItemActivityBinding
     private lateinit var repliesAdapter: GroupieAdapter
 
-    @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemActivityBinding, position: Int) {
         binding = viewBinding
         setAnimation(binding.root.context, binding.root)
@@ -73,13 +72,13 @@ class ActivityItem(
                     } ?: emptyList()
                     repliesAdapter.addAll(replyItems)
                     binding.activityReplies.visibility = View.VISIBLE
-                    binding.commentTotalReplies.text = "Hide replies"
+                    binding.commentTotalReplies.setText(R.string.hide_replies)
                 }
 
                 else -> {
                     repliesAdapter.clear()
                     binding.activityReplies.visibility = View.GONE
-                    binding.commentTotalReplies.text = "View replies"
+                    binding.commentTotalReplies.setText(R.string.view_replies)
 
                 }
             }
@@ -127,7 +126,9 @@ class ActivityItem(
                 binding.activityContent.visibility = View.GONE
                 binding.activityBannerContainer.visibility = View.VISIBLE
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
-                binding.activityText.text = "${activity.user!!.name} ${activity.status} ${activity.progress ?: activity.media?.title?.userPreferred}"
+                val activityText = "${activity.user!!.name} ${activity.status} ${activity.progress 
+                    ?: activity.media?.title?.userPreferred}"
+                binding.activityText.text = activityText
                 binding.activityCover.loadImage(cover)
                 blurImage(binding.activityBannerImage, banner ?: cover)
                 binding.activityAvatarContainer.setOnClickListener {

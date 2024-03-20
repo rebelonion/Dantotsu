@@ -110,7 +110,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 @UnstableApi
-@SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+@SuppressLint("ClickableViewAccessibility")
 class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityListener {
 
     private val resumeWindow = "resumeWindow"
@@ -703,11 +703,13 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         fun seek(forward: Boolean, event: MotionEvent? = null) {
             val seekTime = PrefManager.getVal<Int>(PrefName.SeekTime)
             val (card, text) = if (forward) {
-                forwardText.text = "+${seekTime * ++seekTimesF}"
+                val text = "+${seekTime * ++seekTimesF}"
+                forwardText.text = text
                 handler.post { exoPlayer.seekTo(exoPlayer.currentPosition + seekTime * 1000) }
                 fastForwardCard to forwardText
             } else {
-                rewindText.text = "-${seekTime * ++seekTimesR}"
+                val text = "-${seekTime * ++seekTimesR}"
+                rewindText.text = text
                 handler.post { exoPlayer.seekTo(exoPlayer.currentPosition - seekTime * 1000) }
                 fastRewindCard to rewindText
             }
@@ -1659,7 +1661,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         aspectRatio = Rational(width, height)
 
-        videoInfo.text = "Quality: ${height}p"
+        videoInfo.text = getString(R.string.video_quality, height)
 
         if (exoPlayer.duration < playbackPosition)
             exoPlayer.seekTo(0)

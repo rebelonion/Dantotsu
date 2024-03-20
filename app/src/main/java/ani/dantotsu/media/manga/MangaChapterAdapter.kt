@@ -262,7 +262,6 @@ class MangaChapterAdapter(
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is ChapterCompactViewHolder -> {

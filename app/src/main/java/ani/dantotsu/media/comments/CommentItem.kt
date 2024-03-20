@@ -11,6 +11,7 @@ import ani.dantotsu.connections.comments.Comment
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ItemCommentsBinding
+import ani.dantotsu.getAppString
 import ani.dantotsu.loadImage
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
@@ -52,7 +53,6 @@ class CommentItem(val comment: Comment,
         adapter.add(repliesSection)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
         binding = viewBinding
         setAnimation(binding.root.context, binding.root)
@@ -76,8 +76,15 @@ class CommentItem(val comment: Comment,
         if ((comment.replyCount ?: 0) > 0) {
             viewBinding.commentTotalReplies.visibility = View.VISIBLE
             viewBinding.commentRepliesDivider.visibility = View.VISIBLE
-            viewBinding.commentTotalReplies.text = if(repliesVisible) "Hide Replies" else
-                "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
+            viewBinding.commentTotalReplies.context.run {
+                viewBinding.commentTotalReplies.text = if (repliesVisible)
+                    getString(R.string.hide_replies)
+                else
+                    if (comment.replyCount == 1)
+                        getString(R.string.view_reply)
+                    else
+                        getString(R.string.view_replies_count, comment.replyCount)
+            }
         } else {
             viewBinding.commentTotalReplies.visibility = View.GONE
             viewBinding.commentRepliesDivider.visibility = View.GONE
@@ -87,10 +94,15 @@ class CommentItem(val comment: Comment,
             if (repliesVisible) {
                 repliesSection.clear()
                 removeSubCommentIds()
-                viewBinding.commentTotalReplies.text = "View ${comment.replyCount} repl${if (comment.replyCount == 1) "y" else "ies"}"
+                viewBinding.commentTotalReplies.context.run {
+                    viewBinding.commentTotalReplies.text = if (comment.replyCount == 1)
+                        getString(R.string.view_reply)
+                    else
+                        getString(R.string.view_replies_count, comment.replyCount)
+                }
                 repliesVisible = false
             } else {
-                viewBinding.commentTotalReplies.text = "Hide Replies"
+                viewBinding.commentTotalReplies.setText(R.string.hide_replies)
                 repliesSection.clear()
                 commentsFragment.viewReplyCallback(this)
                 repliesVisible = true
@@ -128,35 +140,37 @@ class CommentItem(val comment: Comment,
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
         viewBinding.commentDelete.setOnClickListener {
-            dialogBuilder("Delete Comment", "Are you sure you want to delete this comment?") {
-                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-                scope.launch {
+            dialogBuilder(getAppString(R.string.delete_comment), getAppString(R.string.delete_comment_confirm)) {
+                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
                     val success = CommentsAPI.deleteComment(comment.commentId)
                     if (success) {
-                        snackString("Comment Deleted")
+                        snackString(R.string.comment_deleted)
                         parentSection.remove(this@CommentItem)
                     }
                 }
             }
         }
         viewBinding.commentBanUser.setOnClickListener {
-            dialogBuilder("Ban User", "Are you sure you want to ban this user?") {
-                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-                scope.launch {
+            dialogBuilder(getAppString(R.string.ban_user), getAppString(R.string.ban_user_confirm)) {
+                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
                     val success = CommentsAPI.banUser(comment.userId)
                     if (success) {
-                        snackString("User Banned")
+                        snackString(R.string.user_banned)
                     }
                 }
             }
         }
         viewBinding.commentReport.setOnClickListener {
-            dialogBuilder("Report Comment", "Only report comments that violate the rules. Are you sure you want to report this comment?") {
-                val scope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-                scope.launch {
-                    val success = CommentsAPI.reportComment(comment.commentId, comment.username, commentsFragment.mediaName, comment.userId)
+            dialogBuilder(getAppString(R.string.report_comment), getAppString(R.string.report_comment_confirm)) {
+                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
+                    val success = CommentsAPI.reportComment(
+                        comment.commentId,
+                        comment.username,
+                        commentsFragment.mediaName,
+                        comment.userId
+                    )
                     if (success) {
-                        snackString("Comment Reported")
+                        snackString(R.string.comment_reported)
                     }
                 }
             }
@@ -210,7 +224,8 @@ class CommentItem(val comment: Comment,
         }
         comment.profilePictureUrl?.let { viewBinding.commentUserAvatar.loadImage(it) }
         viewBinding.commentUserName.text = comment.username
-        viewBinding.commentUserLevel.text = "[${levelColor.second}]"
+        val userColor = "[${levelColor.second}]"
+        viewBinding.commentUserLevel.text = userColor
         viewBinding.commentUserLevel.setTextColor(levelColor.first)
         viewBinding.commentUserTime.text = formatTimestamp(comment.timestamp)
     }
@@ -272,6 +287,7 @@ class CommentItem(val comment: Comment,
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun formatTimestamp(timestamp: String): String {
         return try {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
@@ -297,6 +313,7 @@ class CommentItem(val comment: Comment,
     }
 
     companion object {
+        @SuppressLint("SimpleDateFormat")
         fun timestampToMillis(timestamp: String): Long {
             val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             dateFormat.timeZone = TimeZone.getTimeZone("UTC")

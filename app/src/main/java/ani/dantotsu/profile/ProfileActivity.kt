@@ -49,7 +49,6 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
     private var selected: Int = 0
     private lateinit var navBar: AnimatedBottomBar
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -113,20 +112,30 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 val userLevel = intent.getStringExtra("userLVL") ?: ""
                 binding.followButton.visibility =
                     if (user.id == Anilist.userid || Anilist.userid == null) View.GONE else View.VISIBLE
-                binding.followButton.text =
-                    if (user.isFollowing) "Unfollow" else if (user.isFollower) "Follows you" else "Follow"
-                if (user.isFollowing && user.isFollower) binding.followButton.text = "Mutual"
+                binding.followButton.text = getString(
+                    when {
+                        user.isFollowing -> R.string.unfollow
+                        user.isFollower -> R.string.follows_you
+                        else -> R.string.follow
+                    }
+                )
+                if (user.isFollowing && user.isFollower) binding.followButton.text = getString(R.string.mutual)
                 binding.followButton.setOnClickListener {
                     lifecycleScope.launch(Dispatchers.IO) {
                         val res = Anilist.query.toggleFollow(user.id)
                         if (res?.data?.toggleFollow != null) {
                             withContext(Dispatchers.Main) {
-                                snackString("Success")
+                                snackString(R.string.success)
                                 user.isFollowing = res.data.toggleFollow.isFollowing
-                                binding.followButton.text =
-                                    if (user.isFollowing) "Unfollow" else if (user.isFollower) "Follows you" else "Follow"
-                                if (user.isFollowing && user.isFollower) binding.followButton.text =
-                                    "Mutual"
+                                binding.followButton.text = getString(
+                                    when {
+                                        user.isFollowing -> R.string.unfollow
+                                        user.isFollower -> R.string.follows_you
+                                        else -> R.string.follow
+                                    }
+                                )
+                                if (user.isFollowing && user.isFollower)
+                                    binding.followButton.text = getString(R.string.mutual)
                             }
                         }
                     }
@@ -180,7 +189,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     )
                 }
 
-                binding.profileUserName.text = "${user.name} $userLevel"
+                val userLevelText = "${user.name} $userLevel"
+                binding.profileUserName.text = userLevelText
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.profileBannerImage.pause()
                 blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
@@ -204,7 +214,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     ContextCompat.startActivity(
                         this@ProfileActivity,
                         Intent(this@ProfileActivity, FollowActivity::class.java)
-                            .putExtra("title", "Followers")
+                            .putExtra("title", getString(R.string.followers))
                             .putExtra("userId", user.id),
                         null
                     )

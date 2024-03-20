@@ -56,7 +56,6 @@ class AnimeWatchAdapter(
     private var nestedDialog: AlertDialog? = null
 
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         _binding = binding
@@ -219,9 +218,9 @@ class AnimeWatchAdapter(
                 else -> dialogBinding.animeSourceList
             }
             when (style) {
-                0 -> dialogBinding.layoutText.text = "List"
-                1 -> dialogBinding.layoutText.text = "Grid"
-                2 -> dialogBinding.layoutText.text = "Compact"
+                0 -> dialogBinding.layoutText.setText(R.string.list)
+                1 -> dialogBinding.layoutText.setText(R.string.grid)
+                2 -> dialogBinding.layoutText.setText(R.string.compact)
                 else -> dialogBinding.animeSourceList
             }
             selected.alpha = 1f
@@ -233,24 +232,24 @@ class AnimeWatchAdapter(
             dialogBinding.animeSourceList.setOnClickListener {
                 selected(it as ImageButton)
                 style = 0
-                dialogBinding.layoutText.text = "List"
+                dialogBinding.layoutText.setText(R.string.list)
                 run = true
             }
             dialogBinding.animeSourceGrid.setOnClickListener {
                 selected(it as ImageButton)
                 style = 1
-                dialogBinding.layoutText.text = "Grid"
+                dialogBinding.layoutText.setText(R.string.grid)
                 run = true
             }
             dialogBinding.animeSourceCompact.setOnClickListener {
                 selected(it as ImageButton)
                 style = 2
-                dialogBinding.layoutText.text = "Compact"
+                dialogBinding.layoutText.setText(R.string.compact)
                 run = true
             }
             dialogBinding.animeWebviewContainer.setOnClickListener {
                 if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
-                    toast("WebView not installed")
+                    toast(R.string.webview_not_installed)
                 }
                 //start CookieCatcher activity
                 if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
@@ -303,7 +302,6 @@ class AnimeWatchAdapter(
     }
 
     //Chips
-    @SuppressLint("SetTextI18n")
     fun updateChips(limit: Int, names: Array<String>, arr: Array<Int>, selected: Int = 0) {
         val binding = _binding
         if (binding != null) {
@@ -325,7 +323,8 @@ class AnimeWatchAdapter(
                         0
                     )
                 }
-                chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
+                val chipText = "${names[limit * (position)]} - ${names[last - 1]}"
+                chip.text = chipText
                 chip.setTextColor(
                     ContextCompat.getColorStateList(
                         fragment.requireContext(),
@@ -359,7 +358,6 @@ class AnimeWatchAdapter(
         _binding?.animeSourceChipGroup?.removeAllViews()
     }
 
-    @SuppressLint("SetTextI18n")
     fun handleEpisodes() {
         val binding = _binding
         if (binding != null) {
@@ -367,9 +365,9 @@ class AnimeWatchAdapter(
                 val episodes = media.anime.episodes!!.keys.toTypedArray()
 
                 val anilistEp = (media.userProgress ?: 0).plus(1)
-                val appEp =
-                    PrefManager.getCustomVal<String?>("${media.id}_current_ep", "")?.toIntOrNull()
-                        ?: 1
+                val appEp = PrefManager.getCustomVal<String?>(
+                    "${media.id}_current_ep", ""
+                )?.toIntOrNull() ?: 1
 
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
                 if (episodes.contains(continueEp)) {
@@ -405,15 +403,19 @@ class AnimeWatchAdapter(
                         ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
                     )
                     if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
+
                     binding.animeSourceContinueText.text =
-                        currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${"\n$cleanedTitle"}"
+                        currActivity()!!.getString(R.string.continue_episode, ep.number, if (ep.filler)
+                            currActivity()!!.getString(R.string.filler_tag)
+                        else
+                            "", cleanedTitle)
                     binding.animeSourceContinue.setOnClickListener {
                         fragment.onEpisodeClick(continueEp)
                     }
                     if (fragment.continueEp) {
-                        if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight < PrefManager.getVal<Float>(
-                                PrefName.WatchPercentage
-                            )
+                        if (
+                            (binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams)
+                                .weight < PrefManager.getVal<Float>(PrefName.WatchPercentage)
                         ) {
                             binding.animeSourceContinue.performClick()
                             fragment.continueEp = false

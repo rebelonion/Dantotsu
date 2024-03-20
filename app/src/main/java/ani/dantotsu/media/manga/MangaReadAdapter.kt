@@ -60,7 +60,6 @@ class MangaReadAdapter(
 
     private var nestedDialog: AlertDialog? = null
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         _binding = binding
@@ -188,8 +187,8 @@ class MangaReadAdapter(
                 else -> dialogBinding.animeSourceList
             }
             when (style) {
-                0 -> dialogBinding.layoutText.text = "List"
-                1 -> dialogBinding.layoutText.text = "Compact"
+                0 -> dialogBinding.layoutText.setText(R.string.list)
+                1 -> dialogBinding.layoutText.setText(R.string.compact)
                 else -> dialogBinding.animeSourceList
             }
             selected.alpha = 1f
@@ -201,18 +200,18 @@ class MangaReadAdapter(
             dialogBinding.animeSourceList.setOnClickListener {
                 selected(it as ImageButton)
                 style = 0
-                dialogBinding.layoutText.text = "List"
+                dialogBinding.layoutText.setText(R.string.list)
                 run = true
             }
             dialogBinding.animeSourceCompact.setOnClickListener {
                 selected(it as ImageButton)
                 style = 1
-                dialogBinding.layoutText.text = "Compact"
+                dialogBinding.layoutText.setText(R.string.compact)
                 run = true
             }
             dialogBinding.animeWebviewContainer.setOnClickListener {
                 if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
-                    toast("WebView not installed")
+                    toast(R.string.webview_not_installed)
                 }
                 //start CookieCatcher activity
                 if (mangaReadSources.names.isNotEmpty() && source in 0 until mangaReadSources.names.size) {
@@ -358,7 +357,6 @@ class MangaReadAdapter(
     }
 
     //Chips
-    @SuppressLint("SetTextI18n")
     fun updateChips(limit: Int, names: Array<String>, arr: Array<Int>, selected: Int = 0) {
         val binding = _binding
         if (binding != null) {
@@ -394,7 +392,8 @@ class MangaReadAdapter(
                     names[last - 1]
                 }
                 //chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
-                chip.text = "$startChapterString - $endChapterString"
+                val chipText = "$startChapterString - $endChapterString"
+                chip.text = chipText
                 chip.setTextColor(
                     ContextCompat.getColorStateList(
                         fragment.requireContext(),
@@ -428,7 +427,6 @@ class MangaReadAdapter(
         _binding?.animeSourceChipGroup?.removeAllViews()
     }
 
-    @SuppressLint("SetTextI18n")
     fun handleChapters() {
 
         val binding = _binding
@@ -465,7 +463,7 @@ class MangaReadAdapter(
                     val ep = media.manga.chapters!![continueEp]!!
                     binding.itemEpisodeImage.loadImage(media.banner ?: media.cover)
                     binding.animeSourceContinueText.text =
-                        currActivity()!!.getString(R.string.continue_chapter) + "${ep.number}${if (!ep.title.isNullOrEmpty()) "\n${ep.title}" else ""}"
+                        currActivity()!!.getString(R.string.continue_chapter, ep.number, if (!ep.title.isNullOrEmpty()) ep.title else "")
                     binding.animeSourceContinue.setOnClickListener {
                         fragment.onMangaChapterClick(continueEp)
                     }

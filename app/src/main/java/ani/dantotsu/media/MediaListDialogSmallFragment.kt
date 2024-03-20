@@ -54,7 +54,6 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
     }
 
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.mediaListContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
         val scope = viewLifecycleOwner.lifecycleScope
@@ -68,7 +67,7 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
                             MAL.query.deleteList(media.anime != null, media.idMAL)
                         } catch (e: Exception) {
                             withContext(Dispatchers.Main) {
-                                snackString("Failed to delete because of... ${e.message}")
+                                snackString(getString(R.string.delete_fail_reason, e.message))
                             }
                             return@withContext
                         }
@@ -154,7 +153,10 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
             val init =
                 if (binding.mediaListProgress.text.toString() != "") binding.mediaListProgress.text.toString()
                     .toInt() else 0
-            if (init < (total ?: 5000)) binding.mediaListProgress.setText((init + 1).toString())
+            if (init < (total ?: 5000)) {
+                val progressText = "${init + 1}"
+                binding.mediaListProgress.setText(progressText)
+            }
             if (init + 1 == (total ?: 5000)) {
                 binding.mediaListStatus.setText(statusStrings[2], false)
             }

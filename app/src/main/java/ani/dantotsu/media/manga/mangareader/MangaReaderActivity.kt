@@ -70,7 +70,6 @@ import java.util.*
 import kotlin.math.min
 import kotlin.properties.Delegates
 
-@SuppressLint("SetTextI18n")
 class MangaReaderActivity : AppCompatActivity() {
     private val mangaCache = Injekt.get<MangaCache>()
 

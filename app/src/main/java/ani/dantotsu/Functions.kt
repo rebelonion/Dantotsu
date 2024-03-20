@@ -401,7 +401,6 @@ class InputFilterMinMax(
         return ""
     }
 
-    @SuppressLint("SetTextI18n")
     private fun isInRange(a: Double, b: Double, c: Double): Boolean {
         val statusStrings = currContext()!!.resources.getStringArray(R.array.status_manga)[2]
 
@@ -904,9 +903,9 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
     }
 }
 
-@SuppressLint("SetTextI18n")
 fun countDown(media: Media, view: ViewGroup) {
-    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
+    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null
+        && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
         val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
         view.addView(v.root, 0)
         v.mediaCountdownText.text =
@@ -1007,6 +1006,10 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
     inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
 
+fun getAppString(res: Int): String {
+    return App.instance?.getString(res) ?: ""
+}
+
 fun toast(string: String?) {
     if (string != null) {
         Logger.log(string)
@@ -1015,6 +1018,10 @@ fun toast(string: String?) {
                 .show()
         }
     }
+}
+
+fun toast(res: Int) {
+    toast(getAppString(res))
 }
 
 fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
@@ -1055,6 +1062,10 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
         Injekt.get<CrashlyticsInterface>().logException(e)
     }
     return null
+}
+
+fun snackString(r: Int, activity: Activity? = null, clipboard: String? = null): Snackbar? {
+    return snackString(getAppString(r), activity, clipboard)
 }
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :
