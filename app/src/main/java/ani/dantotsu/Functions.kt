@@ -1013,6 +1013,10 @@ fun toast(string: String?) {
     }
 }
 
+fun toast(res: Int) {
+    toast(getAppString(res))
+}
+
 fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
     try { //I have no idea why this sometimes crashes for some people...
         if (s != null) {

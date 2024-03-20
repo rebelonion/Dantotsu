@@ -253,7 +253,7 @@ class AnimeWatchAdapter(
             }
             dialogBinding.animeWebviewContainer.setOnClickListener {
                 if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
-                    toast("WebView not installed")
+                    toast(R.string.webview_not_installed)
                 }
                 //start CookieCatcher activity
                 if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {

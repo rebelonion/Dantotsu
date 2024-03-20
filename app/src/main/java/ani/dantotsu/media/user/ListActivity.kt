@@ -33,7 +33,6 @@ class ListActivity : AppCompatActivity() {
     private val scope = lifecycleScope
     private var selectedTabIdx = 0
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -83,8 +82,8 @@ class ListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val anime = intent.getBooleanExtra("anime", true)
-        binding.listTitle.text =
-            intent.getStringExtra("username") + "'s " + (if (anime) "Anime" else "Manga") + " List"
+        binding.listTitle.text = getString(R.string.user_list, intent.getStringExtra("username"),
+            if (anime) getString(R.string.anime) else getString(R.string.manga))
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@ListActivity.selectedTabIdx = tab?.position ?: 0

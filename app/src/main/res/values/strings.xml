@@ -493,13 +493,14 @@
     <string name="view_profile_in_dantotsu">View Profile in Dantotsu</string>
     <string name="continue_episode">Continue : Episode %1$s%2$s\n%3$s</string>
     <string name="filler_tag"> - Filler</string>
-    <string name="continue_chapter">Continue : </string>
+    <string name="continue_chapter">Continue : %1$s\n%2$s</string>
     <string name="episode">"Episode "</string>
     <string name="episode_num">"Episode %1$s"</string>
     <string name="chapter">"Chapter "</string>
     <string name="chapter_num">"Chapter %1$s"</string>
     <string name="just_released">- just got released!</string>
     <string name="checking_subscriptions_title">Checking Subscriptions</string>
+    <string name="user_list">%1$s\'s %2$s List</string>
 
     <string name="speed">Speed</string>
     <string name="auto_update">Auto Update progress for %1$s?</string>
