@@ -202,12 +202,12 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
 
         val extensionIconImageView: ImageView = binding.extensionIconImageView
 
-        @SuppressLint("SetTextI18n")
         fun bind(extension: AnimeExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""
             val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
             binding.extensionNameTextView.text = extension.name
-            binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
+            val versionText = "$lang ${extension.versionName} $nsfw"
+            binding.extensionVersionTextView.text = versionText
         }
 
         fun clear() {

@@ -29,7 +29,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 class ExtensionsActivity : AppCompatActivity() {
     lateinit var binding: ActivityExtensionsBinding
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
