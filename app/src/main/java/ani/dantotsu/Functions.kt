@@ -394,7 +394,6 @@ class InputFilterMinMax(
         return ""
     }
 
-    @SuppressLint("SetTextI18n")
     private fun isInRange(a: Double, b: Double, c: Double): Boolean {
         val statusStrings = currContext()!!.resources.getStringArray(R.array.status_manga)[2]
 
@@ -897,9 +896,9 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
     }
 }
 
-@SuppressLint("SetTextI18n")
 fun countDown(media: Media, view: ViewGroup) {
-    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
+    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null
+        && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
         val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
         view.addView(v.root, 0)
         v.mediaCountdownText.text =

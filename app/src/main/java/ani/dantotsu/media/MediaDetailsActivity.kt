@@ -75,7 +75,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     var anime = true
     private var adult = false
 
-    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var media: Media = intent.getSerialized("media") ?: mediaSingleton ?: emptyMedia()
@@ -83,8 +83,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         if (id != -1) {
             runBlocking {
                 withContext(Dispatchers.IO) {
-                    media =
-                        Anilist.query.getMedia(id, false) ?: emptyMedia()
+                    media = Anilist.query.getMedia(id, false) ?: emptyMedia()
                 }
             }
         }
@@ -157,9 +156,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         binding.mediaCoverImage.loadImage(media.cover)
         binding.mediaCoverImage.setOnLongClickListener {
+            val coverTitle = "${media.userPreferredName}[Cover]"
             ImageViewDialog.newInstance(
                 this,
-                media.userPreferredName + "[Cover]",
+                coverTitle,
                 media.cover
             )
         }
@@ -176,9 +176,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
 
             override fun onLongClick(event: MotionEvent) {
+                val bannerTitle = "${media.userPreferredName}[Banner]"
                 ImageViewDialog.newInstance(
                     this@MediaDetailsActivity,
-                    media.userPreferredName + "[Banner]",
+                    bannerTitle,
                     media.banner ?: media.cover
                 )
                 banner.performClick()
@@ -186,7 +187,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         })
         banner.setOnTouchListener { _, motionEvent -> gestureDetector.onTouchEvent(motionEvent);true }
         if (PrefManager.getVal(PrefName.Incognito)) {
-            binding.mediaTitle.text = "    ${media.userPreferredName}"
+            val mediaTitle = "    ${media.userPreferredName}"
+            binding.mediaTitle.text = mediaTitle
             binding.incognito.visibility = View.VISIBLE
         } else {
             binding.mediaTitle.text = media.userPreferredName

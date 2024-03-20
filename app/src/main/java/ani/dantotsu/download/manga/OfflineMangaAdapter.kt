@@ -37,7 +37,6 @@ class OfflineMangaAdapter(
         return position.toLong()
     }
 
-    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
         val view: View = convertView ?: when (style) {
@@ -60,14 +59,14 @@ class OfflineMangaAdapter(
         if (style == 0) {
             val bannerView = view.findViewById<ImageView>(R.id.itemCompactBanner) // for large view
             val chapters = view.findViewById<TextView>(R.id.itemTotal)
-            chapters.text = " Chapters"
+            chapters.text = context.getString(R.string.chapters)
             bannerView.setImageURI(item.banner)
             totalChapter.text = item.totalChapter
         } else if (style == 1) {
             val readChapter =
                 view.findViewById<TextView>(R.id.itemCompactUserProgress) // for compact view
             readChapter.text = item.readChapter
-            totalChapter.text = " | " + item.totalChapter
+            totalChapter.text = context.getString(R.string.total_divider, item.totalChapter)
         }
 
         // Bind item data to the views

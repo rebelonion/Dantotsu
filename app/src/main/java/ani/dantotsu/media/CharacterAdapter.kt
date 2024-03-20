@@ -24,12 +24,12 @@ class CharacterAdapter(
         return CharacterViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         val binding = holder.binding
         setAnimation(binding.root.context, holder.binding.root)
         val character = characterList[position]
-        binding.itemCompactRelation.text = character.role + "  "
+        val whitespace = "${character.role}  "
+        binding.itemCompactRelation.text = whitespace
         binding.itemCompactImage.loadImage(character.image)
         binding.itemCompactTitle.text = character.name
     }

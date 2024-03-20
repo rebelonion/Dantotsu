@@ -34,7 +34,6 @@ class CalendarActivity : AppCompatActivity() {
     private var selectedTabIdx = 1
     private val model: OtherDetailsViewModel by viewModels()
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

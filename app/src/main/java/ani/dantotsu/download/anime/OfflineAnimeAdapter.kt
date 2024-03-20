@@ -1,7 +1,6 @@
 package ani.dantotsu.download.anime
 
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -38,7 +37,6 @@ class OfflineAnimeAdapter(
         return position.toLong()
     }
 
-    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
         val view: View = convertView ?: when (style) {
@@ -61,14 +59,14 @@ class OfflineAnimeAdapter(
         if (style == 0) {
             val bannerView = view.findViewById<ImageView>(R.id.itemCompactBanner) // for large view
             val episodes = view.findViewById<TextView>(R.id.itemTotal)
-            episodes.text = " Episodes"
+            episodes.text = context.getString(R.string.episodes)
             bannerView.setImageURI(item.banner)
             totalepisodes.text = item.totalEpisodeList
         } else if (style == 1) {
             val watchedEpisodes =
                 view.findViewById<TextView>(R.id.itemCompactUserProgress) // for compact view
             watchedEpisodes.text = item.watchedEpisode
-            totalepisodes.text = " | " + item.totalEpisode
+            totalepisodes.text = context.getString(R.string.total_divider, item.totalEpisode)
         }
 
         // Bind item data to the views
