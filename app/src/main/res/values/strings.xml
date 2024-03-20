@@ -17,6 +17,7 @@
     <string name="browse_anime">Browse Anime</string>
     <string name="manga">Manga</string>
     <string name="browse_manga">Browse Manga</string>
+    <string name="novels">Novels</string>
     <string name="info">Info</string>
     <string name="watch">Watch</string>
     <string name="read">Read</string>
@@ -658,7 +659,7 @@
     <string name="app_widget_description">This is an app widget description</string>
     <string name="airing_image">Airing Image</string>
     <string name="anime_downloads">animeDownloads</string>
-    <string name="purge_anime_downloads">Delete all anime downloads</string>
+    <string name="purge_anime_downloads">Delete all Anime downloads</string>
     <string name="purge_manga_downloads">Delete all Manga Downloads</string>
     <string name="purge_novel_downloads">Delete all Novel Downloads</string>
     <string name="requires_android_12">Requires Android 12+</string>
@@ -711,6 +712,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
     <string name="activities">Activities</string>
+
+    <string name="purge_confirm">Are you sure you want to purge all %1$s downloads?</string>
 
     <string name="delete_fail_reason">Failed to delete because of… %1$s</string>
 

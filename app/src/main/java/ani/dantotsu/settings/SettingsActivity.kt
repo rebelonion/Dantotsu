@@ -316,9 +316,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.purgeAnimeDownloads.setOnClickListener {
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Purge Anime Downloads")
-                .setMessage("Are you sure you want to purge all anime downloads?")
-                .setPositiveButton("Yes") { dialog, _ ->
+                .setTitle(R.string.purge_anime_downloads)
+                .setMessage(getString(R.string.purge_confirm, getString(R.string.anime)))
+                .setPositiveButton(R.string.yes) { dialog, _ ->
                     val downloadsManager = Injekt.get<DownloadsManager>()
                     downloadsManager.purgeDownloads(DownloadedType.Type.ANIME)
                     DownloadService.sendRemoveAllDownloads(
@@ -338,9 +338,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.purgeMangaDownloads.setOnClickListener {
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Purge Manga Downloads")
-                .setMessage("Are you sure you want to purge all manga downloads?")
-                .setPositiveButton("Yes") { dialog, _ ->
+                .setTitle(R.string.purge_manga_downloads)
+                .setMessage(getString(R.string.purge_confirm, getString(R.string.manga)))
+                .setPositiveButton(R.string.yes) { dialog, _ ->
                     val downloadsManager = Injekt.get<DownloadsManager>()
                     downloadsManager.purgeDownloads(DownloadedType.Type.MANGA)
                     dialog.dismiss()
@@ -355,9 +355,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         binding.purgeNovelDownloads.setOnClickListener {
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
-                .setTitle("Purge Novel Downloads")
-                .setMessage("Are you sure you want to purge all novel downloads?")
-                .setPositiveButton("Yes") { dialog, _ ->
+                .setTitle(R.string.purge_novel_downloads)
+                .setMessage(getString(R.string.purge_confirm, getString(R.string.novels)))
+                .setPositiveButton(R.string.yes) { dialog, _ ->
                     val downloadsManager = Injekt.get<DownloadsManager>()
                     downloadsManager.purgeDownloads(DownloadedType.Type.NOVEL)
                     dialog.dismiss()
