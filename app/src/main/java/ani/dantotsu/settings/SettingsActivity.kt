@@ -3,7 +3,6 @@ package ani.dantotsu.settings
 import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlertDialog
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
@@ -22,7 +21,6 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
@@ -114,7 +112,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     private var cursedCounter = 0
 
     @OptIn(UnstableApi::class)
-    @SuppressLint("SetTextI18n", "Recycle")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -347,9 +344,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             val themeString: String = PrefManager.getVal(PrefName.Theme)
-            themeSwitcher.setText(
-                themeString.substring(0, 1) + themeString.substring(1).lowercase()
-            )
+            val themeText = themeString.substring(0, 1) + themeString.substring(1).lowercase()
+            themeSwitcher.setText(themeText)
 
             themeSwitcher.setAdapter(
                 ArrayAdapter(
@@ -580,7 +576,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
                 editText.setText(PrefManager.getVal<String>(PrefName.DefaultUserAgent))
                 val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
-                    .setTitle("User Agent")
+                    .setTitle(R.string.user_agent)
                     .setView(dialogView)
                     .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                         PrefManager.setVal(PrefName.DefaultUserAgent, editText.text.toString())
@@ -645,13 +641,13 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     ) { _, which, isChecked ->
                         selectedArray[which] = isChecked
                     }
-                    .setPositiveButton("Import...") { dialog, _ ->
+                    .setPositiveButton(R.string.button_import) { dialog, _ ->
                         openDocumentLauncher.launch(arrayOf("*/*"))
                         dialog.dismiss()
                     }
-                    .setNegativeButton("Export...") { dialog, _ ->
+                    .setNegativeButton(R.string.button_export) { dialog, _ ->
                         if (!selectedArray.contains(true)) {
-                            toast("No location selected")
+                            toast(R.string.no_location_selected)
                             return@setNegativeButton
                         }
                         dialog.dismiss()
@@ -667,7 +663,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                                         password
                                     )
                                 } else {
-                                    toast("Password cannot be empty")
+                                    toast(R.string.password_cannot_be_empty)
                                 }
                             }
                         } else {
@@ -679,7 +675,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                             )
                         }
                     }
-                    .setNeutralButton("Cancel") { dialog, _ ->
+                    .setNeutralButton(R.string.cancel) { dialog, _ ->
                         dialog.dismiss()
                     }
                     .create()
@@ -877,9 +873,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsNotificationsUseAlarmManager.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
-                        .setTitle("Use Alarm Manager")
-                        .setMessage("Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.")
-                        .setPositiveButton("Use") { dialog, _ ->
+                        .setTitle(R.string.use_alarm_manager)
+                        .setMessage(R.string.use_alarm_manager_confirm)
+                        .setPositiveButton(R.string.use) { dialog, _ ->
                             PrefManager.setVal(PrefName.UseAlarmManager, true)
                             if (SDK_INT >= Build.VERSION_CODES.S) {
                                 if (!(getSystemService(Context.ALARM_SERVICE) as AlarmManager).canScheduleExactAlarms()) {
@@ -890,7 +886,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                             }
                             dialog.dismiss()
                         }
-                        .setNegativeButton("Cancel") { dialog, _ ->
+                        .setNegativeButton(R.string.cancel) { dialog, _ ->
                             settingsNotificationsCheckingSubscriptions.isChecked = false
                             PrefManager.setVal(PrefName.UseAlarmManager, false)
                             dialog.dismiss()
@@ -1022,18 +1018,17 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             runOnUiThread {
                 if (Random.nextInt(0, 100) > 69) {
                     CustomBottomDialog.newInstance().apply {
-                        title = "Enjoying the App?"
+                        title = getString(R.string.enjoying_app)
                         addView(TextView(this@SettingsActivity).apply {
-                            text =
-                                "Consider donating!"
+                            text = context.getString(R.string.consider_donating)
                         })
 
-                        setNegativeButton("no moners :(") {
-                            snackString("That's alright, you'll be a rich man soon :prayge:")
+                        setNegativeButton(getString(R.string.no_moners)) {
+                            snackString(R.string.you_be_rich)
                             dismiss()
                         }
 
-                        setPositiveButton("denote :)") {
+                        setPositiveButton(getString(R.string.donate)) {
                             binding.settingBuyMeCoffee.performClick()
                             dismiss()
                         }
@@ -1066,7 +1061,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         context.packageName
                     )!!.component
                 )
-            setAction("Do it!") {
+            setAction(getString(R.string.do_it)) {
                 context.startActivity(mainIntent)
                 Runtime.getRuntime().exit(0)
             }
@@ -1080,14 +1075,14 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         // Inflate the dialog layout
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_user_agent, null)
         val box = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
-        box?.hint = "Password"
+        box?.hint = getString(R.string.password)
         box?.setSingleLine()
 
         val dialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle(getString(R.string.enter_password))
             .setView(dialogView)
-            .setPositiveButton("OK", null)
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setPositiveButton(R.string.ok, null)
+            .setNegativeButton(R.string.cancel) { dialog, _ ->
                 password.fill('0')
                 dialog.dismiss()
                 callback(null)

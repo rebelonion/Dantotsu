@@ -394,7 +394,10 @@
         \n\n_It is not required to sync both MAL and Anilist accounts._
     </string>
     <string name="notification_for_checking_subscriptions">Show notification for Checking Subscriptions</string>
-    <string name="use_alarm_manager">Use Alarm Manager for reliable Notifications</string>
+    <string name="use_alarm_manager">Use Alarm Manager</string>
+    <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
+    <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
+    <string name="use">Use</string>
     <string name="checking_subscriptions">Notification for Checking Subscriptions</string>
     <string name="subscriptions_checking_time_s">Subscriptions Update Frequency : %1$s</string>
     <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
@@ -412,7 +415,7 @@
     <string name="long_click_to_check_update">You Long Click the button to check for App Update</string>
     <string name="saved_to_path">Saved to:\n%s</string>
     <string name="setting_progress">Setting progress to %1$d</string>
-    <string name="login_anilist_account">Please Login into anilist account!</string>
+    <string name="login_anilist_account">Please Login into AniList account!</string>
     <string name="congrats_vro">Congrats Vro</string>
     <string name="please_reload">Please Reload.</string>
     <string name="copied_text">Copied "%1$s"</string>
@@ -512,7 +515,7 @@
     <string name="speed">Speed</string>
     <string name="auto_update">Auto Update progress for %1$s?</string>
     <string name="continue_from">Continue from %1$s?</string>
-    <string name="title_update_progress">Update progress on anilist?</string>
+    <string name="title_update_progress">Update progress on AniList?</string>
     <string name="incognito_will_not_update">Incognito mode will still ignore progress.</string>
     <string name="dont_ask_again">"Don\'t ask again for %1$s"</string>
     <string name="default_speed">Default Speed</string>
@@ -788,4 +791,14 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="video_quality">Quality: %1$dp</string>
     <string name="size_unknown">Unknown Size</string>
     <string name="mb_size">%1$s MB</string>
+    <string name="button_import">Import…</string>
+    <string name="button_export">Export…</string>
+    <string name="no_location_selected">No location selected</string>
+    <string name="enjoying_app">Enjoying the App?</string>
+    <string name="consider_donating">Consider donating!</string>
+    <string name="no_moners">no moners :(</string>
+    <string name="you_be_rich">That\'s alright, you\'ll be a rich man soon :prayge:</string>
+    <string name="donate">donate :)</string>
+    <string name="do_it">Do it!</string>
+    <string name="password">Password</string>
 </resources>

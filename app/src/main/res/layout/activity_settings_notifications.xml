@@ -148,7 +148,7 @@
             android:elegantTextHeight="true"
             android:fontFamily="@font/poppins_bold"
             android:minHeight="64dp"
-            android:text="@string/use_alarm_manager"
+            android:text="@string/use_alarm_manager_reliable"
             android:textAlignment="viewStart"
             android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"
