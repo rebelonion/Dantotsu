@@ -21,6 +21,9 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSearchFilterBinding
 import ani.dantotsu.databinding.ItemChipBinding
 import com.google.android.material.chip.Chip
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class SearchFilterBottomDialog : BottomSheetDialogFragment() {
@@ -67,6 +70,29 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.sortByFilter.setImageResource(filterDrawable)
     }
 
+    private fun resetSearchFilter() {
+        activity.result.sort = null
+        binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_alt_24)
+        startBounceZoomAnimation(binding.sortByFilter)
+        selectedCountry = null
+        binding.countryFilter.setImageResource(R.drawable.ic_round_globe_search_googlefonts)
+        startBounceZoomAnimation(binding.countryFilter)
+
+        selectedGenres.clear()
+        exGenres.clear()
+        selectedTags.clear()
+        exTags.clear()
+        binding.searchStatus.setText("")
+        binding.searchFormat.setText("")
+        binding.searchSeason.setText("")
+        binding.searchYear.setText("")
+        binding.searchStatus.clearFocus()
+        binding.searchFormat.clearFocus()
+        binding.searchSeason.clearFocus()
+        binding.searchYear.clearFocus()
+        updateChips()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         activity = requireActivity() as SearchActivity
@@ -78,33 +104,41 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         setSortByFilterImage()
 
         binding.resetSearchFilter.setOnClickListener {
-            activity.result.sort = null
-            binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_alt_24)
-            startBounceZoomAnimation(binding.sortByFilter)
-
-            selectedCountry = null
-            binding.countryFilter.setImageResource(R.drawable.ic_round_globe_search_googlefonts)
-            startBounceZoomAnimation(binding.countryFilter)
-
             val rotateAnimation = ObjectAnimator.ofFloat(binding.resetSearchFilter, "rotation", 180f, 540f)
             rotateAnimation.duration = 500
             rotateAnimation.interpolator = AccelerateDecelerateInterpolator()
             rotateAnimation.start()
+            resetSearchFilter()
+        }
 
-            selectedGenres.clear()
-            exGenres.clear()
-            selectedTags.clear()
-            exTags.clear()
+        binding.resetSearchFilter.setOnLongClickListener {
+            val rotateAnimation = ObjectAnimator.ofFloat(binding.resetSearchFilter, "rotation", 180f, 540f)
+            rotateAnimation.duration = 500
+            rotateAnimation.interpolator = AccelerateDecelerateInterpolator()
+            rotateAnimation.start()
+            val bounceAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce_zoom)
 
-            binding.searchStatus.setText("")
-            binding.searchFormat.setText("")
-            binding.searchSeason.setText("")
-            binding.searchYear.setText("")
-            binding.searchStatus.clearFocus()
-            binding.searchFormat.clearFocus()
-            binding.searchSeason.clearFocus()
-            binding.searchYear.clearFocus()
-            updateChips()
+            binding.resetSearchFilter.startAnimation(bounceAnimation)
+            binding.resetSearchFilter.postDelayed({
+                resetSearchFilter()
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    activity.result.apply {
+                        format = binding.searchFormat.text.toString().ifBlank { null }
+                        season = binding.searchSeason.text.toString().ifBlank { null }
+                        seasonYear = binding.searchYear.text.toString().toIntOrNull()
+                        sort = activity.result.sort
+                        genres = selectedGenres
+                        tags = selectedTags
+                        excludedGenres = exGenres
+                        excludedTags = exTags
+                    }
+                    activity.updateChips.invoke()
+                    activity.search()
+                    dismiss()
+                }
+            }, 500)
+            true
         }
 
         binding.sortByFilter.setOnClickListener { view ->
