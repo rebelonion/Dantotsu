@@ -1,11 +1,15 @@
 package ani.dantotsu.media
 
+import android.animation.ObjectAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
+import android.widget.PopupMenu
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +28,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private lateinit var activity: SearchActivity
+    private var selectedCountry: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +43,29 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     private var exGenres = mutableListOf<String>()
     private var selectedTags = mutableListOf<String>()
     private var exTags = mutableListOf<String>()
+    private fun updateChips() {
+        binding.searchFilterGenres.adapter?.notifyDataSetChanged()
+        binding.searchFilterTags.adapter?.notifyDataSetChanged()
+    }
+
+    private fun startBounceZoomAnimation(view: View? = null) {
+        val targetView = view ?: binding.sortByFilter
+        val bounceZoomAnimation = AnimationUtils.loadAnimation(requireContext(), R.anim.bounce_zoom)
+        targetView.startAnimation(bounceZoomAnimation)
+    }
+
+    private fun setSortByFilterImage() {
+        val filterDrawable = when (activity.result.sort) {
+            Anilist.sortBy[0] -> R.drawable.ic_round_area_chart_24
+            Anilist.sortBy[1] -> R.drawable.ic_round_filter_peak_24
+            Anilist.sortBy[2] -> R.drawable.ic_round_star_graph_24
+            Anilist.sortBy[3] -> R.drawable.ic_round_filter_list_24
+            Anilist.sortBy[4] -> R.drawable.ic_round_filter_list_24_reverse
+            Anilist.sortBy[5] -> R.drawable.ic_round_assist_walker_24
+            else -> R.drawable.ic_round_filter_alt_24
+        }
+        binding.sortByFilter.setImageResource(filterDrawable)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -47,14 +75,121 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         exGenres = activity.result.excludedGenres ?: mutableListOf()
         selectedTags = activity.result.tags ?: mutableListOf()
         exTags = activity.result.excludedTags ?: mutableListOf()
+        setSortByFilterImage()
+
+        binding.resetSearchFilter.setOnClickListener {
+            activity.result.sort = null
+            binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_alt_24)
+            startBounceZoomAnimation(binding.sortByFilter)
+
+            selectedCountry = null
+            binding.countryFilter.setImageResource(R.drawable.ic_round_globe_search_googlefonts)
+            startBounceZoomAnimation(binding.countryFilter)
+
+            val rotateAnimation = ObjectAnimator.ofFloat(binding.resetSearchFilter, "rotation", 180f, 540f)
+            rotateAnimation.duration = 500
+            rotateAnimation.interpolator = AccelerateDecelerateInterpolator()
+            rotateAnimation.start()
+
+            selectedGenres.clear()
+            exGenres.clear()
+            selectedTags.clear()
+            exTags.clear()
+
+            binding.searchStatus.setText("")
+            binding.searchFormat.setText("")
+            binding.searchSeason.setText("")
+            binding.searchYear.setText("")
+            binding.searchStatus.clearFocus()
+            binding.searchFormat.clearFocus()
+            binding.searchSeason.clearFocus()
+            binding.searchYear.clearFocus()
+            updateChips()
+        }
+
+        binding.sortByFilter.setOnClickListener { view ->
+            val popupMenu = PopupMenu(requireContext(), view)
+            popupMenu.menuInflater.inflate(R.menu.sortby_filter_menu, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.sort_by_score -> {
+                        activity.result.sort = Anilist.sortBy[0]
+                        binding.sortByFilter.setImageResource(R.drawable.ic_round_area_chart_24)
+                        startBounceZoomAnimation()
+                    }
+
+                    R.id.sort_by_popular -> {
+                        activity.result.sort = Anilist.sortBy[1]
+                        binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_peak_24)
+                        startBounceZoomAnimation()
+                    }
+
+                    R.id.sort_by_trending -> {
+                        activity.result.sort = Anilist.sortBy[2]
+                        binding.sortByFilter.setImageResource(R.drawable.ic_round_star_graph_24)
+                        startBounceZoomAnimation()
+                    }
+
+                    R.id.sort_by_a_z -> {
+                        activity.result.sort = Anilist.sortBy[3]
+                        binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_list_24)
+                        startBounceZoomAnimation()
+                    }
+
+                    R.id.sort_by_z_a -> {
+                        activity.result.sort = Anilist.sortBy[4]
+                        binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_list_24_reverse)
+                        startBounceZoomAnimation()
+                    }
+
+                    R.id.sort_by_pure_pain -> {
+                        activity.result.sort = Anilist.sortBy[5]
+                        binding.sortByFilter.setImageResource(R.drawable.ic_round_assist_walker_24)
+                        startBounceZoomAnimation()
+                    }
+                }
+                true
+            }
+            popupMenu.show()
+        }
+
+        binding.countryFilter.setOnClickListener { view ->
+            val popupMenu = PopupMenu(requireContext(), view)
+            popupMenu.menuInflater.inflate(R.menu.country_filter_menu, popupMenu.menu)
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.country_china -> {
+                        selectedCountry = "China"
+                        binding.countryFilter.setImageResource(R.drawable.ic_round_globe_china_googlefonts)
+                        startBounceZoomAnimation(binding.countryFilter)
+                    }
+                    R.id.country_south_korea -> {
+                        selectedCountry = "South Korea"
+                        binding.countryFilter.setImageResource(R.drawable.ic_round_globe_south_korea_googlefonts)
+                        startBounceZoomAnimation(binding.countryFilter)
+                    }
+                    R.id.country_japan -> {
+                        selectedCountry = "Japan"
+                        binding.countryFilter.setImageResource(R.drawable.ic_round_globe_japan_googlefonts)
+                        startBounceZoomAnimation(binding.countryFilter)
+                    }
+                    R.id.country_taiwan -> {
+                        selectedCountry = "Taiwan"
+                        binding.countryFilter.setImageResource(R.drawable.ic_round_globe_taiwan_googlefonts)
+                        startBounceZoomAnimation(binding.countryFilter)
+                    }
+                }
+                true
+            }
+            popupMenu.show()
+        }
 
         binding.searchFilterApply.setOnClickListener {
             activity.result.apply {
                 format = binding.searchFormat.text.toString().ifBlank { null }
-                sort = binding.searchSortBy.text.toString().ifBlank { null }
-                    ?.let { Anilist.sortBy[resources.getStringArray(R.array.sort_by).indexOf(it)] }
                 season = binding.searchSeason.text.toString().ifBlank { null }
                 seasonYear = binding.searchYear.text.toString().toIntOrNull()
+                sort = activity.result.sort
                 genres = selectedGenres
                 tags = selectedTags
                 excludedGenres = exGenres
@@ -67,17 +202,6 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.searchFilterCancel.setOnClickListener {
             dismiss()
         }
-
-        binding.searchSortBy.setText(activity.result.sort?.let {
-            resources.getStringArray(R.array.sort_by)[Anilist.sortBy.indexOf(it)]
-        })
-        binding.searchSortBy.setAdapter(
-            ArrayAdapter(
-                binding.root.context,
-                R.layout.item_dropdown,
-                resources.getStringArray(R.array.sort_by)
-            )
-        )
 
         binding.searchFormat.setText(activity.result.format)
         binding.searchFormat.setAdapter(

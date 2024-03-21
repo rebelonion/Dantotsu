@@ -151,22 +151,23 @@ class ProfileFragment : Fragment() {
     private fun setFavPeople() {
         if (favStaff.isEmpty()) {
             binding.profileFavStaffContainer.visibility = View.GONE
+        } else {
+            binding.profileFavStaffRecycler.adapter = AuthorAdapter(favStaff)
+            binding.profileFavStaffRecycler.layoutManager = LinearLayoutManager(
+                activity, LinearLayoutManager.HORIZONTAL, false
+            )
+            binding.profileFavStaffRecycler.layoutAnimation = LayoutAnimationController(setSlideIn(), 0.25f)
         }
-        binding.profileFavStaffRecycler.adapter = AuthorAdapter(favStaff)
-        binding.profileFavStaffRecycler.layoutManager = LinearLayoutManager(
-            activity,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
+
         if (favCharacter.isEmpty()) {
             binding.profileFavCharactersContainer.visibility = View.GONE
+        } else {
+            binding.profileFavCharactersRecycler.adapter = CharacterAdapter(favCharacter)
+            binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
+                activity, LinearLayoutManager.HORIZONTAL, false
+            )
+            binding.profileFavCharactersRecycler.layoutAnimation = LayoutAnimationController(setSlideIn(), 0.25f)
         }
-        binding.profileFavCharactersRecycler.adapter = CharacterAdapter(favCharacter)
-        binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
-            activity,
-            LinearLayoutManager.HORIZONTAL,
-            false
-        )
     }
 
     private fun initRecyclerView(

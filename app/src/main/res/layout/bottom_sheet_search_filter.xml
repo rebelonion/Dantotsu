@@ -11,17 +11,59 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/bottomSheerCustomTitle"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="16dp"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="@string/filter"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:drawableStartCompat="@drawable/ic_round_filter_alt_24" />
+            android:layout_marginTop="17dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/resetSearchFilter"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="17dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:rotation="180"
+                android:src="@drawable/ic_round_reset_star_24"
+                app:tint="?attr/colorPrimary" />
+
+            <TextView
+                android:id="@+id/bottomSheerCustomTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="-2dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/filter"
+                android:textAlignment="center"
+                android:textSize="23sp" />
+
+            <ImageButton
+                android:id="@+id/countryFilter"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_round_globe_search_googlefonts"
+                app:tint="?attr/colorPrimary" />
+
+            <ImageButton
+                android:id="@+id/sortByFilter"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="17dp"
+                android:background="@null"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_round_filter_alt_24"
+                app:tint="?attr/colorPrimary" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,7 +79,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:hint="@string/sort_by"
+                android:hint="Status"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -46,7 +88,7 @@
                 app:hintAnimationEnabled="true">
 
                 <AutoCompleteTextView
-                    android:id="@+id/searchSortBy"
+                    android:id="@+id/searchStatus"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_weight="1"
@@ -180,11 +222,17 @@
                 android:text="@string/genres"
                 android:textSize="16sp" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/searchGenresGrid"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:layout_marginEnd="10dp"
                 android:text="@string/grid" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/searchGenresGrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -217,11 +265,17 @@
                 android:text="@string/tags"
                 android:textSize="16sp" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/searchTagsGrid"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:layout_marginEnd="10dp"
                 android:text="@string/grid" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                android:id="@+id/searchTagsGrid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
