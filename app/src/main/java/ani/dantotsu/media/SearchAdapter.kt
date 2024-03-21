@@ -123,31 +123,37 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
                     R.id.sort_by_score -> {
                         activity.result.sort = Anilist.sortBy[0]
                         activity.updateChips.invoke()
+                        activity.search()
                         updateFilterTextViewDrawable()
                     }
                     R.id.sort_by_popular -> {
                         activity.result.sort = Anilist.sortBy[1]
                         activity.updateChips.invoke()
+                        activity.search()
                         updateFilterTextViewDrawable()
                     }
                     R.id.sort_by_trending -> {
                         activity.result.sort = Anilist.sortBy[2]
                         activity.updateChips.invoke()
+                        activity.search()
                         updateFilterTextViewDrawable()
                     }
                     R.id.sort_by_a_z -> {
                         activity.result.sort = Anilist.sortBy[3]
                         activity.updateChips.invoke()
+                        activity.search()
                         updateFilterTextViewDrawable()
                     }
                     R.id.sort_by_z_a -> {
                         activity.result.sort = Anilist.sortBy[4]
                         activity.updateChips.invoke()
+                        activity.search()
                         updateFilterTextViewDrawable()
                     }
                     R.id.sort_by_pure_pain -> {
                         activity.result.sort = Anilist.sortBy[5]
                         activity.updateChips.invoke()
+                        activity.search()
                         updateFilterTextViewDrawable()
                     }
                 }
