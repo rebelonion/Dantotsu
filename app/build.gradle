@@ -112,13 +112,13 @@ dependencies {
     implementation "androidx.media3:media3-exoplayer-dash:$exo_version"
     implementation "androidx.media3:media3-datasource-okhttp:$exo_version"
     implementation "androidx.media3:media3-session:$exo_version"
-    //media3 casting
+//  Media3 Casting
     implementation "androidx.media3:media3-cast:$exo_version"
     implementation "androidx.mediarouter:mediarouter:1.6.0"
 
 //  UI
     implementation 'com.google.android.material:material:1.11.0'
-    implementation 'com.github.RepoDevil:AnimatedBottomBar:514389d135'
+    implementation 'com.github.RepoDevil:AnimatedBottomBar:7fcb9af'
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     implementation 'com.alexvasilkov:gesture-views:2.8.3'
