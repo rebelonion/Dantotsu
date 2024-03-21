@@ -1,18 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="en-rUS">
 
-    <string name="repo">rebelonion/Dantotsu</string>
+    <string name="repo" translatable="false">rebelonion/Dantotsu</string>
     <string name="preference_file_key" translatable="false">dantotsuprefs</string>
 
-    <string name="app_name">Dantotsu</string>
+    <string name="app_name" translatable="false">Dantotsu</string>
     <string name="slogan">The NEW Best Anime &amp; Manga app for Android.</string>
 
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
-    <string name="discord">https://discord.gg/4HPZ5nAWwM</string>
-    <string name="github">https://github.com/rebelonion/Dantotsu</string>
-    <string name="telegram" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
-    <string name="coffee">https://www.buymeacoffee.com/rebelonion</string>
+    <string name="discord" translatable="false">https://discord.gg/4HPZ5nAWwM</string>
+    <string name="github" translatable="false">https://github.com/rebelonion/Dantotsu</string>
+    <string name="telegram" tools:ignore="Typos" translatable="false">https://t.me/+gzBCQExtLQo1YTNh </string>
+    <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
+
     <string name="home">Home</string>
     <string name="anime">Anime</string>
     <string name="browse_anime">Browse Anime</string>
@@ -22,6 +23,8 @@
     <string name="info">Info</string>
     <string name="watch">Watch</string>
     <string name="read">Read</string>
+    <string name="language">Language</string>
+    <string name="language_code" translatable="false">LANG</string>
 
     <string name="anime_list">Anime List</string>
     <string name="manga_list">Manga List</string>
@@ -731,7 +734,7 @@
     <string name="set_cookies">Set Cookies</string>
     <string name="open_website">Open Website</string>
 
-    <string name="lorem_ipsum">
+    <string name="lorem_ipsum" translatable="false">
 
 Lorem ipsum dolor sit amet. Est consectetur sint qui internos optio nam Quis excepturi qui voluptatem animi. Qui labore quasi vel suscipit deleniti et doloremque omnis in velit suscipit et quasi eaque. Et doloribus recusandae id laudantium Quis qui natus velit in voluptatem voluptatem!
 
@@ -751,6 +754,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
     <string name="activities">Activities</string>
+
     <string name="incorrect_password">Incorrect password</string>
     <string name="password_cannot_be_empty">Password cannot be empty</string>
     <string name="unknown_file_type">Unknown file type</string>
@@ -759,7 +763,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="enter_password">Enter Password</string>
 
     <string name="you_cursed">youwu have been cuwsed :pwayge:</string>
-    <string name="cursed_yt">https://www.youtube.com/watch?v=dQw4w9WgXcQ</string>
+    <string name="cursed_yt" translatable="false">https://www.youtube.com/watch?v=dQw4w9WgXcQ</string>
     <string name="purge_confirm">Are you sure you want to purge all %1$s downloads?</string>
 
     <string name="delete_fail_reason">Failed to delete because of… %1$s</string>
