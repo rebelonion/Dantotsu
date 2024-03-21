@@ -196,6 +196,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
                 binding.profileBannerImageNoKen?.updateLayoutParams { height += statusBarHeight }
                 binding.profileBannerGradient.updateLayoutParams { height += statusBarHeight }
+                binding.profileCloseButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                 binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                 binding.profileButtonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                 binding.profileBannerImage.setOnLongClickListener {
@@ -250,6 +251,10 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                             .putExtra("userId", user.id)
                             .putExtra("username", user.name), null
                     )
+                }
+
+                binding.profileCloseButton.setOnClickListener {
+                    onBackPressedDispatcher.onBackPressed()
                 }
             }
         }
