@@ -413,7 +413,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Magenta"
         )
         val subBackgroundDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.outline_sub_color))
+            .setTitle(getString(R.string.sub_background_color_select))
         binding.videoSubColorBackground.setOnClickListener {
             val dialog = subBackgroundDialog.setSingleChoiceItems(
                 colorsSubBackground,
@@ -440,7 +440,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Magenta"
         )
         val subWindowDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.outline_sub_color))
+            .setTitle(getString(R.string.sub_window_color_select))
         binding.videoSubColorWindow.setOnClickListener {
             val dialog = subWindowDialog.setSingleChoiceItems(
                 colorsSubWindow,
