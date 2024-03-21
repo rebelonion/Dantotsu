@@ -1,8 +1,11 @@
 package ani.dantotsu.parsers
 
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -12,6 +15,7 @@ import android.provider.MediaStore
 import ani.dantotsu.FileUrl
 import ani.dantotsu.currContext
 import ani.dantotsu.media.anime.AnimeNameAdapter
+import ani.dantotsu.media.anime.ExoplayerView
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.snackString
@@ -51,6 +55,7 @@ import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.FileOutputStream
 import java.io.UnsupportedEncodingException
+import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLDecoder
 import java.util.regex.Pattern
@@ -691,35 +696,44 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         // Check for null video URL
         val videoUrl = aniVideo.videoUrl ?: throw Exception("Video URL is null")
 
-        val urlObj = URL(videoUrl)
-        val path = urlObj.path
-        val query = urlObj.query
+        var format: VideoType?
 
-        var format = getVideoType(path)
+        try {
+            val urlObj = URL(videoUrl)
+            val path = urlObj.path
+            val query = urlObj.query
 
-        if (format == null && query != null) {
-            val queryPairs: List<Pair<String, String>> = query.split("&").map {
-                val idx = it.indexOf("=")
-                val key = URLDecoder.decode(it.substring(0, idx), "UTF-8")
-                val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")
-                Pair(key, value)
+            format = getVideoType(path)
+
+            if (format == null && query != null) {
+                val queryPairs: List<Pair<String, String>> = query.split("&").map {
+                    val idx = it.indexOf("=")
+                    val key = URLDecoder.decode(it.substring(0, idx), "UTF-8")
+                    val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")
+                    Pair(key, value)
+                }
+
+                // Assume the file is named under the "file" query parameter
+                val fileName = queryPairs.find { it.first == "file" }?.second ?: ""
+
+                format = getVideoType(fileName)
+                // this solves a problem no one has, so I'm commenting it out for now
+                //if (format == null) {
+                //    val networkHelper = Injekt.get<NetworkHelper>()
+                //    format = headRequest(videoUrl, networkHelper)
+                //}
             }
 
-            // Assume the file is named under the "file" query parameter
-            val fileName = queryPairs.find { it.first == "file" }?.second ?: ""
-
-            format = getVideoType(fileName)
-            // this solves a problem no one has, so I'm commenting it out for now
-            //if (format == null) {
-            //    val networkHelper = Injekt.get<NetworkHelper>()
-            //    format = headRequest(videoUrl, networkHelper)
-            //}
-        }
-
-        // If the format is still undetermined, log an error
-        if (format == null) {
-            Logger.log("Unknown video format: $videoUrl")
-            format = VideoType.CONTAINER
+            // If the format is still undetermined, log an error
+            if (format == null) {
+                Logger.log("Unknown video format: $videoUrl")
+                format = VideoType.CONTAINER
+            }
+        } catch (malformed: MalformedURLException) {
+            if (videoUrl.startsWith("magnet:"))
+                format = VideoType.CONTAINER
+            else
+                throw malformed
         }
         val headersMap: Map<String, String> =
             aniVideo.headers?.toMultimap()?.mapValues { it.value.joinToString() } ?: mapOf()
@@ -727,7 +741,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
         return Video(
             number,
-            format,
+            format!!,
             FileUrl(videoUrl, headersMap),
             if (aniVideo.totalContentLength == 0L) null else aniVideo.bytesDownloaded.toDouble()
         )
