@@ -11,6 +11,7 @@ data class SearchResults(
     var onList: Boolean? = null,
     var perPage: Int? = null,
     var search: String? = null,
+    var countryOfOrigin :String? = null,
     var sort: String? = null,
     var genres: MutableList<String>? = null,
     var excludedGenres: MutableList<String>? = null,
@@ -43,6 +44,9 @@ data class SearchResults(
         }
         format?.let {
             list.add(SearchChip("FORMAT", currContext()!!.getString(R.string.filter_format, it)))
+        }
+        countryOfOrigin?.let {
+            list.add(SearchChip("COUNTRY", currContext()!!.getString(R.string.filter_country, it)))
         }
         season?.let {
             list.add(SearchChip("SEASON", it))
@@ -80,6 +84,7 @@ data class SearchResults(
             "SORT" -> sort = null
             "STATUS" -> status = null
             "FORMAT" -> format = null
+            "COUNTRY" -> countryOfOrigin = null
             "SEASON" -> season = null
             "SEASON_YEAR" -> seasonYear = null
             "GENRE" -> genres?.remove(chip.text)

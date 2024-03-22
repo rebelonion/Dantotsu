@@ -883,6 +883,7 @@ class AnilistQueries {
         tags: MutableList<String>? = null,
         status: String? = null,
         format: String? = null,
+        countryOfOrigin: String? = null,
         isAdult: Boolean = false,
         onList: Boolean? = null,
         excludedGenres: MutableList<String>? = null,
@@ -947,6 +948,7 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
             ${if (sort != null) ""","sort":"$sort"""" else ""}
             ${if (status != null) ""","status":"$status"""" else ""}
             ${if (format != null) ""","format":"${format.replace(" ", "_")}"""" else ""}
+            ${if (countryOfOrigin != null) ""","sort":"$sort"""" else ""}
             ${if (genres?.isNotEmpty() == true) ""","genres":[${genres.joinToString { "\"$it\"" }}]""" else ""}
             ${
             if (excludedGenres?.isNotEmpty() == true)
@@ -1012,6 +1014,7 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
                 excludedTags = excludedTags,
                 status = status,
                 format = format,
+                countryOfOrigin = countryOfOrigin,
                 seasonYear = seasonYear,
                 season = season,
                 results = responseArray,

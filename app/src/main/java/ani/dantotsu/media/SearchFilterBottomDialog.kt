@@ -31,7 +31,6 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private lateinit var activity: SearchActivity
-    private var selectedCountry: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -74,7 +73,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         activity.result.sort = null
         binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_alt_24)
         startBounceZoomAnimation(binding.sortByFilter)
-        selectedCountry = null
+        activity.result.countryOfOrigin = null
         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_search_googlefonts)
         startBounceZoomAnimation(binding.countryFilter)
 
@@ -194,22 +193,22 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.country_china -> {
-                        selectedCountry = "China"
+                        activity.result.countryOfOrigin = "CN"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_china_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
                     R.id.country_south_korea -> {
-                        selectedCountry = "South Korea"
+                        activity.result.countryOfOrigin = "KR"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_south_korea_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
                     R.id.country_japan -> {
-                        selectedCountry = "Japan"
+                        activity.result.countryOfOrigin = "JP"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_japan_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
                     R.id.country_taiwan -> {
-                        selectedCountry = "Taiwan"
+                        activity.result.countryOfOrigin = "TW"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_taiwan_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
@@ -226,6 +225,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                 season = binding.searchSeason.text.toString().ifBlank { null }
                 seasonYear = binding.searchYear.text.toString().toIntOrNull()
                 sort = activity.result.sort
+                countryOfOrigin = activity.result.countryOfOrigin
                 genres = selectedGenres
                 tags = selectedTags
                 excludedGenres = exGenres

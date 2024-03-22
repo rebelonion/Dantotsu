@@ -187,6 +187,7 @@ class AnilistAnimeViewModel : ViewModel() {
             r.tags,
             r.status,
             r.format,
+            r.countryOfOrigin,
             r.isAdult,
             r.onList
         )
@@ -260,6 +261,7 @@ class AnilistMangaViewModel : ViewModel() {
             r.tags,
             r.status,
             r.format,
+            r.countryOfOrigin,
             r.isAdult,
             r.onList,
             r.excludedGenres,
@@ -290,6 +292,7 @@ class AnilistSearch : ViewModel() {
             r.tags,
             r.status,
             r.format,
+            r.countryOfOrigin,
             r.isAdult,
             r.onList,
             r.excludedGenres,
@@ -310,6 +313,7 @@ class AnilistSearch : ViewModel() {
             r.tags,
             r.status,
             r.format,
+            r.countryOfOrigin,
             r.isAdult,
             r.onList,
             r.excludedGenres,

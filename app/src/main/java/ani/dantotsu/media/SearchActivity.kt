@@ -68,6 +68,7 @@ class SearchActivity : AppCompatActivity() {
                 tags = intent.getStringExtra("tag")?.let { mutableListOf(it) },
                 sort = intent.getStringExtra("sortBy"),
                 status = intent.getStringExtra("status"),
+                countryOfOrigin = intent.getStringExtra("country"),
                 season = intent.getStringExtra("season"),
                 seasonYear = intent.getStringExtra("seasonYear")?.toIntOrNull(),
                 results = mutableListOf(),
@@ -131,6 +132,7 @@ class SearchActivity : AppCompatActivity() {
                     seasonYear = it.seasonYear
                     status = it.status
                     format = it.format
+                    countryOfOrigin = it.countryOfOrigin
                     page = it.page
                     hasNextPage = it.hasNextPage
                 }
