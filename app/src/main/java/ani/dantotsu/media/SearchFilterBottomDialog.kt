@@ -244,7 +244,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             ArrayAdapter(
                 binding.root.context,
                 R.layout.item_dropdown,
-                Anilist.status.toTypedArray()
+                (if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus).toTypedArray()
             )
         )
 
@@ -253,7 +253,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             ArrayAdapter(
                 binding.root.context,
                 R.layout.item_dropdown,
-                (if (activity.result.type == "ANIME") Anilist.anime_formats else Anilist.manga_formats).toTypedArray()
+                (if (activity.result.type == "ANIME") Anilist.animeFormats else Anilist.mangaFormats).toTypedArray()
             )
         )
 

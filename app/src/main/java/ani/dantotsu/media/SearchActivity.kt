@@ -184,7 +184,7 @@ class SearchActivity : AppCompatActivity() {
             override fun run() {
                 scope.launch(Dispatchers.IO) {
                     loading = true
-                    model.loadSearch(result.copy(status = result.status))
+                    model.loadSearch(result)
                     loading = false
                 }
             }

@@ -45,7 +45,14 @@ object Anilist {
         "SCORE"
     )
 
-    val status = listOf(
+    val animeStatus = listOf(
+        "FINISHED",
+        "RELEASING",
+        "NOT_YET_RELEASED",
+        "CANCELLED"
+    )
+
+    val mangaStatus = listOf(
         "FINISHED",
         "RELEASING",
         "NOT_YET_RELEASED",
@@ -57,11 +64,11 @@ object Anilist {
         "WINTER", "SPRING", "SUMMER", "FALL"
     )
 
-    val anime_formats = listOf(
+    val animeFormats = listOf(
         "TV", "TV SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC"
     )
 
-    val manga_formats = listOf(
+    val mangaFormats = listOf(
         "MANGA", "NOVEL", "ONE SHOT"
     )
 
