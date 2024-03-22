@@ -709,6 +709,7 @@
     <string name="manga_mean_score">Manga Mean Score</string>
     <string name="about_me">About me</string>
     <string name="follow">Follow</string>
+    <string name="following">Following</string>
     <string name="unfollow">Unfollow</string>
     <string name="follows_you">Follows you</string>
     <string name="mutual">Mutual</string>
