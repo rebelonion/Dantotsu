@@ -86,6 +86,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Outline(Pref(Location.Player, Int::class, 0)),
     SubBackground(Pref(Location.Player, Int::class, 0)),
     SubWindow(Pref(Location.Player, Int::class, 0)),
+    SubAlpha(Pref(Location.Player, Float::class, 1f)),
     Font(Pref(Location.Player, Int::class, 0)),
     FontSize(Pref(Location.Player, Int::class, 20)),
     Locale(Pref(Location.Player, Int::class, 2)),

@@ -166,6 +166,44 @@
                     app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
                     tools:ignore="TextContrastCheck" />
 
+                <ani.dantotsu.others.Xpandable
+                    android:id="@+id/subtitleTest"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="64dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:gravity="center_vertical"
+                        android:paddingHorizontal="32dp"
+                        android:text="@string/sub_text_example"
+                        android:textColor="?attr/colorSecondary"
+                        app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
+                        tools:ignore="TextContrastCheck" />
+
+                    <LinearLayout
+                        android:id="@+id/subtitleTestWindow"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/subtitleTestText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingHorizontal="32dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:text="@string/sub_text_example" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="8dp" />
+                </ani.dantotsu.others.Xpandable>
+
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/subSwitch"
                     android:layout_width="match_parent"
@@ -291,6 +329,37 @@
                     android:paddingHorizontal="32dp"
                     android:text="@string/sub_window_color_info"
                     android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/videoSubAlphaButton"
+                    style="@style/Widget.Material3.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="64dp"
+                    android:layout_marginBottom="8dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:paddingHorizontal="32dp"
+                    android:text="@string/sub_alpha"
+                    android:textAlignment="viewStart"
+                    android:textAllCaps="false"
+                    android:textColor="@color/bg_opp"
+                    app:cornerRadius="0dp"
+                    app:icon="@drawable/ic_round_color_24"
+                    app:iconPadding="16dp"
+                    app:iconSize="24dp"
+                    android:clickable="false" />
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/videoSubAlpha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="32dp"
+                    android:valueFrom="0"
+                    android:valueTo="1"
+                    android:stepSize="0.1">
+
+                </com.google.android.material.slider.Slider>
 
                 <Button
                     android:id="@+id/videoSubFont"
