@@ -22,6 +22,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemAnimePageBinding
+import ani.dantotsu.databinding.LayoutTrendingBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.CalendarActivity
 import ani.dantotsu.media.GenreActivity
@@ -42,6 +43,7 @@ import com.google.android.material.textfield.TextInputLayout
 class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHolder>() {
     val ready = MutableLiveData(false)
     lateinit var binding: ItemAnimePageBinding
+    private lateinit var trendingBinding: LayoutTrendingBinding
     private var trendHandler: Handler? = null
     private lateinit var trendRun: Runnable
     var trendingViewPager: ViewPager2? = null
@@ -54,14 +56,15 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
     override fun onBindViewHolder(holder: AnimePageViewHolder, position: Int) {
         binding = holder.binding
-        trendingViewPager = binding.animeTrendingViewPager
+        trendingBinding = LayoutTrendingBinding.bind(binding.root)
+        trendingViewPager = trendingBinding.trendingViewPager
 
-        val textInputLayout = holder.itemView.findViewById<TextInputLayout>(R.id.animeSearchBar)
+        val textInputLayout = holder.itemView.findViewById<TextInputLayout>(R.id.searchBar)
         val currentColor = textInputLayout.boxBackgroundColor
         val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xA8000000.toInt()
         textInputLayout.boxBackgroundColor = semiTransparentColor
         val materialCardView =
-            holder.itemView.findViewById<MaterialCardView>(R.id.animeUserAvatarContainer)
+            holder.itemView.findViewById<MaterialCardView>(R.id.userAvatarContainer)
         materialCardView.setCardBackgroundColor(semiTransparentColor)
         val typedValue = TypedValue()
         currContext()?.theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
@@ -70,33 +73,29 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000
         materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000)
 
-        binding.animeTitleContainer.updatePadding(top = statusBarHeight)
+        trendingBinding.titleContainer.updatePadding(top = statusBarHeight)
 
-        if (PrefManager.getVal(PrefName.SmallView)) binding.animeTrendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        if (PrefManager.getVal(PrefName.SmallView)) trendingBinding.trendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = (-108f).px
         }
 
         updateAvatar()
 
-        binding.animeSearchBar.hint = "ANIME"
-        binding.animeSearchBarText.setOnClickListener {
+        trendingBinding.searchBar.hint = "ANIME"
+        trendingBinding.searchBarText.setOnClickListener {
             ContextCompat.startActivity(
                 it.context,
-                Intent(it.context, SearchActivity::class.java).putExtra("type", "ANIME"),
+                Intent(it.context, SearchActivity::class.java).putExtra("type", "MANGA"),
                 null
             )
         }
 
-        binding.animeSearchBar.setEndIconOnClickListener {
-            binding.animeSearchBarText.performClick()
-        }
-
-        binding.animeUserAvatar.setSafeOnClickListener {
+        trendingBinding.userAvatar.setSafeOnClickListener {
             val dialogFragment =
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.ANIME)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
-        binding.animeUserAvatar.setOnLongClickListener { view ->
+        trendingBinding.userAvatar.setOnLongClickListener { view ->
             ContextCompat.startActivity(
                 view.context,
                 Intent(view.context, ProfileActivity::class.java)
@@ -105,8 +104,12 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             false
         }
 
-        binding.animeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
-        binding.animeNotificationCount.text = Anilist.unreadNotificationCount.toString()
+        trendingBinding.searchBar.setEndIconOnClickListener {
+            trendingBinding.searchBar.performClick()
+        }
+
+        trendingBinding.notificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
 
         listOf(
             binding.animePreviousSeason,
@@ -159,17 +162,17 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
     }
 
     fun updateTrending(adaptor: MediaAdaptor) {
-        binding.animeTrendingProgressBar.visibility = View.GONE
-        binding.animeTrendingViewPager.adapter = adaptor
-        binding.animeTrendingViewPager.offscreenPageLimit = 3
-        binding.animeTrendingViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-        binding.animeTrendingViewPager.setPageTransformer(MediaPageTransformer())
+        trendingBinding.trendingProgressBar.visibility = View.GONE
+        trendingBinding.trendingViewPager.adapter = adaptor
+        trendingBinding.trendingViewPager.offscreenPageLimit = 3
+        trendingBinding.trendingViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        trendingBinding.trendingViewPager.setPageTransformer(MediaPageTransformer())
 
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
-            binding.animeTrendingViewPager.currentItem += 1
+            trendingBinding.trendingViewPager.currentItem += 1
         }
-        binding.animeTrendingViewPager.registerOnPageChangeCallback(
+        trendingBinding.trendingViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
@@ -179,9 +182,9 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             }
         )
 
-        binding.animeTrendingViewPager.layoutAnimation =
+        trendingBinding.trendingViewPager.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
-        binding.animeTitleContainer.startAnimation(setSlideUp())
+        trendingBinding.titleContainer.startAnimation(setSlideUp())
         binding.animeListContainer.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
         binding.animeSeasonsCont.layoutAnimation =
@@ -209,16 +212,16 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
 
     fun updateAvatar() {
         if (Anilist.avatar != null && ready.value == true) {
-            binding.animeUserAvatar.loadImage(Anilist.avatar)
-            binding.animeUserAvatar.imageTintList = null
+            trendingBinding.userAvatar.loadImage(Anilist.avatar)
+            trendingBinding.userAvatar.imageTintList = null
         }
     }
 
     fun updateNotificationCount() {
         if (this::binding.isInitialized) {
-            binding.animeNotificationCount.visibility =
+            trendingBinding.notificationCount.visibility =
                 if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
-            binding.animeNotificationCount.text = Anilist.unreadNotificationCount.toString()
+            trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
         }
     }
 
