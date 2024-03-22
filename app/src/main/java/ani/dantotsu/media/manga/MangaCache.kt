@@ -30,8 +30,7 @@ data class ImageData(
             try {
                 // Fetch the image
                 val response = httpSource.getImage(page)
-                Logger.log("Response: ${response.code}")
-                Logger.log("Response: ${response.message}")
+                Logger.log("Response: ${response.code} - ${response.message}")
 
                 // Convert the Response to an InputStream
                 val inputStream = response.body.byteStream()
