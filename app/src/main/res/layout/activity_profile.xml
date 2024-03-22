@@ -129,133 +129,145 @@
                 </LinearLayout>
             </FrameLayout>
 
-            <LinearLayout
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/profileButtonContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
                 android:layout_marginTop="210dp"
-                android:layout_marginBottom="6dp"
-                android:layout_marginEnd="8dp"
-                android:background="?attr/colorSurface"
+                android:layout_marginBottom="2dp"
+                android:backgroundTint="?attr/colorSurfaceVariant"
                 android:baselineAligned="false"
-                android:orientation="horizontal"
-                tools:ignore="HardcodedText">
+                app:cardCornerRadius="16dp">
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/profileFollowerCountContainer"
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:backgroundTint="?attr/colorSurfaceVariant"
-                    app:cardCornerRadius="16dp">
+                    android:orientation="horizontal"
+                    tools:ignore="HardcodedText">
 
-                    <TextView
-                        android:id="@+id/profileFollowerCount"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:id="@+id/profileFollowerCountContainer"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:textColor="?attr/colorPrimary"
-                        tools:text="1" />
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/profileFollowerCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="?attr/colorPrimary"
+                            tools:text="1" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:text="Follower" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="match_parent"
+                        android:background="?android:attr/listDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/profileFollowingCountContainer"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="24dp"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:text="Follower" />
-                </com.google.android.material.card.MaterialCardView>
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
+                        <TextView
+                            android:id="@+id/profileFollowingCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="?attr/colorPrimary"
+                            tools:text="2" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/profileFollowingCountContainer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:backgroundTint="?attr/colorSurfaceVariant"
-                    app:cardCornerRadius="16dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:text="Following" />
 
-                    <TextView
-                        android:id="@+id/profileFollowingCount"
-                        android:layout_width="wrap_content"
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="match_parent"
+                        android:background="?android:attr/listDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/profileAnimeCountContainer"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:textColor="?attr/colorPrimary"
-                        tools:text="2" />
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/profileAnimeCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="?attr/colorPrimary"
+                            tools:text="3" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:text="Anime" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="3dp"
+                        android:layout_height="match_parent"
+                        android:background="?android:attr/listDivider" />
+
+                    <LinearLayout
+                        android:id="@+id/profileMangaCountContainer"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="24dp"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:text="Following" />
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
 
-                </com.google.android.material.card.MaterialCardView>
+                        <TextView
+                            android:id="@+id/profileMangaCount"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:textColor="?attr/colorPrimary"
+                            tools:text="4" />
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/poppins_semi_bold"
+                            android:text="Manga" />
 
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/profileAnimeCountContainer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:backgroundTint="?attr/colorSurfaceVariant"
-                    app:cardCornerRadius="16dp">
-
-                    <TextView
-                        android:id="@+id/profileAnimeCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:textColor="?attr/colorPrimary"
-                        tools:text="3" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="24dp"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:text="Anime" />
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/profileMangaCountContainer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:backgroundTint="?attr/colorSurfaceVariant"
-                    app:cardCornerRadius="16dp">
-
-                    <TextView
-                        android:id="@+id/profileMangaCount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:textColor="?attr/colorPrimary"
-                        tools:text="4" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="24dp"
-                        android:fontFamily="@font/poppins_semi_bold"
-                        android:text="Manga" />
-
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
 

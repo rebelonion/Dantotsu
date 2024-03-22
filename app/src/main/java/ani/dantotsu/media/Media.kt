@@ -25,7 +25,7 @@ data class Media(
     var cover: String? = null,
     var banner: String? = null,
     var relation: String? = null,
-    var popularity: Int? = null,
+    var favourites: Int? = null,
 
     var isAdult: Boolean,
     var isFav: Boolean = false,
@@ -56,6 +56,7 @@ data class Media(
     var trailer: String? = null,
     var startDate: FuzzyDate? = null,
     var endDate: FuzzyDate? = null,
+    var popularity: Int? = null,
 
     var characters: ArrayList<Character>? = null,
     var staff: ArrayList<Author>? = null,
@@ -95,6 +96,7 @@ data class Media(
         meanScore = apiMedia.meanScore,
         startDate = apiMedia.startDate,
         endDate = apiMedia.endDate,
+        favourites = apiMedia.favourites,
         anime = if (apiMedia.type == MediaType.ANIME) Anime(
             totalEpisodes = apiMedia.episodes,
             nextAiringEpisode = apiMedia.nextAiringEpisode?.episode?.minus(1)

@@ -97,6 +97,8 @@ class MediaInfoFragment : Fragment() {
                 binding.mediaInfoSource.text = media.source
                 binding.mediaInfoStart.text = media.startDate?.toString() ?: "??"
                 binding.mediaInfoEnd.text = media.endDate?.toString() ?: "??"
+                binding.mediaInfoPopularity.text = media.popularity.toString()
+                binding.mediaInfoFavorites.text = media.favourites.toString()
                 if (media.anime != null) {
                     val episodeDuration = media.anime.episodeDuration
 
