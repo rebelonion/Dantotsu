@@ -5,7 +5,8 @@
     <ani.dantotsu.others.Xpandable
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:isExpanded="true">
 
         <TextView
             android:layout_width="match_parent"
