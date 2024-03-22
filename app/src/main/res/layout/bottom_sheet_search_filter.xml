@@ -79,7 +79,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:hint="Status"
+                android:hint="@string/status_title"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"

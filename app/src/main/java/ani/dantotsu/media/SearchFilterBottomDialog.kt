@@ -124,6 +124,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     activity.result.apply {
+                        status = binding.searchStatus.text.toString().ifBlank { null }
                         format = binding.searchFormat.text.toString().ifBlank { null }
                         season = binding.searchSeason.text.toString().ifBlank { null }
                         seasonYear = binding.searchYear.text.toString().toIntOrNull()
@@ -220,6 +221,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
 
         binding.searchFilterApply.setOnClickListener {
             activity.result.apply {
+                status = binding.searchStatus.text.toString().ifBlank { null }
                 format = binding.searchFormat.text.toString().ifBlank { null }
                 season = binding.searchSeason.text.toString().ifBlank { null }
                 seasonYear = binding.searchYear.text.toString().toIntOrNull()
@@ -236,6 +238,15 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.searchFilterCancel.setOnClickListener {
             dismiss()
         }
+
+        binding.searchStatus.setText(activity.result.status)
+        binding.searchStatus.setAdapter(
+            ArrayAdapter(
+                binding.root.context,
+                R.layout.item_dropdown,
+                Anilist.status.toTypedArray()
+            )
+        )
 
         binding.searchFormat.setText(activity.result.format)
         binding.searchFormat.setAdapter(

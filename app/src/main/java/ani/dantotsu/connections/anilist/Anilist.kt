@@ -45,6 +45,14 @@ object Anilist {
         "SCORE"
     )
 
+    val status = listOf(
+        "FINISHED",
+        "RELEASING",
+        "NOT_YET_RELEASED",
+        "HIATUS",
+        "CANCELLED"
+    )
+
     val seasons = listOf(
         "WINTER", "SPRING", "SUMMER", "FALL"
     )

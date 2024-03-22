@@ -67,6 +67,7 @@ class SearchActivity : AppCompatActivity() {
                 genres = intent.getStringExtra("genre")?.let { mutableListOf(it) },
                 tags = intent.getStringExtra("tag")?.let { mutableListOf(it) },
                 sort = intent.getStringExtra("sortBy"),
+                status = intent.getStringExtra("status"),
                 season = intent.getStringExtra("season"),
                 seasonYear = intent.getStringExtra("seasonYear")?.toIntOrNull(),
                 results = mutableListOf(),
@@ -128,6 +129,7 @@ class SearchActivity : AppCompatActivity() {
                     tags = it.tags
                     season = it.season
                     seasonYear = it.seasonYear
+                    status = it.status
                     format = it.format
                     page = it.page
                     hasNextPage = it.hasNextPage
@@ -182,7 +184,7 @@ class SearchActivity : AppCompatActivity() {
             override fun run() {
                 scope.launch(Dispatchers.IO) {
                     loading = true
-                    model.loadSearch(result)
+                    model.loadSearch(result.copy(status = result.status))
                     loading = false
                 }
             }

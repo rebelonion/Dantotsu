@@ -16,6 +16,7 @@ data class SearchResults(
     var excludedGenres: MutableList<String>? = null,
     var tags: MutableList<String>? = null,
     var excludedTags: MutableList<String>? = null,
+    var status: String? = null,
     var format: String? = null,
     var seasonYear: Int? = null,
     var season: String? = null,
@@ -36,6 +37,9 @@ data class SearchResults(
                     )
                 )
             )
+        }
+        status?.let {
+            list.add(SearchChip("STATUS", currContext()!!.getString(R.string.filter_status, it)))
         }
         format?.let {
             list.add(SearchChip("FORMAT", currContext()!!.getString(R.string.filter_format, it)))
@@ -74,6 +78,7 @@ data class SearchResults(
     fun removeChip(chip: SearchChip) {
         when (chip.type) {
             "SORT" -> sort = null
+            "STATUS" -> status = null
             "FORMAT" -> format = null
             "SEASON" -> season = null
             "SEASON_YEAR" -> seasonYear = null
