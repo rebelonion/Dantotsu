@@ -255,7 +255,7 @@
             android:elegantTextHeight="true"
             android:fontFamily="@font/poppins_bold"
             android:minHeight="64dp"
-            android:text="@string/always_continue_shows"
+            android:text="@string/always_continue_content"
             android:textAlignment="viewStart"
             android:textColor="?attr/colorOnBackground"
             app:cornerRadius="0dp"

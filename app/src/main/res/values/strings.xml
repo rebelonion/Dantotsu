@@ -174,7 +174,7 @@
     <string name="settings">Settings</string>
     <string name="extensions">Extensions</string>
     <string name="player_settings">Player Settings</string>
-    <string name="recentlyListOnly">Only show My Shows in Recently Updated</string>
+    <string name="recentlyListOnly">Only show my content in \"Recently Updated\"</string>
     <string name="download_manager_select">Download Manager</string>
     <string name="downloadInSd">Download in SD card</string>
     <string name="noSdFound">No SD card was Found.</string>
@@ -369,8 +369,8 @@
     <string name="planned_anime">Planned Anime</string>
     <string name="planned_manga">Planned Manga</string>
     <string name="image_long_clicking">Open image by Long Clicking</string>
-    <string name="always_continue_shows">Always continue Shows</string>
-    <string name="search_source_list">Search available sources</string>
+    <string name="always_continue_content">Always continue previous items</string>
+    <string name="search_source_list">Search next available source</string>
     <string name="timestamp_proxy_desc">Useful if you are getting Handshake Fails</string>
     <string name="timestamp_proxy">Use Proxy for Timestamps</string>
     <string name="check_app_updates">Always check for App Updates</string>
