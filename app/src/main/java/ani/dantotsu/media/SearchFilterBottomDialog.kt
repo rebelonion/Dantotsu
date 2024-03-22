@@ -124,7 +124,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     activity.result.apply {
-                        status = binding.searchStatus.text.toString().ifBlank { null }
+                        status = binding.searchStatus.text.toString().replace(" ", "_").ifBlank { null }
                         format = binding.searchFormat.text.toString().ifBlank { null }
                         season = binding.searchSeason.text.toString().ifBlank { null }
                         seasonYear = binding.searchYear.text.toString().toIntOrNull()
@@ -221,7 +221,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
 
         binding.searchFilterApply.setOnClickListener {
             activity.result.apply {
-                status = binding.searchStatus.text.toString().ifBlank { null }
+                status = binding.searchStatus.text.toString().replace(" ", "_").ifBlank { null }
                 format = binding.searchFormat.text.toString().ifBlank { null }
                 season = binding.searchSeason.text.toString().ifBlank { null }
                 seasonYear = binding.searchYear.text.toString().toIntOrNull()
@@ -238,13 +238,13 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.searchFilterCancel.setOnClickListener {
             dismiss()
         }
-
+        val format =(if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus).toTypedArray()
         binding.searchStatus.setText(activity.result.status)
         binding.searchStatus.setAdapter(
             ArrayAdapter(
                 binding.root.context,
                 R.layout.item_dropdown,
-                (if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus).toTypedArray()
+                format
             )
         )
 

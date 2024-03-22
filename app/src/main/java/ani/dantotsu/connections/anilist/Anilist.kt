@@ -48,14 +48,14 @@ object Anilist {
     val animeStatus = listOf(
         "FINISHED",
         "RELEASING",
-        "NOT_YET_RELEASED",
+        "NOT YET RELEASED",
         "CANCELLED"
     )
 
     val mangaStatus = listOf(
         "FINISHED",
         "RELEASING",
-        "NOT_YET_RELEASED",
+        "NOT YET RELEASED",
         "HIATUS",
         "CANCELLED"
     )

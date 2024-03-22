@@ -333,7 +333,7 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         override fun onBindViewHolder(holder: SearchChipViewHolder, position: Int) {
             val chip = chips[position]
             holder.binding.root.apply {
-                text = chip.text
+                text = chip.text.replace("_", " ")
                 setOnClickListener {
                     activity.result.removeChip(chip)
                     update()
