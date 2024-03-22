@@ -128,143 +128,135 @@
                         app:tint="@color/bg_opp" />
                 </LinearLayout>
             </FrameLayout>
+
             <LinearLayout
                 android:id="@+id/profileButtonContainer"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:layout_marginTop="210dp"
                 android:layout_marginBottom="6dp"
+                android:layout_marginEnd="8dp"
                 android:background="?attr/colorSurface"
                 android:baselineAligned="false"
-                android:layout_gravity="bottom"
                 android:orientation="horizontal"
                 tools:ignore="HardcodedText">
 
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="2dp"
-                    android:background="?android:attr/listDivider" />
-
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/profileFollowerCountContainer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="?attr/colorSurfaceVariant"
+                    app:cardCornerRadius="16dp">
 
                     <TextView
                         android:id="@+id/profileFollowerCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_semi_bold"
-                        tools:text="1"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="?attr/colorPrimary"
+                        tools:text="1" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="24dp"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:text="Follower" />
+                </com.google.android.material.card.MaterialCardView>
 
-                </LinearLayout>
 
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:background="?android:attr/listDivider" />
-
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/profileFollowingCountContainer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="?attr/colorSurfaceVariant"
+                    app:cardCornerRadius="16dp">
 
                     <TextView
                         android:id="@+id/profileFollowingCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_semi_bold"
-                        tools:text="2"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="?attr/colorPrimary"
+                        tools:text="2" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="24dp"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:text="Following" />
 
-                </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:background="?android:attr/listDivider" />
 
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/profileAnimeCountContainer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="?attr/colorSurfaceVariant"
+                    app:cardCornerRadius="16dp">
 
                     <TextView
                         android:id="@+id/profileAnimeCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_semi_bold"
-                        tools:text="3"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="?attr/colorPrimary"
+                        tools:text="3" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="24dp"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:text="Anime" />
 
-                </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:background="?android:attr/listDivider" />
-
-                <LinearLayout
+                <com.google.android.material.card.MaterialCardView
                     android:id="@+id/profileMangaCountContainer"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_marginStart="8dp"
+                    android:backgroundTint="?attr/colorSurfaceVariant"
+                    app:cardCornerRadius="16dp">
 
                     <TextView
                         android:id="@+id/profileMangaCount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
                         android:fontFamily="@font/poppins_semi_bold"
-                        tools:text="4"
-                        android:textColor="?attr/colorPrimary" />
+                        android:textColor="?attr/colorPrimary"
+                        tools:text="4" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="24dp"
                         android:fontFamily="@font/poppins_semi_bold"
                         android:text="Manga" />
 
-                </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
 
-                <View
-                    android:layout_width="3dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginEnd="2dp"
-                    android:background="?android:attr/listDivider" />
             </LinearLayout>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-
 
 
     </com.google.android.material.appbar.AppBarLayout>
