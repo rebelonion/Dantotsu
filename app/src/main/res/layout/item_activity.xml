@@ -109,7 +109,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
@@ -193,7 +193,7 @@
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
     </FrameLayout>
 
     <LinearLayout
