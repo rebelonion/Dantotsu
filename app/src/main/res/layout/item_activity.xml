@@ -109,11 +109,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="start|center_vertical"
-            android:backgroundTint="?attr/colorSurface"
+            app:cardBackgroundColor="@color/nav_bg"
             app:cardCornerRadius="24dp"
             app:strokeColor="@color/transparent">
 
@@ -150,7 +150,7 @@
                     android:layout_height="160dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/ic_round_add_circle_24"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic"
                     tools:ignore="ContentDescription,ImageContrastCheck"
                     tools:tint="@color/transparent" />
 
@@ -193,7 +193,7 @@
                     android:textStyle="bold"
                     tools:ignore="HardcodedText" />
             </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+        </androidx.cardview.widget.CardView>
     </FrameLayout>
 
     <LinearLayout

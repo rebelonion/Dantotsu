@@ -154,7 +154,7 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/animeSourceDubbed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -162,7 +162,9 @@
                     android:padding="12dp"
                     app:cornerRadius="0dp"
                     app:showText="false"
-                    app:useMaterialThemeColors="true" />
+                    android:scaleX="0.80"
+		    android:scaleY="0.80"
+                    app:useMaterialThemeColors="true"/>
 
                 <TextView
                     android:id="@+id/animeSourceDubbedText"
@@ -174,7 +176,7 @@
                     android:ellipsize="marquee"
                     android:fontFamily="@font/poppins_bold"
                     android:marqueeRepeatLimit="marquee_forever"
-                    android:paddingLeft="7dp"
+                    android:paddingLeft="5dp"
                     android:singleLine="true"
                     android:textSize="14sp"
                     tools:text="Dubbed" />
@@ -373,3 +375,4 @@
     </LinearLayout>
 
 </LinearLayout>
+                

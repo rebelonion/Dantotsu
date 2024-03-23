@@ -61,7 +61,7 @@ class OfflineMangaAdapter(
             val bannerView = view.findViewById<ImageView>(R.id.itemCompactBanner) // for large view
             val chapters = view.findViewById<TextView>(R.id.itemTotal)
             chapters.text = " Chapters"
-            bannerView.setImageURI(item.banner)
+            bannerView.setImageURI(item.banner ?: item.image)
             totalChapter.text = item.totalChapter
         } else if (style == 1) {
             val readChapter =

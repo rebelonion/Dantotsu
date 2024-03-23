@@ -124,6 +124,8 @@
     <string name="characters">Characters</string>
     <string name="relations">Relations</string>
     <string name="staff">Staff</string>
+    <string name="favourites">Favourites</string>
+    <string name="popularity">Popularity</string>
 
     <string name="roles">Roles</string>
     <string name="details">Details</string>

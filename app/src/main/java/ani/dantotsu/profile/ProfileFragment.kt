@@ -143,8 +143,6 @@ class ProfileFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-            setFavPeople()
-            model.refresh()
         }
     }
 
