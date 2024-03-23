@@ -42,9 +42,15 @@ class AndroidBug5497Workaround private constructor(activity: Activity, private v
         return r.bottom
     }
 
+    /**
+     * Fixes windowSoftInputMode adjustResize when used with setDecorFitsSystemWindows(false)
+     *
+     * @see <a href="https://issuetracker.google.com/issues/36911528">adjustResize breaks when activity is fullscreen </a>
+     */
     companion object {
-        // For more information, see https://issuetracker.google.com/issues/36911528
-        // To use this class, simply invoke assistActivity() on an Activity that already has its content view set.
+        /**
+         * Called on an Activity after the content view has been set.
+         */
         fun assistActivity(activity: Activity, callback: (Boolean) -> Unit) {
             AndroidBug5497Workaround(activity, callback)
         }
