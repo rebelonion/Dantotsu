@@ -185,7 +185,7 @@ class SubscriptionNotificationTask : Task {
         size: Int
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, CHANNEL_SUBSCRIPTION_CHECK_PROGRESS)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle(context.getString(R.string.checking_subscriptions_title))
             .setProgress(size, 0, false)

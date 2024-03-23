@@ -170,7 +170,7 @@ object Notifications {
                     setName("Subscription Checks")
                     setGroup(GROUP_SUBSCRIPTION_CHECK)
                 },
-                buildNotificationChannel(CHANNEL_SUBSCRIPTION_CHECK_PROGRESS, IMPORTANCE_LOW) {
+                buildNotificationChannel(CHANNEL_SUBSCRIPTION_CHECK_PROGRESS, IMPORTANCE_DEFAULT) {
                     setName("Subscription Checks Progress")
                     setGroup(GROUP_SUBSCRIPTION_CHECK)
                 },
