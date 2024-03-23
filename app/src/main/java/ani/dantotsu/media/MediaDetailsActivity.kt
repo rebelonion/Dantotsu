@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
 import androidx.core.view.isVisible
+import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
@@ -45,6 +46,7 @@ import ani.dantotsu.media.manga.MangaReadFragment
 import ani.dantotsu.media.novel.NovelReadFragment
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.openLinkInBrowser
+import ani.dantotsu.others.AndroidBug5497Workaround
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.settings.saving.PrefManager
@@ -104,6 +106,20 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         initActivity(this)
         binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
+        val oldMargin = binding.mediaViewPager.marginBottom
+        AndroidBug5497Workaround.assistActivity(this) {
+            if (it) {
+                binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = 0
+                }
+                navBar.visibility = View.GONE
+            } else {
+                binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = oldMargin
+                }
+                navBar.visibility = View.VISIBLE
+            }
+        }
         val navBarRightMargin = if (resources.configuration.orientation ==
             Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
         val navBarBottomMargin = if (resources.configuration.orientation ==
