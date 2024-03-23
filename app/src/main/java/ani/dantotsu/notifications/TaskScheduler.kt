@@ -38,21 +38,18 @@ interface TaskScheduler {
             CommentNotificationWorker.WORK_NAME,
             androidx.work.ExistingWorkPolicy.REPLACE,
             androidx.work.OneTimeWorkRequest.Builder(CommentNotificationWorker::class.java)
-                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .build()
         )
         workManager.enqueueUniqueWork(
             AnilistNotificationWorker.WORK_NAME,
             androidx.work.ExistingWorkPolicy.REPLACE,
             androidx.work.OneTimeWorkRequest.Builder(AnilistNotificationWorker::class.java)
-                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .build()
         )
         workManager.enqueueUniqueWork(
             SubscriptionNotificationWorker.WORK_NAME,
             androidx.work.ExistingWorkPolicy.REPLACE,
             androidx.work.OneTimeWorkRequest.Builder(SubscriptionNotificationWorker::class.java)
-                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 .build()
         )
     }

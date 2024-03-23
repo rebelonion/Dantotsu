@@ -3,7 +3,6 @@ package ani.dantotsu.notifications.subscription
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import ani.dantotsu.notifications.anilist.AnilistNotificationTask
 import ani.dantotsu.util.Logger
 
 class SubscriptionNotificationWorker(appContext: Context, workerParams: WorkerParameters) :
