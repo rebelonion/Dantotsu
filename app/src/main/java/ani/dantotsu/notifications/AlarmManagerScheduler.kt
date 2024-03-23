@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
     override fun scheduleRepeatingTask(taskType: TaskType, interval: Long) {
-        if (interval < TimeUnit.MINUTES.toMillis(15)) {
+        if (interval * 1000 < TimeUnit.MINUTES.toMillis(15)) {
             cancelTask(taskType)
             return
         }

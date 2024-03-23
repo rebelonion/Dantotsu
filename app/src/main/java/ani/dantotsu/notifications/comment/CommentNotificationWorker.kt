@@ -11,6 +11,11 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
     CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
         Logger.log("CommentNotificationWorker: doWork")
+        if (System.currentTimeMillis() - lastCheck < 60000) {
+            Logger.log("CommentNotificationWorker: doWork skipped")
+            return Result.success()
+        }
+        lastCheck = System.currentTimeMillis()
         return if (CommentNotificationTask().execute(applicationContext)) {
             Result.success()
         } else {
@@ -30,5 +35,6 @@ class CommentNotificationWorker(appContext: Context, workerParams: WorkerParamet
     companion object {
         val checkIntervals = arrayOf(0L, 480, 720, 1440)
         const val WORK_NAME = "ani.dantotsu.notifications.comment.CommentNotificationWorker"
+        private var lastCheck = 0L
     }
 }

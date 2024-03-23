@@ -1,6 +1,7 @@
 package ani.dantotsu.notifications
 
 import android.content.Context
+import androidx.work.OutOfQuotaPolicy
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
 import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.notifications.subscription.SubscriptionNotificationWorker
@@ -29,6 +30,31 @@ interface TaskScheduler {
             }
             scheduleRepeatingTask(taskType, interval)
         }
+    }
+
+    fun scheduleSingleWork(context: Context) {
+        val workManager = androidx.work.WorkManager.getInstance(context)
+        workManager.enqueueUniqueWork(
+            CommentNotificationWorker.WORK_NAME,
+            androidx.work.ExistingWorkPolicy.REPLACE,
+            androidx.work.OneTimeWorkRequest.Builder(CommentNotificationWorker::class.java)
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build()
+        )
+        workManager.enqueueUniqueWork(
+            AnilistNotificationWorker.WORK_NAME,
+            androidx.work.ExistingWorkPolicy.REPLACE,
+            androidx.work.OneTimeWorkRequest.Builder(AnilistNotificationWorker::class.java)
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build()
+        )
+        workManager.enqueueUniqueWork(
+            SubscriptionNotificationWorker.WORK_NAME,
+            androidx.work.ExistingWorkPolicy.REPLACE,
+            androidx.work.OneTimeWorkRequest.Builder(SubscriptionNotificationWorker::class.java)
+                .setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                .build()
+        )
     }
 
     companion object {

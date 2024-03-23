@@ -11,7 +11,12 @@ class SubscriptionNotificationWorker(appContext: Context, workerParams: WorkerPa
 
     override suspend fun doWork(): Result {
         Logger.log("SubscriptionNotificationWorker: doWork")
-        return if (AnilistNotificationTask().execute(applicationContext)) {
+        if (System.currentTimeMillis() - lastCheck < 60000) {
+            Logger.log("SubscriptionNotificationWorker: doWork skipped")
+            return Result.success()
+        }
+        lastCheck = System.currentTimeMillis()
+        return if (SubscriptionNotificationTask().execute(applicationContext)) {
             Result.success()
         } else {
             Logger.log("SubscriptionNotificationWorker: doWork failed")
@@ -23,5 +28,6 @@ class SubscriptionNotificationWorker(appContext: Context, workerParams: WorkerPa
         val checkIntervals = arrayOf(0L, 480, 720, 1440)
         const val WORK_NAME =
             "ani.dantotsu.notifications.subscription.SubscriptionNotificationWorker"
+        private var lastCheck = 0L
     }
 }
