@@ -18,6 +18,7 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -273,25 +274,6 @@ class PlayerSettingsActivity : AppCompatActivity() {
             dialog.window?.setDimAmount(0.8f)
         }
 
-        fun restartApp() {
-            Snackbar.make(
-                binding.root,
-                R.string.restart_app, Snackbar.LENGTH_SHORT
-            ).apply {
-                val mainIntent =
-                    Intent.makeRestartActivityTask(
-                        context.packageManager.getLaunchIntentForPackage(
-                            context.packageName
-                        )!!.component
-                    )
-                setAction("Do it!") {
-                    context.startActivity(mainIntent)
-                    Runtime.getRuntime().exit(0)
-                }
-                show()
-            }
-        }
-
         fun toggleButton(button: android.widget.Button, toggle: Boolean) {
             button.isClickable = toggle
             button.alpha = when (toggle) {
@@ -331,7 +313,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.subSwitch.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.Subtitles, isChecked)
             toggleSubOptions(isChecked)
-            restartApp()
+            restartApp(binding.root)
         }
         val colorsPrimary =
             arrayOf(
