@@ -114,7 +114,7 @@ dependencies {
     implementation "androidx.media3:media3-session:$exo_version"
 //  Media3 Casting
     implementation "androidx.media3:media3-cast:$exo_version"
-    implementation "androidx.mediarouter:mediarouter:1.6.0"
+    implementation "androidx.mediarouter:mediarouter:1.7.0"
 
 //  UI
     implementation 'com.google.android.material:material:1.11.0'
