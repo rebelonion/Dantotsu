@@ -336,7 +336,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             .setSingleChoiceItems(
                                 subtitleNames.toTypedArray(),
                                 -1
-                            ) { dialog, which ->
+                            ) { _, which ->
                                 subtitleToDownload = subtitles[which]
                             }
                             .setPositiveButton("Download") { _, _ ->

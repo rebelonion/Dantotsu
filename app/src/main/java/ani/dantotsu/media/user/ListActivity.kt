@@ -1,6 +1,5 @@
 package ani.dantotsu.media.user
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -41,13 +40,6 @@ class ListActivity : AppCompatActivity() {
         val typedValue = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
         val primaryColor = typedValue.data
-        val typedValue2 = TypedValue()
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOnBackground,
-            typedValue2,
-            true
-        )
-        val titleTextColor = typedValue2.data
         val typedValue3 = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
         val primaryTextColor = typedValue3.data
@@ -184,7 +176,6 @@ class ListActivity : AppCompatActivity() {
             //get the current tab
             val currentTab =
                 binding.listTabLayout.getTabAt(binding.listTabLayout.selectedTabPosition)
-            val currentViewePager = binding.listViewPager.getChildAt(0)
             val currentFragment =
                 supportFragmentManager.findFragmentByTag("f" + currentTab?.position.toString()) as? ListFragment
             currentFragment?.randomOptionClick()

@@ -449,7 +449,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                 model.mangaReadSources?.get(media.selected!!.sourceIndex) as? DynamicMangaParser
             parser?.let {
                 CoroutineScope(Dispatchers.IO).launch {
-                    val images = parser.imageList("", chapter.sChapter)
+                    val images = parser.imageList(chapter.sChapter)
 
                     // Create a download task
                     val downloadTask = MangaDownloaderService.DownloadTask(

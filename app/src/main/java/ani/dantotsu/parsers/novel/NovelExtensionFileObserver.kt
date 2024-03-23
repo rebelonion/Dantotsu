@@ -45,15 +45,6 @@ class NovelExtensionFileObserver(private val listener: Listener, private val pat
         }
     }
 
-    /**
-     * Loads the extension from the file.
-     *
-     * @param file The file name of the extension.
-     */
-    //private suspend fun loadExtensionFromFile(file: String): String {
-    //    return file
-    //}
-
     interface Listener {
         fun onExtensionFileCreated(file: File)
         fun onExtensionFileDeleted(file: File)

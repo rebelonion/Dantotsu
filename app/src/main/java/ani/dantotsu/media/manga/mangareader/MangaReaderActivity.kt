@@ -415,8 +415,7 @@ class MangaReaderActivity : AppCompatActivity() {
         scope.launch(Dispatchers.IO) {
             model.loadMangaChapterImages(
                 chapter,
-                media.selected!!,
-                media.mainName()
+                media.selected!!
             )
         }
     }
@@ -938,7 +937,6 @@ class MangaReaderActivity : AppCompatActivity() {
                 model.loadMangaChapterImages(
                     chapters[chaptersArr.getOrNull(currentChapterIndex + 1) ?: return@launch]!!,
                     media.selected!!,
-                    media.mainName(),
                     false
                 )
                 loading = false

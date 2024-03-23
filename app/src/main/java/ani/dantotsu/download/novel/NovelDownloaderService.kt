@@ -34,7 +34,6 @@ import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
@@ -65,7 +64,7 @@ class NovelDownloaderService : Service() {
     private val mutex = Mutex()
     private var isCurrentlyProcessing = false
 
-    val networkHelper = Injekt.get<NetworkHelper>()
+    private val networkHelper = Injekt.get<NetworkHelper>()
 
     override fun onBind(intent: Intent?): IBinder? {
         // This is only required for bound services.
@@ -248,7 +247,7 @@ class NovelDownloaderService : Service() {
 
                         networkHelper.downloadClient.newCall(request).execute().use { response ->
                             // Ensure the response is successful and has a body
-                            if (!response.isSuccessful || response.body == null) {
+                            if (!response.isSuccessful) {
                                 throw IOException("Failed to download file: ${response.message}")
                             }
 
@@ -474,7 +473,6 @@ class NovelDownloaderService : Service() {
 }
 
 object NovelServiceDataSingleton {
-    var sourceMedia: Media? = null
     var downloadQueue: Queue<NovelDownloaderService.DownloadTask> = ConcurrentLinkedQueue()
 
     @Volatile

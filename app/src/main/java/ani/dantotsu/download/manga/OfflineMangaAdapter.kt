@@ -49,7 +49,6 @@ class OfflineMangaAdapter(
         val imageView = view.findViewById<ImageView>(R.id.itemCompactImage)
         val titleTextView = view.findViewById<TextView>(R.id.itemCompactTitle)
         val itemScore = view.findViewById<TextView>(R.id.itemCompactScore)
-        val itemScoreBG = view.findViewById<View>(R.id.itemCompactScoreBG)
         val ongoing = view.findViewById<CardView>(R.id.itemCompactOngoing)
         val totalChapter = view.findViewById<TextView>(R.id.itemCompactTotal)
         val typeImage = view.findViewById<ImageView>(R.id.itemCompactTypeImage)

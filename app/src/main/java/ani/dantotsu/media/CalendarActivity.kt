@@ -43,13 +43,6 @@ class CalendarActivity : AppCompatActivity() {
         val typedValue = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
         val primaryColor = typedValue.data
-        val typedValue2 = TypedValue()
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOnBackground,
-            typedValue2,
-            true
-        )
-        val titleTextColor = typedValue2.data
         val typedValue3 = TypedValue()
         theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
         val primaryTextColor = typedValue3.data

@@ -235,7 +235,7 @@ class ChartBuilder {
             aaYaxis.tickInterval(tickInterval)
             aaOptions.yAxis(aaYaxis)
 
-            setColors(aaOptions, context, primaryColor)
+            setColors(aaOptions, context)
 
             return aaOptions
         }
@@ -308,7 +308,7 @@ class ChartBuilder {
             return data.map { (it.toDouble() / max) * 100 }
         }
 
-        private fun setColors(aaOptions: AAOptions, context: Context, primaryColor: Int) {
+        private fun setColors(aaOptions: AAOptions, context: Context) {
             val backgroundColor = TypedValue()
             context.theme.resolveAttribute(
                 com.google.android.material.R.attr.colorSurfaceVariant,

@@ -54,7 +54,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.math.MathUtils.clamp
 import androidx.core.view.isVisible
-import androidx.core.view.WindowCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.cast.CastPlayer
@@ -226,7 +225,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private var extractor: VideoExtractor? = null
     private var video: Video? = null
     private var subtitle: Subtitle? = null
-    private val player = "player_settings"
 
     private var notchHeight: Int = 0
     private var currentWindow = 0
@@ -1398,7 +1396,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             ext.onVideoPlayed(video)
         }
 
-        val simpleCache = VideoCache.getInstance(this)
         val httpClient = okHttpClient.newBuilder().apply {
             ignoreAllSSLErrors()
             followRedirects(true)
@@ -1814,7 +1811,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
                 if (PrefManager.getVal(PrefName.ShowTimeStampButton)) {
 
-                    if (!functionstarted && !disappeared && PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
+                    if (!functionstarted && !disappeared && PrefManager.getVal(PrefName.AutoHideTimeStamps)) {
                         disappearSkip()
                     } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)){
                         skipTimeButton.visibility = View.VISIBLE
@@ -2160,11 +2157,6 @@ class CustomCastButton : MediaRouteButton {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
-
-    constructor(context: Context, attrs: AttributeSet, castCallback: () -> Unit) : super(context, attrs) {
-        this.castCallback = castCallback
-    }
-
 
     override fun performClick(): Boolean {
         return if (PrefManager.getVal(PrefName.UseInternalCast)) {

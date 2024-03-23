@@ -48,6 +48,7 @@ internal object NovelExtensionLoader {
      * Attempts to load an extension from the given package name. It checks if the extension
      * contains the required feature flag before trying to load it.
      */
+    @Suppress("unused")
     fun loadExtensionFromPkgName(context: Context, pkgName: String): NovelLoadResult {
         val path =
             context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/$pkgName.apk"
@@ -56,7 +57,7 @@ internal object NovelExtensionLoader {
             File(it).setWritable(false)
             File(it).setReadable(true)
         }
-        val pkgInfo = try {
+        try {
             context.packageManager.getPackageArchiveInfo(path, 0)
         } catch (error: Exception) {
             // Unlikely, but the package may have been uninstalled at this point

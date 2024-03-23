@@ -97,7 +97,6 @@ class NovelExtensionPagingSource(
         val availableExtensions =
             availableExtensionsFlow.filterNot { it.pkgName in installedExtensions }
         val query = searchQuery
-        val isNsfwEnabled: Boolean = PrefManager.getVal(PrefName.NSFWExtension)
         val filteredExtensions = if (query.isEmpty()) {
             availableExtensions
         } else {

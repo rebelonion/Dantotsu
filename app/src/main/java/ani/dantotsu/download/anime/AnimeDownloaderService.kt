@@ -357,6 +357,7 @@ class AnimeDownloaderService : Service() {
         return false
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: AnimeDownloadTask) {
         launchIO {
             val directory = File(

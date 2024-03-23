@@ -1,11 +1,9 @@
 package ani.dantotsu.profile
 
 import android.animation.ObjectAnimator
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
@@ -267,13 +265,6 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         binding.profileUserAvatarContainer.visibility =
             if (binding.profileUserAvatarContainer.scaleX == 0f) View.GONE else View.VISIBLE
         val duration = (200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
-        val typedValue = TypedValue()
-        this@ProfileActivity.theme.resolveAttribute(
-            com.google.android.material.R.attr.colorSecondary,
-            typedValue,
-            true
-        )
-        val color = typedValue.data
         if (percentage >= percent && !isCollapsed) {
             isCollapsed = true
             ObjectAnimator.ofFloat(binding.profileUserDataContainer, "translationX", screenWidth)

@@ -44,6 +44,7 @@ class DiscordService : Service() {
     private lateinit var heartbeatThread: Thread
     private lateinit var client: OkHttpClient
     private lateinit var wakeLock: PowerManager.WakeLock
+    private val shouldLog = false
     var presenceStore = ""
     val json = Json {
         encodeDefaults = true
@@ -62,7 +63,7 @@ class DiscordService : Service() {
             PowerManager.PARTIAL_WAKE_LOCK,
             "discordRPC:backgroundPresence"
         )
-        wakeLock.acquire()
+        wakeLock.acquire(30*60*1000L /*30 minutes*/)
         log("WakeLock Acquired")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
@@ -265,7 +266,7 @@ class DiscordService : Service() {
                 retryAttempts++
                 if (retryAttempts >= maxRetryAttempts) {
                     log("WebSocket: Error, onFailure() reason: Max Retry Attempts")
-                    errorNotification("Could not set the presence", "Max Retry Attempts")
+                    errorNotification("Timeout setting presence", "Max Retry Attempts")
                     return
                 }
             }
@@ -344,13 +345,13 @@ class DiscordService : Service() {
                 Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            //TODO: Request permission
             return
         }
         notificationManager.notify(2, builder.build())
         log("Error Notified")
     }
 
+    @Suppress("unused")
     fun saveSimpleTestPresence() {
         val file = File(baseContext.cacheDir, "payload")
         //fill with test payload
@@ -377,7 +378,9 @@ class DiscordService : Service() {
     }
 
     fun log(string: String) {
-        //Logger.log(string)
+        if (shouldLog) {
+            Logger.log(string)
+        }
     }
 
     fun resume() {

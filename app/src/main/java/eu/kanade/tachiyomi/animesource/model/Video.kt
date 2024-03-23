@@ -101,6 +101,7 @@ open class Video(
         out.writeObject(headersMap)
     }
 
+    @Suppress("UNCHECKED_CAST")
     @Throws(IOException::class, ClassNotFoundException::class)
     private fun readObject(input: ObjectInputStream) {
         input.defaultReadObject()

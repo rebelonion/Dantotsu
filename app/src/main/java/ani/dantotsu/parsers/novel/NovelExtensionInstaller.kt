@@ -152,13 +152,8 @@ internal class NovelExtensionInstaller(private val context: Context) {
         val destinationPath =
             context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/$pkgName.apk"
 
-        val destinationPathDirectory =
-            context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/"
-        val destinationPathDirectoryFile = File(destinationPathDirectory)
-
-
         // Check if source path is obtained correctly
-        if (sourcePath == null) {
+        if (!sourcePath.startsWith(FILE_SCHEME)) {
             Logger.log("Source APK path not found.")
             downloadsRelay.call(downloadId to InstallStep.Error)
             return InstallStep.Error
@@ -263,6 +258,7 @@ internal class NovelExtensionInstaller(private val context: Context) {
         Logger.log("File copied to internal storage.")
     }
 
+    @Suppress("unused")
     private fun getRealPathFromURI(context: Context, contentUri: Uri): String? {
         var cursor: Cursor? = null
         try {
@@ -376,7 +372,6 @@ internal class NovelExtensionInstaller(private val context: Context) {
 
     companion object {
         const val APK_MIME = "application/vnd.android.package-archive"
-        const val EXTRA_DOWNLOAD_ID = "NovelExtensionInstaller.extra.DOWNLOAD_ID"
         const val FILE_SCHEME = "file://"
     }
 }

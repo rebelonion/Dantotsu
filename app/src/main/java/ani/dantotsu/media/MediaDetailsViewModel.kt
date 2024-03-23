@@ -67,15 +67,6 @@ class MediaDetailsViewModel : ViewModel() {
         return data
     }
 
-    fun loadSelectedStringLocation(sourceName: String): Int {
-        //find the location of the source in the list
-        var location = watchSources?.list?.indexOfFirst { it.name == sourceName } ?: 0
-        if (location == -1) {
-            location = 0
-        }
-        return location
-    }
-
     var continueMedia: Boolean? = null
     private var loading = false
 
@@ -295,7 +286,6 @@ class MediaDetailsViewModel : ViewModel() {
     suspend fun loadMangaChapterImages(
         chapter: MangaChapter,
         selected: Selected,
-        series: String,
         post: Boolean = true
     ): Boolean {
 

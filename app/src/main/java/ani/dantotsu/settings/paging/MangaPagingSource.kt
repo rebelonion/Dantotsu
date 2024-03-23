@@ -1,6 +1,5 @@
 package ani.dantotsu.settings.paging
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
@@ -38,6 +37,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+@Suppress("UNCHECKED_CAST")
 class MangaExtensionsViewModelFactory(
     private val mangaExtensionManager: MangaExtensionManager
 ) : ViewModelProvider.Factory {
@@ -47,7 +47,7 @@ class MangaExtensionsViewModelFactory(
 }
 
 class MangaExtensionsViewModel(
-    private val mangaExtensionManager: MangaExtensionManager
+    mangaExtensionManager: MangaExtensionManager
 ) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
     private var currentPagingSource: MangaExtensionPagingSource? = null

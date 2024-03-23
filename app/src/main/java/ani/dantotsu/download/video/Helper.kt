@@ -126,7 +126,6 @@ object Helper {
     fun downloadManager(context: Context): DownloadManager {
         return download ?: let {
             val database = Injekt.get<StandaloneDatabaseProvider>()
-            val downloadDirectory = File(getDownloadDirectory(context), DOWNLOAD_CONTENT_DIRECTORY)
             val dataSourceFactory = DataSource.Factory {
                 //val dataSource: HttpDataSource = OkHttpDataSource.Factory(okHttpClient).createDataSource()
                 val networkHelper = Injekt.get<NetworkHelper>()

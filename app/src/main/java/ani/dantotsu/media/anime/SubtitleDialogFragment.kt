@@ -113,7 +113,6 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                         binding.root.setCardBackgroundColor(TRANSPARENT)
                     }
                 }
-                val activity: Activity = requireActivity() as ExoplayerView
                 binding.root.setOnClickListener {
                     episode.selectedSubtitle = position - 1
                     model.setEpisode(episode, "Subtitle")

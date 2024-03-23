@@ -49,10 +49,9 @@ class OfflineAnimeAdapter(
         val imageView = view.findViewById<ImageView>(R.id.itemCompactImage)
         val titleTextView = view.findViewById<TextView>(R.id.itemCompactTitle)
         val itemScore = view.findViewById<TextView>(R.id.itemCompactScore)
-        val itemScoreBG = view.findViewById<View>(R.id.itemCompactScoreBG)
         val ongoing = view.findViewById<CardView>(R.id.itemCompactOngoing)
-        val totalepisodes = view.findViewById<TextView>(R.id.itemCompactTotal)
-        val typeimage = view.findViewById<ImageView>(R.id.itemCompactTypeImage)
+        val totalEpisodes = view.findViewById<TextView>(R.id.itemCompactTotal)
+        val typeImage = view.findViewById<ImageView>(R.id.itemCompactTypeImage)
         val type = view.findViewById<TextView>(R.id.itemCompactRelation)
         val typeView = view.findViewById<LinearLayout>(R.id.itemCompactType)
 
@@ -61,16 +60,16 @@ class OfflineAnimeAdapter(
             val episodes = view.findViewById<TextView>(R.id.itemTotal)
             episodes.text = context.getString(R.string.episodes)
             bannerView.setImageURI(item.banner ?: item.image)
-            totalepisodes.text = item.totalEpisodeList
+            totalEpisodes.text = item.totalEpisodeList
         } else if (style == 1) {
             val watchedEpisodes =
                 view.findViewById<TextView>(R.id.itemCompactUserProgress) // for compact view
             watchedEpisodes.text = item.watchedEpisode
-            totalepisodes.text = context.getString(R.string.total_divider, item.totalEpisode)
+            totalEpisodes.text = context.getString(R.string.total_divider, item.totalEpisode)
         }
 
         // Bind item data to the views
-        typeimage.setImageResource(R.drawable.ic_round_movie_filter_24)
+        typeImage.setImageResource(R.drawable.ic_round_movie_filter_24)
         type.text = item.type
         typeView.visibility = View.VISIBLE
         imageView.setImageURI(item.image)

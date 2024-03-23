@@ -57,8 +57,7 @@ class CommentNotificationTask : Task {
                 if (notifications.isNullOrEmpty()) return@withContext
                 PrefManager.setVal(
                     PrefName.UnreadCommentNotifications,
-                    PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + (notifications.size
-                        ?: 0)
+                    PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + (notifications.size)
                 )
 
                 notifications.forEach {
@@ -293,6 +292,7 @@ class CommentNotificationTask : Task {
         return notification
     }
 
+    @Suppress("unused")
     private fun getBitmapFromVectorDrawable(context: Context, drawableId: Int): Bitmap? {
         val drawable = ContextCompat.getDrawable(context, drawableId) ?: return null
         val bitmap = Bitmap.createBitmap(

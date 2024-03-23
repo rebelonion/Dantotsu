@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
-import android.net.Uri
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -26,7 +25,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
-import eu.kanade.tachiyomi.source.model.Page
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -162,7 +160,6 @@ abstract class BaseImageAdapter(
                     Glide.with(this@loadBitmap)
                         .asBitmap()
                         .let {
-                            val fileUri = Uri.fromFile(File(link.url)).toString()
                             val localFile = File(link.url)
                             if (localFile.exists()) {
                                 it.load(localFile.absoluteFile)
@@ -211,8 +208,4 @@ abstract class BaseImageAdapter(
         }
     }
 
-}
-
-interface ImageFetcher {
-    suspend fun fetchImage(page: Page): Bitmap?
 }

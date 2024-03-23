@@ -3,7 +3,6 @@ package ani.dantotsu.media
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Rect
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.SpannableStringBuilder
@@ -220,20 +219,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                     R.drawable.ic_round_favorite_24
                 )
             )
-            val typedValue = TypedValue()
-            this.theme.resolveAttribute(
-                com.google.android.material.R.attr.colorSecondary,
-                typedValue,
-                true
-            )
-            val color = typedValue.data
-            val typedValue2 = TypedValue()
-            this.theme.resolveAttribute(
-                com.google.android.material.R.attr.colorSecondary,
-                typedValue2,
-                true
-            )
-            val color2 = typedValue.data
 
             PopImageButton(
                 scope,
@@ -241,7 +226,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 R.drawable.ic_round_favorite_24,
                 R.drawable.ic_round_favorite_border_24,
                 R.color.bg_opp,
-                R.color.violet_400,//TODO: Change to colorSecondary
+                R.color.violet_400,
                 media.isFav
             ) {
                 media.isFav = it
@@ -487,13 +472,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         binding.mediaCover.visibility =
             if (binding.mediaCover.scaleX == 0f) View.GONE else View.VISIBLE
         val duration = (200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
-        val typedValue = TypedValue()
-        this@MediaDetailsActivity.theme.resolveAttribute(
-            com.google.android.material.R.attr.colorSecondary,
-            typedValue,
-            true
-        )
-        val color = typedValue.data
         if (percentage >= percent && !isCollapsed) {
             isCollapsed = true
             ObjectAnimator.ofFloat(binding.mediaTitle, "translationX", 0f).setDuration(duration)

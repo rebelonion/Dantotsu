@@ -367,7 +367,7 @@ class DatePickerFragment(activity: Activity, var date: FuzzyDate = FuzzyDate().g
         dialog.setButton(
             DialogInterface.BUTTON_NEUTRAL,
             activity.getString(R.string.remove)
-        ) { dialog, which ->
+        ) { _, which ->
             if (which == DialogInterface.BUTTON_NEUTRAL) {
                 date = FuzzyDate()
             }
@@ -1025,7 +1025,7 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
 }
 
 fun getAppString(res: Int): String {
-    return currContext()!!.getString(res) ?: ""
+    return currContext()?.getString(res) ?: ""
 }
 
 fun toast(string: String?) {

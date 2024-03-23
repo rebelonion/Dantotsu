@@ -1,14 +1,6 @@
 package ani.dantotsu.parsers
 
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import ani.dantotsu.FileUrl
 import ani.dantotsu.currContext
 import ani.dantotsu.media.anime.AnimeNameAdapter
@@ -35,12 +27,10 @@ import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.lang.awaitSingle
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -48,18 +38,9 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
 import java.io.UnsupportedEncodingException
 import java.net.URL
 import java.net.URLDecoder
-import java.util.regex.Pattern
-
-class AniyomiAdapter {
-    fun aniyomiToAnimeParser(extension: AnimeExtension.Installed): DynamicAnimeParser {
-        return DynamicAnimeParser(extension)
-    }
-}
 
 class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     val extension: AnimeExtension.Installed
@@ -103,7 +84,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         return false
     }
 
-    fun setDub(setDub: Boolean) {
+    private fun setDub(setDub: Boolean) {
         if (sourceLanguage >= extension.sources.size) {
             sourceLanguage = extension.sources.size - 1
         }
@@ -285,9 +266,6 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             val name = sAnime.title
             val link = sAnime.url
             val coverUrl = sAnime.thumbnail_url ?: ""
-            val otherNames = emptyList<String>() // Populate as needed
-            val total = 1
-            val extra: Map<String, String>? = null // Populate as needed
 
             // Create a new ShowResponse
             ShowResponse(name, link, coverUrl, sAnime)
@@ -333,7 +311,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
 }
 
 class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
-    val mangaCache = Injekt.get<MangaCache>()
+    private val mangaCache = Injekt.get<MangaCache>()
     val extension: MangaExtension.Installed
     var sourceLanguage = 0
 
@@ -408,7 +386,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         return ret
     }
 
-    suspend fun imageList(chapterLink: String, sChapter: SChapter): List<ImageData> {
+    suspend fun imageList(sChapter: SChapter): List<ImageData> {
         val source = try {
             extension.sources[sourceLanguage]
         } catch (e: Exception) {
@@ -441,121 +419,6 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         }
     }
 
-    suspend fun fetchAndProcessImage(
-        page: Page,
-        httpSource: HttpSource,
-        context: Context
-    ): Bitmap? {
-        return withContext(Dispatchers.IO) {
-            try {
-                // Fetch the image
-                val response = httpSource.getImage(page)
-                Logger.log("Response: ${response.code}")
-                Logger.log("Response: ${response.message}")
-
-                // Convert the Response to an InputStream
-                val inputStream = response.body.byteStream()
-
-                // Convert InputStream to Bitmap
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-
-                inputStream.close()
-                ani.dantotsu.media.manga.saveImage(
-                    bitmap,
-                    context.contentResolver,
-                    page.imageUrl!!,
-                    Bitmap.CompressFormat.JPEG,
-                    100
-                )
-
-                return@withContext bitmap
-            } catch (e: Exception) {
-                // Handle any exceptions
-                Logger.log("An error occurred: ${e.message}")
-                return@withContext null
-            }
-        }
-    }
-
-
-    fun fetchAndSaveImage(page: Page, httpSource: HttpSource, contentResolver: ContentResolver) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                // Fetch the image
-                val response = httpSource.getImage(page)
-
-                // Convert the Response to an InputStream
-                val inputStream = response.body.byteStream()
-
-                // Convert InputStream to Bitmap
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-
-                withContext(Dispatchers.IO) {
-                    // Save the Bitmap using MediaStore API
-                    saveImage(
-                        bitmap,
-                        contentResolver,
-                        "image_${System.currentTimeMillis()}.jpg",
-                        Bitmap.CompressFormat.JPEG,
-                        100
-                    )
-                }
-
-                inputStream.close()
-            } catch (e: Exception) {
-                // Handle any exceptions
-                Logger.log("An error occurred: ${e.message}")
-            }
-        }
-    }
-
-    fun saveImage(
-        bitmap: Bitmap,
-        contentResolver: ContentResolver,
-        filename: String,
-        format: Bitmap.CompressFormat,
-        quality: Int
-    ) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val contentValues = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-                    put(MediaStore.MediaColumns.MIME_TYPE, "image/${format.name.lowercase()}")
-                    put(
-                        MediaStore.MediaColumns.RELATIVE_PATH,
-                        "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Anime"
-                    )
-                }
-
-                val uri: Uri? = contentResolver.insert(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    contentValues
-                )
-
-                uri?.let {
-                    contentResolver.openOutputStream(it)?.use { os ->
-                        bitmap.compress(format, quality, os)
-                    }
-                }
-            } else {
-                val directory =
-                    File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Anime")
-                if (!directory.exists()) {
-                    directory.mkdirs()
-                }
-
-                val file = File(directory, filename)
-                FileOutputStream(file).use { outputStream ->
-                    bitmap.compress(format, quality, outputStream)
-                }
-            }
-        } catch (e: Exception) {
-            // Handle exception here
-            Logger.log("Exception while saving image: ${e.message}")
-        }
-    }
-
-
     override suspend fun search(query: String): List<ShowResponse> {
         val source = try {
             extension.sources[sourceLanguage]
@@ -587,9 +450,6 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             val name = sManga.title
             val link = sManga.url
             val coverUrl = sManga.thumbnail_url ?: ""
-            val otherNames = emptyList<String>() // Populate as needed
-            val total = 1
-            val extra: Map<String, String>? = null // Populate as needed
 
             // Create a new ShowResponse
             ShowResponse(name, link, coverUrl, sManga)
@@ -598,12 +458,10 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
     private fun pageToMangaImage(page: Page): MangaImage {
         var headersMap = mapOf<String, String>()
-        var urlWithoutHeaders = ""
         var url = ""
 
         page.imageUrl?.let {
             val splitUrl = it.split("&")
-            urlWithoutHeaders = splitUrl.getOrNull(0) ?: ""
             url = it
 
             headersMap = splitUrl.mapNotNull { part ->
@@ -641,35 +499,9 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             sChapter.date_upload
         )
     }
-
-    fun parseChapterTitle(title: String): Triple<String?, String?, String> {
-        val volumePattern =
-            Pattern.compile("(?:vol\\.?|v|volume\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
-        val chapterPattern =
-            Pattern.compile("(?:ch\\.?|chapter\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
-
-        val volumeMatcher = volumePattern.matcher(title)
-        val chapterMatcher = chapterPattern.matcher(title)
-
-        val volumeNumber = if (volumeMatcher.find()) volumeMatcher.group(1) else null
-        val chapterNumber = if (chapterMatcher.find()) chapterMatcher.group(1) else null
-
-        var remainingTitle = title
-        if (volumeNumber != null) {
-            remainingTitle =
-                volumeMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
-        }
-        if (chapterNumber != null) {
-            remainingTitle =
-                chapterMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
-        }
-
-        return Triple(volumeNumber, chapterNumber, remainingTitle.trim())
-    }
-
 }
 
-class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
+class VideoServerPassthrough(private val videoServer: VideoServer) : VideoExtractor() {
     override val server: VideoServer
         get() = videoServer
 
@@ -748,6 +580,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         return type
     }
 
+    @Suppress("unused")
     private fun headRequest(fileName: String, networkHelper: NetworkHelper): VideoType? {
         return try {
             Logger.log("attempting head request for $fileName")
