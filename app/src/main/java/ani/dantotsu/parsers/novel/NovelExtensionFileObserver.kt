@@ -1,7 +1,6 @@
 package ani.dantotsu.parsers.novel
 
 import android.os.FileObserver
-import android.util.Log
 import ani.dantotsu.parsers.novel.FileObserver.fileObserver
 import ani.dantotsu.util.Logger
 import java.io.File

@@ -24,7 +24,6 @@ class AuthorAdapter(
         return AuthorViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder:AuthorViewHolder, position: Int) {
         val binding = holder.binding
         setAnimation(binding.root.context, holder.binding.root)

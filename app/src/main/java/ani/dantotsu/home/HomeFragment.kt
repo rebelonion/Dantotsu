@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
@@ -81,7 +82,7 @@ class HomeFragment : Fragment() {
                 if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.homeUserBg.pause()
                 blurImage(binding.homeUserBg, Anilist.bg)
                 binding.homeUserDataProgressBar.visibility = View.GONE
-                binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+                binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
                 binding.homeAnimeList.setOnClickListener {
@@ -375,7 +376,7 @@ class HomeFragment : Fragment() {
     override fun onResume() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
         if (_binding != null) {
-            binding.homeNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+            binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
             binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
         }
         super.onResume()

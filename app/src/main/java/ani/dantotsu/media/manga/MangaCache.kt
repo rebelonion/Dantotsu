@@ -2,7 +2,6 @@ package ani.dantotsu.media.manga
 
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -10,8 +9,8 @@ import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.LruCache
-import ani.dantotsu.util.Logger
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.online.HttpSource
 import kotlinx.coroutines.Dispatchers
@@ -25,15 +24,13 @@ data class ImageData(
 ) {
     suspend fun fetchAndProcessImage(
         page: Page,
-        httpSource: HttpSource,
-        context: Context
+        httpSource: HttpSource
     ): Bitmap? {
         return withContext(Dispatchers.IO) {
             try {
                 // Fetch the image
                 val response = httpSource.getImage(page)
-                Logger.log("Response: ${response.code}")
-                Logger.log("Response: ${response.message}")
+                Logger.log("Response: ${response.code} - ${response.message}")
 
                 // Convert the Response to an InputStream
                 val inputStream = response.body.byteStream()

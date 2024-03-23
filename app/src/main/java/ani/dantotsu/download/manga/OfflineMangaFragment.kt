@@ -20,6 +20,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
 import ani.dantotsu.R
@@ -30,15 +31,16 @@ import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.SettingsDialogFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
@@ -178,11 +180,11 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         gridView.setOnItemLongClickListener { _, _, position, _ ->
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
-            val type: DownloadedType.Type =
+            val type: MediaType =
                 if (downloadManager.mangaDownloadedTypes.any { it.title == item.title }) {
-                    DownloadedType.Type.MANGA
+                    MediaType.MANGA
                 } else {
-                    DownloadedType.Type.NOVEL
+                    MediaType.NOVEL
                 }
             // Alert dialog to confirm deletion
             val builder =
@@ -234,7 +236,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             ) {
                 val first = view.getChildAt(0)
                 val visibility = first != null && first.top < 0
-                scrollTop.visibility = if (visibility) View.VISIBLE else View.GONE
+                scrollTop.isVisible = visibility
                 scrollTop.translationY =
                     -(navBarHeight + bottomBar.height + bottomBar.marginBottom).toFloat()
             }
@@ -288,11 +290,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
     }
 
     private fun getMedia(downloadedType: DownloadedType): Media? {
-        val type = when (downloadedType.type) {
-            DownloadedType.Type.MANGA -> "Manga"
-            DownloadedType.Type.ANIME -> "Anime"
-            else -> "Novel"
-        }
+        val type = downloadedType.type.asText()
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             "Dantotsu/$type/${downloadedType.title}"
@@ -316,11 +314,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
     }
 
     private fun loadOfflineMangaModel(downloadedType: DownloadedType): OfflineMangaModel {
-        val type = when (downloadedType.type) {
-            DownloadedType.Type.MANGA -> "Manga"
-            DownloadedType.Type.ANIME -> "Anime"
-            else -> "Novel"
-        }
+        val type = downloadedType.type.asText()
         val directory = File(
             currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
             "Dantotsu/$type/${downloadedType.title}"

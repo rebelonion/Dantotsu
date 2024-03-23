@@ -523,11 +523,10 @@ class CommentsFragment : Fragment() {
 
     }
 
-    @SuppressLint("SetTextI18n")
     fun replyTo(comment: CommentItem, username: String) {
         if (comment.isReplying) {
             activity.binding.commentReplyToContainer.visibility = View.VISIBLE
-            activity.binding.commentReplyTo.text = "Replying to $username"
+            activity.binding.commentReplyTo.text = getString(R.string.replying_to, username)
             activity.binding.commentReplyToCancel.setOnClickListener {
                 comment.replying(false)
                 replyCallback(comment)

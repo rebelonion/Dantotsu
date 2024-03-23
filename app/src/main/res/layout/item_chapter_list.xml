@@ -41,7 +41,8 @@
                 android:layout_marginEnd="5dp"
                 android:background="?android:attr/selectableItemBackground"
                 app:srcCompat="@drawable/ic_round_remove_red_eye_24"
-                app:tint="?attr/colorOnBackground" />
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription"/>
 
             <ImageButton
                 android:id="@+id/itemDownload"
@@ -50,7 +51,8 @@
                 android:layout_marginEnd="5dp"
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/ic_download_24"
-                app:tint="?attr/colorOnBackground" />
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription"/>
 
         </LinearLayout>
         <LinearLayout

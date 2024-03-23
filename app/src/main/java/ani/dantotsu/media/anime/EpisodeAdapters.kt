@@ -8,18 +8,21 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.LinearLayout
 import androidx.annotation.OptIn
+import androidx.core.view.isVisible
 import androidx.lifecycle.coroutineScope
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadIndex
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
+import ani.dantotsu.R
 import ani.dantotsu.connections.updateProgress
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.databinding.ItemEpisodeGridBinding
 import ani.dantotsu.databinding.ItemEpisodeListBinding
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
+import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.model.GlideUrl
@@ -97,7 +100,6 @@ class EpisodeAdapter(
         return type
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val ep = arr[position]
         val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {
@@ -125,8 +127,7 @@ class EpisodeAdapter(
                     binding.itemEpisodeFiller.visibility = View.GONE
                     binding.itemEpisodeFillerView.visibility = View.GONE
                 }
-                binding.itemEpisodeDesc.visibility =
-                    if (ep.desc != null && ep.desc?.trim(' ') != "") View.VISIBLE else View.GONE
+                binding.itemEpisodeDesc.isVisible = !ep.desc.isNullOrBlank()
                 binding.itemEpisodeDesc.text = ep.desc ?: ""
                 holder.bind(ep.number, ep.downloadProgress, ep.desc)
 
@@ -203,8 +204,7 @@ class EpisodeAdapter(
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(), holder.binding.root)
                 binding.itemEpisodeNumber.text = ep.number
-                binding.itemEpisodeFillerView.visibility =
-                    if (ep.filler) View.VISIBLE else View.GONE
+                binding.itemEpisodeFillerView.isVisible = ep.filler
                 if (media.userProgress != null) {
                     if ((ep.number.toFloatOrNull() ?: 9999f) <= media.userProgress!!.toFloat())
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
@@ -429,7 +429,7 @@ class EpisodeAdapter(
         if (bytes < 0) return null
         val unit = 1000
         if (bytes < unit) return "$bytes B"
-        val exp = (Math.log(bytes.toDouble()) / ln(unit.toDouble())).toInt()
+        val exp = (ln(bytes.toDouble()) / ln(unit.toDouble())).toInt()
         val pre = ("KMGTPE")[exp - 1]
         return String.format("%.1f %sB", bytes / unit.toDouble().pow(exp.toDouble()), pre)
     }

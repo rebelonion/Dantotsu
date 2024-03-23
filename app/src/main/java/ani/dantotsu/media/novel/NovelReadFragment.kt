@@ -9,7 +9,6 @@ import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,6 +27,7 @@ import ani.dantotsu.download.novel.NovelDownloaderService
 import ani.dantotsu.download.novel.NovelServiceDataSingleton
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.novel.novelreader.NovelReaderActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.parsers.ShowResponse
@@ -90,7 +90,7 @@ class NovelReadFragment : Fragment(),
                 DownloadedType(
                     media.mainName(),
                     novel.name,
-                    DownloadedType.Type.NOVEL
+                    MediaType.NOVEL
                 )
             )
         ) {
@@ -122,7 +122,7 @@ class NovelReadFragment : Fragment(),
             DownloadedType(
                 media.mainName(),
                 novel.name,
-                DownloadedType.Type.NOVEL
+                MediaType.NOVEL
             )
         )
     }
@@ -133,7 +133,7 @@ class NovelReadFragment : Fragment(),
             DownloadedType(
                 media.mainName(),
                 novel.name,
-                DownloadedType.Type.NOVEL
+                MediaType.NOVEL
             )
         )
     }

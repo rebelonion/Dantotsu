@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.Dantotsu.AppWidgetContainer">
 
     <ImageView
@@ -8,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/gradient_background" />
+        android:src="@drawable/gradient_background"
+        tools:ignore="ContentDescription"/>
 
     <RelativeLayout
         android:id="@+id/widgetContainer"
@@ -23,7 +25,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:foregroundGravity="center_vertical"
-            android:src="@drawable/ic_dantotsu_round" />
+            android:src="@drawable/ic_dantotsu_round"
+            tools:ignore="ContentDescription"/>
 
         <TextView
             android:id="@+id/widgetTitle"
@@ -34,7 +37,7 @@
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/logoView"
             android:gravity="center_vertical"
-            android:text="Currently Airing"
+            android:text="@string/currently_airing"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -44,12 +47,12 @@
             android:layout_height="match_parent"
             android:layout_below="@id/widgetTitle" />
 
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <TextView
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="No shows to display"
+            android:text="@string/no_shows_to_display"
             android:textColor="#ffffff"
             android:textSize="20sp"
             android:textStyle="bold" />

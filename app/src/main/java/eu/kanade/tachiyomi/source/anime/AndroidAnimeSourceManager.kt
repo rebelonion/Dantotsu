@@ -82,7 +82,7 @@ class AndroidAnimeSourceManager(
 
     }
 
-    private suspend fun createStubSource(id: Long): StubAnimeSource {
+    private fun createStubSource(id: Long): StubAnimeSource {
         return StubAnimeSource(AnimeSourceData(id, "", ""))
     }
 }

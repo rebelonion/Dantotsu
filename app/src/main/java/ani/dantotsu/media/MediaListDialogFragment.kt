@@ -36,7 +36,6 @@ class MediaListDialogFragment : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.mediaListContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
         var media: Media?
@@ -168,9 +167,10 @@ class MediaListDialogFragment : BottomSheetDialogFragment() {
                     val init =
                         if (binding.mediaListProgress.text.toString() != "") binding.mediaListProgress.text.toString()
                             .toInt() else 0
-                    if (init < (total
-                            ?: 5000)
-                    ) binding.mediaListProgress.setText((init + 1).toString())
+                    if (init < (total ?: 5000)) {
+                        val progressText = "${init + 1}"
+                        binding.mediaListProgress.setText(progressText)
+                    }
                     if (init + 1 == (total ?: 5000)) {
                         binding.mediaListStatus.setText(statusStrings[2], false)
                         onComplete()

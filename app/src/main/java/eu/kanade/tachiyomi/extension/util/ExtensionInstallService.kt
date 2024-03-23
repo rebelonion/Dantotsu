@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.extension.anime.util
+package eu.kanade.tachiyomi.extension.util
 
 import android.app.Service
 import android.content.Context
@@ -8,18 +8,20 @@ import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import ani.dantotsu.R
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.util.Logger
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.data.notification.Notifications
-import eu.kanade.tachiyomi.extension.anime.installer.InstallerAnime
-import eu.kanade.tachiyomi.extension.anime.installer.PackageInstallerInstallerAnime
-import eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstaller.Companion.EXTRA_DOWNLOAD_ID
+import eu.kanade.tachiyomi.extension.installer.PackageInstallerInstaller
+import eu.kanade.tachiyomi.extension.installer.Installer
+import eu.kanade.tachiyomi.extension.util.ExtensionInstaller.Companion.EXTRA_DOWNLOAD_ID
+import eu.kanade.tachiyomi.extension.util.ExtensionInstaller.Companion.EXTRA_EXTENSION_TYPE
 import eu.kanade.tachiyomi.util.system.getSerializableExtraCompat
 import eu.kanade.tachiyomi.util.system.notificationBuilder
 
-class AnimeExtensionInstallService : Service() {
+class ExtensionInstallService : Service() {
 
-    private var installer: InstallerAnime? = null
+    private var installer: Installer? = null
 
     override fun onCreate() {
         val notification = notificationBuilder(Notifications.CHANNEL_EXTENSIONS_UPDATE) {
@@ -27,7 +29,7 @@ class AnimeExtensionInstallService : Service() {
             setAutoCancel(false)
             setOngoing(true)
             setShowWhen(false)
-            setContentTitle("Installing Anime Extension...")
+            setContentTitle("Installing manga extension...")
             setProgress(100, 100, true)
         }.build()
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
@@ -43,18 +45,19 @@ class AnimeExtensionInstallService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val uri = intent?.data
+        val type = intent?.getSerializableExtraCompat<MediaType>(EXTRA_EXTENSION_TYPE)
         val id = intent?.getLongExtra(EXTRA_DOWNLOAD_ID, -1)?.takeIf { it != -1L }
         val installerUsed = intent?.getSerializableExtraCompat<BasePreferences.ExtensionInstaller>(
-            EXTRA_INSTALLER,
+            EXTRA_INSTALLER
         )
-        if (uri == null || id == null || installerUsed == null) {
+        if (uri == null || type == null || id == null || installerUsed == null) {
             stopSelf()
             return START_NOT_STICKY
         }
 
         if (installer == null) {
             installer = when (installerUsed) {
-                BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstallerAnime(
+                BasePreferences.ExtensionInstaller.PACKAGEINSTALLER -> PackageInstallerInstaller(
                     this
                 )
 
@@ -65,7 +68,7 @@ class AnimeExtensionInstallService : Service() {
                 }
             }
         }
-        installer!!.addToQueue(id, uri)
+        installer!!.addToQueue(type, id, uri)
         return START_NOT_STICKY
     }
 
@@ -81,13 +84,15 @@ class AnimeExtensionInstallService : Service() {
 
         fun getIntent(
             context: Context,
+            type: MediaType,
             downloadId: Long,
             uri: Uri,
             installer: BasePreferences.ExtensionInstaller,
         ): Intent {
-            return Intent(context, AnimeExtensionInstallService::class.java)
-                .setDataAndType(uri, AnimeExtensionInstaller.APK_MIME)
+            return Intent(context, ExtensionInstallService::class.java)
+                .setDataAndType(uri, ExtensionInstaller.APK_MIME)
                 .putExtra(EXTRA_DOWNLOAD_ID, downloadId)
+                .putExtra(EXTRA_EXTENSION_TYPE, type)
                 .putExtra(EXTRA_INSTALLER, installer)
         }
     }

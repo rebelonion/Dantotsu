@@ -387,6 +387,7 @@ class AnilistQueries {
             returnArray.addAll(map.values)
             return returnArray
         }
+        @Suppress("UNCHECKED_CAST")
         val list = PrefManager.getNullableCustomVal(
             "continueAnimeList",
             listOf<Int>(),
@@ -544,6 +545,7 @@ class AnilistQueries {
                 returnMap["current$type"] = returnArray
                 return
             }
+            @Suppress("UNCHECKED_CAST")
             val list = PrefManager.getNullableCustomVal(
                 "continueAnimeList",
                 listOf<Int>(),
@@ -573,6 +575,7 @@ class AnilistQueries {
                     subMap[m.id] = m
                 }
             }
+            @Suppress("UNCHECKED_CAST")
             val list = PrefManager.getNullableCustomVal(
                 "continueAnimeList",
                 listOf<Int>(),
@@ -734,7 +737,7 @@ class AnilistQueries {
         }
 
         sorted["All"] = all
-        val listSort: String = if (anime) PrefManager.getVal(PrefName.AnimeListSortOrder)
+        val listSort: String? = if (anime) PrefManager.getVal(PrefName.AnimeListSortOrder)
         else PrefManager.getVal(PrefName.MangaListSortOrder)
         val sort = listSort ?: sortOrder ?: options?.rowOrder
         for (i in sorted.keys) {

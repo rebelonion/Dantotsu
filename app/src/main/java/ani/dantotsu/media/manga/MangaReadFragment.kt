@@ -20,6 +20,8 @@ import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils.clamp
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -28,21 +30,25 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.*
+import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.manga.MangaDownloaderService
 import ani.dantotsu.download.manga.MangaServiceDataSingleton
+import ani.dantotsu.dp
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
+import ani.dantotsu.setNavigationTheme
 import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -354,14 +360,12 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         val changeUIVisibility: (Boolean) -> Unit = { show ->
             val activity = activity
             if (activity is MediaDetailsActivity && isAdded) {
-                val visibility = if (show) View.VISIBLE else View.GONE
-                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).visibility = visibility
-                activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
-                activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
-                activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-                activity.tabLayout.setVisibility(visibility)
-                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                    if (show) View.GONE else View.VISIBLE
+                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).isVisible = show
+                activity.findViewById<ViewPager2>(R.id.mediaViewPager).isVisible = show
+                activity.findViewById<CardView>(R.id.mediaCover).isVisible = show
+                activity.findViewById<CardView>(R.id.mediaClose).isVisible = show
+                activity.navBar.isVisible = show
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).isGone = show
             }
         }
         var itemSelected = false
@@ -492,7 +496,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.MANGA
+                MediaType.MANGA
             )
         )
         chapterAdapter.deleteDownload(i)
@@ -510,7 +514,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.MANGA
+                MediaType.MANGA
             )
         )
         chapterAdapter.purgeDownload(i)

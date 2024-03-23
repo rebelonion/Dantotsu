@@ -31,7 +31,6 @@ class UrlAdapter(
         )
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: UrlViewHolder, position: Int) {
         val binding = holder.binding
         val url = urls[position]

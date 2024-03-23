@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -14,7 +13,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -161,16 +159,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
+        val bottomNavBar = findViewById<AnimatedBottomBar>(R.id.navbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-            val backgroundDrawable = _bottomBar.background as GradientDrawable
+            val backgroundDrawable = bottomNavBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
             val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xF9000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
-            _bottomBar.background = backgroundDrawable
+            bottomNavBar.background = backgroundDrawable
         }
-        _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        bottomNavBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
         val offset = try {
             val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -339,7 +337,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, NoInternet::class.java))
             } else {
                 val model: AnilistHomeViewModel by viewModels()
-                model.genres.observe(this) { it ->
+                model.genres.observe(this) {
                     if (it != null) {
                         if (it) {
                             val navbar = binding.includedNavbar.navbar
@@ -364,7 +362,7 @@ class MainActivity : AppCompatActivity() {
                                     mainViewPager.setCurrentItem(newIndex, false)
                                 }
                             })
-                            if (mainViewPager.getCurrentItem() != selectedOption) {
+                            if (mainViewPager.currentItem != selectedOption) {
                                 navbar.selectTabAt(selectedOption)
                                 mainViewPager.post {
                                     mainViewPager.setCurrentItem(
@@ -467,18 +465,12 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
     }
 
-    private val Int.toPx get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
-    ).toInt()
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
+        val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 8 else 32
         val params : ViewGroup.MarginLayoutParams =
             binding.includedNavbar.navbar.layoutParams as ViewGroup.MarginLayoutParams
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            params.updateMargins(bottom = 8.toPx)
-        else
-            params.updateMargins(bottom = 32.toPx)
+        params.updateMargins(bottom = margin.toPx)
     }
 
     private fun passwordAlertDialog(callback: (CharArray?) -> Unit) {

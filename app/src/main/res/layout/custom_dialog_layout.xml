@@ -1,6 +1,7 @@
 <!-- custom_dialog_layout.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -13,7 +14,7 @@
         android:fontFamily="@font/poppins_bold"
         android:gravity="center|start"
         android:singleLine="true"
-        android:text="Scanlators"
+        android:text="@string/scanlators"
         android:textColor="?attr/colorOnBackground"
         android:textSize="16sp" />
 
@@ -40,7 +41,8 @@
             android:layout_marginEnd="5dp"
             android:background="@null"
             android:src="@drawable/untick_all_boxes"
-            app:tint="?attr/colorPrimary" />
+            app:tint="?attr/colorPrimary"
+            tools:ignore="ContentDescription" />
     </FrameLayout>
 
 </LinearLayout>

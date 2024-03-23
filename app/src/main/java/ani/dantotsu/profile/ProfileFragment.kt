@@ -11,6 +11,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.LiveData
@@ -33,6 +34,7 @@ import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.util.AniMarkdown.Companion.getFullAniHTML
 import ani.dantotsu.util.Logger
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -57,7 +59,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
 
-        user = arguments?.getSerializable("user") as Query.UserProfile
+        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
             model.setData(user.id)
         }
@@ -101,8 +103,7 @@ class ProfileFragment : Fragment() {
             }
         }
 
-        binding.userInfoContainer.visibility =
-            if (user.about != null) View.VISIBLE else View.GONE
+        binding.userInfoContainer.isVisible = user.about != null
 
 
         binding.statsEpisodesWatched.text = user.statistics.anime.episodesWatched.toString()

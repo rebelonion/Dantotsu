@@ -1,6 +1,5 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -22,7 +21,6 @@ abstract class SourceAdapter(
         return SourceViewHolder(binding)
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: SourceViewHolder, position: Int) {
         val binding = holder.binding
         val character = sources[position]

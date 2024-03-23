@@ -1,9 +1,11 @@
 package ani.dantotsu.profile.activity
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -28,14 +30,16 @@ class FeedActivity : AppCompatActivity() {
         binding = ActivityFeedBinding.inflate(layoutInflater)
         setContentView(binding.root)
         navBar = binding.feedNavBar
-        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
+        val navBarMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarMargin }
         val personalTab = navBar.createTab(R.drawable.ic_round_person_24, "Following")
         val globalTab = navBar.createTab(R.drawable.ic_globe_24, "Global")
         navBar.addTab(personalTab)
         navBar.addTab(globalTab)
         binding.listTitle.text = getString(R.string.activities)
         binding.feedViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin += navBarHeight
+            bottomMargin = navBarMargin
             topMargin += statusBarHeight
         }
         binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
@@ -57,8 +61,18 @@ class FeedActivity : AppCompatActivity() {
             }
         })
         binding.listBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+        val params : ViewGroup.MarginLayoutParams =
+            binding.feedViewPager.layoutParams as ViewGroup.MarginLayoutParams
+        val paramsNav : ViewGroup.MarginLayoutParams = navBar.layoutParams as ViewGroup.MarginLayoutParams
+        params.updateMargins(bottom = margin)
+        paramsNav.updateMargins(bottom = margin)
     }
 
     override fun onResume() {

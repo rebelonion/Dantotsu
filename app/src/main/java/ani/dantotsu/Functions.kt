@@ -10,11 +10,13 @@ import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
+import android.content.ComponentName
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import android.content.res.Resources
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -182,6 +184,10 @@ fun currActivity(): Activity? {
 var loadMedia: Int? = null
 var loadIsMAL = false
 
+val Int.toPx get() = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
+).toInt()
+
 fun initActivity(a: Activity) {
     val window = a.window
     WindowCompat.setDecorFitsSystemWindows(window, false)
@@ -201,6 +207,7 @@ fun initActivity(a: Activity) {
             ViewCompat.getRootWindowInsets(window.decorView.findViewById(android.R.id.content))
                 ?.apply {
                     navBarHeight = this.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
                 }
         }
         WindowInsetsControllerCompat(
@@ -222,6 +229,7 @@ fun initActivity(a: Activity) {
                 statusBarHeight = windowInsets.getInsets(WindowInsetsCompat.Type.statusBars()).top
                 navBarHeight =
                     windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) navBarHeight += 48.toPx
             }
         }
     if (a !is MainActivity) a.setNavigationTheme()
@@ -394,7 +402,6 @@ class InputFilterMinMax(
         return ""
     }
 
-    @SuppressLint("SetTextI18n")
     private fun isInRange(a: Double, b: Double, c: Double): Boolean {
         val statusStrings = currContext()!!.resources.getStringArray(R.array.status_manga)[2]
 
@@ -712,6 +719,23 @@ fun openLinkInBrowser(link: String?) {
     }
 }
 
+fun openLinkInYouTube(link: String?) {
+    link?.let {
+        try {
+            val videoIntent = Intent(Intent.ACTION_VIEW).apply {
+                addCategory(Intent.CATEGORY_BROWSABLE)
+                data = Uri.parse(link)
+                setPackage("com.google.android.youtube")
+            }
+            currContext()!!.startActivity(videoIntent)
+        } catch (e: ActivityNotFoundException) {
+            openLinkInBrowser(link)
+        } catch (e: Exception) {
+            Logger.log(e)
+        }
+    }
+}
+
 fun saveImageToDownloads(title: String, bitmap: Bitmap, context: Activity) {
     FileProvider.getUriForFile(
         context,
@@ -897,9 +921,9 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
     }
 }
 
-@SuppressLint("SetTextI18n")
 fun countDown(media: Media, view: ViewGroup) {
-    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
+    if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null
+        && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
         val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
         view.addView(v.root, 0)
         v.mediaCountdownText.text =
@@ -1000,6 +1024,10 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
     inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
 
+fun getAppString(res: Int): String {
+    return currContext()!!.getString(res) ?: ""
+}
+
 fun toast(string: String?) {
     if (string != null) {
         Logger.log(string)
@@ -1008,6 +1036,10 @@ fun toast(string: String?) {
                 .show()
         }
     }
+}
+
+fun toast(res: Int) {
+    toast(getAppString(res))
 }
 
 fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
@@ -1048,6 +1080,10 @@ fun snackString(s: String?, activity: Activity? = null, clipboard: String? = nul
         Injekt.get<CrashlyticsInterface>().logException(e)
     }
     return null
+}
+
+fun snackString(r: Int, activity: Activity? = null, clipboard: String? = null): Snackbar? {
+    return snackString(getAppString(r), activity, clipboard)
 }
 
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :

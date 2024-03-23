@@ -107,7 +107,7 @@
                         android:textSize="14sp"
                         app:cornerRadius="8dp"
                         app:strokeColor="?attr/colorSecondaryContainer"
-                        tools:ignore="HardcodedText,SpeakableTextPresentCheck" />
+                        tools:ignore="SpeakableTextPresentCheck" />
 
                 </LinearLayout>
 
@@ -145,15 +145,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    tools:ignore="HardcodedText">
+                    android:orientation="horizontal">
 
                     <LinearLayout
                         android:id="@+id/profileFollowerCountContainer"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginVertical="8dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -170,7 +168,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semi_bold"
-                            android:text="Follower" />
+                            android:text="@string/followers" />
 
                     </LinearLayout>
 
@@ -183,8 +181,7 @@
                         android:id="@+id/profileFollowingCountContainer"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginVertical="8dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -201,7 +198,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semi_bold"
-                            android:text="Following" />
+                            android:text="@string/following" />
 
                     </LinearLayout>
 
@@ -214,8 +211,7 @@
                         android:id="@+id/profileAnimeCountContainer"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginVertical="8dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -232,7 +228,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semi_bold"
-                            android:text="Anime" />
+                            android:text="@string/anime" />
 
                     </LinearLayout>
 
@@ -245,8 +241,7 @@
                         android:id="@+id/profileMangaCountContainer"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginVertical="8dp"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:orientation="vertical">
@@ -263,7 +258,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_semi_bold"
-                            android:text="Manga" />
+                            android:text="@string/manga" />
 
                     </LinearLayout>
                 </LinearLayout>
@@ -276,7 +271,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="72dp"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
@@ -292,7 +286,7 @@
     <nl.joery.animatedbottombar.AnimatedBottomBar
         android:id="@+id/profileNavBar"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|bottom"
         android:background="?attr/colorSurface"
         android:padding="0dp"

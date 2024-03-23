@@ -17,6 +17,8 @@ import androidx.annotation.OptIn
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.math.MathUtils
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -27,19 +29,24 @@ import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.*
+import ani.dantotsu.FileUrl
+import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.video.ExoplayerDownloadService
+import ani.dantotsu.dp
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaType
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.HAnimeSources
+import ani.dantotsu.setNavigationTheme
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -340,16 +347,12 @@ class AnimeWatchFragment : Fragment() {
         val changeUIVisibility: (Boolean) -> Unit = { show ->
             val activity = activity
             if (activity is MediaDetailsActivity && isAdded) {
-                val visibility = if (show) View.VISIBLE else View.GONE
-                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).visibility = visibility
-                activity.findViewById<ViewPager2>(R.id.mediaViewPager).visibility = visibility
-                activity.findViewById<CardView>(R.id.mediaCover).visibility = visibility
-                activity.findViewById<CardView>(R.id.mediaClose).visibility = visibility
-
-                activity.tabLayout.setVisibility(visibility)
-
-                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                    if (show) View.GONE else View.VISIBLE
+                activity.findViewById<AppBarLayout>(R.id.mediaAppBar).isVisible = show
+                activity.findViewById<ViewPager2>(R.id.mediaViewPager).isVisible = show
+                activity.findViewById<CardView>(R.id.mediaCover).isVisible = show
+                activity.findViewById<CardView>(R.id.mediaClose).isVisible = show
+                activity.navBar.isVisible = show
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).isGone = show
             }
         }
         var itemSelected = false
@@ -435,7 +438,7 @@ class AnimeWatchFragment : Fragment() {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.ANIME
+                MediaType.ANIME
             )
         )
         episodeAdapter.purgeDownload(i)
@@ -447,7 +450,7 @@ class AnimeWatchFragment : Fragment() {
             DownloadedType(
                 media.mainName(),
                 i,
-                DownloadedType.Type.ANIME
+                MediaType.ANIME
             )
         )
         val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)

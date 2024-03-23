@@ -1,4 +1,4 @@
-package eu.kanade.tachiyomi.extension.manga.util
+package eu.kanade.tachiyomi.extension.util
 
 import android.app.DownloadManager
 import android.content.BroadcastReceiver
@@ -6,15 +6,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import ani.dantotsu.media.MediaType
+import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.util.Logger
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.manga.installer.InstallerManga
+import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
+import eu.kanade.tachiyomi.extension.installer.Installer
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import rx.Observable
@@ -29,7 +33,7 @@ import java.util.concurrent.TimeUnit
  *
  * @param context The application context.
  */
-internal class MangaExtensionInstaller(private val context: Context) {
+internal class ExtensionInstaller(private val context: Context) {
 
     /**
      * The system's download manager
@@ -61,7 +65,7 @@ internal class MangaExtensionInstaller(private val context: Context) {
      * @param url The url of the apk.
      * @param extension The extension to install.
      */
-    fun downloadAndInstall(url: String, extension: MangaExtension) = Observable.defer {
+    fun downloadAndInstall(url: String, extension: AnimeExtension): Observable<InstallStep> = Observable.defer {
         val pkgName = extension.pkgName
 
         val oldDownload = activeDownloads[pkgName]
@@ -81,6 +85,83 @@ internal class MangaExtensionInstaller(private val context: Context) {
                 Environment.DIRECTORY_DOWNLOADS,
                 downloadUri.lastPathSegment
             )
+            .setDescription(MediaType.ANIME.asText())
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+
+        val id = downloadManager.enqueue(request)
+        activeDownloads[pkgName] = id
+
+        downloadsRelay.filter { it.first == id }
+            .map { it.second }
+            // Poll download status
+            .mergeWith(pollStatus(id))
+            // Stop when the application is installed or errors
+            .takeUntil { it.isCompleted() }
+            // Always notify on main thread
+            .observeOn(AndroidSchedulers.mainThread())
+            // Always remove the download when unsubscribed
+            .doOnUnsubscribe { deleteDownload(pkgName) }
+    }
+
+    fun downloadAndInstall(url: String, extension: MangaExtension): Observable<InstallStep> = Observable.defer {
+        val pkgName = extension.pkgName
+
+        val oldDownload = activeDownloads[pkgName]
+        if (oldDownload != null) {
+            deleteDownload(pkgName)
+        }
+
+        // Register the receiver after removing (and unregistering) the previous download
+        downloadReceiver.register()
+
+        val downloadUri = url.toUri()
+        val request = DownloadManager.Request(downloadUri)
+            .setTitle(extension.name)
+            .setMimeType(APK_MIME)
+            .setDestinationInExternalFilesDir(
+                context,
+                Environment.DIRECTORY_DOWNLOADS,
+                downloadUri.lastPathSegment
+            )
+            .setDescription(MediaType.MANGA.asText())
+            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+
+        val id = downloadManager.enqueue(request)
+        activeDownloads[pkgName] = id
+
+        downloadsRelay.filter { it.first == id }
+            .map { it.second }
+            // Poll download status
+            .mergeWith(pollStatus(id))
+            // Stop when the application is installed or errors
+            .takeUntil { it.isCompleted() }
+            // Always notify on main thread
+            .observeOn(AndroidSchedulers.mainThread())
+            // Always remove the download when unsubscribed
+            .doOnUnsubscribe { deleteDownload(pkgName) }
+    }
+
+    fun downloadAndInstall(url: String, extension: NovelExtension) = Observable.defer {
+        val pkgName = extension.pkgName
+
+        val oldDownload = activeDownloads[pkgName]
+        if (oldDownload != null) {
+            deleteDownload(pkgName)
+        }
+
+        // Register the receiver after removing (and unregistering) the previous download
+        downloadReceiver.register()
+
+        val downloadUri = url.toUri()
+        val request = DownloadManager.Request(downloadUri)
+            .setTitle(extension.name)
+            .setMimeType(APK_MIME)
+            .setDestinationInExternalFilesDir(
+                context,
+                Environment.DIRECTORY_DOWNLOADS,
+                downloadUri.lastPathSegment
+            )
+            .setDescription(MediaType.MANGA.asText())
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
         val id = downloadManager.enqueue(request)
@@ -134,11 +215,12 @@ internal class MangaExtensionInstaller(private val context: Context) {
      *
      * @param uri The uri of the extension to install.
      */
-    fun installApk(downloadId: Long, uri: Uri) {
+    fun installApk(type: MediaType, downloadId: Long, uri: Uri) {
         when (val installer = extensionInstaller.get()) {
             BasePreferences.ExtensionInstaller.LEGACY -> {
-                val intent = Intent(context, MangaExtensionInstallActivity::class.java)
+                val intent = Intent(context, ExtensionInstallActivity::class.java)
                     .setDataAndType(uri, APK_MIME)
+                    .putExtra(EXTRA_EXTENSION_TYPE, type)
                     .putExtra(EXTRA_DOWNLOAD_ID, downloadId)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
@@ -147,7 +229,7 @@ internal class MangaExtensionInstaller(private val context: Context) {
 
             else -> {
                 val intent =
-                    MangaExtensionInstallService.getIntent(context, downloadId, uri, installer)
+                    ExtensionInstallService.getIntent(context, type, downloadId, uri, installer)
                 ContextCompat.startForegroundService(context, intent)
             }
         }
@@ -159,7 +241,7 @@ internal class MangaExtensionInstaller(private val context: Context) {
     fun cancelInstall(pkgName: String) {
         val downloadId = activeDownloads.remove(pkgName) ?: return
         downloadManager.remove(downloadId)
-        InstallerManga.cancelInstallQueue(context, downloadId)
+        Installer.cancelInstallQueue(context, downloadId)
     }
 
     /**
@@ -168,10 +250,13 @@ internal class MangaExtensionInstaller(private val context: Context) {
      * @param pkgName The package name of the extension to uninstall
      */
     fun uninstallApk(pkgName: String) {
-        val intent = Intent(Intent.ACTION_UNINSTALL_PACKAGE, "package:$pkgName".toUri())
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val intent = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)
+            Intent(Intent.ACTION_DELETE).setData("package:$pkgName".toUri())
+        else
+            @Suppress("DEPRECATION")
+            Intent(Intent.ACTION_UNINSTALL_PACKAGE, "package:$pkgName".toUri())
 
-        context.startActivity(intent)
+        context.startActivity(intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
     /**
@@ -255,8 +340,11 @@ internal class MangaExtensionInstaller(private val context: Context) {
                     val localUri = cursor.getString(
                         cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI),
                     ).removePrefix(FILE_SCHEME)
+                    val type = MediaType.fromText(cursor.getString(
+                        cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_DESCRIPTION),
+                    ))
 
-                    installApk(id, File(localUri).getUriCompat(context))
+                    installApk(type, id, File(localUri).getUriCompat(context))
                 }
             }
         }
@@ -265,6 +353,7 @@ internal class MangaExtensionInstaller(private val context: Context) {
     companion object {
         const val APK_MIME = "application/vnd.android.package-archive"
         const val EXTRA_DOWNLOAD_ID = "ExtensionInstaller.extra.DOWNLOAD_ID"
+        const val EXTRA_EXTENSION_TYPE = "ExtensionInstaller.extra.EXTENSION_TYPE"
         const val FILE_SCHEME = "file://"
     }
 }

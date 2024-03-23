@@ -6,7 +6,6 @@ import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
@@ -17,7 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
-import ani.dantotsu.navBarHeight
+import ani.dantotsu.hideSystemBarsExtendView
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -33,7 +32,6 @@ class ListActivity : AppCompatActivity() {
     private val scope = lifecycleScope
     private var selectedTabIdx = 0
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -72,10 +70,7 @@ class ListActivity : AppCompatActivity() {
         } else {
             binding.root.fitsSystemWindows = false
             requestWindowFeature(Window.FEATURE_NO_TITLE)
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+            hideSystemBarsExtendView()
             binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = statusBarHeight
             }
@@ -83,8 +78,8 @@ class ListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val anime = intent.getBooleanExtra("anime", true)
-        binding.listTitle.text =
-            intent.getStringExtra("username") + "'s " + (if (anime) "Anime" else "Manga") + " List"
+        binding.listTitle.text = getString(R.string.user_list, intent.getStringExtra("username"),
+            if (anime) getString(R.string.anime) else getString(R.string.manga))
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@ListActivity.selectedTabIdx = tab?.position ?: 0

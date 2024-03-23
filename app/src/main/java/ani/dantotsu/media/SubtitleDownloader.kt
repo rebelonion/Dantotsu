@@ -17,7 +17,7 @@ class SubtitleDownloader {
 
     companion object {
         //doesn't really download the subtitles -\_(o_o)_/-
-        suspend fun loadSubtitleType(context: Context, url: String): SubtitleType =
+        suspend fun loadSubtitleType(url: String): SubtitleType =
             withContext(Dispatchers.IO) {
                 // Initialize the NetworkHelper instance. Replace this line based on how you usually initialize it
                 val networkHelper = Injekt.get<NetworkHelper>()
@@ -60,7 +60,7 @@ class SubtitleDownloader {
                 if (!directory.exists()) { //just in case
                     directory.mkdirs()
                 }
-                val type = loadSubtitleType(context, url)
+                val type = loadSubtitleType(url)
                 val subtiteFile = File(directory, "subtitle.${type}")
                 if (subtiteFile.exists()) {
                     subtiteFile.delete()

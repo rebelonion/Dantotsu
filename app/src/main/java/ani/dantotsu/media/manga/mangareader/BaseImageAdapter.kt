@@ -13,10 +13,14 @@ import androidx.core.view.GestureDetectorCompat
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
+import ani.dantotsu.FileUrl
+import ani.dantotsu.GesturesListener
+import ani.dantotsu.R
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
+import ani.dantotsu.px
 import ani.dantotsu.settings.CurrentReaderSettings
+import ani.dantotsu.tryWithSuspend
 import com.alexvasilkov.gestures.views.GestureFrameLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -118,13 +122,13 @@ abstract class BaseImageAdapter(
     abstract suspend fun loadImage(position: Int, parent: View): Boolean
 
     companion object {
-        suspend fun Context.loadBitmap_old(
+        suspend fun Context.loadBitmapOld(
             link: FileUrl,
             transforms: List<BitmapTransformation>
         ): Bitmap? { //still used in some places
             return tryWithSuspend {
                 withContext(Dispatchers.IO) {
-                    Glide.with(this@loadBitmap_old)
+                    Glide.with(this@loadBitmapOld)
                         .asBitmap()
                         .let {
                             if (link.url.startsWith("file://")) {
@@ -168,8 +172,7 @@ abstract class BaseImageAdapter(
                                 mangaCache.get(link.url)?.let { imageData ->
                                     val bitmap = imageData.fetchAndProcessImage(
                                         imageData.page,
-                                        imageData.source,
-                                        context = this@loadBitmap
+                                        imageData.source
                                     )
                                     it.load(bitmap)
                                         .skipMemoryCache(true)

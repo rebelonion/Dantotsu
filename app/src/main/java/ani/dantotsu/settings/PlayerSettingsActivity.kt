@@ -127,6 +127,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.playerSettingsTimeStamps.isChecked = PrefManager.getVal(PrefName.TimeStampsEnabled)
         binding.playerSettingsTimeStamps.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.TimeStampsEnabled, isChecked)
+            binding.playerSettingsAutoSkipOpEd.isEnabled = isChecked
         }
 
         binding.playerSettingsTimeStampsAutoHide.isChecked = PrefManager.getVal(PrefName.AutoHideTimeStamps)
@@ -148,6 +149,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
 
         // Auto
         binding.playerSettingsAutoSkipOpEd.isChecked = PrefManager.getVal(PrefName.AutoSkipOPED)
+        binding.playerSettingsAutoSkipOpEd.isEnabled = binding.playerSettingsTimeStamps.isChecked
         binding.playerSettingsAutoSkipOpEd.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.AutoSkipOPED, isChecked)
         }
@@ -172,7 +174,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.playerSettingsAskChapterZero.isChecked =
             PrefManager.getVal(PrefName.ChapterZeroPlayer)
         binding.playerSettingsAskChapterZero.isEnabled =
-            !PrefManager.getVal<Boolean>(PrefName.AskIndividualPlayer)
+            !binding.playerSettingsAskUpdateProgress.isChecked
         binding.playerSettingsAskChapterZero.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.ChapterZeroPlayer, isChecked)
         }
@@ -411,7 +413,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Magenta"
         )
         val subBackgroundDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.outline_sub_color))
+            .setTitle(getString(R.string.sub_background_color_select))
         binding.videoSubColorBackground.setOnClickListener {
             val dialog = subBackgroundDialog.setSingleChoiceItems(
                 colorsSubBackground,
@@ -438,7 +440,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             "Magenta"
         )
         val subWindowDialog = AlertDialog.Builder(this, R.style.MyPopup)
-            .setTitle(getString(R.string.outline_sub_color))
+            .setTitle(getString(R.string.sub_window_color_select))
         binding.videoSubColorWindow.setOnClickListener {
             val dialog = subWindowDialog.setSingleChoiceItems(
                 colorsSubWindow,

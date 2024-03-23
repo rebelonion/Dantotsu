@@ -1,7 +1,6 @@
 package ani.dantotsu.widgets
 
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.widget.RemoteViews
@@ -12,7 +11,7 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class CurrentlyAiringRemoteViewsFactory(private val context: Context, intent: Intent) :
+class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
     RemoteViewsService.RemoteViewsFactory {
     private var widgetItems = mutableListOf<WidgetItem>()
 

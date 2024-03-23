@@ -16,6 +16,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.text.HtmlCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -37,7 +39,7 @@ import java.io.Serializable
 import java.net.URLEncoder
 
 
-@SuppressLint("SetTextI18n")
+
 class MediaInfoFragment : Fragment() {
     private var _binding: FragmentMediaInfoBinding? = null
     private val binding get() = _binding!!
@@ -45,6 +47,8 @@ class MediaInfoFragment : Fragment() {
     private var loaded = false
     private var type = "ANIME"
     private val genreModel: GenresViewModel by activityViewModels()
+
+    private val tripleTab = "\t\t\t"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,8 +67,8 @@ class MediaInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
         val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
-        binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
-        binding.mediaInfoContainer.visibility = if (loaded) View.VISIBLE else View.GONE
+        binding.mediaInfoProgressBar.isGone = loaded
+        binding.mediaInfoContainer.isVisible = loaded
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }
 
         model.scrolledToTop.observe(viewLifecycleOwner) {
@@ -78,14 +82,16 @@ class MediaInfoFragment : Fragment() {
 
                 binding.mediaInfoProgressBar.visibility = View.GONE
                 binding.mediaInfoContainer.visibility = View.VISIBLE
-                binding.mediaInfoName.text = "\t\t\t" + (media.name ?: media.nameRomaji)
+                val infoName = tripleTab + (media.name ?: media.nameRomaji)
+                binding.mediaInfoName.text = infoName
                 binding.mediaInfoName.setOnLongClickListener {
                     copyToClipboard(media.name ?: media.nameRomaji)
                     true
                 }
                 if (media.name != null) binding.mediaInfoNameRomajiContainer.visibility =
                     View.VISIBLE
-                binding.mediaInfoNameRomaji.text = "\t\t\t" + media.nameRomaji
+                val infoNameRomanji = tripleTab + media.nameRomaji
+                binding.mediaInfoNameRomaji.text = infoNameRomanji
                 binding.mediaInfoNameRomaji.setOnLongClickListener {
                     copyToClipboard(media.nameRomaji)
                     true
@@ -127,8 +133,9 @@ class MediaInfoFragment : Fragment() {
                     }
                     binding.mediaInfoDurationContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeasonContainer.visibility = View.VISIBLE
-                    binding.mediaInfoSeason.text =
-                        (media.anime.season ?: "??") + " " + (media.anime.seasonYear ?: "??")
+                    val seasonInfo = "${(media.anime.season ?: "??")} ${(media.anime.seasonYear ?: "??")}"
+                    binding.mediaInfoSeason.text = seasonInfo
+
                     if (media.anime.mainStudio != null) {
                         binding.mediaInfoStudioContainer.visibility = View.VISIBLE
                         binding.mediaInfoStudio.text = media.anime.mainStudio!!.name
@@ -162,9 +169,12 @@ class MediaInfoFragment : Fragment() {
                         }
                     }
                     binding.mediaInfoTotalTitle.setText(R.string.total_eps)
-                    binding.mediaInfoTotal.text =
-                        if (media.anime.nextAiringEpisode != null) (media.anime.nextAiringEpisode.toString() + " | " + (media.anime.totalEpisodes
-                            ?: "~").toString()) else (media.anime.totalEpisodes ?: "~").toString()
+                    val infoTotal = if (media.anime.nextAiringEpisode != null)
+                            "${media.anime.nextAiringEpisode} | ${media.anime.totalEpisodes ?: "~"}"
+                    else
+                            (media.anime.totalEpisodes ?: "~").toString()
+                    binding.mediaInfoTotal.text = infoTotal
+
                 } else if (media.manga != null) {
                     type = "MANGA"
                     binding.mediaInfoTotalTitle.setText(R.string.total_chaps)
@@ -191,8 +201,9 @@ class MediaInfoFragment : Fragment() {
                     (media.description ?: "null").replace("\\n", "<br>").replace("\\\"", "\""),
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
-                binding.mediaInfoDescription.text =
-                    "\t\t\t" + if (desc.toString() != "null") desc else getString(R.string.no_description_available)
+                val infoDesc = tripleTab + if (desc.toString() != "null") desc else getString(R.string.no_description_available)
+                binding.mediaInfoDescription.text = infoDesc
+
                 binding.mediaInfoDescription.setOnClickListener {
                     if (binding.mediaInfoDescription.maxLines == 5) {
                         ObjectAnimator.ofInt(binding.mediaInfoDescription, "maxLines", 100)
@@ -550,7 +561,7 @@ class MediaInfoFragment : Fragment() {
     }
 
     override fun onResume() {
-        binding.mediaInfoProgressBar.visibility = if (!loaded) View.VISIBLE else View.GONE
+        binding.mediaInfoProgressBar.isGone = loaded
         super.onResume()
     }
 

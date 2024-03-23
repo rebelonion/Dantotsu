@@ -20,6 +20,7 @@ import ani.dantotsu.profile.ChartBuilder.Companion.StatType
 import ani.dantotsu.statusBarHeight
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.xwray.groupie.GroupieAdapter
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -48,7 +49,7 @@ class StatsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
-        user = arguments?.getSerializable("user") as Query.UserProfile
+        user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile
 
         binding.statisticList.adapter = adapter
         binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0)
@@ -95,7 +96,7 @@ class StatsFragment :
                 }
             } else {
                 stats.removeAll(
-                    stats.filter { it?.id == Anilist.userid }
+                    stats.filter { it?.id == Anilist.userid }.toSet()
                 )
                 loadStats(type == MediaType.ANIME)
             }
@@ -445,6 +446,7 @@ class StatsFragment :
             }.toMutableList()
             chartPackets.clear()
             chartPackets.addAll(standardizedPackets)
+            @Suppress("UNCHECKED_CAST")
             val genreChart = ChartBuilder.buildChart(
                 activity,
                 ChartType.TwoDimensional,
@@ -499,6 +501,7 @@ class StatsFragment :
             }.toMutableList()
             chartPackets.clear()
             chartPackets.addAll(standardizedPackets)
+            @Suppress("UNCHECKED_CAST")
             val tagChart = ChartBuilder.buildChart(
                 activity,
                 ChartType.TwoDimensional,
@@ -553,6 +556,7 @@ class StatsFragment :
             }.toMutableList()
             chartPackets.clear()
             chartPackets.addAll(standardizedPackets)
+            @Suppress("UNCHECKED_CAST")
             val countryChart = ChartBuilder.buildChart(
                 activity,
                 ChartType.OneDimensional,
@@ -609,6 +613,7 @@ class StatsFragment :
             }.toMutableList()
             chartPackets.clear()
             chartPackets.addAll(standardizedPackets)
+            @Suppress("UNCHECKED_CAST")
             val voiceActorsChart = ChartBuilder.buildChart(
                 activity,
                 ChartType.TwoDimensional,
@@ -663,6 +668,7 @@ class StatsFragment :
             }.toMutableList()
             chartPackets.clear()
             chartPackets.addAll(standardizedPackets)
+            @Suppress("UNCHECKED_CAST")
             val studioChart = ChartBuilder.buildChart(
                 activity,
                 ChartType.TwoDimensional,
@@ -720,6 +726,7 @@ class StatsFragment :
             }.toMutableList()
             chartPackets.clear()
             chartPackets.addAll(standardizedPackets)
+            @Suppress("UNCHECKED_CAST")
             val staffChart = ChartBuilder.buildChart(
                 activity,
                 ChartType.TwoDimensional,

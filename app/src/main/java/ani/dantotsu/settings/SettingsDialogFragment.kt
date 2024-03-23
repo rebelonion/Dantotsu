@@ -9,9 +9,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.MainActivity
-import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetSettingsBinding
@@ -24,13 +24,15 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.incognitoNotification
 import ani.dantotsu.loadImage
-import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.offline.OfflineFragment
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
+import ani.dantotsu.profile.activity.NotificationActivity
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.startMainActivity
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import java.util.Timer
 import kotlin.concurrent.schedule
 
@@ -41,7 +43,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
     private lateinit var pageType: PageType
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        pageType = arguments?.getSerializable("pageType") as? PageType ?: PageType.HOME
+        pageType = arguments?.getSerializableCompat("pageType") as? PageType ?: PageType.HOME
     }
 
     override fun onCreateView(
@@ -94,7 +96,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
                 Anilist.loginIntent(requireActivity())
             }
         }
-        binding.settingsNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        binding.settingsNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
         binding.settingsNotificationCount.text = Anilist.unreadNotificationCount.toString()
         binding.settingsUserAvatar.setOnClickListener{
             ContextCompat.startActivity(

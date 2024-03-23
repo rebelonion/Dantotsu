@@ -86,7 +86,7 @@ class App : MultiDexApplication() {
         Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
         Logger.log("App: Logging started")
 
-        initializeNetwork(baseContext)
+        initializeNetwork()
 
         setupNotificationChannels()
         if (!LogcatLogger.isInstalled) {
@@ -154,6 +154,9 @@ class App : MultiDexApplication() {
 
     companion object {
         private var instance: App? = null
+        /** Reference to the application context.
+         *
+         * USE WITH EXTREME CAUTION!**/
         var context: Context? = null
         fun currentContext(): Context? {
             return instance?.mFTActivityLifecycleCallbacks?.currentActivity ?: context
