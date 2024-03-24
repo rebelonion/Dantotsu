@@ -1017,17 +1017,17 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             runOnUiThread {
                 if (Random.nextInt(0, 100) > 69) {
                     CustomBottomDialog.newInstance().apply {
-                        title = getString(R.string.enjoying_app)
+                        title = this@SettingsActivity.getString(R.string.enjoying_app)
                         addView(TextView(this@SettingsActivity).apply {
                             text = context.getString(R.string.consider_donating)
                         })
 
-                        setNegativeButton(getString(R.string.no_moners)) {
+                        setNegativeButton(this@SettingsActivity.getString(R.string.no_moners)) {
                             snackString(R.string.you_be_rich)
                             dismiss()
                         }
 
-                        setPositiveButton(getString(R.string.donate)) {
+                        setPositiveButton(this@SettingsActivity.getString(R.string.donate)) {
                             binding.settingBuyMeCoffee.performClick()
                             dismiss()
                         }
