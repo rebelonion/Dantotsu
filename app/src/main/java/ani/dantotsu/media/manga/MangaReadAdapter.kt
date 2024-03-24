@@ -481,6 +481,22 @@ class MangaReadAdapter(
                 val sourceFound = media.manga.chapters!!.isNotEmpty()
                 binding.animeSourceNotFound.isGone = sourceFound
                 binding.faqbutton.isGone = sourceFound
+                if (!sourceFound && PrefManager.getVal(PrefName.SearchSources)) {
+                    if (binding.animeSource.adapter.count > media.selected!!.sourceIndex + 1) {
+                        val nextIndex = media.selected!!.sourceIndex + 1
+                        binding.animeSource.setText(binding.animeSource.adapter
+                            .getItem(nextIndex).toString(), false)
+                        fragment.onSourceChange(nextIndex).apply {
+                            binding.animeSourceTitle.text = showUserText
+                            showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
+                            setLanguageList(0, nextIndex)
+                        }
+                        subscribeButton(false)
+                        // invalidate if it's the last source
+                        val invalidate = nextIndex == mangaReadSources.names.size - 1
+                        fragment.loadChapters(nextIndex, invalidate)
+                    }
+                }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE

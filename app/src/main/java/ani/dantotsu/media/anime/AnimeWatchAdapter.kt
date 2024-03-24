@@ -159,8 +159,7 @@ class AnimeWatchAdapter(
                 }
                 subscribeButton(false)
                 fragment.loadEpisodes(media.selected!!.sourceIndex, true)
-            } ?: run {
-            }
+            } ?: run { }
         }
 
         //settings
@@ -430,6 +429,22 @@ class AnimeWatchAdapter(
                 val sourceFound = media.anime.episodes!!.isNotEmpty()
                 binding.animeSourceNotFound.isGone = sourceFound
                 binding.faqbutton.isGone = sourceFound
+                if (!sourceFound && PrefManager.getVal(PrefName.SearchSources)) {
+                    if (binding.animeSource.adapter.count > media.selected!!.sourceIndex + 1) {
+                        val nextIndex = media.selected!!.sourceIndex + 1
+                        binding.animeSource.setText(binding.animeSource.adapter
+                            .getItem(nextIndex).toString(), false)
+                        fragment.onSourceChange(nextIndex).apply {
+                            binding.animeSourceTitle.text = showUserText
+                            showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
+                            binding.animeSourceDubbed.isChecked = selectDub
+                            binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
+                            setLanguageList(0, nextIndex)
+                        }
+                        subscribeButton(false)
+                        fragment.loadEpisodes(nextIndex, false)
+                    }
+                }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE
