@@ -165,6 +165,7 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
         }.await()
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private suspend fun getMangaExtensionFromIntent(context: Context, intent: Intent?): MangaLoadResult {
         val pkgName = getPackageNameFromIntent(intent)
         if (pkgName == null) {

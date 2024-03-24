@@ -1,6 +1,5 @@
 package ani.dantotsu.media.novel
 
-import android.annotation.SuppressLint
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View

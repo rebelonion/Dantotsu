@@ -1,6 +1,5 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputFilter.LengthFilter
 import android.view.Gravity
@@ -11,11 +10,18 @@ import android.widget.ArrayAdapter
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
-import ani.dantotsu.*
+import ani.dantotsu.BottomSheetDialogFragment
+import ani.dantotsu.DatePickerFragment
+import ani.dantotsu.InputFilterMinMax
+import ani.dantotsu.R
+import ani.dantotsu.Refresh
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.databinding.BottomSheetMediaListBinding
+import ani.dantotsu.navBarHeight
+import ani.dantotsu.snackString
+import ani.dantotsu.tryWith
 import com.google.android.material.materialswitch.MaterialSwitch
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

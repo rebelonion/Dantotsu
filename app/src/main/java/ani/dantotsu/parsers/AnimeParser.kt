@@ -90,14 +90,12 @@ abstract class AnimeParser : BaseParser() {
             domain = domain.substring(4)
         }
 
-        val extractor: VideoExtractor? = when (domain) {
+        return when (domain) {
             else -> {
                 println("$name : No extractor found for: $domain | ${server.embed.url}")
                 null
             }
         }
-
-        return extractor
     }
 
     /**

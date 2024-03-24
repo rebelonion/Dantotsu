@@ -3,7 +3,6 @@ package ani.dantotsu.media
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -24,10 +23,24 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import ani.dantotsu.*
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.GenresViewModel
-import ani.dantotsu.databinding.*
+import ani.dantotsu.copyToClipboard
+import ani.dantotsu.countDown
+import ani.dantotsu.currActivity
+import ani.dantotsu.databinding.ActivityGenreBinding
+import ani.dantotsu.databinding.FragmentMediaInfoBinding
+import ani.dantotsu.databinding.ItemChipBinding
+import ani.dantotsu.databinding.ItemQuelsBinding
+import ani.dantotsu.databinding.ItemTitleChipgroupBinding
+import ani.dantotsu.databinding.ItemTitleRecyclerBinding
+import ani.dantotsu.databinding.ItemTitleTextBinding
+import ani.dantotsu.databinding.ItemTitleTrailerBinding
+import ani.dantotsu.loadImage
+import ani.dantotsu.navBarHeight
+import ani.dantotsu.px
+import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import io.noties.markwon.Markwon
@@ -37,7 +50,6 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.Serializable
 import java.net.URLEncoder
-
 
 
 class MediaInfoFragment : Fragment() {

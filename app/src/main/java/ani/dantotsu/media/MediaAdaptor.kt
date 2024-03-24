@@ -1,8 +1,6 @@
 package ani.dantotsu.media
 
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -15,26 +13,25 @@ import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
-import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import ani.dantotsu.*
+import ani.dantotsu.R
+import ani.dantotsu.blurImage
+import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ItemMediaCompactBinding
 import ani.dantotsu.databinding.ItemMediaLargeBinding
 import ani.dantotsu.databinding.ItemMediaPageBinding
 import ani.dantotsu.databinding.ItemMediaPageSmallBinding
+import ani.dantotsu.loadImage
+import ani.dantotsu.setAnimation
+import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.request.RequestOptions
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
-import jp.wasabeef.glide.transformations.BlurTransformation
 import java.io.Serializable
 
 
@@ -152,25 +149,22 @@ class MediaAdaptor(
                         (if (media.userScore != 0) R.drawable.item_user_score else R.drawable.item_score)
                     )
                     if (media.anime != null) {
-                        b.itemTotal.text = " " + if ((media.anime.totalEpisodes
-                                ?: 0) != 1
-                        ) currActivity()!!.getString(R.string.episode_plural)
-                        else currActivity()!!.getString(R.string.episode_singular)
+                        val itemTotal =  " " + if ((media.anime.totalEpisodes ?: 0) != 1) currActivity()!!.getString(R.string.episode_plural) else currActivity()!!.getString(R.string.episode_singular)
+                        b.itemTotal.text = itemTotal
                         b.itemCompactTotal.text =
                             if (media.anime.nextAiringEpisode != null) (media.anime.nextAiringEpisode.toString() + " / " + (media.anime.totalEpisodes
                                 ?: "??").toString()) else (media.anime.totalEpisodes
                                 ?: "??").toString()
                     } else if (media.manga != null) {
-                        b.itemTotal.text = " " + if ((media.manga.totalChapters
-                                ?: 0) != 1
-                        ) currActivity()!!.getString(R.string.chapter_plural)
-                        else currActivity()!!.getString(R.string.chapter_singular)
+                        val itemTotal = " " + if ((media.manga.totalChapters ?: 0) != 1) currActivity()!!.getString(R.string.chapter_plural) else currActivity()!!.getString(R.string.chapter_singular)
+                        b.itemTotal.text = itemTotal
                         b.itemCompactTotal.text = "${media.manga.totalChapters ?: "??"}"
                     }
-                    @SuppressLint("NotifyDataSetChanged")
                     if (position == mediaList!!.size - 2 && viewPager != null) viewPager.post {
+                        val start = mediaList.size
                         mediaList.addAll(mediaList)
-                        notifyDataSetChanged()
+                        val end = mediaList.size - start
+                        notifyItemRangeInserted(start, end)
                     }
                 }
             }

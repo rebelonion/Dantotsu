@@ -1,6 +1,5 @@
 package ani.dantotsu.download.manga
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View

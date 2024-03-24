@@ -1,6 +1,5 @@
 package ani.dantotsu.media.manga
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -17,11 +16,11 @@ import ani.dantotsu.databinding.ItemChapterListBinding
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.setAnimation
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 class MangaChapterAdapter(
     private var type: Int,

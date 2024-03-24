@@ -1,21 +1,9 @@
 package ani.dantotsu.parsers
 
-import android.content.ActivityNotFoundException
-import android.content.ComponentName
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import ani.dantotsu.FileUrl
 import ani.dantotsu.currContext
 import ani.dantotsu.media.anime.AnimeNameAdapter
-import ani.dantotsu.media.anime.ExoplayerView
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.snackString

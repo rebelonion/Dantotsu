@@ -14,6 +14,7 @@ import eu.kanade.tachiyomi.extension.util.ExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
 import eu.kanade.tachiyomi.extension.util.ExtensionLoader
 import eu.kanade.tachiyomi.util.preference.plusAssign
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -250,6 +251,7 @@ class MangaExtensionManager(
      *
      * @param signature The signature to whitelist.
      */
+    @OptIn(DelicateCoroutinesApi::class)
     fun trustSignature(signature: String) {
         val untrustedSignatures = _untrustedExtensionsFlow.value.map { it.signatureHash }.toSet()
         if (signature !in untrustedSignatures) return
