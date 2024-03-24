@@ -194,6 +194,10 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             popupMenu.menuInflater.inflate(R.menu.country_filter_menu, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
+                    R.id.country_global -> {
+                        binding.countryFilter.setImageResource(R.drawable.ic_round_globe_search_googlefonts)
+                        startBounceZoomAnimation(binding.countryFilter)
+                    }
                     R.id.country_china -> {
                         activity.result.countryOfOrigin = "CN"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_china_googlefonts)
