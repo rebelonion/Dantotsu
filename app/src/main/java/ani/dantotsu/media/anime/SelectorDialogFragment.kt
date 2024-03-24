@@ -3,6 +3,8 @@ package ani.dantotsu.media.anime
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -12,6 +14,8 @@ import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
@@ -28,10 +32,12 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.Subtitle
+import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -212,11 +218,62 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
+    private val externalPlayerResult = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        Logger.log(result.data.toString())
+    }
+
+    private fun exportMagnetIntent(episode: Episode, video: Video) : Intent {
+        val amnis = "com.amnis"
+        return Intent(Intent.ACTION_VIEW).apply {
+            component = ComponentName(amnis, "$amnis.gui.player.PlayerActivity")
+            data = Uri.parse(video.file.url)
+            putExtra("title", "${media?.name} - ${episode.title}")
+            putExtra("position", 0)
+            putExtra(Intent.EXTRA_RETURN_RESULT, true)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            putExtra("secure_uri", true)
+            val headersArray = arrayOf<String>()
+            video.file.headers.forEach {
+                headersArray.plus(arrayOf(it.key, it.value))
+            }
+            putExtra("headers", headersArray)
+        }
+    }
+
     @SuppressLint("UnsafeOptInUsageError")
     fun startExoplayer(media: Media) {
         prevEpisode = null
 
         dismiss()
+
+        episode?.let { ep ->
+            val video = ep.extractors?.find {
+                it.server.name == ep.selectedExtractor
+            }?.videos?.getOrNull(ep.selectedVideo)
+            video?.file?.url?.let { url ->
+                if (url.startsWith("magnet:")) {
+                    try {
+                        externalPlayerResult.launch(exportMagnetIntent(ep, video))
+                    } catch (e: ActivityNotFoundException) {
+                        val amnis = "com.amnis"
+                        try {
+                            startActivity(Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=$amnis"))
+                            )
+                        } catch (e: ActivityNotFoundException) {
+                            startActivity(Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=$amnis")
+                            ))
+                        }
+                    }
+                    return
+                }
+            }
+        }
+
         if (launch!! || model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)) {
             stopAddingToList()
             val intent = Intent(activity, ExoplayerView::class.java)
