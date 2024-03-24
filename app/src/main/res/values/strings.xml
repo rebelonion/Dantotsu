@@ -614,6 +614,7 @@
     <string name="chapter_plural">Chapters</string>
 
     <string name="filter_status">"Status : %1$s"</string>
+    <string name="filter_source">"Source : %1$s"</string>
     <string name="filter_format">"Format : %1$s"</string>
     <string name="filter_country">"Country : %1$s"</string>
     <string name="filter_sort">"Sort : %1$s"</string>

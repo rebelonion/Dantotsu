@@ -45,6 +45,24 @@ object Anilist {
         "SCORE"
     )
 
+    val source = listOf(
+        "ORIGINAL",
+        "MANGA",
+        "LIGHT_NOVEL",
+        "VISUAL_NOVEL",
+        "VIDEO_GAME",
+        "OTHER",
+        "NOVEL",
+        "DOUJINSHI",
+        "ANIME",
+        "WEB_NOVEL",
+        "LIVE_ACTION",
+        "GAME",
+        "COMIC",
+        "MULTIMEDIA_PROJECT",
+        "PICTURE_BOOK"
+    )
+
     val animeStatus = listOf(
         "FINISHED",
         "RELEASING",

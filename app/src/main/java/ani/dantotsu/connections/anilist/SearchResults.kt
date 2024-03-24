@@ -18,6 +18,7 @@ data class SearchResults(
     var tags: MutableList<String>? = null,
     var excludedTags: MutableList<String>? = null,
     var status: String? = null,
+    var source: String? = null,
     var format: String? = null,
     var seasonYear: Int? = null,
     var season: String? = null,
@@ -41,6 +42,9 @@ data class SearchResults(
         }
         status?.let {
             list.add(SearchChip("STATUS", currContext()!!.getString(R.string.filter_status, it)))
+        }
+        source?.let {
+            list.add(SearchChip("SOURCE", currContext()!!.getString(R.string.filter_source, it)))
         }
         format?.let {
             list.add(SearchChip("FORMAT", currContext()!!.getString(R.string.filter_format, it)))
@@ -83,6 +87,7 @@ data class SearchResults(
         when (chip.type) {
             "SORT" -> sort = null
             "STATUS" -> status = null
+            "SOURCE" -> source = null
             "FORMAT" -> format = null
             "COUNTRY" -> countryOfOrigin = null
             "SEASON" -> season = null
