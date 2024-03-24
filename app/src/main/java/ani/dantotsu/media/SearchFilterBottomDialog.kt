@@ -241,8 +241,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.searchFilterCancel.setOnClickListener {
             dismiss()
         }
-        val format =(if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus).toTypedArray()
-        binding.searchStatus.setText(activity.result.status)
+        val format =(if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus)
+        binding.searchStatus.setText(activity.result.status?.replace("_", " "))
         binding.searchStatus.setAdapter(
             ArrayAdapter(
                 binding.root.context,
@@ -251,7 +251,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             )
         )
 
-        binding.searchSource.setText(activity.result.source)
+        binding.searchSource.setText(activity.result.source?.replace("_", " "))
         binding.searchSource.setAdapter(
             ArrayAdapter(
                 binding.root.context,
