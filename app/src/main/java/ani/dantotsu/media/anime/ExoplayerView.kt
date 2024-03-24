@@ -481,7 +481,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
 
         playerView.subtitleView?.alpha = when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
-            true -> 1f
+            true -> PrefManager.getVal(PrefName.SubAlpha)
             false -> 0f
         }
         val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()

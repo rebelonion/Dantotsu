@@ -1,6 +1,5 @@
 package ani.dantotsu.settings
 
-import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.AlertDialog
 import android.content.Context
@@ -33,7 +32,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
-import ani.dantotsu.Refresh
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.connections.discord.Discord
@@ -66,6 +64,8 @@ import ani.dantotsu.openSettings
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.pop
+import ani.dantotsu.reloadActivity
+import ani.dantotsu.restartApp
 import ani.dantotsu.savePrefsToDownloads
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
@@ -79,7 +79,6 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
@@ -144,7 +143,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                                         return@passwordAlertDialog
                                     }
                                     if (PreferencePackager.unpack(decryptedJson))
-                                        restartApp()
+                                        restartApp(binding.root)
                                 } else {
                                     toast(getString(R.string.password_cannot_be_empty))
                                 }
@@ -152,7 +151,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         } else if (name.endsWith(".ani")) {
                             val decryptedJson = jsonString.toString(Charsets.UTF_8)
                             if (PreferencePackager.unpack(decryptedJson))
-                                restartApp()
+                                restartApp(binding.root)
                         } else {
                             toast(getString(R.string.unknown_file_type))
                         }
@@ -316,7 +315,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsUseMaterialYou.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
                 if (isChecked) settingsUseCustomTheme.isChecked = false
-                restartApp()
+                restartApp(binding.root)
             }
 
             settingsUseCustomTheme.isChecked =
@@ -327,20 +326,20 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     settingsUseMaterialYou.isChecked = false
                 }
 
-                restartApp()
+                restartApp(binding.root)
             }
 
             settingsUseSourceTheme.isChecked =
                 PrefManager.getVal(PrefName.UseSourceTheme)
             settingsUseSourceTheme.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.UseSourceTheme, isChecked)
-                restartApp()
+                restartApp(binding.root)
             }
 
             settingsUseOLED.isChecked = PrefManager.getVal(PrefName.UseOLED)
             settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.UseOLED, isChecked)
-                restartApp()
+                restartApp(binding.root)
             }
 
             val themeString: String = PrefManager.getVal(PrefName.Theme)
@@ -359,17 +358,15 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 PrefManager.setVal(PrefName.Theme, ThemeManager.Companion.Theme.entries[i].theme)
                 //ActivityHelper.shouldRefreshMainActivity = true
                 themeSwitcher.clearFocus()
-                restartApp()
-
+                restartApp(binding.root)
             }
-
 
             customTheme.setOnClickListener {
                 val originalColor: Int = PrefManager.getVal(PrefName.CustomThemeInt)
 
                 class CustomColorDialog : SimpleColorDialog() { //idk where to put it
                     override fun onPositiveButtonClick() {
-                        restartApp()
+                        restartApp(binding.root)
                         super.onPositiveButtonClick()
                     }
                 }
@@ -398,10 +395,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 previous = current
                 current.alpha = 1f
                 PrefManager.setVal(PrefName.DarkMode, mode)
-                Refresh.all()
-                finish()
-                startActivity(Intent(this@SettingsActivity, SettingsActivity::class.java))
-                initActivity(this@SettingsActivity)
+                reloadActivity()
             }
 
             settingsUiAuto.setOnClickListener {
@@ -688,7 +682,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsExtensionDns.setOnItemClickListener { _, _, i, _ ->
                 PrefManager.setVal(PrefName.DohProvider, i)
                 settingsExtensionDns.clearFocus()
-                restartApp()
+                restartApp(binding.root)
             }
 
             settingsDownloadInSd.isChecked = PrefManager.getVal(PrefName.SdDl)
@@ -973,7 +967,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsLogToFile.isChecked = PrefManager.getVal(PrefName.LogToFile)
             settingsLogToFile.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.LogToFile, isChecked)
-                restartApp()
+                restartApp(binding.root)
             }
 
             settingsShareLog.setOnClickListener {
@@ -1053,25 +1047,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
         }
         return true
-    }
-
-    private fun restartApp() {
-        Snackbar.make(
-            binding.root,
-            R.string.restart_app, Snackbar.LENGTH_SHORT
-        ).apply {
-            val mainIntent =
-                Intent.makeRestartActivityTask(
-                    context.packageManager.getLaunchIntentForPackage(
-                        context.packageName
-                    )!!.component
-                )
-            setAction(getString(R.string.do_it)) {
-                context.startActivity(mainIntent)
-                Runtime.getRuntime().exit(0)
-            }
-            show()
-        }
     }
 
     private fun passwordAlertDialog(isExporting: Boolean, callback: (CharArray?) -> Unit) {
