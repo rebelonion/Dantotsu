@@ -948,7 +948,7 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
             ${if (sort != null) ""","sort":"$sort"""" else ""}
             ${if (status != null) ""","status":"$status"""" else ""}
             ${if (format != null) ""","format":"${format.replace(" ", "_")}"""" else ""}
-            ${if (countryOfOrigin != null) ""","sort":"$sort"""" else ""}
+            ${if (countryOfOrigin != null) ""","countryOfOrigin":"$countryOfOrigin"""" else ""}
             ${if (genres?.isNotEmpty() == true) ""","genres":[${genres.joinToString { "\"$it\"" }}]""" else ""}
             ${
             if (excludedGenres?.isNotEmpty() == true)
