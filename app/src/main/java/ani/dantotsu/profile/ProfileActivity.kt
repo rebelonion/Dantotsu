@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
@@ -108,8 +109,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     }
                 })
                 val userLevel = intent.getStringExtra("userLVL") ?: ""
-                binding.followButton.visibility =
-                    if (user.id == Anilist.userid || Anilist.userid == null) View.GONE else View.VISIBLE
+                binding.followButton.isGone = user.id == Anilist.userid || Anilist.userid == null
                 binding.followButton.text = getString(
                     when {
                         user.isFollowing -> R.string.unfollow
