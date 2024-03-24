@@ -1,14 +1,17 @@
 package ani.dantotsu.settings
 
 import android.app.AlertDialog
-import android.content.Intent
+import android.content.res.Resources
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
 import ani.dantotsu.R
@@ -16,6 +19,7 @@ import ani.dantotsu.databinding.ActivityPlayerSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.Media
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.others.Xpandable
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.settings.saving.PrefManager
@@ -24,7 +28,7 @@ import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
-import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.slider.Slider.OnChangeListener
 import kotlin.math.roundToInt
 
 
@@ -35,6 +39,9 @@ class PlayerSettingsActivity : AppCompatActivity() {
     var media: Media? = null
     var subtitle: Subtitle? = null
 
+    private val Int.toSP get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -273,66 +280,33 @@ class PlayerSettingsActivity : AppCompatActivity() {
             dialog.window?.setDimAmount(0.8f)
         }
 
-        fun restartApp() {
-            Snackbar.make(
-                binding.root,
-                R.string.restart_app, Snackbar.LENGTH_SHORT
-            ).apply {
-                val mainIntent =
-                    Intent.makeRestartActivityTask(
-                        context.packageManager.getLaunchIntentForPackage(
-                            context.packageName
-                        )!!.component
-                    )
-                setAction("Do it!") {
-                    context.startActivity(mainIntent)
-                    Runtime.getRuntime().exit(0)
-                }
-                show()
-            }
-        }
-
-        fun toggleButton(button: android.widget.Button, toggle: Boolean) {
-            button.isClickable = toggle
-            button.alpha = when (toggle) {
-                true -> 1f
-                false -> 0.5f
-            }
-        }
-
         fun toggleSubOptions(isChecked: Boolean) {
-            toggleButton(binding.videoSubColorPrimary, isChecked)
-            toggleButton(binding.videoSubColorSecondary, isChecked)
-            toggleButton(binding.videoSubOutline, isChecked)
-            toggleButton(binding.videoSubFont, isChecked)
-            binding.subtitleFontSizeCard.isEnabled = isChecked
-            binding.subtitleFontSizeCard.isClickable = isChecked
-            binding.subtitleFontSizeCard.alpha = when (isChecked) {
-                true -> 1f
-                false -> 0.5f
-            }
-            binding.subtitleFontSize.isEnabled = isChecked
-            binding.subtitleFontSize.isClickable = isChecked
-            binding.subtitleFontSize.alpha = when (isChecked) {
-                true -> 1f
-                false -> 0.5f
-            }
-            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.isEnabled =
-                isChecked
-            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.isClickable =
-                isChecked
-            ActivityPlayerSettingsBinding.bind(binding.root).subtitleFontSizeText.alpha =
-                when (isChecked) {
+            arrayOf(
+                binding.videoSubColorPrimary,
+                binding.videoSubColorSecondary,
+                binding.videoSubOutline,
+                binding.videoSubColorBackground,
+                binding.videoSubAlphaButton,
+                binding.videoSubColorWindow,
+                binding.videoSubFont,
+                binding.videoSubAlpha,
+                binding.subtitleFontSizeText,
+                binding.subtitleFontSize
+            ).forEach {
+                it.isEnabled = isChecked
+                it.isClickable = isChecked
+                it.alpha = when (isChecked) {
                     true -> 1f
                     false -> 0.5f
                 }
+            }
         }
         binding.subSwitch.isChecked = PrefManager.getVal(PrefName.Subtitles)
         binding.subSwitch.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.Subtitles, isChecked)
             toggleSubOptions(isChecked)
-            restartApp()
         }
+        toggleSubOptions(binding.subSwitch.isChecked)
         val colorsPrimary =
             arrayOf(
                 "Black",
@@ -356,6 +330,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             ) { dialog, count ->
                 PrefManager.setVal(PrefName.PrimaryColor, count)
                 dialog.dismiss()
+                updateSubPreview()
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
@@ -382,6 +357,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             ) { dialog, count ->
                 PrefManager.setVal(PrefName.SecondaryColor, count)
                 dialog.dismiss()
+                updateSubPreview()
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
@@ -395,6 +371,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             ) { dialog, count ->
                 PrefManager.setVal(PrefName.Outline, count)
                 dialog.dismiss()
+                updateSubPreview()
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
@@ -421,6 +398,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             ) { dialog, count ->
                 PrefManager.setVal(PrefName.SubBackground, count)
                 dialog.dismiss()
+                updateSubPreview()
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
@@ -448,9 +426,19 @@ class PlayerSettingsActivity : AppCompatActivity() {
             ) { dialog, count ->
                 PrefManager.setVal(PrefName.SubWindow, count)
                 dialog.dismiss()
+                updateSubPreview()
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
+
+        binding.videoSubAlpha.value = PrefManager.getVal(PrefName.SubAlpha)
+        binding.videoSubAlpha.addOnChangeListener(OnChangeListener { _, value, fromUser ->
+            if (fromUser) {
+                PrefManager.setVal(PrefName.SubAlpha, value)
+                updateSubPreview()
+            }
+        })
+
         val fonts = arrayOf(
             "Poppins Semi Bold",
             "Poppins Bold",
@@ -469,6 +457,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
             ) { dialog, count ->
                 PrefManager.setVal(PrefName.Font, count)
                 dialog.dismiss()
+                updateSubPreview()
             }.show()
             dialog.window?.setDimAmount(0.8f)
         }
@@ -483,8 +472,79 @@ class PlayerSettingsActivity : AppCompatActivity() {
             val size = binding.subtitleFontSize.text.toString().toIntOrNull()
             if (size != null) {
                 PrefManager.setVal(PrefName.FontSize, size)
+                updateSubPreview()
             }
         }
-        toggleSubOptions(PrefManager.getVal(PrefName.Subtitles))
+        binding.subtitleTest.setOnChangeListener(object: Xpandable.OnChangeListener {
+            override fun onExpand() {
+                updateSubPreview()
+            }
+            override fun onRetract() {}
+        })
+        updateSubPreview()
+    }
+
+    private fun updateSubPreview() {
+        binding.subtitleTestWindow.run {
+            alpha = PrefManager.getVal(PrefName.SubAlpha)
+            setBackgroundColor(when (PrefManager.getVal<Int>(PrefName.SubWindow)) {
+                0 -> Color.TRANSPARENT
+                1 -> Color.BLACK
+                2 -> Color.DKGRAY
+                3 -> Color.GRAY
+                4 -> Color.LTGRAY
+                5 -> Color.WHITE
+                6 -> Color.RED
+                7 -> Color.YELLOW
+                8 -> Color.GREEN
+                9 -> Color.CYAN
+                10 -> Color.BLUE
+                11 -> Color.MAGENTA
+                else -> Color.TRANSPARENT
+            })
+        }
+        binding.subtitleTestText.run {
+            textSize =  PrefManager.getVal<Int>(PrefName.FontSize).toSP
+            typeface = when (PrefManager.getVal<Int>(PrefName.Font)) {
+                0 -> ResourcesCompat.getFont(this.context, R.font.poppins_semi_bold)
+                1 -> ResourcesCompat.getFont(this.context, R.font.poppins_bold)
+                2 -> ResourcesCompat.getFont(this.context, R.font.poppins)
+                3 -> ResourcesCompat.getFont(this.context, R.font.poppins_thin)
+                4 -> ResourcesCompat.getFont(this.context, R.font.century_gothic_regular)
+                5 -> ResourcesCompat.getFont(this.context, R.font.levenim_mt_bold)
+                6 -> ResourcesCompat.getFont(this.context, R.font.blocky)
+                else -> ResourcesCompat.getFont(this.context, R.font.poppins_semi_bold)
+            }
+            setTextColor(when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
+                0 -> Color.BLACK
+                1 -> Color.DKGRAY
+                2 -> Color.GRAY
+                3 -> Color.LTGRAY
+                4 -> Color.WHITE
+                5 -> Color.RED
+                6 -> Color.YELLOW
+                7 -> Color.GREEN
+                8 -> Color.CYAN
+                9 -> Color.BLUE
+                10 -> Color.MAGENTA
+                11 -> Color.TRANSPARENT
+                else -> Color.WHITE
+            })
+            setBackgroundColor(when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
+                0 -> Color.TRANSPARENT
+                1 -> Color.BLACK
+                2 -> Color.DKGRAY
+                3 -> Color.GRAY
+                4 -> Color.LTGRAY
+                5 -> Color.WHITE
+                6 -> Color.RED
+                7 -> Color.YELLOW
+                8 -> Color.GREEN
+                9 -> Color.CYAN
+                10 -> Color.BLUE
+                11 -> Color.MAGENTA
+                else -> Color.TRANSPARENT
+            })
+        }
     }
 }

@@ -13,6 +13,7 @@ class Xpandable @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : LinearLayout(context, attrs) {
     var expanded: Boolean = false
+    private var listener: OnChangeListener? = null
 
     init {
         context.withStyledAttributes(attrs, R.styleable.Xpandable) {
@@ -37,7 +38,6 @@ class Xpandable @JvmOverloads constructor(
         super.onAttachedToWindow()
     }
 
-
     private fun hideAll() {
         children.forEach {
             if (it != getChildAt(0)) {
@@ -48,8 +48,10 @@ class Xpandable @JvmOverloads constructor(
                     it.visibility = GONE
                 }, 300)
             }
-
         }
+        postDelayed({
+            listener?.onRetract()
+        }, 300)
     }
 
     private fun showAll() {
@@ -61,6 +63,19 @@ class Xpandable @JvmOverloads constructor(
                 ObjectAnimator.ofFloat(it, "alpha", 0f, 1f).setDuration(200).start()
             }
         }
+        postDelayed({
+            listener?.onExpand()
+        }, 300)
+    }
+
+    @Suppress("unused")
+    fun setOnChangeListener(listener: OnChangeListener) {
+        this.listener = listener
+    }
+
+    interface OnChangeListener {
+        fun onExpand()
+        fun onRetract()
     }
 
 }

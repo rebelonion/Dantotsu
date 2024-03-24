@@ -174,7 +174,7 @@
     <string name="settings">Settings</string>
     <string name="extensions">Extensions</string>
     <string name="player_settings">Player Settings</string>
-    <string name="recentlyListOnly">Only show My Shows in Recently Updated</string>
+    <string name="recentlyListOnly">Only show my content in \"Recently Updated\"</string>
     <string name="download_manager_select">Download Manager</string>
     <string name="downloadInSd">Download in SD card</string>
     <string name="noSdFound">No SD card was Found.</string>
@@ -243,6 +243,8 @@
     <string name="sub_window_color_select">Subtitle Window Color</string>
     <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn\'t)"</string>
     <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
+    <string name="sub_alpha">Subtitle Transparency</string>
+    <string name="sub_text_example">Example Subtitle</string>
     <string name="sub_font_select">Subtitle Font</string>
     <string name="subtitle_font_size">Subtitle Size</string>
 
@@ -344,14 +346,7 @@
     <string name="reload">Reload</string>
     <string name="share">Share</string>
     <string name="skip">Skip</string>
-    <string name="show_skip_time_stamp_button">Show Skip Time Stamp Button</string>
-    <string name="always_load_time_stamps">Always Load Time Stamps</string>
-    <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>string
-    <string name="hide_skip_button">Hide Skip Button</string>
-    <string name="timestamps">Time Stamps</string>
     <string name="other">Other</string>
-    <string name="auto_skip_op_ed">Auto Skip OP / ED</string>
-    <string name="requires_time_stamps_to_be_enabled">Requires Time Stamps to be Enabled</string>
     <string name="total_repeats">TOTAL REPEATS</string>
     <string name="custom_lists">Custom Lists</string>
     <string name="donate_desc">Want to support Dantotsu\'s Maintainer?\nConsider Donating</string>
@@ -369,7 +364,8 @@
     <string name="planned_anime">Planned Anime</string>
     <string name="planned_manga">Planned Manga</string>
     <string name="image_long_clicking">Open image by Long Clicking</string>
-    <string name="always_continue_shows">Always continue Shows</string>
+    <string name="always_continue_content">Always continue previous items</string>
+    <string name="search_source_list">Search next available source</string>
     <string name="timestamp_proxy_desc">Useful if you are getting Handshake Fails</string>
     <string name="timestamp_proxy">Use Proxy for Timestamps</string>
     <string name="check_app_updates">Always check for App Updates</string>
@@ -428,6 +424,13 @@
     <string name="anilist_not_found">Seems like that wasn\'t found on Anilist.</string>
     <string name="disabled_auto_skip">Disabled Auto Skipping OP &amp; ED</string>
     <string name="auto_skip">Auto Skipping OP &amp; ED</string>
+    <string name="show_skip_time_stamp_button">Show Skip Time Stamp Button</string>
+    <string name="always_load_time_stamps">Always Load Time Stamps</string>
+    <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>string
+    <string name="timestamps">Time Stamps</string>
+    <string name="auto_skip_op_ed">Auto Skip OP / ED</string>
+    <string name="requires_time_stamps_to_be_enabled">Requires Time Stamps to be Enabled</string>
+    <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
     <string name="copied_to_clipboard">Copied to Clipboard</string>
     <string name="first_episode">This is the 1st Episode!</string>
     <string name="reset_auto_update">You can long click List Editor button to Reset Auto Update</string>

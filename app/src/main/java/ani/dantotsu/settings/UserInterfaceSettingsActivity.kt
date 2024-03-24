@@ -10,6 +10,7 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityUserInterfaceSettingsBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -49,7 +50,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
                     }
                     setPositiveButton("Done") { _, _ ->
                         PrefManager.setVal(PrefName.HomeLayoutShow, set)
-                        restartApp()
+                        restartApp(binding.root)
                     }
                 }.show()
             dialog.window?.setDimAmount(0.8f)
@@ -58,24 +59,24 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         binding.uiSettingsSmallView.isChecked = PrefManager.getVal(PrefName.SmallView)
         binding.uiSettingsSmallView.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.SmallView, isChecked)
-            restartApp()
+            restartApp(binding.root)
         }
 
         binding.uiSettingsImmersive.isChecked = PrefManager.getVal(PrefName.ImmersiveMode)
         binding.uiSettingsImmersive.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.ImmersiveMode, isChecked)
-            restartApp()
+            restartApp(binding.root)
         }
         binding.uiSettingsBannerAnimation.isChecked = PrefManager.getVal(PrefName.BannerAnimations)
         binding.uiSettingsBannerAnimation.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.BannerAnimations, isChecked)
-            restartApp()
+            restartApp(binding.root)
         }
 
         binding.uiSettingsLayoutAnimation.isChecked = PrefManager.getVal(PrefName.LayoutAnimations)
         binding.uiSettingsLayoutAnimation.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.LayoutAnimations, isChecked)
-            restartApp()
+            restartApp(binding.root)
         }
 
         val map = mapOf(
@@ -94,41 +95,22 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             mapReverse[PrefManager.getVal(PrefName.AnimationSpeed)] ?: 1f
         binding.uiSettingsAnimationSpeed.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.AnimationSpeed, map[value] ?: 1f)
-            restartApp()
+            restartApp(binding.root)
         }
         binding.uiSettingsBlurBanners.isChecked = PrefManager.getVal(PrefName.BlurBanners)
         binding.uiSettingsBlurBanners.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.BlurBanners, isChecked)
-            restartApp()
+            restartApp(binding.root)
         }
         binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as  Float)
         binding.uiSettingsBlurRadius.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.BlurRadius, value)
-            restartApp()
+            restartApp(binding.root)
         }
         binding.uiSettingsBlurSampling.value = (PrefManager.getVal(PrefName.BlurSampling) as Float)
         binding.uiSettingsBlurSampling.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.BlurSampling, value)
-            restartApp()
-        }
-    }
-
-    private fun restartApp() {
-        Snackbar.make(
-            binding.root,
-            R.string.restart_app, Snackbar.LENGTH_SHORT
-        ).apply {
-            val mainIntent =
-                Intent.makeRestartActivityTask(
-                    context.packageManager.getLaunchIntentForPackage(
-                        context.packageName
-                    )!!.component
-                )
-            setAction("Do it!") {
-                context.startActivity(mainIntent)
-                Runtime.getRuntime().exit(0)
-            }
-            show()
+            restartApp(binding.root)
         }
     }
 }

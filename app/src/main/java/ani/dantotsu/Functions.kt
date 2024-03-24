@@ -270,6 +270,32 @@ fun Activity.setNavigationTheme() {
     }
 }
 
+fun Activity.reloadActivity() {
+    Refresh.all()
+    finish()
+    startActivity(Intent(this, this::class.java))
+    initActivity(this)
+}
+
+fun Context.restartApp(view: View) {
+    val mainIntent = Intent.makeRestartActivityTask(
+        packageManager.getLaunchIntentForPackage(this.packageName)!!.component
+    )
+    val component = ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
+    Snackbar.make(view, R.string.restart_app, Snackbar.LENGTH_INDEFINITE).apply {
+        setAction(R.string.do_it) {
+            this.dismiss()
+            try {
+                startActivity(Intent().setComponent(component))
+            } catch (anything: Exception) {
+                startActivity(mainIntent)
+            }
+            Runtime.getRuntime().exit(0)
+        }
+        show()
+    }
+}
+
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()
@@ -1272,7 +1298,7 @@ fun blurImage(imageView: ImageView, banner: String?) {
                 val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
                 Glide.with(context as Context)
                     .load(GlideUrl(url))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)
                     .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))
                     .into(imageView)
             }
