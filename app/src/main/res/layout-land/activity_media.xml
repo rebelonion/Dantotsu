@@ -7,9 +7,10 @@
     android:orientation="horizontal">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        tools:ignore="InefficientWeight">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/mediaAppBar"
