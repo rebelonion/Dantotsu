@@ -85,7 +85,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         trendingBinding.searchBarText.setOnClickListener {
             ContextCompat.startActivity(
                 it.context,
-                Intent(it.context, SearchActivity::class.java).putExtra("type", "MANGA"),
+                Intent(it.context, SearchActivity::class.java).putExtra("type", "ANIME"),
                 null
             )
         }
