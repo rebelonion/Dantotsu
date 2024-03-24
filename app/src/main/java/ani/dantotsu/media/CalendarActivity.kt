@@ -1,6 +1,5 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View

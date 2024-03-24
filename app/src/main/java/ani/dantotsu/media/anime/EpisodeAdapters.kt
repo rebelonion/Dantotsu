@@ -1,6 +1,5 @@
 package ani.dantotsu.media.anime
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.View

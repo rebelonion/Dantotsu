@@ -1,6 +1,5 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -1,6 +1,5 @@
 package ani.dantotsu.media.anime
 
-import android.app.Activity
 import android.graphics.Color.TRANSPARENT
 import android.os.Bundle
 import android.view.LayoutInflater
