@@ -79,7 +79,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:hint="@string/status_title"
+                android:hint="@string/source"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -88,7 +88,7 @@
                 app:hintAnimationEnabled="true">
 
                 <AutoCompleteTextView
-                    android:id="@+id/searchStatus"
+                    android:id="@+id/searchSource"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_weight="1"
@@ -151,7 +151,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:hint="@string/source"
+                android:hint="@string/status_title"
                 app:boxCornerRadiusBottomEnd="16dp"
                 app:boxCornerRadiusBottomStart="16dp"
                 app:boxCornerRadiusTopEnd="16dp"
@@ -160,7 +160,7 @@
                 app:hintAnimationEnabled="true">
 
                 <AutoCompleteTextView
-                    android:id="@+id/searchSource"
+                    android:id="@+id/searchStatus"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_weight="1"
