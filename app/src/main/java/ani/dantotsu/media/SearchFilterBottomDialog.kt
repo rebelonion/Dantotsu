@@ -82,6 +82,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         selectedTags.clear()
         exTags.clear()
         binding.searchStatus.setText("")
+        binding.searchSource.setText("")
         binding.searchFormat.setText("")
         binding.searchSeason.setText("")
         binding.searchYear.setText("")
