@@ -143,8 +143,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             true
         }
 
-        binding.sortByFilter.setOnClickListener { view ->
-            val popupMenu = PopupMenu(requireContext(), view)
+        binding.sortByFilter.setOnClickListener {
+            val popupMenu = PopupMenu(requireContext(), it)
             popupMenu.menuInflater.inflate(R.menu.sortby_filter_menu, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
@@ -189,8 +189,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             popupMenu.show()
         }
 
-        binding.countryFilter.setOnClickListener { view ->
-            val popupMenu = PopupMenu(requireContext(), view)
+        binding.countryFilter.setOnClickListener {
+            val popupMenu = PopupMenu(requireContext(), it)
             popupMenu.menuInflater.inflate(R.menu.country_filter_menu, popupMenu.menu)
             popupMenu.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
