@@ -1272,7 +1272,7 @@ fun blurImage(imageView: ImageView, banner: String?) {
                 val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
                 Glide.with(context as Context)
                     .load(GlideUrl(url))
-                    .diskCacheStrategy(DiskCacheStrategy.ALL).override(400)
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)
                     .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))
                     .into(imageView)
             }
