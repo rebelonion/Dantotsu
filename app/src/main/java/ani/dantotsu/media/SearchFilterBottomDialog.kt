@@ -245,7 +245,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.searchFilterCancel.setOnClickListener {
             dismiss()
         }
-        val format =(if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus)
+        val format = if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus
         binding.searchStatus.setText(activity.result.status?.replace("_", " "))
         binding.searchStatus.setAdapter(
             ArrayAdapter(
@@ -273,7 +273,17 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             )
         )
 
-        if (activity.result.type == "MANGA") binding.searchSeasonYearCont.visibility = GONE
+        binding.searchYear.setText(activity.result.seasonYear?.toString())
+        binding.searchYear.setAdapter(
+            ArrayAdapter(
+                binding.root.context,
+                R.layout.item_dropdown,
+                (1970 until Calendar.getInstance().get(Calendar.YEAR) + 2).map { it.toString() }
+                    .reversed().toTypedArray()
+            )
+        )
+
+        if (activity.result.type == "MANGA") binding.searchSeasonCont.visibility = GONE
         else {
             binding.searchSeason.setText(activity.result.season)
             binding.searchSeason.setAdapter(
@@ -281,16 +291,6 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                     binding.root.context,
                     R.layout.item_dropdown,
                     Anilist.seasons.toTypedArray()
-                )
-            )
-
-            binding.searchYear.setText(activity.result.seasonYear?.toString())
-            binding.searchYear.setAdapter(
-                ArrayAdapter(
-                    binding.root.context,
-                    R.layout.item_dropdown,
-                    (1970 until Calendar.getInstance().get(Calendar.YEAR) + 2).map { it.toString() }
-                        .reversed().toTypedArray()
                 )
             )
         }
