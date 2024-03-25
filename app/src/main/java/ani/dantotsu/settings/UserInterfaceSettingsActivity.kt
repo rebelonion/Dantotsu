@@ -77,6 +77,11 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             restartApp(binding.root)
         }
 
+        binding.uiSettingsTrendingScroller.isChecked = PrefManager.getVal(PrefName.TrendingScroller)
+        binding.uiSettingsTrendingScroller.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.TrendingScroller, isChecked)
+        }
+
         val map = mapOf(
             2f to 0.5f,
             1.75f to 0.625f,

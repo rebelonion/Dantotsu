@@ -166,8 +166,9 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    trendHandler!!.removeCallbacks(trendRun)
-                    trendHandler!!.postDelayed(trendRun, 4000)
+                    trendHandler?.removeCallbacks(trendRun)
+                    if (PrefManager.getVal(PrefName.TrendingScroller))
+                        trendHandler!!.postDelayed(trendRun, 4000)
                 }
             }
         )

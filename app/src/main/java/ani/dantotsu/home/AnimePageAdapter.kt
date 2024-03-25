@@ -169,7 +169,6 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         trendingBinding.trendingViewPager.offscreenPageLimit = 3
         trendingBinding.trendingViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         trendingBinding.trendingViewPager.setPageTransformer(MediaPageTransformer())
-
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
             trendingBinding.trendingViewPager.currentItem += 1
@@ -178,8 +177,10 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    trendHandler!!.removeCallbacks(trendRun)
-                    trendHandler!!.postDelayed(trendRun, 4000)
+                    trendHandler?.removeCallbacks(trendRun)
+                    if (PrefManager.getVal(PrefName.TrendingScroller)) {
+                        trendHandler!!.postDelayed(trendRun, 4000)
+                    }
                 }
             }
         )
