@@ -13,7 +13,7 @@
         android:id="@+id/commentsRefresh"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="58dp"
+        android:layout_marginBottom="120dp"
         android:clipChildren="false"
         android:clipToPadding="false">
 
