@@ -304,6 +304,7 @@
     <string name="animations">Animations</string>
     <string name="banner_animations">Banner Animations</string>
     <string name="layout_animations">Layout Animations</string>
+    <string name="trending_scroller">Trending Scroller</string>
     <string name="animation_speed">Overall Speed</string>
     <string name="empty_fav">Looks like you don\'t like anything,\nTry liking a show to keep it here.</string>
     <string name="fav_anime">Favourite Anime</string>
