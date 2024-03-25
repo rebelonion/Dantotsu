@@ -21,6 +21,7 @@ data class SearchResults(
     var source: String? = null,
     var format: String? = null,
     var seasonYear: Int? = null,
+    var startYear: Int? = null,
     var season: String? = null,
     var page: Int = 1,
     var results: MutableList<Media>,
@@ -54,6 +55,9 @@ data class SearchResults(
         }
         season?.let {
             list.add(SearchChip("SEASON", it))
+        }
+        startYear?.let {
+            list.add(SearchChip("START_YEAR", it.toString()))
         }
         seasonYear?.let {
             list.add(SearchChip("SEASON_YEAR", it.toString()))
@@ -91,6 +95,7 @@ data class SearchResults(
             "FORMAT" -> format = null
             "COUNTRY" -> countryOfOrigin = null
             "SEASON" -> season = null
+            "START_YEAR" -> startYear = null
             "SEASON_YEAR" -> seasonYear = null
             "GENRE" -> genres?.remove(chip.text)
             "EXCLUDED_GENRE" -> excludedGenres?.remove(chip.text)

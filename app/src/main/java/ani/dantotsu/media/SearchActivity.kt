@@ -71,7 +71,8 @@ class SearchActivity : AppCompatActivity() {
                 source = intent.getStringExtra("source"),
                 countryOfOrigin = intent.getStringExtra("country"),
                 season = intent.getStringExtra("season"),
-                seasonYear = intent.getStringExtra("seasonYear")?.toIntOrNull(),
+                seasonYear = if (intent.getStringExtra("type") == "ANIME") intent.getStringExtra("seasonYear")?.toIntOrNull() else null,
+                startYear = if (intent.getStringExtra("type") == "MANGA") intent.getStringExtra("seasonYear")?.toIntOrNull() else null,
                 results = mutableListOf(),
                 hasNextPage = false
             )
@@ -130,6 +131,7 @@ class SearchActivity : AppCompatActivity() {
                     excludedTags = it.excludedTags
                     tags = it.tags
                     season = it.season
+                    startYear = it.startYear
                     seasonYear = it.seasonYear
                     status = it.status
                     source = it.source

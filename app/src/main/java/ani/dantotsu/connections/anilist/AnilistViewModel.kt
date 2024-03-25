@@ -268,6 +268,7 @@ class AnilistMangaViewModel : ViewModel() {
             r.onList,
             r.excludedGenres,
             r.excludedTags,
+            r.startYear,
             r.seasonYear,
             r.season
         )
@@ -300,6 +301,7 @@ class AnilistSearch : ViewModel() {
             r.onList,
             r.excludedGenres,
             r.excludedTags,
+            r.startYear,
             r.seasonYear,
             r.season
         )
@@ -322,6 +324,7 @@ class AnilistSearch : ViewModel() {
             r.onList,
             r.excludedGenres,
             r.excludedTags,
+            r.startYear,
             r.seasonYear,
             r.season
         )

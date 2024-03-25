@@ -128,6 +128,7 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                         source = binding.searchSource.text.toString().replace(" ", "_").ifBlank { null }
                         format = binding.searchFormat.text.toString().ifBlank { null }
                         season = binding.searchSeason.text.toString().ifBlank { null }
+                        startYear = binding.searchYear.text.toString().toIntOrNull()
                         seasonYear = binding.searchYear.text.toString().toIntOrNull()
                         sort = activity.result.sort
                         genres = selectedGenres
@@ -230,7 +231,11 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                 source = binding.searchSource.text.toString().replace(" ", "_").ifBlank { null }
                 format = binding.searchFormat.text.toString().ifBlank { null }
                 season = binding.searchSeason.text.toString().ifBlank { null }
-                seasonYear = binding.searchYear.text.toString().toIntOrNull()
+                if (activity.result.type == "ANIME") {
+                    seasonYear = binding.searchYear.text.toString().toIntOrNull()
+                } else {
+                    startYear = binding.searchYear.text.toString().toIntOrNull()
+                }
                 sort = activity.result.sort
                 countryOfOrigin = activity.result.countryOfOrigin
                 genres = selectedGenres
@@ -273,7 +278,11 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             )
         )
 
-        binding.searchYear.setText(activity.result.seasonYear?.toString())
+        if (activity.result.type == "ANIME") {
+            binding.searchYear.setText(activity.result.seasonYear?.toString())
+        } else {
+            binding.searchYear.setText(activity.result.startYear?.toString())
+        }
         binding.searchYear.setAdapter(
             ArrayAdapter(
                 binding.root.context,

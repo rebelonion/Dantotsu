@@ -889,6 +889,7 @@ class AnilistQueries {
         onList: Boolean? = null,
         excludedGenres: MutableList<String>? = null,
         excludedTags: MutableList<String>? = null,
+        startYear: Int? =null,
         seasonYear: Int? = null,
         season: String? = null,
         id: Int? = null,
@@ -943,7 +944,8 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
             ${if (onList != null) ""","onList":$onList""" else ""}
             ${if (page != null) ""","page":"$page"""" else ""}
             ${if (id != null) ""","id":"$id"""" else ""}
-            ${if (seasonYear != null) ""","seasonYear":"$seasonYear"""" else ""}
+            ${if (type == "ANIME" && seasonYear != null) ""","seasonYear":"$seasonYear"""" else ""}
+            ${if (type == "MANGA" && startYear != null) ""","startDate_greater":${startYear}0101,"startDate_lesser":${startYear + 1}0101""" else ""}
             ${if (season != null) ""","season":"$season"""" else ""}
             ${if (search != null) ""","search":"$search"""" else ""}
             ${if (source != null) ""","source":"$source"""" else ""}
@@ -1018,6 +1020,7 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
                 source = source,
                 format = format,
                 countryOfOrigin = countryOfOrigin,
+                startYear = startYear,
                 seasonYear = seasonYear,
                 season = season,
                 results = responseArray,
