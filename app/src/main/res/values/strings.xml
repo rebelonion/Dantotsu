@@ -812,6 +812,16 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="donate">donate :)</string>
     <string name="do_it">Do it!</string>
     <string name="password">Password</string>
+
+    <string name="profile_stats_widget">Track progress directly from your home screen</string>
+    <string name="anime_watched">Anime Watched</string>
+    <string name="manga_read">Manga Read</string>
+    <string name="loading">Loading…</string>
+
+    <string name="please">Please</string>
+    <string name="log_in">log in</string>
+    <string name="or_join">or join</string>
+
     <string name="top_background_color">Top background color</string>
     <string name="bottom_background_color">Bottom Background Color</string>
     <string name="countdown_text_color">Countdown Text Color</string>
