@@ -17,6 +17,7 @@ import ani.dantotsu.profile.ChartBuilder.Companion.ChartPacket
 import ani.dantotsu.profile.ChartBuilder.Companion.ChartType
 import ani.dantotsu.profile.ChartBuilder.Companion.MediaType
 import ani.dantotsu.profile.ChartBuilder.Companion.StatType
+import ani.dantotsu.setBaseline
 import ani.dantotsu.statusBarHeight
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartType
 import com.xwray.groupie.GroupieAdapter
@@ -49,7 +50,10 @@ class StatsFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
+
         user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile
+
+        binding.statisticList.setBaseline(activity.navBar)
 
         binding.statisticList.adapter = adapter
         binding.statisticList.recycledViewPool.setMaxRecycledViews(0, 0)
@@ -114,6 +118,7 @@ class StatsFragment :
         super.onResume()
         if (this::binding.isInitialized) {
             binding.statisticList.visibility = View.VISIBLE
+            binding.statisticList.setBaseline(activity.navBar)
             binding.root.requestLayout()
             if (!loadedFirstTime) {
                 activity.lifecycleScope.launch {
