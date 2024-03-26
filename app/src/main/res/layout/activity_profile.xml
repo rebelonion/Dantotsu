@@ -28,7 +28,6 @@
         tools:visibility="visible">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="false"
@@ -136,11 +135,11 @@
                 android:layout_gravity="bottom"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="12dp"
-                android:layout_marginTop="210dp"
+                android:layout_marginTop="200dp"
                 android:layout_marginBottom="2dp"
                 android:backgroundTint="?attr/colorSurfaceVariant"
                 android:baselineAligned="false"
-                app:cardCornerRadius="16dp">
+                app:cardCornerRadius="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
