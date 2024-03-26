@@ -85,8 +85,13 @@ class UpcomingWidget : AppWidgetProvider() {
             ) as GradientDrawable
             gradientDrawable.colors = intArrayOf(backgroundColor, backgroundFade)
             val widgetSizeProvider = WidgetSizeProvider(context)
-            val (width, height) = widgetSizeProvider.getWidgetsSize(appWidgetId)
-            gradientDrawable.cornerRadius = 50f
+            var (width, height) = widgetSizeProvider.getWidgetsSize(appWidgetId)
+            if (width > 0 && height > 0) {
+                gradientDrawable.cornerRadius = 50f
+            } else {
+                width = 300
+                height = 300
+            }
 
             val intentTemplate = Intent(context, MainActivity::class.java)
             intentTemplate.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
