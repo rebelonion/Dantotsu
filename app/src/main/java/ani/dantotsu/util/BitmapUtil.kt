@@ -22,8 +22,8 @@ class BitmapUtil {
             return output
         }
 
-        fun convertDrawableToBitmap(drawable: Drawable): Bitmap {
-            val bitmap = Bitmap.createBitmap(100, 300, Bitmap.Config.ARGB_8888)
+        fun convertDrawableToBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
             val canvas = Canvas(bitmap)
             drawable.setBounds(0, 0, canvas.width, canvas.height)
             drawable.draw(canvas)

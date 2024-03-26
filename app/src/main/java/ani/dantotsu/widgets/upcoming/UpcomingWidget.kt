@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.util.BitmapUtil.Companion.convertDrawableToBitmap
+import ani.dantotsu.widgets.WidgetSizeProvider
 
 /**
  * Implementation of App Widget functionality.
@@ -70,13 +71,16 @@ class UpcomingWidget : AppWidgetProvider() {
                 null
             ) as GradientDrawable
             gradientDrawable.colors = intArrayOf(backgroundColor, backgroundFade)
+            val widgetSizeProvider = WidgetSizeProvider(context)
+            val (width, height) = widgetSizeProvider.getWidgetsSize(appWidgetId)
+            gradientDrawable.cornerRadius = 50f
 
             val intentTemplate = Intent(context, MainActivity::class.java)
             intentTemplate.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             intentTemplate.putExtra("fromWidget", true)
 
             val views = RemoteViews(context.packageName, R.layout.upcoming_widget).apply {
-                setImageViewBitmap(R.id.backgroundView, convertDrawableToBitmap(gradientDrawable))
+                setImageViewBitmap(R.id.backgroundView, convertDrawableToBitmap(gradientDrawable, width, height))
                 setTextColor(R.id.text_show_title, titleTextColor)
                 setTextColor(R.id.text_show_countdown, countdownTextColor)
                 setTextColor(R.id.widgetTitle, titleTextColor)
@@ -103,9 +107,7 @@ class UpcomingWidget : AppWidgetProvider() {
                     )
                 )
             }
-
             return views
-
         }
 
         const val PREFS_NAME = "ani.dantotsu.widgets.UpcomingWidget"
