@@ -60,6 +60,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                     this@UpcomingWidgetConfigureActivity,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
                 )
+                .setupColorWheelAlpha(true)
                 .allowCustom(true)
                 .showOutline(0x46000000)
                 .gridNumColumn(5)
@@ -75,6 +76,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                     this@UpcomingWidgetConfigureActivity,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
                 )
+                .setupColorWheelAlpha(true)
                 .allowCustom(true)
                 .showOutline(0x46000000)
                 .gridNumColumn(5)
