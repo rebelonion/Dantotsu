@@ -224,7 +224,6 @@
         </LinearLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -244,7 +243,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"
         android:orientation="vertical">
-
 
         <LinearLayout
             android:id="@+id/commentMessageContainer"

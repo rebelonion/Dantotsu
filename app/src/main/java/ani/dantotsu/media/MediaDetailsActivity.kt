@@ -127,6 +127,9 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             rightMargin = navBarRightMargin
             bottomMargin = navBarBottomMargin
         }
+        binding.commentMessageContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarRightMargin
+        }
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
         binding.mediaClose.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
