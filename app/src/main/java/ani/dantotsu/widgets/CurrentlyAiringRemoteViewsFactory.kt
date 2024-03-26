@@ -1,12 +1,24 @@
 package ani.dantotsu.widgets
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.BitmapShader
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.RectF
+import android.graphics.Shader
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import ani.dantotsu.R
+import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.util.Logger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
@@ -14,59 +26,47 @@ import java.net.URL
 class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
     RemoteViewsService.RemoteViewsFactory {
     private var widgetItems = mutableListOf<WidgetItem>()
+    private var refreshing = false
+    private val prefs =
+        context.getSharedPreferences(CurrentlyAiringWidget.PREFS_NAME, Context.MODE_PRIVATE)
 
     override fun onCreate() {
-        // 4 items for testing
-        widgetItems.clear()
         Logger.log("CurrentlyAiringRemoteViewsFactory onCreate")
-        widgetItems = List(4) {
-            WidgetItem(
-                "Show $it",
-                "$it days $it hours $it minutes",
-                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
-            )
-        }.toMutableList()
+        fillWidgetItems()
+    }
+
+    private fun timeUntil(timeUntil: Long): String {
+        val days = timeUntil / (1000 * 60 * 60 * 24)
+        val hours = (timeUntil % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        val minutes = ((timeUntil % (1000 * 60 * 60 * 24)) % (1000 * 60 * 60)) / (1000 * 60)
+        return "$days days $hours hours $minutes minutes"
     }
 
     override fun onDataSetChanged() {
-        // 4 items for testing
+        if (refreshing) return
         Logger.log("CurrentlyAiringRemoteViewsFactory onDataSetChanged")
         widgetItems.clear()
-        widgetItems.add(
-            WidgetItem(
-                "Show 1",
-                "1 day 2 hours 3 minutes",
-                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
-            )
-        )
-        widgetItems.add(
-            WidgetItem(
-                "Show 2",
-                "2 days 3 hours 4 minutes",
-                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
-            )
-        )
-        widgetItems.add(
-            WidgetItem(
-                "Show 3",
-                "3 days 4 hours 5 minutes",
-                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
-            )
-        )
-        widgetItems.add(
-            WidgetItem(
-                "Show 4",
-                "4 days 5 hours 6 minutes",
-                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
-            )
-        )
-        widgetItems.add(
-            WidgetItem(
-                "Show 5",
-                "5 days 6 hours 7 minutes",
-                "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14741-alxqoP4yx6WF.jpg"
-            )
-        )
+        fillWidgetItems()
+
+    }
+
+    private fun fillWidgetItems() {
+        refreshing = true
+        val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
+        runBlocking(Dispatchers.IO) {
+            val upcoming = Anilist.query.getUpcomingAnime(userId)
+            upcoming.forEach {
+                widgetItems.add(
+                    WidgetItem(
+                        it.userPreferredName,
+                        timeUntil(it.timeUntilAiring ?: 0),
+                        it.cover ?: "",
+                        it.id
+                    )
+                )
+            }
+            refreshing = false
+        }
     }
 
     override fun onDestroy() {
@@ -80,12 +80,20 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
     override fun getViewAt(position: Int): RemoteViews {
         Logger.log("CurrentlyAiringRemoteViewsFactory getViewAt")
         val item = widgetItems[position]
+        val titleTextColor = prefs.getInt(CurrentlyAiringWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)
+        val countdownTextColor =
+            prefs.getInt(CurrentlyAiringWidget.PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
         val rv = RemoteViews(context.packageName, R.layout.item_currently_airing_widget).apply {
             setTextViewText(R.id.text_show_title, item.title)
             setTextViewText(R.id.text_show_countdown, item.countdown)
+            setTextColor(R.id.text_show_title, titleTextColor)
+            setTextColor(R.id.text_show_countdown, countdownTextColor)
             val bitmap = downloadImageAsBitmap(item.image)
-            //setImageViewUri(R.id.image_show_icon, Uri.parse(item.image))
             setImageViewBitmap(R.id.image_show_icon, bitmap)
+            val fillInIntent = Intent().apply {
+                putExtra("mediaId", item.id)
+            }
+            setOnClickFillInIntent(R.id.widget_item, fillInIntent)
         }
 
         return rv
@@ -108,15 +116,26 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            // Handle the error according to your needs
         } finally {
-            // Clean up resources
             inputStream?.close()
             urlConnection?.disconnect()
         }
-
-        return bitmap
+        return bitmap?.let { roundCorners(it) }
     }
+
+    private fun roundCorners(bitmap: Bitmap): Bitmap {
+        val cornerRadius = 20f
+        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(output)
+        val paint = Paint()
+        paint.isAntiAlias = true
+        paint.shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
+        val rect = RectF(0f, 0f, bitmap.width.toFloat(), bitmap.height.toFloat())
+        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint)
+
+        return output
+    }
+
 
     override fun getLoadingView(): RemoteViews {
         return RemoteViews(context.packageName, R.layout.item_currently_airing_widget)
@@ -135,4 +154,4 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
     }
 }
 
-data class WidgetItem(val title: String, val countdown: String, val image: String)
+data class WidgetItem(val title: String, val countdown: String, val image: String, val id: Int)

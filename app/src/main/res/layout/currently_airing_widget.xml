@@ -20,8 +20,8 @@
 
         <ImageView
             android:id="@+id/logoView"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:foregroundGravity="center_vertical"
@@ -31,20 +31,24 @@
         <TextView
             android:id="@+id/widgetTitle"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/logoView"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|start"
+            android:textAlignment="viewStart"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="@string/currently_airing"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <ListView
             android:id="@+id/widgetListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="none"
             android:layout_below="@id/widgetTitle" />
 
         <TextView
@@ -52,6 +56,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="@string/no_shows_to_display"
             android:textColor="#ffffff"
             android:textSize="20sp"

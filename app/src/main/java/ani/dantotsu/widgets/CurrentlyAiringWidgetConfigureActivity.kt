@@ -1,42 +1,36 @@
 package ani.dantotsu.widgets
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import ani.dantotsu.R
 import ani.dantotsu.databinding.CurrentlyAiringWidgetConfigureBinding
 import ani.dantotsu.themes.ThemeManager
+import eltos.simpledialogfragment.SimpleDialog
+import eltos.simpledialogfragment.color.SimpleColorDialog
 
 /**
  * The configuration screen for the [CurrentlyAiringWidget] AppWidget.
  */
-class CurrentlyAiringWidgetConfigureActivity : Activity() {
+class CurrentlyAiringWidgetConfigureActivity : AppCompatActivity(),
+    SimpleDialog.OnDialogResultListener {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-    private lateinit var appWidgetText: EditText
+
     private var onClickListener = View.OnClickListener {
         val context = this@CurrentlyAiringWidgetConfigureActivity
-
-        // When the button is clicked, store the string locally
-        val widgetText = appWidgetText.text.toString()
-        saveTitlePref(context, appWidgetId, widgetText)
-
-        // It is the responsibility of the configuration activity to update the app widget
         val appWidgetManager = AppWidgetManager.getInstance(context)
-        //updateAppWidget(context, appWidgetManager, appWidgetId)
 
-
-        CurrentlyAiringWidget.updateAppWidget(
+        updateAppWidget(
             context,
             appWidgetManager,
             appWidgetId,
-            -1
         )
 
-        // Make sure we pass back the original appWidgetId
         val resultValue = Intent()
         resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
         setResult(RESULT_OK, resultValue)
@@ -45,21 +39,87 @@ class CurrentlyAiringWidgetConfigureActivity : Activity() {
     private lateinit var binding: CurrentlyAiringWidgetConfigureBinding
 
     public override fun onCreate(icicle: Bundle?) {
-
         ThemeManager(this).applyTheme()
         super.onCreate(icicle)
-
-        // Set the result to CANCELED.  This will cause the widget host to cancel
-        // out of the widget placement if the user presses the back button.
         setResult(RESULT_CANCELED)
 
         binding = CurrentlyAiringWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val prefs = getSharedPreferences(CurrentlyAiringWidget.PREFS_NAME, Context.MODE_PRIVATE)
 
-        appWidgetText = binding.appwidgetText
+        binding.topBackgroundButton.setOnClickListener {
+            val tag = CurrentlyAiringWidget.PREF_BACKGROUND_COLOR
+            SimpleColorDialog().title(R.string.custom_theme)
+                .colorPreset(
+                    prefs.getInt(
+                        CurrentlyAiringWidget.PREF_BACKGROUND_COLOR,
+                        ContextCompat.getColor(this, R.color.theme)
+                    )
+                )
+                .colors(
+                    this@CurrentlyAiringWidgetConfigureActivity,
+                    SimpleColorDialog.MATERIAL_COLOR_PALLET
+                )
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this@CurrentlyAiringWidgetConfigureActivity, tag)
+        }
+        binding.bottomBackgroundButton.setOnClickListener {
+            val tag = CurrentlyAiringWidget.PREF_BACKGROUND_FADE
+            SimpleColorDialog().title(R.string.custom_theme)
+                .colorPreset(prefs.getInt(CurrentlyAiringWidget.PREF_BACKGROUND_FADE, Color.GRAY))
+                .colors(
+                    this@CurrentlyAiringWidgetConfigureActivity,
+                    SimpleColorDialog.MATERIAL_COLOR_PALLET
+                )
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this@CurrentlyAiringWidgetConfigureActivity, tag)
+        }
+        binding.titleColorButton.setOnClickListener {
+            val tag = CurrentlyAiringWidget.PREF_TITLE_TEXT_COLOR
+            SimpleColorDialog().title(R.string.custom_theme)
+                .colorPreset(prefs.getInt(CurrentlyAiringWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE))
+                .colors(
+                    this@CurrentlyAiringWidgetConfigureActivity,
+                    SimpleColorDialog.MATERIAL_COLOR_PALLET
+                )
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this@CurrentlyAiringWidgetConfigureActivity, tag)
+        }
+        binding.countdownColorButton.setOnClickListener {
+            val tag = CurrentlyAiringWidget.PREF_COUNTDOWN_TEXT_COLOR
+            SimpleColorDialog().title(R.string.custom_theme)
+                .colorPreset(
+                    prefs.getInt(
+                        CurrentlyAiringWidget.PREF_COUNTDOWN_TEXT_COLOR,
+                        Color.WHITE
+                    )
+                )
+                .colors(
+                    this@CurrentlyAiringWidgetConfigureActivity,
+                    SimpleColorDialog.MATERIAL_COLOR_PALLET
+                )
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this@CurrentlyAiringWidgetConfigureActivity, tag)
+        }
+
         binding.addButton.setOnClickListener(onClickListener)
 
-        // Find the widget id from the intent.
         val intent = intent
         val extras = intent.extras
         if (extras != null) {
@@ -68,43 +128,66 @@ class CurrentlyAiringWidgetConfigureActivity : Activity() {
             )
         }
 
-        // If this activity was started with an intent without an app widget ID, finish with an error.
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
             finish()
             return
         }
-
-        appWidgetText.setText(
-            loadTitlePref(
-                this@CurrentlyAiringWidgetConfigureActivity,
-                appWidgetId
-            )
-        )
-
     }
 
-}
+    override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
+        if (which == SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE) {
+            when (dialogTag) {
+                CurrentlyAiringWidget.PREF_BACKGROUND_COLOR -> {
+                    getSharedPreferences(
+                        CurrentlyAiringWidget.PREFS_NAME,
+                        Context.MODE_PRIVATE
+                    ).edit()
+                        .putInt(
+                            CurrentlyAiringWidget.PREF_BACKGROUND_COLOR,
+                            extras.getInt(SimpleColorDialog.COLOR)
+                        )
+                        .apply()
+                }
 
-private const val PREFS_NAME = "ani.dantotsu.parsers.CurrentlyAiringWidget"
-private const val PREF_PREFIX_KEY = "appwidget_"
+                CurrentlyAiringWidget.PREF_BACKGROUND_FADE -> {
+                    getSharedPreferences(
+                        CurrentlyAiringWidget.PREFS_NAME,
+                        Context.MODE_PRIVATE
+                    ).edit()
+                        .putInt(
+                            CurrentlyAiringWidget.PREF_BACKGROUND_FADE,
+                            extras.getInt(SimpleColorDialog.COLOR)
+                        )
+                        .apply()
+                }
 
-// Write the prefix to the SharedPreferences object for this widget
-internal fun saveTitlePref(context: Context, appWidgetId: Int, text: String) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.putString(PREF_PREFIX_KEY + appWidgetId, text)
-    prefs.apply()
-}
+                CurrentlyAiringWidget.PREF_TITLE_TEXT_COLOR -> {
+                    getSharedPreferences(
+                        CurrentlyAiringWidget.PREFS_NAME,
+                        Context.MODE_PRIVATE
+                    ).edit()
+                        .putInt(
+                            CurrentlyAiringWidget.PREF_TITLE_TEXT_COLOR,
+                            extras.getInt(SimpleColorDialog.COLOR)
+                        )
+                        .apply()
+                }
 
-// Read the prefix from the SharedPreferences object for this widget.
-// If there is no preference saved, get the default from a resource
-internal fun loadTitlePref(context: Context, appWidgetId: Int): String {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0)
-    val titleValue = prefs.getString(PREF_PREFIX_KEY + appWidgetId, null)
-    return titleValue ?: context.getString(R.string.appwidget_text)
-}
+                CurrentlyAiringWidget.PREF_COUNTDOWN_TEXT_COLOR -> {
+                    getSharedPreferences(
+                        CurrentlyAiringWidget.PREFS_NAME,
+                        Context.MODE_PRIVATE
+                    ).edit()
+                        .putInt(
+                            CurrentlyAiringWidget.PREF_COUNTDOWN_TEXT_COLOR,
+                            extras.getInt(SimpleColorDialog.COLOR)
+                        )
+                        .apply()
+                }
 
-internal fun deleteTitlePref(context: Context, appWidgetId: Int) {
-    val prefs = context.getSharedPreferences(PREFS_NAME, 0).edit()
-    prefs.remove(PREF_PREFIX_KEY + appWidgetId)
-    prefs.apply()
+            }
+        }
+        return true
+    }
+
 }

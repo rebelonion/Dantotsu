@@ -11,7 +11,7 @@
 
     <string name="discord" translatable="false">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github" translatable="false">https://github.com/rebelonion/Dantotsu</string>
-    <string name="telegram" tools:ignore="Typos" translatable="false">https://t.me/+gzBCQExtLQo1YTNh </string>
+    <string name="telegram" translatable="false" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
     <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
 
     <string name="home">Home</string>
@@ -811,4 +811,9 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="donate">donate :)</string>
     <string name="do_it">Do it!</string>
     <string name="password">Password</string>
+    <string name="top_background_color">Top background color</string>
+    <string name="bottom_background_color">Bottom Background Color</string>
+    <string name="countdown_text_color">Countdown Text Color</string>
+    <string name="title_color">Title Color</string>
+    <string name="placeholder">Placeholder</string>
 </resources>

@@ -12,7 +12,9 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.widget.RemoteViews
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 
 /**
@@ -26,25 +28,15 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
         appWidgetIds: IntArray
     ) {
         appWidgetIds.forEach { appWidgetId ->
-            val intent = Intent(context, CurrentlyAiringRemoteViewsService::class.java).apply {
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
-            }
-
-            val rv = RemoteViews(context.packageName, R.layout.currently_airing_widget).apply {
-                setRemoteAdapter(R.id.widgetListView, intent)
-                setEmptyView(R.id.widgetListView, R.id.empty_view)
-            }
-
+            val rv = updateAppWidget(context, appWidgetId)
             appWidgetManager.updateAppWidget(appWidgetId, rv)
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds)
     }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
-        // When the user deletes the widget, delete the preference associated with it.
         for (appWidgetId in appWidgetIds) {
-            deleteTitlePref(context, appWidgetId)
+            context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE).edit().clear().apply()
         }
         super.onDeleted(context, appWidgetIds)
     }
@@ -57,34 +49,65 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
         super.onDisabled(context)
     }
 
+
     companion object {
         fun updateAppWidget(
             context: Context,
-            appWidgetManager: AppWidgetManager,
             appWidgetId: Int,
-            color: Int
-        ) {
-            // Create an intent to launch the configuration activity when the widget is clicked
-            val intent = Intent(context, CurrentlyAiringWidgetConfigureActivity::class.java)
-            val pendingIntent =
-                PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
+        ): RemoteViews {
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val backgroundColor =
+                prefs.getInt(PREF_BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.theme))
+            val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.GRAY)
+            val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)
+            val countdownTextColor = prefs.getInt(PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
 
-            // Get the gradient drawable resource and update its start color with the user-selected color
+            val intent = Intent(context, CurrentlyAiringRemoteViewsService::class.java).apply {
+                putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+            }
             val gradientDrawable = ResourcesCompat.getDrawable(
                 context.resources,
                 R.drawable.gradient_background,
                 null
             ) as GradientDrawable
-            gradientDrawable.colors = intArrayOf(color, Color.GRAY) // End color is gray.
+            gradientDrawable.colors = intArrayOf(backgroundColor, backgroundFade)
 
-            // Create the RemoteViews object and set the background
+            val intentTemplate = Intent(context, MainActivity::class.java)
+            intentTemplate.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intentTemplate.putExtra("fromWidget", true)
+
             val views = RemoteViews(context.packageName, R.layout.currently_airing_widget).apply {
-                //setImageViewBitmap(R.id.backgroundView, convertDrawableToBitmap(gradientDrawable))
-                //setOnClickPendingIntent(R.id.backgroundView, pendingIntent)
+                setImageViewBitmap(R.id.backgroundView, convertDrawableToBitmap(gradientDrawable))
+                setTextColor(R.id.text_show_title, titleTextColor)
+                setTextColor(R.id.text_show_countdown, countdownTextColor)
+                setTextColor(R.id.widgetTitle, titleTextColor)
+                setRemoteAdapter(R.id.widgetListView, intent)
+                setEmptyView(R.id.widgetListView, R.id.empty_view)
+                setPendingIntentTemplate(
+                    R.id.widgetListView,
+                    PendingIntent.getActivity(
+                        context,
+                        0,
+                        intentTemplate,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
+                    )
+                )
+                setOnClickPendingIntent(
+                    R.id.logoView,
+                    PendingIntent.getActivity(
+                        context,
+                        1,
+                        Intent(context, CurrentlyAiringWidgetConfigureActivity::class.java).apply {
+                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                        },
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                    )
+                )
             }
 
-            // Instruct the widget manager to update the widget
-            appWidgetManager.updateAppWidget(appWidgetId, views)
+            return views
+
         }
 
         private fun convertDrawableToBitmap(drawable: Drawable): Bitmap {
@@ -94,6 +117,12 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
             drawable.draw(canvas)
             return bitmap
         }
+
+        const val PREFS_NAME = "ani.dantotsu.widgets.CurrentlyAiringWidget"
+        const val PREF_BACKGROUND_COLOR = "background_color"
+        const val PREF_BACKGROUND_FADE = "background_fade"
+        const val PREF_TITLE_TEXT_COLOR = "title_text_color"
+        const val PREF_COUNTDOWN_TEXT_COLOR = "countdown_text_color"
     }
 }
 
@@ -102,11 +131,7 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    val widgetText = loadTitlePref(context, appWidgetId)
-    // Construct the RemoteViews object
-    val views = RemoteViews(context.packageName, R.layout.currently_airing_widget)
-    views.setTextViewText(R.id.appwidget_text, widgetText)
-
-    // Instruct the widget manager to update the widget
+    val views = CurrentlyAiringWidget.updateAppWidget(context, appWidgetId)
     appWidgetManager.updateAppWidget(appWidgetId, views)
+    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView)
 }
