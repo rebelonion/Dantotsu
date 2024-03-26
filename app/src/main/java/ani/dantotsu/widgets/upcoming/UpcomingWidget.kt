@@ -8,6 +8,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
+import android.os.Bundle
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
@@ -48,6 +49,18 @@ class UpcomingWidget : AppWidgetProvider() {
         super.onDisabled(context)
     }
 
+    override fun onAppWidgetOptionsChanged(
+        context: Context?,
+        appWidgetManager: AppWidgetManager?,
+        appWidgetId: Int,
+        newOptions: Bundle?
+    ) {
+        super.onAppWidgetOptionsChanged(context, appWidgetManager, appWidgetId, newOptions)
+        if (context != null && appWidgetManager != null) {
+            val views = updateAppWidget(context, appWidgetId)
+            appWidgetManager.updateAppWidget(appWidgetId, views)
+        }
+    }
 
     companion object {
         fun updateAppWidget(
