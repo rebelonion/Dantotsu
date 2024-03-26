@@ -16,7 +16,7 @@
         android:id="@+id/widgetContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="8dp">
 
         <ImageView
             android:id="@+id/logoView"
@@ -40,8 +40,7 @@
             android:textAlignment="viewStart"
             android:maxLines="2"
             android:ellipsize="none"
-            android:autoSizeTextType="uniform"
-            android:text="@string/currently_airing"
+            android:text="@string/upcoming"
             android:textSize="20sp"
             android:textStyle="bold" />
 

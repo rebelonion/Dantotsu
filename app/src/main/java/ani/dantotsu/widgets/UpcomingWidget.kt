@@ -19,9 +19,9 @@ import ani.dantotsu.R
 
 /**
  * Implementation of App Widget functionality.
- * App Widget Configuration implemented in [CurrentlyAiringWidgetConfigureActivity]
+ * App Widget Configuration implemented in [UpcomingWidgetConfigureActivity]
  */
-class CurrentlyAiringWidget : AppWidgetProvider() {
+class UpcomingWidget : AppWidgetProvider() {
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -62,7 +62,7 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
             val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)
             val countdownTextColor = prefs.getInt(PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
 
-            val intent = Intent(context, CurrentlyAiringRemoteViewsService::class.java).apply {
+            val intent = Intent(context, UpcomingRemoteViewsService::class.java).apply {
                 putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                 data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
             }
@@ -77,7 +77,7 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
             intentTemplate.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             intentTemplate.putExtra("fromWidget", true)
 
-            val views = RemoteViews(context.packageName, R.layout.currently_airing_widget).apply {
+            val views = RemoteViews(context.packageName, R.layout.upcoming_widget).apply {
                 setImageViewBitmap(R.id.backgroundView, convertDrawableToBitmap(gradientDrawable))
                 setTextColor(R.id.text_show_title, titleTextColor)
                 setTextColor(R.id.text_show_countdown, countdownTextColor)
@@ -98,7 +98,7 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
                     PendingIntent.getActivity(
                         context,
                         1,
-                        Intent(context, CurrentlyAiringWidgetConfigureActivity::class.java).apply {
+                        Intent(context, UpcomingWidgetConfigureActivity::class.java).apply {
                             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                         },
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
@@ -118,7 +118,7 @@ class CurrentlyAiringWidget : AppWidgetProvider() {
             return bitmap
         }
 
-        const val PREFS_NAME = "ani.dantotsu.widgets.CurrentlyAiringWidget"
+        const val PREFS_NAME = "ani.dantotsu.widgets.UpcomingWidget"
         const val PREF_BACKGROUND_COLOR = "background_color"
         const val PREF_BACKGROUND_FADE = "background_fade"
         const val PREF_TITLE_TEXT_COLOR = "title_text_color"
@@ -131,7 +131,7 @@ internal fun updateAppWidget(
     appWidgetManager: AppWidgetManager,
     appWidgetId: Int
 ) {
-    val views = CurrentlyAiringWidget.updateAppWidget(context, appWidgetId)
+    val views = UpcomingWidget.updateAppWidget(context, appWidgetId)
     appWidgetManager.updateAppWidget(appWidgetId, views)
     appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.widgetListView)
 }

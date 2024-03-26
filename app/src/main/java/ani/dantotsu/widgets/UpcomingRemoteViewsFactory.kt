@@ -23,15 +23,15 @@ import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
 
-class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
+class UpcomingRemoteViewsFactory(private val context: Context) :
     RemoteViewsService.RemoteViewsFactory {
     private var widgetItems = mutableListOf<WidgetItem>()
     private var refreshing = false
     private val prefs =
-        context.getSharedPreferences(CurrentlyAiringWidget.PREFS_NAME, Context.MODE_PRIVATE)
+        context.getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE)
 
     override fun onCreate() {
-        Logger.log("CurrentlyAiringRemoteViewsFactory onCreate")
+        Logger.log("UpcomingRemoteViewsFactory onCreate")
         fillWidgetItems()
     }
 
@@ -44,7 +44,7 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
 
     override fun onDataSetChanged() {
         if (refreshing) return
-        Logger.log("CurrentlyAiringRemoteViewsFactory onDataSetChanged")
+        Logger.log("UpcomingRemoteViewsFactory onDataSetChanged")
         widgetItems.clear()
         fillWidgetItems()
 
@@ -78,12 +78,12 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
     }
 
     override fun getViewAt(position: Int): RemoteViews {
-        Logger.log("CurrentlyAiringRemoteViewsFactory getViewAt")
+        Logger.log("UpcomingRemoteViewsFactory getViewAt")
         val item = widgetItems[position]
-        val titleTextColor = prefs.getInt(CurrentlyAiringWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)
+        val titleTextColor = prefs.getInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)
         val countdownTextColor =
-            prefs.getInt(CurrentlyAiringWidget.PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
-        val rv = RemoteViews(context.packageName, R.layout.item_currently_airing_widget).apply {
+            prefs.getInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
+        val rv = RemoteViews(context.packageName, R.layout.item_upcoming_widget).apply {
             setTextViewText(R.id.text_show_title, item.title)
             setTextViewText(R.id.text_show_countdown, item.countdown)
             setTextColor(R.id.text_show_title, titleTextColor)
@@ -138,7 +138,7 @@ class CurrentlyAiringRemoteViewsFactory(private val context: Context) :
 
 
     override fun getLoadingView(): RemoteViews {
-        return RemoteViews(context.packageName, R.layout.item_currently_airing_widget)
+        return RemoteViews(context.packageName, R.layout.item_upcoming_widget)
     }
 
     override fun getViewTypeCount(): Int {

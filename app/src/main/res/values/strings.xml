@@ -678,6 +678,7 @@
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+    <string name="upcoming_anime">Upcoming Anime</string>
     <string name="airing_image">Airing Image</string>
     <string name="anime_downloads">animeDownloads</string>
     <string name="purge_anime_downloads">Delete all Anime downloads</string>
@@ -720,7 +721,7 @@
     <string name="mutual">Mutual</string>
     <string name="success">Success</string>
 
-    <string name="currently_airing">Currently Airing</string>
+    <string name="upcoming">Upcoming</string>
     <string name="no_shows_to_display">No shows to display</string>
     <string name="extension_name">Extension Name</string>
     <string name="extension_version">version</string>
