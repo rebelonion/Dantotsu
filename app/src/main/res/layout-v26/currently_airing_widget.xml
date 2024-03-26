@@ -40,6 +40,7 @@
             android:textAlignment="viewStart"
             android:maxLines="2"
             android:ellipsize="none"
+            android:autoSizeTextType="uniform"
             android:text="@string/currently_airing"
             android:textSize="20sp"
             android:textStyle="bold" />
