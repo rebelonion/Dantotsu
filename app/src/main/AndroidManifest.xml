@@ -62,7 +62,7 @@
         tools:targetApi="tiramisu">
 
         <receiver
-            android:name=".widgets.UpcomingWidget"
+            android:name=".widgets.upcoming.UpcomingWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -73,7 +73,7 @@
                 android:resource="@xml/upcoming_widget_info" />
         </receiver>
         <activity
-            android:name=".widgets.UpcomingWidgetConfigureActivity"
+            android:name=".widgets.upcoming.UpcomingWidgetConfigureActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -347,7 +347,7 @@
         </provider>
 
         <service
-            android:name=".widgets.UpcomingRemoteViewsService"
+            android:name=".widgets.upcoming.UpcomingRemoteViewsService"
             android:exported="true"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service

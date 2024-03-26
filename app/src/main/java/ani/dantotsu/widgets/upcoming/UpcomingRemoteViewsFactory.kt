@@ -1,21 +1,17 @@
-package ani.dantotsu.widgets
+package ani.dantotsu.widgets.upcoming
 
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.BitmapShader
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.RectF
-import android.graphics.Shader
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.BitmapUtil.Companion.roundCorners
 import ani.dantotsu.util.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -123,18 +119,7 @@ class UpcomingRemoteViewsFactory(private val context: Context) :
         return bitmap?.let { roundCorners(it) }
     }
 
-    private fun roundCorners(bitmap: Bitmap): Bitmap {
-        val cornerRadius = 20f
-        val output = Bitmap.createBitmap(bitmap.width, bitmap.height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(output)
-        val paint = Paint()
-        paint.isAntiAlias = true
-        paint.shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-        val rect = RectF(0f, 0f, bitmap.width.toFloat(), bitmap.height.toFloat())
-        canvas.drawRoundRect(rect, cornerRadius, cornerRadius, paint)
 
-        return output
-    }
 
 
     override fun getLoadingView(): RemoteViews {

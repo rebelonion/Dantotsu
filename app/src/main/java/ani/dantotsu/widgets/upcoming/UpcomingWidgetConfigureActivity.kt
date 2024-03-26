@@ -1,4 +1,4 @@
-package ani.dantotsu.widgets
+package ani.dantotsu.widgets.upcoming
 
 import android.appwidget.AppWidgetManager
 import android.content.Context

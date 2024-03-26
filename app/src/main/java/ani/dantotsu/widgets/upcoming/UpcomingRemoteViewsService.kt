@@ -1,4 +1,4 @@
-package ani.dantotsu.widgets
+package ani.dantotsu.widgets.upcoming
 
 import android.content.Intent
 import android.widget.RemoteViewsService

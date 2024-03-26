@@ -1,14 +1,11 @@
-package ani.dantotsu.widgets
+package ani.dantotsu.widgets.upcoming
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.widget.RemoteViews
@@ -16,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
+import ani.dantotsu.util.BitmapUtil.Companion.convertDrawableToBitmap
 
 /**
  * Implementation of App Widget functionality.
@@ -108,14 +106,6 @@ class UpcomingWidget : AppWidgetProvider() {
 
             return views
 
-        }
-
-        private fun convertDrawableToBitmap(drawable: Drawable): Bitmap {
-            val bitmap = Bitmap.createBitmap(100, 300, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            return bitmap
         }
 
         const val PREFS_NAME = "ani.dantotsu.widgets.UpcomingWidget"
