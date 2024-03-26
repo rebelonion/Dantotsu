@@ -75,7 +75,7 @@ class CommentsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as MediaDetailsActivity
 
-        binding.root.setBaseline(activity.navBar, activity.binding.commentInputLayout)
+        binding.commentsList.setBaseline(activity.navBar, activity.binding.commentInputLayout)
 
         //get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
@@ -370,7 +370,7 @@ class CommentsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         tag = null
-        binding.root.setBaseline(activity.navBar, activity.binding.commentInputLayout)
+        binding.commentsList.setBaseline(activity.navBar, activity.binding.commentInputLayout)
         section.groups.forEach {
             if (it is CommentItem && it.containsGif()) {
                 it.notifyChanged()

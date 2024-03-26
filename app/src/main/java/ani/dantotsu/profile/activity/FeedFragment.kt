@@ -50,7 +50,7 @@ class FeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity()
 
-        binding.feedSwipeRefresh.setBaseline((activity as ProfileActivity).navBar)
+        binding.listRecyclerView.setBaseline((activity as ProfileActivity).navBar)
 
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager =
@@ -67,7 +67,7 @@ class FeedFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-            binding.feedSwipeRefresh.setBaseline((activity as ProfileActivity).navBar)
+            binding.listRecyclerView.setBaseline((activity as ProfileActivity).navBar)
             if (!loadedFirstTime) {
                 activity.lifecycleScope.launch(Dispatchers.IO) {
                     val nulledId = if (activityId == -1) null else activityId
