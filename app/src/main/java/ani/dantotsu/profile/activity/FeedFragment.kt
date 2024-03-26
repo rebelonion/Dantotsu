@@ -18,6 +18,7 @@ import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.FragmentFeedBinding
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.profile.ProfileActivity
+import ani.dantotsu.setBaseline
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import com.xwray.groupie.GroupieAdapter
@@ -48,6 +49,9 @@ class FeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity()
+
+        binding.feedSwipeRefresh.setBaseline((activity as ProfileActivity).navBar)
+
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -63,6 +67,7 @@ class FeedFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
+            binding.feedSwipeRefresh.setBaseline((activity as ProfileActivity).navBar)
             if (!loadedFirstTime) {
                 activity.lifecycleScope.launch(Dispatchers.IO) {
                     val nulledId = if (activityId == -1) null else activityId

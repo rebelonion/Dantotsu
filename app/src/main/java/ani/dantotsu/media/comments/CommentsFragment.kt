@@ -28,6 +28,7 @@ import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.databinding.FragmentCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.setBaseline
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -73,6 +74,9 @@ class CommentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as MediaDetailsActivity
+
+        binding.root.setBaseline(activity.navBar, activity.binding.commentInputLayout)
+
         //get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
         mediaName = arguments?.getString("mediaName") ?: "unknown"
@@ -366,6 +370,7 @@ class CommentsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         tag = null
+        binding.root.setBaseline(activity.navBar, activity.binding.commentInputLayout)
         section.groups.forEach {
             if (it is CommentItem && it.containsGif()) {
                 it.notifyChanged()

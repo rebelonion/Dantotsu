@@ -81,13 +81,16 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.children
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
@@ -268,6 +271,29 @@ fun Activity.setNavigationTheme() {
     ) {
         window.navigationBarColor = tv.data
     }
+}
+
+/**
+ * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding.
+ *
+ * When nesting multiple scrolling views, only call this method on the highest level scrolling parent.
+ */
+fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {
+    navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    clipToPadding = false
+    setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + navBar.measuredHeight)
+}
+
+/**
+ * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding.
+ *
+ * When nesting multiple scrolling views, only call this method on the highest level scrolling parent.
+ */
+fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, overlayView: View) {
+    navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    overlayView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    clipToPadding = false
+    setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + navBar.measuredHeight + overlayView.measuredHeight)
 }
 
 fun Activity.reloadActivity() {
