@@ -4,35 +4,48 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.Dantotsu.AppWidgetContainer">
 
-    <RelativeLayout
+    <FrameLayout
         android:id="@+id/widgetContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
+
+        <ImageView
+            android:id="@+id/backgroundView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/widget_stats_rounded"
+            tools:ignore="ContentDescription"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:background="@drawable/widget_stats_rounded"
-            android:layout_centerInParent="true"
-            android:orientation="vertical"
-            tools:ignore="UselessParent">
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:padding="4dp"
+            android:orientation="vertical" >
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
                 <LinearLayout
                     android:id="@+id/topLeft"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="NestedWeights">
                     <TextView
                         android:id="@+id/topLeftItem"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/poppins_semi_bold"
+                        android:fontFamily="@font/poppins_bold"
                         android:text="@string/loading"/>
                     <TextView
                         android:id="@+id/topLeftLabel"
@@ -44,6 +57,7 @@
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:id="@+id/dividerTop"
                     android:layout_width="4dp"
                     android:layout_height="match_parent"
                     android:layout_marginTop="4dp"
@@ -53,6 +67,7 @@
                     android:id="@+id/topRight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <TextView
@@ -60,7 +75,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/poppins_semi_bold"
+                        android:fontFamily="@font/poppins_bold"
                         android:text="@string/loading"/>
                     <TextView
                         android:id="@+id/topRightLabel"
@@ -73,6 +88,7 @@
             </LinearLayout>
 
             <RelativeLayout
+                android:id="@+id/dividerMiddle"
                 android:layout_width="match_parent"
                 android:layout_height="2dp"
                 android:layout_margin="4dp"
@@ -81,19 +97,24 @@
             <LinearLayout
                 android:id="@+id/bottomLeft"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    tools:ignore="NestedWeights">
                     <TextView
                         android:id="@+id/bottomLeftItem"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/poppins_semi_bold"
+                        android:fontFamily="@font/poppins_bold"
                         android:text="@string/loading"/>
                     <TextView
                         android:id="@+id/bottomLeftLabel"
@@ -105,6 +126,7 @@
                 </LinearLayout>
 
                 <RelativeLayout
+                    android:id="@+id/dividerBottom"
                     android:layout_width="4dp"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="4dp"
@@ -114,6 +136,7 @@
                     android:id="@+id/bottomRight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_weight="1"
                     android:orientation="vertical">
                     <TextView
@@ -121,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:fontFamily="@font/poppins_semi_bold"
+                        android:fontFamily="@font/poppins_bold"
                         android:text="@string/loading"/>
                     <TextView
                         android:id="@+id/bottomRightLabel"
@@ -133,5 +156,5 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
-    </RelativeLayout>
+    </FrameLayout>
 </RelativeLayout>

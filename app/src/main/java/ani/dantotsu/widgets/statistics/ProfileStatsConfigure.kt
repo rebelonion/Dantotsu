@@ -5,6 +5,7 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import ani.dantotsu.databinding.StatisticsWidgetConfigureBinding
 
@@ -49,6 +50,25 @@ class ProfileStatsConfigure : Activity() {
 
         binding = StatisticsWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val typedValueSurface = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValueSurface, true)
+        val backgroundColor = typedValueSurface.data
+
+        val typedValuePrimary = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValuePrimary, true)
+        val textColor = typedValuePrimary.data
+
+        val typedValueOutline = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValueOutline, true)
+        val subTextColor = typedValueOutline.data
+
+        getSharedPreferences(ProfileStatsWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
+            putInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, backgroundColor)
+            putInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, backgroundColor)
+            putInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, textColor)
+            apply()
+        }
 
         binding.addButton.setOnClickListener(onClickListener)
 

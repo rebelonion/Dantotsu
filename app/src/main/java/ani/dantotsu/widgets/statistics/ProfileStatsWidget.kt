@@ -5,13 +5,18 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
 import android.widget.RemoteViews
+import androidx.core.content.res.ResourcesCompat
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.BitmapUtil
+import ani.dantotsu.widgets.WidgetSizeProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -52,6 +57,27 @@ class ProfileStatsWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
 
+            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val backgroundColor =
+                prefs.getInt(PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
+            val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
+            val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)
+
+            val gradientDrawable = ResourcesCompat.getDrawable(
+                context.resources,
+                R.drawable.linear_gradient_black,
+                null
+            ) as GradientDrawable
+            gradientDrawable.colors = intArrayOf(backgroundColor, backgroundFade)
+            val widgetSizeProvider = WidgetSizeProvider(context)
+            var (width, height) = widgetSizeProvider.getWidgetsSize(appWidgetId)
+            if (width > 0 && height > 0) {
+                gradientDrawable.cornerRadius = 64f
+            } else {
+                width = 300
+                height = 300
+            }
+
             launchIO {
                 val userPref = PrefManager.getVal(PrefName.AnilistUserId, "")
                 val userId = if (userPref.isNotEmpty()) userPref.toInt() else Anilist.userid
@@ -60,51 +86,68 @@ class ProfileStatsWidget : AppWidgetProvider() {
                     val respond = Anilist.query.getUserProfile(it)
                     respond?.data?.user?.let { user ->
                         withContext(Dispatchers.Main) {
-                            val views = RemoteViews(context.packageName, R.layout.statistics_widget)
+                            val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {
 
-                            views.setTextViewText(
-                                R.id.topLeftItem,
-                                user.statistics.anime.count.toString()
-                            )
-                            views.setTextViewText(
-                                R.id.topLeftLabel,
-                                context.getString(R.string.anime_watched)
-                            )
+                                setImageViewBitmap(
+                                    R.id.backgroundView,
+                                    BitmapUtil.convertDrawableToBitmap(
+                                        gradientDrawable,
+                                        width,
+                                        height
+                                    )
+                                )
+                                setTextColor(R.id.topLeftItem, titleTextColor)
+                                setTextColor(R.id.topLeftLabel, titleTextColor)
+                                setTextColor(R.id.topRightItem, titleTextColor)
+                                setTextColor(R.id.topRightLabel, titleTextColor)
+                                setTextColor(R.id.bottomLeftItem, titleTextColor)
+                                setTextColor(R.id.bottomLeftLabel, titleTextColor)
+                                setTextColor(R.id.bottomRightItem, titleTextColor)
+                                setTextColor(R.id.bottomRightLabel, titleTextColor)
 
-                            views.setTextViewText(
-                                R.id.topRightItem,
-                                user.statistics.anime.episodesWatched.toString()
-                            )
-                            views.setTextViewText(
-                                R.id.topRightLabel,
-                                context.getString(R.string.episodes_watched)
-                            )
+                                setTextViewText(
+                                    R.id.topLeftItem,
+                                    user.statistics.anime.count.toString()
+                                )
+                                setTextViewText(
+                                    R.id.topLeftLabel,
+                                    context.getString(R.string.anime_watched)
+                                )
 
-                            views.setTextViewText(
-                                R.id.bottomLeftItem,
-                                user.statistics.manga.count.toString()
-                            )
-                            views.setTextViewText(
-                                R.id.bottomLeftLabel,
-                                context.getString(R.string.manga_read)
-                            )
+                                setTextViewText(
+                                    R.id.topRightItem,
+                                    user.statistics.anime.episodesWatched.toString()
+                                )
+                                setTextViewText(
+                                    R.id.topRightLabel,
+                                    context.getString(R.string.episodes_watched)
+                                )
 
-                            views.setTextViewText(
-                                R.id.bottomRightItem,
-                                user.statistics.manga.chaptersRead.toString()
-                            )
-                            views.setTextViewText(
-                                R.id.bottomRightLabel,
-                                context.getString(R.string.chapters_read)
-                            )
+                                setTextViewText(
+                                    R.id.bottomLeftItem,
+                                    user.statistics.manga.count.toString()
+                                )
+                                setTextViewText(
+                                    R.id.bottomLeftLabel,
+                                    context.getString(R.string.manga_read)
+                                )
 
-                            val intent = Intent(context, ProfileActivity::class.java)
-                                .putExtra("userId", it)
-                            val pendingIntent = PendingIntent.getActivity(
-                                context, 0, intent, PendingIntent.FLAG_IMMUTABLE
-                            )
-                            views.setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)
+                                setTextViewText(
+                                    R.id.bottomRightItem,
+                                    user.statistics.manga.chaptersRead.toString()
+                                )
+                                setTextViewText(
+                                    R.id.bottomRightLabel,
+                                    context.getString(R.string.chapters_read)
+                                )
 
+                                val intent = Intent(context, ProfileActivity::class.java)
+                                    .putExtra("userId", it)
+                                val pendingIntent = PendingIntent.getActivity(
+                                    context, 0, intent, PendingIntent.FLAG_IMMUTABLE
+                                )
+                                setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)
+                            }
                             // Instruct the widget manager to update the widget
                             appWidgetManager.updateAppWidget(appWidgetId, views)
                         }
@@ -116,6 +159,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
         private suspend fun showLoginCascade(
             context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int
         ) {
+
             withContext(Dispatchers.Main) {
                 val views = RemoteViews(context.packageName, R.layout.statistics_widget)
 
@@ -152,5 +196,10 @@ class ProfileStatsWidget : AppWidgetProvider() {
                 appWidgetManager.updateAppWidget(appWidgetId, views)
             }
         }
+
+        const val PREFS_NAME = "ani.dantotsu.widgets.ResumableWidget"
+        const val PREF_BACKGROUND_COLOR = "background_color"
+        const val PREF_BACKGROUND_FADE = "background_fade"
+        const val PREF_TITLE_TEXT_COLOR = "title_text_color"
     }
 }
