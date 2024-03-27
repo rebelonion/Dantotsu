@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
@@ -138,8 +139,18 @@ class CommentItem(val comment: Comment,
             commentsFragment.replyTo(this, comment.username)
             commentsFragment.replyCallback(this)
         }
-        viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
-        viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
+        viewBinding.modBadge.apply {
+            visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
+            setOnClickListener {
+                Toast.makeText(context, "Comment Moderator", Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewBinding.adminBadge.apply {
+            visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
+            setOnClickListener {
+                Toast.makeText(context, "Owner", Toast.LENGTH_SHORT).show()
+            }
+        }
         viewBinding.commentDelete.setOnClickListener {
             dialogBuilder(getAppString(R.string.delete_comment), getAppString(R.string.delete_comment_confirm)) {
                 CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
