@@ -835,5 +835,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="bottom_background_color">Bottom Background Color</string>
     <string name="countdown_text_color">Countdown Text Color</string>
     <string name="title_color">Title Color</string>
+    <string name="stat_text_color">Stats Text Color</string>
     <string name="placeholder">Placeholder</string>
 </resources>

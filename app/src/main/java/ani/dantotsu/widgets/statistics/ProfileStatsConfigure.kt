@@ -4,19 +4,26 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import ani.dantotsu.R
 import ani.dantotsu.databinding.StatisticsWidgetConfigureBinding
 
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.widgets.upcoming.UpcomingWidget
+import eltos.simpledialogfragment.SimpleDialog
+import eltos.simpledialogfragment.color.SimpleColorDialog
 
 /**
  * The configuration screen for the [ProfileStatsWidget] AppWidget.
  */
-class ProfileStatsConfigure : Activity() {
+class ProfileStatsConfigure : AppCompatActivity(),
+    SimpleDialog.OnDialogResultListener {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-
+    private var isMonetEnabled = false
     private var onClickListener = View.OnClickListener {
         val context = this@ProfileStatsConfigure
 
@@ -51,25 +58,93 @@ class ProfileStatsConfigure : Activity() {
         binding = StatisticsWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val typedValueSurface = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValueSurface, true)
-        val backgroundColor = typedValueSurface.data
+        val prefs = getSharedPreferences(ProfileStatsWidget.PREFS_NAME, Context.MODE_PRIVATE)
 
-        val typedValuePrimary = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValuePrimary, true)
-        val textColor = typedValuePrimary.data
-
-        val typedValueOutline = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValueOutline, true)
-        val subTextColor = typedValueOutline.data
-
-        getSharedPreferences(ProfileStatsWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
-            putInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, backgroundColor)
-            putInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, backgroundColor)
-            putInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, textColor)
-            apply()
+        binding.topBackgroundButton.setOnClickListener {
+            val tag = ProfileStatsWidget.PREF_BACKGROUND_COLOR
+            SimpleColorDialog().title(R.string.custom_theme)
+                .colorPreset(
+                    prefs.getInt(
+                        ProfileStatsWidget.PREF_BACKGROUND_COLOR,
+                        Color.parseColor("#80000000")
+                    )
+                )
+                .colors(
+                    this@ProfileStatsConfigure,
+                    SimpleColorDialog.MATERIAL_COLOR_PALLET
+                )
+                .setupColorWheelAlpha(true)
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this@ProfileStatsConfigure, tag)
         }
+        binding.bottomBackgroundButton.setOnClickListener {
+            val tag = ProfileStatsWidget.PREF_BACKGROUND_FADE
+            SimpleColorDialog().title(R.string.custom_theme)
+                .colorPreset(prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000")))
+                .colors(
+                    this@ProfileStatsConfigure,
+                    SimpleColorDialog.MATERIAL_COLOR_PALLET
+                )
+                .setupColorWheelAlpha(true)
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this@ProfileStatsConfigure, tag)
+        }
+        binding.titleColorButton.setOnClickListener {
+            val tag = ProfileStatsWidget.PREF_TITLE_TEXT_COLOR
+            SimpleColorDialog().title(R.string.custom_theme)
+                .colorPreset(prefs.getInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE))
+                .colors(
+                    this@ProfileStatsConfigure,
+                    SimpleColorDialog.MATERIAL_COLOR_PALLET
+                )
+                .setupColorWheelAlpha(true)
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this@ProfileStatsConfigure, tag)
+        }
+        binding.statsColorButton.setOnClickListener {
+            val tag = ProfileStatsWidget.PREF_STATS_TEXT_COLOR
+            SimpleColorDialog().title(R.string.custom_theme)
+                .colorPreset(prefs.getInt(ProfileStatsWidget.PREF_STATS_TEXT_COLOR, Color.WHITE))
+                .colors(
+                    this@ProfileStatsConfigure,
+                    SimpleColorDialog.MATERIAL_COLOR_PALLET
+                )
+                .setupColorWheelAlpha(true)
+                .allowCustom(true)
+                .showOutline(0x46000000)
+                .gridNumColumn(5)
+                .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
+                .neg()
+                .show(this@ProfileStatsConfigure, tag)
+        }
+        binding.useAppTheme.setOnCheckedChangeListener { _, isChecked ->
+            isMonetEnabled = isChecked
+            if (isChecked) {
+                binding.topBackgroundButton.visibility = View.GONE
+                binding.bottomBackgroundButton.visibility = View.GONE
+                binding.titleColorButton.visibility = View.GONE
+                binding.statsColorButton.visibility = View.GONE
+                themeColors()
 
+            } else {
+                binding.topBackgroundButton.visibility = View.VISIBLE
+                binding.bottomBackgroundButton.visibility = View.VISIBLE
+                binding.titleColorButton.visibility = View.VISIBLE
+                binding.statsColorButton.visibility = View.VISIBLE
+            }
+        }
         binding.addButton.setOnClickListener(onClickListener)
 
         // Find the widget id from the intent.
@@ -90,7 +165,94 @@ class ProfileStatsConfigure : Activity() {
         }
     }
 
-}
+    private fun themeColors() {
+        val typedValueSurface = TypedValue()
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorSurface,
+            typedValueSurface,
+            true
+        )
+        val backgroundColor = typedValueSurface.data
 
-private const val PROFILE_STATS_PREFS = "ani.dantotsu.widget.ProfileStatsWidget"
-private const val PROFILE_STATS_PREFS_PREFIX = "appwidget_"
+        val typedValuePrimary = TypedValue()
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorPrimary,
+            typedValuePrimary,
+            true
+        )
+        val textColor = typedValuePrimary.data
+
+        val typedValueOutline = TypedValue()
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOutline,
+            typedValueOutline,
+            true
+        )
+        val subTextColor = typedValueOutline.data
+
+        getSharedPreferences(ProfileStatsWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
+            putInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, backgroundColor)
+            putInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, backgroundColor)
+            putInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, textColor)
+            putInt(ProfileStatsWidget.PREF_STATS_TEXT_COLOR, subTextColor)
+            apply()
+        }
+    }
+
+    override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
+        if (which == SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE) {
+            if (!isMonetEnabled) {
+                when (dialogTag) {
+                    ProfileStatsWidget.PREF_BACKGROUND_COLOR -> {
+                        getSharedPreferences(
+                            ProfileStatsWidget.PREFS_NAME,
+                            Context.MODE_PRIVATE
+                        ).edit()
+                            .putInt(
+                                ProfileStatsWidget.PREF_BACKGROUND_COLOR,
+                                extras.getInt(SimpleColorDialog.COLOR)
+                            )
+                            .apply()
+                    }
+
+                    ProfileStatsWidget.PREF_BACKGROUND_FADE -> {
+                        getSharedPreferences(
+                            ProfileStatsWidget.PREFS_NAME,
+                            Context.MODE_PRIVATE
+                        ).edit()
+                            .putInt(
+                                ProfileStatsWidget.PREF_BACKGROUND_FADE,
+                                extras.getInt(SimpleColorDialog.COLOR)
+                            )
+                            .apply()
+                    }
+
+                    ProfileStatsWidget.PREF_TITLE_TEXT_COLOR -> {
+                        getSharedPreferences(
+                            ProfileStatsWidget.PREFS_NAME,
+                            Context.MODE_PRIVATE
+                        ).edit()
+                            .putInt(
+                                ProfileStatsWidget.PREF_TITLE_TEXT_COLOR,
+                                extras.getInt(SimpleColorDialog.COLOR)
+                            )
+                            .apply()
+                    }
+
+                    ProfileStatsWidget.PREF_STATS_TEXT_COLOR -> {
+                        getSharedPreferences(
+                            ProfileStatsWidget.PREFS_NAME,
+                            Context.MODE_PRIVATE
+                        ).edit()
+                            .putInt(
+                                ProfileStatsWidget.PREF_STATS_TEXT_COLOR,
+                                extras.getInt(SimpleColorDialog.COLOR)
+                            )
+                            .apply()
+                    }
+                }
+            }
+        }
+        return true
+    }
+}

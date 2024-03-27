@@ -151,6 +151,28 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
         }
     }
 
+    private fun themeColors() {
+        val typedValueSurface = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValueSurface, true)
+        val backgroundColor = typedValueSurface.data
+
+        val typedValuePrimary = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValuePrimary, true)
+        val textColor = typedValuePrimary.data
+
+        val typedValueOutline = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValueOutline, true)
+        val subTextColor = typedValueOutline.data
+
+        getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
+            putInt(UpcomingWidget.PREF_BACKGROUND_COLOR, backgroundColor)
+            putInt(UpcomingWidget.PREF_BACKGROUND_FADE, backgroundColor)
+            putInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, textColor)
+            putInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, subTextColor)
+            apply()
+        }
+    }
+
     override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
         if (which == SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE) {
             if (!isMonetEnabled) {
@@ -208,26 +230,4 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
         }
         return true
     }
-    private fun themeColors() {
-        val typedValueSurface = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValueSurface, true)
-        val backgroundColor = typedValueSurface.data
-
-        val typedValuePrimary = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValuePrimary, true)
-        val textColor = typedValuePrimary.data
-
-        val typedValueOutline = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValueOutline, true)
-        val subTextColor = typedValueOutline.data
-
-        getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
-            putInt(UpcomingWidget.PREF_BACKGROUND_COLOR, backgroundColor)
-            putInt(UpcomingWidget.PREF_BACKGROUND_FADE, backgroundColor)
-            putInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, textColor)
-            putInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, subTextColor)
-            apply()
-        }
-    }
-
 }

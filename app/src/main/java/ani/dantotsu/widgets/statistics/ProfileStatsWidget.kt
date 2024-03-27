@@ -94,6 +94,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                 prefs.getInt(PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
             val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
             val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)
+            val statsTextColor = prefs.getInt(PREF_STATS_TEXT_COLOR, Color.WHITE)
 
             val gradientDrawable = ResourcesCompat.getDrawable(
                 context.resources,
@@ -127,14 +128,26 @@ class ProfileStatsWidget : AppWidgetProvider() {
                                         height
                                     )
                                 )
-                                setTextColor(R.id.topLeftItem, titleTextColor)
-                                setTextColor(R.id.topLeftLabel, titleTextColor)
-                                setTextColor(R.id.topRightItem, titleTextColor)
-                                setTextColor(R.id.topRightLabel, titleTextColor)
-                                setTextColor(R.id.bottomLeftItem, titleTextColor)
-                                setTextColor(R.id.bottomLeftLabel, titleTextColor)
-                                setTextColor(R.id.bottomRightItem, titleTextColor)
-                                setTextColor(R.id.bottomRightLabel, titleTextColor)
+                                setOnClickPendingIntent(
+                                    R.id.userAvatar,
+                                    PendingIntent.getActivity(
+                                        context,
+                                        1,
+                                        Intent(context, ProfileStatsConfigure::class.java).apply {
+                                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                        },
+                                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                                    )
+                                )
+                                setTextColor(R.id.userLabel, titleTextColor)
+                                setTextColor(R.id.topLeftItem, statsTextColor)
+                                setTextColor(R.id.topLeftLabel, statsTextColor)
+                                setTextColor(R.id.topRightItem, statsTextColor)
+                                setTextColor(R.id.topRightLabel, statsTextColor)
+                                setTextColor(R.id.bottomLeftItem, statsTextColor)
+                                setTextColor(R.id.bottomLeftLabel, statsTextColor)
+                                setTextColor(R.id.bottomRightItem, statsTextColor)
+                                setTextColor(R.id.bottomRightLabel, statsTextColor)
 
                                 setImageViewBitmap(
                                     R.id.userAvatar,
@@ -241,5 +254,6 @@ class ProfileStatsWidget : AppWidgetProvider() {
         const val PREF_BACKGROUND_COLOR = "background_color"
         const val PREF_BACKGROUND_FADE = "background_fade"
         const val PREF_TITLE_TEXT_COLOR = "title_text_color"
+        const val PREF_STATS_TEXT_COLOR = "stats_text_color"
     }
 }

@@ -77,6 +77,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/anime_watched" />
             </LinearLayout>
@@ -107,6 +108,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/episodes_watched"/>
             </LinearLayout>
@@ -147,7 +149,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/manga_read"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:gravity="center"/>
             </LinearLayout>
 
             <RelativeLayout
@@ -176,6 +179,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/chapters_read"/>
             </LinearLayout>
