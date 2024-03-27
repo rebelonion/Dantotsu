@@ -409,6 +409,13 @@
     <string name="crop_borders">Crop Borders</string>
     <string name="note">NOTE</string>
 
+    <string name="installing_extension">Installing extension</string>
+    <string name="installation_failed">Installation failed: %1$s</string>
+    <string name="installation_complete">Installation complete</string>
+    <string name="extension_has_been_installed">The extension has been successfully installed.</string>
+    <string name="extension_installed">Extension installed</string>
+    <string name="error_message">Error: %1$s</string>
+    <string name="install_step">Step: %1$s</string>
 
     <string name="jobless_message">DAMN! YOU TRULY ARE JOBLESS\nYOU REACHED THE END</string>
     <string name="file_manager_not_found">Couldn\'t find any File Manager to open SD card</string>

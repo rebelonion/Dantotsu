@@ -3,7 +3,7 @@ package ani.dantotsu.parsers
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.media.manga.MangaNameAdapter
+import ani.dantotsu.media.MediaNameAdapter
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -38,7 +38,7 @@ class OfflineNovelParser : NovelParser() {
                     chapters.add(chapter)
                 }
             }
-            chapters.sortBy { MangaNameAdapter.findChapterNumber(it.name) }
+            chapters.sortBy { MediaNameAdapter.findChapterNumber(it.name) }
             return chapters.first()
         }
         return Book(

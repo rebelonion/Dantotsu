@@ -15,6 +15,7 @@ import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemChapterListBinding
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.setAnimation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -267,10 +268,10 @@ class MangaChapterAdapter(
                 val binding = holder.binding
                 setAnimation(fragment.requireContext(), holder.binding.root)
                 val ep = arr[position]
-                val parsedNumber = MangaNameAdapter.findChapterNumber(ep.number)?.toInt()
+                val parsedNumber = MediaNameAdapter.findChapterNumber(ep.number)?.toInt()
                 binding.itemEpisodeNumber.text = parsedNumber?.toString() ?: ep.number
                 if (media.userProgress != null) {
-                    if ((MangaNameAdapter.findChapterNumber(ep.number)
+                    if ((MediaNameAdapter.findChapterNumber(ep.number)
                             ?: 9999f) <= media.userProgress!!.toFloat()
                     )
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
@@ -279,7 +280,7 @@ class MangaChapterAdapter(
                         binding.itemEpisodeCont.setOnLongClickListener {
                             updateProgress(
                                 media,
-                                MangaNameAdapter.findChapterNumber(ep.number).toString()
+                                MediaNameAdapter.findChapterNumber(ep.number).toString()
                             )
                             true
                         }
@@ -315,7 +316,7 @@ class MangaChapterAdapter(
                 } else binding.itemChapterTitle.visibility = View.VISIBLE
 
                 if (media.userProgress != null) {
-                    if ((MangaNameAdapter.findChapterNumber(ep.number)
+                    if ((MediaNameAdapter.findChapterNumber(ep.number)
                             ?: 9999f) <= media.userProgress!!.toFloat()
                     ) {
                         binding.itemEpisodeViewedCover.visibility = View.VISIBLE
@@ -326,7 +327,7 @@ class MangaChapterAdapter(
                         binding.root.setOnLongClickListener {
                             updateProgress(
                                 media,
-                                MangaNameAdapter.findChapterNumber(ep.number).toString()
+                                MediaNameAdapter.findChapterNumber(ep.number).toString()
                             )
                             true
                         }
