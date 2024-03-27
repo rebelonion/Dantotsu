@@ -79,6 +79,18 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+        
+        <receiver
+            android:name=".widgets.statistics.ProfileStatsWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/statistics_widget_info" />
+        </receiver>
         <receiver android:name=".notifications.IncognitoNotificationClickReceiver" />
 
         <activity
@@ -115,6 +127,14 @@
             android:name=".settings.ExtensionsActivity"
             android:parentActivityName=".MainActivity"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".widgets.statistics.ProfileStatsConfigure"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".profile.ProfileActivity"
             android:parentActivityName=".MainActivity"
