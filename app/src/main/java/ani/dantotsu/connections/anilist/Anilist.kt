@@ -40,6 +40,7 @@ object Anilist {
         "SCORE_DESC",
         "POPULARITY_DESC",
         "TRENDING_DESC",
+        "START_DATE_DESC",
         "TITLE_ENGLISH",
         "TITLE_ENGLISH_DESC",
         "SCORE"

@@ -10,6 +10,9 @@
         android:id="@+id/sort_by_trending"
         android:title="Trending" />
     <item
+        android:id="@+id/sort_by_recent"
+        android:title="New Releases" />
+    <item
         android:id="@+id/sort_by_a_z"
         android:title="A-Z" />
     <item

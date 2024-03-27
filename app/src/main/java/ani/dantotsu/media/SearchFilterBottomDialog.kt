@@ -61,9 +61,10 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
             Anilist.sortBy[0] -> R.drawable.ic_round_area_chart_24
             Anilist.sortBy[1] -> R.drawable.ic_round_filter_peak_24
             Anilist.sortBy[2] -> R.drawable.ic_round_star_graph_24
-            Anilist.sortBy[3] -> R.drawable.ic_round_filter_list_24
-            Anilist.sortBy[4] -> R.drawable.ic_round_filter_list_24_reverse
-            Anilist.sortBy[5] -> R.drawable.ic_round_assist_walker_24
+            Anilist.sortBy[3] -> R.drawable.ic_round_new_releases_24
+            Anilist.sortBy[4] -> R.drawable.ic_round_filter_list_24
+            Anilist.sortBy[5] -> R.drawable.ic_round_filter_list_24_reverse
+            Anilist.sortBy[6] -> R.drawable.ic_round_assist_walker_24
             else -> R.drawable.ic_round_filter_alt_24
         }
         binding.sortByFilter.setImageResource(filterDrawable)
@@ -167,20 +168,26 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                         startBounceZoomAnimation()
                     }
 
-                    R.id.sort_by_a_z -> {
+                    R.id.sort_by_recent -> {
                         activity.result.sort = Anilist.sortBy[3]
+                        binding.sortByFilter.setImageResource(R.drawable.ic_round_new_releases_24)
+                        startBounceZoomAnimation()
+                    }
+
+                    R.id.sort_by_a_z -> {
+                        activity.result.sort = Anilist.sortBy[4]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_list_24)
                         startBounceZoomAnimation()
                     }
 
                     R.id.sort_by_z_a -> {
-                        activity.result.sort = Anilist.sortBy[4]
+                        activity.result.sort = Anilist.sortBy[5]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_filter_list_24_reverse)
                         startBounceZoomAnimation()
                     }
 
                     R.id.sort_by_pure_pain -> {
-                        activity.result.sort = Anilist.sortBy[5]
+                        activity.result.sort = Anilist.sortBy[6]
                         binding.sortByFilter.setImageResource(R.drawable.ic_round_assist_walker_24)
                         startBounceZoomAnimation()
                     }

@@ -50,9 +50,10 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
             Anilist.sortBy[0] -> R.drawable.ic_round_area_chart_24
             Anilist.sortBy[1] -> R.drawable.ic_round_filter_peak_24
             Anilist.sortBy[2] -> R.drawable.ic_round_star_graph_24
-            Anilist.sortBy[3] -> R.drawable.ic_round_filter_list_24
-            Anilist.sortBy[4] -> R.drawable.ic_round_filter_list_24_reverse
-            Anilist.sortBy[5] -> R.drawable.ic_round_assist_walker_24
+            Anilist.sortBy[3] -> R.drawable.ic_round_new_releases_24
+            Anilist.sortBy[4] -> R.drawable.ic_round_filter_list_24
+            Anilist.sortBy[5] -> R.drawable.ic_round_filter_list_24_reverse
+            Anilist.sortBy[6] -> R.drawable.ic_round_assist_walker_24
             else -> R.drawable.ic_round_filter_alt_24
         }
         binding.filterTextView.setCompoundDrawablesWithIntrinsicBounds(filterDrawable, 0, 0, 0)
@@ -138,20 +139,26 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
-                    R.id.sort_by_a_z -> {
+                    R.id.sort_by_recent -> {
                         activity.result.sort = Anilist.sortBy[3]
                         activity.updateChips.invoke()
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
-                    R.id.sort_by_z_a -> {
+                    R.id.sort_by_a_z -> {
                         activity.result.sort = Anilist.sortBy[4]
                         activity.updateChips.invoke()
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
-                    R.id.sort_by_pure_pain -> {
+                    R.id.sort_by_z_a -> {
                         activity.result.sort = Anilist.sortBy[5]
+                        activity.updateChips.invoke()
+                        activity.search()
+                        updateFilterTextViewDrawable()
+                    }
+                    R.id.sort_by_pure_pain -> {
+                        activity.result.sort = Anilist.sortBy[6]
                         activity.updateChips.invoke()
                         activity.search()
                         updateFilterTextViewDrawable()
