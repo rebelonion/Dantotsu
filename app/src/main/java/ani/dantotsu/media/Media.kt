@@ -58,6 +58,8 @@ data class Media(
     var endDate: FuzzyDate? = null,
     var popularity: Int? = null,
 
+    var timeUntilAiring: Long? = null,
+
     var characters: ArrayList<Character>? = null,
     var staff: ArrayList<Author>? = null,
     var prequel: Media? = null,
@@ -84,7 +86,7 @@ data class Media(
         name = apiMedia.title!!.english,
         nameRomaji = apiMedia.title!!.romaji,
         userPreferredName = apiMedia.title!!.userPreferred,
-        cover = apiMedia.coverImage?.large,
+        cover = apiMedia.coverImage?.large ?: apiMedia.coverImage?.medium,
         banner = apiMedia.bannerImage,
         status = apiMedia.status.toString(),
         isFav = apiMedia.isFavourite!!,
@@ -97,6 +99,7 @@ data class Media(
         startDate = apiMedia.startDate,
         endDate = apiMedia.endDate,
         favourites = apiMedia.favourites,
+        timeUntilAiring = apiMedia.nextAiringEpisode?.timeUntilAiring?.let { it.toLong() * 1000},
         anime = if (apiMedia.type == MediaType.ANIME) Anime(
             totalEpisodes = apiMedia.episodes,
             nextAiringEpisode = apiMedia.nextAiringEpisode?.episode?.minus(1)

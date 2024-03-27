@@ -5,8 +5,8 @@
     android:id="@+id/commentsCardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
     android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
     android:layout_marginBottom="4dp">
 
 
@@ -153,94 +153,92 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        app:layout_constrainedWidth="true"
-        app:layout_constraintHorizontal_bias="0.0"
         android:fontFamily="@font/poppins_semi_bold"
         android:maxLines="8"
         android:scrollHorizontally="false"
         android:text="@string/slogan"
         android:textSize="12sp"
+        app:layout_constrainedWidth="true"
+        app:layout_constraintEnd_toStartOf="@+id/linearLayout7"
 
         app:layout_constraintHeight_max="200dp"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-        app:layout_constraintEnd_toStartOf="@+id/linearLayout7"
         app:layout_constraintTop_toBottomOf="@+id/commentUserDetailsLayout" />
 
     <TextView
         android:id="@+id/commentReply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-        app:layout_constraintTop_toBottomOf="@+id/commentText"
-        android:layout_marginEnd="12dp"
-        android:paddingEnd="12dp"
         android:layout_marginStart="10dp"
+        android:layout_marginEnd="12dp"
         android:alpha="0.6"
         android:fontFamily="@font/poppins_semi_bold"
         android:paddingTop="1dp"
+        android:paddingEnd="12dp"
         android:text="Reply"
         android:textSize="12sp"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/commentText"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/commentEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/commentReply"
-        app:layout_constraintBottom_toBottomOf="@+id/commentReply"
         android:layout_marginEnd="12dp"
-        android:paddingEnd="12dp"
         android:alpha="0.6"
         android:fontFamily="@font/poppins_semi_bold"
         android:paddingTop="1dp"
+        android:paddingEnd="12dp"
         android:text="Edit"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/commentReply"
+        app:layout_constraintStart_toEndOf="@+id/commentReply"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/commentDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/commentEdit"
-        app:layout_constraintBottom_toBottomOf="@+id/commentEdit"
         android:layout_marginEnd="12dp"
-        android:paddingEnd="12dp"
         android:alpha="0.6"
         android:fontFamily="@font/poppins_semi_bold"
         android:paddingTop="1dp"
+        android:paddingEnd="12dp"
         android:text="Delete"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/commentEdit"
+        app:layout_constraintStart_toEndOf="@+id/commentEdit"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/commentReport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/commentDelete"
-        app:layout_constraintBottom_toBottomOf="@+id/commentDelete"
         android:layout_marginEnd="12dp"
-        android:paddingEnd="12dp"
         android:alpha="0.6"
         android:fontFamily="@font/poppins_semi_bold"
         android:paddingTop="1dp"
+        android:paddingEnd="12dp"
         android:text="Report"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/commentDelete"
+        app:layout_constraintStart_toEndOf="@+id/commentDelete"
         tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/commentBanUser"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/commentReport"
-        app:layout_constraintBottom_toBottomOf="@+id/commentReport"
         android:alpha="0.6"
         android:fontFamily="@font/poppins_semi_bold"
         android:paddingTop="1dp"
         android:text="Ban User"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/commentReport"
+        app:layout_constraintStart_toEndOf="@+id/commentReport"
         tools:ignore="HardcodedText" />
-
-
 
 
     <LinearLayout
@@ -248,8 +246,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:orientation="vertical"
         android:layout_marginEnd="4dp"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -287,38 +285,37 @@
         android:id="@+id/commentRepliesDivider"
         android:layout_width="32dp"
         android:layout_height="3dp"
-        app:layout_constraintTop_toBottomOf="@+id/commentReply"
-        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
-        android:layout_marginTop="8dp"
         android:layout_gravity="center"
         android:layout_marginStart="4dp"
-        android:background="@color/nav_tab" />
+        android:layout_marginTop="8dp"
+        android:background="@color/nav_tab"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout5"
+        app:layout_constraintTop_toBottomOf="@+id/commentReply" />
 
     <TextView
         android:id="@+id/commentTotalReplies"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@+id/commentRepliesDivider"
-        app:layout_constraintBottom_toBottomOf="@+id/commentRepliesDivider"
-        app:layout_constraintStart_toEndOf="@+id/commentRepliesDivider"
         android:layout_marginStart="4dp"
         android:alpha="0.8"
         android:fontFamily="@font/poppins_semi_bold"
         android:text="View replies"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/commentRepliesDivider"
+        app:layout_constraintStart_toEndOf="@+id/commentRepliesDivider"
+        app:layout_constraintTop_toTopOf="@+id/commentRepliesDivider"
         tools:ignore="HardcodedText" />
-
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/commentRepliesList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/commentRepliesDivider"
+        android:nestedScrollingEnabled="false"
         android:paddingStart="16dp"
         android:visibility="visible"
+        app:layout_constraintTop_toBottomOf="@+id/commentRepliesDivider"
         tools:ignore="RtlSymmetry"
-        android:nestedScrollingEnabled="false"
         tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

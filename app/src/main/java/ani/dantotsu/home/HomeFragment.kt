@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Build
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -124,6 +125,7 @@ class HomeFragment : Fragment() {
             )
         }
         binding.homeUserAvatarContainer.setOnLongClickListener {
+            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             ContextCompat.startActivity(
                 requireContext(), Intent(requireContext(), ProfileActivity::class.java)
                     .putExtra("userId", Anilist.userid),null

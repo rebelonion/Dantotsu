@@ -270,6 +270,29 @@ fun Activity.setNavigationTheme() {
     }
 }
 
+/**
+ * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding.
+ *
+ * When nesting multiple scrolling views, only call this method on the inner most scrolling view.
+ */
+fun ViewGroup.setBaseline(navBar: AnimatedBottomBar) {
+    navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    clipToPadding = false
+    setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + navBar.measuredHeight)
+}
+
+/**
+ * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding.
+ *
+ * When nesting multiple scrolling views, only call this method on the inner most scrolling view.
+ */
+fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, overlayView: View) {
+    navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    overlayView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
+    clipToPadding = false
+    setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + navBar.measuredHeight + overlayView.measuredHeight)
+}
+
 fun Activity.reloadActivity() {
     Refresh.all()
     finish()

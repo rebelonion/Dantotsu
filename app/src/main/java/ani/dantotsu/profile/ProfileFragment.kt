@@ -30,6 +30,7 @@ import ani.dantotsu.media.CharacterAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
 import ani.dantotsu.media.user.ListActivity
+import ani.dantotsu.setBaseline
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.util.AniMarkdown.Companion.getFullAniHTML
@@ -58,6 +59,8 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as ProfileActivity
+
+        binding.root.setBaseline(activity.navBar)
 
         user = arguments?.getSerializableCompat<Query.UserProfile>("user") as Query.UserProfile
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.IO) {
@@ -144,6 +147,7 @@ class ProfileFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
+            binding.root.setBaseline(activity.navBar)
         }
     }
 

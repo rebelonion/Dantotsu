@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Handler
 import android.os.Looper
 import android.util.TypedValue
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,6 +97,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
         trendingBinding.userAvatar.setOnLongClickListener { view ->
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             ContextCompat.startActivity(
                 view.context,
                 Intent(view.context, ProfileActivity::class.java)
@@ -167,7 +169,6 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         trendingBinding.trendingViewPager.offscreenPageLimit = 3
         trendingBinding.trendingViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         trendingBinding.trendingViewPager.setPageTransformer(MediaPageTransformer())
-
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
             trendingBinding.trendingViewPager.currentItem += 1
@@ -176,8 +177,10 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    trendHandler!!.removeCallbacks(trendRun)
-                    trendHandler!!.postDelayed(trendRun, 4000)
+                    trendHandler?.removeCallbacks(trendRun)
+                    if (PrefManager.getVal(PrefName.TrendingScroller)) {
+                        trendHandler!!.postDelayed(trendRun, 4000)
+                    }
                 }
             }
         )

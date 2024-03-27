@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.View
+import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
@@ -156,7 +157,10 @@ class SearchActivity : AppCompatActivity() {
                 } else
                     headerAdaptor.requestFocus?.run()
 
-                if (intent.getBooleanExtra("search", false)) search()
+                if (intent.getBooleanExtra("search", false)) {
+                    window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_UNCHANGED)
+                    search()
+                }
             }
         }
     }

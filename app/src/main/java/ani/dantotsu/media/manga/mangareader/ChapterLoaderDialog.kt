@@ -37,7 +37,7 @@ class ChapterLoaderDialog : BottomSheetDialogFragment() {
         binding.selectorAutoListContainer.visibility = View.VISIBLE
         binding.selectorListContainer.visibility = View.GONE
 
-        binding.selectorTitle.text = getString(R.string.loading_next_chap)
+        binding.selectorTitle.text = getString(R.string.loading_chap_number, chp.number)
         binding.selectorCancel.setOnClickListener {
             dismiss()
         }

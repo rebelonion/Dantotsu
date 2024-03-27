@@ -154,6 +154,7 @@ class App : MultiDexApplication() {
 
     companion object {
         private var instance: App? = null
+
         /** Reference to the application context.
          *
          * USE WITH EXTREME CAUTION!**/

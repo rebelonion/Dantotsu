@@ -1430,6 +1430,24 @@ Page(page:$page,perPage:50) {
         )
     }
 
+    suspend fun getUpcomingAnime(id: String): List<Media> {
+        val res = executeQuery<Query.MediaListCollection>(
+            """{MediaListCollection(userId:$id,type:ANIME){lists{name entries{media{id,isFavourite,title{userPreferred,romaji}coverImage{medium}nextAiringEpisode{timeUntilAiring}}}}}}""",
+            force = true
+        )
+        val list = mutableListOf<Media>()
+        res?.data?.mediaListCollection?.lists?.forEach { listEntry ->
+            listEntry.entries?.forEach { entry ->
+                entry.media?.nextAiringEpisode?.timeUntilAiring?.let {
+                    list.add(Media(entry.media!!))
+                }
+            }
+        }
+        return list.sortedBy { it.timeUntilAiring }
+            .distinctBy { it.id }
+            .filter { it.timeUntilAiring != null }
+    }
+
     suspend fun isUserFav(favType: AnilistMutations.FavType, id: Int): Boolean {   //anilist isFavourite is broken, so we need to check it manually
         val res = getUserProfile(Anilist.userid?: return false)
         return when (favType) {

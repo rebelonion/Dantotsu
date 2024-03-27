@@ -307,6 +307,7 @@
     <string name="animations">Animations</string>
     <string name="banner_animations">Banner Animations</string>
     <string name="layout_animations">Layout Animations</string>
+    <string name="trending_scroller">Trending Scroller</string>
     <string name="animation_speed">Overall Speed</string>
     <string name="empty_fav">Looks like you don\'t like anything,\nTry liking a show to keep it here.</string>
     <string name="fav_anime">Favourite Anime</string>
@@ -406,7 +407,7 @@
     <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
     <string name="subscriptions_info">Amount of time for Dantotsu to periodically check for new Episodes/Chapters\n(Less time will cause more battery consumption)</string>
     <string name="do_not_update">Don\'t Update</string>
-    <string name="loading_next_chap">Loading Next Chapter</string>
+    <string name="loading_chap_number">Loading Chapter %1$s</string>
     <string name="sort_by_release_date">Sort by Release Date</string>
     <string name="crop_borders">Crop Borders</string>
     <string name="note">NOTE</string>
@@ -422,7 +423,7 @@
     <string name="congrats_vro">Congrats Vro</string>
     <string name="please_reload">Please Reload.</string>
     <string name="copied_text">Copied "%1$s"</string>
-    <string name="back_to_exit">Please perform BACK again to Exit</string>
+    <string name="back_to_exit">Press BACK again to exit</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="anilist_not_found">Seems like that wasn\'t found on Anilist.</string>
     <string name="disabled_auto_skip">Disabled Auto Skipping OP &amp; ED</string>
@@ -658,6 +659,12 @@
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile</string>
     <string name="discord_custom_button">Set up your own custom button</string>
+    <string name="discord_rich_presence">Discord Rich Presence</string>
+    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
+    <string name="view_my_anilist">View My AniList</string>
+    <string name="button_text">Button Text</string>
+    <string name="button_link">Button Link</string>
+    <string name="discord_custom_sample">Sample</string>
     <string name="warning">Warning</string>
     <string name="view_anime">View Anime</string>
     <string name="view_manga">View Manga</string>
@@ -683,6 +690,7 @@
     <string name="configure">Configure</string>
     <string name="add_widget">Add widget</string>
     <string name="app_widget_description">This is an app widget description</string>
+    <string name="upcoming_anime">Upcoming Anime</string>
     <string name="airing_image">Airing Image</string>
     <string name="anime_downloads">animeDownloads</string>
     <string name="purge_anime_downloads">Delete all Anime downloads</string>
@@ -725,7 +733,7 @@
     <string name="mutual">Mutual</string>
     <string name="success">Success</string>
 
-    <string name="currently_airing">Currently Airing</string>
+    <string name="upcoming">Upcoming</string>
     <string name="no_shows_to_display">No shows to display</string>
     <string name="extension_name">Extension Name</string>
     <string name="extension_version">version</string>
@@ -816,10 +824,10 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="donate">donate :)</string>
     <string name="do_it">Do it!</string>
     <string name="password">Password</string>
-    <string name="discord_rich_presence">Discord Rich Presence</string>
-    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
-    <string name="view_my_anilist">View My AniList</string>
-    <string name="button_text">Button Text</string>
-    <string name="button_link">Button Link</string>
-    <string name="discord_custom_sample">Sample</string>
+  
+    <string name="top_background_color">Top background color</string>
+    <string name="bottom_background_color">Bottom Background Color</string>
+    <string name="countdown_text_color">Countdown Text Color</string>
+    <string name="title_color">Title Color</string>
+    <string name="placeholder">Placeholder</string>
 </resources>
