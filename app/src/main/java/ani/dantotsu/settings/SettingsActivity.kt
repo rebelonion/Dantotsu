@@ -66,6 +66,7 @@ import ani.dantotsu.openLinkInYouTube
 import ani.dantotsu.openSettings
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.others.Xpandable
 import ani.dantotsu.pop
 import ani.dantotsu.reloadActivity
 import ani.dantotsu.restartApp
@@ -548,6 +549,22 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         bindingExtensions = ActivitySettingsExtensionsBinding.bind(binding.root).apply {
 
+            fun setMangaRepoVisibility(isChecked: Boolean) {
+                mangaRepoHeadingDivider.isGone = isChecked
+                mangaRepoHeading.isGone = isChecked
+                mangaRepoInventory.isGone = isChecked
+                mangaRepoDivider.isGone = isChecked
+                mangaAddRepository.isGone = isChecked
+            }
+
+            extensionSettings.setOnChangeListener(object : Xpandable.OnChangeListener {
+                override fun onExpand() {
+                    setMangaRepoVisibility(settingsShareRepo.isChecked)
+                }
+
+                override fun onRetract() { }
+            })
+
             fun processUserInput(input: String, mediaType: MediaType) {
                 val entry = if (input.endsWith("/") || input.endsWith("index.min.json"))
                     input.substring(0, input.lastIndexOf("/")) else input
@@ -602,14 +619,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 alertDialog.window?.setDimAmount(0.8f)
             }
 
-            fun setMangaRepoVisibility(isChecked: Boolean) {
-                mangaRepoHeadingDivider.isGone = isChecked
-                mangaRepoHeading.isGone = isChecked
-                mangaRepoInventory.isGone = isChecked
-                mangaRepoDivider.isGone = isChecked
-                mangaAddRepository.isGone = isChecked
-            }
-
             mangaAddRepository.setOnClickListener {
                 val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
                 val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
@@ -636,10 +645,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             settingsShareRepo.isChecked = PrefManager.getVal(PrefName.SharedRepositories)
-            setMangaRepoVisibility(settingsShareRepo.isChecked)
             settingsShareRepo.setOnCheckedChangeListener { _, isChecked ->
-                setMangaRepoVisibility(isChecked)
                 PrefManager.setVal(PrefName.SharedRepositories, isChecked)
+                setMangaRepoVisibility(isChecked)
             }
 
             settingsForceLegacyInstall.isChecked =

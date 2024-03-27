@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <ani.dantotsu.others.Xpandable
+        android:id="@+id/extensionSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -164,7 +165,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:checked="false"
-            android:drawableStart="@drawable/ic_round_new_releases_24"
+            android:drawableStart="@drawable/ic_round_share_24"
             android:drawablePadding="16dp"
             android:elegantTextHeight="true"
             android:fontFamily="@font/poppins_bold"
