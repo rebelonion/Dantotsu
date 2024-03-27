@@ -46,7 +46,7 @@ import kotlin.math.abs
 class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
     lateinit var binding: ActivityProfileBinding
     private var selected: Int = 0
-    private lateinit var navBar: AnimatedBottomBar
+    lateinit var navBar: AnimatedBottomBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

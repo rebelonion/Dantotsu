@@ -404,7 +404,7 @@
     <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
     <string name="subscriptions_info">Amount of time for Dantotsu to periodically check for new Episodes/Chapters\n(Less time will cause more battery consumption)</string>
     <string name="do_not_update">Don\'t Update</string>
-    <string name="loading_next_chap">Loading Next Chapter</string>
+    <string name="loading_chap_number">Loading Chapter %1$s</string>
     <string name="sort_by_release_date">Sort by Release Date</string>
     <string name="crop_borders">Crop Borders</string>
     <string name="note">NOTE</string>
@@ -420,7 +420,7 @@
     <string name="congrats_vro">Congrats Vro</string>
     <string name="please_reload">Please Reload.</string>
     <string name="copied_text">Copied "%1$s"</string>
-    <string name="back_to_exit">Please perform BACK again to Exit</string>
+    <string name="back_to_exit">Press BACK again to exit</string>
     <string name="no_internet_connection">No Internet Connection</string>
     <string name="anilist_not_found">Seems like that wasn\'t found on Anilist.</string>
     <string name="disabled_auto_skip">Disabled Auto Skipping OP &amp; ED</string>
