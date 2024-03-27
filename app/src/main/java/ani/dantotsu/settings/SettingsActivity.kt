@@ -31,6 +31,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import android.view.HapticFeedbackConstants
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.doAfterTextChanged
 import androidx.documentfile.provider.DocumentFile
@@ -304,6 +305,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         imageSwitcher.startAnimation(zoomInAnimation)
                     }
                     imageSwitcher.setOnLongClickListener {
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                         val dialogView = LayoutInflater.from(this@SettingsActivity).inflate(R.layout.discord_rpc_layout, null)
                         val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radio_group)
                         val radioDantotsu = dialogView.findViewById<RadioButton>(R.id.radio_dantotsu)
