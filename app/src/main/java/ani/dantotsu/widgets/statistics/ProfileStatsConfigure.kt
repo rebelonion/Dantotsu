@@ -4,6 +4,7 @@ import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -14,6 +15,7 @@ import ani.dantotsu.databinding.StatisticsWidgetConfigureBinding
 
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.widgets.upcoming.UpcomingWidget
+import com.google.android.material.button.MaterialButton
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.color.SimpleColorDialog
 
@@ -59,16 +61,12 @@ class ProfileStatsConfigure : AppCompatActivity(),
         setContentView(binding.root)
 
         val prefs = getSharedPreferences(ProfileStatsWidget.PREFS_NAME, Context.MODE_PRIVATE)
-
+        val topBackground = prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
+        (binding.topBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(topBackground)
         binding.topBackgroundButton.setOnClickListener {
             val tag = ProfileStatsWidget.PREF_BACKGROUND_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(
-                    prefs.getInt(
-                        ProfileStatsWidget.PREF_BACKGROUND_COLOR,
-                        Color.parseColor("#80000000")
-                    )
-                )
+                .colorPreset(topBackground)
                 .colors(
                     this@ProfileStatsConfigure,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
@@ -81,10 +79,12 @@ class ProfileStatsConfigure : AppCompatActivity(),
                 .neg()
                 .show(this@ProfileStatsConfigure, tag)
         }
+        val bottomBackground = prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
+        (binding.bottomBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(bottomBackground)
         binding.bottomBackgroundButton.setOnClickListener {
             val tag = ProfileStatsWidget.PREF_BACKGROUND_FADE
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000")))
+                .colorPreset(bottomBackground)
                 .colors(
                     this@ProfileStatsConfigure,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
@@ -97,10 +97,12 @@ class ProfileStatsConfigure : AppCompatActivity(),
                 .neg()
                 .show(this@ProfileStatsConfigure, tag)
         }
+        val titleColor = prefs.getInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)
+        (binding.titleColorButton as MaterialButton).iconTint = ColorStateList.valueOf(titleColor)
         binding.titleColorButton.setOnClickListener {
             val tag = ProfileStatsWidget.PREF_TITLE_TEXT_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(prefs.getInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE))
+                .colorPreset(titleColor)
                 .colors(
                     this@ProfileStatsConfigure,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
@@ -113,10 +115,12 @@ class ProfileStatsConfigure : AppCompatActivity(),
                 .neg()
                 .show(this@ProfileStatsConfigure, tag)
         }
+        val statsColor = prefs.getInt(ProfileStatsWidget.PREF_STATS_TEXT_COLOR, Color.WHITE)
+        (binding.statsColorButton as MaterialButton).iconTint = ColorStateList.valueOf(statsColor)
         binding.statsColorButton.setOnClickListener {
             val tag = ProfileStatsWidget.PREF_STATS_TEXT_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(prefs.getInt(ProfileStatsWidget.PREF_STATS_TEXT_COLOR, Color.WHITE))
+                .colorPreset(statsColor)
                 .colors(
                     this@ProfileStatsConfigure,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
@@ -155,8 +159,6 @@ class ProfileStatsConfigure : AppCompatActivity(),
                 AppWidgetManager.EXTRA_APPWIDGET_ID, AppWidgetManager.INVALID_APPWIDGET_ID
             )
         }
-
-        // Possibly consider sorting the items or configuring colors
 
         // If this activity was started with an intent without an app widget ID, finish with an error.
         if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {

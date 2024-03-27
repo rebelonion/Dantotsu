@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:checked="false"
-        android:drawableStart="@drawable/ic_round_new_releases_24"
+        android:drawableStart="@drawable/ic_palette"
         android:drawablePadding="16dp"
         android:elegantTextHeight="true"
         android:fontFamily="@font/poppins_bold"
@@ -51,7 +51,7 @@
         android:textAllCaps="false"
         android:textColor="?attr/colorOnBackground"
         app:cornerRadius="0dp"
-        app:icon="@drawable/ic_round_color_picker_24"
+        app:icon="@drawable/shape_corner_16dp"
         app:iconPadding="16dp"
         app:iconSize="24dp"
         app:iconTint="?attr/colorPrimary" />
@@ -75,7 +75,7 @@
         android:textAllCaps="false"
         android:textColor="?attr/colorOnBackground"
         app:cornerRadius="0dp"
-        app:icon="@drawable/ic_round_color_picker_24"
+        app:icon="@drawable/shape_corner_16dp"
         app:iconPadding="16dp"
         app:iconSize="24dp"
         app:iconTint="?attr/colorPrimary" />
@@ -99,7 +99,7 @@
         android:textAllCaps="false"
         android:textColor="?attr/colorOnBackground"
         app:cornerRadius="0dp"
-        app:icon="@drawable/ic_round_color_picker_24"
+        app:icon="@drawable/shape_corner_16dp"
         app:iconPadding="16dp"
         app:iconSize="24dp"
         app:iconTint="?attr/colorPrimary" />
@@ -123,7 +123,7 @@
         android:textAllCaps="false"
         android:textColor="?attr/colorOnBackground"
         app:cornerRadius="0dp"
-        app:icon="@drawable/ic_round_color_picker_24"
+        app:icon="@drawable/shape_corner_16dp"
         app:iconPadding="16dp"
         app:iconSize="24dp"
         app:iconTint="?attr/colorPrimary" />

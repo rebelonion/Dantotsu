@@ -3,6 +3,7 @@ package ani.dantotsu.widgets.upcoming
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import ani.dantotsu.R
 import ani.dantotsu.databinding.UpcomingWidgetConfigureBinding
 import ani.dantotsu.themes.ThemeManager
+import com.google.android.material.button.MaterialButton
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.color.SimpleColorDialog
 
@@ -46,16 +48,12 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
         binding = UpcomingWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val prefs = getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE)
-
+        val topBackground = prefs.getInt(UpcomingWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
+        (binding.topBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(topBackground)
         binding.topBackgroundButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_BACKGROUND_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(
-                    prefs.getInt(
-                        UpcomingWidget.PREF_BACKGROUND_COLOR,
-                        Color.parseColor("#80000000")
-                    )
-                )
+                .colorPreset(topBackground)
                 .colors(
                     this@UpcomingWidgetConfigureActivity,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
@@ -68,10 +66,12 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .neg()
                 .show(this@UpcomingWidgetConfigureActivity, tag)
         }
+        val bottomBackground = prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
+        (binding.bottomBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(bottomBackground)
         binding.bottomBackgroundButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_BACKGROUND_FADE
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000")))
+                .colorPreset(bottomBackground)
                 .colors(
                     this@UpcomingWidgetConfigureActivity,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
@@ -84,10 +84,12 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .neg()
                 .show(this@UpcomingWidgetConfigureActivity, tag)
         }
+        val titleTextColor = prefs.getInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)
+        (binding.titleColorButton as MaterialButton).iconTint = ColorStateList.valueOf(titleTextColor)
         binding.titleColorButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_TITLE_TEXT_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(prefs.getInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE))
+                .colorPreset(titleTextColor)
                 .colors(
                     this@UpcomingWidgetConfigureActivity,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
@@ -99,15 +101,12 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .neg()
                 .show(this@UpcomingWidgetConfigureActivity, tag)
         }
+        val countdownTextColor = prefs.getInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
+        (binding.countdownColorButton as MaterialButton).iconTint = ColorStateList.valueOf(countdownTextColor)
         binding.countdownColorButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(
-                    prefs.getInt(
-                        UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR,
-                        Color.WHITE
-                    )
-                )
+                .colorPreset(countdownTextColor)
                 .colors(
                     this@UpcomingWidgetConfigureActivity,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
