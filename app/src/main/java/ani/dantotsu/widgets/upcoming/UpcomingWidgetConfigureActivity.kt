@@ -5,9 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import ani.dantotsu.R
 import ani.dantotsu.databinding.UpcomingWidgetConfigureBinding
 import ani.dantotsu.themes.ThemeManager
@@ -20,7 +20,7 @@ import eltos.simpledialogfragment.color.SimpleColorDialog
 class UpcomingWidgetConfigureActivity : AppCompatActivity(),
     SimpleDialog.OnDialogResultListener {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-
+    private var isMonetEnabled = false
     private var onClickListener = View.OnClickListener {
         val context = this@UpcomingWidgetConfigureActivity
         val appWidgetManager = AppWidgetManager.getInstance(context)
@@ -53,7 +53,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .colorPreset(
                     prefs.getInt(
                         UpcomingWidget.PREF_BACKGROUND_COLOR,
-                        ContextCompat.getColor(this, R.color.theme)
+                        Color.parseColor("#80000000")
                     )
                 )
                 .colors(
@@ -71,7 +71,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
         binding.bottomBackgroundButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_BACKGROUND_FADE
             SimpleColorDialog().title(R.string.custom_theme)
-                .colorPreset(prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.GRAY))
+                .colorPreset(prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000")))
                 .colors(
                     this@UpcomingWidgetConfigureActivity,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
@@ -119,7 +119,22 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .neg()
                 .show(this@UpcomingWidgetConfigureActivity, tag)
         }
+        binding.useAppTheme.setOnCheckedChangeListener { _, isChecked ->
+            isMonetEnabled = isChecked
+            if (isChecked) {
+                binding.topBackgroundButton.visibility = View.GONE
+                binding.bottomBackgroundButton.visibility = View.GONE
+                binding.titleColorButton.visibility = View.GONE
+                binding.countdownColorButton.visibility = View.GONE
+                themeColors()
 
+            } else {
+                binding.topBackgroundButton.visibility = View.VISIBLE
+                binding.bottomBackgroundButton.visibility = View.VISIBLE
+                binding.titleColorButton.visibility = View.VISIBLE
+                binding.countdownColorButton.visibility = View.VISIBLE
+            }
+        }
         binding.addButton.setOnClickListener(onClickListener)
 
         val intent = intent
@@ -138,58 +153,81 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
 
     override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
         if (which == SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE) {
-            when (dialogTag) {
-                UpcomingWidget.PREF_BACKGROUND_COLOR -> {
-                    getSharedPreferences(
-                        UpcomingWidget.PREFS_NAME,
-                        Context.MODE_PRIVATE
-                    ).edit()
-                        .putInt(
-                            UpcomingWidget.PREF_BACKGROUND_COLOR,
-                            extras.getInt(SimpleColorDialog.COLOR)
-                        )
-                        .apply()
-                }
+            if (!isMonetEnabled) {
+                when (dialogTag) {
+                    UpcomingWidget.PREF_BACKGROUND_COLOR -> {
+                        getSharedPreferences(
+                            UpcomingWidget.PREFS_NAME,
+                            Context.MODE_PRIVATE
+                        ).edit()
+                            .putInt(
+                                UpcomingWidget.PREF_BACKGROUND_COLOR,
+                                extras.getInt(SimpleColorDialog.COLOR)
+                            )
+                            .apply()
+                    }
 
-                UpcomingWidget.PREF_BACKGROUND_FADE -> {
-                    getSharedPreferences(
-                        UpcomingWidget.PREFS_NAME,
-                        Context.MODE_PRIVATE
-                    ).edit()
-                        .putInt(
-                            UpcomingWidget.PREF_BACKGROUND_FADE,
-                            extras.getInt(SimpleColorDialog.COLOR)
-                        )
-                        .apply()
-                }
+                    UpcomingWidget.PREF_BACKGROUND_FADE -> {
+                        getSharedPreferences(
+                            UpcomingWidget.PREFS_NAME,
+                            Context.MODE_PRIVATE
+                        ).edit()
+                            .putInt(
+                                UpcomingWidget.PREF_BACKGROUND_FADE,
+                                extras.getInt(SimpleColorDialog.COLOR)
+                            )
+                            .apply()
+                    }
 
-                UpcomingWidget.PREF_TITLE_TEXT_COLOR -> {
-                    getSharedPreferences(
-                        UpcomingWidget.PREFS_NAME,
-                        Context.MODE_PRIVATE
-                    ).edit()
-                        .putInt(
-                            UpcomingWidget.PREF_TITLE_TEXT_COLOR,
-                            extras.getInt(SimpleColorDialog.COLOR)
-                        )
-                        .apply()
-                }
+                    UpcomingWidget.PREF_TITLE_TEXT_COLOR -> {
+                        getSharedPreferences(
+                            UpcomingWidget.PREFS_NAME,
+                            Context.MODE_PRIVATE
+                        ).edit()
+                            .putInt(
+                                UpcomingWidget.PREF_TITLE_TEXT_COLOR,
+                                extras.getInt(SimpleColorDialog.COLOR)
+                            )
+                            .apply()
+                    }
 
-                UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR -> {
-                    getSharedPreferences(
-                        UpcomingWidget.PREFS_NAME,
-                        Context.MODE_PRIVATE
-                    ).edit()
-                        .putInt(
-                            UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR,
-                            extras.getInt(SimpleColorDialog.COLOR)
-                        )
-                        .apply()
-                }
+                    UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR -> {
+                        getSharedPreferences(
+                            UpcomingWidget.PREFS_NAME,
+                            Context.MODE_PRIVATE
+                        ).edit()
+                            .putInt(
+                                UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR,
+                                extras.getInt(SimpleColorDialog.COLOR)
+                            )
+                            .apply()
+                    }
 
+                }
             }
         }
         return true
+    }
+    private fun themeColors() {
+        val typedValueSurface = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValueSurface, true)
+        val backgroundColor = typedValueSurface.data
+
+        val typedValuePrimary = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValuePrimary, true)
+        val textColor = typedValuePrimary.data
+
+        val typedValueOutline = TypedValue()
+        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValueOutline, true)
+        val subTextColor = typedValueOutline.data
+
+        getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
+            putInt(UpcomingWidget.PREF_BACKGROUND_COLOR, backgroundColor)
+            putInt(UpcomingWidget.PREF_BACKGROUND_FADE, backgroundColor)
+            putInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, textColor)
+            putInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, subTextColor)
+            apply()
+        }
     }
 
 }

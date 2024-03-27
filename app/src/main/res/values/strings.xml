@@ -661,6 +661,7 @@
     <string name="NSFWExtention">NSFW Extensions</string>
     <string name="skip_loading_extension_icons">Skip loading extension icons</string>
     <string name="use_material_you">Material You</string>
+    <string name="use_app_theme">Use App Theme</string>
     <string name="extension_specific_dns">Extension-specific DNS</string>
     <string name="theme_">Theme:</string>
     <string name="user_agent">User Agent</string>

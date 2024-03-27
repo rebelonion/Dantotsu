@@ -69,8 +69,8 @@ class UpcomingWidget : AppWidgetProvider() {
         ): RemoteViews {
             val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
             val backgroundColor =
-                prefs.getInt(PREF_BACKGROUND_COLOR, ContextCompat.getColor(context, R.color.theme))
-            val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.GRAY)
+                prefs.getInt(PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
+            val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
             val titleTextColor = prefs.getInt(PREF_TITLE_TEXT_COLOR, Color.WHITE)
             val countdownTextColor = prefs.getInt(PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
 
@@ -80,14 +80,14 @@ class UpcomingWidget : AppWidgetProvider() {
             }
             val gradientDrawable = ResourcesCompat.getDrawable(
                 context.resources,
-                R.drawable.gradient_background,
+                R.drawable.linear_gradient_black,
                 null
             ) as GradientDrawable
             gradientDrawable.colors = intArrayOf(backgroundColor, backgroundFade)
             val widgetSizeProvider = WidgetSizeProvider(context)
             var (width, height) = widgetSizeProvider.getWidgetsSize(appWidgetId)
             if (width > 0 && height > 0) {
-                gradientDrawable.cornerRadius = 50f
+                gradientDrawable.cornerRadius = 64f
             } else {
                 width = 300
                 height = 300
