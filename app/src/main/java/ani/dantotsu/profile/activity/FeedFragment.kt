@@ -50,7 +50,7 @@ class FeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity()
 
-        binding.listRecyclerView.setBaseline((activity as ProfileActivity).navBar)
+
 
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager =
@@ -60,6 +60,12 @@ class FeedFragment : Fragment() {
         activityId = arguments?.getInt("activityId", -1) ?: -1
         if (userId == -1) userId = null
         global = arguments?.getBoolean("global", false) ?: false
+
+        if (userId != null) {
+            binding.listRecyclerView.setBaseline((activity as ProfileActivity).navBar)
+        }else{
+            binding.listRecyclerView.setBaseline((activity as FeedActivity).navBar)
+        }
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -67,7 +73,11 @@ class FeedFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-            binding.listRecyclerView.setBaseline((activity as ProfileActivity).navBar)
+            if (userId != null) {
+                binding.listRecyclerView.setBaseline((activity as ProfileActivity).navBar)
+            }else{
+                binding.listRecyclerView.setBaseline((activity as FeedActivity).navBar)
+            }
             if (!loadedFirstTime) {
                 activity.lifecycleScope.launch(Dispatchers.IO) {
                     val nulledId = if (activityId == -1) null else activityId

@@ -21,7 +21,7 @@ import nl.joery.animatedbottombar.AnimatedBottomBar
 class FeedActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFeedBinding
     private var selected: Int = 0
-    private lateinit var navBar: AnimatedBottomBar
+    lateinit var navBar: AnimatedBottomBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
