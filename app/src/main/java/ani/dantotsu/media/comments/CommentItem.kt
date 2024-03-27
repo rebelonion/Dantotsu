@@ -139,6 +139,12 @@ class CommentItem(val comment: Comment,
             commentsFragment.replyTo(this, comment.username)
             commentsFragment.replyCallback(this)
         }
+        viewBinding.devBadge.apply {
+            visibility = if (comment.isDev == true) View.VISIBLE else View.GONE
+            setOnClickListener {
+                Toast.makeText(context, "App Developer", Toast.LENGTH_SHORT).show()
+            }
+        }
         viewBinding.modBadge.apply {
             visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
             setOnClickListener {
