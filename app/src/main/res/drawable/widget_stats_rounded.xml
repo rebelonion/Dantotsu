@@ -4,15 +4,26 @@
         <shape android:shape="rectangle">
             <gradient
                 android:angle="270"
-                android:endColor="@color/grey_20"
+                android:endColor="@color/bg_white_50"
                 android:startColor="@color/bg_black_50" />
-            <corners android:radius="28dp"/>
+            <corners
+                android:topLeftRadius="28dp"
+                android:topRightRadius="28dp"
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp"/>
         </shape>
     </item>
-    <item>
+    <item
+        android:left="-2dp"
+        android:right="-2dp"
+        android:bottom="-4dp">
         <shape>
-            <stroke android:width="2dp" android:color="#B1BCBE" />
-            <corners android:radius="28dp"/>
+            <stroke android:width="2dp" android:color="@color/bg_white" />
+            <corners
+                android:topLeftRadius="28dp"
+                android:topRightRadius="28dp"
+                android:bottomLeftRadius="0dp"
+                android:bottomRightRadius="0dp"/>
         </shape>
     </item>
 </layer-list>

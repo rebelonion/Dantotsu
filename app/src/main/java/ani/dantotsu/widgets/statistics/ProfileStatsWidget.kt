@@ -5,6 +5,8 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.widget.RemoteViews
@@ -19,8 +21,12 @@ import ani.dantotsu.util.BitmapUtil
 import ani.dantotsu.widgets.WidgetSizeProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.launchIO
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 /**
  * Implementation of App Widget functionality.
@@ -50,6 +56,32 @@ class ProfileStatsWidget : AppWidgetProvider() {
     }
 
     companion object {
+        private fun downloadImageAsBitmap(imageUrl: String): Bitmap? {
+            var bitmap: Bitmap? = null
+
+            runBlocking(Dispatchers.IO) {
+                var inputStream: InputStream? = null
+                var urlConnection: HttpURLConnection? = null
+                try {
+                    val url = URL(imageUrl)
+                    urlConnection = url.openConnection() as HttpURLConnection
+                    urlConnection.requestMethod = "GET"
+                    urlConnection.connect()
+
+                    if (urlConnection.responseCode == HttpURLConnection.HTTP_OK) {
+                        inputStream = urlConnection.inputStream
+                        bitmap = BitmapFactory.decodeStream(inputStream)
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    inputStream?.close()
+                    urlConnection?.disconnect()
+                }
+            }
+            return bitmap?.let { BitmapUtil.roundCorners(it) }
+        }
+
         @OptIn(DelicateCoroutinesApi::class)
         fun updateAppWidget(
             context: Context,
@@ -87,7 +119,6 @@ class ProfileStatsWidget : AppWidgetProvider() {
                     respond?.data?.user?.let { user ->
                         withContext(Dispatchers.Main) {
                             val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {
-
                                 setImageViewBitmap(
                                     R.id.backgroundView,
                                     BitmapUtil.convertDrawableToBitmap(
@@ -104,6 +135,15 @@ class ProfileStatsWidget : AppWidgetProvider() {
                                 setTextColor(R.id.bottomLeftLabel, titleTextColor)
                                 setTextColor(R.id.bottomRightItem, titleTextColor)
                                 setTextColor(R.id.bottomRightLabel, titleTextColor)
+
+                                setImageViewBitmap(
+                                    R.id.userAvatar,
+                                    user.avatar?.medium?.let { it1 -> downloadImageAsBitmap(it1) }
+                                )
+                                setTextViewText(
+                                    R.id.userLabel,
+                                    context.getString(R.string.user_stats, user.name)
+                                )
 
                                 setTextViewText(
                                     R.id.topLeftItem,
