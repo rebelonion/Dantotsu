@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.extension.anime.api
 
 import android.content.Context
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
@@ -32,6 +33,10 @@ internal class AnimeExtensionGithubApi {
         preferenceStore.getLong("last_ext_check", 0)
     }
 
+    private val repoAddress by lazy {
+        preferenceStore.getString(PrefName.ExtensionRepo.name, "").get()
+    }
+
     private var requiresFallbackSource = false
 
     suspend fun findExtensions(): List<AnimeExtension.Available> {
@@ -41,7 +46,7 @@ internal class AnimeExtensionGithubApi {
             } else {
                 try {
                     networkService.client
-                        .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
+                        .newCall(GET("${repoAddress}/index.min.json"))
                         .awaitSuccess()
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
@@ -52,7 +57,7 @@ internal class AnimeExtensionGithubApi {
 
             val response = githubResponse ?: run {
                 networkService.client
-                    .newCall(GET("${FALLBACK_REPO_URL_PREFIX}index.min.json"))
+                    .newCall(GET("${FALLBACK_REPO_URL_PREFIX}/index.min.json"))
                     .awaitSuccess()
             }
 
@@ -147,14 +152,14 @@ internal class AnimeExtensionGithubApi {
     }
 
     fun getApkUrl(extension: AnimeExtension.Available): String {
-        return "${getUrlPrefix()}apk/${extension.apkName}"
+        return "${getUrlPrefix()}/apk/${extension.apkName}"
     }
 
     private fun getUrlPrefix(): String {
         return if (requiresFallbackSource) {
             FALLBACK_REPO_URL_PREFIX
         } else {
-            REPO_URL_PREFIX
+            repoAddress
         }
     }
 }
@@ -163,8 +168,8 @@ private fun AnimeExtensionJsonObject.extractLibVersion(): Double {
     return version.substringBeforeLast('.').toDouble()
 }
 
-private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo/"
-private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/aniyomiorg/aniyomi-extensions@repo/"
+private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo"
+private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/aniyomiorg/aniyomi-extensions@repo"
 
 @Serializable
 private data class AnimeExtensionJsonObject(

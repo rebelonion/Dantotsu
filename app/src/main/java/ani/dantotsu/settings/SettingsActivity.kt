@@ -13,6 +13,7 @@ import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -544,6 +545,20 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         bindingExtensions = ActivitySettingsExtensionsBinding.bind(binding.root).apply {
+
+            repoEntry.setOnEditorActionListener { textView, action, keyEvent ->
+                if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE ||
+                    (keyEvent?.action == KeyEvent.ACTION_UP
+                            && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    PrefManager.setVal(PrefName.ExtensionRepo, textView.text.toString())
+                    repoInventory.text = PrefManager.getVal(PrefName.ExtensionRepo)
+                    true
+                }
+                false
+            }
+
+            repoInventory.text = PrefManager.getVal(PrefName.ExtensionRepo)
+
             settingsForceLegacyInstall.isChecked =
                 extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY
             settingsForceLegacyInstall.setOnCheckedChangeListener { _, isChecked ->

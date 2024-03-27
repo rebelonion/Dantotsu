@@ -838,5 +838,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="title_color">Title Color</string>
     <string name="stat_text_color">Stats Text Color</string>
     <string name="placeholder">Placeholder</string>
-    <string name="example_url">https://raw.githubusercontent.com/</string>
+
+    <string name="example_url">https://raw.githubusercontent.com/USER/REPO</string>
 </resources>

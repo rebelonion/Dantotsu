@@ -21,25 +21,34 @@
         <ani.dantotsu.others.Xpandable
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:paddingStart="16dp"
+            android:orientation="vertical"
+            tools:ignore="RtlSymmetry">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center_vertical"
-                android:paddingStart="16dp"
                 android:text="@string/manage_extension_repos"
                 android:textColor="?attr/colorSecondary"
                 app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
-                tools:ignore="RtlSymmetry,TextContrastCheck" />
+                tools:ignore="TextContrastCheck" />
 
             <EditText
+                android:id="@+id/repoEntry"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/extension_name"
-                android:text="@string/example_url"
-                android:inputType="textUri"/>
+                android:hint="@string/example_url"
+                android:inputType="textUri"
+                android:autofillHints="@string/example_url"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/repoInventory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"/>
 
         </ani.dantotsu.others.Xpandable>
 
