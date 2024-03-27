@@ -13,12 +13,18 @@ import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -26,6 +32,7 @@ import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.widget.doAfterTextChanged
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
@@ -79,6 +86,7 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
@@ -294,6 +302,74 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         PrefManager.setVal(PrefName.DiscordStatus, status)
                         imageSwitcher.setImageResource(initialStatus)
                         imageSwitcher.startAnimation(zoomInAnimation)
+                    }
+                    imageSwitcher.setOnLongClickListener {
+                        val dialogView = LayoutInflater.from(this@SettingsActivity).inflate(R.layout.discord_rpc_layout, null)
+                        val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radio_group)
+                        val radioDantotsu = dialogView.findViewById<RadioButton>(R.id.radio_dantotsu)
+                        val radioAnilist = dialogView.findViewById<RadioButton>(R.id.radio_anilist)
+                        val radioCustom = dialogView.findViewById<RadioButton>(R.id.radio_custom)
+                        val anilistLinkPreview = dialogView.findViewById<TextView>(R.id.anilistLinkPreview)
+                        val customButtonPreview = dialogView.findViewById<TextView>(R.id.customButtonPreview)
+                        val customLinkPreview = dialogView.findViewById<TextView>(R.id.customLinkPreview)
+                        val buttonEditText = dialogView.findViewById<EditText>(R.id.buttonEditText)
+                        val linkEditText = dialogView.findViewById<EditText>(R.id.linkEditText)
+
+                        buttonEditText.addTextChangedListener(object : TextWatcher {
+                            override fun afterTextChanged(s: Editable?) {}
+                            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                                PrefManager.setCustomVal("custom_button_text", s.toString())
+                                customButtonPreview.text = s.toString().ifEmpty { "Sample" }
+                            }
+                        })
+
+                        linkEditText.addTextChangedListener(object : TextWatcher {
+                            override fun afterTextChanged(s: Editable?) {}
+                            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+                            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                                PrefManager.setCustomVal("custom_button_link", s.toString())
+                                customLinkPreview.text = s.toString().ifEmpty { "https://example.com/" }
+                            }
+                        })
+
+                        val userId = PrefManager.getVal<String>(PrefName.AnilistUserName)
+                        val currentMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
+                        val customButtonText = PrefManager.getCustomVal("custom_button_text", "")
+                        val customButtonLink = PrefManager.getCustomVal("custom_button_link", "")
+
+                        when (currentMode) {
+                            "dantotsu" -> radioDantotsu.isChecked = true
+                            "anilist" -> radioAnilist.isChecked = true
+                            "custom" -> radioCustom.isChecked = true
+                        }
+
+                        anilistLinkPreview.text = getString(R.string.anilist_link, userId)
+                        customButtonPreview.text = customButtonText.ifEmpty { "Sample" }
+                        customLinkPreview.text = customButtonLink.ifEmpty { "https://example.com/" }
+                        buttonEditText.setText(customButtonText)
+                        linkEditText.setText(customButtonLink)
+
+                        val bottomSheetDialog = BottomSheetDialog(this@SettingsActivity)
+                        bottomSheetDialog.setContentView(dialogView)
+
+                        radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                            when (checkedId) {
+                                R.id.radio_dantotsu -> {
+                                    PrefManager.setCustomVal("discord_mode", "dantotsu")
+                                }
+                                R.id.radio_anilist -> {
+                                    PrefManager.setCustomVal("discord_mode", "anilist")
+                                }
+                                R.id.radio_custom -> {
+                                    PrefManager.setCustomVal("discord_mode", "custom")
+                                    PrefManager.setCustomVal("custom_button_text", buttonEditText.text.toString())
+                                    PrefManager.setCustomVal("custom_button_link", linkEditText.text.toString())
+                                }
+                            }
+                        }
+                        bottomSheetDialog.show()
+                        true
                     }
                 } else {
                     imageSwitcher.visibility = View.GONE
