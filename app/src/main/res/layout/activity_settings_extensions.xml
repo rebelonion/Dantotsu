@@ -18,6 +18,37 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
+        <Button
+            android:id="@+id/userAgent"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:backgroundTint="?attr/colorSecondary"
+            android:backgroundTintMode="src_atop"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="31dp"
+            android:text="@string/user_agent"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_round_video_settings_24"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
         <TextView
             android:id="@+id/repoHeading"
             android:paddingStart="16dp"
@@ -34,6 +65,7 @@
             android:paddingStart="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:textSize="12sp"
             tools:ignore="RtlSymmetry" />
 
@@ -66,44 +98,6 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
-        <Button
-            android:id="@+id/userAgent"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="-31dp"
-            android:layout_marginEnd="-31dp"
-            android:background="@drawable/ui_bg"
-            android:backgroundTint="?attr/colorSecondary"
-            android:backgroundTintMode="src_atop"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingHorizontal="31dp"
-            android:text="@string/user_agent"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:icon="@drawable/ic_round_video_settings_24"
-            app:iconPadding="16dp"
-            app:iconSize="24dp"
-            app:iconTint="?attr/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:layout_marginBottom="8dp"
-            android:background="?android:attr/listDivider" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsForceLegacyInstall"
