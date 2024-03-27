@@ -16,7 +16,7 @@
     <item
         android:left="-2dp"
         android:right="-2dp"
-        android:bottom="-4dp">
+        android:bottom="-30dp">
         <shape>
             <stroke android:width="2dp" android:color="@color/bg_white" />
             <corners
