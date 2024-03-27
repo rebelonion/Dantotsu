@@ -26,6 +26,7 @@ import ani.dantotsu.isOnline
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.media.anime.handleProgress
 import ani.dantotsu.openSettings
@@ -385,8 +386,8 @@ class MangaReadAdapter(
                     )
                 }
 
-                val startChapter = MangaNameAdapter.findChapterNumber(names[limit * (position)])
-                val endChapter = MangaNameAdapter.findChapterNumber(names[last - 1])
+                val startChapter = MediaNameAdapter.findChapterNumber(names[limit * (position)])
+                val endChapter = MediaNameAdapter.findChapterNumber(names[last - 1])
                 val startChapterString = if (startChapter != null) {
                     "Ch.$startChapter"
                 } else {
@@ -448,7 +449,7 @@ class MangaReadAdapter(
                     chapter.scanlator !in hiddenScanlators
                 }
                 val formattedChapters = filteredChapters.map {
-                    MangaNameAdapter.findChapterNumber(it)?.toInt()?.toString()
+                    MediaNameAdapter.findChapterNumber(it)?.toInt()?.toString()
                 }
                 if (formattedChapters.contains(continueEp)) {
                     continueEp = chapters[formattedChapters.indexOf(continueEp)]

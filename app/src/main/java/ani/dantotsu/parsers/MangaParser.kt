@@ -1,7 +1,7 @@
 package ani.dantotsu.parsers
 
 import ani.dantotsu.FileUrl
-import ani.dantotsu.media.manga.MangaNameAdapter
+import ani.dantotsu.media.MediaNameAdapter
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import eu.kanade.tachiyomi.source.model.Page
 import eu.kanade.tachiyomi.source.model.SChapter
@@ -33,9 +33,9 @@ abstract class MangaParser : BaseParser() {
     ): MangaChapter? {
         val chapter = loadChapters(mangaLink, extra, sManga)
         val max = chapter
-            .maxByOrNull { MangaNameAdapter.findChapterNumber(it.number) ?: 0f }
+            .maxByOrNull { MediaNameAdapter.findChapterNumber(it.number) ?: 0f }
         return max
-            ?.takeIf { latest < (MangaNameAdapter.findChapterNumber(it.number) ?: 0.001f) }
+            ?.takeIf { latest < (MediaNameAdapter.findChapterNumber(it.number) ?: 0.001f) }
     }
 
     /**

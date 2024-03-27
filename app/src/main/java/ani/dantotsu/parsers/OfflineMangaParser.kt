@@ -3,7 +3,7 @@ package ani.dantotsu.parsers
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.media.manga.MangaNameAdapter
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
@@ -43,7 +43,7 @@ class OfflineMangaParser : MangaParser() {
                     chapters.add(chapter)
                 }
             }
-            chapters.sortBy { MangaNameAdapter.findChapterNumber(it.number) }
+            chapters.sortBy { MediaNameAdapter.findChapterNumber(it.number) }
             return chapters
         }
         return emptyList()

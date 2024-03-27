@@ -57,9 +57,9 @@ import ani.dantotsu.logError
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaSingleton
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.media.manga.MangaChapter
-import ani.dantotsu.media.manga.MangaNameAdapter
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaImage
@@ -180,7 +180,7 @@ class MangaReaderActivity : AppCompatActivity() {
         defaultSettings = loadReaderSettings("reader_settings") ?: defaultSettings
 
         onBackPressedDispatcher.addCallback(this) {
-            val chapter = (MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
+            val chapter = (MediaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
                 ?.minus(1L) ?: 0).toString()
             if (chapter == "0.0" && PrefManager.getVal(PrefName.ChapterZeroReader)
                 // Not asking individually or incognito
@@ -969,7 +969,7 @@ class MangaReaderActivity : AppCompatActivity() {
                         PrefManager.setCustomVal("${media.id}_save_progress", true)
                         updateProgress(
                             media,
-                            MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
+                            MediaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
                                 .toString()
                         )
                         dialog.dismiss()
@@ -991,7 +991,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 )
                     updateProgress(
                         media,
-                        MangaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
+                        MediaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
                             .toString()
                     )
                 runnable.run()

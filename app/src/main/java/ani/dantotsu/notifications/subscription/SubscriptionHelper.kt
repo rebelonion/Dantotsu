@@ -3,13 +3,11 @@ package ani.dantotsu.notifications.subscription
 import ani.dantotsu.R
 import ani.dantotsu.currContext
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.Selected
-import ani.dantotsu.media.manga.MangaNameAdapter
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.Episode
-import ani.dantotsu.parsers.HAnimeSources
-import ani.dantotsu.parsers.HMangaSources
 import ani.dantotsu.parsers.MangaChapter
 import ani.dantotsu.parsers.MangaParser
 import ani.dantotsu.parsers.MangaSources
@@ -105,7 +103,7 @@ class SubscriptionHelper {
             }
 
             return chp?.apply {
-                selected.latest = MangaNameAdapter.findChapterNumber(number) ?: 0f
+                selected.latest = MediaNameAdapter.findChapterNumber(number) ?: 0f
                 saveSelected(id, selected)
             }
         }
