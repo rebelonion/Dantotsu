@@ -27,7 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
+import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -603,11 +603,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             fun setMangaRepoVisibility(isChecked: Boolean) {
-                mangaRepoHeadingDivider.isVisible = isChecked
-                mangaRepoHeading.isVisible = isChecked
-                mangaRepoInventory.isVisible = isChecked
-                mangaRepoDivider.isVisible = isChecked
-                mangaAddRepository.isVisible = isChecked
+                mangaRepoHeadingDivider.isGone = isChecked
+                mangaRepoHeading.isGone = isChecked
+                mangaRepoInventory.isGone = isChecked
+                mangaRepoDivider.isGone = isChecked
+                mangaAddRepository.isGone = isChecked
             }
 
             mangaAddRepository.setOnClickListener {
