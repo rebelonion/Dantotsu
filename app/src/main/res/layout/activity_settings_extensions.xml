@@ -18,45 +18,59 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
-        <ani.dantotsu.others.Xpandable
+        <TextView
+            android:id="@+id/repoHeading"
+            android:paddingStart="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:textSize="14sp"
+            android:text="@string/repo_listing"
+            android:fontFamily="@font/poppins_bold"
+            tools:ignore="RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/repoInventory"
             android:paddingStart="16dp"
-            android:orientation="vertical"
-            tools:ignore="RtlSymmetry">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="64dp"
-                android:fontFamily="@font/poppins_bold"
-                android:gravity="center_vertical"
-                android:text="@string/manage_extension_repos"
-                android:textColor="?attr/colorSecondary"
-                app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
-                tools:ignore="TextContrastCheck" />
-
-            <EditText
-                android:id="@+id/repoEntry"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/example_url"
-                android:inputType="textUri"
-                android:autofillHints="@string/example_url"
-                android:textSize="14sp"/>
-
-            <TextView
-                android:id="@+id/repoInventory"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="14sp"/>
-
-        </ani.dantotsu.others.Xpandable>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            tools:ignore="RtlSymmetry" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="-16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
+        <Button
+            android:id="@+id/addRepository"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:backgroundTint="?attr/colorSecondary"
+            android:backgroundTintMode="src_atop"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="31dp"
+            android:text="@string/add_repository"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_github"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
             android:layout_marginEnd="-16dp"
             android:background="?android:attr/listDivider" />
 
@@ -72,8 +86,7 @@
             android:fontFamily="@font/poppins_bold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
+            android:paddingHorizontal="31dp"
             android:text="@string/user_agent"
             android:textAlignment="viewStart"
             android:textAllCaps="false"

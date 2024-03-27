@@ -546,15 +546,45 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         bindingExtensions = ActivitySettingsExtensionsBinding.bind(binding.root).apply {
 
-            repoEntry.setOnEditorActionListener { textView, action, keyEvent ->
+            fun processUserInput(input: String) {
+                val input = if (input.endsWith("/") || input.endsWith("index.min.json"))
+                    input.substring(0, input.lastIndexOf("/")) else input
+                PrefManager.setVal(PrefName.ExtensionRepo, input)
+                repoInventory.text = input
+            }
+
+            addRepository.setOnClickListener {
+                val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
+                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+                val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                    .setTitle(R.string.add_repository)
+                    .setView(dialogView)
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        processUserInput(editText.text.toString())
+                        dialog.dismiss()
+                    }
+                    .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
+                        PrefManager.removeVal(PrefName.DefaultUserAgent)
+                        editText.setText("")
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+
+                editText.setOnEditorActionListener { textView, action, keyEvent ->
                 if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE ||
                     (keyEvent?.action == KeyEvent.ACTION_UP
                             && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    PrefManager.setVal(PrefName.ExtensionRepo, textView.text.toString())
-                    repoInventory.text = PrefManager.getVal(PrefName.ExtensionRepo)
+                    processUserInput(editText.text.toString())
+                    alertDialog.dismiss()
                     true
                 }
                 false
+                }
+                alertDialog.show()
+                alertDialog.window?.setDimAmount(0.8f)
             }
 
             repoInventory.text = PrefManager.getVal(PrefName.ExtensionRepo)
