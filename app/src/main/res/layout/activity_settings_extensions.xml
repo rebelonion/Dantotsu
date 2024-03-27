@@ -2,7 +2,9 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <ani.dantotsu.others.Xpandable
+        android:id="@+id/extensionSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -18,14 +20,6 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
         <Button
             android:id="@+id/userAgent"
             android:layout_width="match_parent"
@@ -38,8 +32,7 @@
             android:fontFamily="@font/poppins_bold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
+            android:paddingHorizontal="31dp"
             android:text="@string/user_agent"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
@@ -55,7 +48,118 @@
             android:layout_height="1dp"
             android:layout_marginStart="-16dp"
             android:layout_marginEnd="-16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/animeRepoHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/anime_repo_listing"
+            android:textSize="14sp"
+            tools:ignore="RtlSymmetry" />
+
+        <LinearLayout
+            android:id="@+id/animeRepoInventory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingStart="36dp"
+            android:visibility="gone"
+            tools:ignore="RtlSymmetry"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/animeAddRepository"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:backgroundTint="?attr/colorSecondary"
+            android:backgroundTintMode="src_atop"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="31dp"
+            android:text="@string/anime_add_repository"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_github"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
+        <View
+            android:id="@+id/mangaRepoHeadingDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
+
+        <TextView
+            android:id="@+id/mangaRepoHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/manga_repo_listing"
+            android:textSize="14sp"
+            tools:ignore="RtlSymmetry" />
+
+        <LinearLayout
+            android:id="@+id/mangaRepoInventory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingStart="36dp"
+            android:visibility="gone"
+            tools:ignore="RtlSymmetry"
+            android:orientation="vertical" />
+
+        <Button
+            android:id="@+id/mangaAddRepository"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:backgroundTint="?attr/colorSecondary"
+            android:backgroundTintMode="src_atop"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="31dp"
+            android:text="@string/manga_add_repository"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_github"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+        <View
+            android:id="@+id/mangaRepoDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginBottom="16dp"
             android:background="?android:attr/listDivider" />
 
         <com.google.android.material.materialswitch.MaterialSwitch

@@ -252,7 +252,7 @@
     <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn\'t)"</string>
     <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
     <string name="sub_alpha">Subtitle Transparency</string>
-    <string name="sub_text_example">Example Subtitle</string>
+    <string name="sub_text_example">Example Sub</string>
     <string name="sub_font_select">Subtitle Font</string>
     <string name="subtitle_font_size">Subtitle Size</string>
 
@@ -417,6 +417,7 @@
     <string name="crop_borders">Crop Borders</string>
     <string name="note">NOTE</string>
 
+    <string name="manage_extension_repos">Manage Extension Repos</string>
     <string name="installing_extension">Installing extension</string>
     <string name="installation_failed">Installation failed: %1$s</string>
     <string name="installation_complete">Installation complete</string>
@@ -859,6 +860,13 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="title_color">Title Color</string>
     <string name="stat_text_color">Stats Text Color</string>
     <string name="placeholder">Placeholder</string>
+
+    <string name="anime_repo_listing">Anime Extension Repos</string>
+    <string name="anime_add_repository">Add Anime Repo</string>
+    <string name="manga_repo_listing">Manga Extension Repos</string>
+    <string name="manga_add_repository">Add Manga Repo</string>
+    <string name="long_click_delete">Long click to delete</string>
+    
     <string name="trending_movies">Trending Movies</string>
     <string name="include_list">Include list</string>
     <string name="top_rated">Top rated</string>

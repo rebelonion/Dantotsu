@@ -475,7 +475,7 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 updateSubPreview()
             }
         }
-        binding.subtitleTest.setOnChangeListener(object: Xpandable.OnChangeListener {
+        binding.subtitleTest.addOnChangeListener(object: Xpandable.OnChangeListener {
             override fun onExpand() {
                 updateSubPreview()
             }

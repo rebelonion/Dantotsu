@@ -13,12 +13,15 @@ import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
@@ -29,6 +32,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.view.HapticFeedbackConstants
 import androidx.core.view.ViewCompat.performHapticFeedback
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -51,6 +55,7 @@ import ani.dantotsu.databinding.ActivitySettingsExtensionsBinding
 import ani.dantotsu.databinding.ActivitySettingsMangaBinding
 import ani.dantotsu.databinding.ActivitySettingsNotificationsBinding
 import ani.dantotsu.databinding.ActivitySettingsThemeBinding
+import ani.dantotsu.databinding.ItemRepositoryBinding
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.downloadsPermission
@@ -89,13 +94,17 @@ import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
 import eltos.simpledialogfragment.color.SimpleColorDialog
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import kotlin.random.Random
 
 
@@ -114,6 +123,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     private lateinit var bindingAbout: ActivitySettingsAboutBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private var cursedCounter = 0
+
+    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
+    private val mangaExtensionManager: MangaExtensionManager by injectLazy()
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -583,6 +595,142 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         }
 
         bindingExtensions = ActivitySettingsExtensionsBinding.bind(binding.root).apply {
+
+            fun setExtensionOutput() {
+                animeRepoInventory.removeAllViews()
+                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).forEach { item ->
+                    val view = ItemRepositoryBinding.inflate(
+                        LayoutInflater.from(animeRepoInventory.context), animeRepoInventory, true
+                    )
+                    view.repositoryItem.text = item
+                    view.repositoryItem.setOnClickListener {
+                        snackString(getString(R.string.long_click_delete))
+                    }
+                    view.repositoryItem.setOnLongClickListener {
+                        val anime = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos)
+                            .minus(item)
+                        PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        setExtensionOutput()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            animeExtensionManager.findAvailableExtensions()
+                        }
+                        true
+                    }
+                }
+                animeRepoInventory.isVisible = animeRepoInventory.childCount > 0
+                mangaRepoInventory.removeAllViews()
+                PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).forEach { item ->
+                    val view = ItemRepositoryBinding.inflate(
+                        LayoutInflater.from(mangaRepoInventory.context), mangaRepoInventory, true
+                    )
+                    view.repositoryItem.text = item
+                    view.repositoryItem.setOnClickListener {
+                        snackString(getString(R.string.long_click_delete))
+                    }
+                    view.repositoryItem.setOnLongClickListener {
+                        val anime = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos)
+                            .minus(item)
+                        PrefManager.setVal(PrefName.MangaExtensionRepos, anime)
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        setExtensionOutput()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            mangaExtensionManager.findAvailableExtensions()
+                        }
+                        true
+                    }
+                }
+                mangaRepoInventory.isVisible = mangaRepoInventory.childCount > 0
+            }
+
+            fun processUserInput(input: String, mediaType: MediaType) {
+                val entry = if (input.endsWith("/") || input.endsWith("index.min.json"))
+                    input.substring(0, input.lastIndexOf("/")) else input
+                if (mediaType == MediaType.ANIME) {
+                    val anime = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).plus(entry)
+                    PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        animeExtensionManager.findAvailableExtensions()
+                    }
+                }
+                if (mediaType == MediaType.MANGA) {
+                    val manga = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).plus(entry)
+                    PrefManager.setVal(PrefName.MangaExtensionRepos, manga)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        mangaExtensionManager.findAvailableExtensions()
+                    }
+                }
+                setExtensionOutput()
+            }
+
+            fun processEditorAction(dialog: AlertDialog, editText: EditText, mediaType: MediaType) {
+                editText.setOnEditorActionListener { textView, action, keyEvent ->
+                    if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE ||
+                        (keyEvent?.action == KeyEvent.ACTION_UP
+                                && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        processUserInput(textView.text.toString(), mediaType)
+                        dialog.dismiss()
+                        return@setOnEditorActionListener true
+                    }
+                    false
+                }
+            }
+
+            setExtensionOutput()
+            animeAddRepository.setOnClickListener {
+                val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
+                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
+                    hint = getString(R.string.anime_add_repository)
+                }
+                val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                    .setTitle(R.string.anime_add_repository)
+                    .setView(dialogView)
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        processUserInput(editText.text.toString(), MediaType.ANIME)
+                        dialog.dismiss()
+                    }
+                    .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
+                        PrefManager.removeVal(PrefName.DefaultUserAgent)
+                        editText.setText("")
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+
+                processEditorAction(alertDialog, editText, MediaType.ANIME)
+                alertDialog.show()
+                alertDialog.window?.setDimAmount(0.8f)
+            }
+
+            mangaAddRepository.setOnClickListener {
+                val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
+                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
+                    hint = getString(R.string.manga_add_repository)
+                }
+                val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                    .setTitle(R.string.manga_add_repository)
+                    .setView(dialogView)
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        processUserInput(editText.text.toString(), MediaType.MANGA)
+                        dialog.dismiss()
+                    }
+                    .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
+                        PrefManager.removeVal(PrefName.DefaultUserAgent)
+                        editText.setText("")
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+
+                processEditorAction(alertDialog, editText, MediaType.MANGA)
+                alertDialog.show()
+                alertDialog.window?.setDimAmount(0.8f)
+            }
+
             settingsForceLegacyInstall.isChecked =
                 extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY
             settingsForceLegacyInstall.setOnCheckedChangeListener { _, isChecked ->
