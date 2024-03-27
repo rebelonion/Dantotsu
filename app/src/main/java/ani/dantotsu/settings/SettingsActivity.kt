@@ -20,12 +20,14 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -546,21 +548,43 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         bindingExtensions = ActivitySettingsExtensionsBinding.bind(binding.root).apply {
 
-            fun processUserInput(input: String) {
-                val input = if (input.endsWith("/") || input.endsWith("index.min.json"))
+            fun processUserInput(input: String, mediaType: MediaType) {
+                val entry = if (input.endsWith("/") || input.endsWith("index.min.json"))
                     input.substring(0, input.lastIndexOf("/")) else input
-                PrefManager.setVal(PrefName.ExtensionRepo, input)
-                repoInventory.text = input
+                if (mediaType == MediaType.ANIME) {
+                    PrefManager.setVal(PrefName.AnimeExtensionRepo, entry)
+                    animeRepoInventory.text = entry
+                }
+                if (mediaType == MediaType.MANGA) {
+                    PrefManager.setVal(PrefName.MangaExtensionRepo, entry)
+                    mangaRepoInventory.text = entry
+                }
             }
 
-            addRepository.setOnClickListener {
+            fun processEditorAction(dialog: AlertDialog, editText: EditText, mediaType: MediaType) {
+                editText.setOnEditorActionListener { textView, action, keyEvent ->
+                    if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE ||
+                        (keyEvent?.action == KeyEvent.ACTION_UP
+                                && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
+                        processUserInput(textView.text.toString(), mediaType)
+                        dialog.dismiss()
+                        true
+                    }
+                    false
+                }
+            }
+
+            animeRepoInventory.text = PrefManager.getVal(PrefName.AnimeExtensionRepo)
+            mangaRepoInventory.text = PrefManager.getVal(PrefName.MangaExtensionRepo)
+
+            animeAddRepository.setOnClickListener {
                 val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
                 val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
                 val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
-                    .setTitle(R.string.add_repository)
+                    .setTitle(R.string.anime_add_repository)
                     .setView(dialogView)
                     .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                        processUserInput(editText.text.toString())
+                        processUserInput(editText.text.toString(), MediaType.ANIME)
                         dialog.dismiss()
                     }
                     .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
@@ -573,21 +597,50 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     }
                     .create()
 
-                editText.setOnEditorActionListener { textView, action, keyEvent ->
-                if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE ||
-                    (keyEvent?.action == KeyEvent.ACTION_UP
-                            && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    processUserInput(editText.text.toString())
-                    alertDialog.dismiss()
-                    true
-                }
-                false
-                }
+                processEditorAction(alertDialog, editText, MediaType.ANIME)
                 alertDialog.show()
                 alertDialog.window?.setDimAmount(0.8f)
             }
 
-            repoInventory.text = PrefManager.getVal(PrefName.ExtensionRepo)
+            fun setMangaRepoVisibility(isChecked: Boolean) {
+                mangaRepoHeadingDivider.isVisible = isChecked
+                mangaRepoHeading.isVisible = isChecked
+                mangaRepoInventory.isVisible = isChecked
+                mangaRepoDivider.isVisible = isChecked
+                mangaAddRepository.isVisible = isChecked
+            }
+
+            mangaAddRepository.setOnClickListener {
+                val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
+                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+                val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                    .setTitle(R.string.manga_add_repository)
+                    .setView(dialogView)
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        processUserInput(editText.text.toString(), MediaType.MANGA)
+                        dialog.dismiss()
+                    }
+                    .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
+                        PrefManager.removeVal(PrefName.DefaultUserAgent)
+                        editText.setText("")
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+
+                processEditorAction(alertDialog, editText, MediaType.MANGA)
+                alertDialog.show()
+                alertDialog.window?.setDimAmount(0.8f)
+            }
+
+            settingsShareRepo.isChecked = PrefManager.getVal(PrefName.SharedRepositories)
+            setMangaRepoVisibility(settingsShareRepo.isChecked)
+            settingsShareRepo.setOnCheckedChangeListener { _, isChecked ->
+                setMangaRepoVisibility(isChecked)
+                PrefManager.setVal(PrefName.SharedRepositories, isChecked)
+            }
 
             settingsForceLegacyInstall.isChecked =
                 extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY

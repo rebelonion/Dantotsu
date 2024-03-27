@@ -33,8 +33,8 @@ internal class AnimeExtensionGithubApi {
         preferenceStore.getLong("last_ext_check", 0)
     }
 
-    private val repoAddress by lazy {
-        preferenceStore.getString(PrefName.ExtensionRepo.name, "").get()
+    private val extensionRepo by lazy {
+        preferenceStore.getString(PrefName.AnimeExtensionRepo.name, "").get()
     }
 
     private var requiresFallbackSource = false
@@ -46,7 +46,7 @@ internal class AnimeExtensionGithubApi {
             } else {
                 try {
                     networkService.client
-                        .newCall(GET("${repoAddress}/index.min.json"))
+                        .newCall(GET("${extensionRepo}/index.min.json"))
                         .awaitSuccess()
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
@@ -159,7 +159,7 @@ internal class AnimeExtensionGithubApi {
         return if (requiresFallbackSource) {
             FALLBACK_REPO_URL_PREFIX
         } else {
-            repoAddress
+            extensionRepo
         }
     }
 }

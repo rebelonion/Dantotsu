@@ -29,7 +29,9 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
             "Mozilla/5.0 (Linux; Android 13; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36"
         )
     ),
-    ExtensionRepo(Pref(Location.General, String::class, "")),
+    AnimeExtensionRepo(Pref(Location.General, String::class, "")),
+    MangaExtensionRepo(Pref(Location.General, String::class, "")),
+    SharedRepositories(Pref(Location.General, Boolean::class, false)),
     AnimeSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
     AnimeSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
     MangaSourcesOrder(Pref(Location.General, List::class, listOf<String>())),

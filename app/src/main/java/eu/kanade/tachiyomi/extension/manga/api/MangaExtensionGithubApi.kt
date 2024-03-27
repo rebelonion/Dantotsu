@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.extension.manga.api
 
 import android.content.Context
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -32,6 +33,13 @@ internal class MangaExtensionGithubApi {
         preferenceStore.getLong("last_ext_check", 0)
     }
 
+    private val extensionRepo by lazy {
+        if (preferenceStore.getBoolean(PrefName.SharedRepositories.name, false).get())
+            preferenceStore.getString(PrefName.AnimeExtensionRepo.name, "").get()
+        else
+            preferenceStore.getString(PrefName.MangaExtensionRepo.name, "").get()
+    }
+
     private var requiresFallbackSource = false
 
     suspend fun findExtensions(): List<MangaExtension.Available> {
@@ -41,7 +49,7 @@ internal class MangaExtensionGithubApi {
             } else {
                 try {
                     networkService.client
-                        .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
+                        .newCall(GET("${extensionRepo}/index.min.json"))
                         .awaitSuccess()
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
@@ -52,7 +60,7 @@ internal class MangaExtensionGithubApi {
 
             val response = githubResponse ?: run {
                 networkService.client
-                    .newCall(GET("${FALLBACK_REPO_URL_PREFIX}index.min.json"))
+                    .newCall(GET("${FALLBACK_REPO_URL_PREFIX}/index.min.json"))
                     .awaitSuccess()
             }
 
@@ -146,14 +154,14 @@ internal class MangaExtensionGithubApi {
     }
 
     fun getApkUrl(extension: MangaExtension.Available): String {
-        return "${getUrlPrefix()}apk/${extension.apkName}"
+        return "${getUrlPrefix()}/apk/${extension.apkName}"
     }
 
     private fun getUrlPrefix(): String {
         return if (requiresFallbackSource) {
             FALLBACK_REPO_URL_PREFIX
         } else {
-            REPO_URL_PREFIX
+            extensionRepo
         }
     }
 
@@ -162,8 +170,8 @@ internal class MangaExtensionGithubApi {
     }
 }
 
-private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/keiyoushi/extensions/main/"
-private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/keiyoushi/extensions@main/"
+private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/keiyoushi/extensions/main"
+private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/keiyoushi/extensions@main"
 
 @Serializable
 private data class ExtensionJsonObject(
