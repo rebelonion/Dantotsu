@@ -557,7 +557,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 mangaAddRepository.isGone = isChecked
             }
 
-            extensionSettings.setOnChangeListener(object : Xpandable.OnChangeListener {
+            extensionSettings.addOnChangeListener(object : Xpandable.OnChangeListener {
                 override fun onExpand() {
                     setMangaRepoVisibility(settingsShareRepo.isChecked)
                 }
