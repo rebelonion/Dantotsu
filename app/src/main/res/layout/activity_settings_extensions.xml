@@ -18,6 +18,31 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
+        <ani.dantotsu.others.Xpandable
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:paddingStart="16dp"
+                android:text="@string/manage_extension_repos"
+                android:textColor="?attr/colorSecondary"
+                app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
+                tools:ignore="RtlSymmetry,TextContrastCheck" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/extension_name"
+                android:text="@string/example_url"
+                android:inputType="textUri"/>
+
+        </ani.dantotsu.others.Xpandable>
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

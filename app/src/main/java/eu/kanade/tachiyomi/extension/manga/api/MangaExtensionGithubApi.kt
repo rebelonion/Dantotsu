@@ -163,8 +163,7 @@ internal class MangaExtensionGithubApi {
 }
 
 private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/keiyoushi/extensions/main/"
-private const val FALLBACK_REPO_URL_PREFIX =
-    "https://gcore.jsdelivr.net/gh/keiyoushi/extensions@main/"
+private const val FALLBACK_REPO_URL_PREFIX = "https://gcore.jsdelivr.net/gh/keiyoushi/extensions@main/"
 
 @Serializable
 private data class ExtensionJsonObject(

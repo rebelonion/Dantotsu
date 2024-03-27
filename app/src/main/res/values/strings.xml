@@ -409,6 +409,7 @@
     <string name="crop_borders">Crop Borders</string>
     <string name="note">NOTE</string>
 
+    <string name="manage_extension_repos">Manage Extension Repos</string>
     <string name="installing_extension">Installing extension</string>
     <string name="installation_failed">Installation failed: %1$s</string>
     <string name="installation_complete">Installation complete</string>
@@ -837,4 +838,5 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="title_color">Title Color</string>
     <string name="stat_text_color">Stats Text Color</string>
     <string name="placeholder">Placeholder</string>
+    <string name="example_url">https://raw.githubusercontent.com/</string>
 </resources>
