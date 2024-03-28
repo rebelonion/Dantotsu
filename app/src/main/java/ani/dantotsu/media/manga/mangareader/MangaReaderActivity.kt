@@ -388,14 +388,6 @@ class MangaReaderActivity : AppCompatActivity() {
                                     RPC.Link("View My AniList", anilistLink)
                                 )
                             }
-                            "custom" -> {
-                                val customButtonText = PrefManager.getCustomVal("custom_button_text", "")
-                                val customButtonLink = PrefManager.getCustomVal("custom_button_link", "")
-                                mutableListOf(
-                                    RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
-                                    RPC.Link(customButtonText, customButtonLink)
-                                )
-                            }
                             else -> mutableListOf()
                         }
                         val presence = RPC.createPresence(

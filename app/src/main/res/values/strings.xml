@@ -16,6 +16,8 @@
     <string name="telegram" translatable="false" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
     <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
 
+    <string name="anilist_link">https://anilist.co/user/%1$s/</string>
+
     <string name="home">Home</string>
     <string name="anime">Anime</string>
     <string name="browse_anime">Browse Anime</string>
@@ -414,7 +416,7 @@
     <string name="note">NOTE</string>
   
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
-    <string name="discord_anilist_button">Display your AniList profile</string>
+    <string name="discord_anilist_button">Display your AniList profile instead</string>
     <string name="discord_custom_button">Set up your own custom button</string>
     <string name="discord_rich_presence">Discord Rich Presence</string>
     <string name="stream_on_dantotsu">Stream on Dantotsu</string>
