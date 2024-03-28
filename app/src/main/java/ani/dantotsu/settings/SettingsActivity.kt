@@ -13,6 +13,7 @@ import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -20,7 +21,6 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -28,7 +28,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.isGone
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -42,7 +41,6 @@ import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currContext
-import ani.dantotsu.databinding.ActivityAuthorBinding.inflate
 import ani.dantotsu.databinding.ActivitySettingsAboutBinding
 import ani.dantotsu.databinding.ActivitySettingsAccountsBinding
 import ani.dantotsu.databinding.ActivitySettingsAnimeBinding
@@ -52,7 +50,6 @@ import ani.dantotsu.databinding.ActivitySettingsExtensionsBinding
 import ani.dantotsu.databinding.ActivitySettingsMangaBinding
 import ani.dantotsu.databinding.ActivitySettingsNotificationsBinding
 import ani.dantotsu.databinding.ActivitySettingsThemeBinding
-import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.databinding.ItemRepositoryBinding
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
@@ -70,7 +67,6 @@ import ani.dantotsu.openLinkInYouTube
 import ani.dantotsu.openSettings
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
-import ani.dantotsu.others.Xpandable
 import ani.dantotsu.pop
 import ani.dantotsu.reloadActivity
 import ani.dantotsu.restartApp
@@ -92,13 +88,17 @@ import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
 import eltos.simpledialogfragment.color.SimpleColorDialog
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import kotlin.random.Random
 
 
@@ -117,6 +117,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     private lateinit var bindingAbout: ActivitySettingsAboutBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private var cursedCounter = 0
+
+    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
+    private val mangaExtensionManager: MangaExtensionManager by injectLazy()
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -567,7 +570,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         val anime = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos)
                             .minus(item)
                         PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                         setExtensionOutput()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            animeExtensionManager.findAvailableExtensions()
+                        }
                         true
                     }
                 }
@@ -584,7 +591,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         val anime = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos)
                             .minus(item)
                         PrefManager.setVal(PrefName.MangaExtensionRepos, anime)
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                         setExtensionOutput()
+                        CoroutineScope(Dispatchers.IO).launch {
+                            mangaExtensionManager.findAvailableExtensions()
+                        }
                         true
                     }
                 }
@@ -596,10 +607,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 if (mediaType == MediaType.ANIME) {
                     val anime = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).plus(entry)
                     PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        animeExtensionManager.findAvailableExtensions()
+                    }
                 }
                 if (mediaType == MediaType.MANGA) {
                     val manga = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).plus(entry)
                     PrefManager.setVal(PrefName.MangaExtensionRepos, manga)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        mangaExtensionManager.findAvailableExtensions()
+                    }
                 }
                 setExtensionOutput()
             }
@@ -611,7 +628,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                                 && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
                         processUserInput(textView.text.toString(), mediaType)
                         dialog.dismiss()
-                        true
+                        return@setOnEditorActionListener true
                     }
                     false
                 }
