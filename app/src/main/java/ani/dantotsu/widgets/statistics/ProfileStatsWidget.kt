@@ -113,10 +113,8 @@ class ProfileStatsWidget : AppWidgetProvider() {
 
             launchIO {
                 val userPref = PrefManager.getVal(PrefName.AnilistUserId, "")
-                val userId = if (userPref.isNotEmpty()) userPref.toInt() else Anilist.userid
-                    ?: if (Anilist.query.getUserData()) Anilist.userid else null
-                userId?.let {
-                    val respond = Anilist.query.getUserProfile(it)
+                if (userPref.isNotEmpty()) {
+                    val respond = Anilist.query.getUserProfile(userPref.toInt())
                     respond?.data?.user?.let { user ->
                         withContext(Dispatchers.Main) {
                             val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {
@@ -195,7 +193,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                                 )
 
                                 val intent = Intent(context, ProfileActivity::class.java)
-                                    .putExtra("userId", it)
+                                    .putExtra("userId", userPref.toInt())
                                 val pendingIntent = PendingIntent.getActivity(
                                     context, 0, intent, PendingIntent.FLAG_IMMUTABLE
                                 )
@@ -205,7 +203,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                             appWidgetManager.updateAppWidget(appWidgetId, views)
                         }
                     } ?: showLoginCascade(context, appWidgetManager, appWidgetId)
-                } ?: showLoginCascade(context, appWidgetManager, appWidgetId)
+                } else showLoginCascade(context, appWidgetManager, appWidgetId)
             }
         }
 
