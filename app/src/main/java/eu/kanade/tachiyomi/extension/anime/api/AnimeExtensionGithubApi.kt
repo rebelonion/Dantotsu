@@ -1,6 +1,7 @@
 package eu.kanade.tachiyomi.extension.anime.api
 
 import android.content.Context
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
@@ -33,44 +34,34 @@ internal class AnimeExtensionGithubApi {
         preferenceStore.getLong("last_ext_check", 0)
     }
 
-    private val extensionRepo by lazy {
-        preferenceStore.getString(PrefName.AnimeExtensionRepo.name, "").get()
-    }
-
-    private var requiresFallbackSource = false
-
     suspend fun findExtensions(): List<AnimeExtension.Available> {
         return withIOContext {
-            val githubResponse = if (requiresFallbackSource) {
-                null
-            } else {
+
+            val extensions: ArrayList<AnimeExtension.Available> = arrayListOf()
+
+            PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).forEach {
                 try {
-                    networkService.client
-                        .newCall(GET("${extensionRepo}/index.min.json"))
-                        .awaitSuccess()
+                    val githubResponse =
+                        networkService.client
+                            .newCall(GET("${it}/index.min.json"))
+                            .awaitSuccess()
+
+                    val repoExtensions = with(json) {
+                        githubResponse
+                            .parseAs<List<AnimeExtensionJsonObject>>()
+                            .toExtensions(it)
+                    }
+
+                    // Sanity check - a small number of extensions probably means something broke
+                    // with the repo generator
+                    if (repoExtensions.size < 10) {
+                        throw Exception()
+                    }
+
+                    extensions.addAll(repoExtensions)
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
-                    requiresFallbackSource = true
-                    null
                 }
-            }
-
-            val response = githubResponse ?: run {
-                networkService.client
-                    .newCall(GET("${FALLBACK_REPO_URL_PREFIX}/index.min.json"))
-                    .awaitSuccess()
-            }
-
-            val extensions = with(json) {
-                response
-                    .parseAs<List<AnimeExtensionJsonObject>>()
-                    .toExtensions()
-            }
-
-            // Sanity check - a small number of extensions probably means something broke
-            // with the repo generator
-            if (extensions.size < 10) {
-                throw Exception()
             }
 
             extensions
@@ -116,7 +107,7 @@ internal class AnimeExtensionGithubApi {
         return extensionsWithUpdate
     }
 
-    private fun List<AnimeExtensionJsonObject>.toExtensions(): List<AnimeExtension.Available> {
+    private fun List<AnimeExtensionJsonObject>.toExtensions(repository: String): List<AnimeExtension.Available> {
         return this
             .filter {
                 val libVersion = it.extractLibVersion()
@@ -135,7 +126,8 @@ internal class AnimeExtensionGithubApi {
                     hasChangelog = it.hasChangelog == 1,
                     sources = it.sources?.toAnimeExtensionSources().orEmpty(),
                     apkName = it.apk,
-                    iconUrl = "${getUrlPrefix()}/icon/${it.pkg}.png",
+                    repository = repository,
+                    iconUrl = "${repository}/icon/${it.pkg}.png",
                 )
             }
     }
@@ -152,15 +144,7 @@ internal class AnimeExtensionGithubApi {
     }
 
     fun getApkUrl(extension: AnimeExtension.Available): String {
-        return "${getUrlPrefix()}/apk/${extension.apkName}"
-    }
-
-    private fun getUrlPrefix(): String {
-        return if (requiresFallbackSource) {
-            FALLBACK_REPO_URL_PREFIX
-        } else {
-            extensionRepo
-        }
+        return "${extension.repository}/apk/${extension.apkName}"
     }
 }
 

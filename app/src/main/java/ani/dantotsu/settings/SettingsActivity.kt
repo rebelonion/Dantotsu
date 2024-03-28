@@ -549,33 +549,32 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
         bindingExtensions = ActivitySettingsExtensionsBinding.bind(binding.root).apply {
 
-            fun setMangaRepoVisibility(isChecked: Boolean) {
-                mangaRepoHeadingDivider.isGone = isChecked
-                mangaRepoHeading.isGone = isChecked
-                mangaRepoInventory.isGone = isChecked
-                mangaRepoDivider.isGone = isChecked
-                mangaAddRepository.isGone = isChecked
-            }
-
-            extensionSettings.addOnChangeListener(object : Xpandable.OnChangeListener {
-                override fun onExpand() {
-                    setMangaRepoVisibility(settingsShareRepo.isChecked)
+            fun setExtensionOutput() {
+                var animeRepos = ""
+                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).forEach {
+                    animeRepos += "\n$it"
                 }
-
-                override fun onRetract() { }
-            })
+                animeRepoInventory.text = animeRepos.trimStart()
+                var mangaRepos = ""
+                PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).forEach {
+                    mangaRepos += "\n$it"
+                }
+                mangaRepoInventory.text = mangaRepos.trimStart()
+            }
 
             fun processUserInput(input: String, mediaType: MediaType) {
                 val entry = if (input.endsWith("/") || input.endsWith("index.min.json"))
                     input.substring(0, input.lastIndexOf("/")) else input
                 if (mediaType == MediaType.ANIME) {
-                    PrefManager.setVal(PrefName.AnimeExtensionRepo, entry)
-                    animeRepoInventory.text = entry
+                    val anime = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).plus(entry)
+                    PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
                 }
                 if (mediaType == MediaType.MANGA) {
-                    PrefManager.setVal(PrefName.MangaExtensionRepo, entry)
-                    mangaRepoInventory.text = entry
+                    val manga = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).plus(entry)
+                    PrefManager.setVal(PrefName.MangaExtensionRepos, manga)
+                    mangaRepoInventory.text = manga.toString()
                 }
+                setExtensionOutput()
             }
 
             fun processEditorAction(dialog: AlertDialog, editText: EditText, mediaType: MediaType) {
@@ -591,13 +590,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 }
             }
 
-            animeRepoInventory.text = PrefManager.getVal(PrefName.AnimeExtensionRepo)
-            mangaRepoInventory.text = PrefManager.getVal(PrefName.MangaExtensionRepo)
-
+            setExtensionOutput()
             animeAddRepository.setOnClickListener {
                 val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
                 val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
-                    hint = PrefManager.getVal(PrefName.AnimeExtensionRepo)
+                    hint = getString(R.string.anime_add_repository)
                 }
                 val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
                     .setTitle(R.string.anime_add_repository)
@@ -624,7 +621,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             mangaAddRepository.setOnClickListener {
                 val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
                 val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
-                    hint = PrefManager.getVal(PrefName.MangaExtensionRepo)
+                    hint = getString(R.string.manga_add_repository)
                 }
                 val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
                     .setTitle(R.string.manga_add_repository)
@@ -646,12 +643,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 processEditorAction(alertDialog, editText, MediaType.MANGA)
                 alertDialog.show()
                 alertDialog.window?.setDimAmount(0.8f)
-            }
-
-            settingsShareRepo.isChecked = PrefManager.getVal(PrefName.SharedRepositories)
-            settingsShareRepo.setOnCheckedChangeListener { _, isChecked ->
-                PrefManager.setVal(PrefName.SharedRepositories, isChecked)
-                setMangaRepoVisibility(isChecked)
             }
 
             settingsForceLegacyInstall.isChecked =
