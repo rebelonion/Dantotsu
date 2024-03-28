@@ -596,7 +596,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
             animeAddRepository.setOnClickListener {
                 val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
-                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
+                    hint = PrefManager.getVal(PrefName.AnimeExtensionRepo)
+                }
                 val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
                     .setTitle(R.string.anime_add_repository)
                     .setView(dialogView)
@@ -621,7 +623,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
             mangaAddRepository.setOnClickListener {
                 val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
-                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
+                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
+                    hint = PrefManager.getVal(PrefName.MangaExtensionRepo)
+                }
                 val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
                     .setTitle(R.string.manga_add_repository)
                     .setView(dialogView)
