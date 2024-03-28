@@ -113,6 +113,7 @@ import ani.dantotsu.isOnline
 import ani.dantotsu.logError
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.okHttpClient
 import ani.dantotsu.others.AniSkip
@@ -998,7 +999,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         episodeTitleArr = arrayListOf()
         episodes.forEach {
             val episode = it.value
-            val cleanedTitle = AnimeNameAdapter.removeEpisodeNumberCompletely(episode.title ?: "")
+            val cleanedTitle = MediaNameAdapter.removeEpisodeNumberCompletely(episode.title ?: "")
             episodeTitleArr.add("Episode ${episode.number}${if (episode.filler) " [Filler]" else ""}${if (cleanedTitle.isNotBlank() && cleanedTitle != "null") ": $cleanedTitle" else ""}")
         }
 

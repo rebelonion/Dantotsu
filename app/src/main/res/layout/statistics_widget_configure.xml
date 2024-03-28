@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
+        android:gravity="center"
         android:fontFamily="@font/poppins_bold"
-        android:text="@string/configure" />
+        android:text="@string/profile_stats_widget" />
 
     <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/useAppTheme"
@@ -105,7 +106,7 @@
         app:iconTint="?attr/colorPrimary" />
 
     <Button
-        android:id="@+id/countdownColorButton"
+        android:id="@+id/statsColorButton"
         android:layout_width="match_parent"
         android:layout_height="64dp"
         android:layout_marginStart="-31dp"
@@ -118,7 +119,7 @@
         android:insetBottom="0dp"
         android:paddingStart="31dp"
         android:paddingEnd="31dp"
-        android:text="@string/countdown_text_color"
+        android:text="@string/stat_text_color"
         android:textAlignment="viewStart"
         android:textAllCaps="false"
         android:textColor="?attr/colorOnBackground"
@@ -128,7 +129,7 @@
         app:iconSize="24dp"
         app:iconTint="?attr/colorPrimary" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/add_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

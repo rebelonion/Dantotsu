@@ -26,6 +26,7 @@ import ani.dantotsu.isOnline
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.openSettings
 import ani.dantotsu.others.LanguageMapper
@@ -403,7 +404,7 @@ class AnimeWatchAdapter(
                     }
                     val ep = media.anime.episodes!![continueEp]!!
 
-                    val cleanedTitle = ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
+                    val cleanedTitle = ep.title?.let { MediaNameAdapter.removeEpisodeNumber(it) }
 
                     binding.itemEpisodeImage.loadImage(
                         ep.thumb ?: FileUrl[media.banner ?: media.cover], 0

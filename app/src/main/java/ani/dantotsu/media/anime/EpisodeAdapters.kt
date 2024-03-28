@@ -21,6 +21,7 @@ import ani.dantotsu.databinding.ItemEpisodeListBinding
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
 import com.bumptech.glide.Glide
@@ -102,7 +103,7 @@ class EpisodeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val ep = arr[position]
         val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {
-            ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
+            ep.title?.let { MediaNameAdapter.removeEpisodeNumber(it) }
         } else {
             ep.number
         } ?: ""

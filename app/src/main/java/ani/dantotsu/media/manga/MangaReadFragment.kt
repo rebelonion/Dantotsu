@@ -41,6 +41,7 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaType
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
@@ -227,7 +228,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         val chapters = media.manga?.chapters?.values?.toList()
         //filter by selected language
         val progressChapterIndex = (chapters?.indexOfFirst {
-            MangaNameAdapter.findChapterNumber(it.number)?.toInt() == selected
+            MediaNameAdapter.findChapterNumber(it.number)?.toInt() == selected
         } ?: 0) + 1
 
         if (progressChapterIndex < 0 || n < 1 || chapters == null) return

@@ -50,16 +50,21 @@ class FeedFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity()
 
-        binding.listRecyclerView.setBaseline((activity as ProfileActivity).navBar)
+        userId = arguments?.getInt("userId", -1)
+        activityId = arguments?.getInt("activityId", -1) ?: -1
+        if (userId == -1) userId = null
+        global = arguments?.getBoolean("global", false) ?: false
+
+        val navBar = if (userId != null)
+                (activity as ProfileActivity).navBar
+        else
+                (activity as FeedActivity).navBar
+        binding.listRecyclerView.setBaseline(navBar)
 
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
-        userId = arguments?.getInt("userId", -1)
-        activityId = arguments?.getInt("activityId", -1) ?: -1
-        if (userId == -1) userId = null
-        global = arguments?.getBoolean("global", false) ?: false
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -67,7 +72,11 @@ class FeedFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-            binding.listRecyclerView.setBaseline((activity as ProfileActivity).navBar)
+            val navBar = if (userId != null)
+                (activity as ProfileActivity).navBar
+            else
+                (activity as FeedActivity).navBar
+            binding.listRecyclerView.setBaseline(navBar)
             if (!loadedFirstTime) {
                 activity.lifecycleScope.launch(Dispatchers.IO) {
                     val nulledId = if (activityId == -1) null else activityId

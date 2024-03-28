@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
+import ani.dantotsu.databinding.FragmentExtensionsBinding
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
@@ -49,7 +49,7 @@ import java.util.Locale
 class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
 
-    private var _binding: FragmentAnimeExtensionsBinding? = null
+    private var _binding: FragmentExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
     private val skipIcons: Boolean = PrefManager.getVal(PrefName.SkipExtensionIcons)
@@ -183,9 +183,9 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAnimeExtensionsBinding.inflate(inflater, container, false)
+        _binding = FragmentExtensionsBinding.inflate(inflater, container, false)
 
-        extensionsRecyclerView = binding.allAnimeExtensionsRecyclerView
+        extensionsRecyclerView = binding.allExtensionsRecyclerView
         extensionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         extensionsRecyclerView.adapter = extensionsAdapter
 

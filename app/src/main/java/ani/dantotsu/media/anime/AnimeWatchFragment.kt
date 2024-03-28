@@ -41,6 +41,7 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaType
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
 import ani.dantotsu.notifications.subscription.SubscriptionHelper.Companion.saveSubscription
@@ -224,7 +225,7 @@ class AnimeWatchFragment : Fragment() {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
                                 episode.desc =
                                     media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
-                                episode.title = if (AnimeNameAdapter.removeEpisodeNumberCompletely(
+                                episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
                                         episode.title ?: ""
                                     ).isBlank()
                                 ) media.anime!!.kitsuEpisodes!![i]?.title

@@ -9,6 +9,7 @@
     <color name="bg_opp">@color/bg_black</color>
     <color name="fg">#A8000000</color>
     <color name="bg_black_50" alpha="128">#80000000</color>
+    <color name="bg_white_50" alpha="128">#80FFFFFF</color>
     <color name="nav_bg">#fff</color>
     <color name="nav_bg_inv">#00BFAEAE</color>
     <color name="gradiant_bg_start">#ACACAC</color>

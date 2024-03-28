@@ -5,7 +5,7 @@ import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.media.MediaType
-import ani.dantotsu.media.anime.AnimeNameAdapter
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.tryWithSuspend
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
@@ -54,7 +54,7 @@ class OfflineAnimeParser : AnimeParser() {
                     episodes.add(episode)
                 }
             }
-            episodes.sortBy { AnimeNameAdapter.findEpisodeNumber(it.number) }
+            episodes.sortBy { MediaNameAdapter.findEpisodeNumber(it.number) }
             return episodes
         }
         return emptyList()
