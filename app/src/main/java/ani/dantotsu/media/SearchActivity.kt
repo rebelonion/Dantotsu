@@ -70,6 +70,7 @@ class SearchActivity : AppCompatActivity() {
                 intent.getStringExtra("type") ?: "ANIME",
                 isAdult = if (Anilist.adult) intent.getBooleanExtra("hentai", false) else false,
                 onList = listOnly,
+                search = intent.getStringExtra("query"),
                 genres = intent.getStringExtra("genre")?.let { mutableListOf(it) },
                 tags = intent.getStringExtra("tag")?.let { mutableListOf(it) },
                 sort = intent.getStringExtra("sortBy"),
