@@ -137,7 +137,7 @@ internal class MangaExtensionGithubApi {
                     hasChangelog = it.hasChangelog == 1,
                     sources = it.sources?.toExtensionSources().orEmpty(),
                     apkName = it.apk,
-                    iconUrl = "${getUrlPrefix()}icon/${it.pkg}.png",
+                    iconUrl = "${getUrlPrefix()}/icon/${it.pkg}.png",
                 )
             }
     }
