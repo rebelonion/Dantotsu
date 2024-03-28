@@ -2,6 +2,7 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <ani.dantotsu.others.Xpandable
         android:id="@+id/extensionSettings"
         android:layout_width="match_parent"
@@ -52,30 +53,21 @@
 
         <TextView
             android:id="@+id/animeRepoHeading"
-            android:paddingStart="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:textSize="14sp"
-            android:text="@string/anime_repo_listing"
             android:fontFamily="@font/poppins_bold"
+            android:text="@string/anime_repo_listing"
+            android:textSize="14sp"
             tools:ignore="RtlSymmetry" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/animeRepoInventory"
-            android:paddingStart="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:textSize="12sp"
-            tools:ignore="RtlSymmetry" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
+            android:paddingStart="36dp"
+            tools:ignore="RtlSymmetry"
+            android:orientation="vertical" />
 
         <Button
             android:id="@+id/animeAddRepository"
@@ -101,6 +93,13 @@
             app:iconTint="?attr/colorPrimary" />
 
         <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
+        <View
             android:id="@+id/mangaRepoHeadingDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -111,31 +110,21 @@
 
         <TextView
             android:id="@+id/mangaRepoHeading"
-            android:paddingStart="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:textSize="14sp"
-            android:text="@string/manga_repo_listing"
             android:fontFamily="@font/poppins_bold"
+            android:text="@string/manga_repo_listing"
+            android:textSize="14sp"
             tools:ignore="RtlSymmetry" />
 
-        <TextView
+        <LinearLayout
             android:id="@+id/mangaRepoInventory"
-            android:paddingStart="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:textSize="12sp"
-            tools:ignore="RtlSymmetry" />
-
-        <View
-            android:id="@+id/mangaRepoDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
+            android:paddingStart="36dp"
+            tools:ignore="RtlSymmetry"
+            android:orientation="vertical" />
 
         <Button
             android:id="@+id/mangaAddRepository"
@@ -159,6 +148,15 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
+
+        <View
+            android:id="@+id/mangaRepoDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsForceLegacyInstall"

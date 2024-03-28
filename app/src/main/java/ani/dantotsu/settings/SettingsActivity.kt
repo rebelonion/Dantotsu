@@ -20,6 +20,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -41,6 +42,7 @@ import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currContext
+import ani.dantotsu.databinding.ActivityAuthorBinding.inflate
 import ani.dantotsu.databinding.ActivitySettingsAboutBinding
 import ani.dantotsu.databinding.ActivitySettingsAccountsBinding
 import ani.dantotsu.databinding.ActivitySettingsAnimeBinding
@@ -50,6 +52,8 @@ import ani.dantotsu.databinding.ActivitySettingsExtensionsBinding
 import ani.dantotsu.databinding.ActivitySettingsMangaBinding
 import ani.dantotsu.databinding.ActivitySettingsNotificationsBinding
 import ani.dantotsu.databinding.ActivitySettingsThemeBinding
+import ani.dantotsu.databinding.ItemCountDownBinding
+import ani.dantotsu.databinding.ItemRepositoryBinding
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.video.ExoplayerDownloadService
 import ani.dantotsu.downloadsPermission
@@ -550,16 +554,40 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         bindingExtensions = ActivitySettingsExtensionsBinding.bind(binding.root).apply {
 
             fun setExtensionOutput() {
-                var animeRepos = ""
-                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).forEach {
-                    animeRepos += "\n$it"
+                animeRepoInventory.removeAllViews()
+                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).forEach { item ->
+                    val view = ItemRepositoryBinding.inflate(
+                        LayoutInflater.from(animeRepoInventory.context), animeRepoInventory, true
+                    )
+                    view.repositoryItem.text = item
+                    view.repositoryItem.setOnClickListener {
+                        snackString(getString(R.string.long_click_delete))
+                    }
+                    view.repositoryItem.setOnLongClickListener {
+                        val anime = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos)
+                            .minus(item)
+                        PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
+                        setExtensionOutput()
+                        true
+                    }
                 }
-                animeRepoInventory.text = animeRepos.trimStart()
-                var mangaRepos = ""
-                PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).forEach {
-                    mangaRepos += "\n$it"
+                mangaRepoInventory.removeAllViews()
+                PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).forEach { item ->
+                    val view = ItemRepositoryBinding.inflate(
+                        LayoutInflater.from(mangaRepoInventory.context), mangaRepoInventory, true
+                    )
+                    view.repositoryItem.text = item
+                    view.repositoryItem.setOnClickListener {
+                        snackString(getString(R.string.long_click_delete))
+                    }
+                    view.repositoryItem.setOnLongClickListener {
+                        val anime = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos)
+                            .minus(item)
+                        PrefManager.setVal(PrefName.MangaExtensionRepos, anime)
+                        setExtensionOutput()
+                        true
+                    }
                 }
-                mangaRepoInventory.text = mangaRepos.trimStart()
             }
 
             fun processUserInput(input: String, mediaType: MediaType) {
@@ -572,7 +600,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 if (mediaType == MediaType.MANGA) {
                     val manga = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).plus(entry)
                     PrefManager.setVal(PrefName.MangaExtensionRepos, manga)
-                    mangaRepoInventory.text = manga.toString()
                 }
                 setExtensionOutput()
             }
