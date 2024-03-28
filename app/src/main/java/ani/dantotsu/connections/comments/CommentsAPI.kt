@@ -505,6 +505,9 @@ data class Comment(
     val username: String,
     @SerialName("profile_picture_url")
     val profilePictureUrl: String?,
+    @SerialName("is_dev")
+    @Serializable(with = NumericBooleanSerializer::class)
+    val isDev: Boolean? = null,
     @SerialName("is_mod")
     @Serializable(with = NumericBooleanSerializer::class)
     val isMod: Boolean? = null,
