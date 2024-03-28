@@ -15,7 +15,9 @@ apikey.properties
 captures/
 .externalNativeBuild/
 .cxx/
+*.aar
 *.apk
+*.jar
 output.json
 
 # IntelliJ

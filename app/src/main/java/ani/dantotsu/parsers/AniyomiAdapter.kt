@@ -558,7 +558,7 @@ class VideoServerPassthrough(private val videoServer: VideoServer) : VideoExtrac
                 format = VideoType.CONTAINER
             }
         } catch (malformed: MalformedURLException) {
-            if (videoUrl.startsWith("magnet:"))
+            if (videoUrl.startsWith("magnet:") || videoUrl.endsWith(".torrent"))
                 format = VideoType.CONTAINER
             else
                 throw malformed

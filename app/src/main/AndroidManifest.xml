@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk tools:overrideLibrary="go.server.gojni" />
+
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
@@ -404,6 +406,9 @@
             android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+
+        <service android:name="eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService"
+            android:foregroundServiceType="dataSync"/>
 
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"

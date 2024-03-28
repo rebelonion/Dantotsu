@@ -9,6 +9,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.BottomSheetDialogFragment
@@ -27,6 +29,7 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currActivity
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
 import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
@@ -45,11 +48,15 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWith
-import ani.dantotsu.util.Logger
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat
@@ -226,11 +233,6 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
     }
 
-    private val externalPlayerResult = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
-        Logger.log(result.data.toString())
-    }
-
     private fun exportMagnetIntent(episode: Episode, video: Video) : Intent {
         val amnis = "com.amnis"
         return Intent(Intent.ACTION_VIEW).apply {
@@ -249,38 +251,74 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
+    private fun launchWithExternalPlayer(episode: Episode, video: Video) {
+        try {
+            startActivity(exportMagnetIntent(episode, video))
+        } catch (e: ActivityNotFoundException) {
+            val amnis = "com.amnis"
+            try {
+                startActivity(Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=$amnis"))
+                )
+            } catch (e: ActivityNotFoundException) {
+                startActivity(Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://play.google.com/store/apps/details?id=$amnis")
+                ))
+            }
+        }
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    @androidx.annotation.OptIn(UnstableApi::class)
+    private fun launchWithTorrentServer(video: Video, media: Media) {
+        launchIO {
+            TorrentServerService.start()
+            TorrentServerService.wait(10)
+            TorrentServerUtils.setTrackersList()
+            val index = if (video.file.url.contains("index=")) {
+                 try {
+                    video.file.url.substringAfter("index=").toInt()
+                } catch (e: NumberFormatException) { 0 }
+            } else 0
+            val currentTorrent = TorrentServerApi.addTorrent(
+                video.file.url, video.quality.toString(), "", "", false
+            )
+            video.file.url = TorrentServerUtils.getTorrentPlayLink(currentTorrent, index)
+            val intent = Intent(currContext(), ExoplayerView::class.java)
+            ExoplayerView.media = media
+            ExoplayerView.initialized = true
+            startActivity(intent)
+            dismiss()
+        }
+    }
+
     @SuppressLint("UnsafeOptInUsageError")
     fun startExoplayer(media: Media) {
         prevEpisode = null
-
-        dismiss()
 
         episode?.let { ep ->
             val video = ep.extractors?.find {
                 it.server.name == ep.selectedExtractor
             }?.videos?.getOrNull(ep.selectedVideo)
-            video?.file?.url?.let { url ->
-                if (url.startsWith("magnet:")) {
-                    try {
-                        externalPlayerResult.launch(exportMagnetIntent(ep, video))
-                    } catch (e: ActivityNotFoundException) {
-                        val amnis = "com.amnis"
-                        try {
-                            startActivity(Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("market://details?id=$amnis"))
-                            )
-                        } catch (e: ActivityNotFoundException) {
-                            startActivity(Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://play.google.com/store/apps/details?id=$amnis")
-                            ))
-                        }
+            video?.file?.url?.let { videoUrl ->
+                if (videoUrl.startsWith("magnet:") || videoUrl.endsWith(".torrent")) {
+                    stopAddingToList()
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        binding.selectorRecyclerView.visibility = View.GONE
+                        binding.selectorProgressBar.visibility = View.VISIBLE
+                        launchWithTorrentServer(video, media)
+                    } else {
+                        dismiss()
+                        launchWithExternalPlayer(ep, video)
                     }
                     return
                 }
             }
         }
+
+        dismiss()
 
         if (launch!! || model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)) {
             stopAddingToList()
@@ -295,6 +333,8 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             )
         }
     }
+
+
 
     private fun stopAddingToList() {
         episode?.extractorCallback = null

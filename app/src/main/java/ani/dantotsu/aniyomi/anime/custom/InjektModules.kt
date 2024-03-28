@@ -13,6 +13,7 @@ import ani.dantotsu.parsers.novel.NovelExtensionManager
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.core.preference.AndroidPreferenceStore
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerPreferences
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -81,5 +82,7 @@ class PreferenceModule(val application: Application) : InjektModule {
         addSingletonFactory {
             BasePreferences(application, get())
         }
+
+        addSingletonFactory { TorrentServerPreferences(get()) }
     }
 }

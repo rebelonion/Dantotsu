@@ -144,6 +144,7 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.slider.Slider
 import com.lagradost.nicehttp.ignoreAllSSLErrors
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -1965,6 +1966,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             functionstarted = false
             releasePlayer()
         }
+
+        try {
+            TorrentServerService.stop()
+        } catch (ignored: Exception) { }
 
         super.onDestroy()
         finishAndRemoveTask()

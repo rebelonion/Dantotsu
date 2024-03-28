@@ -73,6 +73,23 @@ android {
     namespace 'ani.dantotsu'
 }
 
+tasks.register('torrserver') {
+    def f = new File('app/libs/server.aar')
+    if (!f.exists()) {
+        new URL(
+                'https://github.com/RepoDevil/TorrServer/raw/matagi/server.aar'
+        ).withInputStream { i -> f.withOutputStream { it << i } }
+    }
+    def s = new File('app/libs/server-sources.jar')
+    if (!s.exists()) {
+        new URL(
+                'https://github.com/RepoDevil/TorrServer/raw/matagi/server-sources.jar'
+        ).withInputStream { i -> s.withOutputStream { it << i } }
+    }
+}
+
+build.dependsOn tasks.torrserver
+
 dependencies {
 
 //  FireBase
@@ -115,6 +132,9 @@ dependencies {
 //  Media3 Casting
     implementation "androidx.media3:media3-cast:$exo_version"
     implementation "androidx.mediarouter:mediarouter:1.7.0"
+
+//  Torrent Streaming
+    implementation fileTree(dir: 'libs', include: ['*.aar', '*.jar'])
 
 //  UI
     implementation 'com.google.android.material:material:1.11.0'
