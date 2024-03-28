@@ -35,6 +35,7 @@ import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemQuelsBinding
 import ani.dantotsu.databinding.ItemTitleChipgroupBinding
 import ani.dantotsu.databinding.ItemTitleRecyclerBinding
+import ani.dantotsu.databinding.ItemTitleSearchBinding
 import ani.dantotsu.databinding.ItemTitleTextBinding
 import ani.dantotsu.databinding.ItemTitleTrailerBinding
 import ani.dantotsu.loadImage
@@ -90,7 +91,6 @@ class MediaInfoFragment : Fragment() {
         model.getMedia().observe(viewLifecycleOwner) { media ->
             if (media != null && !loaded) {
                 loaded = true
-
 
                 binding.mediaInfoProgressBar.visibility = View.GONE
                 binding.mediaInfoContainer.visibility = View.VISIBLE
@@ -438,113 +438,138 @@ class MediaInfoFragment : Fragment() {
 
                 if (!media.relations.isNullOrEmpty() && !offline) {
                     if (media.sequel != null || media.prequel != null) {
-                        val bind = ItemQuelsBinding.inflate(
+                        ItemQuelsBinding.inflate(
                             LayoutInflater.from(context),
                             parent,
                             false
-                        )
+                        ).apply {
 
-                        if (media.sequel != null) {
-                            bind.mediaInfoSequel.visibility = View.VISIBLE
-                            bind.mediaInfoSequelImage.loadImage(
-                                media.sequel!!.banner ?: media.sequel!!.cover
-                            )
-                            bind.mediaInfoSequel.setSafeOnClickListener {
-                                ContextCompat.startActivity(
-                                    requireContext(),
-                                    Intent(
-                                        requireContext(),
-                                        MediaDetailsActivity::class.java
-                                    ).putExtra(
-                                        "media",
-                                        media.sequel as Serializable
-                                    ), null
+                            if (media.sequel != null) {
+                                mediaInfoSequel.visibility = View.VISIBLE
+                                mediaInfoSequelImage.loadImage(
+                                    media.sequel!!.banner ?: media.sequel!!.cover
                                 )
-                            }
-                        }
-                        if (media.prequel != null) {
-                            bind.mediaInfoPrequel.visibility = View.VISIBLE
-                            bind.mediaInfoPrequelImage.loadImage(
-                                media.prequel!!.banner ?: media.prequel!!.cover
-                            )
-                            bind.mediaInfoPrequel.setSafeOnClickListener {
-                                ContextCompat.startActivity(
-                                    requireContext(),
-                                    Intent(
+                                mediaInfoSequel.setSafeOnClickListener {
+                                    ContextCompat.startActivity(
                                         requireContext(),
-                                        MediaDetailsActivity::class.java
-                                    ).putExtra(
-                                        "media",
-                                        media.prequel as Serializable
-                                    ), null
-                                )
+                                        Intent(
+                                            requireContext(),
+                                            MediaDetailsActivity::class.java
+                                        ).putExtra(
+                                            "media",
+                                            media.sequel as Serializable
+                                        ), null
+                                    )
+                                }
                             }
+                            if (media.prequel != null) {
+                                mediaInfoPrequel.visibility = View.VISIBLE
+                                mediaInfoPrequelImage.loadImage(
+                                    media.prequel!!.banner ?: media.prequel!!.cover
+                                )
+                                mediaInfoPrequel.setSafeOnClickListener {
+                                    ContextCompat.startActivity(
+                                        requireContext(),
+                                        Intent(
+                                            requireContext(),
+                                            MediaDetailsActivity::class.java
+                                        ).putExtra(
+                                            "media",
+                                            media.prequel as Serializable
+                                        ), null
+                                    )
+                                }
+                            }
+                            parent.addView(root)
                         }
-                        parent.addView(bind.root)
+
+                        ItemTitleSearchBinding.inflate(
+                            LayoutInflater.from(context),
+                            parent,
+                            false
+                        ).apply {
+
+                            titleSearchImage.loadImage(media.banner ?: media.cover)
+                            titleSearchText.text =
+                                getString(R.string.search_title, media.mainName())
+                            titleSearchCard.setSafeOnClickListener {
+                                val query = Intent(requireContext(), SearchActivity::class.java)
+                                    .putExtra("type", "ANIME")
+                                    .putExtra("query", media.mainName())
+                                    .putExtra("search", true)
+                                ContextCompat.startActivity(requireContext(), query, null)
+                            }
+
+                            parent.addView(root)
+                        }
                     }
 
-                    val bindi = ItemTitleRecyclerBinding.inflate(
+                    ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
                         false
-                    )
+                    ).apply {
 
-                    bindi.itemRecycler.adapter =
-                        MediaAdaptor(0, media.relations!!, requireActivity())
-                    bindi.itemRecycler.layoutManager = LinearLayoutManager(
-                        requireContext(),
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                    parent.addView(bindi.root)
+                        itemRecycler.adapter =
+                            MediaAdaptor(0, media.relations!!, requireActivity())
+                        itemRecycler.layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
+                        parent.addView(root)
+                    }
                 }
                 if (!media.characters.isNullOrEmpty() && !offline) {
-                    val bind = ItemTitleRecyclerBinding.inflate(
+                    ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
                         false
-                    )
-                    bind.itemTitle.setText(R.string.characters)
-                    bind.itemRecycler.adapter =
-                        CharacterAdapter(media.characters!!)
-                    bind.itemRecycler.layoutManager = LinearLayoutManager(
-                        requireContext(),
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                    parent.addView(bind.root)
+                    ).apply {
+                        itemTitle.setText(R.string.characters)
+                        itemRecycler.adapter =
+                            CharacterAdapter(media.characters!!)
+                        itemRecycler.layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
+                        parent.addView(root)
+                    }
                 }
                 if (!media.staff.isNullOrEmpty() && !offline) {
-                    val bind = ItemTitleRecyclerBinding.inflate(
+                    ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
                         false
-                    )
-                    bind.itemTitle.setText(R.string.staff)
-                    bind.itemRecycler.adapter =
-                        AuthorAdapter(media.staff!!)
-                    bind.itemRecycler.layoutManager = LinearLayoutManager(
-                        requireContext(),
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                    parent.addView(bind.root)
+                    ).apply {
+                        itemTitle.setText(R.string.staff)
+                        itemRecycler.adapter =
+                            AuthorAdapter(media.staff!!)
+                        itemRecycler.layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
+                        parent.addView(root)
+                    }
                 }
                 if (!media.recommendations.isNullOrEmpty() && !offline) {
-                    val bind = ItemTitleRecyclerBinding.inflate(
+                    ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
                         false
-                    )
-                    bind.itemTitle.setText(R.string.recommended)
-                    bind.itemRecycler.adapter =
-                        MediaAdaptor(0, media.recommendations!!, requireActivity())
-                    bind.itemRecycler.layoutManager = LinearLayoutManager(
-                        requireContext(),
-                        LinearLayoutManager.HORIZONTAL,
-                        false
-                    )
-                    parent.addView(bind.root)
+                    ).apply {
+                        itemTitle.setText(R.string.recommended)
+                        itemRecycler.adapter =
+                            MediaAdaptor(0, media.recommendations!!, requireActivity())
+                        itemRecycler.layoutManager = LinearLayoutManager(
+                            requireContext(),
+                            LinearLayoutManager.HORIZONTAL,
+                            false
+                        )
+                        parent.addView(root)
+                    }
                 }
             }
         }
@@ -569,6 +594,7 @@ class MediaInfoFragment : Fragment() {
                 }
             }
         }
+
         super.onViewCreated(view, null)
     }
 

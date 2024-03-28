@@ -9,13 +9,12 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
+    
+    <string name="dantotsu" translatable="false">https://dantotsu.app/</string>
     <string name="discord" translatable="false">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github" translatable="false">https://github.com/rebelonion/Dantotsu</string>
-    <string name="dantotsu" translatable="false">https://dantotsu.app/</string>
-    <string name="telegram" tools:ignore="Typos" translatable="false">https://t.me/+gzBCQExtLQo1YTNh </string>
+    <string name="telegram" translatable="false" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
     <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
-    <string name="anilist_link">https://anilist.co/user/%1$s/</string>
-
 
     <string name="home">Home</string>
     <string name="anime">Anime</string>
@@ -52,10 +51,10 @@
     <string name="popular_manga">Popular Manga</string>
 
     <string name="username">Username</string>
-    <string name="chapters_read">"Chapters Read "</string>
-    <string name="chapters_read_n">"Chapters\nRead "</string>
-    <string name="episodes_watched">"Episodes Watched "</string>
-    <string name="episodes_watched_n">"Episodes\nWatched "</string>
+    <string name="chapters_read">Chapters Read</string>
+    <string name="chapters_read_n">Chapters\nRead</string>
+    <string name="episodes_watched">Episodes Watched</string>
+    <string name="episodes_watched_n">Episodes\nWatched</string>
     <string name="continue_reading">Continue Reading</string>
     <string name="continue_watching">Continue Watching</string>
     <string name="recommended">Recommended</string>
@@ -413,6 +412,16 @@
     <string name="sort_by_release_date">Sort by Release Date</string>
     <string name="crop_borders">Crop Borders</string>
     <string name="note">NOTE</string>
+  
+    <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
+    <string name="discord_anilist_button">Display your AniList profile</string>
+    <string name="discord_custom_button">Set up your own custom button</string>
+    <string name="discord_rich_presence">Discord Rich Presence</string>
+    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
+    <string name="view_my_anilist">View My AniList</string>
+    <string name="button_text">Button Text</string>
+    <string name="button_link">Button Link</string>
+    <string name="discord_custom_sample">Sample</string>
 
     <string name="installing_extension">Installing extension</string>
     <string name="installation_failed">Installation failed: %1$s</string>
@@ -665,15 +674,6 @@
     <string name="discord_try_again">Try logging-in again</string>
     <string name="error_loading_discord_user_data">Error loading Discord User Data</string>
     <string name="discord_warning"><![CDATA[By logging in, your discord will now show what you are watching & reading on Dantotsu\n\nIf you are on invisible mode, logging in will make you online, when you open Dantotsu.\n\nThis does break the Discord TOS. \nAlthough Discord has never banned anyone for using Custom Rich Presence(what Dantotsu uses), You have still been warned.\n\nDantotsu is not responsible for anything that happens to your account.]]></string>
-    <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
-    <string name="discord_anilist_button">Display your AniList profile</string>
-    <string name="discord_custom_button">Set up your own custom button</string>
-    <string name="discord_rich_presence">Discord Rich Presence</string>
-    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
-    <string name="view_my_anilist">View My AniList</string>
-    <string name="button_text">Button Text</string>
-    <string name="button_link">Button Link</string>
-    <string name="discord_custom_sample">Sample</string>
     <string name="warning">Warning</string>
     <string name="view_anime">View Anime</string>
     <string name="view_manga">View Manga</string>
@@ -834,6 +834,9 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="donate">donate :)</string>
     <string name="do_it">Do it!</string>
     <string name="password">Password</string>
+
+    <string name="search_title">Search %1$s</string>
+
     <string name="profile_stats_widget">Track progress directly from your home screen</string>
     <string name="anime_watched">Anime\nWatched</string>
     <string name="manga_read">Manga\nRead</string>
