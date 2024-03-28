@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:description="@string/upcoming_anime"
-    android:configure="ani.dantotsu.widgets.upcoming.UpcomingWidgetConfigureActivity"
+    android:configure="ani.dantotsu.widgets.upcoming.UpcomingWidgetConfigure"
     android:initialKeyguardLayout="@layout/upcoming_widget"
     android:initialLayout="@layout/upcoming_widget"
     android:minWidth="160dp"

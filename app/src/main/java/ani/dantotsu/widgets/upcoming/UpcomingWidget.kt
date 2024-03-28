@@ -10,7 +10,6 @@ import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
-import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
@@ -19,7 +18,7 @@ import ani.dantotsu.widgets.WidgetSizeProvider
 
 /**
  * Implementation of App Widget functionality.
- * App Widget Configuration implemented in [UpcomingWidgetConfigureActivity]
+ * App Widget Configuration implemented in [UpcomingWidgetConfigure]
  */
 class UpcomingWidget : AppWidgetProvider() {
     override fun onUpdate(
@@ -118,7 +117,7 @@ class UpcomingWidget : AppWidgetProvider() {
                     PendingIntent.getActivity(
                         context,
                         1,
-                        Intent(context, UpcomingWidgetConfigureActivity::class.java).apply {
+                        Intent(context, UpcomingWidgetConfigure::class.java).apply {
                             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
                         },
                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE

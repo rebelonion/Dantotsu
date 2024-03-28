@@ -110,7 +110,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:text="@string/episodes_watched"/>
+                    android:text="@string/episodes_watched_n"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -181,7 +181,7 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:fontFamily="@font/poppins_semi_bold"
-                    android:text="@string/chapters_read"/>
+                    android:text="@string/chapters_read_n"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

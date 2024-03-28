@@ -10,8 +10,8 @@
         </shape>
     </item>
     <item
-        android:left="-2dp"
-        android:right="-2dp"
+        android:left="-3dp"
+        android:right="-3dp"
         android:bottom="-50dp">
         <shape>
             <stroke android:width="2dp" android:color="@color/bg_white" />

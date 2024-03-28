@@ -173,7 +173,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                                 )
                                 setTextViewText(
                                     R.id.topRightLabel,
-                                    context.getString(R.string.episodes_watched)
+                                    context.getString(R.string.episodes_watched_n)
                                 )
 
                                 setTextViewText(
@@ -191,7 +191,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                                 )
                                 setTextViewText(
                                     R.id.bottomRightLabel,
-                                    context.getString(R.string.chapters_read)
+                                    context.getString(R.string.chapters_read_n)
                                 )
 
                                 val intent = Intent(context, ProfileActivity::class.java)

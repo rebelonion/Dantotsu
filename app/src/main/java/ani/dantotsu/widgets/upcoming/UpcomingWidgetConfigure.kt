@@ -19,12 +19,12 @@ import eltos.simpledialogfragment.color.SimpleColorDialog
 /**
  * The configuration screen for the [UpcomingWidget] AppWidget.
  */
-class UpcomingWidgetConfigureActivity : AppCompatActivity(),
+class UpcomingWidgetConfigure : AppCompatActivity(),
     SimpleDialog.OnDialogResultListener {
     private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
     private var isMonetEnabled = false
     private var onClickListener = View.OnClickListener {
-        val context = this@UpcomingWidgetConfigureActivity
+        val context = this@UpcomingWidgetConfigure
         val appWidgetManager = AppWidgetManager.getInstance(context)
 
         updateAppWidget(
@@ -55,7 +55,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
             SimpleColorDialog().title(R.string.custom_theme)
                 .colorPreset(topBackground)
                 .colors(
-                    this@UpcomingWidgetConfigureActivity,
+                    this@UpcomingWidgetConfigure,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
                 )
                 .setupColorWheelAlpha(true)
@@ -64,7 +64,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .gridNumColumn(5)
                 .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
                 .neg()
-                .show(this@UpcomingWidgetConfigureActivity, tag)
+                .show(this@UpcomingWidgetConfigure, tag)
         }
         val bottomBackground = prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
         (binding.bottomBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(bottomBackground)
@@ -73,7 +73,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
             SimpleColorDialog().title(R.string.custom_theme)
                 .colorPreset(bottomBackground)
                 .colors(
-                    this@UpcomingWidgetConfigureActivity,
+                    this@UpcomingWidgetConfigure,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
                 )
                 .setupColorWheelAlpha(true)
@@ -82,7 +82,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .gridNumColumn(5)
                 .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
                 .neg()
-                .show(this@UpcomingWidgetConfigureActivity, tag)
+                .show(this@UpcomingWidgetConfigure, tag)
         }
         val titleTextColor = prefs.getInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)
         (binding.titleColorButton as MaterialButton).iconTint = ColorStateList.valueOf(titleTextColor)
@@ -91,7 +91,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
             SimpleColorDialog().title(R.string.custom_theme)
                 .colorPreset(titleTextColor)
                 .colors(
-                    this@UpcomingWidgetConfigureActivity,
+                    this@UpcomingWidgetConfigure,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
                 )
                 .allowCustom(true)
@@ -99,7 +99,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .gridNumColumn(5)
                 .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
                 .neg()
-                .show(this@UpcomingWidgetConfigureActivity, tag)
+                .show(this@UpcomingWidgetConfigure, tag)
         }
         val countdownTextColor = prefs.getInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
         (binding.countdownColorButton as MaterialButton).iconTint = ColorStateList.valueOf(countdownTextColor)
@@ -108,7 +108,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
             SimpleColorDialog().title(R.string.custom_theme)
                 .colorPreset(countdownTextColor)
                 .colors(
-                    this@UpcomingWidgetConfigureActivity,
+                    this@UpcomingWidgetConfigure,
                     SimpleColorDialog.MATERIAL_COLOR_PALLET
                 )
                 .allowCustom(true)
@@ -116,7 +116,7 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                 .gridNumColumn(5)
                 .choiceMode(SimpleColorDialog.SINGLE_CHOICE)
                 .neg()
-                .show(this@UpcomingWidgetConfigureActivity, tag)
+                .show(this@UpcomingWidgetConfigure, tag)
         }
         binding.useAppTheme.setOnCheckedChangeListener { _, isChecked ->
             isMonetEnabled = isChecked
@@ -186,6 +186,8 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                                 extras.getInt(SimpleColorDialog.COLOR)
                             )
                             .apply()
+                        (binding.topBackgroundButton as MaterialButton).iconTint =
+                            ColorStateList.valueOf(extras.getInt(SimpleColorDialog.COLOR))
                     }
 
                     UpcomingWidget.PREF_BACKGROUND_FADE -> {
@@ -198,6 +200,8 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                                 extras.getInt(SimpleColorDialog.COLOR)
                             )
                             .apply()
+                        (binding.bottomBackgroundButton as MaterialButton).iconTint =
+                            ColorStateList.valueOf(extras.getInt(SimpleColorDialog.COLOR))
                     }
 
                     UpcomingWidget.PREF_TITLE_TEXT_COLOR -> {
@@ -210,6 +214,8 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                                 extras.getInt(SimpleColorDialog.COLOR)
                             )
                             .apply()
+                        (binding.titleColorButton as MaterialButton).iconTint =
+                            ColorStateList.valueOf(extras.getInt(SimpleColorDialog.COLOR))
                     }
 
                     UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR -> {
@@ -222,6 +228,8 @@ class UpcomingWidgetConfigureActivity : AppCompatActivity(),
                                 extras.getInt(SimpleColorDialog.COLOR)
                             )
                             .apply()
+                        (binding.countdownColorButton as MaterialButton).iconTint =
+                            ColorStateList.valueOf(extras.getInt(SimpleColorDialog.COLOR))
                     }
 
                 }

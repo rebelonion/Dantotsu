@@ -215,6 +215,8 @@ class ProfileStatsConfigure : AppCompatActivity(),
                                 extras.getInt(SimpleColorDialog.COLOR)
                             )
                             .apply()
+                        (binding.topBackgroundButton as MaterialButton).iconTint =
+                            ColorStateList.valueOf(extras.getInt(SimpleColorDialog.COLOR))
                     }
 
                     ProfileStatsWidget.PREF_BACKGROUND_FADE -> {
@@ -227,6 +229,8 @@ class ProfileStatsConfigure : AppCompatActivity(),
                                 extras.getInt(SimpleColorDialog.COLOR)
                             )
                             .apply()
+                        (binding.bottomBackgroundButton as MaterialButton).iconTint =
+                            ColorStateList.valueOf(extras.getInt(SimpleColorDialog.COLOR))
                     }
 
                     ProfileStatsWidget.PREF_TITLE_TEXT_COLOR -> {
@@ -239,6 +243,8 @@ class ProfileStatsConfigure : AppCompatActivity(),
                                 extras.getInt(SimpleColorDialog.COLOR)
                             )
                             .apply()
+                        (binding.titleColorButton as MaterialButton).iconTint =
+                            ColorStateList.valueOf(extras.getInt(SimpleColorDialog.COLOR))
                     }
 
                     ProfileStatsWidget.PREF_STATS_TEXT_COLOR -> {
@@ -251,6 +257,8 @@ class ProfileStatsConfigure : AppCompatActivity(),
                                 extras.getInt(SimpleColorDialog.COLOR)
                             )
                             .apply()
+                        (binding.statsColorButton as MaterialButton).iconTint =
+                            ColorStateList.valueOf(extras.getInt(SimpleColorDialog.COLOR))
                     }
                 }
             }
