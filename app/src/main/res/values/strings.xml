@@ -823,6 +823,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="do_it">Do it!</string>
     <string name="password">Password</string>
 
+    <string name="search_title">Search %1$s</string>
+
     <string name="profile_stats_widget">Track progress directly from your home screen</string>
     <string name="anime_watched">Anime\nWatched</string>
     <string name="manga_read">Manga\nRead</string>
