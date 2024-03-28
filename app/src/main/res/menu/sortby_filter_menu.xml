@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/sort_by_score"
+        android:title="Score" />
+    <item
+        android:id="@+id/sort_by_popular"
+        android:title="Popular" />
+    <item
+        android:id="@+id/sort_by_trending"
+        android:title="Trending" />
+    <item
+        android:id="@+id/sort_by_recent"
+        android:title="New Releases" />
+    <item
+        android:id="@+id/sort_by_a_z"
+        android:title="A-Z" />
+    <item
+        android:id="@+id/sort_by_z_a"
+        android:title="Z-A" />
+    <item
+        android:id="@+id/sort_by_pure_pain"
+        android:title="Pure pain" />
+</menu>
