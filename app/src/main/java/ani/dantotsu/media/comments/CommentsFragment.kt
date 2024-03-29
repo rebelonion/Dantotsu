@@ -370,7 +370,6 @@ class CommentsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         tag = null
-        binding.commentsList.setBaseline(activity.navBar, activity.binding.commentInputLayout)
         section.groups.forEach {
             if (it is CommentItem && it.containsGif()) {
                 it.notifyChanged()
