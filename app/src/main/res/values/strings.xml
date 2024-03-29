@@ -839,4 +839,9 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="title_color">Title Color</string>
     <string name="stat_text_color">Stats Text Color</string>
     <string name="placeholder">Placeholder</string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="include_list">Include list</string>
+    <string name="top_rated">Top rated</string>
+    <string name="most_favourite">Most Favourite</string>
+    <string name="trending_manhwa">Trending Manhwa</string>
 </resources>

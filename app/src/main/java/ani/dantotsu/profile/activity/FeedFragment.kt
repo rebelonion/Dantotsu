@@ -55,12 +55,12 @@ class FeedFragment : Fragment() {
         if (userId == -1) userId = null
         global = arguments?.getBoolean("global", false) ?: false
 
-        val navBar = if (userId != null)
-                (activity as ProfileActivity).navBar
-        else
-                (activity as FeedActivity).navBar
+        val navBar = if (userId != null) {
+            (activity as ProfileActivity).navBar
+        }else{
+            (activity as FeedActivity).navBar
+        }
         binding.listRecyclerView.setBaseline(navBar)
-
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
@@ -72,10 +72,11 @@ class FeedFragment : Fragment() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-            val navBar = if (userId != null)
+            val navBar = if (userId != null) {
                 (activity as ProfileActivity).navBar
-            else
+            }else{
                 (activity as FeedActivity).navBar
+            }
             binding.listRecyclerView.setBaseline(navBar)
             if (!loadedFirstTime) {
                 activity.lifecycleScope.launch(Dispatchers.IO) {

@@ -152,7 +152,31 @@ class Query {
             @SerialName("mangaMediaList") val mangaMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?
         )
     }
-
+    @Serializable
+    data class AnimeList(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("trendingMovie") val trendingMovie: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
+        )
+    }
+    @Serializable
+    data class MangaList(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("trendingManga") val trendingManga: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingManhwa") val trendingManhwa: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
+        )
+    }
     @Serializable
     data class ToggleFollow(
         @SerialName("data")
