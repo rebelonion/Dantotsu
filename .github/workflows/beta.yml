@@ -19,14 +19,14 @@ jobs:
       with:
         fetch-depth: 0
 
-        
+
     - name: Download last SHA artifact
       uses: dawidd6/action-download-artifact@v3
       with:
         workflow: beta.yml
         name: last-sha
         path: .
-      
+
       continue-on-error: true
 
     - name: Get Commits Since Last Run
@@ -63,22 +63,36 @@ jobs:
         echo "Version $VERSION"
         echo "VERSION=$VERSION" >> $GITHUB_ENV
 
+    - uses: suisei-cn/actions-download-file@818d6b7dc8fe73f2f924b6241f2b1134ca1377d9 # 1.6.0
+      id: downloadserver  # Remember to give an ID if you need the output filename
+      name: Download server.aar
+      with:
+        url: "https://github.com/RepoDevil/TorrServer/raw/matagi/server.aar"
+        target: app/libs/
+
+    - uses: suisei-cn/actions-download-file@818d6b7dc8fe73f2f924b6241f2b1134ca1377d9 # 1.6.0
+      id: downloadsources  # Remember to give an ID if you need the output filename
+      name: Download server-sources.jar
+      with:
+        url: "https://github.com/RepoDevil/TorrServer/raw/matagi/server-sources.jar"
+        target: app/libs/
+
     - name: Setup JDK 17
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: 17
         cache: gradle
-  
+
     - name: Decode Keystore File
       run: echo "${{ secrets.KEYSTORE_FILE }}" | base64 -d > $GITHUB_WORKSPACE/key.keystore
-  
+
     - name: List files in the directory
       run: ls -l
-  
+
     - name: Make gradlew executable
       run: chmod +x ./gradlew
-  
+
     - name: Build with Gradle
       run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
@@ -87,7 +101,7 @@ jobs:
       with:
           name: Dantotsu
           path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
-            
+
     - name: Upload APK to Discord and Telegram
       if: ${{ github.repository == 'rebelonion/Dantotsu' }}
       shell: bash
@@ -101,7 +115,7 @@ jobs:
         fi
         contentbody=$( jq -nc --arg msg "Alpha-Build: <@714249925248024617> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
         curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
-        
+
         #Telegram
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
