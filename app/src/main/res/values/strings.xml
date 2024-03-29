@@ -175,6 +175,7 @@
     <string name="offline_mode">Offline Mode</string>
     <string name="settings">Settings</string>
     <string name="extensions">Extensions</string>
+    <string name="extension_updates_available">Extension updates available</string>
     <string name="player_settings">Player Settings</string>
     <string name="recentlyListOnly">Only show my content in \"Recently Updated\"</string>
     <string name="download_manager_select">Download Manager</string>
@@ -418,6 +419,7 @@
     <string name="extension_installed">Extension installed</string>
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
+    <string name="review">Review</string>
 
     <string name="jobless_message">DAMN! YOU TRULY ARE JOBLESS\nYOU REACHED THE END</string>
     <string name="file_manager_not_found">Couldn\'t find any File Manager to open SD card</string>

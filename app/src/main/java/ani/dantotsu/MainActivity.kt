@@ -15,6 +15,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
@@ -54,6 +55,7 @@ import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.profile.activity.NotificationActivity
+import ani.dantotsu.settings.ExtensionsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.PrefName
@@ -232,11 +234,10 @@ class MainActivity : AppCompatActivity() {
         if (preferences.animeExtensionUpdatesCount()
                 .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
         ) {
-            Toast.makeText(
-                this,
-                "You have extension updates available!",
-                Toast.LENGTH_LONG
-            ).show()
+            snackString(R.string.extension_updates_available)?.setAction(R.string.review) {
+                startActivity(Intent(this, ExtensionsActivity::class.java))
+            }
+
         }
 
         binding.root.isMotionEventSplittingEnabled = false
@@ -482,7 +483,7 @@ class MainActivity : AppCompatActivity() {
         dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)?.hint = "Password"
         val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
         subtitleTextView?.visibility = View.VISIBLE
-        subtitleTextView?.text = "Enter your password to decrypt the file"
+        subtitleTextView?.text = getString(R.string.enter_password_to_decrypt_file)
 
         val dialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle("Enter Password")
