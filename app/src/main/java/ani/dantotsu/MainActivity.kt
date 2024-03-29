@@ -230,16 +230,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val preferences: SourcePreferences = Injekt.get()
-        if (preferences.animeExtensionUpdatesCount()
-                .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
-        ) {
-            snackString(R.string.extension_updates_available)?.setAction(R.string.review) {
-                startActivity(Intent(this, ExtensionsActivity::class.java))
-            }
-
-        }
-
         binding.root.isMotionEventSplittingEnabled = false
 
         lifecycleScope.launch {
@@ -283,6 +273,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
+            val preferences: SourcePreferences = Injekt.get()
+            if (preferences.animeExtensionUpdatesCount()
+                    .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
+            ) {
+                snackString(R.string.extension_updates_available)
+                    ?.setDuration(Snackbar.LENGTH_LONG)
+                    ?.setAction(R.string.review) {
+                        startActivity(Intent(this, ExtensionsActivity::class.java))
+                    }
+            }
             window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
             selectedOption = if (fragment != null) {
                 when (fragment) {
