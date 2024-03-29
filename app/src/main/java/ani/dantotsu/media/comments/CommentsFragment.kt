@@ -75,7 +75,7 @@ class CommentsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as MediaDetailsActivity
 
-        binding.commentsList.setBaseline(activity.navBar, activity.binding.commentInputLayout)
+        binding.commentsListContainer.setBaseline(activity.navBar, activity.binding.commentInputLayout)
 
         //get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
