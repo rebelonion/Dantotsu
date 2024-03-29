@@ -49,9 +49,9 @@
     <string name="popular_manga">Popular Manga</string>
 
     <string name="username">Username</string>
-    <string name="chapters_read">Chapters Read</string>
+    <string name="chapters_read">Chapters Read </string>
     <string name="chapters_read_n">Chapters\nRead</string>
-    <string name="episodes_watched">Episodes Watched</string>
+    <string name="episodes_watched">Episodes Watched </string>
     <string name="episodes_watched_n">Episodes\nWatched</string>
     <string name="continue_reading">Continue Reading</string>
     <string name="continue_watching">Continue Watching</string>
