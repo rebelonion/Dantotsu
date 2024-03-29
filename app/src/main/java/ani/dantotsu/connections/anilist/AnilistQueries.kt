@@ -1043,10 +1043,10 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
     }
 
     private fun trendingManga(): String{
-        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA, onList:${PrefManager.getVal<Boolean>(PrefName.IncludeMangaList)}){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA,countryOfOrigin:JP ,onList:${PrefManager.getVal<Boolean>(PrefName.IncludeMangaList)}){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
     }
     private fun trendingManhwa(): String{
-        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA, countryOfOrigin:KR onList:${PrefManager.getVal<Boolean>(PrefName.IncludeMangaList)}){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA, countryOfOrigin:KR ,onList:${PrefManager.getVal<Boolean>(PrefName.IncludeMangaList)}){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
     }
     private fun topRatedManga(): String{
         return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort: SCORE_DESC, type: MANGA,onList:${PrefManager.getVal<Boolean>(PrefName.IncludeMangaList)}){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""

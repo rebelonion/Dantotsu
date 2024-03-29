@@ -343,7 +343,6 @@
             android:text="@string/include_media_in_list"
             android:textSize="12sp" />
 
-
     </LinearLayout>
 
 </LinearLayout>

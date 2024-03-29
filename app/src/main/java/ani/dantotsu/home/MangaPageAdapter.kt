@@ -178,6 +178,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         trendingBinding.titleContainer.startAnimation(setSlideUp())
         binding.mangaListContainer.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
+
     }
 
     fun updateTrendingManga(adaptor: MediaAdaptor) {
@@ -259,6 +260,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         binding.mangaNovel.startAnimation(setSlideUp())
         binding.mangaNovelRecyclerView.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
+        binding.mangaPopular.visibility = View.VISIBLE
+        binding.mangaPopular.startAnimation(setSlideUp())
     }
 
     fun updateAvatar() {
