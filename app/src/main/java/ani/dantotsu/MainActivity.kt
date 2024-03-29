@@ -15,11 +15,9 @@ import android.os.Looper
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
@@ -70,11 +68,13 @@ import com.google.android.material.textfield.TextInputEditText
 import eu.kanade.domain.source.service.SourcePreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.Serializable
@@ -99,7 +99,6 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         androidx.work.WorkManager.getInstance(this)
             .enqueue(OneTimeWorkRequest.Companion.from(CommentNotificationWorker::class.java))
@@ -464,6 +463,12 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
+    }
+
+    @kotlin.OptIn(DelicateCoroutinesApi::class)
+    override fun onDestroy() {
+        launchIO { torrServerStop() }
+        super.onDestroy()
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

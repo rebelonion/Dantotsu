@@ -122,6 +122,8 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
 import com.google.android.material.snackbar.Snackbar
 import eu.kanade.tachiyomi.data.notification.Notifications
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerUtils
+import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
 import io.noties.markwon.MarkwonConfiguration
@@ -1406,4 +1408,21 @@ fun buildMarkwon(
         }))
         .build()
     return markwon
+}
+
+suspend fun torrServerStart() {
+    if (!TorrentServerService.isRunning()) {
+        TorrentServerService.start()
+        TorrentServerService.wait(10)
+        TorrentServerUtils.setTrackersList()
+    }
+}
+
+suspend fun torrServerStop() {
+    if (TorrentServerService.isRunning()) {
+        try {
+            TorrentServerService.stop()
+        } catch (ignored: Exception) {
+        }
+    }
 }

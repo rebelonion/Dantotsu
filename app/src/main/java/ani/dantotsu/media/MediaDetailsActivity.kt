@@ -53,15 +53,18 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.torrServerStart
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import tachiyomi.core.util.lang.launchIO
 import kotlin.math.abs
 
 
@@ -75,6 +78,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     var anime = true
     private var adult = false
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +108,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         // Ui init
 
         initActivity(this)
+        if (media.anime != null) launchIO { torrServerStart() }
         binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
         val oldMargin = binding.mediaViewPager.marginBottom
         AndroidBug5497Workaround.assistActivity(this) {

@@ -144,12 +144,14 @@ import com.google.android.gms.common.ConnectionResult
 import com.google.android.gms.common.GoogleApiAvailability
 import com.google.android.material.slider.Slider
 import com.lagradost.nicehttp.ignoreAllSSLErrors
-import eu.kanade.tachiyomi.data.torrentServer.service.TorrentServerService
+import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.util.Calendar
@@ -215,6 +217,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     companion object {
         var initialized = false
         lateinit var media: Media
+        var torrentHash: String? = null
     }
 
     private lateinit var episode: Episode
@@ -384,6 +387,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         )
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -405,6 +409,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         hideSystemBarsExtendView()
 
         onBackPressedDispatcher.addCallback(this) {
+            launchIO {
+                torrentHash?.let {
+                    TorrentServerApi.remTorrent(it)
+                }
+                torrentHash = null
+            }
             finishAndRemoveTask()
         }
 
@@ -900,7 +910,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 isFastForwarding = true
                 exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
                 fastForward.visibility = View.VISIBLE
-                fastForward.text = "${exoPlayer.playbackParameters.speed}x"
+                val speedText = "${exoPlayer.playbackParameters.speed}x"
+                fastForward.text = speedText
             }
 
             fun stopFastForward() {
@@ -1951,6 +1962,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         startActivity(intent)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onDestroy() {
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
 
@@ -1967,9 +1979,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             releasePlayer()
         }
 
-        try {
-            TorrentServerService.stop()
-        } catch (ignored: Exception) { }
+        launchIO {
+            torrentHash?.let {
+                TorrentServerApi.remTorrent(it)
+            }
+            torrentHash = null
+        }
 
         super.onDestroy()
         finishAndRemoveTask()

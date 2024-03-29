@@ -1,5 +1,6 @@
 package eu.kanade.tachiyomi.data.torrentServer.service
 
+import android.app.ActivityManager
 import android.app.Application
 import android.app.PendingIntent
 import android.app.Service
@@ -11,6 +12,7 @@ import android.os.IBinder
 import android.util.Log
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
+import ani.dantotsu.currContext
 import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.data.torrentServer.TorrentServerApi
 import eu.kanade.tachiyomi.util.system.cancelNotification
@@ -108,6 +110,18 @@ class TorrentServerService : Service() {
         const val ACTION_START = "start_torrent_server"
         const val ACTION_STOP = "stop_torrent_server"
         val applicationContext = Injekt.get<Application>()
+
+        fun isRunning(): Boolean {
+            with ( currContext()?.getSystemService(ACTIVITY_SERVICE) as ActivityManager) {
+                @Suppress("DEPRECATION") // We only need our services
+                getRunningServices(Int.MAX_VALUE).forEach {
+                    if (TorrentServerService::class.java.name.equals(it.service.className)) {
+                        return true
+                    }
+                }
+            }
+            return false
+        }
 
         fun start() {
             try {
