@@ -30,7 +30,7 @@ class OtherDetailsViewModel : ViewModel() {
     fun getCalendar(): LiveData<Map<String, MutableList<Media>>> = calendar
     suspend fun loadCalendar() {
         val curr = System.currentTimeMillis() / 1000
-        val res = Anilist.query.recentlyUpdated(false, curr - 86400, curr + (86400 * 6))
+        val res = Anilist.query.recentlyUpdated(curr - 86400, curr + (86400 * 6))
         val df = DateFormat.getDateInstance(DateFormat.FULL)
         val map = mutableMapOf<String, MutableList<Media>>()
         val idMap = mutableMapOf<String, MutableList<Int>>()

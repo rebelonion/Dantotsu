@@ -162,7 +162,7 @@
             android:id="@+id/settingsIncludeMangaList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:checked="true"
+            android:checked="false"
             android:drawableStart="@drawable/ic_round_movie_filter_24"
             android:drawablePadding="16dp"
             android:elegantTextHeight="true"

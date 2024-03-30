@@ -160,7 +160,7 @@ class MangaFragment : Fragment() {
         })
         mangaPageAdapter.ready.observe(viewLifecycleOwner) { i ->
             if (i == true) {
-                model.getTrendingNovel().observe(viewLifecycleOwner) {
+                model.getPopularNovel().observe(viewLifecycleOwner) {
                     if (it != null) {
                         mangaPageAdapter.updateNovel(MediaAdaptor(0, it, requireActivity()))
                     }
@@ -257,7 +257,6 @@ class MangaFragment : Fragment() {
                         }
                         model.loaded = true
                         model.loadTrending()
-                        model.loadTrendingNovel()
                         model.loadAll()
                         model.loadPopular(
                             "MANGA", sort = Anilist.sortBy[1], onList = PrefManager.getVal(

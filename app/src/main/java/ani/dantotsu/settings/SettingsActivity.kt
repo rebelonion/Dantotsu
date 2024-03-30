@@ -457,7 +457,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsIncludeAnimeList.isChecked = PrefManager.getVal(PrefName.IncludeAnimeList)
             settingsIncludeAnimeList.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.IncludeAnimeList, isChecked)
+                restartApp(binding.root)
             }
+
             var previousEp: View = when (PrefManager.getVal<Int>(PrefName.AnimeDefaultView)) {
                 0 -> settingsEpList
                 1 -> settingsEpGrid
@@ -548,6 +550,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsIncludeMangaList.isChecked = PrefManager.getVal(PrefName.IncludeMangaList)
             settingsIncludeMangaList.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.IncludeMangaList, isChecked)
+                restartApp(binding.root)
             }
         }
 
@@ -721,7 +724,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.RecentlyListOnly, isChecked)
             }
-
+            settingsAdultAnimeOnly.isChecked = PrefManager.getVal(PrefName.AdultOnly)
+            settingsAdultAnimeOnly.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.AdultOnly, isChecked)
+                restartApp(binding.root)
+            }
             var previousStart: View = when (PrefManager.getVal<Int>(PrefName.DefaultStartUpTab)) {
                 0 -> uiSettingsAnime
                 1 -> uiSettingsHome

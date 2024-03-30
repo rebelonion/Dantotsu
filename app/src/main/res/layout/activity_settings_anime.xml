@@ -198,7 +198,6 @@
             android:id="@+id/settingsIncludeAnimeList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
             android:checked="true"
             android:drawableStart="@drawable/ic_round_movie_filter_24"
             android:drawablePadding="16dp"
@@ -212,5 +211,7 @@
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
+
+
     </ani.dantotsu.others.Xpandable>
 </merge>

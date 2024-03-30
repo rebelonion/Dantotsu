@@ -327,8 +327,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:orientation="horizontal"
-        android:visibility="invisible"
-        tools:visibility="visible">
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="0dp"
@@ -337,7 +336,6 @@
             android:fontFamily="@font/poppins_bold"
             android:padding="8dp"
             android:text="@string/popular_manga"
-            android:visibility="invisible"
             android:textSize="16sp" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
