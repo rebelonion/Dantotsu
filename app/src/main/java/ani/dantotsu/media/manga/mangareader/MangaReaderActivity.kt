@@ -376,6 +376,9 @@ class MangaReaderActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
                         val buttons = when (discordMode) {
+                            "nothing" -> mutableListOf(
+                                RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
+                            )
                             "dantotsu" -> mutableListOf(
                                 RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
                                 RPC.Link("Read on Dantotsu", getString(R.string.dantotsu))

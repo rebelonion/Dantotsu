@@ -1086,6 +1086,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     lifecycleScope.launch {
                         val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
                         val buttons = when (discordMode) {
+                            "nothing" -> mutableListOf(
+                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                            )
                             "dantotsu" -> mutableListOf(
                                 RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
                                 RPC.Link("Watch on Dantotsu", getString(R.string.dantotsu))

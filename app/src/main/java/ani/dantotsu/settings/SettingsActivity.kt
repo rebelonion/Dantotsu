@@ -303,6 +303,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                         val dialogView = LayoutInflater.from(this@SettingsActivity).inflate(R.layout.discord_rpc_layout, null)
                         val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radio_group)
+                        val radioNothing = dialogView.findViewById<RadioButton>(R.id.radio_nothing)
                         val radioDantotsu = dialogView.findViewById<RadioButton>(R.id.radio_dantotsu)
                         val radioAnilist = dialogView.findViewById<RadioButton>(R.id.radio_anilist)
                         val anilistLinkPreview = dialogView.findViewById<TextView>(R.id.anilistLinkPreview)
@@ -311,6 +312,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         val currentMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
 
                         when (currentMode) {
+                            "nothing" -> radioNothing.isChecked= true
                             "dantotsu" -> radioDantotsu.isChecked = true
                             "anilist" -> radioAnilist.isChecked = true
                         }
@@ -322,6 +324,9 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
                         radioGroup.setOnCheckedChangeListener { _, checkedId ->
                             when (checkedId) {
+                                R.id.radio_nothing -> {
+                                    PrefManager.setCustomVal("discord_mode", "nothing")
+                                }
                                 R.id.radio_dantotsu -> {
                                     PrefManager.setCustomVal("discord_mode", "dantotsu")
                                 }

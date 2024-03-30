@@ -29,6 +29,13 @@
             android:layout_height="wrap_content">
 
             <RadioButton
+                android:id="@+id/radio_nothing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:text="@string/discord_nothing_button" />
+
+            <RadioButton
                 android:id="@+id/radio_dantotsu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
