@@ -18,6 +18,13 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
         <Button
             android:id="@+id/settingsSubscriptionsTime"
             style="@style/Widget.Material3.Button.TextButton"
@@ -157,5 +164,13 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
     </ani.dantotsu.others.Xpandable>
 </merge>

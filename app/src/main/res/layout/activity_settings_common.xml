@@ -19,6 +19,12 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -91,14 +97,6 @@
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
         <Button
             android:id="@+id/settingsUi"
             android:layout_width="match_parent"
@@ -120,13 +118,6 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
 
         <Button
             android:id="@+id/settingsDownloadManager"
@@ -152,13 +143,6 @@
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
         <Button
             android:id="@+id/importExportSettings"
             android:layout_width="match_parent"
@@ -182,14 +166,6 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:layout_marginBottom="16dp"
-            android:background="?android:attr/listDivider" />
 
         <!--TODO: Add support for SD card-->
         <com.google.android.material.materialswitch.MaterialSwitch
@@ -223,6 +199,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginBottom="8dp"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
             app:boxCornerRadiusTopEnd="8dp"
@@ -317,5 +294,14 @@
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
+            
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
     </ani.dantotsu.others.Xpandable>
 </merge>

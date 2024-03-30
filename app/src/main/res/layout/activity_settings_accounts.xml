@@ -18,10 +18,18 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
         <LinearLayout
             android:id="@+id/settingsAnilistLoginContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -260,5 +268,12 @@
             app:drawableStartCompat="@drawable/ic_round_help_24"
             app:drawableTint="?attr/colorPrimary" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
     </ani.dantotsu.others.Xpandable>
 </merge>

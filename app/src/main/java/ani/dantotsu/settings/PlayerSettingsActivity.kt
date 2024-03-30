@@ -137,11 +137,6 @@ class PlayerSettingsActivity : AppCompatActivity() {
             binding.playerSettingsAutoSkipOpEd.isEnabled = isChecked
         }
 
-        binding.playerSettingsTimeStampsAutoHide.isChecked = PrefManager.getVal(PrefName.AutoHideTimeStamps)
-        binding.playerSettingsTimeStampsAutoHide.setOnCheckedChangeListener { _, isChecked ->
-            PrefManager.setVal(PrefName.AutoHideTimeStamps, isChecked)
-        }
-
         binding.playerSettingsTimeStampsProxy.isChecked =
             PrefManager.getVal(PrefName.UseProxyForTimeStamps)
         binding.playerSettingsTimeStampsProxy.setOnCheckedChangeListener { _, isChecked ->
@@ -152,6 +147,13 @@ class PlayerSettingsActivity : AppCompatActivity() {
             PrefManager.getVal(PrefName.ShowTimeStampButton)
         binding.playerSettingsShowTimeStamp.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.ShowTimeStampButton, isChecked)
+            binding.playerSettingsTimeStampsAutoHide.isEnabled = isChecked
+        }
+
+        binding.playerSettingsTimeStampsAutoHide.isChecked = PrefManager.getVal(PrefName.AutoHideTimeStamps)
+        binding.playerSettingsTimeStampsAutoHide.isEnabled = binding.playerSettingsShowTimeStamp.isChecked
+        binding.playerSettingsTimeStampsAutoHide.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.AutoHideTimeStamps, isChecked)
         }
 
         // Auto

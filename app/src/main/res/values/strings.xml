@@ -452,7 +452,7 @@
     <string name="show_skip_time_stamp_button">Show Skip Time Stamp Button</string>
     <string name="always_load_time_stamps">Always Load Time Stamps</string>
     <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>string
-    <string name="timestamps">Time Stamps</string>
+    <string name="timestamps">Segments</string>
     <string name="auto_skip_op_ed">Auto Skip OP / ED</string>
     <string name="requires_time_stamps_to_be_enabled">Requires Time Stamps to be Enabled</string>
     <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>

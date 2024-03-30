@@ -20,6 +20,13 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
         <Button
             android:id="@+id/userAgent"
             android:layout_width="match_parent"
@@ -43,14 +50,6 @@
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:layout_marginBottom="16dp"
-            android:background="?android:attr/listDivider" />
-
         <TextView
             android:id="@+id/animeRepoHeading"
             android:layout_width="match_parent"
@@ -60,6 +59,13 @@
             android:text="@string/anime_repo_listing"
             android:textSize="14sp"
             tools:ignore="RtlSymmetry" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
 
         <LinearLayout
             android:id="@+id/animeRepoInventory"
@@ -94,22 +100,6 @@
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
-        <View
-            android:id="@+id/mangaRepoHeadingDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:layout_marginBottom="16dp"
-            android:background="?android:attr/listDivider" />
-
         <TextView
             android:id="@+id/mangaRepoHeading"
             android:layout_width="match_parent"
@@ -119,6 +109,14 @@
             android:text="@string/manga_repo_listing"
             android:textSize="14sp"
             tools:ignore="RtlSymmetry" />
+
+        <View
+            android:id="@+id/mangaRepoDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
 
         <LinearLayout
             android:id="@+id/mangaRepoInventory"
@@ -152,15 +150,6 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
-
-        <View
-            android:id="@+id/mangaRepoDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:layout_marginBottom="16dp"
-            android:background="?android:attr/listDivider" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsForceLegacyInstall"
@@ -216,5 +205,13 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
     </ani.dantotsu.others.Xpandable>
 </merge>
