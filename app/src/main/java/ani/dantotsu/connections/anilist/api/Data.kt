@@ -159,7 +159,8 @@ class Query {
     ) {
         @Serializable
         data class Data(
-            @SerialName("trendingMovie") val trendingMovie: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("recentUpdates") val recentUpdates: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingMovies") val trendingMovies: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
         )
@@ -173,6 +174,7 @@ class Query {
         data class Data(
             @SerialName("trendingManga") val trendingManga: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("trendingManhwa") val trendingManhwa: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingNovel") val trendingNovel: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
         )

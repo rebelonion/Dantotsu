@@ -149,11 +149,6 @@ class AnilistAnimeViewModel : ViewModel() {
         )
     }
 
-    private val updated: MutableLiveData<MutableList<Media>> =
-        MutableLiveData<MutableList<Media>>(null)
-
-    fun getUpdated(): LiveData<MutableList<Media>> = updated
-    suspend fun loadUpdated() = updated.postValue(Anilist.query.recentlyUpdated())
 
     private val animePopular = MutableLiveData<SearchResults?>(null)
 
@@ -193,29 +188,41 @@ class AnilistAnimeViewModel : ViewModel() {
     )
 
     var loaded: Boolean = false
+    private val updated: MutableLiveData<MutableList<Media>> =
+        MutableLiveData<MutableList<Media>>(null)
+    fun getUpdated(): LiveData<MutableList<Media>> = updated
 
     private val popularMovies: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
     fun getMovies(): LiveData<MutableList<Media>> = popularMovies
 
-    private val topRated: MutableLiveData<MutableList<Media>> =
+    private val topRatedAnime: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
-    fun getTopRated(): LiveData<MutableList<Media>> = topRated
+    fun getTopRated(): LiveData<MutableList<Media>> = topRatedAnime
 
-    private val mostFav: MutableLiveData<MutableList<Media>> =
+    private val mostFavAnime: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
-    fun getMostFav(): LiveData<MutableList<Media>> = mostFav
+    fun getMostFav(): LiveData<MutableList<Media>> = mostFavAnime
     suspend fun loadAll() {
-        val response = Anilist.query.loadAnimeList()
+        val res = Anilist.query.loadAnimeList()?.data
 
-        val trendingMovie = response?.data?.trendingMovie?.media?.map { Media(it) }?.toMutableList()
-        popularMovies.postValue(trendingMovie ?: arrayListOf())
+        val listOnly: Boolean = PrefManager.getVal(PrefName.RecentlyListOnly)
 
-        val topRatedList = response?.data?.topRated?.media?.map { Media(it) }?.toMutableList()
-        topRated.postValue(topRatedList ?: arrayListOf())
+        res?.apply{
+            updated.postValue(recentUpdates?.airingSchedules?.mapNotNull {i ->
+                i.media?.let {
+                    if (!listOnly && (it.countryOfOrigin == "JP" && (if (!Anilist.adult) it.isAdult == false else true)) || (listOnly && it.mediaListEntry != null)){
+                        Media(it)
+                    }else{
+                        null
+                    }
+                }
+            }?.toMutableList() ?: arrayListOf())
+            popularMovies.postValue(trendingMovies?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
+            topRatedAnime.postValue(topRated?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
+            mostFavAnime.postValue(mostFav?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
+        }
 
-        val mostFavList = response?.data?.mostFav?.media?.map { Media(it) }?.toMutableList()
-        mostFav.postValue(mostFavList ?: arrayListOf())
     }
 }
 
@@ -238,19 +245,6 @@ class AnilistMangaViewModel : ViewModel() {
             )?.results
         )
 
-    private val updated: MutableLiveData<MutableList<Media>> =
-        MutableLiveData<MutableList<Media>>(null)
-
-    fun getTrendingNovel(): LiveData<MutableList<Media>> = updated
-    suspend fun loadTrendingNovel() =
-        updated.postValue(
-            Anilist.query.search(
-                type,
-                perPage = 10,
-                sort = Anilist.sortBy[2],
-                format = "NOVEL"
-            )?.results
-        )
 
     private val mangaPopular = MutableLiveData<SearchResults?>(null)
     fun getPopular(): LiveData<SearchResults?> = mangaPopular
@@ -302,27 +296,27 @@ class AnilistMangaViewModel : ViewModel() {
         MutableLiveData<MutableList<Media>>(null)
     fun getPopularManhwa(): LiveData<MutableList<Media>> = popularManhwa
 
-    private val topRated: MutableLiveData<MutableList<Media>> =
+    private val popularNovel: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
-    fun getTopRated(): LiveData<MutableList<Media>> = topRated
+    fun getPopularNovel(): LiveData<MutableList<Media>> = popularNovel
 
-    private val mostFav: MutableLiveData<MutableList<Media>> =
+    private val topRatedManga: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
-    fun getMostFav(): LiveData<MutableList<Media>> = mostFav
+    fun getTopRated(): LiveData<MutableList<Media>> = topRatedManga
+
+    private val mostFavManga: MutableLiveData<MutableList<Media>> =
+        MutableLiveData<MutableList<Media>>(null)
+    fun getMostFav(): LiveData<MutableList<Media>> = mostFavManga
     suspend fun loadAll() {
-        val response = Anilist.query.loadMangaList()
+        val response = Anilist.query.loadMangaList()?.data
 
-        val trendingManga = response?.data?.trendingManga?.media?.map { Media(it) }?.toMutableList()
-        popularManga.postValue(trendingManga ?: arrayListOf())
-
-        val trendingManhwa = response?.data?.trendingManhwa?.media?.map { Media(it) }?.toMutableList()
-        popularManhwa.postValue(trendingManhwa ?: arrayListOf())
-
-        val topRatedList = response?.data?.topRated?.media?.map { Media(it) }?.toMutableList()
-        topRated.postValue(topRatedList ?: arrayListOf())
-
-        val mostFavList = response?.data?.mostFav?.media?.map { Media(it) }?.toMutableList()
-        mostFav.postValue(mostFavList ?: arrayListOf())
+        response?.apply {
+            popularManga.postValue(trendingManga?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
+            popularManhwa.postValue(trendingManhwa?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
+            popularNovel.postValue(trendingNovel?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
+            topRatedManga.postValue(topRated?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
+            mostFavManga.postValue(mostFav?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
+        }
     }
 }
 
