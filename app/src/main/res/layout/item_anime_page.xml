@@ -218,6 +218,126 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/animeMovies"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:padding="8dp"
+        android:text="@string/trending_movies"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp">
+
+        <ProgressBar
+            android:id="@+id/animeMoviesProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/animeMoviesRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/animeTopRated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:padding="8dp"
+        android:text="@string/top_rated"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp">
+
+        <ProgressBar
+            android:id="@+id/animeTopRatedProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/animeTopRatedRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/animeMostFav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:padding="8dp"
+        android:text="@string/most_favourite"
+        android:textSize="16sp"
+        android:visibility="invisible"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp">
+
+        <ProgressBar
+            android:id="@+id/animeMostFavProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/animeMostFavRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
     <LinearLayout
         android:id="@+id/animePopular"
         android:layout_width="match_parent"

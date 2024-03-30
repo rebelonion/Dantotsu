@@ -212,7 +212,55 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         binding.animePopular.visibility = View.VISIBLE
         binding.animePopular.startAnimation(setSlideUp())
     }
+    fun updateMovies(adaptor: MediaAdaptor) {
+        binding.animeMoviesProgressBar.visibility = View.GONE
+        binding.animeMoviesRecyclerView.adapter = adaptor
+        binding.animeMoviesRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.animeMoviesRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.animeMoviesRecyclerView.visibility = View.VISIBLE
 
+        binding.animeMovies.visibility = View.VISIBLE
+        binding.animeMovies.startAnimation(setSlideUp())
+        binding.animeMoviesRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+    }
+
+    fun updateTopRated(adaptor: MediaAdaptor) {
+        binding.animeTopRatedProgressBar.visibility = View.GONE
+        binding.animeTopRatedRecyclerView.adapter = adaptor
+        binding.animeTopRatedRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.animeTopRatedRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.animeTopRatedRecyclerView.visibility = View.VISIBLE
+
+        binding.animeTopRated.visibility = View.VISIBLE
+        binding.animeTopRated.startAnimation(setSlideUp())
+        binding.animeTopRatedRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+    }
+    fun updateMostFav(adaptor: MediaAdaptor) {
+        binding.animeMostFavProgressBar.visibility = View.GONE
+        binding.animeMostFavRecyclerView.adapter = adaptor
+        binding.animeMostFavRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.animeMostFavRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.animeMostFavRecyclerView.visibility = View.VISIBLE
+
+        binding.animeMostFav.visibility = View.VISIBLE
+        binding.animeMostFav.startAnimation(setSlideUp())
+        binding.animeMostFavRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+    }
     fun updateAvatar() {
         if (Anilist.avatar != null && ready.value == true) {
             trendingBinding.userAvatar.loadImage(Anilist.avatar)

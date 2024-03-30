@@ -492,7 +492,10 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsShowYt.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.ShowYtButton, isChecked)
             }
-
+            settingsIncludeAnimeList.isChecked = PrefManager.getVal(PrefName.IncludeAnimeList)
+            settingsIncludeAnimeList.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.IncludeAnimeList, isChecked)
+            }
             var previousEp: View = when (PrefManager.getVal<Int>(PrefName.AnimeDefaultView)) {
                 0 -> settingsEpList
                 1 -> settingsEpGrid
@@ -578,6 +581,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
             settingsChpCompact.setOnClickListener {
                 uiChp(1, it)
+            }
+
+            settingsIncludeMangaList.isChecked = PrefManager.getVal(PrefName.IncludeMangaList)
+            settingsIncludeMangaList.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.IncludeMangaList, isChecked)
             }
         }
 

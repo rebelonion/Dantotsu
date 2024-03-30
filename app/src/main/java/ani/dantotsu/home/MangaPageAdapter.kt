@@ -178,8 +178,73 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         trendingBinding.titleContainer.startAnimation(setSlideUp())
         binding.mangaListContainer.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
+
     }
 
+    fun updateTrendingManga(adaptor: MediaAdaptor) {
+        binding.mangaTrendingMangaProgressBar.visibility = View.GONE
+        binding.mangaTrendingMangaRecyclerView.adapter = adaptor
+        binding.mangaTrendingMangaRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.mangaTrendingMangaRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.mangaTrendingMangaRecyclerView.visibility = View.VISIBLE
+
+        binding.mangaTrendingManga.visibility = View.VISIBLE
+        binding.mangaTrendingManga.startAnimation(setSlideUp())
+        binding.mangaTrendingMangaRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+    }
+    fun updateTrendingManhwa(adaptor: MediaAdaptor) {
+        binding.mangaTrendingManhwaProgressBar.visibility = View.GONE
+        binding.mangaTrendingManhwaRecyclerView.adapter = adaptor
+        binding.mangaTrendingManhwaRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.mangaNovelRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.mangaTrendingManhwaRecyclerView.visibility = View.VISIBLE
+
+        binding.mangaTrendingManhwa.visibility = View.VISIBLE
+        binding.mangaTrendingManhwa.startAnimation(setSlideUp())
+        binding.mangaTrendingManhwaRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+    }
+    fun updateTopRated(adaptor: MediaAdaptor) {
+        binding.mangaTopRatedProgressBar.visibility = View.GONE
+        binding.mangaTopRatedRecyclerView.adapter = adaptor
+        binding.mangaTopRatedRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.mangaTopRatedRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.mangaTopRatedRecyclerView.visibility = View.VISIBLE
+
+        binding.mangaTopRated.visibility = View.VISIBLE
+        binding.mangaTopRated.startAnimation(setSlideUp())
+        binding.mangaTopRatedRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+    }
+    fun updateMostFav(adaptor: MediaAdaptor) {
+        binding.mangaMostFavProgressBar.visibility = View.GONE
+        binding.mangaMostFavRecyclerView.adapter = adaptor
+        binding.mangaMostFavRecyclerView.layoutManager =
+            LinearLayoutManager(
+                binding.mangaMostFavRecyclerView.context,
+                LinearLayoutManager.HORIZONTAL,
+                false
+            )
+        binding.mangaMostFavRecyclerView.visibility = View.VISIBLE
+
+        binding.mangaMostFav.visibility = View.VISIBLE
+        binding.mangaMostFav.startAnimation(setSlideUp())
+        binding.mangaMostFavRecyclerView.layoutAnimation =
+            LayoutAnimationController(setSlideIn(), 0.25f)
+    }
     fun updateNovel(adaptor: MediaAdaptor) {
         binding.mangaNovelProgressBar.visibility = View.GONE
         binding.mangaNovelRecyclerView.adapter = adaptor

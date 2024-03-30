@@ -1022,7 +1022,49 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
         }
         return null
     }
+    private fun trendingMovie(): String{
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: ANIME, format: MOVIE){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    }
+    private fun topRatedAnime(): String{
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort: SCORE_DESC, type: ANIME){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    }
+    private fun mostFavAnime(): String{
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:FAVOURITES_DESC,type: ANIME){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    }
+    suspend fun loadAnimeList(): Query.AnimeList?{
+        return executeQuery<Query.AnimeList>(
+            """{
+                trendingMovie:${trendingMovie()}
+                topRated:${topRatedAnime()}
+                mostFav:${mostFavAnime()}
+            }""".trimIndent(), force = true
+        )
 
+    }
+
+    private fun trendingManga(): String{
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA,countryOfOrigin:JP){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    }
+    private fun trendingManhwa(): String{
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA, countryOfOrigin:KR){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    }
+    private fun topRatedManga(): String{
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort: SCORE_DESC, type: MANGA){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    }
+    private fun mostFavManga(): String{
+        return """Page(page:1,perPage:50){pageInfo{hasNextPage total}media(sort:FAVOURITES_DESC,type: MANGA){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    }
+    suspend fun loadMangaList(): Query.MangaList?{
+        return executeQuery<Query.MangaList>(
+            """{
+                trendingManga:${trendingManga()}
+                trendingManhwa:${trendingManhwa()}
+                topRated:${topRatedManga()}
+                mostFav:${mostFavManga()}
+            }""".trimIndent(), force = true
+        )
+
+    }
     suspend fun recentlyUpdated(
         smaller: Boolean = true,
         greater: Long = 0,

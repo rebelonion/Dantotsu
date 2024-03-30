@@ -138,13 +138,13 @@ class ProfileStatsWidget : AppWidgetProvider() {
                                     )
                                 )
                                 setTextColor(R.id.userLabel, titleTextColor)
-                                setTextColor(R.id.topLeftItem, statsTextColor)
+                                setTextColor(R.id.topLeftItem, titleTextColor)
                                 setTextColor(R.id.topLeftLabel, statsTextColor)
-                                setTextColor(R.id.topRightItem, statsTextColor)
+                                setTextColor(R.id.topRightItem, titleTextColor)
                                 setTextColor(R.id.topRightLabel, statsTextColor)
-                                setTextColor(R.id.bottomLeftItem, statsTextColor)
+                                setTextColor(R.id.bottomLeftItem, titleTextColor)
                                 setTextColor(R.id.bottomLeftLabel, statsTextColor)
-                                setTextColor(R.id.bottomRightItem, statsTextColor)
+                                setTextColor(R.id.bottomRightItem, titleTextColor)
                                 setTextColor(R.id.bottomRightLabel, statsTextColor)
 
                                 setImageViewBitmap(
