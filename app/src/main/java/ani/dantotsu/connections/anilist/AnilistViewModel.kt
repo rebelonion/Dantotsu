@@ -5,6 +5,8 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.webkit.internal.ApiFeature.P
+import androidx.webkit.internal.StartupApiFeature
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
 import ani.dantotsu.connections.discord.Discord
@@ -207,16 +209,22 @@ class AnilistAnimeViewModel : ViewModel() {
         val res = Anilist.query.loadAnimeList()?.data
 
         val listOnly: Boolean = PrefManager.getVal(PrefName.RecentlyListOnly)
-
+        val adultOnly: Boolean = PrefManager.getVal(PrefName.AdultOnly)
         res?.apply{
             val idArr = mutableListOf<Int>()
             updated.postValue(recentUpdates?.airingSchedules?.mapNotNull {i ->
                 i.media?.let {
                     if (!idArr.contains(it.id))
-                        if (!listOnly && (it.countryOfOrigin == "JP" && (if (!Anilist.adult) it.isAdult == false else true)) || (listOnly && it.mediaListEntry != null)) {
+                        if (!listOnly && it.countryOfOrigin == "JP" && Anilist.adult && adultOnly && it.isAdult == true) {
                             idArr.add(it.id)
                             Media(it)
-                        } else null
+                        }else if (!listOnly && !adultOnly && (it.countryOfOrigin == "JP" && it.isAdult == false)){
+                            idArr.add(it.id)
+                            Media(it)
+                        }else if ((listOnly && it.mediaListEntry != null)) {
+                            idArr.add(it.id)
+                            Media(it)
+                        }else null
                     else null
                 }
             }?.toMutableList() ?: arrayListOf())
