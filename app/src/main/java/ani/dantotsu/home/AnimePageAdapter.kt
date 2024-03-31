@@ -203,8 +203,12 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 animeRecently
             )
             animePopular.visibility = View.VISIBLE
-            binding.animePopular.startAnimation(setSlideUp())
+            animePopular.startAnimation(setSlideUp())
+            if (adaptor.itemCount == 0) {
+                animeRecentlyContainer.visibility = View.GONE
+            }
         }
+
     }
     fun updateMovies(adaptor: MediaAdaptor) {
         binding.apply{

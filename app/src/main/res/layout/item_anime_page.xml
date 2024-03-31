@@ -178,45 +178,52 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:id="@+id/animeRecently"
+    <LinearLayout
+        android:id="@+id/animeRecentlyContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="8dp"
-        android:text="@string/updated"
-        android:textSize="16sp"
-        android:visibility="invisible"
-        tools:visibility="visible" />
+        android:orientation="horizontal">
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="250dp">
-
-        <ProgressBar
-            android:id="@+id/animeUpdatedProgressBar"
-            style="?android:attr/progressBarStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="center" />
-
-        <ani.dantotsu.FadingEdgeRecyclerView
-            android:id="@+id/animeUpdatedRecyclerView"
+        <TextView
+            android:id="@+id/animeRecently"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:clipToPadding="false"
-            android:nestedScrollingEnabled="true"
-            android:paddingStart="20dp"
-            android:paddingEnd="20dp"
-            android:requiresFadingEdge="horizontal"
-            tools:itemCount="4"
-            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/item_media_compact"
-            tools:orientation="horizontal" />
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:text="@string/updated"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            tools:visibility="visible" />
 
-    </FrameLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="250dp">
+
+            <ProgressBar
+                android:id="@+id/animeUpdatedProgressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center" />
+
+            <ani.dantotsu.FadingEdgeRecyclerView
+                android:id="@+id/animeUpdatedRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="250dp"
+                android:clipToPadding="false"
+                android:nestedScrollingEnabled="true"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:requiresFadingEdge="horizontal"
+                tools:itemCount="4"
+                tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                tools:listitem="@layout/item_media_compact"
+                tools:orientation="horizontal" />
+
+        </FrameLayout>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/animeMovies"
