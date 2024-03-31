@@ -209,20 +209,21 @@ class AnilistAnimeViewModel : ViewModel() {
         val listOnly: Boolean = PrefManager.getVal(PrefName.RecentlyListOnly)
 
         res?.apply{
+            val idArr = mutableListOf<Int>()
             updated.postValue(recentUpdates?.airingSchedules?.mapNotNull {i ->
                 i.media?.let {
-                    if (!listOnly && (it.countryOfOrigin == "JP" && (if (!Anilist.adult) it.isAdult == false else true)) || (listOnly && it.mediaListEntry != null)){
-                        Media(it)
-                    }else{
-                        null
-                    }
+                    if (!idArr.contains(it.id))
+                        if (!listOnly && (it.countryOfOrigin == "JP" && (if (!Anilist.adult) it.isAdult == false else true)) || (listOnly && it.mediaListEntry != null)) {
+                            idArr.add(it.id)
+                            Media(it)
+                        } else null
+                    else null
                 }
             }?.toMutableList() ?: arrayListOf())
             popularMovies.postValue(trendingMovies?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
             topRatedAnime.postValue(topRated?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
             mostFavAnime.postValue(mostFav?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
         }
-
     }
 }
 
