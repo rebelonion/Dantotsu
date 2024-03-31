@@ -80,8 +80,8 @@ class HomeFragment : Fragment() {
                 binding.homeUserEpisodesWatched.text = Anilist.episodesWatched.toString()
                 binding.homeUserChaptersRead.text = Anilist.chapterRead.toString()
                 binding.homeUserAvatar.loadImage(Anilist.avatar)
-                if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.homeUserBg.pause()
-                blurImage(binding.homeUserBg, Anilist.bg)
+                val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+                blurImage(if (bannerAnimations) binding.homeUserBg else binding.homeUserBgNoKen, Anilist.bg)
                 binding.homeUserDataProgressBar.visibility = View.GONE
                 binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
@@ -137,6 +137,7 @@ class HomeFragment : Fragment() {
             bottomMargin = navBarHeight
         }
         binding.homeUserBg.updateLayoutParams { height += statusBarHeight }
+        binding.homeUserBgNoKen.updateLayoutParams { height += statusBarHeight }
         binding.homeTopContainer.updatePadding(top = statusBarHeight)
 
         var reached = false

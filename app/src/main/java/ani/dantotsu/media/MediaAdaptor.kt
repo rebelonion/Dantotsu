@@ -173,6 +173,7 @@ class MediaAdaptor(
                 val b = (holder as MediaPageViewHolder).binding
                 val media = mediaList?.get(position)
                 if (media != null) {
+
                     val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
                     b.itemCompactImage.loadImage(media.cover)
                     if (bannerAnimations)
@@ -182,7 +183,7 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    blurImage(b.itemCompactBanner, media.banner ?: media.cover)
+                    blurImage(if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen , media.banner ?: media.cover)
                     b.itemCompactOngoing.isVisible =
                         media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
@@ -231,7 +232,7 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    blurImage(b.itemCompactBanner, media.banner ?: media.cover)
+                    blurImage(if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen , media.banner ?: media.cover)
                     b.itemCompactOngoing.isVisible =
                         media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName

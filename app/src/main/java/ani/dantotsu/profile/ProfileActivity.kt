@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -189,9 +190,11 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
 
                 val userLevelText = "${user.name} $userLevel"
                 binding.profileUserName.text = userLevelText
-                if (!(PrefManager.getVal(PrefName.BannerAnimations) as Boolean)) binding.profileBannerImage.pause()
-                blurImage(binding.profileBannerImage, user.bannerImage ?: user.avatar?.medium)
+                val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+
+                blurImage(if (bannerAnimations) binding.profileBannerImage else binding.profileBannerImageNoKen as ImageView, user.bannerImage ?: user.avatar?.medium)
                 binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
+                binding.profileBannerImageNoKen?.updateLayoutParams { height += statusBarHeight }
                 binding.profileBannerGradient.updateLayoutParams { height += statusBarHeight }
                 binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                 binding.profileButtonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
