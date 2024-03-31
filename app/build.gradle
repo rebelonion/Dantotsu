@@ -37,7 +37,7 @@ android {
 
     buildTypes {
         alpha {
-            applicationIdSuffix ".beta" // keep as beta by popular request
+            applicationIdSuffix ".beta1" // keep as beta by popular request
             versionNameSuffix "-alpha01"
             manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_alpha"
             manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_alpha_round"

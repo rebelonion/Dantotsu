@@ -263,18 +263,18 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         reload()
                     }
 
-                    imageSwitcher.visibility = View.VISIBLE
+                    settingsImageSwitcher.visibility = View.VISIBLE
                     var initialStatus = when (PrefManager.getVal<String>(PrefName.DiscordStatus)) {
                         "online" -> R.drawable.discord_status_online
                         "idle" -> R.drawable.discord_status_idle
                         "dnd" -> R.drawable.discord_status_dnd
                         else -> R.drawable.discord_status_online
                     }
-                    imageSwitcher.setImageResource(initialStatus)
+                    settingsImageSwitcher.setImageResource(initialStatus)
 
                     val zoomInAnimation =
                         AnimationUtils.loadAnimation(this@SettingsActivity, R.anim.bounce_zoom)
-                    imageSwitcher.setOnClickListener {
+                    settingsImageSwitcher.setOnClickListener {
                         var status = "online"
                         initialStatus = when (initialStatus) {
                             R.drawable.discord_status_online -> {
@@ -296,50 +296,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         }
 
                         PrefManager.setVal(PrefName.DiscordStatus, status)
-                        imageSwitcher.setImageResource(initialStatus)
-                        imageSwitcher.startAnimation(zoomInAnimation)
+                        settingsImageSwitcher.setImageResource(initialStatus)
+                        settingsImageSwitcher.startAnimation(zoomInAnimation)
                     }
-                    imageSwitcher.setOnLongClickListener {
+                    settingsImageSwitcher.setOnLongClickListener {
                         it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
-                        val dialogView = LayoutInflater.from(this@SettingsActivity).inflate(R.layout.discord_rpc_layout, null)
-                        val radioGroup = dialogView.findViewById<RadioGroup>(R.id.radio_group)
-                        val radioNothing = dialogView.findViewById<RadioButton>(R.id.radio_nothing)
-                        val radioDantotsu = dialogView.findViewById<RadioButton>(R.id.radio_dantotsu)
-                        val radioAnilist = dialogView.findViewById<RadioButton>(R.id.radio_anilist)
-                        val anilistLinkPreview = dialogView.findViewById<TextView>(R.id.anilistLinkPreview)
-
-                        val userId = PrefManager.getVal<String>(PrefName.AnilistUserName)
-                        val currentMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
-
-                        when (currentMode) {
-                            "nothing" -> radioNothing.isChecked= true
-                            "dantotsu" -> radioDantotsu.isChecked = true
-                            "anilist" -> radioAnilist.isChecked = true
-                        }
-
-                        anilistLinkPreview.text = getString(R.string.anilist_link, userId)
-
-                        val bottomSheetDialog = BottomSheetDialog(this@SettingsActivity)
-                        bottomSheetDialog.setContentView(dialogView)
-
-                        radioGroup.setOnCheckedChangeListener { _, checkedId ->
-                            when (checkedId) {
-                                R.id.radio_nothing -> {
-                                    PrefManager.setCustomVal("discord_mode", "nothing")
-                                }
-                                R.id.radio_dantotsu -> {
-                                    PrefManager.setCustomVal("discord_mode", "dantotsu")
-                                }
-                                R.id.radio_anilist -> {
-                                    PrefManager.setCustomVal("discord_mode", "anilist")
-                                }
-                            }
-                        }
-                        bottomSheetDialog.show()
+                        DiscordDialogFragment().show(supportFragmentManager, "dialog")
                         true
                     }
                 } else {
-                    imageSwitcher.visibility = View.GONE
+                    settingsImageSwitcher.visibility = View.GONE
                     settingsDiscordAvatar.setImageResource(R.drawable.ic_round_person_24)
                     settingsDiscordUsername.visibility = View.GONE
                     settingsDiscordLogin.setText(R.string.login)
