@@ -1429,15 +1429,10 @@ Page(page:$page,perPage:50) {
             """{
             favoriteAnime:${userFavMediaQuery(true, 1, id)}
             favoriteManga:${userFavMediaQuery(false, 1, id)}
-            animeMediaList:${bannerImageQuery("ANIME", id)}
-            mangaMediaList:${bannerImageQuery("MANGA", id)}
             }""".trimIndent(), force = true
         )
     }
 
-    private fun bannerImageQuery(type: String, id: Int?): String {
-        return """MediaListCollection(userId: ${id}, type: $type, chunk:1,perChunk:25, sort: [SCORE_DESC,UPDATED_TIME_DESC]) { lists { entries{ media { id bannerImage } } } }"""
-    }
 
     suspend fun getNotifications(id: Int, page: Int = 1, resetNotification: Boolean = true): NotificationResponse? {
         val reset = if (resetNotification) "true" else "false"

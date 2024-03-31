@@ -60,45 +60,36 @@ class AnilistHomeViewModel : ViewModel() {
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getAnimeContinue(): LiveData<ArrayList<Media>> = animeContinue
-    suspend fun setAnimeContinue() = animeContinue.postValue(Anilist.query.continueMedia("ANIME"))
 
     private val animeFav: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getAnimeFav(): LiveData<ArrayList<Media>> = animeFav
-    suspend fun setAnimeFav() = animeFav.postValue(Anilist.query.favMedia(true))
 
     private val animePlanned: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getAnimePlanned(): LiveData<ArrayList<Media>> = animePlanned
-    suspend fun setAnimePlanned() =
-        animePlanned.postValue(Anilist.query.continueMedia("ANIME", true))
 
     private val mangaContinue: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getMangaContinue(): LiveData<ArrayList<Media>> = mangaContinue
-    suspend fun setMangaContinue() = mangaContinue.postValue(Anilist.query.continueMedia("MANGA"))
 
     private val mangaFav: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getMangaFav(): LiveData<ArrayList<Media>> = mangaFav
-    suspend fun setMangaFav() = mangaFav.postValue(Anilist.query.favMedia(false))
 
     private val mangaPlanned: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getMangaPlanned(): LiveData<ArrayList<Media>> = mangaPlanned
-    suspend fun setMangaPlanned() =
-        mangaPlanned.postValue(Anilist.query.continueMedia("MANGA", true))
 
     private val recommendation: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getRecommendation(): LiveData<ArrayList<Media>> = recommendation
-    suspend fun setRecommendation() = recommendation.postValue(Anilist.query.recommendations())
 
     suspend fun initHomePage() {
         val res = Anilist.query.initHomePage()
@@ -406,11 +397,6 @@ class ProfileViewModel : ViewModel() {
 
     fun getAnimeFav(): LiveData<ArrayList<Media>> = animeFav
 
-    private val listImages: MutableLiveData<ArrayList<String?>> =
-        MutableLiveData<ArrayList<String?>>(arrayListOf())
-
-    fun getListImages(): LiveData<ArrayList<String?>> = listImages
-
     suspend fun setData(id: Int) {
         val res = Anilist.query.initProfilePage(id)
         val mangaList = res?.data?.favoriteManga?.favourites?.manga?.edges?.mapNotNull {
@@ -426,30 +412,11 @@ class ProfileViewModel : ViewModel() {
         }
         animeFav.postValue(ArrayList(animeList ?: arrayListOf()))
 
-        val bannerImages = arrayListOf<String?>(null, null)
-        val animeRandom = res?.data?.animeMediaList?.lists?.mapNotNull {
-            it.entries?.mapNotNull { entry ->
-                val imageUrl = entry.media?.bannerImage
-                if (imageUrl != null && imageUrl != "null") imageUrl
-                else null
-            }
-        }?.flatten()?.randomOrNull()
-        bannerImages[0] = animeRandom
-        val mangaRandom = res?.data?.mangaMediaList?.lists?.mapNotNull {
-            it.entries?.mapNotNull { entry ->
-                val imageUrl = entry.media?.bannerImage
-                if (imageUrl != null && imageUrl != "null") imageUrl
-                else null
-            }
-        }?.flatten()?.randomOrNull()
-        bannerImages[1] = mangaRandom
-        listImages.postValue(bannerImages)
-
     }
 
     fun refresh() {
         mangaFav.postValue(mangaFav.value)
         animeFav.postValue(animeFav.value)
-        listImages.postValue(listImages.value)
+
     }
 }

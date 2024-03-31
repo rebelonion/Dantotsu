@@ -147,10 +147,7 @@ class Query {
         @Serializable
         data class Data(
             @SerialName("favoriteAnime") val favoriteAnime: ani.dantotsu.connections.anilist.api.User?,
-            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?,
-            @SerialName("animeMediaList") val animeMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?,
-            @SerialName("mangaMediaList") val mangaMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?
-        )
+            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?)
     }
     @Serializable
     data class AnimeList(
