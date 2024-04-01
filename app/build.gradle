@@ -6,6 +6,10 @@ plugins {
     id 'com.google.devtools.ksp'
 }
 
+def gitCommitHash = providers.exec {
+    commandLine("git", "rev-parse", "--verify", "--short", "HEAD")
+}.standardOutput.asText.get().trim()
+
 android {
     compileSdk 34
 
@@ -37,8 +41,8 @@ android {
 
     buildTypes {
         alpha {
-            applicationIdSuffix ".beta1" // keep as beta by popular request
-            versionNameSuffix "-alpha01"
+            applicationIdSuffix ".beta" // keep as beta by popular request
+            versionNameSuffix "-alpha01-" + gitCommitHash
             manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_alpha"
             manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_alpha_round"
             debuggable System.getenv("CI") == null

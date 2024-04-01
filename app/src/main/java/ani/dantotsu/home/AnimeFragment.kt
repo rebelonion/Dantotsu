@@ -278,7 +278,6 @@ class AnimeFragment : Fragment() {
                         }
                         model.loaded = true
                         model.loadTrending(1)
-                        model.loadUpdated()
                         model.loadAll()
                         model.loadPopular(
                             "ANIME", sort = Anilist.sortBy[1], onList = PrefManager.getVal(

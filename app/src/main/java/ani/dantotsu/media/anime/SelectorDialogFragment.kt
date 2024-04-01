@@ -30,10 +30,13 @@ import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
 import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
+import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaType
+import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.Download.download
 import ani.dantotsu.parsers.Subtitle
@@ -375,6 +378,45 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 binding.urlDownload.visibility = View.VISIBLE
             } else {
                 binding.urlDownload.visibility = View.GONE
+            }
+            val subtitles = extractor.subtitles
+            if (subtitles.isNotEmpty()) {
+                binding.urlSub.visibility = View.VISIBLE
+            } else {
+                binding.urlSub.visibility = View.GONE
+            }
+            binding.urlSub.setOnClickListener {
+                if (subtitles.isNotEmpty()) {
+                    val subtitleNames = subtitles.map { it.language }
+                    var subtitleToDownload: Subtitle? = null
+                    val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
+                        .setTitle("Download Subtitle")
+                        .setSingleChoiceItems(
+                            subtitleNames.toTypedArray(),
+                            -1
+                        ) { _, which ->
+                            subtitleToDownload = subtitles[which]
+                        }
+                        .setPositiveButton("Download") { dialog, _ ->
+                            scope.launch {
+                                if (subtitleToDownload != null) {
+                                    SubtitleDownloader.downloadSubtitle(
+                                        requireContext(),
+                                        subtitleToDownload!!.file.url,
+                                        DownloadedType(media!!.mainName(), media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.number, MediaType.ANIME)
+                                    )
+                                }
+                            }
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("Cancel") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .show()
+                    alertDialog.window?.setDimAmount(0.8f)
+                } else {
+                    snackString("No Subtitles Available")
+                }
             }
             binding.urlDownload.setSafeOnClickListener {
                 media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.selectedExtractor =

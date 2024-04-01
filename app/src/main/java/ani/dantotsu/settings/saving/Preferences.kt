@@ -40,6 +40,9 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     LastAnilistNotificationId(Pref(Location.General, Int::class, 0)),
     AnilistFilteredTypes(Pref(Location.General, Set::class, setOf<String>())),
     UseAlarmManager(Pref(Location.General, Boolean::class, false)),
+    IncludeAnimeList(Pref(Location.General, Boolean::class, true)),
+    IncludeMangaList(Pref(Location.General, Boolean::class, true)),
+    AdultOnly(Pref(Location.General, Boolean::class, false)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),
@@ -77,8 +80,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     MangaListSortOrder(Pref(Location.UI, String::class, "score")),
     CommentSortOrder(Pref(Location.UI, String::class, "newest")),
     FollowerLayout(Pref(Location.UI, Int::class, 0)),
-    IncludeAnimeList(Pref(Location.UI, Boolean::class, true)),
-    IncludeMangaList(Pref(Location.UI, Boolean::class, true)),
+
 
     //Player
     DefaultSpeed(Pref(Location.Player, Int::class, 5)),
