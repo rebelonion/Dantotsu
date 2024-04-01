@@ -137,7 +137,8 @@ class AnilistAnimeViewModel : ViewModel() {
                 sort = Anilist.sortBy[2],
                 season = season,
                 seasonYear = year,
-                hd = true
+                hd = true,
+                adultOnly = PrefManager.getVal(PrefName.AdultOnly)
             )?.results
         )
     }
@@ -159,7 +160,8 @@ class AnilistAnimeViewModel : ViewModel() {
                 search = searchVal,
                 onList = if (onList) null else false,
                 sort = sort,
-                genres = genres
+                genres = genres,
+                adultOnly = PrefManager.getVal(PrefName.AdultOnly)
             )
         )
     }
@@ -176,7 +178,8 @@ class AnilistAnimeViewModel : ViewModel() {
             r.tags,
             r.format,
             r.isAdult,
-            r.onList
+            r.onList,
+            adultOnly = PrefManager.getVal(PrefName.AdultOnly),
         )
     )
 
@@ -241,7 +244,8 @@ class AnilistMangaViewModel : ViewModel() {
                 type,
                 perPage = 10,
                 sort = Anilist.sortBy[2],
-                hd = true
+                hd = true,
+                adultOnly = PrefManager.getVal(PrefName.AdultOnly)
             )?.results
         )
 
@@ -261,7 +265,8 @@ class AnilistMangaViewModel : ViewModel() {
                 search = searchVal,
                 onList = if (onList) null else false,
                 sort = sort,
-                genres = genres
+                genres = genres,
+                adultOnly = PrefManager.getVal(PrefName.AdultOnly)
             )
         )
     }
@@ -282,7 +287,8 @@ class AnilistMangaViewModel : ViewModel() {
             r.excludedGenres,
             r.excludedTags,
             r.seasonYear,
-            r.season
+            r.season,
+            adultOnly = PrefManager.getVal(PrefName.AdultOnly)
         )
     )
 
@@ -342,7 +348,7 @@ class AnilistSearch : ViewModel() {
             r.excludedGenres,
             r.excludedTags,
             r.seasonYear,
-            r.season
+            r.season,
         )
     )
 
