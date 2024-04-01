@@ -40,7 +40,7 @@ class DiscordDialogFragment: BottomSheetDialogFragment() {
             else -> binding.radioAnilist.isChecked = true
         }
 
-        // binding.anilistLinkPreview.text = getString(R.string.anilist_link, Anilist.userid.toString()) if you really want it
+        binding.anilistLinkPreview.text = getString(R.string.anilist_link, PrefManager.getVal<String>(PrefName.AnilistUserName))
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val mode = when (checkedId) {
