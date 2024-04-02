@@ -9,6 +9,7 @@ import com.lagradost.nicehttp.Requests
 import com.lagradost.nicehttp.ResponseParser
 import com.lagradost.nicehttp.addGenericDns
 import eu.kanade.tachiyomi.network.NetworkHelper
+import eu.kanade.tachiyomi.network.NetworkHelper.Companion.defaultUserAgentProvider
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -40,7 +41,7 @@ fun initializeNetwork() {
 
     defaultHeaders = mapOf(
         "User-Agent" to
-                Injekt.get<NetworkHelper>().defaultUserAgentProvider()
+                defaultUserAgentProvider()
                     .format(Build.VERSION.RELEASE, Build.MODEL)
     )
 

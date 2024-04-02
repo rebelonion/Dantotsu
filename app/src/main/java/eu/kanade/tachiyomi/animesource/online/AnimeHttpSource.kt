@@ -8,6 +8,7 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.Video
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
+import eu.kanade.tachiyomi.network.NetworkHelper.Companion.defaultUserAgentProvider
 import eu.kanade.tachiyomi.network.asObservableSuccess
 import eu.kanade.tachiyomi.network.newCachelessCallWithProgress
 import okhttp3.Headers
@@ -69,7 +70,7 @@ abstract class AnimeHttpSource : AnimeCatalogueSource {
      * Headers builder for requests. Implementations can override this method for custom headers.
      */
     protected open fun headersBuilder() = Headers.Builder().apply {
-        add("User-Agent", network.defaultUserAgentProvider())
+        add("User-Agent", defaultUserAgentProvider())
     }
 
     /**
