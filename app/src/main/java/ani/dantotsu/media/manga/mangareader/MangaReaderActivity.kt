@@ -362,15 +362,11 @@ class MangaReaderActivity : AppCompatActivity() {
                 currentChapterIndex = chaptersArr.indexOf(chap.number)
                 binding.mangaReaderChapterSelect.setSelection(currentChapterIndex)
                 if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
-                    binding.mangaReaderNextChap.text =
-                        chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
-                    binding.mangaReaderPrevChap.text =
-                        chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
+                    binding.mangaReaderNextChap.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
+                    binding.mangaReaderPrevChap.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
                 } else {
-                    binding.mangaReaderNextChap.text =
-                        chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
-                    binding.mangaReaderPrevChap.text =
-                        chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
+                    binding.mangaReaderNextChap.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
+                    binding.mangaReaderPrevChap.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                 }
                 applySettings()
                 val context = this
@@ -378,6 +374,25 @@ class MangaReaderActivity : AppCompatActivity() {
                 val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
                 if ((isOnline(context) && !offline) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
+                        val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
+                        val buttons = when (discordMode) {
+                            "nothing" -> mutableListOf(
+                                RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
+                            )
+                            "dantotsu" -> mutableListOf(
+                                RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
+                                RPC.Link("Read on Dantotsu", getString(R.string.dantotsu))
+                            )
+                            "anilist" -> {
+                                val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
+                                val anilistLink = "https://anilist.co/user/$userId/"
+                                mutableListOf(
+                                    RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
+                                    RPC.Link("View My AniList", anilistLink)
+                                )
+                            }
+                            else -> mutableListOf()
+                        }
                         val presence = RPC.createPresence(
                             RPC.Companion.RPCData(
                                 applicationId = Discord.application_Id,
@@ -386,20 +401,9 @@ class MangaReaderActivity : AppCompatActivity() {
                                 details = chap.title?.takeIf { it.isNotEmpty() }
                                     ?: getString(R.string.chapter_num, chap.number),
                                 state = "${chap.number}/${media.manga?.totalChapters ?: "??"}",
-                                largeImage = media.cover?.let { cover ->
-                                    RPC.Link(media.userPreferredName, cover)
-                                },
-                                smallImage = RPC.Link(
-                                    "Dantotsu",
-                                    Discord.small_Image
-                                ),
-                                buttons = mutableListOf(
-                                    RPC.Link(getString(R.string.view_manga), media.shareLink ?: ""),
-                                    RPC.Link(
-                                        "Stream on Dantotsu",
-                                        getString(R.string.github)
-                                    )
-                                )
+                                largeImage = media.cover?.let { cover -> RPC.Link(media.userPreferredName, cover) },
+                                smallImage = RPC.Link("Dantotsu", Discord.small_Image),
+                                buttons = buttons
                             )
                         )
                         val intent = Intent(context, DiscordService::class.java).apply {

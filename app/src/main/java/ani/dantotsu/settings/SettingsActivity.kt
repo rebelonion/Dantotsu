@@ -19,12 +19,15 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import android.view.HapticFeedbackConstants
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -79,6 +82,7 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
@@ -259,18 +263,18 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         reload()
                     }
 
-                    imageSwitcher.visibility = View.VISIBLE
+                    settingsImageSwitcher.visibility = View.VISIBLE
                     var initialStatus = when (PrefManager.getVal<String>(PrefName.DiscordStatus)) {
                         "online" -> R.drawable.discord_status_online
                         "idle" -> R.drawable.discord_status_idle
                         "dnd" -> R.drawable.discord_status_dnd
                         else -> R.drawable.discord_status_online
                     }
-                    imageSwitcher.setImageResource(initialStatus)
+                    settingsImageSwitcher.setImageResource(initialStatus)
 
                     val zoomInAnimation =
                         AnimationUtils.loadAnimation(this@SettingsActivity, R.anim.bounce_zoom)
-                    imageSwitcher.setOnClickListener {
+                    settingsImageSwitcher.setOnClickListener {
                         var status = "online"
                         initialStatus = when (initialStatus) {
                             R.drawable.discord_status_online -> {
@@ -292,11 +296,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         }
 
                         PrefManager.setVal(PrefName.DiscordStatus, status)
-                        imageSwitcher.setImageResource(initialStatus)
-                        imageSwitcher.startAnimation(zoomInAnimation)
+                        settingsImageSwitcher.setImageResource(initialStatus)
+                        settingsImageSwitcher.startAnimation(zoomInAnimation)
+                    }
+                    settingsImageSwitcher.setOnLongClickListener {
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        DiscordDialogFragment().show(supportFragmentManager, "dialog")
+                        true
                     }
                 } else {
-                    imageSwitcher.visibility = View.GONE
+                    settingsImageSwitcher.visibility = View.GONE
                     settingsDiscordAvatar.setImageResource(R.drawable.ic_round_person_24)
                     settingsDiscordUsername.visibility = View.GONE
                     settingsDiscordLogin.setText(R.string.login)
