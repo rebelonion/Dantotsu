@@ -30,7 +30,7 @@ class NetworkHelper(
             .callTimeout(2, TimeUnit.MINUTES)
             .cache(
                 Cache(
-                    directory = File(context.cacheDir, "network_cache"),
+                    directory = File(context.externalCacheDir ?: context.cacheDir, "network_cache"),
                     maxSize = 5L * 1024 * 1024, // 5 MiB
                 ),
             )
