@@ -3,7 +3,6 @@ package ani.dantotsu.connections.bakaupdates
 import ani.dantotsu.client
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.tryWithSuspend
-import ani.dantotsu.util.Logger
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import okio.ByteString.Companion.encode
@@ -36,8 +35,10 @@ class MangaUpdates {
                     e.printStackTrace()
                 }
             }
-            val res = client.post(apiUrl, json = query).parsed<MangaUpdatesResponse>()
-            res.results?.forEach{ Logger.log("MangaUpdates: $it") }
+            val request = client.post(apiUrl, json = query)
+            if (!request.isSuccessful) throw JSONException("MangaUpdates search failure")
+            val res = request.parsed<MangaUpdatesResponse>()
+            res.results?.forEach{ println("MangaUpdates: $it") }
             res.results?.get(0)
         }
     }
@@ -77,13 +78,13 @@ class MangaUpdates {
                 @Serializable
                 data class Series(
                     @SerialName("series_id")
-                    val seriesId: Long?,
+                    val seriesId: Long,
                     @SerialName("title")
-                    val title: String?,
+                    val title: String,
                     @SerialName("latest_chapter")
                     val latestChapter: Int?,
                     @SerialName("last_updated")
-                    val lastUpdated: LastUpdated?
+                    val lastUpdated: LastUpdated
                 ) {
                     @Serializable
                     data class LastUpdated(

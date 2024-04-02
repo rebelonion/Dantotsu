@@ -1012,37 +1012,33 @@ fun countDown(media: Media, view: ViewGroup) {
 fun sinceWhen(media: Media, view: ViewGroup) {
     CoroutineScope(Dispatchers.IO).launch {
         MangaUpdates().search(media.nameRomaji, media.startDate)?.let {
-            val latestChapter = it.metadata.series.latestChapter
-                ?: it.record.chapter?.toInt()
-            it.metadata.series.lastUpdated?.timestamp?.let { timeStamp ->
-                val timeSince = (System.currentTimeMillis() - (timeStamp * 1000)) / 1000
-                withContext(Dispatchers.Main) {
-                    val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
-                    view.addView(v.root, 0)
-                    v.mediaCountdownText.text =
-                        currActivity()?.getString(
-                            R.string.chapter_release_timeout,
-                            latestChapter
+            val latestChapter = it.metadata.series.latestChapter ?: it.record.chapter?.toInt()
+            val timeSince = (System.currentTimeMillis() -
+                    (it.metadata.series.lastUpdated.timestamp * 1000)) / 1000
+
+            withContext(Dispatchers.Main) {
+                val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
+                view.addView(v.root, 0)
+                v.mediaCountdownText.text =
+                    currActivity()?.getString(R.string.chapter_release_timeout, latestChapter)
+
+                object : CountUpTimer(86400000) {
+                    override fun onTick(second: Int) {
+                        val a = second + timeSince
+                        v.mediaCountdown.text = currActivity()?.getString(
+                            R.string.time_format,
+                            a / 86400,
+                            a % 86400 / 3600,
+                            a % 86400 % 3600 / 60,
+                            a % 86400 % 3600 % 60
                         )
+                    }
 
-                    object : CountUpTimer(86400000) {
-                        override fun onTick(second: Int) {
-                            val a = second + timeSince
-                            v.mediaCountdown.text = currActivity()?.getString(
-                                R.string.time_format,
-                                a / 86400,
-                                a % 86400 / 3600,
-                                a % 86400 % 3600 / 60,
-                                a % 86400 % 3600 % 60
-                            )
-                        }
-
-                        override fun onFinish() {
-                            v.mediaCountdownContainer.visibility = View.GONE
-                            snackString(currContext()?.getString(R.string.congrats_vro))
-                        }
-                    }.start()
-                }
+                    override fun onFinish() {
+                        v.mediaCountdownContainer.visibility = View.GONE
+                        snackString(currContext()?.getString(R.string.congrats_vro))
+                    }
+                }.start()
             }
         }
     }
