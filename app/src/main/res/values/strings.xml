@@ -506,6 +506,7 @@
         <item>Score</item>
         <item>Popular</item>
         <item>Trending</item>
+        <item>New Releases</item>
         <item>A-Z</item>
         <item>Z-A</item>
         <item>Pure pain</item>
@@ -661,7 +662,10 @@
     <string name="chapter_singular">Chapter</string>
     <string name="chapter_plural">Chapters</string>
 
+    <string name="filter_status">"Status : %1$s"</string>
+    <string name="filter_source">"Source : %1$s"</string>
     <string name="filter_format">"Format : %1$s"</string>
+    <string name="filter_country">"Country : %1$s"</string>
     <string name="filter_sort">"Sort : %1$s"</string>
     <string name="filter_exclude">"Not %1$s"</string>
     <string name="search_by_image">Search by Image</string>

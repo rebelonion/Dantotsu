@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/country_global"
+        android:title="Global" />
+    <item
+        android:id="@+id/country_china"
+        android:title="China" />
+    <item
+        android:id="@+id/country_south_korea"
+        android:title="South Korea" />
+    <item
+        android:id="@+id/country_japan"
+        android:title="Japan" />
+    <item
+        android:id="@+id/country_taiwan"
+        android:title="Taiwan" />
+</menu>
