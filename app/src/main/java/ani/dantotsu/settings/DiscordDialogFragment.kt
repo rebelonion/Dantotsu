@@ -1,22 +1,14 @@
 package ani.dantotsu.settings
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.R
-import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.BottomSheetDiscordRpcBinding
-import ani.dantotsu.profile.activity.UsersAdapter
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class DiscordDialogFragment: BottomSheetDialogFragment() {
     private var _binding: BottomSheetDiscordRpcBinding? = null
