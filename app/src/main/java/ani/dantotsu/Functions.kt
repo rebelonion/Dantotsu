@@ -92,6 +92,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.bakaupdates.MangaUpdates
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
@@ -102,6 +103,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
+import ani.dantotsu.util.CountUpTimer
 import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -134,9 +136,12 @@ import io.noties.markwon.html.TagHandlerNoOp
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.glide.GlideImagesPlugin
 import jp.wasabeef.glide.transformations.BlurTransformation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -1001,6 +1006,53 @@ fun countDown(media: Media, view: ViewGroup) {
                 snackString(currContext()?.getString(R.string.congrats_vro))
             }
         }.start()
+    }
+}
+
+fun sinceWhen(media: Media, view: ViewGroup) {
+    CoroutineScope(Dispatchers.IO).launch {
+        MangaUpdates().search(media.nameRomaji, media.startDate)?.let {
+            val latestChapter = it.metadata.series.latestChapter
+                ?: it.record.chapter.toInt()
+            it.metadata.series.lastUpdated?.timestamp?.let { timeStamp ->
+                val timeSince = (System.currentTimeMillis() - (timeStamp * 1000)) / 1000
+                withContext(Dispatchers.Main) {
+                    val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
+                    view.addView(v.root, 0)
+                    v.mediaCountdownText.text =
+                        currActivity()?.getString(
+                            R.string.chapter_release_timeout,
+                            latestChapter
+                        )
+
+                    object : CountUpTimer(86400000) {
+                        override fun onTick(second: Int) {
+                            val a = second + timeSince
+                            v.mediaCountdown.text = currActivity()?.getString(
+                                R.string.time_format,
+                                a / 86400,
+                                a % 86400 / 3600,
+                                a % 86400 % 3600 / 60,
+                                a % 86400 % 3600 % 60
+                            )
+                        }
+
+                        override fun onFinish() {
+                            v.mediaCountdownContainer.visibility = View.GONE
+                            snackString(currContext()?.getString(R.string.congrats_vro))
+                        }
+                    }.start()
+                }
+            }
+        }
+    }
+}
+
+fun displayTimer(media: Media, view: ViewGroup) {
+    when {
+        media.anime != null -> countDown(media, view)
+        media.format == "MANGA" || media.format == "ONE_SHOT" -> sinceWhen(media, view)
+        else -> { } // No timer yet
     }
 }
 

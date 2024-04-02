@@ -27,7 +27,6 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.GenresViewModel
 import ani.dantotsu.copyToClipboard
-import ani.dantotsu.countDown
 import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.ActivityGenreBinding
 import ani.dantotsu.databinding.FragmentMediaInfoBinding
@@ -38,6 +37,7 @@ import ani.dantotsu.databinding.ItemTitleRecyclerBinding
 import ani.dantotsu.databinding.ItemTitleSearchBinding
 import ani.dantotsu.databinding.ItemTitleTextBinding
 import ani.dantotsu.databinding.ItemTitleTrailerBinding
+import ani.dantotsu.displayTimer
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.px
@@ -225,8 +225,7 @@ class MediaInfoFragment : Fragment() {
                             .setDuration(400).start()
                     }
                 }
-
-                countDown(media, binding.mediaInfoContainer)
+                displayTimer(media, binding.mediaInfoContainer)
                 val parent = _binding?.mediaInfoContainer!!
                 val screenWidth = resources.displayMetrics.run { widthPixels / density }
 
