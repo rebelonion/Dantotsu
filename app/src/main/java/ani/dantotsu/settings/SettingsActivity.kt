@@ -28,6 +28,7 @@ import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import android.view.HapticFeedbackConstants
+import androidx.core.view.ViewCompat.performHapticFeedback
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
@@ -211,6 +212,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     settingsAnilistUsername.visibility = View.VISIBLE
                     settingsAnilistUsername.text = Anilist.username
                     settingsAnilistAvatar.loadImage(Anilist.avatar)
+                    settingsAnilistAvatar.setOnClickListener {
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        val anilistLink = getString(R.string.anilist_link, PrefManager.getVal<String>(PrefName.AnilistUserName))
+                        openLinkInBrowser(anilistLink)
+                        true
+                    }
 
                     settingsMALLoginRequired.visibility = View.GONE
                     settingsMALLogin.visibility = View.VISIBLE
@@ -226,6 +233,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         settingsMALUsername.visibility = View.VISIBLE
                         settingsMALUsername.text = MAL.username
                         settingsMALAvatar.loadImage(MAL.avatar)
+                        settingsMALAvatar.setOnClickListener {
+                            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                            val myanilistLink = getString(R.string.myanilist_link, MAL.username)
+                            openLinkInBrowser(myanilistLink)
+                            true
+                        }
                     } else {
                         settingsMALAvatar.setImageResource(R.drawable.ic_round_person_24)
                         settingsMALUsername.visibility = View.GONE
@@ -252,6 +265,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     val username = PrefManager.getVal(PrefName.DiscordUserName, null as String?)
                     if (id != null && avatar != null) {
                         settingsDiscordAvatar.loadImage("https://cdn.discordapp.com/avatars/$id/$avatar.png")
+                        settingsDiscordAvatar.setOnClickListener {
+                            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                            val discordLink = getString(R.string.discord_link, id)
+                            openLinkInBrowser(discordLink)
+                            true
+                        }
                     }
                     settingsDiscordUsername.visibility = View.VISIBLE
                     settingsDiscordUsername.text =

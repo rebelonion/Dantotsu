@@ -16,6 +16,7 @@
     <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
     
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
+    <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
 
     <string name="home">Home</string>
