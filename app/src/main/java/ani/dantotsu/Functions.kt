@@ -1013,7 +1013,7 @@ fun sinceWhen(media: Media, view: ViewGroup) {
     CoroutineScope(Dispatchers.IO).launch {
         MangaUpdates().search(media.nameRomaji, media.startDate)?.let {
             val latestChapter = it.metadata.series.latestChapter
-                ?: it.record.chapter.toInt()
+                ?: it.record.chapter?.toInt()
             it.metadata.series.lastUpdated?.timestamp?.let { timeStamp ->
                 val timeSince = (System.currentTimeMillis() - (timeStamp * 1000)) / 1000
                 withContext(Dispatchers.Main) {

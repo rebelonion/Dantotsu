@@ -23,12 +23,14 @@ class MangaUpdates {
             val query = JSONObject().apply {
                 try {
                     put("search", title.encode(Charset.forName("UTF-8")))
+                    put("orderby", "date")
                     startDate?.let {
                         put(
                             "start_date",
                             "${it.year}-${it.month.dateFormat}-${it.day.dateFormat}"
                         )
                     }
+                    put("asc", "desc")
                     put("include_metadata", true)
                 } catch (e: JSONException) {
                     e.printStackTrace()
@@ -64,7 +66,7 @@ class MangaUpdates {
                 @SerialName("volume")
                 val volume: String?,
                 @SerialName("chapter")
-                val chapter: String,
+                val chapter: String?,
                 @SerialName("release_date")
                 val releaseDate: String
             )
