@@ -96,50 +96,8 @@ object Download {
             when (PrefManager.getVal(PrefName.DownloadManager) as Int) {
                 1 -> oneDM(context, file, notif ?: fileName)
                 2 -> adm(context, file, fileName, folder)
-                else -> defaultDownload(context, file, fileName, folder, notif ?: fileName)
+                else -> oneDM(context, file, notif ?: fileName)
             }
-    }
-
-    private fun defaultDownload(
-        context: Context,
-        file: FileUrl,
-        fileName: String,
-        folder: String,
-        notif: String
-    ) {
-        val manager =
-            context.getSystemService(AppCompatActivity.DOWNLOAD_SERVICE) as DownloadManager
-        val request: DownloadManager.Request = DownloadManager.Request(Uri.parse(file.url))
-        file.headers.forEach {
-            request.addRequestHeader(it.key, it.value)
-        }
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-
-                val arrayOfFiles = ContextCompat.getExternalFilesDirs(context, null)
-                if (PrefManager.getVal(PrefName.SdDl) && arrayOfFiles.size > 1 && arrayOfFiles[0] != null && arrayOfFiles[1] != null) {
-                    val parentDirectory = arrayOfFiles[1].toString() + folder
-                    val direct = File(parentDirectory)
-                    if (!direct.exists()) direct.mkdirs()
-                    request.setDestinationUri(Uri.fromFile(File("$parentDirectory$fileName")))
-                } else {
-                    val direct = File(Environment.DIRECTORY_DOWNLOADS + "/Dantotsu$folder")
-                    if (!direct.exists()) direct.mkdirs()
-                    request.setDestinationInExternalPublicDir(
-                        Environment.DIRECTORY_DOWNLOADS,
-                        "/Dantotsu$folder$fileName"
-                    )
-                }
-                request.setTitle(notif)
-                manager.enqueue(request)
-                toast(currContext()?.getString(R.string.started_downloading, notif))
-            } catch (e: SecurityException) {
-                toast(currContext()?.getString(R.string.permission_required))
-            } catch (e: Exception) {
-                toast(e.toString())
-            }
-        }
     }
 
     private fun oneDM(context: Context, file: FileUrl, notif: String) {

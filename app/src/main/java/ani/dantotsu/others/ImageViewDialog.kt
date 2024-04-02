@@ -12,7 +12,6 @@ import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.databinding.BottomSheetImageBinding
-import ani.dantotsu.downloadsPermission
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmap
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.loadBitmapOld
 import ani.dantotsu.media.manga.mangareader.BaseImageAdapter.Companion.mergeBitmap
@@ -22,6 +21,7 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.shareImage
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
+import ani.dantotsu.util.StoragePermissions.Companion.downloadsPermission
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import com.davemorrissey.labs.subscaleview.ImageSource
 import kotlinx.coroutines.launch

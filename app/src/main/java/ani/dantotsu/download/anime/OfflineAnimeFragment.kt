@@ -204,10 +204,6 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 if (mediaIds.isEmpty()) {
                     snackString("No media found")  // if this happens, terrible things have happened
                 }
-                for (mediaId in mediaIds) {
-                    ani.dantotsu.download.video.Helper.downloadManager(requireContext())
-                        .removeDownload(mediaId.toString())
-                }
                 getDownloads()
                 adapter.setItems(downloads)
                 total.text = if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"

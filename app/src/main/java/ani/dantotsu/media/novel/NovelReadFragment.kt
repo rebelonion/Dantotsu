@@ -96,7 +96,7 @@ class NovelReadFragment : Fragment(),
         ) {
             val file = File(
                 context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "${DownloadsManager.novelLocation}/${media.mainName()}/${novel.name}/0.epub"
+                "a/${media.mainName()}/${novel.name}/0.epub" //FIXME
             )
             if (!file.exists()) return false
             val fileUri = FileProvider.getUriForFile(
@@ -135,7 +135,7 @@ class NovelReadFragment : Fragment(),
                 novel.name,
                 MediaType.NOVEL
             )
-        )
+        ) {}
     }
 
     private val downloadStatusReceiver = object : BroadcastReceiver() {

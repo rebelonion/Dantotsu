@@ -51,8 +51,6 @@ import ani.dantotsu.databinding.ActivitySettingsMangaBinding
 import ani.dantotsu.databinding.ActivitySettingsNotificationsBinding
 import ani.dantotsu.databinding.ActivitySettingsThemeBinding
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.download.video.ExoplayerDownloadService
-import ani.dantotsu.downloadsPermission
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaType
@@ -82,6 +80,7 @@ import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.StoragePermissions.Companion.downloadsPermission
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputEditText
 import eltos.simpledialogfragment.SimpleDialog
@@ -438,11 +437,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     .setPositiveButton(R.string.yes) { dialog, _ ->
                         val downloadsManager = Injekt.get<DownloadsManager>()
                         downloadsManager.purgeDownloads(MediaType.ANIME)
-                        DownloadService.sendRemoveAllDownloads(
-                            this@SettingsActivity,
-                            ExoplayerDownloadService::class.java,
-                            false
-                        )
                         dialog.dismiss()
                     }
                     .setNegativeButton(R.string.no) { dialog, _ ->

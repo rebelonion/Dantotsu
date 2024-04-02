@@ -104,7 +104,7 @@ import ani.dantotsu.connections.discord.RPC
 import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
 import ani.dantotsu.defaultHeaders
-import ani.dantotsu.download.video.Helper
+import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.dp
 import ani.dantotsu.getCurrentBrightnessValue
 import ani.dantotsu.hideSystemBars
@@ -114,6 +114,7 @@ import ani.dantotsu.logError
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaNameAdapter
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.okHttpClient
 import ani.dantotsu.others.AniSkip
@@ -394,7 +395,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         isCastApiAvailable = GoogleApiAvailability.getInstance()
             .isGooglePlayServicesAvailable(this) == ConnectionResult.SUCCESS
         try {
-            castContext = CastContext.getSharedInstance(this, Executors.newSingleThreadExecutor()).result
+            castContext =
+                CastContext.getSharedInstance(this, Executors.newSingleThreadExecutor()).result
             castPlayer = CastPlayer(castContext!!)
             castPlayer!!.setSessionAvailabilityListener(this)
         } catch (e: Exception) {
@@ -442,41 +444,43 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }, AUDIO_CONTENT_TYPE_MOVIE, AUDIOFOCUS_GAIN)
 
         if (System.getInt(contentResolver, System.ACCELEROMETER_ROTATION, 0) != 1) {
-    if (PrefManager.getVal(PrefName.RotationPlayer)) {
-        orientationListener =
-            object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
-                override fun onOrientationChanged(orientation: Int) {
-                    when (orientation) {
-                        in 45..135 -> {
-                            if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
-                                exoRotate.visibility = View.VISIBLE
+            if (PrefManager.getVal(PrefName.RotationPlayer)) {
+                orientationListener =
+                    object : OrientationEventListener(this, SensorManager.SENSOR_DELAY_UI) {
+                        override fun onOrientationChanged(orientation: Int) {
+                            when (orientation) {
+                                in 45..135 -> {
+                                    if (rotation != ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE) {
+                                        exoRotate.visibility = View.VISIBLE
+                                    }
+                                    rotation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
+                                }
+
+                                in 225..315 -> {
+                                    if (rotation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+                                        exoRotate.visibility = View.VISIBLE
+                                    }
+                                    rotation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                                }
+
+                                in 315..360, in 0..45 -> {
+                                    if (rotation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
+                                        exoRotate.visibility = View.VISIBLE
+                                    }
+                                    rotation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                                }
                             }
-                            rotation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
-                        }
-                        in 225..315 -> {
-                            if (rotation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
-                                exoRotate.visibility = View.VISIBLE
-                            }
-                            rotation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                        }
-                        in 315..360, in 0..45 -> {
-                            if (rotation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
-                                exoRotate.visibility = View.VISIBLE
-                            }
-                            rotation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                         }
                     }
-                }
+                orientationListener?.enable()
             }
-        orientationListener?.enable()
-    }
 
-    requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
-    exoRotate.setOnClickListener {
-        requestedOrientation = rotation
-        it.visibility = View.GONE
-    }
-}
+            requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE
+            exoRotate.setOnClickListener {
+                requestedOrientation = rotation
+                it.visibility = View.GONE
+            }
+        }
 
         setupSubFormatting(playerView)
 
@@ -1089,10 +1093,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                             "nothing" -> mutableListOf(
                                 RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
                             )
+
                             "dantotsu" -> mutableListOf(
                                 RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
                                 RPC.Link("Watch on Dantotsu", getString(R.string.dantotsu))
                             )
+
                             "anilist" -> {
                                 val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
                                 val anilistLink = "https://anilist.co/user/$userId/"
@@ -1101,6 +1107,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                                     RPC.Link("View My AniList", anilistLink)
                                 )
                             }
+
                             else -> mutableListOf()
                         }
                         val presence = RPC.createPresence(
@@ -1113,7 +1120,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                                     ep.number
                                 ),
                                 state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
-                                largeImage = media.cover?.let { RPC.Link(media.userPreferredName, it) },
+                                largeImage = media.cover?.let {
+                                    RPC.Link(
+                                        media.userPreferredName,
+                                        it
+                                    )
+                                },
                                 smallImage = RPC.Link("Dantotsu", Discord.small_Image),
                                 buttons = buttons
                             )
@@ -1161,7 +1173,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if (PrefManager.getVal(PrefName.Cast)) {
             playerView.findViewById<CustomCastButton>(R.id.exo_cast).apply {
                 visibility = View.VISIBLE
-                if(PrefManager.getVal(PrefName.UseInternalCast)) {
+                if (PrefManager.getVal(PrefName.UseInternalCast)) {
                     try {
                         CastButtonFactory.setUpMediaRouteButton(context, this)
                         dialogFactory = CustomCastThemeFactory()
@@ -1324,7 +1336,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         )
 
         @Suppress("UNCHECKED_CAST")
-        val list = (PrefManager.getNullableCustomVal("continueAnimeList", listOf<Int>(), List::class.java) as List<Int>).toMutableList()
+        val list = (PrefManager.getNullableCustomVal(
+            "continueAnimeList",
+            listOf<Int>(),
+            List::class.java
+        ) as List<Int>).toMutableList()
         if (list.contains(media.id)) list.remove(media.id)
         list.add(media.id)
         PrefManager.setCustomVal("continueAnimeList", list)
@@ -1418,7 +1434,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
         val dafuckDataSourceFactory = DefaultDataSource.Factory(this)
         cacheFactory = CacheDataSource.Factory().apply {
-            setCache(Helper.getSimpleCache(this@ExoplayerView))
+            setCache(VideoCache.getInstance(this@ExoplayerView))
             if (ext.server.offline) {
                 setUpstreamDataSourceFactory(dafuckDataSourceFactory)
             } else {
@@ -1435,15 +1451,28 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
         val downloadedMediaItem = if (ext.server.offline) {
             val key = ext.server.name
-            downloadId = PrefManager.getAnimeDownloadPreferences()
-                .getString(key, null)
-            if (downloadId != null) {
-                Helper.downloadManager(this)
-                    .downloadIndex.getDownload(downloadId!!)?.request?.toMediaItem()
+            val titleName = ext.server.name.split("/").first()
+            val episodeName = ext.server.name.split("/").last()
+
+            val directory = getSubDirectory(this, MediaType.ANIME, false, titleName, episodeName)
+            if (directory != null) {
+                val files = directory.listFiles()
+                println(files)
+                val docFile = directory.listFiles().firstOrNull {
+                    it.name?.endsWith(".mp4") == true || it.name?.endsWith(".mkv") == true
+                }
+                if (docFile != null) {
+                    val uri = docFile.uri
+                    MediaItem.Builder().setUri(uri).setMimeType(mimeType).build()
+                } else {
+                    snackString("File not found")
+                    null
+                }
             } else {
-                snackString("Download not found")
+                snackString("Directory not found")
                 null
             }
+
         } else null
 
         mediaItem = if (downloadedMediaItem == null) {
@@ -1818,7 +1847,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
                     if (!functionstarted && !disappeared && PrefManager.getVal(PrefName.AutoHideTimeStamps)) {
                         disappearSkip()
-                    } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)){
+                    } else if (!PrefManager.getVal<Boolean>(PrefName.AutoHideTimeStamps)) {
                         skipTimeButton.visibility = View.VISIBLE
                         exoSkip.visibility = View.GONE
                         skipTimeText.text = new.skipType.getType()
@@ -2157,11 +2186,16 @@ class CustomCastButton : MediaRouteButton {
     fun setCastCallback(castCallback: () -> Unit) {
         this.castCallback = castCallback
     }
+
     constructor(context: Context) : super(context)
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
 
     override fun performClick(): Boolean {
         return if (PrefManager.getVal(PrefName.UseInternalCast)) {

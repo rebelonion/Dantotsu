@@ -182,6 +182,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     RecentGlobalNotification(Pref(Location.Irrelevant, Int::class, 0)),
     CommentNotificationStore(Pref(Location.Irrelevant, List::class, listOf<CommentStore>())),
     UnreadCommentNotifications(Pref(Location.Irrelevant, Int::class, 0)),
+    DownloadsDir(Pref(Location.Irrelevant, String::class, "")),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

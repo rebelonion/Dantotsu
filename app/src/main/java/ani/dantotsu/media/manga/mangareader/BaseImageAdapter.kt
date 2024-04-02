@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -165,6 +166,10 @@ abstract class BaseImageAdapter(
                                 it.load(localFile.absoluteFile)
                                     .skipMemoryCache(true)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            } else if (link.url.startsWith("content://")) {
+                                it.load(Uri.parse(link.url))
+                                    .skipMemoryCache(true)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                             } else {
                                 mangaCache.get(link.url)?.let { imageData ->
                                     val bitmap = imageData.fetchAndProcessImage(
@@ -175,6 +180,7 @@ abstract class BaseImageAdapter(
                                         .skipMemoryCache(true)
                                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 }
+
                             }
                         }
                         ?.let {

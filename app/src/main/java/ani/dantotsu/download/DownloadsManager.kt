@@ -1,14 +1,21 @@
 package ani.dantotsu.download
 
 import android.content.Context
-import android.os.Environment
-import android.widget.Toast
+import android.net.Uri
+import androidx.documentfile.provider.DocumentFile
+import ani.dantotsu.download.DownloadsManager.Companion.findValidName
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.snackString
+import com.anggrayudi.storage.file.deleteRecursively
+import com.anggrayudi.storage.file.findFolder
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import java.io.File
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.Serializable
 
 class DownloadsManager(private val context: Context) {
@@ -42,27 +49,29 @@ class DownloadsManager(private val context: Context) {
         saveDownloads()
     }
 
-    fun removeDownload(downloadedType: DownloadedType) {
+    fun removeDownload(downloadedType: DownloadedType, onFinished: () -> Unit) {
         downloadsList.remove(downloadedType)
-        removeDirectory(downloadedType)
+        CoroutineScope(Dispatchers.IO).launch {
+            removeDirectory(downloadedType)
+            withContext(Dispatchers.Main) {
+                onFinished()
+            }
+        }
         saveDownloads()
     }
 
     fun removeMedia(title: String, type: MediaType) {
-        val subDirectory = type.asText()
-        val directory = File(
-            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/$subDirectory/$title"
-        )
-        if (directory.exists()) {
-            val deleted = directory.deleteRecursively()
+        val baseDirectory = getBaseDirectory(context, type)
+        val directory = baseDirectory?.findFolder(title)
+        if (directory?.exists() == true) {
+            val deleted = directory.deleteRecursively(context, false)
             if (deleted) {
-                Toast.makeText(context, "Successfully deleted", Toast.LENGTH_SHORT).show()
+                snackString("Successfully deleted")
             } else {
-                Toast.makeText(context, "Failed to delete directory", Toast.LENGTH_SHORT).show()
+                snackString("Failed to delete directory")
             }
         } else {
-            Toast.makeText(context, "Directory does not exist", Toast.LENGTH_SHORT).show()
+            snackString("Directory does not exist")
             cleanDownloads()
         }
         when (type) {
@@ -89,23 +98,17 @@ class DownloadsManager(private val context: Context) {
 
     private fun cleanDownload(type: MediaType) {
         // remove all folders that are not in the downloads list
-        val subDirectory = type.asText()
-        val directory = File(
-            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/$subDirectory"
-        )
+        val directory = getBaseDirectory(context, type)
         val downloadsSubLists = when (type) {
             MediaType.MANGA -> mangaDownloadedTypes
             MediaType.ANIME -> animeDownloadedTypes
             else -> novelDownloadedTypes
         }
-        if (directory.exists()) {
+        if (directory?.exists() == true && directory.isDirectory) {
             val files = directory.listFiles()
-            if (files != null) {
-                for (file in files) {
-                    if (!downloadsSubLists.any { it.title == file.name }) {
-                        file.deleteRecursively()
-                    }
+            for (file in files) {
+                if (!downloadsSubLists.any { it.title == file.name }) {
+                    file.deleteRecursively(context, false)
                 }
             }
         }
@@ -113,27 +116,11 @@ class DownloadsManager(private val context: Context) {
         val iterator = downloadsList.iterator()
         while (iterator.hasNext()) {
             val download = iterator.next()
-            val downloadDir = File(directory, download.title)
-            if ((!downloadDir.exists() && download.type == type) || download.title.isBlank()) {
+            val downloadDir = directory?.findFolder(download.title)
+            if ((downloadDir?.exists() == false && download.type == type) || download.title.isBlank()) {
                 iterator.remove()
             }
         }
-    }
-
-    fun saveDownloadsListToJSONFileInDownloadsFolder(downloadsList: List<DownloadedType>)  //for debugging
-    {
-        val jsonString = gson.toJson(downloadsList)
-        val file = File(
-            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/downloads.json"
-        )
-        if (file.parentFile?.exists() == false) {
-            file.parentFile?.mkdirs()
-        }
-        if (!file.exists()) {
-            file.createNewFile()
-        }
-        file.writeText(jsonString)
     }
 
     fun queryDownload(downloadedType: DownloadedType): Boolean {
@@ -149,98 +136,35 @@ class DownloadsManager(private val context: Context) {
     }
 
     private fun removeDirectory(downloadedType: DownloadedType) {
-        val directory = when (downloadedType.type) {
-            MediaType.MANGA -> {
-                File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                    "Dantotsu/Manga/${downloadedType.title}/${downloadedType.chapter}"
-                )
-            }
-            MediaType.ANIME -> {
-                File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                    "Dantotsu/Anime/${downloadedType.title}/${downloadedType.chapter}"
-                )
-            }
-            else -> {
-                File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                    "Dantotsu/Novel/${downloadedType.title}/${downloadedType.chapter}"
-                )
-            }
-        }
+        val baseDirectory = getBaseDirectory(context, downloadedType.type)
+        val directory =
+            baseDirectory?.findFolder(downloadedType.title)?.findFolder(downloadedType.chapter)
 
         // Check if the directory exists and delete it recursively
-        if (directory.exists()) {
-            val deleted = directory.deleteRecursively()
+        if (directory?.exists() == true) {
+            val deleted = directory.deleteRecursively(context, false)
             if (deleted) {
-                Toast.makeText(context, "Successfully deleted", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(context, "Failed to delete directory", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            Toast.makeText(context, "Directory does not exist", Toast.LENGTH_SHORT).show()
-        }
-    }
+                snackString("Successfully deleted")
 
-    fun exportDownloads(downloadedType: DownloadedType) { //copies to the downloads folder available to the user
-        val directory = when (downloadedType.type) {
-            MediaType.MANGA -> {
-                File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                    "Dantotsu/Manga/${downloadedType.title}/${downloadedType.chapter}"
-                )
-            }
-            MediaType.ANIME -> {
-                File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                    "Dantotsu/Anime/${downloadedType.title}/${downloadedType.chapter}"
-                )
-            }
-            else -> {
-                File(
-                    context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                    "Dantotsu/Novel/${downloadedType.title}/${downloadedType.chapter}"
-                )
-            }
-        }
-        val destination = File(
-            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/${downloadedType.title}/${downloadedType.chapter}"
-        )
-        if (directory.exists()) {
-            val copied = directory.copyRecursively(destination, true)
-            if (copied) {
-                Toast.makeText(context, "Successfully copied", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(context, "Failed to copy directory", Toast.LENGTH_SHORT).show()
+                snackString("Failed to delete directory")
             }
         } else {
-            Toast.makeText(context, "Directory does not exist", Toast.LENGTH_SHORT).show()
+            snackString("Directory does not exist")
         }
     }
 
     fun purgeDownloads(type: MediaType) {
-        val directory = when (type) {
-            MediaType.MANGA -> {
-                File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Manga")
-            }
-            MediaType.ANIME -> {
-                File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Anime")
-            }
-            else -> {
-                File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Dantotsu/Novel")
-            }
-        }
-        if (directory.exists()) {
-            val deleted = directory.deleteRecursively()
+        val directory = getBaseDirectory(context, type)
+        if (directory?.exists() == true) {
+            val deleted = directory.deleteRecursively(context, false)
             if (deleted) {
-                Toast.makeText(context, "Successfully deleted", Toast.LENGTH_SHORT).show()
+                snackString("Successfully deleted")
             } else {
-                Toast.makeText(context, "Failed to delete directory", Toast.LENGTH_SHORT).show()
+                snackString("Failed to delete directory")
             }
         } else {
-            Toast.makeText(context, "Directory does not exist", Toast.LENGTH_SHORT).show()
+            snackString("Directory does not exist")
         }
 
         downloadsList.removeAll { it.type == type }
@@ -248,59 +172,95 @@ class DownloadsManager(private val context: Context) {
     }
 
     companion object {
-        const val novelLocation = "Dantotsu/Novel"
-        const val mangaLocation = "Dantotsu/Manga"
-        const val animeLocation = "Dantotsu/Anime"
+        private const val BASE_LOCATION = "Dantotsu"
+        private const val MANGA_SUB_LOCATION = "Manga"
+        private const val ANIME_SUB_LOCATION = "Anime"
+        private const val NOVEL_SUB_LOCATION = "Novel"
+        private const val RESERVED_CHARS = "|\\?*<\":>+[]/'"
 
-        fun getDirectory(
-            context: Context,
-            type: MediaType,
-            title: String,
-            chapter: String? = null
-        ): File {
+        fun String?.findValidName(): String {
+            return this?.filterNot { RESERVED_CHARS.contains(it) } ?: ""
+        }
+
+        /**
+         * Get and create a base directory for the given type
+         * @param context the context
+         * @param type the type of media
+         * @return the base directory
+         */
+
+        private fun getBaseDirectory(context: Context, type: MediaType): DocumentFile? {
+            val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
+            if (baseDirectory == Uri.EMPTY) return null
+            var base = DocumentFile.fromTreeUri(context, baseDirectory) ?: return null
+            base = base.findOrCreateFolder(BASE_LOCATION, false) ?: return null
             return when (type) {
                 MediaType.MANGA -> {
-                    if (chapter != null) {
-                        File(
-                            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                            "$mangaLocation/$title/$chapter"
-                        )
-                    } else {
-                        File(
-                            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                            "$mangaLocation/$title"
-                        )
-                    }
+                    base.findOrCreateFolder(MANGA_SUB_LOCATION, false)
                 }
+
                 MediaType.ANIME -> {
-                    if (chapter != null) {
-                        File(
-                            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                            "$animeLocation/$title/$chapter"
-                        )
-                    } else {
-                        File(
-                            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                            "$animeLocation/$title"
-                        )
-                    }
+                    base.findOrCreateFolder(ANIME_SUB_LOCATION, false)
                 }
+
                 else -> {
-                    if (chapter != null) {
-                        File(
-                            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                            "$novelLocation/$title/$chapter"
-                        )
-                    } else {
-                        File(
-                            context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                            "$novelLocation/$title"
-                        )
-                    }
+                    base.findOrCreateFolder(NOVEL_SUB_LOCATION, false)
                 }
             }
         }
+
+        /**
+         * Get and create a subdirectory for the given type
+         * @param context the context
+         * @param type the type of media
+         * @param title the title of the media
+         * @param chapter the chapter of the media
+         * @return the subdirectory
+         */
+        fun getSubDirectory(
+            context: Context,
+            type: MediaType,
+            overwrite: Boolean,
+            title: String,
+            chapter: String? = null
+        ): DocumentFile? {
+            val baseDirectory = getBaseDirectory(context, type) ?: return null
+            return if (chapter != null) {
+                baseDirectory.findOrCreateFolder(title, false)
+                    ?.findOrCreateFolder(chapter, overwrite)
+            } else {
+                baseDirectory.findOrCreateFolder(title, overwrite)
+            }
+        }
+
+        fun getDirSize(context: Context, type: MediaType, title: String, chapter: String? = null): Long {
+            val directory = getSubDirectory(context, type, false, title, chapter) ?: return 0
+            var size = 0L
+            directory.listFiles().forEach {
+                size += it.length()
+            }
+            return size
+        }
+
+        private fun DocumentFile.findOrCreateFolder(
+            name: String, overwrite: Boolean
+        ): DocumentFile? {
+            return if (overwrite) {
+                findFolder(name.findValidName())?.delete()
+                createDirectory(name.findValidName())
+            } else {
+                findFolder(name.findValidName()) ?: createDirectory(name.findValidName())
+            }
+        }
+
     }
 }
 
-data class DownloadedType(val title: String, val chapter: String, val type: MediaType) : Serializable
+data class DownloadedType(
+    val pTitle: String, val pChapter: String, val type: MediaType
+) : Serializable {
+    val title: String
+        get() = pTitle.findValidName()
+    val chapter: String
+        get() = pChapter.findValidName()
+}

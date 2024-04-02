@@ -53,140 +53,6 @@ import java.util.concurrent.Executors
 
 @SuppressLint("UnsafeOptInUsageError")
 object Helper {
-
-
-    private var simpleCache: SimpleCache? = null
-
-    fun downloadVideo(context: Context, video: Video, subtitle: Subtitle?) {
-        val dataSourceFactory = DataSource.Factory {
-            val dataSource: HttpDataSource =
-                OkHttpDataSource.Factory(okHttpClient).createDataSource()
-            defaultHeaders.forEach {
-                dataSource.setRequestProperty(it.key, it.value)
-            }
-            video.file.headers.forEach {
-                dataSource.setRequestProperty(it.key, it.value)
-            }
-            dataSource
-        }
-        val mimeType = when (video.format) {
-            VideoType.M3U8 -> MimeTypes.APPLICATION_M3U8
-            VideoType.DASH -> MimeTypes.APPLICATION_MPD
-            else -> MimeTypes.APPLICATION_MP4
-        }
-
-        val builder = MediaItem.Builder().setUri(video.file.url).setMimeType(mimeType)
-        var sub: MediaItem.SubtitleConfiguration? = null
-        if (subtitle != null) {
-            sub = MediaItem.SubtitleConfiguration
-                .Builder(Uri.parse(subtitle.file.url))
-                .setSelectionFlags(C.SELECTION_FLAG_FORCED)
-                .setMimeType(
-                    when (subtitle.type) {
-                        SubtitleType.VTT -> MimeTypes.TEXT_VTT
-                        SubtitleType.ASS -> MimeTypes.TEXT_SSA
-                        SubtitleType.SRT -> MimeTypes.APPLICATION_SUBRIP
-                        SubtitleType.UNKNOWN -> MimeTypes.TEXT_SSA
-                    }
-                )
-                .build()
-        }
-        if (sub != null) builder.setSubtitleConfigurations(mutableListOf(sub))
-        val mediaItem = builder.build()
-        val downloadHelper = DownloadHelper.forMediaItem(
-            context,
-            mediaItem,
-            DefaultRenderersFactory(context),
-            dataSourceFactory
-        )
-        downloadHelper.prepare(object : DownloadHelper.Callback {
-            override fun onPrepared(helper: DownloadHelper) {
-                helper.getDownloadRequest(null).let {
-                    DownloadService.sendAddDownload(
-                        context,
-                        ExoplayerDownloadService::class.java,
-                        it,
-                        false
-                    )
-                }
-            }
-
-            override fun onPrepareError(helper: DownloadHelper, e: IOException) {
-                logError(e)
-            }
-        })
-    }
-
-
-    private var download: DownloadManager? = null
-    private const val DOWNLOAD_CONTENT_DIRECTORY = "Anime_Downloads"
-
-    @Synchronized
-    @UnstableApi
-    fun downloadManager(context: Context): DownloadManager {
-        return download ?: let {
-            val database = Injekt.get<StandaloneDatabaseProvider>()
-            val dataSourceFactory = DataSource.Factory {
-                //val dataSource: HttpDataSource = OkHttpDataSource.Factory(okHttpClient).createDataSource()
-                val networkHelper = Injekt.get<NetworkHelper>()
-                val okHttpClient = networkHelper.client
-                val dataSource: HttpDataSource =
-                    OkHttpDataSource.Factory(okHttpClient).createDataSource()
-                defaultHeaders.forEach {
-                    dataSource.setRequestProperty(it.key, it.value)
-                }
-                dataSource
-            }
-            val threadPoolSize = Runtime.getRuntime().availableProcessors()
-            val executorService = Executors.newFixedThreadPool(threadPoolSize)
-            val downloadManager = DownloadManager(
-                context,
-                database,
-                getSimpleCache(context),
-                dataSourceFactory,
-                executorService
-            ).apply {
-                requirements =
-                    Requirements(Requirements.NETWORK or Requirements.DEVICE_STORAGE_NOT_LOW)
-                maxParallelDownloads = 3
-            }
-            downloadManager.addListener(  //for testing
-                object : DownloadManager.Listener {
-                    override fun onDownloadChanged(
-                        downloadManager: DownloadManager,
-                        download: Download,
-                        finalException: Exception?
-                    ) {
-                        when (download.state) {
-                            Download.STATE_COMPLETED -> Logger.log("Download Completed")
-                            Download.STATE_FAILED -> Logger.log("Download Failed")
-                            Download.STATE_STOPPED -> Logger.log("Download Stopped")
-                            Download.STATE_QUEUED -> Logger.log("Download Queued")
-                            Download.STATE_DOWNLOADING -> Logger.log("Download Downloading")
-                            Download.STATE_REMOVING -> Logger.log("Download Removing")
-                            Download.STATE_RESTARTING -> Logger.log("Download Restarting")
-                        }
-                    }
-                }
-            )
-
-            downloadManager
-        }
-    }
-
-    private var downloadDirectory: File? = null
-
-    @Synchronized
-    private fun getDownloadDirectory(context: Context): File {
-        if (downloadDirectory == null) {
-            downloadDirectory = context.getExternalFilesDir(null)
-            if (downloadDirectory == null) {
-                downloadDirectory = context.filesDir
-            }
-        }
-        return downloadDirectory!!
-    }
-
     @OptIn(UnstableApi::class)
     fun startAnimeDownloadService(
         context: Context,
@@ -225,15 +91,6 @@ object Helper {
                 .setTitle("Download Exists")
                 .setMessage("A download for this episode already exists. Do you want to overwrite it?")
                 .setPositiveButton("Yes") { _, _ ->
-                    DownloadService.sendRemoveDownload(
-                        context,
-                        ExoplayerDownloadService::class.java,
-                        PrefManager.getAnimeDownloadPreferences().getString(
-                            animeDownloadTask.getTaskName(),
-                            ""
-                        ) ?: "",
-                        false
-                    )
                     PrefManager.getAnimeDownloadPreferences().edit()
                         .remove(animeDownloadTask.getTaskName())
                         .apply()
@@ -243,12 +100,13 @@ object Helper {
                             episode,
                             MediaType.ANIME
                         )
-                    )
-                    AnimeServiceDataSingleton.downloadQueue.offer(animeDownloadTask)
-                    if (!AnimeServiceDataSingleton.isServiceRunning) {
-                        val intent = Intent(context, AnimeDownloaderService::class.java)
-                        ContextCompat.startForegroundService(context, intent)
-                        AnimeServiceDataSingleton.isServiceRunning = true
+                    ) {
+                        AnimeServiceDataSingleton.downloadQueue.offer(animeDownloadTask)
+                        if (!AnimeServiceDataSingleton.isServiceRunning) {
+                            val intent = Intent(context, AnimeDownloaderService::class.java)
+                            ContextCompat.startForegroundService(context, intent)
+                            AnimeServiceDataSingleton.isServiceRunning = true
+                        }
                     }
                 }
                 .setNegativeButton("No") { _, _ -> }
@@ -260,18 +118,6 @@ object Helper {
                 ContextCompat.startForegroundService(context, intent)
                 AnimeServiceDataSingleton.isServiceRunning = true
             }
-        }
-    }
-
-    @OptIn(UnstableApi::class)
-    fun getSimpleCache(context: Context): SimpleCache {
-        return if (simpleCache == null) {
-            val downloadDirectory = File(getDownloadDirectory(context), DOWNLOAD_CONTENT_DIRECTORY)
-            val database = Injekt.get<StandaloneDatabaseProvider>()
-            simpleCache = SimpleCache(downloadDirectory, NoOpCacheEvictor(), database)
-            simpleCache!!
-        } else {
-            simpleCache!!
         }
     }
 

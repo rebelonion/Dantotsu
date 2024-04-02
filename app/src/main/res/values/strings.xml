@@ -865,4 +865,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="trending_manhwa">Trending Manhwa</string>
     <string name="liked_by">Liked By</string>
     <string name="adult_only_content">Adult only content</string>
+    <string name="dir_error">Your path could not be set</string>
+    <string name="dir_access">Downloads access</string>
+    <string name="dir_access_msg">Please choose a directory to save your downloads</string>
 </resources>
