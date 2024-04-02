@@ -1041,8 +1041,7 @@ fun sinceWhen(media: Media, view: ViewGroup) {
                     }
 
                     override fun onFinish() {
-                        v.mediaCountdownContainer.visibility = View.GONE
-                        snackString(currContext()?.getString(R.string.congrats_vro))
+                        // The legend will never die.
                     }
                 }.start()
             }
