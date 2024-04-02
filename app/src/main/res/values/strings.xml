@@ -9,10 +9,14 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
+    <string name="dantotsu" translatable="false">https://dantotsu.app/</string>
     <string name="discord" translatable="false">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github" translatable="false">https://github.com/rebelonion/Dantotsu</string>
     <string name="telegram" translatable="false" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
     <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
+    
+    <string name="anilist_link">https://anilist.co/user/%1$s/</string>
+    <string name="discord_link">https://discord.com/users/%1$s/</string>
 
     <string name="home">Home</string>
     <string name="anime">Anime</string>
@@ -421,6 +425,13 @@
     <string name="install_step">Step: %1$s</string>
     <string name="review">Review</string>
 
+    <string name="discord_nothing_button">Display only the first button</string>
+    <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
+    <string name="discord_anilist_button">Display your AniList profile instead</string>
+    <string name="discord_rich_presence">Discord Rich Presence</string>
+    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
+    <string name="view_my_anilist">View My AniList</string>
+
     <string name="jobless_message">DAMN! YOU TRULY ARE JOBLESS\nYOU REACHED THE END</string>
     <string name="file_manager_not_found">Couldn\'t find any File Manager to open SD card</string>
     <string name="error_loading_data">Error loading data %1$s</string>
@@ -495,6 +506,7 @@
         <item>Score</item>
         <item>Popular</item>
         <item>Trending</item>
+        <item>New Releases</item>
         <item>A-Z</item>
         <item>Z-A</item>
         <item>Pure pain</item>
@@ -650,7 +662,10 @@
     <string name="chapter_singular">Chapter</string>
     <string name="chapter_plural">Chapters</string>
 
+    <string name="filter_status">"Status : %1$s"</string>
+    <string name="filter_source">"Source : %1$s"</string>
     <string name="filter_format">"Format : %1$s"</string>
+    <string name="filter_country">"Country : %1$s"</string>
     <string name="filter_sort">"Sort : %1$s"</string>
     <string name="filter_exclude">"Not %1$s"</string>
     <string name="search_by_image">Search by Image</string>
@@ -848,5 +863,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="top_rated">Top rated</string>
     <string name="most_favourite">Most Favourite</string>
     <string name="trending_manhwa">Trending Manhwa</string>
+    <string name="liked_by">Liked By</string>
     <string name="adult_only_content">Adult only content</string>
 </resources>

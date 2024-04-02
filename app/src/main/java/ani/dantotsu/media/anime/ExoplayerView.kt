@@ -1084,35 +1084,40 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 val incognito: Boolean = PrefManager.getVal(PrefName.Incognito)
                 if ((isOnline(context) && !offline) && Discord.token != null && !incognito) {
                     lifecycleScope.launch {
-                        val presence = RPC.createPresence(RPC.Companion.RPCData(
-                            applicationId = Discord.application_Id,
-                            type = RPC.Type.WATCHING,
-                            activityName = media.userPreferredName,
-                            details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
-                                R.string.episode_num,
-                                ep.number
-                            ),
-                            state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
-                            largeImage = media.cover?.let {
-                                RPC.Link(
-                                    media.userPreferredName,
-                                    it
-                                )
-                            },
-                            smallImage = RPC.Link(
-                                "Dantotsu",
-                                Discord.small_Image
-                            ),
-                            buttons = mutableListOf(
+                        val discordMode = PrefManager.getCustomVal("discord_mode", "dantotsu")
+                        val buttons = when (discordMode) {
+                            "nothing" -> mutableListOf(
                                 RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
-                                RPC.Link(
-                                    "Stream on Dantotsu",
-                                    getString(R.string.github)
+                            )
+                            "dantotsu" -> mutableListOf(
+                                RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                                RPC.Link("Watch on Dantotsu", getString(R.string.dantotsu))
+                            )
+                            "anilist" -> {
+                                val userId = PrefManager.getVal<String>(PrefName.AnilistUserId)
+                                val anilistLink = "https://anilist.co/user/$userId/"
+                                mutableListOf(
+                                    RPC.Link(getString(R.string.view_anime), media.shareLink ?: ""),
+                                    RPC.Link("View My AniList", anilistLink)
                                 )
+                            }
+                            else -> mutableListOf()
+                        }
+                        val presence = RPC.createPresence(
+                            RPC.Companion.RPCData(
+                                applicationId = Discord.application_Id,
+                                type = RPC.Type.WATCHING,
+                                activityName = media.userPreferredName,
+                                details = ep.title?.takeIf { it.isNotEmpty() } ?: getString(
+                                    R.string.episode_num,
+                                    ep.number
+                                ),
+                                state = "Episode : ${ep.number}/${media.anime?.totalEpisodes ?: "??"}",
+                                largeImage = media.cover?.let { RPC.Link(media.userPreferredName, it) },
+                                smallImage = RPC.Link("Dantotsu", Discord.small_Image),
+                                buttons = buttons
                             )
                         )
-                        )
-
                         val intent = Intent(context, DiscordService::class.java).apply {
                             putExtra("presence", presence)
                         }
@@ -1120,7 +1125,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                         startService(intent)
                     }
                 }
-
                 updateProgress()
             }
         }

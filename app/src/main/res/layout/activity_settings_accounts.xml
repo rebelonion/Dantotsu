@@ -213,11 +213,10 @@
             </LinearLayout>
 
             <ImageView
-                android:id="@+id/imageSwitcher"
+                android:id="@+id/settingsImageSwitcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/discord_status_idle"
-                android:onClick="onImageClicked"
                 android:padding="16dp" />
 
             <com.google.android.material.card.MaterialCardView

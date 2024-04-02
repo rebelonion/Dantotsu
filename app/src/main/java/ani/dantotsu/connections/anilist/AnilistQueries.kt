@@ -885,11 +885,15 @@ class AnilistQueries {
         sort: String? = null,
         genres: MutableList<String>? = null,
         tags: MutableList<String>? = null,
+        status: String? = null,
+        source: String? = null,
         format: String? = null,
+        countryOfOrigin: String? = null,
         isAdult: Boolean = false,
         onList: Boolean? = null,
         excludedGenres: MutableList<String>? = null,
         excludedTags: MutableList<String>? = null,
+        startYear: Int? = null,
         seasonYear: Int? = null,
         season: String? = null,
         id: Int? = null,
@@ -897,7 +901,7 @@ class AnilistQueries {
         adultOnly: Boolean = false
     ): SearchResults? {
         val query = """
-query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult: Boolean = false, ${"$"}search: String, ${"$"}format: [MediaFormat], ${"$"}status: MediaStatus, ${"$"}countryOfOrigin: CountryCode, ${"$"}source: MediaSource, ${"$"}season: MediaSeason, ${"$"}seasonYear: Int, ${"$"}year: String, ${"$"}onList: Boolean, ${"$"}yearLesser: FuzzyDateInt, ${"$"}yearGreater: FuzzyDateInt, ${"$"}episodeLesser: Int, ${"$"}episodeGreater: Int, ${"$"}durationLesser: Int, ${"$"}durationGreater: Int, ${"$"}chapterLesser: Int, ${"$"}chapterGreater: Int, ${"$"}volumeLesser: Int, ${"$"}volumeGreater: Int, ${"$"}licensedBy: [String], ${"$"}isLicensed: Boolean, ${"$"}genres: [String], ${"$"}excludedGenres: [String], ${"$"}tags: [String], ${"$"}excludedTags: [String], ${"$"}minimumTagRank: Int, ${"$"}sort: [MediaSort] = [POPULARITY_DESC, SCORE_DESC]) {
+query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult: Boolean = false, ${"$"}search: String, ${"$"}format: [MediaFormat], ${"$"}status: MediaStatus, ${"$"}countryOfOrigin: CountryCode, ${"$"}source: MediaSource, ${"$"}season: MediaSeason, ${"$"}seasonYear: Int, ${"$"}year: String, ${"$"}onList: Boolean, ${"$"}yearLesser: FuzzyDateInt, ${"$"}yearGreater: FuzzyDateInt, ${"$"}episodeLesser: Int, ${"$"}episodeGreater: Int, ${"$"}durationLesser: Int, ${"$"}durationGreater: Int, ${"$"}chapterLesser: Int, ${"$"}chapterGreater: Int, ${"$"}volumeLesser: Int, ${"$"}volumeGreater: Int, ${"$"}licensedBy: [String], ${"$"}isLicensed: Boolean, ${"$"}genres: [String], ${"$"}excludedGenres: [String], ${"$"}tags: [String], ${"$"}excludedTags: [String], ${"$"}minimumTagRank: Int, ${"$"}sort: [MediaSort] = [POPULARITY_DESC, SCORE_DESC, START_DATE_DESC]) {
   Page(page: ${"$"}page, perPage: ${perPage ?: 50}) {
     pageInfo {
       total
@@ -946,11 +950,15 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
             ${if (onList != null) ""","onList":$onList""" else ""}
             ${if (page != null) ""","page":"$page"""" else ""}
             ${if (id != null) ""","id":"$id"""" else ""}
-            ${if (seasonYear != null) ""","seasonYear":"$seasonYear"""" else ""}
+            ${if (type == "ANIME" && seasonYear != null) ""","seasonYear":"$seasonYear"""" else ""}
+            ${if (type == "MANGA" && startYear != null) ""","yearGreater":${startYear}0000,"yearLesser":${startYear + 1}0000""" else ""}
             ${if (season != null) ""","season":"$season"""" else ""}
             ${if (search != null) ""","search":"$search"""" else ""}
+            ${if (source != null) ""","source":"$source"""" else ""}
             ${if (sort != null) ""","sort":"$sort"""" else ""}
+            ${if (status != null) ""","status":"$status"""" else ""}
             ${if (format != null) ""","format":"${format.replace(" ", "_")}"""" else ""}
+            ${if (countryOfOrigin != null) ""","countryOfOrigin":"$countryOfOrigin"""" else ""}
             ${if (genres?.isNotEmpty() == true) ""","genres":[${genres.joinToString { "\"$it\"" }}]""" else ""}
             ${
             if (excludedGenres?.isNotEmpty() == true)
@@ -982,7 +990,6 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
             else ""
         }
             }""".replace("\n", " ").replace("""  """, "")
-
         val response = executeQuery<Query.Page>(query, variables, true)?.data?.page
         if (response?.media != null) {
             val responseArray = arrayListOf<Media>()
@@ -1014,7 +1021,11 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
                 excludedGenres = excludedGenres,
                 tags = tags,
                 excludedTags = excludedTags,
+                status = status,
+                source = source,
                 format = format,
+                countryOfOrigin = countryOfOrigin,
+                startYear = startYear,
                 seasonYear = seasonYear,
                 season = season,
                 results = responseArray,
