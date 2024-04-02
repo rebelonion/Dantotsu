@@ -102,7 +102,7 @@
             		android:clickable="true"
             		android:layout_width="wrap_content"
             		android:layout_height="wrap_content"
-            		android:text="@string/import_settings_underline"
+            		android:text="@string/restore_settings_underline"
             		android:textSize="11sp"
             		android:textColor="?attr/colorOutline"
             		android:fontFamily="@font/poppins_bold"/>

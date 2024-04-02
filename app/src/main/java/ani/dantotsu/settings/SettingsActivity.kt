@@ -648,18 +648,18 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 val filteredLocations = Location.entries.filter { it.exportable }
                 selectedArray.addAll(List(filteredLocations.size - 1) { false })
                 val dialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
-                    .setTitle(R.string.import_export_settings)
+                    .setTitle(R.string.backup_restore)
                     .setMultiChoiceItems(
                         filteredLocations.map { it.name }.toTypedArray(),
                         selectedArray.toBooleanArray()
                     ) { _, which, isChecked ->
                         selectedArray[which] = isChecked
                     }
-                    .setPositiveButton(R.string.button_import) { dialog, _ ->
+                    .setPositiveButton(R.string.button_restore) { dialog, _ ->
                         openDocumentLauncher.launch(arrayOf("*/*"))
                         dialog.dismiss()
                     }
-                    .setNegativeButton(R.string.button_export) { dialog, _ ->
+                    .setNegativeButton(R.string.button_backup) { dialog, _ ->
                         if (!selectedArray.contains(true)) {
                             toast(R.string.no_location_selected)
                             return@setNegativeButton
