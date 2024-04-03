@@ -214,7 +214,8 @@ fun initActivity(a: Activity) {
             window,
             window.decorView
         ).hide(WindowInsetsCompat.Type.statusBars())
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0 && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0
+            && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             window.decorView.rootWindowInsets?.displayCutout?.apply {
                 if (boundingRects.size > 0) {
                     statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())
