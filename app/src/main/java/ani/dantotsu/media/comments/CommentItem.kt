@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
+import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
@@ -34,13 +35,15 @@ import java.util.TimeZone
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-class CommentItem(val comment: Comment,
-                  private val markwon: Markwon,
-                  val parentSection: Section,
-                  private val commentsFragment: CommentsFragment,
-                  private val backgroundColor: Int,
-                  val commentDepth: Int
-) : BindableItem<ItemCommentsBinding>() {
+class CommentItem(
+    val comment: Comment,
+    private val markwon: Markwon,
+    val parentSection: Section,
+    private val commentsFragment: CommentsFragment,
+    private val backgroundColor: Int,
+    val commentDepth: Int
+) :
+    BindableItem<ItemCommentsBinding>() {
     lateinit var binding: ItemCommentsBinding
     val adapter = GroupieAdapter()
     private var subCommentIds: MutableList<Int> = mutableListOf()
@@ -62,9 +65,6 @@ class CommentItem(val comment: Comment,
         val isUserComment = CommentsAPI.userId == comment.userId
         val levelColor = getAvatarColor(comment.totalVotes, backgroundColor)
         markwon.setMarkdown(viewBinding.commentText, comment.content)
-        viewBinding.commentDelete.visibility = if (isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod) View.VISIBLE else View.GONE
-        viewBinding.commentBanUser.visibility = if ((CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment) View.VISIBLE else View.GONE
-        viewBinding.commentReport.visibility = if (!isUserComment) View.VISIBLE else View.GONE
         viewBinding.commentEdit.visibility = if (isUserComment) View.VISIBLE else View.GONE
         if (comment.tag == null) {
             viewBinding.commentUserTagLayout.visibility = View.GONE
@@ -140,41 +140,71 @@ class CommentItem(val comment: Comment,
         }
         viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
         viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
-        viewBinding.commentDelete.setOnClickListener {
-            dialogBuilder(getAppString(R.string.delete_comment), getAppString(R.string.delete_comment_confirm)) {
-                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
-                    val success = CommentsAPI.deleteComment(comment.commentId)
-                    if (success) {
-                        snackString(R.string.comment_deleted)
-                        parentSection.remove(this@CommentItem)
+        viewBinding.commentInfo.setOnClickListener {
+            val popup = PopupMenu(commentsFragment.requireContext(), viewBinding.commentInfo)
+            popup.menuInflater.inflate(R.menu.profile_details_menu, popup.menu)
+            popup.menu.findItem(R.id.commentDelete)?.isVisible = isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod
+            popup.menu.findItem(R.id.commentBanUser)?.isVisible = (CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment
+            popup.menu.findItem(R.id.commentReport)?.isVisible = !isUserComment
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.commentReport -> {
+                        dialogBuilder(
+                            getAppString(R.string.report_comment),
+                            getAppString(R.string.report_comment_confirm)
+                        ) {
+                            CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
+                                val success = CommentsAPI.reportComment(
+                                    comment.commentId,
+                                    comment.username,
+                                    commentsFragment.mediaName,
+                                    comment.userId
+                                )
+                                if (success) {
+                                    snackString(R.string.comment_reported)
+                                }
+                            }
+                        }
+                        true
+                    }
+
+                    R.id.commentDelete -> {
+                        dialogBuilder(
+                            getAppString(R.string.delete_comment),
+                            getAppString(R.string.delete_comment_confirm)
+                        ) {
+                            CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
+                                val success = CommentsAPI.deleteComment(comment.commentId)
+                                if (success) {
+                                    snackString(R.string.comment_deleted)
+                                    parentSection.remove(this@CommentItem)
+                                }
+                            }
+                        }
+                        true
+                    }
+
+                    R.id.commentBanUser -> {
+                        dialogBuilder(
+                            getAppString(R.string.ban_user),
+                            getAppString(R.string.ban_user_confirm)
+                        ) {
+                            CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
+                                val success = CommentsAPI.banUser(comment.userId)
+                                if (success) {
+                                    snackString(R.string.user_banned)
+                                }
+                            }
+                        }
+                        true
+                    }
+
+                    else -> {
+                        false
                     }
                 }
             }
-        }
-        viewBinding.commentBanUser.setOnClickListener {
-            dialogBuilder(getAppString(R.string.ban_user), getAppString(R.string.ban_user_confirm)) {
-                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
-                    val success = CommentsAPI.banUser(comment.userId)
-                    if (success) {
-                        snackString(R.string.user_banned)
-                    }
-                }
-            }
-        }
-        viewBinding.commentReport.setOnClickListener {
-            dialogBuilder(getAppString(R.string.report_comment), getAppString(R.string.report_comment_confirm)) {
-                CoroutineScope(Dispatchers.Main + SupervisorJob()).launch {
-                    val success = CommentsAPI.reportComment(
-                        comment.commentId,
-                        comment.username,
-                        commentsFragment.mediaName,
-                        comment.userId
-                    )
-                    if (success) {
-                        snackString(R.string.comment_reported)
-                    }
-                }
-            }
+            popup.show()
         }
         //fill the icon if the user has liked the comment
         setVoteButtons(viewBinding)
@@ -210,7 +240,6 @@ class CommentItem(val comment: Comment,
                         comment.upvotes -= 1
                     }
                     comment.downvotes += if (voteType == -1) 1 else -1
-
                     notifyChanged()
                 }
             }
