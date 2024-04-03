@@ -804,7 +804,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 val screenWidth = Resources.getSystem().displayMetrics.widthPixels
                 //if in the 1st 1/5th of the screen width, left and lower than 1/5th of the screen height, left
                 if (screenWidth / 5 in x + 1..<y) {
-                    pressLocation = if (directionRLBT) {
+                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT) {
                         PressPos.RIGHT
                     } else {
                         PressPos.LEFT
@@ -812,7 +812,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 }
                 //if in the last 1/5th of the screen width, right and lower than 1/5th of the screen height, right
                 else if (x > screenWidth - screenWidth / 5 && y > screenWidth / 5) {
-                    pressLocation = if (directionRLBT) {
+                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT) {
                         PressPos.LEFT
                     } else {
                         PressPos.RIGHT
