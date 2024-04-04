@@ -36,16 +36,8 @@ object Download {
     }
 
     private fun getDownloadDir(context: Context): File {
-        val direct: File
-        if (PrefManager.getVal(PrefName.SdDl)) {
-            val arrayOfFiles = ContextCompat.getExternalFilesDirs(context, null)
-            val parentDirectory = arrayOfFiles[1].toString()
-            direct = File(parentDirectory)
-            if (!direct.exists()) direct.mkdirs()
-        } else {
-            direct = File("storage/emulated/0/${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/")
-            if (!direct.exists()) direct.mkdirs()
-        }
+        val direct = File("storage/emulated/0/${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/")
+        if (!direct.exists()) direct.mkdirs()
         return direct
     }
 

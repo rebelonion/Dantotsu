@@ -747,7 +747,9 @@
     <string name="follows_you">Follows you</string>
     <string name="mutual">Mutual</string>
     <string name="success">Success</string>
-
+    <string name="error">Some error occurred</string>
+    <string name="error_msg">Error: %1$s</string>
+    <string name="please_wait">Please wait</string>
     <string name="upcoming">Upcoming</string>
     <string name="no_shows_to_display">No shows to display</string>
     <string name="extension_name">Extension Name</string>
@@ -868,4 +870,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="dir_error">Your path could not be set</string>
     <string name="dir_access">Downloads access</string>
     <string name="dir_access_msg">Please choose a directory to save your downloads</string>
+    <string name="change_download_location">Change Download Location</string>
+    <string name="download_location_msg">Are you sure you want to change the download location?\nOld downloads may no longer be accessible.</string>
 </resources>

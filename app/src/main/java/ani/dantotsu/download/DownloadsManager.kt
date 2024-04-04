@@ -8,8 +8,12 @@ import ani.dantotsu.media.MediaType
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
+import com.anggrayudi.storage.callback.FolderCallback
 import com.anggrayudi.storage.file.deleteRecursively
 import com.anggrayudi.storage.file.findFolder
+import com.anggrayudi.storage.file.moveFileTo
+import com.anggrayudi.storage.file.moveFolderTo
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -120,6 +124,52 @@ class DownloadsManager(private val context: Context) {
             if ((downloadDir?.exists() == false && download.type == type) || download.title.isBlank()) {
                 iterator.remove()
             }
+        }
+    }
+
+    fun moveDownloadsDir(context: Context, oldUri: Uri, newUri: Uri, finished: (Boolean, String) -> Unit) {
+        try {
+            if (oldUri == newUri) {
+                finished(false, "Source and destination are the same")
+                return
+            }
+            CoroutineScope(Dispatchers.IO).launch {
+
+                val oldBase =
+                    DocumentFile.fromTreeUri(context, oldUri) ?: throw Exception("Old base is null")
+                val newBase =
+                    DocumentFile.fromTreeUri(context, newUri) ?: throw Exception("New base is null")
+                val folder =
+                    oldBase.findFolder(BASE_LOCATION) ?: throw Exception("Base folder not found")
+                folder.moveFolderTo(context, newBase, false, BASE_LOCATION, object:
+                    FolderCallback() {
+                    override fun onFailed(errorCode: ErrorCode) {
+                        when (errorCode) {
+                            ErrorCode.CANCELED -> finished(false, "Move canceled")
+                            ErrorCode.CANNOT_CREATE_FILE_IN_TARGET -> finished(false, "Cannot create file in target")
+                            ErrorCode.INVALID_TARGET_FOLDER -> finished(true, "Invalid target folder") // seems to still work
+                            ErrorCode.NO_SPACE_LEFT_ON_TARGET_PATH -> finished(false, "No space left on target path")
+                            ErrorCode.UNKNOWN_IO_ERROR -> finished(false, "Unknown IO error")
+                            ErrorCode.SOURCE_FOLDER_NOT_FOUND -> finished(false, "Source folder not found")
+                            ErrorCode.STORAGE_PERMISSION_DENIED -> finished(false, "Storage permission denied")
+                            ErrorCode.TARGET_FOLDER_CANNOT_HAVE_SAME_PATH_WITH_SOURCE_FOLDER -> finished(false, "Target folder cannot have same path with source folder")
+                            else -> finished(false, "Failed to move downloads: $errorCode")
+                        }
+                        Logger.log("Failed to move downloads: $errorCode")
+                        super.onFailed(errorCode)
+                    }
+
+                    override fun onCompleted(result: Result) {
+                        finished(true, "Successfully moved downloads")
+                        super.onCompleted(result)
+                    }
+                })
+                }
+
+        } catch (e: Exception) {
+            snackString("Error: ${e.message}")
+            finished(false, "Failed to move downloads: ${e.message}")
+            return
         }
     }
 

@@ -62,8 +62,11 @@ class StoragePermissions {
         }
 
         fun AppCompatActivity.accessAlertDialog(launcher: LauncherWrapper,
-                                                complete: (Boolean) -> Unit) {
-            if (PrefManager.getVal<String>(PrefName.DownloadsDir).isNotEmpty()) {
+                                                force: Boolean = false,
+                                                complete: (Boolean) -> Unit
+        ) {
+            if ((PrefManager.getVal<String>(PrefName.DownloadsDir).isNotEmpty() || hasDirAccess(this)) && !force) {
+                complete(true)
                 return
             }
             val builder = AlertDialog.Builder(this, R.style.MyPopup)

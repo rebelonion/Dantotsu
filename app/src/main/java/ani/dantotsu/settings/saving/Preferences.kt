@@ -13,7 +13,6 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     OfflineView(Pref(Location.General, Int::class, 0)),
     DownloadManager(Pref(Location.General, Int::class, 0)),
     NSFWExtension(Pref(Location.General, Boolean::class, true)),
-    SdDl(Pref(Location.General, Boolean::class, false)),
     ContinueMedia(Pref(Location.General, Boolean::class, true)),
     SearchSources(Pref(Location.General, Boolean::class, true)),
     RecentlyListOnly(Pref(Location.General, Boolean::class, false)),
