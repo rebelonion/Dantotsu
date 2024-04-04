@@ -37,7 +37,18 @@ abstract class BaseImageAdapter(
     chapter: MangaChapter
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val settings = activity.defaultSettings
-    val images = chapter.images()
+    private val chapterImages = chapter.images()
+    var images = chapterImages
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        images = if (settings.layout == CurrentReaderSettings.Layouts.PAGED
+            && settings.direction == CurrentReaderSettings.Directions.BOTTOM_TO_TOP) {
+            chapterImages.reversed()
+        } else {
+            chapterImages
+        }
+        super.onAttachedToRecyclerView(recyclerView)
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -213,5 +224,4 @@ abstract class BaseImageAdapter(
             return newBitmap
         }
     }
-
 }

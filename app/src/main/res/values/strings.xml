@@ -16,6 +16,7 @@
     <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
     
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
+    <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
 
     <string name="home">Home</string>
@@ -714,9 +715,9 @@
     <string name="requires_android_12">Requires Android 12+</string>
     <string name="share_username_in_crash_reports">Share username in crash reports</string>
     <string name="pinned_sources">Pinned Sources</string>
-    <string name="import_export_settings">Import/Export Settings</string>
-    <string name="import_settings">Import Settings</string>
-    <string name="import_settings_underline"><u>Import Settings</u></string>
+    <string name="backup_restore">Backup and Restore</string>
+    <string name="restore_settings">Import Settings</string>
+    <string name="restore_settings_underline"><u>Restore Settings</u></string>
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
 
     <string name="comments">Comments</string>
@@ -831,8 +832,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="video_quality">Quality: %1$dp</string>
     <string name="size_unknown">Unknown Size</string>
     <string name="mb_size">%1$s MB</string>
-    <string name="button_import">Import…</string>
-    <string name="button_export">Export…</string>
+    <string name="button_restore">Restore</string>
+    <string name="button_backup">Backup</string>
     <string name="no_location_selected">No location selected</string>
     <string name="enjoying_app">Enjoying the App?</string>
     <string name="consider_donating">Consider donating!</string>
@@ -872,4 +873,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="dir_access_msg">Please choose a directory to save your downloads</string>
     <string name="change_download_location">Change Download Location</string>
     <string name="download_location_msg">Are you sure you want to change the download location?\nOld downloads may no longer be accessible.</string>
+    <string name="report">Report</string>
+    <string name="ban">Ban</string>
 </resources>
