@@ -18,6 +18,13 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -90,14 +97,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
         <Button
             android:id="@+id/settingsPlayer"
             android:layout_width="match_parent"
@@ -122,13 +121,6 @@
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
         <Button
             android:id="@+id/purgeAnimeDownloads"
             android:layout_width="match_parent"
@@ -150,14 +142,6 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:layout_marginBottom="16dp"
-            android:background="?android:attr/listDivider" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsPreferDub"
@@ -194,6 +178,7 @@
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
+
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsIncludeAnimeList"
             android:layout_width="match_parent"
@@ -212,6 +197,13 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
     </ani.dantotsu.others.Xpandable>
 </merge>
