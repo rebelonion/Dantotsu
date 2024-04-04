@@ -1,9 +1,12 @@
 package ani.dantotsu.parsers
 
+import android.app.Application
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.media.MediaNameAdapter
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
@@ -14,6 +17,7 @@ import java.io.File
 
 class OfflineMangaParser : MangaParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()
+    private val context = Injekt.get<Application>()
 
     override val hostUrl: String = "Offline"
     override val name: String = "Offline"
@@ -23,17 +27,14 @@ class OfflineMangaParser : MangaParser() {
         extra: Map<String, String>?,
         sManga: SManga
     ): List<MangaChapter> {
-        val directory = File(
-            currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/Manga/$mangaLink"
-        )
+        val directory = getSubDirectory(context, MediaType.MANGA, false, mangaLink)
         //get all of the folder names and add them to the list
         val chapters = mutableListOf<MangaChapter>()
-        if (directory.exists()) {
-            directory.listFiles()?.forEach {
+        if (directory?.exists() == true) {
+            directory.listFiles().forEach {
                 if (it.isDirectory) {
                     val chapter = MangaChapter(
-                        it.name,
+                        it.name!!,
                         "$mangaLink/${it.name}",
                         it.name,
                         null,
@@ -50,16 +51,15 @@ class OfflineMangaParser : MangaParser() {
     }
 
     override suspend fun loadImages(chapterLink: String, sChapter: SChapter): List<MangaImage> {
-        val directory = File(
-            currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/Manga/$chapterLink"
-        )
+        val title = chapterLink.split("/").first()
+        val chapter = chapterLink.split("/").last()
+        val directory = getSubDirectory(context, MediaType.MANGA, false, title, chapter)
         val images = mutableListOf<MangaImage>()
         val imageNumberRegex = Regex("""(\d+)\.jpg$""")
-        if (directory.exists()) {
-            directory.listFiles()?.forEach {
+        if (directory?.exists() == true) {
+            directory.listFiles().forEach {
                 if (it.isFile) {
-                    val image = MangaImage(it.absolutePath, false, null)
+                    val image = MangaImage(it.uri.toString(), false, null)
                     images.add(image)
                 }
             }

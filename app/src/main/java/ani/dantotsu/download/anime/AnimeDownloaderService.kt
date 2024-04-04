@@ -9,24 +9,21 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.documentfile.provider.DocumentFile
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.DownloadManager
-import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.currActivity
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.download.video.ExoplayerDownloadService
-import ani.dantotsu.download.video.Helper
+import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
+import ani.dantotsu.download.anime.AnimeDownloaderService.AnimeDownloadTask.Companion.getTaskName
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.SubtitleDownloader
@@ -36,6 +33,12 @@ import ani.dantotsu.parsers.Video
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import com.anggrayudi.storage.file.forceDelete
+import com.anggrayudi.storage.file.openOutputStream
+import com.arthenica.ffmpegkit.FFmpegKit
+import com.arthenica.ffmpegkit.FFmpegKitConfig
+import com.arthenica.ffmpegkit.FFprobeKit
+import com.arthenica.ffmpegkit.SessionState
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -46,7 +49,6 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
@@ -56,12 +58,11 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Queue
 import java.util.concurrent.ConcurrentLinkedQueue
+
 
 class AnimeDownloaderService : Service() {
 
@@ -88,6 +89,7 @@ class AnimeDownloaderService : Service() {
                 setSmallIcon(R.drawable.ic_download_24)
                 priority = NotificationCompat.PRIORITY_DEFAULT
                 setOnlyAlertOnce(true)
+                setProgress(100, 0, false)
             }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(
@@ -156,27 +158,14 @@ class AnimeDownloaderService : Service() {
 
     @UnstableApi
     fun cancelDownload(taskName: String) {
-        val url =
-            AnimeServiceDataSingleton.downloadQueue.find { it.getTaskName() == taskName }?.video?.file?.url
-                ?: currentTasks.find { it.getTaskName() == taskName }?.video?.file?.url ?: ""
-        if (url.isEmpty()) {
-            snackString("Failed to cancel download")
-            return
+        val sessionIds =
+            AnimeServiceDataSingleton.downloadQueue.filter { it.getTaskName() == taskName }
+                .map { it.sessionId }.toMutableList()
+        sessionIds.addAll(currentTasks.filter { it.getTaskName() == taskName }.map { it.sessionId })
+        sessionIds.forEach {
+            FFmpegKit.cancel(it)
         }
         currentTasks.removeAll { it.getTaskName() == taskName }
-        DownloadService.sendSetStopReason(
-            this@AnimeDownloaderService,
-            ExoplayerDownloadService::class.java,
-            url,
-            androidx.media3.exoplayer.offline.Download.STATE_STOPPED,
-            false
-        )
-        DownloadService.sendRemoveDownload(
-            this@AnimeDownloaderService,
-            ExoplayerDownloadService::class.java,
-            url,
-            false
-        )
         CoroutineScope(Dispatchers.Default).launch {
             mutex.withLock {
                 downloadJobs[taskName]?.cancel()
@@ -209,7 +198,7 @@ class AnimeDownloaderService : Service() {
     @androidx.annotation.OptIn(UnstableApi::class)
     suspend fun download(task: AnimeDownloadTask) {
         try {
-            val downloadManager = Helper.downloadManager(this@AnimeDownloaderService)
+            //val downloadManager = Helper.downloadManager(this@AnimeDownloaderService)
             withContext(Dispatchers.Main) {
                 val notifi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     ContextCompat.checkSelfPermission(
@@ -220,18 +209,80 @@ class AnimeDownloaderService : Service() {
                     true
                 }
 
-                builder.setContentText("Downloading ${task.title} - ${task.episode}")
+                builder.setContentText("Downloading ${getTaskName(task.title, task.episode)}")
                 if (notifi) {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                 }
 
-                currActivity()?.let {
-                    Helper.downloadVideo(
-                        it,
-                        task.video,
-                        task.subtitle
-                    )
+                val outputDir = getSubDirectory(
+                    this@AnimeDownloaderService,
+                    MediaType.ANIME,
+                    false,
+                    task.title,
+                    task.episode
+                ) ?: throw Exception("Failed to create output directory")
+
+                outputDir.findFile("${task.getTaskName()}.mp4")?.delete()
+                val outputFile = outputDir.createFile("video/mp4", "${task.getTaskName()}.mp4")
+                    ?: throw Exception("Failed to create output file")
+
+                var percent = 0
+                var totalLength = 0.0
+                val path = FFmpegKitConfig.getSafParameterForWrite(
+                    this@AnimeDownloaderService,
+                    outputFile.uri
+                )
+                val headersStringBuilder = StringBuilder().append(" ")
+                task.video.file.headers.forEach {
+                    headersStringBuilder.append("\"${it.key}: ${it.value}\"\'\r\n\'")
                 }
+                headersStringBuilder.append(" ")
+                FFprobeKit.executeAsync(
+                    "-headers $headersStringBuilder -i ${task.video.file.url} -show_entries format=duration -v quiet -of csv=\"p=0\"",
+                    {
+                        Logger.log("FFprobeKit: $it")
+                    }, {
+                        if (it.message.toDoubleOrNull() != null) {
+                            totalLength = it.message.toDouble()
+                        }
+                    })
+
+                var request = "-headers"
+                val headers = headersStringBuilder.toString()
+                if (task.video.file.headers.isNotEmpty()) {
+                    request += headers
+                }
+                request += "-i ${task.video.file.url} -c copy -bsf:a aac_adtstoasc -tls_verify 0 $path -v trace"
+                println("Request: $request")
+                val ffTask =
+                    FFmpegKit.executeAsync(request,
+                        { session ->
+                            val state: SessionState = session.state
+                            val returnCode = session.returnCode
+                            // CALLED WHEN SESSION IS EXECUTED
+                            Logger.log(
+                                java.lang.String.format(
+                                    "FFmpeg process exited with state %s and rc %s.%s",
+                                    state,
+                                    returnCode,
+                                    session.failStackTrace
+                                )
+                            )
+
+                        }, {
+                            // CALLED WHEN SESSION PRINTS LOGS
+                            Logger.log(it.message)
+                        }) {
+                        // CALLED WHEN SESSION GENERATES STATISTICS
+                        val timeInMilliseconds = it.time
+                        if (timeInMilliseconds > 0 && totalLength > 0) {
+                            percent = ((it.time / 1000) / totalLength * 100).toInt()
+                        }
+                        Logger.log("Statistics: $it")
+                    }
+                task.sessionId = ffTask.sessionId
+                currentTasks.find { it.getTaskName() == task.getTaskName() }?.sessionId =
+                    ffTask.sessionId
 
                 saveMediaInfo(task)
                 task.subtitle?.let {
@@ -245,86 +296,115 @@ class AnimeDownloaderService : Service() {
                         )
                     )
                 }
-                val downloadStarted =
-                    hasDownloadStarted(downloadManager, task, 30000) // 30 seconds timeout
-
-                if (!downloadStarted) {
-                    Logger.log("Download failed to start")
-                    builder.setContentText("${task.title} - ${task.episode} Download failed to start")
-                    notificationManager.notify(NOTIFICATION_ID, builder.build())
-                    snackString("${task.title} - ${task.episode} Download failed to start")
-                    broadcastDownloadFailed(task.episode)
-                    return@withContext
-                }
-
 
                 // periodically check if the download is complete
-                while (downloadManager.downloadIndex.getDownload(task.video.file.url) != null) {
-                    val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
-                    if (download != null) {
-                        if (download.state == androidx.media3.exoplayer.offline.Download.STATE_FAILED) {
-                            Logger.log("Download failed")
-                            builder.setContentText("${task.title} - ${task.episode} Download failed")
-                            notificationManager.notify(NOTIFICATION_ID, builder.build())
-                            snackString("${task.title} - ${task.episode} Download failed")
-                            Logger.log("Download failed: ${download.failureReason}")
-                            downloadsManager.removeDownload(
-                                DownloadedType(
+                while (ffTask.state != SessionState.COMPLETED) {
+                    if (ffTask.state == SessionState.FAILED) {
+                        Logger.log("Download failed")
+                        builder.setContentText(
+                            "${
+                                getTaskName(
                                     task.title,
-                                    task.episode,
-                                    MediaType.ANIME,
+                                    task.episode
                                 )
-                            )
-                            Injekt.get<CrashlyticsInterface>().logException(
-                                Exception(
-                                    "Anime Download failed:" +
-                                            " ${download.failureReason}" +
-                                            " url: ${task.video.file.url}" +
-                                            " title: ${task.title}" +
-                                            " episode: ${task.episode}"
-                                )
-                            )
-                            currentTasks.removeAll { it.getTaskName() == task.getTaskName() }
-                            broadcastDownloadFailed(task.episode)
-                            break
-                        }
-                        if (download.state == androidx.media3.exoplayer.offline.Download.STATE_COMPLETED) {
-                            Logger.log("Download completed")
-                            builder.setContentText("${task.title} - ${task.episode} Download completed")
-                            notificationManager.notify(NOTIFICATION_ID, builder.build())
-                            snackString("${task.title} - ${task.episode} Download completed")
-                            PrefManager.getAnimeDownloadPreferences().edit().putString(
-                                task.getTaskName(),
-                                task.video.file.url
-                            ).apply()
-                            downloadsManager.addDownload(
-                                DownloadedType(
-                                    task.title,
-                                    task.episode,
-                                    MediaType.ANIME,
-                                )
-                            )
-                            currentTasks.removeAll { it.getTaskName() == task.getTaskName() }
-                            broadcastDownloadFinished(task.episode)
-                            break
-                        }
-                        if (download.state == androidx.media3.exoplayer.offline.Download.STATE_STOPPED) {
-                            Logger.log("Download stopped")
-                            builder.setContentText("${task.title} - ${task.episode} Download stopped")
-                            notificationManager.notify(NOTIFICATION_ID, builder.build())
-                            snackString("${task.title} - ${task.episode} Download stopped")
-                            break
-                        }
-                        broadcastDownloadProgress(
-                            task.episode,
-                            download.percentDownloaded.toInt()
+                            } Download failed"
                         )
-                        if (notifi) {
-                            notificationManager.notify(NOTIFICATION_ID, builder.build())
-                        }
+                        notificationManager.notify(NOTIFICATION_ID, builder.build())
+                        snackString("${getTaskName(task.title, task.episode)} Download failed")
+                        Logger.log("Download failed: ${ffTask.failStackTrace}")
+                        downloadsManager.removeDownload(
+                            DownloadedType(
+                                task.title,
+                                task.episode,
+                                MediaType.ANIME,
+                            )
+                        ) {}
+                        Injekt.get<CrashlyticsInterface>().logException(
+                            Exception(
+                                "Anime Download failed:" +
+                                        " ${getTaskName(task.title, task.episode)}" +
+                                        " url: ${task.video.file.url}" +
+                                        " title: ${task.title}" +
+                                        " episode: ${task.episode}"
+                            )
+                        )
+                        currentTasks.removeAll { it.getTaskName() == task.getTaskName() }
+                        broadcastDownloadFailed(task.episode)
+                        break
+                    }
+                    builder.setProgress(
+                        100, percent.coerceAtMost(99),
+                        false
+                    )
+                    broadcastDownloadProgress(
+                        task.episode,
+                        percent.coerceAtMost(99)
+                    )
+                    if (notifi) {
+                        notificationManager.notify(NOTIFICATION_ID, builder.build())
                     }
                     kotlinx.coroutines.delay(2000)
                 }
+                if (ffTask.state == SessionState.COMPLETED) {
+                    if (ffTask.returnCode.isValueError) {
+                        Logger.log("Download failed")
+                        builder.setContentText(
+                            "${
+                                getTaskName(
+                                    task.title,
+                                    task.episode
+                                )
+                            } Download failed"
+                        )
+                        notificationManager.notify(NOTIFICATION_ID, builder.build())
+                        snackString("${getTaskName(task.title, task.episode)} Download failed")
+                        downloadsManager.removeDownload(
+                            DownloadedType(
+                                task.title,
+                                task.episode,
+                                MediaType.ANIME,
+                            )
+                        ) {}
+                        Injekt.get<CrashlyticsInterface>().logException(
+                            Exception(
+                                "Anime Download failed:" +
+                                        " ${getTaskName(task.title, task.episode)}" +
+                                        " url: ${task.video.file.url}" +
+                                        " title: ${task.title}" +
+                                        " episode: ${task.episode}"
+                            )
+                        )
+                        currentTasks.removeAll { it.getTaskName() == task.getTaskName() }
+                        broadcastDownloadFailed(task.episode)
+                        return@withContext
+                    }
+                    Logger.log("Download completed")
+                    builder.setContentText(
+                        "${
+                            getTaskName(
+                                task.title,
+                                task.episode
+                            )
+                        } Download completed"
+                    )
+                    notificationManager.notify(NOTIFICATION_ID, builder.build())
+                    snackString("${getTaskName(task.title, task.episode)} Download completed")
+                    PrefManager.getAnimeDownloadPreferences().edit().putString(
+                        task.getTaskName(),
+                        task.video.file.url
+                    ).apply()
+                    downloadsManager.addDownload(
+                        DownloadedType(
+                            task.title,
+                            task.episode,
+                            MediaType.ANIME,
+                        )
+                    )
+
+                    currentTasks.removeAll { it.getTaskName() == task.getTaskName() }
+                    broadcastDownloadFinished(task.episode)
+                } else throw Exception("Download failed")
+
             }
         } catch (e: Exception) {
             if (e.message?.contains("Coroutine was cancelled") == false) {  //wut
@@ -337,35 +417,24 @@ class AnimeDownloaderService : Service() {
         }
     }
 
-    @androidx.annotation.OptIn(UnstableApi::class)
-    suspend fun hasDownloadStarted(
-        downloadManager: DownloadManager,
-        task: AnimeDownloadTask,
-        timeout: Long
-    ): Boolean {
-        val startTime = System.currentTimeMillis()
-        while (System.currentTimeMillis() - startTime < timeout) {
-            val download = downloadManager.downloadIndex.getDownload(task.video.file.url)
-            if (download != null) {
-                return true
-            }
-            // Delay between each poll
-            kotlinx.coroutines.delay(500)
-        }
-        return false
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: AnimeDownloadTask) {
         CoroutineScope(Dispatchers.IO).launch {
-            val directory = File(
-                getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "${DownloadsManager.animeLocation}/${task.title}"
-            )
-            val episodeDirectory = File(directory, task.episode)
-            if (!episodeDirectory.exists()) episodeDirectory.mkdirs()
+            val directory =
+                getSubDirectory(this@AnimeDownloaderService, MediaType.ANIME, false, task.title)
+                    ?: throw Exception("Directory not found")
+            directory.findFile("media.json")?.forceDelete(this@AnimeDownloaderService)
+            val file = directory.createFile("application/json", "media.json")
+                ?: throw Exception("File not created")
+            val episodeDirectory =
+                getSubDirectory(
+                    this@AnimeDownloaderService,
+                    MediaType.ANIME,
+                    false,
+                    task.title,
+                    task.episode
+                )
+                    ?: throw Exception("Directory not found")
 
-            val file = File(directory, "media.json")
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
                     SChapterImpl() // Provide an instance of SChapterImpl
@@ -399,14 +468,25 @@ class AnimeDownloaderService : Service() {
 
                 val jsonString = gson.toJson(media)
                 withContext(Dispatchers.Main) {
-                    file.writeText(jsonString)
+                    try {
+                        file.openOutputStream(this@AnimeDownloaderService, false).use { output ->
+                            if (output == null) throw Exception("Output stream is null")
+                            output.write(jsonString.toByteArray())
+                        }
+                    } catch (e: android.system.ErrnoException) {
+                        e.printStackTrace()
+                        Toast.makeText(
+                            this@AnimeDownloaderService,
+                            "Error while saving: ${e.localizedMessage}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }
     }
 
-
-    private suspend fun downloadImage(url: String, directory: File, name: String): String? =
+    private suspend fun downloadImage(url: String, directory: DocumentFile, name: String): String? =
         withContext(Dispatchers.IO) {
             var connection: HttpURLConnection? = null
             println("Downloading url $url")
@@ -417,13 +497,16 @@ class AnimeDownloaderService : Service() {
                     throw Exception("Server returned HTTP ${connection.responseCode} ${connection.responseMessage}")
                 }
 
-                val file = File(directory, name)
-                FileOutputStream(file).use { output ->
+                directory.findFile(name)?.forceDelete(this@AnimeDownloaderService)
+                val file =
+                    directory.createFile("image/jpeg", name) ?: throw Exception("File not created")
+                file.openOutputStream(this@AnimeDownloaderService, false).use { output ->
+                    if (output == null) throw Exception("Output stream is null")
                     connection.inputStream.use { input ->
                         input.copyTo(output)
                     }
                 }
-                return@withContext file.absolutePath
+                return@withContext file.uri.toString()
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
@@ -490,14 +573,15 @@ class AnimeDownloaderService : Service() {
         val episodeImage: String? = null,
         val retries: Int = 2,
         val simultaneousDownloads: Int = 2,
+        var sessionId: Long = -1
     ) {
         fun getTaskName(): String {
-            return "$title - $episode"
+            return "${title.replace("/", "")}/${episode.replace("/", "")}"
         }
 
         companion object {
             fun getTaskName(title: String, episode: String): String {
-                return "$title - $episode"
+                return "${title.replace("/", "")}/${episode.replace("/", "")}"
             }
         }
     }
@@ -511,7 +595,6 @@ class AnimeDownloaderService : Service() {
 
 object AnimeServiceDataSingleton {
     var video: Video? = null
-    var sourceMedia: Media? = null
     var downloadQueue: Queue<AnimeDownloaderService.AnimeDownloadTask> = ConcurrentLinkedQueue()
 
     @Volatile

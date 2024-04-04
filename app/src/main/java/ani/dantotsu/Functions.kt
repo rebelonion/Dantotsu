@@ -620,9 +620,14 @@ fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
     file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
     if (file?.url?.isNotEmpty() == true) {
         tryWith {
-            val glideUrl = GlideUrl(file.url) { file.headers }
-            Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)
-                .into(this)
+            if (file.url.startsWith("content://")) {
+                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())
+                    .override(size).into(this)
+            } else {
+                val glideUrl = GlideUrl(file.url) { file.headers }
+                Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)
+                    .into(this)
+            }
         }
     }
 }
@@ -876,31 +881,6 @@ fun savePrefs(
         null
     }
 }
-
-fun downloadsPermission(activity: AppCompatActivity): Boolean {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) return true
-    val permissions = arrayOf(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
-
-    val requiredPermissions = permissions.filter {
-        ContextCompat.checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
-    }.toTypedArray()
-
-    return if (requiredPermissions.isNotEmpty()) {
-        ActivityCompat.requestPermissions(
-            activity,
-            requiredPermissions,
-            DOWNLOADS_PERMISSION_REQUEST_CODE
-        )
-        false
-    } else {
-        true
-    }
-}
-
-private const val DOWNLOADS_PERMISSION_REQUEST_CODE = 100
 
 fun shareImage(title: String, bitmap: Bitmap, context: Context) {
 

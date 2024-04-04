@@ -1,9 +1,12 @@
 package ani.dantotsu.parsers
 
+import android.app.Application
 import android.net.Uri
 import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
+import ani.dantotsu.download.anime.AnimeDownloaderService.AnimeDownloadTask.Companion.getTaskName
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.tryWithSuspend
@@ -18,6 +21,7 @@ import java.util.Locale
 
 class OfflineAnimeParser : AnimeParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()
+    private val context = Injekt.get<Application>()
 
     override val name = "Offline"
     override val saveName = "Offline"
@@ -29,22 +33,19 @@ class OfflineAnimeParser : AnimeParser() {
         extra: Map<String, String>?,
         sAnime: SAnime
     ): List<Episode> {
-        val directory = File(
-            currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "${DownloadsManager.animeLocation}/$animeLink"
-        )
+        val directory = getSubDirectory(context, MediaType.ANIME, false, animeLink)
         //get all of the folder names and add them to the list
         val episodes = mutableListOf<Episode>()
-        if (directory.exists()) {
-            directory.listFiles()?.forEach {
+        if (directory?.exists() == true) {
+            directory.listFiles().forEach {
                 //put the title and episdode number in the extra data
                 val extraData = mutableMapOf<String, String>()
                 extraData["title"] = animeLink
-                extraData["episode"] = it.name
+                extraData["episode"] = it.name!!
                 if (it.isDirectory) {
                     val episode = Episode(
-                        it.name,
-                        "$animeLink - ${it.name}",
+                        it.name!!,
+                        getTaskName(animeLink,it.name!!),
                         it.name,
                         null,
                         null,
@@ -131,18 +132,19 @@ class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
 
     private fun getSubtitle(title: String, episode: String): List<Subtitle>? {
         currContext()?.let {
-            DownloadsManager.getDirectory(
+            DownloadsManager.getSubDirectory(
                 it,
                 MediaType.ANIME,
+                false,
                 title,
                 episode
-            ).listFiles()?.forEach { file ->
-                if (file.name.contains("subtitle")) {
+            )?.listFiles()?.forEach { file ->
+                if (file.name?.contains("subtitle") == true) {
                     return listOf(
                         Subtitle(
                             "Downloaded Subtitle",
-                            Uri.fromFile(file).toString(),
-                            determineSubtitletype(file.absolutePath)
+                            file.uri.toString(),
+                            determineSubtitletype(file.name ?: "")
                         )
                     )
                 }

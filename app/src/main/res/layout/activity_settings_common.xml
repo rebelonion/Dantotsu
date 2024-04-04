@@ -191,27 +191,6 @@
             android:layout_marginBottom="16dp"
             android:background="?android:attr/listDivider" />
 
-        <!--TODO: Add support for SD card-->
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/settingsDownloadInSd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:drawableStart="@drawable/ic_round_sd_card_24"
-            android:drawablePadding="16dp"
-            android:elegantTextHeight="true"
-            android:enabled="false"
-            android:fontFamily="@font/poppins_bold"
-            android:minHeight="64dp"
-            android:text="@string/downloadInSd"
-            android:textAlignment="viewStart"
-            android:textColor="?attr/colorOnBackground"
-            android:visibility="gone"
-            app:cornerRadius="0dp"
-            app:drawableTint="?attr/colorPrimary"
-            app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -317,5 +296,29 @@
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
+
+        <Button
+            android:id="@+id/settingsDownloadLocation"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:backgroundTint="?attr/colorSecondary"
+            android:backgroundTintMode="src_atop"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingStart="31dp"
+            android:paddingEnd="31dp"
+            android:text="@string/change_download_location"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_round_source_24"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
     </ani.dantotsu.others.Xpandable>
 </merge>
