@@ -55,118 +55,43 @@ class CommentNotificationTask : Task {
                     PrefManager.setVal(PrefName.RecentGlobalNotification, newRecentGlobal)
                 }
                 if (notifications.isNullOrEmpty()) return@withContext
-                PrefManager.setVal(
-                    PrefName.UnreadCommentNotifications,
-                    PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + (notifications.size)
-                )
 
                 notifications.forEach {
                     val type: CommentNotificationWorker.NotificationType = when (it.type) {
                         1 -> CommentNotificationWorker.NotificationType.COMMENT_REPLY
                         2 -> CommentNotificationWorker.NotificationType.COMMENT_WARNING
-                        3 -> CommentNotificationWorker.NotificationType.APP_GLOBAL
+                        3 -> {
+                            val newRecentGlobal = it.notificationId
+                            PrefManager.setVal(PrefName.RecentGlobalNotification, newRecentGlobal)
+                            null
+                        }
                         420 -> CommentNotificationWorker.NotificationType.NO_NOTIFICATION
                         else -> CommentNotificationWorker.NotificationType.UNKNOWN
                     }
-                    val notification = when (type) {
-                        CommentNotificationWorker.NotificationType.COMMENT_WARNING -> {
-                            val title = "You received a warning"
-                            val message = it.content ?: "Be more thoughtful with your comments"
 
-                            val commentStore = CommentStore(
-                                title,
-                                message,
-                                it.mediaId,
-                                it.commentId
-                            )
-                            addNotificationToStore(commentStore)
-
-                            createNotification(
-                                context,
-                                CommentNotificationWorker.NotificationType.COMMENT_WARNING,
-                                message,
-                                title,
-                                it.mediaId,
-                                it.commentId,
-                                "",
-                                ""
-                            )
-                        }
-
-                        CommentNotificationWorker.NotificationType.COMMENT_REPLY -> {
-                            val title = "New Comment Reply"
-                            val mediaName = names[it.mediaId]?.title ?: "Unknown"
-                            val message = "${it.username} replied to your comment in $mediaName"
-
-                            val commentStore = CommentStore(
-                                title,
-                                message,
-                                it.mediaId,
-                                it.commentId
-                            )
-                            addNotificationToStore(commentStore)
-
-                            createNotification(
-                                context,
-                                CommentNotificationWorker.NotificationType.COMMENT_REPLY,
-                                message,
-                                title,
-                                it.mediaId,
-                                it.commentId,
-                                names[it.mediaId]?.color ?: "#222222",
-                                names[it.mediaId]?.coverImage ?: ""
-                            )
-                        }
-
-                        CommentNotificationWorker.NotificationType.APP_GLOBAL -> {
-                            val title = "Update from Dantotsu"
-                            val message = it.content ?: "New feature available"
-
-                            val commentStore = CommentStore(
-                                title,
-                                message,
-                                null,
-                                null
-                            )
-                            addNotificationToStore(commentStore)
-
-                            createNotification(
-                                context,
-                                CommentNotificationWorker.NotificationType.APP_GLOBAL,
-                                message,
-                                title,
-                                0,
-                                0,
-                                "",
-                                ""
-                            )
-                        }
-
-                        CommentNotificationWorker.NotificationType.NO_NOTIFICATION -> {
-                            PrefManager.removeCustomVal("genre_thumb")
-                            PrefManager.removeCustomVal("banner_ANIME_time")
-                            PrefManager.removeCustomVal("banner_MANGA_time")
-                            PrefManager.setVal(PrefName.ImageUrl, it.content ?: "")
-                            null
-                        }
-
-                        CommentNotificationWorker.NotificationType.UNKNOWN -> {
-                            null
-                        }
+                    // Increment count only if the notification type is not null and not a global message notification
+                    if (type != null && type != CommentNotificationWorker.NotificationType.APP_GLOBAL) {
+                        PrefManager.setVal(
+                            PrefName.UnreadCommentNotifications,
+                            PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + 1
+                        )
                     }
 
-                    if (ActivityCompat.checkSelfPermission(
+                    // Create and send the notification for non-global message notification types
+                    if (type != CommentNotificationWorker.NotificationType.APP_GLOBAL) {
+                        val notification = createNotification(
                             context,
-                            Manifest.permission.POST_NOTIFICATIONS
-                        ) == PackageManager.PERMISSION_GRANTED
-                    ) {
+                            type,
+                            it.content ?: "",
+                            getTitle(type),
+                            it.mediaId,
+                            it.commentId,
+                            getColor(type, names[it.mediaId]?.color ?: ""),
+                            names[it.mediaId]?.coverImage ?: ""
+                        )
                         if (notification != null) {
                             NotificationManagerCompat.from(context)
-                                .notify(
-                                    type.id,
-                                    System.currentTimeMillis().toInt(),
-                                    notification
-                                )
+                                .notify(type.id, System.currentTimeMillis().toInt(), notification)
                         }
                     }
                 }
@@ -179,20 +104,21 @@ class CommentNotificationTask : Task {
         }
     }
 
-    private fun addNotificationToStore(notification: CommentStore) {
-        val notificationStore = PrefManager.getNullableVal<List<CommentStore>>(
-            PrefName.CommentNotificationStore,
-            null
-        ) ?: listOf()
-        val newStore = notificationStore.toMutableList()
-        if (newStore.size > 10) {
-            newStore.remove(newStore.minByOrNull { it.time })
+    private fun getTitle(type: CommentNotificationWorker.NotificationType): String {
+        return when (type) {
+            CommentNotificationWorker.NotificationType.COMMENT_WARNING -> "You received a warning"
+            CommentNotificationWorker.NotificationType.COMMENT_REPLY -> "New Comment Reply"
+            CommentNotificationWorker.NotificationType.APP_GLOBAL -> "Update from Dantotsu"
+            CommentNotificationWorker.NotificationType.NO_NOTIFICATION -> ""
+            CommentNotificationWorker.NotificationType.UNKNOWN -> ""
         }
-        if (newStore.any { it.content == notification.content }) {
-            return
+    }
+
+    private fun getColor(type: CommentNotificationWorker.NotificationType, defaultColor: String): String {
+        return when (type) {
+            CommentNotificationWorker.NotificationType.COMMENT_REPLY -> defaultColor
+            else -> ""
         }
-        newStore.add(notification)
-        PrefManager.setVal(PrefName.CommentNotificationStore, newStore)
     }
 
     private fun createNotification(
@@ -270,6 +196,9 @@ class CommentNotificationTask : Task {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 val pendingIntent = PendingIntent.getActivity(
+                    context,
+                    System                 
+                                    val pendingIntent = PendingIntent.getActivity(
                     context,
                     System.currentTimeMillis().toInt(),
                     intent,
