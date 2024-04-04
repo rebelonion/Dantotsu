@@ -38,6 +38,15 @@
         android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
         tools:ignore="ProtectedPermissions" />
 
+    <!-- ExoPlayer: Bluetooth Headsets -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+    <uses-permission android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30"/>
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- ExoPlayer: Bluetooth Headsets -->
+
     <queries>
         <package android:name="idm.internet.download.manager.plus" />
         <package android:name="idm.internet.download.manager" />
