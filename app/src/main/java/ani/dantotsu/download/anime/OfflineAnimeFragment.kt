@@ -44,6 +44,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import com.anggrayudi.storage.file.openInputStream
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
@@ -290,12 +291,12 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
 
     private fun getMedia(downloadedType: DownloadedType): Media? {
         val type = downloadedType.type.asText()
-        val directory = File(
-            currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/$type/${downloadedType.title}"
-        )
         //load media.json and convert to media class with gson
         return try {
+            val directory = DownloadsManager.getSubDirectory(
+                context ?: currContext()!!, downloadedType.type,
+                false, downloadedType.title
+            )
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
                     SChapterImpl() // Provide an instance of SChapterImpl
@@ -307,8 +308,12 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                     SEpisodeImpl() // Provide an instance of SEpisodeImpl
                 })
                 .create()
-            val media = File(directory, "media.json")
-            val mediaJson = media.readText()
+            val media = directory?.findFile("media.json")
+                ?: return null
+            val mediaJson = media.openInputStream(context?:currContext()!!)?.bufferedReader().use {
+                it?.readText()
+            }
+                ?: return null
             gson.fromJson(mediaJson, Media::class.java)
         } catch (e: Exception) {
             Logger.log("Error loading media.json: ${e.message}")
@@ -320,20 +325,20 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
 
     private fun loadOfflineAnimeModel(downloadedType: DownloadedType): OfflineAnimeModel {
         val type = downloadedType.type.asText()
-        val directory = File(
-            currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/$type/${downloadedType.title}"
-        )
         //load media.json and convert to media class with gson
         try {
+            val directory = DownloadsManager.getSubDirectory(
+                context ?: currContext()!!, downloadedType.type,
+                false, downloadedType.title
+            )
             val mediaModel = getMedia(downloadedType)!!
-            val cover = File(directory, "cover.jpg")
-            val coverUri: Uri? = if (cover.exists()) {
-                Uri.fromFile(cover)
+            val cover = directory?.findFile("cover.jpg")
+            val coverUri: Uri? = if (cover?.exists() == true) {
+                cover.uri
             } else null
-            val banner = File(directory, "banner.jpg")
-            val bannerUri: Uri? = if (banner.exists()) {
-                Uri.fromFile(banner)
+            val banner = directory?.findFile("banner.jpg")
+            val bannerUri: Uri? = if (banner?.exists() == true) {
+                banner.uri
             } else null
             val title = mediaModel.mainName()
             val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore
