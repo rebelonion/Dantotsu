@@ -39,15 +39,33 @@ internal class AnimeExtensionGithubApi {
 
             val extensions: ArrayList<AnimeExtension.Available> = arrayListOf()
 
-            PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).forEach {
+            val repos =
+                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()
+            if (repos.isEmpty()) {
+                repos.add("https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo")
+                PrefManager.setVal(PrefName.AnimeExtensionRepos, repos.toSet())
+            }
+
+            repos.forEach {
                 try {
-                    val githubResponse =
+                    val githubResponse = try {
                         networkService.client
                             .newCall(GET("${it}/index.min.json"))
                             .awaitSuccess()
+                    } catch (e: Throwable) {
+                        Logger.log("Failed to get repo: $it")
+                        Logger.log(e)
+                        null
+                    }
+
+                    val response = githubResponse ?: run {
+                        networkService.client
+                            .newCall(GET(fallbackRepoUrl(it) + "/index.min.json"))
+                            .awaitSuccess()
+                    }
 
                     val repoExtensions = with(json) {
-                        githubResponse
+                        response
                             .parseAs<List<AnimeExtensionJsonObject>>()
                             .toExtensions(it)
                     }
@@ -61,6 +79,7 @@ internal class AnimeExtensionGithubApi {
                     extensions.addAll(repoExtensions)
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
+                    Logger.log(e)
                 }
             }
 
@@ -145,6 +164,26 @@ internal class AnimeExtensionGithubApi {
 
     fun getApkUrl(extension: AnimeExtension.Available): String {
         return "${extension.repository}/apk/${extension.apkName}"
+    }
+
+    private fun fallbackRepoUrl(repoUrl: String): String? {
+        var fallbackRepoUrl = "https://gcore.jsdelivr.net/gh/"
+        val strippedRepoUrl =
+            repoUrl.removePrefix("https://").removePrefix("http://").removeSuffix("/")
+        val repoUrlParts = strippedRepoUrl.split("/")
+        if (repoUrlParts.size < 3) {
+            return null
+        }
+        val repoOwner = repoUrlParts[1]
+        val repoName = repoUrlParts[2]
+        fallbackRepoUrl += "$repoOwner/$repoName"
+        val repoBranch = if (repoUrlParts.size > 3) {
+            repoUrlParts[3]
+        } else {
+            "main"
+        }
+        fallbackRepoUrl += "@$repoBranch"
+        return fallbackRepoUrl
     }
 }
 
