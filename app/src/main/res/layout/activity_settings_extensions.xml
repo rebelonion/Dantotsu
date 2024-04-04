@@ -50,32 +50,12 @@
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
 
-        <TextView
-            android:id="@+id/animeRepoHeading"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/poppins_bold"
-            android:text="@string/anime_repo_listing"
-            android:textSize="14sp"
-            tools:ignore="RtlSymmetry" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="-16dp"
             android:layout_marginEnd="-16dp"
             android:background="?android:attr/listDivider" />
-
-        <LinearLayout
-            android:id="@+id/animeRepoInventory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingStart="36dp"
-            android:visibility="gone"
-            tools:ignore="RtlSymmetry"
-            android:orientation="vertical" />
 
         <Button
             android:id="@+id/animeAddRepository"
@@ -100,33 +80,23 @@
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
 
-        <TextView
-            android:id="@+id/mangaRepoHeading"
+
+        <LinearLayout
+            android:id="@+id/animeRepoInventory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:fontFamily="@font/poppins_bold"
-            android:text="@string/manga_repo_listing"
-            android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:paddingStart="36dp"
+            android:visibility="gone"
             tools:ignore="RtlSymmetry" />
 
         <View
-            android:id="@+id/mangaRepoDivider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="-16dp"
             android:layout_marginEnd="-16dp"
             android:background="?android:attr/listDivider" />
-
-        <LinearLayout
-            android:id="@+id/mangaRepoInventory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:paddingStart="36dp"
-            android:visibility="gone"
-            tools:ignore="RtlSymmetry"
-            android:orientation="vertical" />
 
         <Button
             android:id="@+id/mangaAddRepository"
@@ -150,6 +120,23 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
+
+        <LinearLayout
+            android:id="@+id/mangaRepoInventory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:paddingStart="36dp"
+            android:visibility="gone"
+            tools:ignore="RtlSymmetry" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsForceLegacyInstall"
@@ -209,8 +196,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="-16dp"
             android:layout_marginBottom="16dp"
             android:background="?android:attr/listDivider" />
     </ani.dantotsu.others.Xpandable>

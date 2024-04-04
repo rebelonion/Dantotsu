@@ -868,6 +868,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="anime_add_repository">Add Anime Repo</string>
     <string name="manga_repo_listing">Manga Extension Repos</string>
     <string name="manga_add_repository">Add Manga Repo</string>
+    <string name="add_repository">Add Repo</string>
     <string name="long_click_delete">Long click to delete</string>
     
     <string name="trending_movies">Trending Movies</string>
