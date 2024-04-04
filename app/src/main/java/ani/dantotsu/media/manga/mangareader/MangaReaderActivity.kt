@@ -129,6 +129,11 @@ class MangaReaderActivity : AppCompatActivity() {
     var sliding = false
     var isAnimating = false
 
+    private val directionRLBT get() = defaultSettings.direction == RIGHT_TO_LEFT
+            || defaultSettings.direction == BOTTOM_TO_TOP
+    private val directionPagedBT get() = defaultSettings.layout == CurrentReaderSettings.Layouts.PAGED
+            && defaultSettings.direction == CurrentReaderSettings.Directions.BOTTOM_TO_TOP
+
     override fun onAttachedToWindow() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && !PrefManager.getVal<Boolean>(PrefName.ShowSystemBars)) {
             val displayCutout = window.decorView.rootWindowInsets.displayCutout
@@ -224,8 +229,13 @@ class MangaReaderActivity : AppCompatActivity() {
                     binding.mangaReaderRecycler.scrollToPosition((value.toInt() - 1) / (dualPage { 2 }
                         ?: 1))
                 else
-                    binding.mangaReaderPager.currentItem =
-                        (value.toInt() - 1) / (dualPage { 2 } ?: 1)
+                    if (defaultSettings.direction == CurrentReaderSettings.Directions.BOTTOM_TO_TOP ) {
+                        binding.mangaReaderPager.currentItem =
+                            (maxChapterPage.toInt() - value.toInt()) / (dualPage { 2 } ?: 1)
+                    } else {
+                        binding.mangaReaderPager.currentItem =
+                            (value.toInt() - 1) / (dualPage { 2 } ?: 1)
+                    }
                 pageSliderHide()
             }
         }
@@ -331,7 +341,7 @@ class MangaReaderActivity : AppCompatActivity() {
             binding.mangaReaderNextChapter.performClick()
         }
         binding.mangaReaderNextChapter.setOnClickListener {
-            if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
+            if (directionRLBT) {
                 if (currentChapterIndex > 0) change(currentChapterIndex - 1)
                 else snackString(getString(R.string.first_chapter))
             } else {
@@ -344,7 +354,7 @@ class MangaReaderActivity : AppCompatActivity() {
             binding.mangaReaderPreviousChapter.performClick()
         }
         binding.mangaReaderPreviousChapter.setOnClickListener {
-            if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
+            if (directionRLBT) {
                 if (chaptersArr.size > currentChapterIndex + 1) progress { change(currentChapterIndex + 1) }
                 else snackString(getString(R.string.next_chapter_not_found))
             } else {
@@ -361,7 +371,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 PrefManager.setCustomVal("${media.id}_current_chp", chap.number)
                 currentChapterIndex = chaptersArr.indexOf(chap.number)
                 binding.mangaReaderChapterSelect.setSelection(currentChapterIndex)
-                if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
+                if (directionRLBT) {
                     binding.mangaReaderNextChap.text = chaptersTitleArr.getOrNull(currentChapterIndex - 1) ?: ""
                     binding.mangaReaderPrevChap.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1) ?: ""
                 } else {
@@ -459,7 +469,11 @@ class MangaReaderActivity : AppCompatActivity() {
 
         currentChapterPage = PrefManager.getCustomVal("${media.id}_${chapter.number}", 1L)
 
-        val chapImages = chapter.images()
+        val chapImages = if (directionPagedBT) {
+            chapter.images().reversed()
+        } else {
+            chapter.images()
+        }
 
         maxChapterPage = 0
         if (chapImages.isNotEmpty()) {
@@ -483,7 +497,11 @@ class MangaReaderActivity : AppCompatActivity() {
 
         }
 
-        val currentPage = currentChapterPage.toInt()
+        val currentPage = if (directionPagedBT) {
+            maxChapterPage - currentChapterPage + 1
+        } else {
+            currentChapterPage
+        }.toInt()
 
         if ((defaultSettings.direction == TOP_TO_BOTTOM || defaultSettings.direction == BOTTOM_TO_TOP)) {
             binding.mangaReaderSwipy.vertical = true
@@ -512,10 +530,10 @@ class MangaReaderActivity : AppCompatActivity() {
                 binding.TopSwipeText.text = chaptersTitleArr.getOrNull(currentChapterIndex + 1)
                     ?: getString(R.string.no_chapter)
                 binding.mangaReaderSwipy.onTopSwiped = {
-                    binding.mangaReaderNextChapter.performClick()
+                    binding.mangaReaderPreviousChapter.performClick()
                 }
                 binding.mangaReaderSwipy.onBottomSwiped = {
-                    binding.mangaReaderPreviousChapter.performClick()
+                    binding.mangaReaderNextChapter.performClick()
                 }
             }
             binding.mangaReaderSwipy.topBeingSwiped = { value ->
@@ -624,7 +642,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     RecyclerView.VERTICAL
                 else
                     RecyclerView.HORIZONTAL,
-                !(defaultSettings.direction == TOP_TO_BOTTOM || defaultSettings.direction == LEFT_TO_RIGHT)
+                directionRLBT
             )
             manager.preloadItemCount = 5
 
@@ -640,6 +658,8 @@ class MangaReaderActivity : AppCompatActivity() {
                         tryWith { detector.onTouchEvent(event) } ?: false
                     else false
                 }
+
+                manager.setStackFromEnd(defaultSettings.direction == BOTTOM_TO_TOP)
 
                 addOnScrollListener(object : RecyclerView.OnScrollListener() {
                     override fun onScrolled(v: RecyclerView, dx: Int, dy: Int) {
@@ -695,9 +715,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 visibility = View.VISIBLE
                 adapter = imageAdapter
                 layoutDirection =
-                    if (defaultSettings.direction == BOTTOM_TO_TOP || defaultSettings.direction == RIGHT_TO_LEFT)
-                        View.LAYOUT_DIRECTION_RTL
-                    else View.LAYOUT_DIRECTION_LTR
+                    if (directionRLBT) View.LAYOUT_DIRECTION_RTL else View.LAYOUT_DIRECTION_LTR
                 orientation =
                     if (defaultSettings.direction == LEFT_TO_RIGHT || defaultSettings.direction == RIGHT_TO_LEFT)
                         ViewPager2.ORIENTATION_HORIZONTAL
@@ -786,7 +804,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 val screenWidth = Resources.getSystem().displayMetrics.widthPixels
                 //if in the 1st 1/5th of the screen width, left and lower than 1/5th of the screen height, left
                 if (screenWidth / 5 in x + 1..<y) {
-                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
+                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT) {
                         PressPos.RIGHT
                     } else {
                         PressPos.LEFT
@@ -794,7 +812,7 @@ class MangaReaderActivity : AppCompatActivity() {
                 }
                 //if in the last 1/5th of the screen width, right and lower than 1/5th of the screen height, right
                 else if (x > screenWidth - screenWidth / 5 && y > screenWidth / 5) {
-                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP) {
+                    pressLocation = if (defaultSettings.direction == RIGHT_TO_LEFT) {
                         PressPos.LEFT
                     } else {
                         PressPos.RIGHT
@@ -890,9 +908,10 @@ class MangaReaderActivity : AppCompatActivity() {
                 }
             }
             binding.mangaReaderSlider.layoutDirection =
-                if (defaultSettings.direction == RIGHT_TO_LEFT || defaultSettings.direction == BOTTOM_TO_TOP)
+                if (directionRLBT)
                     View.LAYOUT_DIRECTION_RTL
-                else View.LAYOUT_DIRECTION_LTR
+                else
+                    View.LAYOUT_DIRECTION_LTR
             shouldShow?.apply { isContVisible = !this }
             if (isContVisible) {
                 isContVisible = false
@@ -900,12 +919,7 @@ class MangaReaderActivity : AppCompatActivity() {
                     isAnimating = true
                     ObjectAnimator.ofFloat(binding.mangaReaderCont, "alpha", 1f, 0f)
                         .setDuration(controllerDuration).start()
-                    ObjectAnimator.ofFloat(
-                        binding.mangaReaderBottomLayout,
-                        "translationY",
-                        0f,
-                        128f
-                    )
+                    ObjectAnimator.ofFloat(binding.mangaReaderBottomLayout, "translationY", 0f, 128f)
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
                     ObjectAnimator.ofFloat(binding.mangaReaderTopLayout, "translationY", 0f, -128f)
                         .apply { interpolator = overshoot;duration = controllerDuration;start() }
@@ -925,7 +939,11 @@ class MangaReaderActivity : AppCompatActivity() {
     }
 
     private var loading = false
-    fun updatePageNumber(page: Long) {
+    fun updatePageNumber(pageNumber: Long) {
+        var page = pageNumber
+        if (directionPagedBT) {
+            page = maxChapterPage - pageNumber + 1
+        }
         if (currentChapterPage != page) {
             currentChapterPage = page
             PrefManager.setCustomVal("${media.id}_${chapter.number}", page)
