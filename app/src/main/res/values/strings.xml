@@ -502,6 +502,7 @@
     <string name="refresh_token_load_failed">Refresh Token : Failed to load Saved Token</string>
     <string name="refreshing_token_failed">Refreshing Token Failed</string>
     <string name="episode_release_countdown">Episode %1$d will be released in</string>
+    <string name="chapter_release_timeout">Chapter %1$d has been available for</string>
     <string name="time_format">%1$d days %2$d hrs %3$d mins %4$d secs</string>
     <string-array name="sort_by">
         <item>Score</item>
