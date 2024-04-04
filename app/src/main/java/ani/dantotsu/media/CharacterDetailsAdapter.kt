@@ -3,6 +3,7 @@ package ani.dantotsu.media
 import android.app.Activity
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.currActivity
@@ -36,7 +37,10 @@ class CharacterDetailsAdapter(private val character: Character, private val acti
         val markWon = Markwon.builder(activity).usePlugin(SoftBreakAddsNewLinePlugin.create())
             .usePlugin(SpoilerPlugin()).build()
         markWon.setMarkdown(binding.characterDesc, desc.replace("~!", "||").replace("!~", "||"))
-
+        binding.voiceActorRecycler.adapter = AuthorAdapter(character.voiceActor ?: arrayListOf())
+        binding.voiceActorRecycler.layoutManager = LinearLayoutManager(
+            activity, LinearLayoutManager.HORIZONTAL, false
+        )
     }
 
     override fun getItemCount(): Int = 1

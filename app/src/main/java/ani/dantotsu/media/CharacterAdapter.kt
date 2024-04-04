@@ -28,6 +28,7 @@ class CharacterAdapter(
         setAnimation(binding.root.context, holder.binding.root)
         val character = characterList[position]
         val whitespace = "${character.role}  "
+        character.voiceActor
         binding.itemCompactRelation.text = whitespace
         binding.itemCompactImage.loadImage(character.image)
         binding.itemCompactTitle.text = character.name
