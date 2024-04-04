@@ -6,7 +6,6 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -23,6 +22,7 @@ import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityProfileBinding
+import ani.dantotsu.databinding.ItemProfileAppBarBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.user.ListActivity
@@ -46,6 +46,7 @@ import kotlin.math.abs
 
 class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
     lateinit var binding: ActivityProfileBinding
+    private lateinit var bindingProfileAppBar: ItemProfileAppBarBinding
     private var selected: Int = 0
     lateinit var navBar: AnimatedBottomBar
 
@@ -109,147 +110,165 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                         binding.profileViewPager.setCurrentItem(selected, true)
                     }
                 })
-                val userLevel = intent.getStringExtra("userLVL") ?: ""
-                binding.followButton.isGone = user.id == Anilist.userid || Anilist.userid == null
-                binding.followButton.text = getString(
-                    when {
-                        user.isFollowing -> R.string.unfollow
-                        user.isFollower -> R.string.follows_you
-                        else -> R.string.follow
-                    }
-                )
-                if (user.isFollowing && user.isFollower) binding.followButton.text = getString(R.string.mutual)
-                binding.followButton.setOnClickListener {
-                    lifecycleScope.launch(Dispatchers.IO) {
-                        val res = Anilist.query.toggleFollow(user.id)
-                        if (res?.data?.toggleFollow != null) {
-                            withContext(Dispatchers.Main) {
-                                snackString(R.string.success)
-                                user.isFollowing = res.data.toggleFollow.isFollowing
-                                binding.followButton.text = getString(
-                                    when {
-                                        user.isFollowing -> R.string.unfollow
-                                        user.isFollower -> R.string.follows_you
-                                        else -> R.string.follow
-                                    }
-                                )
-                                if (user.isFollowing && user.isFollower)
-                                    binding.followButton.text = getString(R.string.mutual)
+
+                bindingProfileAppBar = ItemProfileAppBarBinding.bind(binding.root).apply {
+
+                    val userLevel = intent.getStringExtra("userLVL") ?: ""
+                    followButton.isGone =
+                        user.id == Anilist.userid || Anilist.userid == null
+                    followButton.text = getString(
+                        when {
+                            user.isFollowing -> R.string.unfollow
+                            user.isFollower -> R.string.follows_you
+                            else -> R.string.follow
+                        }
+                    )
+                    if (user.isFollowing && user.isFollower) followButton.text =
+                        getString(R.string.mutual)
+                    followButton.setOnClickListener {
+                        lifecycleScope.launch(Dispatchers.IO) {
+                            val res = Anilist.query.toggleFollow(user.id)
+                            if (res?.data?.toggleFollow != null) {
+                                withContext(Dispatchers.Main) {
+                                    snackString(R.string.success)
+                                    user.isFollowing = res.data.toggleFollow.isFollowing
+                                    followButton.text = getString(
+                                        when {
+                                            user.isFollowing -> R.string.unfollow
+                                            user.isFollower -> R.string.follows_you
+                                            else -> R.string.follow
+                                        }
+                                    )
+                                    if (user.isFollowing && user.isFollower)
+                                        followButton.text = getString(R.string.mutual)
+                                }
                             }
                         }
                     }
-                }
-                binding.profileProgressBar.visibility = View.GONE
-                binding.profileAppBar.visibility = View.VISIBLE
-                binding.profileMenuButton.setOnClickListener {
-                    val popup = PopupMenu(this@ProfileActivity, binding.profileMenuButton)
-                    popup.menuInflater.inflate(R.menu.menu_profile, popup.menu)
-                    popup.setOnMenuItemClickListener { item ->
-                        when (item.itemId) {
-                            R.id.action_view_following -> {
-                                ContextCompat.startActivity(
-                                    this@ProfileActivity,
-                                    Intent(this@ProfileActivity, FollowActivity::class.java)
-                                        .putExtra("title", "Following")
-                                        .putExtra("userId", user.id),
-                                    null
-                                )
-                                true
-                            }
+                    binding.profileProgressBar.visibility = View.GONE
+                    profileAppBar.visibility = View.VISIBLE
+                    profileMenuButton.setOnClickListener {
+                        val popup = PopupMenu(this@ProfileActivity, profileMenuButton)
+                        popup.menuInflater.inflate(R.menu.menu_profile, popup.menu)
+                        popup.setOnMenuItemClickListener { item ->
+                            when (item.itemId) {
+                                R.id.action_view_following -> {
+                                    ContextCompat.startActivity(
+                                        this@ProfileActivity,
+                                        Intent(this@ProfileActivity, FollowActivity::class.java)
+                                            .putExtra("title", "Following")
+                                            .putExtra("userId", user.id),
+                                        null
+                                    )
+                                    true
+                                }
 
-                            R.id.action_view_followers -> {
-                                ContextCompat.startActivity(
-                                    this@ProfileActivity,
-                                    Intent(this@ProfileActivity, FollowActivity::class.java)
-                                        .putExtra("title", "Followers")
-                                        .putExtra("userId", user.id),
-                                    null
-                                )
-                                true
-                            }
+                                R.id.action_view_followers -> {
+                                    ContextCompat.startActivity(
+                                        this@ProfileActivity,
+                                        Intent(this@ProfileActivity, FollowActivity::class.java)
+                                            .putExtra("title", "Followers")
+                                            .putExtra("userId", user.id),
+                                        null
+                                    )
+                                    true
+                                }
 
-                            R.id.action_view_on_anilist -> {
-                                openLinkInBrowser("https://anilist.co/user/${user.name}")
-                                true
-                            }
+                                R.id.action_view_on_anilist -> {
+                                    openLinkInBrowser("https://anilist.co/user/${user.name}")
+                                    true
+                                }
 
-                            else -> false
+                                else -> false
+                            }
                         }
+                        popup.show()
                     }
-                    popup.show()
-                }
 
-                binding.profileUserAvatar.loadImage(user.avatar?.medium)
-                binding.profileUserAvatar.setOnLongClickListener {
-                    ImageViewDialog.newInstance(
-                        this@ProfileActivity,
-                        "${user.name}'s [Avatar]",
-                        user.avatar?.medium
+                    profileUserAvatar.loadImage(user.avatar?.medium)
+                    profileUserAvatar.setOnLongClickListener {
+                        ImageViewDialog.newInstance(
+                            this@ProfileActivity,
+                            "${user.name}'s [Avatar]",
+                            user.avatar?.medium
+                        )
+                    }
+
+                    val userLevelText = "${user.name} $userLevel"
+                    profileUserName.text = userLevelText
+                    val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+
+                    blurImage(
+                        if (bannerAnimations) profileBannerImage else profileBannerImageNoKen,
+                        user.bannerImage ?: user.avatar?.medium
                     )
-                }
+                    profileBannerImage.updateLayoutParams { height += statusBarHeight }
+                    profileBannerImageNoKen.updateLayoutParams { height += statusBarHeight }
+                    profileBannerGradient.updateLayoutParams { height += statusBarHeight }
+                    profileCloseButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+                    profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+                    profileButtonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+                    profileBannerImage.setOnLongClickListener {
+                        ImageViewDialog.newInstance(
+                            this@ProfileActivity,
+                            user.name + " [Banner]",
+                            user.bannerImage
+                        )
+                    }
 
-                val userLevelText = "${user.name} $userLevel"
-                binding.profileUserName.text = userLevelText
-                val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
-
-                blurImage(if (bannerAnimations) binding.profileBannerImage else binding.profileBannerImageNoKen as ImageView, user.bannerImage ?: user.avatar?.medium)
-                binding.profileBannerImage.updateLayoutParams { height += statusBarHeight }
-                binding.profileBannerImageNoKen?.updateLayoutParams { height += statusBarHeight }
-                binding.profileBannerGradient.updateLayoutParams { height += statusBarHeight }
-                binding.profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
-                binding.profileButtonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
-                binding.profileBannerImage.setOnLongClickListener {
-                    ImageViewDialog.newInstance(
-                        this@ProfileActivity,
-                        user.name + " [Banner]",
-                        user.bannerImage
-                    )
-                }
-
-                mMaxScrollSize = binding.profileAppBar.totalScrollRange
-                binding.profileAppBar.addOnOffsetChangedListener(this@ProfileActivity)
+                    mMaxScrollSize = profileAppBar.totalScrollRange
+                    profileAppBar.addOnOffsetChangedListener(this@ProfileActivity)
 
 
-                binding.profileFollowerCount.text = followers.toString()
-                binding.profileFollowerCountContainer.setOnClickListener {
-                    ContextCompat.startActivity(
-                        this@ProfileActivity,
-                        Intent(this@ProfileActivity, FollowActivity::class.java)
-                            .putExtra("title", getString(R.string.followers))
-                            .putExtra("userId", user.id),
-                        null
-                    )
-                }
+                    profileFollowerCount.text = followers.toString()
+                    profileFollowerCountContainer.setOnClickListener {
+                        ContextCompat.startActivity(
+                            this@ProfileActivity,
+                            Intent(this@ProfileActivity, FollowActivity::class.java)
+                                .putExtra("title", getString(R.string.followers))
+                                .putExtra("userId", user.id),
+                            null
+                        )
+                    }
 
-                binding.profileFollowingCount.text = following.toString()
-                binding.profileFollowingCountContainer.setOnClickListener {
-                    ContextCompat.startActivity(
-                        this@ProfileActivity,
-                        Intent(this@ProfileActivity, FollowActivity::class.java)
-                            .putExtra("title", "Following")
-                            .putExtra("userId", user.id),
-                        null
-                    )
-                }
+                    profileFollowingCount.text = following.toString()
+                    profileFollowingCountContainer.setOnClickListener {
+                        ContextCompat.startActivity(
+                            this@ProfileActivity,
+                            Intent(this@ProfileActivity, FollowActivity::class.java)
+                                .putExtra("title", "Following")
+                                .putExtra("userId", user.id),
+                            null
+                        )
+                    }
 
-                binding.profileAnimeCount.text = user.statistics.anime.count.toString()
-                binding.profileAnimeCountContainer.setOnClickListener {
-                    ContextCompat.startActivity(
-                        this@ProfileActivity, Intent(this@ProfileActivity, ListActivity::class.java)
-                            .putExtra("anime", true)
-                            .putExtra("userId", user.id)
-                            .putExtra("username", user.name), null
-                    )
-                }
+                    profileAnimeCount.text = user.statistics.anime.count.toString()
+                    profileAnimeCountContainer.setOnClickListener {
+                        ContextCompat.startActivity(
+                            this@ProfileActivity,
+                            Intent(this@ProfileActivity, ListActivity::class.java)
+                                .putExtra("anime", true)
+                                .putExtra("userId", user.id)
+                                .putExtra("username", user.name),
+                            null
+                        )
+                    }
 
-                binding.profileMangaCount.text = user.statistics.manga.count.toString()
-                binding.profileMangaCountContainer.setOnClickListener {
-                    ContextCompat.startActivity(
-                        this@ProfileActivity, Intent(this@ProfileActivity, ListActivity::class.java)
-                            .putExtra("anime", false)
-                            .putExtra("userId", user.id)
-                            .putExtra("username", user.name), null
-                    )
+                    profileMangaCount.text = user.statistics.manga.count.toString()
+                    profileMangaCountContainer.setOnClickListener {
+                        ContextCompat.startActivity(
+                            this@ProfileActivity,
+                            Intent(this@ProfileActivity, ListActivity::class.java)
+                                .putExtra("anime", false)
+                                .putExtra("userId", user.id)
+                                .putExtra("username", user.name),
+                            null
+                        )
+                    }
+
+                    profileCloseButton.setOnClickListener {
+                        onBackPressedDispatcher.onBackPressed()
+                    }
                 }
             }
         }
@@ -265,29 +284,31 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange
         val percentage = abs(i) * 100 / mMaxScrollSize
 
-        binding.profileUserAvatarContainer.visibility =
-            if (binding.profileUserAvatarContainer.scaleX == 0f) View.GONE else View.VISIBLE
-        val duration = (200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
-        if (percentage >= percent && !isCollapsed) {
-            isCollapsed = true
-            ObjectAnimator.ofFloat(binding.profileUserDataContainer, "translationX", screenWidth)
-                .setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.profileUserAvatarContainer, "translationX", screenWidth)
-                .setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.profileButtonContainer, "translationX", screenWidth)
-                .setDuration(duration).start()
-            binding.profileBannerImage.pause()
-        }
-        if (percentage <= percent && isCollapsed) {
-            isCollapsed = false
-            ObjectAnimator.ofFloat(binding.profileUserDataContainer, "translationX", 0f)
-                .setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.profileUserAvatarContainer, "translationX", 0f)
-                .setDuration(duration).start()
-            ObjectAnimator.ofFloat(binding.profileButtonContainer, "translationX", 0f)
-                .setDuration(duration).start()
+        with (bindingProfileAppBar) {
+            profileUserAvatarContainer.visibility =
+                if (profileUserAvatarContainer.scaleX == 0f) View.GONE else View.VISIBLE
+            val duration = (200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
+            if (percentage >= percent && !isCollapsed) {
+                isCollapsed = true
+                ObjectAnimator.ofFloat(profileUserDataContainer, "translationX", screenWidth)
+                    .setDuration(duration).start()
+                ObjectAnimator.ofFloat(profileUserAvatarContainer, "translationX", screenWidth)
+                    .setDuration(duration).start()
+                ObjectAnimator.ofFloat(profileButtonContainer, "translationX", screenWidth)
+                    .setDuration(duration).start()
+                profileBannerImage.pause()
+            }
+            if (percentage <= percent && isCollapsed) {
+                isCollapsed = false
+                ObjectAnimator.ofFloat(profileUserDataContainer, "translationX", 0f)
+                    .setDuration(duration).start()
+                ObjectAnimator.ofFloat(profileUserAvatarContainer, "translationX", 0f)
+                    .setDuration(duration).start()
+                ObjectAnimator.ofFloat(profileButtonContainer, "translationX", 0f)
+                    .setDuration(duration).start()
 
-            if (PrefManager.getVal(PrefName.BannerAnimations)) binding.profileBannerImage.resume()
+                if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage.resume()
+            }
         }
     }
 
