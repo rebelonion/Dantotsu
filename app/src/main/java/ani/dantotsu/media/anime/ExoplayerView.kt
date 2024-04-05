@@ -1825,7 +1825,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                         override fun onTick(millisUntilFinished: Long) {
                             if (new == null) {
                                 skipTimeButton.visibility = View.GONE
-                                exoSkip.visibility = View.VISIBLE
+                                exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
                                 disappeared = false
                                 functionstarted = false
                                 cancelTimer()
@@ -1834,7 +1834,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
                         override fun onFinish() {
                             skipTimeButton.visibility = View.GONE
-                            exoSkip.visibility = View.VISIBLE
+                            exoSkip.isVisible = PrefManager.getVal<Int>(PrefName.SkipTime) > 0
                             disappeared = true
                             functionstarted = false
                             cancelTimer()
