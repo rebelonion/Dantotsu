@@ -195,24 +195,67 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
     }
 
     fun updateRecent(adaptor: MediaAdaptor) {
-        binding.animeUpdatedProgressBar.visibility = View.GONE
-        binding.animeUpdatedRecyclerView.adapter = adaptor
-        binding.animeUpdatedRecyclerView.layoutManager =
+        binding.apply{
+            init(
+                adaptor,
+                animeUpdatedRecyclerView,
+                animeUpdatedProgressBar,
+                animeRecently
+            )
+            animePopular.visibility = View.VISIBLE
+            animePopular.startAnimation(setSlideUp())
+            if (adaptor.itemCount == 0) {
+                animeRecentlyContainer.visibility = View.GONE
+            }
+        }
+
+    }
+    fun updateMovies(adaptor: MediaAdaptor) {
+        binding.apply{
+            init(
+                adaptor,
+                animeMoviesRecyclerView,
+                animeMoviesProgressBar,
+                animeMovies
+            )
+        }
+    }
+
+    fun updateTopRated(adaptor: MediaAdaptor) {
+        binding.apply{
+            init(
+                adaptor,
+                animeTopRatedRecyclerView,
+                animeTopRatedProgressBar,
+                animeTopRated
+            )
+        }
+    }
+    fun updateMostFav(adaptor: MediaAdaptor) {
+        binding.apply{
+            init(
+                adaptor,
+                animeMostFavRecyclerView,
+                animeMostFavProgressBar,
+                animeMostFav
+            )
+        }
+    }
+    fun init(adaptor: MediaAdaptor,recyclerView: RecyclerView, progress: View, title: View){
+        progress.visibility = View.GONE
+        recyclerView.adapter = adaptor
+        recyclerView.layoutManager =
             LinearLayoutManager(
-                binding.animeUpdatedRecyclerView.context,
+                recyclerView.context,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-        binding.animeUpdatedRecyclerView.visibility = View.VISIBLE
-
-        binding.animeRecently.visibility = View.VISIBLE
-        binding.animeRecently.startAnimation(setSlideUp())
-        binding.animeUpdatedRecyclerView.layoutAnimation =
+        recyclerView.visibility = View.VISIBLE
+        title.visibility = View.VISIBLE
+        title.startAnimation(setSlideUp())
+        recyclerView.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
-        binding.animePopular.visibility = View.VISIBLE
-        binding.animePopular.startAnimation(setSlideUp())
     }
-
     fun updateAvatar() {
         if (Anilist.avatar != null && ready.value == true) {
             trendingBinding.userAvatar.loadImage(Anilist.avatar)

@@ -1,6 +1,8 @@
 package ani.dantotsu.media
 
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.anilist.api.Query
+import org.checkerframework.checker.units.qual.A
 import java.io.Serializable
 
 data class Character(
@@ -14,5 +16,6 @@ data class Character(
     var age: String? = null,
     var gender: String? = null,
     var dateOfBirth: FuzzyDate? = null,
-    var roles: ArrayList<Media>? = null
+    var roles: ArrayList<Media>? = null,
+    val voiceActor: ArrayList<Author>? = null,
 ) : Serializable

@@ -18,10 +18,17 @@
             app:drawableEndCompat="@drawable/ic_round_arrow_drop_down_24"
             tools:ignore="TextContrastCheck" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -71,14 +78,6 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
         <Button
             android:id="@+id/settingsReader"
             android:layout_width="match_parent"
@@ -100,13 +99,6 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
 
         <Button
             android:id="@+id/purgeMangaDownloads"
@@ -130,13 +122,6 @@
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
         <Button
             android:id="@+id/purgeNovelDownloads"
             android:layout_width="match_parent"
@@ -158,7 +143,23 @@
             app:iconPadding="16dp"
             app:iconSize="24dp"
             app:iconTint="?attr/colorPrimary" />
-
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/settingsIncludeMangaList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:drawableStart="@drawable/view_list_24"
+            android:drawablePadding="16dp"
+            android:elegantTextHeight="true"
+            android:fontFamily="@font/poppins_bold"
+            android:minHeight="64dp"
+            android:text="@string/include_list"
+            android:textAlignment="viewStart"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:drawableTint="?attr/colorPrimary"
+            app:showText="false"
+            app:thumbTint="@color/button_switch_track" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

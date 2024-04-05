@@ -13,7 +13,6 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     OfflineView(Pref(Location.General, Int::class, 0)),
     DownloadManager(Pref(Location.General, Int::class, 0)),
     NSFWExtension(Pref(Location.General, Boolean::class, true)),
-    SdDl(Pref(Location.General, Boolean::class, false)),
     ContinueMedia(Pref(Location.General, Boolean::class, true)),
     SearchSources(Pref(Location.General, Boolean::class, true)),
     RecentlyListOnly(Pref(Location.General, Boolean::class, false)),
@@ -29,6 +28,9 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
             "Mozilla/5.0 (Linux; Android 13; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36"
         )
     ),
+    AnimeExtensionRepos(Pref(Location.General, Set::class, setOf<String>())),
+    MangaExtensionRepos(Pref(Location.General, Set::class, setOf<String>())),
+    SharedRepositories(Pref(Location.General, Boolean::class, false)),
     AnimeSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
     AnimeSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
     MangaSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
@@ -40,6 +42,9 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     LastAnilistNotificationId(Pref(Location.General, Int::class, 0)),
     AnilistFilteredTypes(Pref(Location.General, Set::class, setOf<String>())),
     UseAlarmManager(Pref(Location.General, Boolean::class, false)),
+    IncludeAnimeList(Pref(Location.General, Boolean::class, true)),
+    IncludeMangaList(Pref(Location.General, Boolean::class, true)),
+    AdultOnly(Pref(Location.General, Boolean::class, false)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),
@@ -77,6 +82,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     MangaListSortOrder(Pref(Location.UI, String::class, "score")),
     CommentSortOrder(Pref(Location.UI, String::class, "newest")),
     FollowerLayout(Pref(Location.UI, Int::class, 0)),
+
 
     //Player
     DefaultSpeed(Pref(Location.Player, Int::class, 5)),
@@ -178,6 +184,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     RecentGlobalNotification(Pref(Location.Irrelevant, Int::class, 0)),
     CommentNotificationStore(Pref(Location.Irrelevant, List::class, listOf<CommentStore>())),
     UnreadCommentNotifications(Pref(Location.Irrelevant, Int::class, 0)),
+    DownloadsDir(Pref(Location.Irrelevant, String::class, "")),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

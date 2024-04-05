@@ -160,9 +160,29 @@ class MangaFragment : Fragment() {
         })
         mangaPageAdapter.ready.observe(viewLifecycleOwner) { i ->
             if (i == true) {
-                model.getTrendingNovel().observe(viewLifecycleOwner) {
+                model.getPopularNovel().observe(viewLifecycleOwner) {
                     if (it != null) {
                         mangaPageAdapter.updateNovel(MediaAdaptor(0, it, requireActivity()))
+                    }
+                }
+                model.getPopularManga().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        mangaPageAdapter.updateTrendingManga(MediaAdaptor(0, it, requireActivity()))
+                    }
+                }
+                model.getPopularManhwa().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        mangaPageAdapter.updateTrendingManhwa(MediaAdaptor(0, it, requireActivity()))
+                    }
+                }
+                model.getTopRated().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        mangaPageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()))
+                    }
+                }
+                model.getMostFav().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        mangaPageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()))
                     }
                 }
                 if (mangaPageAdapter.trendingViewPager != null) {
@@ -237,7 +257,7 @@ class MangaFragment : Fragment() {
                         }
                         model.loaded = true
                         model.loadTrending()
-                        model.loadTrendingNovel()
+                        model.loadAll()
                         model.loadPopular(
                             "MANGA", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
                                 PrefName.PopularMangaList

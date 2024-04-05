@@ -10,7 +10,6 @@ import androidx.annotation.OptIn
 import androidx.core.view.isVisible
 import androidx.lifecycle.coroutineScope
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.DownloadIndex
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.connections.updateProgress
@@ -18,9 +17,12 @@ import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.databinding.ItemEpisodeGridBinding
 import ani.dantotsu.databinding.ItemEpisodeListBinding
+import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.DownloadsManager.Companion.getDirSize
 import ani.dantotsu.download.anime.AnimeDownloaderService
-import ani.dantotsu.download.video.Helper
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaNameAdapter
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
 import com.bumptech.glide.Glide
@@ -55,15 +57,7 @@ class EpisodeAdapter(
     var arr: List<Episode> = arrayListOf(),
     var offlineMode: Boolean
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-
-    private lateinit var index: DownloadIndex
-
-
-    init {
-        if (offlineMode) {
-            index = Helper.downloadManager(fragment.requireContext()).downloadIndex
-        }
-    }
+    val context = fragment.requireContext()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return (when (viewType) {
@@ -102,7 +96,7 @@ class EpisodeAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val ep = arr[position]
         val title = if (!ep.title.isNullOrEmpty() && ep.title != "null") {
-            ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
+            ep.title?.let { MediaNameAdapter.removeEpisodeNumber(it) }
         } else {
             ep.number
         } ?: ""
@@ -247,17 +241,8 @@ class EpisodeAdapter(
         // Find the position of the chapter and notify only that item
         val position = arr.indexOfFirst { it.number == episodeNumber }
         if (position != -1) {
-            val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(
-                media.mainName(),
-                episodeNumber
-            )
-            val id = PrefManager.getAnimeDownloadPreferences().getString(
-                taskName,
-                ""
-            ) ?: ""
             val size = try {
-                val download = index.getDownload(id)
-                bytesToHuman(download?.bytesDownloaded ?: 0)
+                bytesToHuman(getDirSize(context, MediaType.ANIME, media.mainName(), episodeNumber))
             } catch (e: Exception) {
                 null
             }

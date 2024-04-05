@@ -89,5 +89,7 @@ class NetworkHelper(
         responseParser = Mapper
     )
 
-    fun defaultUserAgentProvider() = PrefManager.getVal<String>(PrefName.DefaultUserAgent)
+    companion object {
+        fun defaultUserAgentProvider() = PrefManager.getVal<String>(PrefName.DefaultUserAgent)
+    }
 }

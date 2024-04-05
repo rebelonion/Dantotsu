@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
@@ -94,23 +95,23 @@ class NovelReadFragment : Fragment(),
                 )
             )
         ) {
-            val file = File(
-                context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "${DownloadsManager.novelLocation}/${media.mainName()}/${novel.name}/0.epub"
-            )
-            if (!file.exists()) return false
-            val fileUri = FileProvider.getUriForFile(
-                requireContext(),
-                "${requireContext().packageName}.provider",
-                file
-            )
-            val intent = Intent(context, NovelReaderActivity::class.java).apply {
-                action = Intent.ACTION_VIEW
-                setDataAndType(fileUri, "application/epub+zip")
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            try {
+                val directory =
+                    DownloadsManager.getSubDirectory(context?:currContext()!!, MediaType.NOVEL, false, novel.name)
+                val file = directory?.findFile(novel.name)
+                if (file?.exists() == false) return false
+                val fileUri = file?.uri ?: return false
+                val intent = Intent(context, NovelReaderActivity::class.java).apply {
+                    action = Intent.ACTION_VIEW
+                    setDataAndType(fileUri, "application/epub+zip")
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }
+                startActivity(intent)
+                return true
+            } catch (e: Exception) {
+                Logger.log(e)
+                return false
             }
-            startActivity(intent)
-            return true
         } else {
             return false
         }
@@ -135,7 +136,7 @@ class NovelReadFragment : Fragment(),
                 novel.name,
                 MediaType.NOVEL
             )
-        )
+        ) {}
     }
 
     private val downloadStatusReceiver = object : BroadcastReceiver() {

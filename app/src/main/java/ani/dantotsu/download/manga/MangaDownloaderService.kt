@@ -10,17 +10,18 @@ import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.graphics.Bitmap
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.documentfile.provider.DocumentFile
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.manga.ImageData
@@ -31,6 +32,9 @@ import ani.dantotsu.media.manga.MangaReadFragment.Companion.ACTION_DOWNLOAD_STAR
 import ani.dantotsu.media.manga.MangaReadFragment.Companion.EXTRA_CHAPTER_NUMBER
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import com.anggrayudi.storage.file.deleteRecursively
+import com.anggrayudi.storage.file.forceDelete
+import com.anggrayudi.storage.file.openOutputStream
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
 import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_DOWNLOADER_PROGRESS
@@ -51,8 +55,6 @@ import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.Queue
@@ -189,12 +191,19 @@ class MangaDownloaderService : Service() {
                     true
                 }
 
-                //val deferredList = mutableListOf<Deferred<Bitmap?>>()
                 val deferredMap = mutableMapOf<Int, Deferred<Bitmap?>>()
                 builder.setContentText("Downloading ${task.title} - ${task.chapter}")
                 if (notifi) {
                     notificationManager.notify(NOTIFICATION_ID, builder.build())
                 }
+
+                getSubDirectory(
+                    this@MangaDownloaderService,
+                    MediaType.MANGA,
+                    false,
+                    task.title,
+                    task.chapter
+                )?.deleteRecursively(this@MangaDownloaderService)
 
                 // Loop through each ImageData object from the task
                 var farthest = 0
@@ -263,24 +272,18 @@ class MangaDownloaderService : Service() {
     private fun saveToDisk(fileName: String, bitmap: Bitmap, title: String, chapter: String) {
         try {
             // Define the directory within the private external storage space
-            val directory = File(
-                this.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Manga/$title/$chapter"
-            )
-
-            if (!directory.exists()) {
-                directory.mkdirs()
-            }
-
-            // Create a file reference within that directory for your image
-            val file = File(directory, fileName)
+            val directory = getSubDirectory(this, MediaType.MANGA, false, title, chapter)
+                ?: throw Exception("Directory not found")
+            directory.findFile(fileName)?.forceDelete(this)
+            // Create a file reference within that directory for the image
+            val file =
+                directory.createFile("image/jpeg", fileName) ?: throw Exception("File not created")
 
             // Use a FileOutputStream to write the bitmap to the file
-            FileOutputStream(file).use { outputStream ->
+            file.openOutputStream(this, false).use { outputStream ->
+                if (outputStream == null) throw Exception("Output stream is null")
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
             }
-
-
         } catch (e: Exception) {
             println("Exception while saving image: ${e.message}")
             snackString("Exception while saving image: ${e.message}")
@@ -291,13 +294,12 @@ class MangaDownloaderService : Service() {
     @OptIn(DelicateCoroutinesApi::class)
     private fun saveMediaInfo(task: DownloadTask) {
         launchIO {
-            val directory = File(
-                getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "Dantotsu/Manga/${task.title}"
-            )
-            if (!directory.exists()) directory.mkdirs()
-
-            val file = File(directory, "media.json")
+            val directory =
+                getSubDirectory(this@MangaDownloaderService, MediaType.MANGA, false, task.title)
+                    ?: throw Exception("Directory not found")
+            directory.findFile("media.json")?.forceDelete(this@MangaDownloaderService)
+            val file = directory.createFile("application/json", "media.json")
+                ?: throw Exception("File not created")
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
                     SChapterImpl() // Provide an instance of SChapterImpl
@@ -312,7 +314,10 @@ class MangaDownloaderService : Service() {
                 val jsonString = gson.toJson(media)
                 withContext(Dispatchers.Main) {
                     try {
-                        file.writeText(jsonString)
+                        file.openOutputStream(this@MangaDownloaderService, false).use { output ->
+                            if (output == null) throw Exception("Output stream is null")
+                            output.write(jsonString.toByteArray())
+                        }
                     } catch (e: android.system.ErrnoException) {
                         e.printStackTrace()
                         Toast.makeText(
@@ -327,7 +332,7 @@ class MangaDownloaderService : Service() {
     }
 
 
-    private suspend fun downloadImage(url: String, directory: File, name: String): String? =
+    private suspend fun downloadImage(url: String, directory: DocumentFile, name: String): String? =
         withContext(Dispatchers.IO) {
             var connection: HttpURLConnection? = null
             println("Downloading url $url")
@@ -337,14 +342,16 @@ class MangaDownloaderService : Service() {
                 if (connection.responseCode != HttpURLConnection.HTTP_OK) {
                     throw Exception("Server returned HTTP ${connection.responseCode} ${connection.responseMessage}")
                 }
-
-                val file = File(directory, name)
-                FileOutputStream(file).use { output ->
+                directory.findFile(name)?.forceDelete(this@MangaDownloaderService)
+                val file =
+                    directory.createFile("image/jpeg", name) ?: throw Exception("File not created")
+                file.openOutputStream(this@MangaDownloaderService, false).use { output ->
+                    if (output == null) throw Exception("Output stream is null")
                     connection.inputStream.use { input ->
                         input.copyTo(output)
                     }
                 }
-                return@withContext file.absolutePath
+                return@withContext file.uri.toString()
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {

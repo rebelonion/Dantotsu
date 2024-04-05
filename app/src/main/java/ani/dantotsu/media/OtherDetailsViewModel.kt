@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ani.dantotsu.connections.anilist.Anilist
+import org.checkerframework.checker.units.qual.A
 import java.text.DateFormat
 import java.util.Date
 
@@ -25,12 +26,16 @@ class OtherDetailsViewModel : ViewModel() {
     suspend fun loadAuthor(m: Author) {
         if (author.value == null) author.postValue(Anilist.query.getAuthorDetails(m))
     }
-
+    private val voiceActor: MutableLiveData<Author> = MutableLiveData(null)
+    fun getVoiceActor(): LiveData<Author> = voiceActor
+    suspend fun loadVoiceActor(m: Author) {
+        if (voiceActor.value == null) voiceActor.postValue(Anilist.query.getVoiceActorsDetails(m))
+    }
     private val calendar: MutableLiveData<Map<String, MutableList<Media>>> = MutableLiveData(null)
     fun getCalendar(): LiveData<Map<String, MutableList<Media>>> = calendar
     suspend fun loadCalendar() {
         val curr = System.currentTimeMillis() / 1000
-        val res = Anilist.query.recentlyUpdated(false, curr - 86400, curr + (86400 * 6))
+        val res = Anilist.query.recentlyUpdated(curr - 86400, curr + (86400 * 6))
         val df = DateFormat.getDateInstance(DateFormat.FULL)
         val map = mutableMapOf<String, MutableList<Media>>()
         val idMap = mutableMapOf<String, MutableList<Int>>()

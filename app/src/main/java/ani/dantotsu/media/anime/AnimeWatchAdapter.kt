@@ -17,15 +17,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
-import ani.dantotsu.countDown
 import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
+import ani.dantotsu.displayTimer
 import ani.dantotsu.isOnline
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.SourceSearchDialogFragment
 import ani.dantotsu.openSettings
 import ani.dantotsu.others.LanguageMapper
@@ -51,7 +52,7 @@ class AnimeWatchAdapter(
     private val fragment: AnimeWatchFragment,
     private val watchSources: WatchSources
 ) : RecyclerView.Adapter<AnimeWatchAdapter.ViewHolder>() {
-
+    private var autoSelect = true
     var subscribe: MediaDetailsActivity.PopImageButton? = null
     private var _binding: ItemAnimeWatchBinding? = null
 
@@ -403,7 +404,7 @@ class AnimeWatchAdapter(
                     }
                     val ep = media.anime.episodes!![continueEp]!!
 
-                    val cleanedTitle = ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
+                    val cleanedTitle = ep.title?.let { MediaNameAdapter.removeEpisodeNumber(it) }
 
                     binding.itemEpisodeImage.loadImage(
                         ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
@@ -436,7 +437,8 @@ class AnimeWatchAdapter(
                 val sourceFound = media.anime.episodes!!.isNotEmpty()
                 binding.animeSourceNotFound.isGone = sourceFound
                 binding.faqbutton.isGone = sourceFound
-                if (!sourceFound && PrefManager.getVal(PrefName.SearchSources)) {
+
+                if (!sourceFound && PrefManager.getVal(PrefName.SearchSources) && autoSelect) {
                     if (binding.animeSource.adapter.count > media.selected!!.sourceIndex + 1) {
                         val nextIndex = media.selected!!.sourceIndex + 1
                         binding.animeSource.setText(binding.animeSource.adapter
@@ -452,6 +454,7 @@ class AnimeWatchAdapter(
                         fragment.loadEpisodes(nextIndex, false)
                     }
                 }
+                binding.animeSource.setOnClickListener { autoSelect = false }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE
@@ -497,8 +500,7 @@ class AnimeWatchAdapter(
     inner class ViewHolder(val binding: ItemAnimeWatchBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            //Timer
-            countDown(media, binding.animeSourceContainer)
+            displayTimer(media, binding.animeSourceContainer)
         }
     }
 }

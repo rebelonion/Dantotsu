@@ -92,6 +92,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.bakaupdates.MangaUpdates
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
@@ -102,6 +103,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore.Companion.generateSalt
+import ani.dantotsu.util.CountUpTimer
 import ani.dantotsu.util.Logger
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestBuilder
@@ -134,9 +136,12 @@ import io.noties.markwon.html.TagHandlerNoOp
 import io.noties.markwon.image.AsyncDrawable
 import io.noties.markwon.image.glide.GlideImagesPlugin
 import jp.wasabeef.glide.transformations.BlurTransformation
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
@@ -214,7 +219,8 @@ fun initActivity(a: Activity) {
             window,
             window.decorView
         ).hide(WindowInsetsCompat.Type.statusBars())
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0 && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0
+            && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
             window.decorView.rootWindowInsets?.displayCutout?.apply {
                 if (boundingRects.size > 0) {
                     statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())
@@ -619,9 +625,14 @@ fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
     file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
     if (file?.url?.isNotEmpty() == true) {
         tryWith {
-            val glideUrl = GlideUrl(file.url) { file.headers }
-            Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)
-                .into(this)
+            if (file.url.startsWith("content://")) {
+                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())
+                    .override(size).into(this)
+            } else {
+                val glideUrl = GlideUrl(file.url) { file.headers }
+                Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(size)
+                    .into(this)
+            }
         }
     }
 }
@@ -876,31 +887,6 @@ fun savePrefs(
     }
 }
 
-fun downloadsPermission(activity: AppCompatActivity): Boolean {
-    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) return true
-    val permissions = arrayOf(
-        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.READ_EXTERNAL_STORAGE
-    )
-
-    val requiredPermissions = permissions.filter {
-        ContextCompat.checkSelfPermission(activity, it) != PackageManager.PERMISSION_GRANTED
-    }.toTypedArray()
-
-    return if (requiredPermissions.isNotEmpty()) {
-        ActivityCompat.requestPermissions(
-            activity,
-            requiredPermissions,
-            DOWNLOADS_PERMISSION_REQUEST_CODE
-        )
-        false
-    } else {
-        true
-    }
-}
-
-private const val DOWNLOADS_PERMISSION_REQUEST_CODE = 100
-
 fun shareImage(title: String, bitmap: Bitmap, context: Context) {
 
     val contentUri = FileProvider.getUriForFile(
@@ -1001,6 +987,54 @@ fun countDown(media: Media, view: ViewGroup) {
                 snackString(currContext()?.getString(R.string.congrats_vro))
             }
         }.start()
+    }
+}
+
+fun sinceWhen(media: Media, view: ViewGroup) {
+    CoroutineScope(Dispatchers.IO).launch {
+        MangaUpdates().search(media.name ?: media.nameRomaji, media.startDate)?.let {
+            val latestChapter = it.metadata.series.latestChapter ?: it.record.chapter?.let { chapter ->
+                if (chapter.contains("-"))
+                    chapter.split("-")[1].trim()
+                else
+                    chapter
+            }?.toInt()
+            val timeSince = (System.currentTimeMillis() -
+                    (it.metadata.series.lastUpdated!!.timestamp * 1000)) / 1000
+
+            withContext(Dispatchers.Main) {
+                val v =
+                    ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
+                view.addView(v.root, 0)
+                v.mediaCountdownText.text =
+                    currActivity()?.getString(R.string.chapter_release_timeout, latestChapter)
+
+                object : CountUpTimer(86400000) {
+                    override fun onTick(second: Int) {
+                        val a = second + timeSince
+                        v.mediaCountdown.text = currActivity()?.getString(
+                            R.string.time_format,
+                            a / 86400,
+                            a % 86400 / 3600,
+                            a % 86400 % 3600 / 60,
+                            a % 86400 % 3600 % 60
+                        )
+                    }
+
+                    override fun onFinish() {
+                        // The legend will never die.
+                    }
+                }.start()
+            }
+        }
+    }
+}
+
+fun displayTimer(media: Media, view: ViewGroup) {
+    when {
+        media.anime != null -> countDown(media, view)
+        media.format == "MANGA" || media.format == "ONE_SHOT" -> sinceWhen(media, view)
+        else -> { } // No timer yet
     }
 }
 

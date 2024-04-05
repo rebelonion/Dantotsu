@@ -9,14 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@drawable/gradient_background"
+        android:src="@drawable/linear_gradient_black"
         tools:ignore="ContentDescription"/>
 
     <RelativeLayout
         android:id="@+id/widgetContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp">
+        android:padding="16dp">
 
         <ImageView
             android:id="@+id/logoView"

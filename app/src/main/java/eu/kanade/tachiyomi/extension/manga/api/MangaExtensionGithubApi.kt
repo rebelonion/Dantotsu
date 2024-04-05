@@ -1,6 +1,8 @@
 package eu.kanade.tachiyomi.extension.manga.api
 
 import android.content.Context
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -32,40 +34,53 @@ internal class MangaExtensionGithubApi {
         preferenceStore.getLong("last_ext_check", 0)
     }
 
-    private var requiresFallbackSource = false
-
     suspend fun findExtensions(): List<MangaExtension.Available> {
         return withIOContext {
-            val githubResponse = if (requiresFallbackSource) {
-                null
-            } else {
+
+            val extensions: ArrayList<MangaExtension.Available> = arrayListOf()
+
+            val repos =
+                PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).toMutableList()
+            if (repos.isEmpty()) {
+                repos.add("https://raw.githubusercontent.com/keiyoushi/extensions/main")
+                PrefManager.setVal(PrefName.MangaExtensionRepos, repos.toSet())
+            }
+
+            repos.forEach {
                 try {
-                    networkService.client
-                        .newCall(GET("${REPO_URL_PREFIX}index.min.json"))
-                        .awaitSuccess()
+                    val githubResponse = try {
+                        networkService.client
+                            .newCall(GET("${it}/index.min.json"))
+                            .awaitSuccess()
+                    } catch (e: Throwable) {
+                        Logger.log("Failed to get repo: $it")
+                        Logger.log(e)
+                        null
+                    }
+
+                    val response = githubResponse ?: run {
+                        networkService.client
+                            .newCall(GET(fallbackRepoUrl(it) + "/index.min.json"))
+                            .awaitSuccess()
+                    }
+
+                    val repoExtensions = with(json) {
+                        response
+                            .parseAs<List<ExtensionJsonObject>>()
+                            .toExtensions(it)
+                    }
+
+                    // Sanity check - a small number of extensions probably means something broke
+                    // with the repo generator
+                    if (repoExtensions.size < 10) {
+                        throw Exception()
+                    }
+
+                    extensions.addAll(repoExtensions)
                 } catch (e: Throwable) {
                     Logger.log("Failed to get extensions from GitHub")
-                    requiresFallbackSource = true
-                    null
+                    Logger.log(e)
                 }
-            }
-
-            val response = githubResponse ?: run {
-                networkService.client
-                    .newCall(GET("${FALLBACK_REPO_URL_PREFIX}index.min.json"))
-                    .awaitSuccess()
-            }
-
-            val extensions = with(json) {
-                response
-                    .parseAs<List<ExtensionJsonObject>>()
-                    .toExtensions()
-            }
-
-            // Sanity check - a small number of extensions probably means something broke
-            // with the repo generator
-            if (extensions.size < 100) {
-                throw Exception()
             }
 
             extensions
@@ -110,7 +125,7 @@ internal class MangaExtensionGithubApi {
         return extensionsWithUpdate
     }
 
-    private fun List<ExtensionJsonObject>.toExtensions(): List<MangaExtension.Available> {
+    private fun List<ExtensionJsonObject>.toExtensions(repository: String): List<MangaExtension.Available> {
         return this
             .filter {
                 val libVersion = it.extractLibVersion()
@@ -129,7 +144,8 @@ internal class MangaExtensionGithubApi {
                     hasChangelog = it.hasChangelog == 1,
                     sources = it.sources?.toExtensionSources().orEmpty(),
                     apkName = it.apk,
-                    iconUrl = "${getUrlPrefix()}icon/${it.pkg}.png",
+                    repository = repository,
+                    iconUrl = "${repository}/icon/${it.pkg}.png",
                 )
             }
     }
@@ -146,25 +162,33 @@ internal class MangaExtensionGithubApi {
     }
 
     fun getApkUrl(extension: MangaExtension.Available): String {
-        return "${getUrlPrefix()}apk/${extension.apkName}"
-    }
-
-    private fun getUrlPrefix(): String {
-        return if (requiresFallbackSource) {
-            FALLBACK_REPO_URL_PREFIX
-        } else {
-            REPO_URL_PREFIX
-        }
+        return "${extension.repository}/apk/${extension.apkName}"
     }
 
     private fun ExtensionJsonObject.extractLibVersion(): Double {
         return version.substringBeforeLast('.').toDouble()
     }
-}
 
-private const val REPO_URL_PREFIX = "https://raw.githubusercontent.com/keiyoushi/extensions/main/"
-private const val FALLBACK_REPO_URL_PREFIX =
-    "https://gcore.jsdelivr.net/gh/keiyoushi/extensions@main/"
+    private fun fallbackRepoUrl(repoUrl: String): String? {
+        var fallbackRepoUrl = "https://gcore.jsdelivr.net/gh/"
+        val strippedRepoUrl =
+            repoUrl.removePrefix("https://").removePrefix("http://").removeSuffix("/")
+        val repoUrlParts = strippedRepoUrl.split("/")
+        if (repoUrlParts.size < 3) {
+            return null
+        }
+        val repoOwner = repoUrlParts[1]
+        val repoName = repoUrlParts[2]
+        fallbackRepoUrl += "$repoOwner/$repoName"
+        val repoBranch = if (repoUrlParts.size > 3) {
+            repoUrlParts[3]
+        } else {
+            "main"
+        }
+        fallbackRepoUrl += "@$repoBranch"
+        return fallbackRepoUrl
+    }
+}
 
 @Serializable
 private data class ExtensionJsonObject(

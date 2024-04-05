@@ -4,7 +4,6 @@ package ani.dantotsu.download.anime
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.TypedValue
@@ -25,6 +24,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import ani.dantotsu.R
 import ani.dantotsu.bottomBar
@@ -33,6 +33,7 @@ import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.DownloadsManager.Companion.findValidName
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
@@ -44,6 +45,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import com.anggrayudi.storage.file.openInputStream
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.imageview.ShapeableImageView
 import com.google.android.material.textfield.TextInputLayout
@@ -55,9 +57,13 @@ import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.SEpisodeImpl
 import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
 
@@ -66,6 +72,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     private lateinit var gridView: GridView
     private lateinit var adapter: OfflineAnimeAdapter
     private lateinit var total: TextView
+    private var downloadsJob: Job = Job()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -112,10 +119,10 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         })
         var style: Int = PrefManager.getVal(PrefName.OfflineView)
         val layoutList = view.findViewById<ImageView>(R.id.downloadedList)
-        val layoutcompact = view.findViewById<ImageView>(R.id.downloadedGrid)
+        val layoutCompact = view.findViewById<ImageView>(R.id.downloadedGrid)
         var selected = when (style) {
             0 -> layoutList
-            1 -> layoutcompact
+            1 -> layoutCompact
             else -> layoutList
         }
         selected.alpha = 1f
@@ -136,7 +143,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             grid()
         }
 
-        layoutcompact.setOnClickListener {
+        layoutCompact.setOnClickListener {
             selected(it as ImageView)
             style = 1
             PrefManager.setVal(PrefName.OfflineView, style)
@@ -156,11 +163,11 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     @OptIn(UnstableApi::class)
     private fun grid() {
         gridView.visibility = View.VISIBLE
-        getDownloads()
         val fadeIn = AlphaAnimation(0f, 1f)
         fadeIn.duration = 300 // animations  pog
         gridView.layoutAnimation = LayoutAnimationController(fadeIn)
         adapter = OfflineAnimeAdapter(requireContext(), downloads, this)
+        getDownloads()
         gridView.adapter = adapter
         gridView.scheduleLayoutAnimation()
         total.text = if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
@@ -168,20 +175,22 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
             val media =
-                downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title }
+                downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title.findValidName() }
             media?.let {
-                val mediaModel = getMedia(it)
-                if (mediaModel == null) {
-                    snackString("Error loading media.json")
-                    return@let
+                lifecycleScope.launch {
+                    val mediaModel = getMedia(it)
+                    if (mediaModel == null) {
+                        snackString("Error loading media.json")
+                        return@launch
+                    }
+                    MediaDetailsActivity.mediaSingleton = mediaModel
+                    ContextCompat.startActivity(
+                        requireActivity(),
+                        Intent(requireContext(), MediaDetailsActivity::class.java)
+                            .putExtra("download", true),
+                        null
+                    )
                 }
-                MediaDetailsActivity.mediaSingleton = mediaModel
-                ContextCompat.startActivity(
-                    requireActivity(),
-                    Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("download", true),
-                    null
-                )
             } ?: run {
                 snackString("no media found")
             }
@@ -204,13 +213,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 if (mediaIds.isEmpty()) {
                     snackString("No media found")  // if this happens, terrible things have happened
                 }
-                for (mediaId in mediaIds) {
-                    ani.dantotsu.download.video.Helper.downloadManager(requireContext())
-                        .removeDownload(mediaId.toString())
-                }
                 getDownloads()
-                adapter.setItems(downloads)
-                total.text = if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
             }
             builder.setNegativeButton("No") { _, _ ->
                 // Do nothing
@@ -238,7 +241,6 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
 
         gridView.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView, scrollState: Int) {
-                // Implement behavior for different scroll states if needed
             }
 
             override fun onScroll(
@@ -261,7 +263,6 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
     override fun onResume() {
         super.onResume()
         getDownloads()
-        adapter.notifyDataSetChanged()
     }
 
     override fun onPause() {
@@ -281,25 +282,39 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
 
     private fun getDownloads() {
         downloads = listOf()
-        val animeTitles = downloadManager.animeDownloadedTypes.map { it.title }.distinct()
-        val newAnimeDownloads = mutableListOf<OfflineAnimeModel>()
-        for (title in animeTitles) {
-            val tDownloads = downloadManager.animeDownloadedTypes.filter { it.title == title }
-            val download = tDownloads.first()
-            val offlineAnimeModel = loadOfflineAnimeModel(download)
-            newAnimeDownloads += offlineAnimeModel
+        if (downloadsJob.isActive) {
+            downloadsJob.cancel()
         }
-        downloads = newAnimeDownloads
+        downloadsJob = Job()
+        CoroutineScope(Dispatchers.IO + downloadsJob).launch {
+            val animeTitles = downloadManager.animeDownloadedTypes.map { it.title }.distinct()
+            val newAnimeDownloads = mutableListOf<OfflineAnimeModel>()
+            for (title in animeTitles) {
+                val tDownloads = downloadManager.animeDownloadedTypes.filter { it.title == title }
+                val download = tDownloads.first()
+                val offlineAnimeModel = loadOfflineAnimeModel(download)
+                newAnimeDownloads += offlineAnimeModel
+            }
+            downloads = newAnimeDownloads
+            withContext(Dispatchers.Main) {
+                adapter.setItems(downloads)
+                total.text = if (gridView.count > 0) "Anime (${gridView.count})" else "Empty List"
+                adapter.notifyDataSetChanged()
+            }
+        }
     }
 
-    private fun getMedia(downloadedType: DownloadedType): Media? {
-        val type = downloadedType.type.asText()
-        val directory = File(
-            currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/$type/${downloadedType.title}"
-        )
-        //load media.json and convert to media class with gson
+    /**
+     * Load media.json file from the directory and convert it to Media class
+     * @param downloadedType DownloadedType object
+     * @return Media object
+     */
+    private suspend fun getMedia(downloadedType: DownloadedType): Media? {
         return try {
+            val directory = DownloadsManager.getSubDirectory(
+                context ?: currContext()!!, downloadedType.type,
+                false, downloadedType.title
+            )
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
                     SChapterImpl() // Provide an instance of SChapterImpl
@@ -311,8 +326,13 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                     SEpisodeImpl() // Provide an instance of SEpisodeImpl
                 })
                 .create()
-            val media = File(directory, "media.json")
-            val mediaJson = media.readText()
+            val media = directory?.findFile("media.json")
+                ?: return null
+            val mediaJson =
+                media.openInputStream(context ?: currContext()!!)?.bufferedReader().use {
+                    it?.readText()
+                }
+                    ?: return null
             gson.fromJson(mediaJson, Media::class.java)
         } catch (e: Exception) {
             Logger.log("Error loading media.json: ${e.message}")
@@ -322,22 +342,26 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         }
     }
 
-    private fun loadOfflineAnimeModel(downloadedType: DownloadedType): OfflineAnimeModel {
+    /**
+     * Load OfflineAnimeModel from the directory
+     * @param downloadedType DownloadedType object
+     * @return OfflineAnimeModel object
+     */
+    private suspend fun loadOfflineAnimeModel(downloadedType: DownloadedType): OfflineAnimeModel {
         val type = downloadedType.type.asText()
-        val directory = File(
-            currContext()?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-            "Dantotsu/$type/${downloadedType.title}"
-        )
-        //load media.json and convert to media class with gson
         try {
+            val directory = DownloadsManager.getSubDirectory(
+                context ?: currContext()!!, downloadedType.type,
+                false, downloadedType.title
+            )
             val mediaModel = getMedia(downloadedType)!!
-            val cover = File(directory, "cover.jpg")
-            val coverUri: Uri? = if (cover.exists()) {
-                Uri.fromFile(cover)
+            val cover = directory?.findFile("cover.jpg")
+            val coverUri: Uri? = if (cover?.exists() == true) {
+                cover.uri
             } else null
-            val banner = File(directory, "banner.jpg")
-            val bannerUri: Uri? = if (banner.exists()) {
-                Uri.fromFile(banner)
+            val banner = directory?.findFile("banner.jpg")
+            val bannerUri: Uri? = if (banner?.exists() == true) {
+                banner.uri
             } else null
             val title = mediaModel.mainName()
             val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore

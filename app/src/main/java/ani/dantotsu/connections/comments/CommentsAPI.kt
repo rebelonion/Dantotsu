@@ -24,7 +24,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 object CommentsAPI {
-    val address: String = "https://1224665.xyz:443"
+    private const val ADDRESS: String = "https://1224665.xyz:443"
     var authToken: String? = null
     var userId: String? = null
     var isBanned: Boolean = false
@@ -33,7 +33,7 @@ object CommentsAPI {
     var totalVotes: Int = 0
 
     suspend fun getCommentsForId(id: Int, page: Int = 1, tag: Int?, sort: String?): CommentResponse? {
-        var url = "$address/comments/$id/$page"
+        var url = "$ADDRESS/comments/$id/$page"
         val request = requestBuilder()
         tag?.let {
             url += "?tag=$it"
@@ -61,7 +61,7 @@ object CommentsAPI {
     }
 
     suspend fun getRepliesFromId(id: Int, page: Int = 1): CommentResponse? {
-        val url = "$address/comments/parent/$id/$page"
+        val url = "$ADDRESS/comments/parent/$id/$page"
         val request = requestBuilder()
         val json = try {
             request.get(url)
@@ -83,7 +83,7 @@ object CommentsAPI {
     }
 
     suspend fun getSingleComment(id: Int): Comment? {
-        val url = "$address/comments/$id"
+        val url = "$ADDRESS/comments/$id"
         val request = requestBuilder()
         val json = try {
             request.get(url)
@@ -105,7 +105,7 @@ object CommentsAPI {
     }
 
     suspend fun vote(commentId: Int, voteType: Int): Boolean {
-        val url = "$address/comments/vote/$commentId/$voteType"
+        val url = "$ADDRESS/comments/vote/$commentId/$voteType"
         val request = requestBuilder()
         val json = try {
             request.post(url)
@@ -121,7 +121,7 @@ object CommentsAPI {
     }
 
     suspend fun comment(mediaId: Int, parentCommentId: Int?, content: String, tag: Int?): Comment? {
-        val url = "$address/comments"
+        val url = "$ADDRESS/comments"
         val body = FormBody.Builder()
             .add("user_id", userId ?: return null)
             .add("media_id", mediaId.toString())
@@ -169,7 +169,7 @@ object CommentsAPI {
     }
 
     suspend fun deleteComment(commentId: Int): Boolean {
-        val url = "$address/comments/$commentId"
+        val url = "$ADDRESS/comments/$commentId"
         val request = requestBuilder()
         val json = try {
             request.delete(url)
@@ -185,7 +185,7 @@ object CommentsAPI {
     }
 
     suspend fun editComment(commentId: Int, content: String): Boolean {
-        val url = "$address/comments/$commentId"
+        val url = "$ADDRESS/comments/$commentId"
         val body = FormBody.Builder()
             .add("content", content)
             .build()
@@ -204,7 +204,7 @@ object CommentsAPI {
     }
 
     suspend fun banUser(userId: String): Boolean {
-        val url = "$address/ban/$userId"
+        val url = "$ADDRESS/ban/$userId"
         val request = requestBuilder()
         val json = try {
             request.post(url)
@@ -225,7 +225,7 @@ object CommentsAPI {
         mediaTitle: String,
         reportedId: String
     ): Boolean {
-        val url = "$address/report/$commentId"
+        val url = "$ADDRESS/report/$commentId"
         val body = FormBody.Builder()
             .add("username", username)
             .add("mediaName", mediaTitle)
@@ -247,7 +247,7 @@ object CommentsAPI {
     }
 
     suspend fun getNotifications(client: OkHttpClient): NotificationResponse? {
-        val url = "$address/notification/reply"
+        val url = "$ADDRESS/notification/reply"
         val request = requestBuilder(client)
         val json = try {
             request.get(url)
@@ -268,7 +268,7 @@ object CommentsAPI {
     }
 
     private suspend fun getUserDetails(client: OkHttpClient? = null): User? {
-        val url = "$address/user"
+        val url = "$ADDRESS/user"
         val request = if (client != null) requestBuilder(client) else requestBuilder()
         val json = try {
             request.get(url)
@@ -310,7 +310,7 @@ object CommentsAPI {
             }
 
         }
-        val url = "$address/authenticate"
+        val url = "$ADDRESS/authenticate"
         val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
         repeat(MAX_RETRIES) {
             try {
@@ -346,6 +346,17 @@ object CommentsAPI {
             kotlinx.coroutines.delay(60000)
         }
         snackString("Failed to login after multiple attempts")
+    }
+
+    fun logout() {
+        PrefManager.removeVal(PrefName.CommentAuthResponse)
+        PrefManager.removeVal(PrefName.CommentTokenExpiry)
+        authToken = null
+        userId = null
+        isBanned = false
+        isAdmin = false
+        isMod = false
+        totalVotes = 0
     }
 
     private suspend fun authRequest(

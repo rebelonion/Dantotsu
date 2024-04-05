@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Animatable
+import android.net.Uri
 import android.os.Build
 import android.os.Build.BRAND
 import android.os.Build.DEVICE
@@ -13,23 +14,25 @@ import android.os.Build.VERSION.CODENAME
 import android.os.Build.VERSION.RELEASE
 import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
+import android.view.HapticFeedbackConstants
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.documentfile.provider.DocumentFile
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.DownloadService
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
@@ -47,9 +50,8 @@ import ani.dantotsu.databinding.ActivitySettingsExtensionsBinding
 import ani.dantotsu.databinding.ActivitySettingsMangaBinding
 import ani.dantotsu.databinding.ActivitySettingsNotificationsBinding
 import ani.dantotsu.databinding.ActivitySettingsThemeBinding
+import ani.dantotsu.databinding.ItemRepositoryBinding
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.download.video.ExoplayerDownloadService
-import ani.dantotsu.downloadsPermission
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaType
@@ -78,19 +80,27 @@ import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
+import ani.dantotsu.util.LauncherWrapper
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.StoragePermissions.Companion.downloadsPermission
 import com.google.android.material.textfield.TextInputEditText
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE
 import eltos.simpledialogfragment.color.SimpleColorDialog
 import eu.kanade.domain.base.BasePreferences
+import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
+import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import uy.kohesive.injekt.injectLazy
 import kotlin.random.Random
 
 
@@ -99,6 +109,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         override fun handleOnBackPressed() = startMainActivity(this@SettingsActivity)
     }
     lateinit var binding: ActivitySettingsBinding
+    lateinit var launcher: LauncherWrapper
     private lateinit var bindingAccounts: ActivitySettingsAccountsBinding
     private lateinit var bindingTheme: ActivitySettingsThemeBinding
     private lateinit var bindingExtensions: ActivitySettingsExtensionsBinding
@@ -109,7 +120,10 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
     private lateinit var bindingAbout: ActivitySettingsAboutBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private var cursedCounter = 0
+    private val animeExtensionManager: AnimeExtensionManager by injectLazy()
+    private val mangaExtensionManager: MangaExtensionManager by injectLazy()
 
+    @kotlin.OptIn(DelicateCoroutinesApi::class)
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -161,6 +175,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     }
                 }
             }
+        val contract = ActivityResultContracts.OpenDocumentTree()
+        launcher = LauncherWrapper(this, contract)
 
         binding.settingsVersion.text = getString(R.string.version_current, BuildConfig.VERSION_NAME)
         binding.settingsVersion.setOnLongClickListener {
@@ -207,6 +223,15 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     settingsAnilistUsername.visibility = View.VISIBLE
                     settingsAnilistUsername.text = Anilist.username
                     settingsAnilistAvatar.loadImage(Anilist.avatar)
+                    settingsAnilistAvatar.setOnClickListener {
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        val anilistLink = getString(
+                            R.string.anilist_link,
+                            PrefManager.getVal<String>(PrefName.AnilistUserName)
+                        )
+                        openLinkInBrowser(anilistLink)
+                        true
+                    }
 
                     settingsMALLoginRequired.visibility = View.GONE
                     settingsMALLogin.visibility = View.VISIBLE
@@ -222,6 +247,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         settingsMALUsername.visibility = View.VISIBLE
                         settingsMALUsername.text = MAL.username
                         settingsMALAvatar.loadImage(MAL.avatar)
+                        settingsMALAvatar.setOnClickListener {
+                            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                            val myanilistLink = getString(R.string.myanilist_link, MAL.username)
+                            openLinkInBrowser(myanilistLink)
+                            true
+                        }
                     } else {
                         settingsMALAvatar.setImageResource(R.drawable.ic_round_person_24)
                         settingsMALUsername.visibility = View.GONE
@@ -248,6 +279,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     val username = PrefManager.getVal(PrefName.DiscordUserName, null as String?)
                     if (id != null && avatar != null) {
                         settingsDiscordAvatar.loadImage("https://cdn.discordapp.com/avatars/$id/$avatar.png")
+                        settingsDiscordAvatar.setOnClickListener {
+                            it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                            val discordLink = getString(R.string.discord_link, id)
+                            openLinkInBrowser(discordLink)
+                            true
+                        }
                     }
                     settingsDiscordUsername.visibility = View.VISIBLE
                     settingsDiscordUsername.text =
@@ -259,18 +296,18 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         reload()
                     }
 
-                    imageSwitcher.visibility = View.VISIBLE
+                    settingsImageSwitcher.visibility = View.VISIBLE
                     var initialStatus = when (PrefManager.getVal<String>(PrefName.DiscordStatus)) {
                         "online" -> R.drawable.discord_status_online
                         "idle" -> R.drawable.discord_status_idle
                         "dnd" -> R.drawable.discord_status_dnd
                         else -> R.drawable.discord_status_online
                     }
-                    imageSwitcher.setImageResource(initialStatus)
+                    settingsImageSwitcher.setImageResource(initialStatus)
 
                     val zoomInAnimation =
                         AnimationUtils.loadAnimation(this@SettingsActivity, R.anim.bounce_zoom)
-                    imageSwitcher.setOnClickListener {
+                    settingsImageSwitcher.setOnClickListener {
                         var status = "online"
                         initialStatus = when (initialStatus) {
                             R.drawable.discord_status_online -> {
@@ -292,11 +329,16 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         }
 
                         PrefManager.setVal(PrefName.DiscordStatus, status)
-                        imageSwitcher.setImageResource(initialStatus)
-                        imageSwitcher.startAnimation(zoomInAnimation)
+                        settingsImageSwitcher.setImageResource(initialStatus)
+                        settingsImageSwitcher.startAnimation(zoomInAnimation)
+                    }
+                    settingsImageSwitcher.setOnLongClickListener {
+                        it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                        DiscordDialogFragment().show(supportFragmentManager, "dialog")
+                        true
                     }
                 } else {
-                    imageSwitcher.visibility = View.GONE
+                    settingsImageSwitcher.visibility = View.GONE
                     settingsDiscordAvatar.setImageResource(R.drawable.ic_round_person_24)
                     settingsDiscordUsername.visibility = View.GONE
                     settingsDiscordLogin.setText(R.string.login)
@@ -429,11 +471,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     .setPositiveButton(R.string.yes) { dialog, _ ->
                         val downloadsManager = Injekt.get<DownloadsManager>()
                         downloadsManager.purgeDownloads(MediaType.ANIME)
-                        DownloadService.sendRemoveAllDownloads(
-                            this@SettingsActivity,
-                            ExoplayerDownloadService::class.java,
-                            false
-                        )
                         dialog.dismiss()
                     }
                     .setNegativeButton(R.string.no) { dialog, _ ->
@@ -453,6 +490,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsShowYt.isChecked = PrefManager.getVal(PrefName.ShowYtButton)
             settingsShowYt.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.ShowYtButton, isChecked)
+            }
+            settingsIncludeAnimeList.isChecked = PrefManager.getVal(PrefName.IncludeAnimeList)
+            settingsIncludeAnimeList.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.IncludeAnimeList, isChecked)
+                restartApp(binding.root)
             }
 
             var previousEp: View = when (PrefManager.getVal<Int>(PrefName.AnimeDefaultView)) {
@@ -541,9 +583,178 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsChpCompact.setOnClickListener {
                 uiChp(1, it)
             }
+
+            settingsIncludeMangaList.isChecked = PrefManager.getVal(PrefName.IncludeMangaList)
+            settingsIncludeMangaList.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.IncludeMangaList, isChecked)
+                restartApp(binding.root)
+            }
         }
 
         bindingExtensions = ActivitySettingsExtensionsBinding.bind(binding.root).apply {
+
+            fun setExtensionOutput() {
+                animeRepoInventory.removeAllViews()
+                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).forEach { item ->
+                    val view = ItemRepositoryBinding.inflate(
+                        LayoutInflater.from(animeRepoInventory.context), animeRepoInventory, true
+                    )
+                    view.repositoryItem.text = item.replace("https://raw.githubusercontent.com/", "")
+                    view.repositoryItem.setOnClickListener {
+                        AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                            .setTitle("Delete Anime Repository")
+                            .setMessage(item)
+                            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                                val anime = PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).minus(item)
+                                PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
+                                it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                                setExtensionOutput()
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    animeExtensionManager.findAvailableExtensions()
+                                }
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .create()
+                            .show()
+                    }
+                    view.repositoryItem.setOnLongClickListener {
+                        copyToClipboard(item, true)
+                        true
+                    }
+                }
+                animeRepoInventory.isVisible = animeRepoInventory.childCount > 0
+                mangaRepoInventory.removeAllViews()
+                PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).forEach { item ->
+                    val view = ItemRepositoryBinding.inflate(
+                        LayoutInflater.from(mangaRepoInventory.context), mangaRepoInventory, true
+                    )
+                    view.repositoryItem.text = item.replace("https://raw.githubusercontent.com/", "")
+                    view.repositoryItem.setOnClickListener {
+                        AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                            .setTitle("Delete Manga Repository")
+                            .setMessage(item)
+                            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                                val manga = PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).minus(item)
+                                PrefManager.setVal(PrefName.MangaExtensionRepos, manga)
+                                it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+                                setExtensionOutput()
+                                CoroutineScope(Dispatchers.IO).launch {
+                                    mangaExtensionManager.findAvailableExtensions()
+                                }
+                                dialog.dismiss()
+                            }
+                            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                                dialog.dismiss()
+                            }
+                            .create()
+                            .show()
+                    }
+                    view.repositoryItem.setOnLongClickListener {
+                        copyToClipboard(item, true)
+                        true
+                    }
+                }
+                mangaRepoInventory.isVisible = mangaRepoInventory.childCount > 0
+            }
+
+            fun processUserInput(input: String, mediaType: MediaType) {
+                val entry = if (input.endsWith("/") || input.endsWith("index.min.json"))
+                    input.substring(0, input.lastIndexOf("/")) else input
+                if (mediaType == MediaType.ANIME) {
+                    val anime =
+                        PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).plus(entry)
+                    PrefManager.setVal(PrefName.AnimeExtensionRepos, anime)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        animeExtensionManager.findAvailableExtensions()
+                    }
+                }
+                if (mediaType == MediaType.MANGA) {
+                    val manga =
+                        PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).plus(entry)
+                    PrefManager.setVal(PrefName.MangaExtensionRepos, manga)
+                    CoroutineScope(Dispatchers.IO).launch {
+                        mangaExtensionManager.findAvailableExtensions()
+                    }
+                }
+                setExtensionOutput()
+            }
+
+            fun processEditorAction(dialog: AlertDialog, editText: EditText, mediaType: MediaType) {
+                editText.setOnEditorActionListener { textView, action, keyEvent ->
+                    if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE ||
+                        (keyEvent?.action == KeyEvent.ACTION_UP
+                                && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)
+                    ) {
+                        processUserInput(textView.text.toString(), mediaType)
+                        dialog.dismiss()
+                        return@setOnEditorActionListener true
+                    }
+                    false
+                }
+            }
+
+            setExtensionOutput()
+            animeAddRepository.setOnClickListener {
+                val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
+                val editText =
+                    dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
+                        hint = getString(R.string.anime_add_repository)
+                    }
+                val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                    .setTitle(R.string.add_repository)
+                    .setMessage("Add additional repo for anime extensions")
+                    .setView(dialogView)
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        processUserInput(editText.text.toString(), MediaType.ANIME)
+                        dialog.dismiss()
+                    }
+                    .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
+                        PrefManager.removeVal(PrefName.DefaultUserAgent)
+                        editText.setText("")
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+
+                processEditorAction(alertDialog, editText, MediaType.ANIME)
+                alertDialog.show()
+                alertDialog.window?.setDimAmount(0.8f)
+            }
+
+            mangaAddRepository.setOnClickListener {
+                val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
+                val editText =
+                    dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
+                        hint = getString(R.string.manga_add_repository)
+                    }
+                val alertDialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                    .setTitle(R.string.add_repository)
+                    .setView(dialogView)
+                    .setMessage("Add additional repo for manga extensions")
+                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                        processUserInput(editText.text.toString(), MediaType.MANGA)
+                        dialog.dismiss()
+                    }
+                    .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
+                        PrefManager.removeVal(PrefName.DefaultUserAgent)
+                        editText.setText("")
+                        dialog.dismiss()
+                    }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+
+                processEditorAction(alertDialog, editText, MediaType.MANGA)
+                alertDialog.show()
+                alertDialog.window?.setDimAmount(0.8f)
+            }
+
             settingsForceLegacyInstall.isChecked =
                 extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY
             settingsForceLegacyInstall.setOnCheckedChangeListener { _, isChecked ->
@@ -628,18 +839,18 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 val filteredLocations = Location.entries.filter { it.exportable }
                 selectedArray.addAll(List(filteredLocations.size - 1) { false })
                 val dialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
-                    .setTitle(R.string.import_export_settings)
+                    .setTitle(R.string.backup_restore)
                     .setMultiChoiceItems(
                         filteredLocations.map { it.name }.toTypedArray(),
                         selectedArray.toBooleanArray()
                     ) { _, which, isChecked ->
                         selectedArray[which] = isChecked
                     }
-                    .setPositiveButton(R.string.button_import) { dialog, _ ->
+                    .setPositiveButton(R.string.button_restore) { dialog, _ ->
                         openDocumentLauncher.launch(arrayOf("*/*"))
                         dialog.dismiss()
                     }
-                    .setNegativeButton(R.string.button_export) { dialog, _ ->
+                    .setNegativeButton(R.string.button_backup) { dialog, _ ->
                         if (!selectedArray.contains(true)) {
                             toast(R.string.no_location_selected)
                             return@setNegativeButton
@@ -678,25 +889,17 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             settingsExtensionDns.setText(exDns[PrefManager.getVal(PrefName.DohProvider)])
-            settingsExtensionDns.setAdapter(ArrayAdapter(this@SettingsActivity, R.layout.item_dropdown, exDns))
+            settingsExtensionDns.setAdapter(
+                ArrayAdapter(
+                    this@SettingsActivity,
+                    R.layout.item_dropdown,
+                    exDns
+                )
+            )
             settingsExtensionDns.setOnItemClickListener { _, _, i, _ ->
                 PrefManager.setVal(PrefName.DohProvider, i)
                 settingsExtensionDns.clearFocus()
                 restartApp(binding.root)
-            }
-
-            settingsDownloadInSd.isChecked = PrefManager.getVal(PrefName.SdDl)
-            settingsDownloadInSd.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    val arrayOfFiles = ContextCompat.getExternalFilesDirs(this@SettingsActivity, null)
-                    if (arrayOfFiles.size > 1 && arrayOfFiles[1] != null) {
-                        PrefManager.setVal(PrefName.SdDl, true)
-                    } else {
-                        settingsDownloadInSd.isChecked = false
-                        PrefManager.setVal(PrefName.SdDl, true)
-                        snackString(getString(R.string.noSdFound))
-                    }
-                } else PrefManager.setVal(PrefName.SdDl, true)
             }
 
             settingsContinueMedia.isChecked = PrefManager.getVal(PrefName.ContinueMedia)
@@ -712,6 +915,48 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             settingsRecentlyListOnly.isChecked = PrefManager.getVal(PrefName.RecentlyListOnly)
             settingsRecentlyListOnly.setOnCheckedChangeListener { _, isChecked ->
                 PrefManager.setVal(PrefName.RecentlyListOnly, isChecked)
+            }
+            settingsAdultAnimeOnly.isChecked = PrefManager.getVal(PrefName.AdultOnly)
+            settingsAdultAnimeOnly.setOnCheckedChangeListener { _, isChecked ->
+                PrefManager.setVal(PrefName.AdultOnly, isChecked)
+                restartApp(binding.root)
+            }
+
+            settingsDownloadLocation.setOnClickListener {
+                val dialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
+                    .setTitle(R.string.change_download_location)
+                    .setMessage(R.string.download_location_msg)
+                    .setPositiveButton(R.string.ok) { dialog, _ ->
+                        val oldUri = PrefManager.getVal<String>(PrefName.DownloadsDir)
+                        launcher.registerForCallback { success ->
+                            if (success) {
+                                toast(getString(R.string.please_wait))
+                                val newUri = PrefManager.getVal<String>(PrefName.DownloadsDir)
+                                GlobalScope.launch(Dispatchers.IO) {
+                                    Injekt.get<DownloadsManager>().moveDownloadsDir(
+                                        this@SettingsActivity,
+                                        Uri.parse(oldUri), Uri.parse(newUri)
+                                    ) { finished, message ->
+                                        if (finished) {
+                                            toast(getString(R.string.success))
+                                        } else {
+                                            toast(message)
+                                        }
+                                    }
+                                }
+                            } else {
+                                toast(getString(R.string.error))
+                            }
+                        }
+                        launcher.launch()
+                        dialog.dismiss()
+                    }
+                    .setNeutralButton(R.string.cancel) { dialog, _ ->
+                        dialog.dismiss()
+                    }
+                    .create()
+                dialog.window?.setDimAmount(0.8f)
+                dialog.show()
             }
 
             var previousStart: View = when (PrefManager.getVal<Int>(PrefName.DefaultStartUpTab)) {
@@ -742,7 +987,12 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             settingsUi.setOnClickListener {
-                startActivity(Intent(this@SettingsActivity, UserInterfaceSettingsActivity::class.java))
+                startActivity(
+                    Intent(
+                        this@SettingsActivity,
+                        UserInterfaceSettingsActivity::class.java
+                    )
+                )
             }
         }
 
@@ -766,7 +1016,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         getString(R.string.subscriptions_checking_time_s, timeNames[i])
                     PrefManager.setVal(PrefName.SubscriptionNotificationInterval, curTime)
                     dialog.dismiss()
-                    TaskScheduler.create(this@SettingsActivity,
+                    TaskScheduler.create(
+                        this@SettingsActivity,
                         PrefManager.getVal(PrefName.UseAlarmManager)
                     ).scheduleAllTasks(this@SettingsActivity)
                 }.show()
@@ -774,7 +1025,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             settingsSubscriptionsTime.setOnLongClickListener {
-                TaskScheduler.create(this@SettingsActivity,
+                TaskScheduler.create(
+                    this@SettingsActivity,
                     PrefManager.getVal(PrefName.UseAlarmManager)
                 ).scheduleAllTasks(this@SettingsActivity)
                 true
@@ -788,7 +1040,10 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 else getString(R.string.do_not_update)
             }
             settingsAnilistSubscriptionsTime.text =
-                getString(R.string.anilist_notifications_checking_time, aItems[PrefManager.getVal(PrefName.AnilistNotificationInterval)])
+                getString(
+                    R.string.anilist_notifications_checking_time,
+                    aItems[PrefManager.getVal(PrefName.AnilistNotificationInterval)]
+                )
             settingsAnilistSubscriptionsTime.setOnClickListener {
 
                 val selected = PrefManager.getVal<Int>(PrefName.AnilistNotificationInterval)
@@ -799,7 +1054,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         settingsAnilistSubscriptionsTime.text =
                             getString(R.string.anilist_notifications_checking_time, aItems[i])
                         dialog.dismiss()
-                        TaskScheduler.create(this@SettingsActivity,
+                        TaskScheduler.create(
+                            this@SettingsActivity,
                             PrefManager.getVal(PrefName.UseAlarmManager)
                         ).scheduleAllTasks(this@SettingsActivity)
                     }
@@ -810,7 +1066,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
 
             settingsAnilistNotifications.setOnClickListener {
                 val types = NotificationType.entries.map { it.name }
-                val filteredTypes = PrefManager.getVal<Set<String>>(PrefName.AnilistFilteredTypes).toMutableSet()
+                val filteredTypes =
+                    PrefManager.getVal<Set<String>>(PrefName.AnilistFilteredTypes).toMutableSet()
                 val selected = types.map { filteredTypes.contains(it) }.toBooleanArray()
                 val dialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
                     .setTitle(R.string.anilist_notification_filters)
@@ -837,7 +1094,10 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
             }
 
             settingsCommentSubscriptionsTime.text =
-                getString(R.string.comment_notification_checking_time, cItems[PrefManager.getVal(PrefName.CommentNotificationInterval)])
+                getString(
+                    R.string.comment_notification_checking_time,
+                    cItems[PrefManager.getVal(PrefName.CommentNotificationInterval)]
+                )
             settingsCommentSubscriptionsTime.setOnClickListener {
                 val selected = PrefManager.getVal<Int>(PrefName.CommentNotificationInterval)
                 val dialog = AlertDialog.Builder(this@SettingsActivity, R.style.MyPopup)
@@ -847,7 +1107,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         settingsCommentSubscriptionsTime.text =
                             getString(R.string.comment_notification_checking_time, cItems[i])
                         dialog.dismiss()
-                        TaskScheduler.create(this@SettingsActivity,
+                        TaskScheduler.create(
+                            this@SettingsActivity,
                             PrefManager.getVal(PrefName.UseAlarmManager)
                         ).scheduleAllTasks(this@SettingsActivity)
                     }
@@ -878,7 +1139,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                             PrefManager.setVal(PrefName.UseAlarmManager, true)
                             if (SDK_INT >= Build.VERSION_CODES.S) {
                                 if (!(getSystemService(Context.ALARM_SERVICE) as AlarmManager).canScheduleExactAlarms()) {
-                                    val intent = Intent("android.settings.REQUEST_SCHEDULE_EXACT_ALARM")
+                                    val intent =
+                                        Intent("android.settings.REQUEST_SCHEDULE_EXACT_ALARM")
                                     startActivity(intent)
                                     settingsNotificationsCheckingSubscriptions.isChecked = true
                                 }
@@ -896,7 +1158,8 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 } else {
                     PrefManager.setVal(PrefName.UseAlarmManager, false)
                     TaskScheduler.create(this@SettingsActivity, true).cancelAllTasks()
-                    TaskScheduler.create(this@SettingsActivity, false).scheduleAllTasks(this@SettingsActivity)
+                    TaskScheduler.create(this@SettingsActivity, false)
+                        .scheduleAllTasks(this@SettingsActivity)
                 }
             }
         }
@@ -1068,6 +1331,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                 callback(null)
             }
             .create()
+
         fun handleOkAction() {
             val editText = dialog.findViewById<TextInputEditText>(R.id.userAgentTextBox)
             if (editText?.text?.isNotBlank() == true) {

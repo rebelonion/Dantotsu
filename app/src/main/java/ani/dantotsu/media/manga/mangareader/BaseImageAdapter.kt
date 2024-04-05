@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.net.Uri
 import android.view.HapticFeedbackConstants
 import android.view.MotionEvent
 import android.view.View
@@ -36,7 +37,18 @@ abstract class BaseImageAdapter(
     chapter: MangaChapter
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     val settings = activity.defaultSettings
-    val images = chapter.images()
+    private val chapterImages = chapter.images()
+    var images = chapterImages
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        images = if (settings.layout == CurrentReaderSettings.Layouts.PAGED
+            && settings.direction == CurrentReaderSettings.Directions.BOTTOM_TO_TOP) {
+            chapterImages.reversed()
+        } else {
+            chapterImages
+        }
+        super.onAttachedToRecyclerView(recyclerView)
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
@@ -165,6 +177,10 @@ abstract class BaseImageAdapter(
                                 it.load(localFile.absoluteFile)
                                     .skipMemoryCache(true)
                                     .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            } else if (link.url.startsWith("content://")) {
+                                it.load(Uri.parse(link.url))
+                                    .skipMemoryCache(true)
+                                    .diskCacheStrategy(DiskCacheStrategy.NONE)
                             } else {
                                 mangaCache.get(link.url)?.let { imageData ->
                                     val bitmap = imageData.fetchAndProcessImage(
@@ -175,6 +191,7 @@ abstract class BaseImageAdapter(
                                         .skipMemoryCache(true)
                                         .diskCacheStrategy(DiskCacheStrategy.NONE)
                                 }
+
                             }
                         }
                         ?.let {
@@ -207,5 +224,4 @@ abstract class BaseImageAdapter(
             return newBitmap
         }
     }
-
 }

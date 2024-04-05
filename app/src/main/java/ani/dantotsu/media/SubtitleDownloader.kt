@@ -5,6 +5,7 @@ import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.snackString
+import com.anggrayudi.storage.file.openOutputStream
 import eu.kanade.tachiyomi.network.NetworkHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -51,21 +52,17 @@ class SubtitleDownloader {
             downloadedType: DownloadedType
         ) {
             try {
-                val directory = DownloadsManager.getDirectory(
+                val directory = DownloadsManager.getSubDirectory(
                     context,
                     downloadedType.type,
+                    false,
                     downloadedType.title,
                     downloadedType.chapter
-                )
-                if (!directory.exists()) { //just in case
-                    directory.mkdirs()
-                }
+                ) ?: throw Exception("Could not create directory")
                 val type = loadSubtitleType(url)
-                val subtiteFile = File(directory, "subtitle.${type}")
-                if (subtiteFile.exists()) {
-                    subtiteFile.delete()
-                }
-                subtiteFile.createNewFile()
+                directory.findFile("subtitle.${type}")?.delete()
+                val subtitleFile = directory.createFile("*/*", "subtitle.${type}")
+                    ?: throw Exception("Could not create subtitle file")
 
                 val client = Injekt.get<NetworkHelper>().client
                 val request = Request.Builder().url(url).build()
@@ -77,7 +74,8 @@ class SubtitleDownloader {
                 }
 
                 reponse.body.byteStream().use { input ->
-                    subtiteFile.outputStream().use { output ->
+                    subtitleFile.openOutputStream(context, false).use { output ->
+                        if (output == null) throw Exception("Could not open output stream")
                         input.copyTo(output)
                     }
                 }

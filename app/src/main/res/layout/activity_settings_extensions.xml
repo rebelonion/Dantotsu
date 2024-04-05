@@ -2,7 +2,9 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <ani.dantotsu.others.Xpandable
+        android:id="@+id/extensionSettings"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -22,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginStart="-16dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="-16dp"
             android:background="?android:attr/listDivider" />
 
@@ -38,8 +39,7 @@
             android:fontFamily="@font/poppins_bold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
+            android:paddingHorizontal="31dp"
             android:text="@string/user_agent"
             android:textAlignment="viewStart"
             android:textAllCaps="false"
@@ -55,7 +55,87 @@
             android:layout_height="1dp"
             android:layout_marginStart="-16dp"
             android:layout_marginEnd="-16dp"
-            android:layout_marginBottom="8dp"
+            android:background="?android:attr/listDivider" />
+
+        <Button
+            android:id="@+id/animeAddRepository"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:backgroundTint="?attr/colorSecondary"
+            android:backgroundTintMode="src_atop"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="31dp"
+            android:text="@string/anime_add_repository"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_github"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+
+        <LinearLayout
+            android:id="@+id/animeRepoInventory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:paddingStart="36dp"
+            android:visibility="gone"
+            tools:ignore="RtlSymmetry" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
+            android:background="?android:attr/listDivider" />
+
+        <Button
+            android:id="@+id/mangaAddRepository"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginStart="-31dp"
+            android:layout_marginEnd="-31dp"
+            android:background="@drawable/ui_bg"
+            android:backgroundTint="?attr/colorSecondary"
+            android:backgroundTintMode="src_atop"
+            android:fontFamily="@font/poppins_bold"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:paddingHorizontal="31dp"
+            android:text="@string/manga_add_repository"
+            android:textAlignment="viewStart"
+            android:textAllCaps="false"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:icon="@drawable/ic_github"
+            app:iconPadding="16dp"
+            app:iconSize="24dp"
+            app:iconTint="?attr/colorPrimary" />
+
+        <LinearLayout
+            android:id="@+id/mangaRepoInventory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="vertical"
+            android:paddingStart="36dp"
+            android:visibility="gone"
+            tools:ignore="RtlSymmetry" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginEnd="-16dp"
             android:background="?android:attr/listDivider" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
@@ -112,5 +192,13 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="-16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="-16dp"
+            android:layout_marginBottom="16dp"
+            android:background="?android:attr/listDivider" />
     </ani.dantotsu.others.Xpandable>
 </merge>

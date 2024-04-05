@@ -147,12 +147,35 @@ class Query {
         @Serializable
         data class Data(
             @SerialName("favoriteAnime") val favoriteAnime: ani.dantotsu.connections.anilist.api.User?,
-            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?,
-            @SerialName("animeMediaList") val animeMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?,
-            @SerialName("mangaMediaList") val mangaMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?
+            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?)
+    }
+    @Serializable
+    data class AnimeList(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("recentUpdates") val recentUpdates: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingMovies") val trendingMovies: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
         )
     }
-
+    @Serializable
+    data class MangaList(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("trendingManga") val trendingManga: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingManhwa") val trendingManhwa: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingNovel") val trendingNovel: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
+        )
+    }
     @Serializable
     data class ToggleFollow(
         @SerialName("data")

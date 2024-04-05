@@ -12,8 +12,8 @@ import ani.dantotsu.R
 class Xpandable @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : LinearLayout(context, attrs) {
-    var expanded: Boolean = false
-    private var listener: OnChangeListener? = null
+    private var expanded: Boolean = false
+    private var listeners: ArrayList<OnChangeListener> = arrayListOf()
 
     init {
         context.withStyledAttributes(attrs, R.styleable.Xpandable) {
@@ -50,7 +50,9 @@ class Xpandable @JvmOverloads constructor(
             }
         }
         postDelayed({
-            listener?.onRetract()
+            listeners.forEach{
+                it.onRetract()
+            }
         }, 300)
     }
 
@@ -64,13 +66,19 @@ class Xpandable @JvmOverloads constructor(
             }
         }
         postDelayed({
-            listener?.onExpand()
+            listeners.forEach{
+                it.onExpand()
+            }
         }, 300)
     }
 
     @Suppress("unused")
-    fun setOnChangeListener(listener: OnChangeListener) {
-        this.listener = listener
+    fun addOnChangeListener(listener: OnChangeListener) {
+        listeners.add(listener)
+    }
+
+    fun removeListener(listener: OnChangeListener) {
+        listeners.remove(listener)
     }
 
     interface OnChangeListener {

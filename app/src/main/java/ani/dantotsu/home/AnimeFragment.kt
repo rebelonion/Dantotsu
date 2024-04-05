@@ -207,6 +207,21 @@ class AnimeFragment : Fragment() {
                         animePageAdapter.updateRecent(MediaAdaptor(0, it, requireActivity()))
                     }
                 }
+                model.getMovies().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        animePageAdapter.updateMovies(MediaAdaptor(0, it, requireActivity()))
+                    }
+                }
+                model.getTopRated().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        animePageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()))
+                    }
+                }
+                model.getMostFav().observe(viewLifecycleOwner) {
+                    if (it != null) {
+                        animePageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()))
+                    }
+                }
                 if (animePageAdapter.trendingViewPager != null) {
                     animePageAdapter.updateHeight()
                     model.getTrending().observe(viewLifecycleOwner) {
@@ -263,7 +278,7 @@ class AnimeFragment : Fragment() {
                         }
                         model.loaded = true
                         model.loadTrending(1)
-                        model.loadUpdated()
+                        model.loadAll()
                         model.loadPopular(
                             "ANIME", sort = Anilist.sortBy[1], onList = PrefManager.getVal(
                                 PrefName.PopularAnimeList

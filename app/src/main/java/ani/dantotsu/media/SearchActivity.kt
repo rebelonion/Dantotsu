@@ -70,11 +70,16 @@ class SearchActivity : AppCompatActivity() {
                 intent.getStringExtra("type") ?: "ANIME",
                 isAdult = if (Anilist.adult) intent.getBooleanExtra("hentai", false) else false,
                 onList = listOnly,
+                search = intent.getStringExtra("query"),
                 genres = intent.getStringExtra("genre")?.let { mutableListOf(it) },
                 tags = intent.getStringExtra("tag")?.let { mutableListOf(it) },
                 sort = intent.getStringExtra("sortBy"),
+                status = intent.getStringExtra("status"),
+                source = intent.getStringExtra("source"),
+                countryOfOrigin = intent.getStringExtra("country"),
                 season = intent.getStringExtra("season"),
-                seasonYear = intent.getStringExtra("seasonYear")?.toIntOrNull(),
+                seasonYear = if (intent.getStringExtra("type") == "ANIME") intent.getStringExtra("seasonYear")?.toIntOrNull() else null,
+                startYear = if (intent.getStringExtra("type") == "MANGA") intent.getStringExtra("seasonYear")?.toIntOrNull() else null,
                 results = mutableListOf(),
                 hasNextPage = false
             )
@@ -133,8 +138,12 @@ class SearchActivity : AppCompatActivity() {
                     excludedTags = it.excludedTags
                     tags = it.tags
                     season = it.season
+                    startYear = it.startYear
                     seasonYear = it.seasonYear
+                    status = it.status
+                    source = it.source
                     format = it.format
+                    countryOfOrigin = it.countryOfOrigin
                     page = it.page
                     hasNextPage = it.hasNextPage
                 }

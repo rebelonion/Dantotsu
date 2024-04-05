@@ -9,10 +9,15 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
+    <string name="dantotsu" translatable="false">https://dantotsu.app/</string>
     <string name="discord" translatable="false">https://discord.gg/4HPZ5nAWwM</string>
     <string name="github" translatable="false">https://github.com/rebelonion/Dantotsu</string>
     <string name="telegram" translatable="false" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
     <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
+    
+    <string name="anilist_link">https://anilist.co/user/%1$s/</string>
+    <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
+    <string name="discord_link">https://discord.com/users/%1$s/</string>
 
     <string name="home">Home</string>
     <string name="anime">Anime</string>
@@ -49,8 +54,10 @@
     <string name="popular_manga">Popular Manga</string>
 
     <string name="username">Username</string>
-    <string name="chapters_read">"Chapters Read "</string>
-    <string name="episodes_watched">"Episodes Watched "</string>
+    <string name="chapters_read">Chapters Read</string>
+    <string name="chapters_read_n">Chapters\nRead</string>
+    <string name="episodes_watched">Episodes Watched</string>
+    <string name="episodes_watched_n">Episodes\nWatched</string>
     <string name="continue_reading">Continue Reading</string>
     <string name="continue_watching">Continue Watching</string>
     <string name="recommended">Recommended</string>
@@ -173,6 +180,7 @@
     <string name="offline_mode">Offline Mode</string>
     <string name="settings">Settings</string>
     <string name="extensions">Extensions</string>
+    <string name="extension_updates_available">Extension updates available</string>
     <string name="player_settings">Player Settings</string>
     <string name="recentlyListOnly">Only show my content in \"Recently Updated\"</string>
     <string name="download_manager_select">Download Manager</string>
@@ -244,7 +252,7 @@
     <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn\'t)"</string>
     <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
     <string name="sub_alpha">Subtitle Transparency</string>
-    <string name="sub_text_example">Example Subtitle</string>
+    <string name="sub_text_example">Example Sub</string>
     <string name="sub_font_select">Subtitle Font</string>
     <string name="subtitle_font_size">Subtitle Size</string>
 
@@ -409,6 +417,22 @@
     <string name="crop_borders">Crop Borders</string>
     <string name="note">NOTE</string>
 
+    <string name="manage_extension_repos">Manage Extension Repos</string>
+    <string name="installing_extension">Installing extension</string>
+    <string name="installation_failed">Installation failed: %1$s</string>
+    <string name="installation_complete">Installation complete</string>
+    <string name="extension_has_been_installed">The extension has been successfully installed.</string>
+    <string name="extension_installed">Extension installed</string>
+    <string name="error_message">Error: %1$s</string>
+    <string name="install_step">Step: %1$s</string>
+    <string name="review">Review</string>
+
+    <string name="discord_nothing_button">Display only the first button</string>
+    <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
+    <string name="discord_anilist_button">Display your AniList profile instead</string>
+    <string name="discord_rich_presence">Discord Rich Presence</string>
+    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
+    <string name="view_my_anilist">View My AniList</string>
 
     <string name="jobless_message">DAMN! YOU TRULY ARE JOBLESS\nYOU REACHED THE END</string>
     <string name="file_manager_not_found">Couldn\'t find any File Manager to open SD card</string>
@@ -428,7 +452,7 @@
     <string name="show_skip_time_stamp_button">Show Skip Time Stamp Button</string>
     <string name="always_load_time_stamps">Always Load Time Stamps</string>
     <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>string
-    <string name="timestamps">Time Stamps</string>
+    <string name="timestamps">Segments</string>
     <string name="auto_skip_op_ed">Auto Skip OP / ED</string>
     <string name="requires_time_stamps_to_be_enabled">Requires Time Stamps to be Enabled</string>
     <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
@@ -479,11 +503,13 @@
     <string name="refresh_token_load_failed">Refresh Token : Failed to load Saved Token</string>
     <string name="refreshing_token_failed">Refreshing Token Failed</string>
     <string name="episode_release_countdown">Episode %1$d will be released in</string>
+    <string name="chapter_release_timeout">Chapter %1$d has been available for</string>
     <string name="time_format">%1$d days %2$d hrs %3$d mins %4$d secs</string>
     <string-array name="sort_by">
         <item>Score</item>
         <item>Popular</item>
         <item>Trending</item>
+        <item>New Releases</item>
         <item>A-Z</item>
         <item>Z-A</item>
         <item>Pure pain</item>
@@ -639,7 +665,10 @@
     <string name="chapter_singular">Chapter</string>
     <string name="chapter_plural">Chapters</string>
 
+    <string name="filter_status">"Status : %1$s"</string>
+    <string name="filter_source">"Source : %1$s"</string>
     <string name="filter_format">"Format : %1$s"</string>
+    <string name="filter_country">"Country : %1$s"</string>
     <string name="filter_sort">"Sort : %1$s"</string>
     <string name="filter_exclude">"Not %1$s"</string>
     <string name="search_by_image">Search by Image</string>
@@ -661,6 +690,7 @@
     <string name="NSFWExtention">NSFW Extensions</string>
     <string name="skip_loading_extension_icons">Skip loading extension icons</string>
     <string name="use_material_you">Material You</string>
+    <string name="use_app_theme">Use App Theme</string>
     <string name="extension_specific_dns">Extension-specific DNS</string>
     <string name="theme_">Theme:</string>
     <string name="user_agent">User Agent</string>
@@ -687,9 +717,9 @@
     <string name="requires_android_12">Requires Android 12+</string>
     <string name="share_username_in_crash_reports">Share username in crash reports</string>
     <string name="pinned_sources">Pinned Sources</string>
-    <string name="import_export_settings">Import/Export Settings</string>
-    <string name="import_settings">Import Settings</string>
-    <string name="import_settings_underline"><u>Import Settings</u></string>
+    <string name="backup_restore">Backup and Restore</string>
+    <string name="restore_settings">Import Settings</string>
+    <string name="restore_settings_underline"><u>Restore Settings</u></string>
     <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
 
     <string name="comments">Comments</string>
@@ -720,7 +750,9 @@
     <string name="follows_you">Follows you</string>
     <string name="mutual">Mutual</string>
     <string name="success">Success</string>
-
+    <string name="error">Some error occurred</string>
+    <string name="error_msg">Error: %1$s</string>
+    <string name="please_wait">Please wait</string>
     <string name="upcoming">Upcoming</string>
     <string name="no_shows_to_display">No shows to display</string>
     <string name="extension_name">Extension Name</string>
@@ -802,8 +834,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="video_quality">Quality: %1$dp</string>
     <string name="size_unknown">Unknown Size</string>
     <string name="mb_size">%1$s MB</string>
-    <string name="button_import">Import…</string>
-    <string name="button_export">Export…</string>
+    <string name="button_restore">Restore</string>
+    <string name="button_backup">Backup</string>
     <string name="no_location_selected">No location selected</string>
     <string name="enjoying_app">Enjoying the App?</string>
     <string name="consider_donating">Consider donating!</string>
@@ -812,9 +844,46 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="donate">donate :)</string>
     <string name="do_it">Do it!</string>
     <string name="password">Password</string>
+
+    <string name="search_title">Search %1$s</string>
+
+    <string name="profile_stats_widget">Track progress directly from your home screen</string>
+    <string name="anime_watched">Anime\nWatched</string>
+    <string name="manga_read">Manga\nRead</string>
+    <string name="loading">Loading…</string>
+    <string name="user_stats">%1$s\'s Stats</string>
+
+    <string name="please">Please</string>
+    <string name="log_in">log in</string>
+    <string name="or_join">or join</string>
+
     <string name="top_background_color">Top background color</string>
     <string name="bottom_background_color">Bottom Background Color</string>
     <string name="countdown_text_color">Countdown Text Color</string>
     <string name="title_color">Title Color</string>
+    <string name="stat_text_color">Stats Text Color</string>
     <string name="placeholder">Placeholder</string>
+
+    <string name="anime_repo_listing">Anime Extension Repos</string>
+    <string name="anime_add_repository">Add Anime Repo</string>
+    <string name="manga_repo_listing">Manga Extension Repos</string>
+    <string name="manga_add_repository">Add Manga Repo</string>
+    <string name="add_repository">Add Repo</string>
+    <string name="long_click_delete">Long click to delete</string>
+    
+    <string name="trending_movies">Trending Movies</string>
+    <string name="include_list">Include list</string>
+    <string name="top_rated">Top rated</string>
+    <string name="most_favourite">Most Favourite</string>
+    <string name="trending_manhwa">Trending Manhwa</string>
+    <string name="liked_by">Liked By</string>
+    <string name="adult_only_content">Adult only content</string>
+    <string name="dir_error">Your path could not be set</string>
+    <string name="dir_access">Downloads access</string>
+    <string name="dir_access_msg">Please choose a directory to save your downloads</string>
+    <string name="change_download_location">Change Download Location</string>
+    <string name="download_location_msg">Are you sure you want to change the download location?\nOld downloads may no longer be accessible.</string>
+    <string name="report">Report</string>
+    <string name="ban">Ban</string>
+    <string name="voice_actors">Voice Actors</string>
 </resources>

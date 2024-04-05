@@ -3,6 +3,7 @@ package ani.dantotsu
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.drawable.Animatable
@@ -18,8 +19,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -54,6 +55,7 @@ import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.profile.activity.NotificationActivity
+import ani.dantotsu.settings.ExtensionsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.PrefName
@@ -228,17 +230,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val preferences: SourcePreferences = Injekt.get()
-        if (preferences.animeExtensionUpdatesCount()
-                .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
-        ) {
-            Toast.makeText(
-                this,
-                "You have extension updates available!",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-
         binding.root.isMotionEventSplittingEnabled = false
 
         lifecycleScope.launch {
@@ -282,6 +273,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
+            val preferences: SourcePreferences = Injekt.get()
+            if (preferences.animeExtensionUpdatesCount()
+                    .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
+            ) {
+                snackString(R.string.extension_updates_available)
+                    ?.setDuration(Snackbar.LENGTH_LONG)
+                    ?.setAction(R.string.review) {
+                        startActivity(Intent(this, ExtensionsActivity::class.java))
+                    }
+            }
             window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
             selectedOption = if (fragment != null) {
                 when (fragment) {
@@ -448,7 +449,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        lifecycleScope.launch(Dispatchers.IO) {  //simple cleanup
+        /*lifecycleScope.launch(Dispatchers.IO) {  //simple cleanup
             val index = Helper.downloadManager(this@MainActivity).downloadIndex
             val downloadCursor = index.getDownloads()
             while (downloadCursor.moveToNext()) {
@@ -457,7 +458,7 @@ class MainActivity : AppCompatActivity() {
                     Helper.downloadManager(this@MainActivity).removeDownload(download.request.id)
                 }
             }
-        }
+        }*/ //TODO: remove this
     }
 
     override fun onRestart() {
@@ -482,7 +483,7 @@ class MainActivity : AppCompatActivity() {
         dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)?.hint = "Password"
         val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
         subtitleTextView?.visibility = View.VISIBLE
-        subtitleTextView?.text = "Enter your password to decrypt the file"
+        subtitleTextView?.text = getString(R.string.enter_password_to_decrypt_file)
 
         val dialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle("Enter Password")

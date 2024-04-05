@@ -3,7 +3,7 @@ package ani.dantotsu.parsers
 import android.content.Context
 import ani.dantotsu.FileUrl
 import ani.dantotsu.currContext
-import ani.dantotsu.media.anime.AnimeNameAdapter
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.snackString
@@ -73,12 +73,12 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     configurableSource.getPreferenceKey(),
                     Context.MODE_PRIVATE
                 )
-            sharedPreferences.all.filterValues { AnimeNameAdapter.getSubDub(it.toString()) != AnimeNameAdapter.Companion.SubDubType.NULL }
+            sharedPreferences.all.filterValues { MediaNameAdapter.getSubDub(it.toString()) != MediaNameAdapter.SubDubType.NULL }
                 .forEach { value ->
-                    return when (AnimeNameAdapter.getSubDub(value.value.toString())) {
-                        AnimeNameAdapter.Companion.SubDubType.SUB -> false
-                        AnimeNameAdapter.Companion.SubDubType.DUB -> true
-                        AnimeNameAdapter.Companion.SubDubType.NULL -> false
+                    return when (MediaNameAdapter.getSubDub(value.value.toString())) {
+                        MediaNameAdapter.SubDubType.SUB -> false
+                        MediaNameAdapter.SubDubType.DUB -> true
+                        MediaNameAdapter.SubDubType.NULL -> false
                     }
                 }
         }
@@ -92,8 +92,8 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
             ?: return
         val type = when (setDub) {
-            true -> AnimeNameAdapter.Companion.SubDubType.DUB
-            false -> AnimeNameAdapter.Companion.SubDubType.SUB
+            true -> MediaNameAdapter.SubDubType.DUB
+            false -> MediaNameAdapter.SubDubType.SUB
         }
         currContext()?.let { context ->
             val sharedPreferences =
@@ -101,9 +101,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     configurableSource.getPreferenceKey(),
                     Context.MODE_PRIVATE
                 )
-            sharedPreferences.all.filterValues { AnimeNameAdapter.getSubDub(it.toString()) != AnimeNameAdapter.Companion.SubDubType.NULL }
+            sharedPreferences.all.filterValues { MediaNameAdapter.getSubDub(it.toString()) != MediaNameAdapter.SubDubType.NULL }
                 .forEach { value ->
-                    val setValue = AnimeNameAdapter.setSubDub(value.value.toString(), type)
+                    val setValue = MediaNameAdapter.setSubDub(value.value.toString(), type)
                     if (setValue != null) {
                         sharedPreferences.edit().putString(value.key, setValue).apply()
                     }
@@ -122,9 +122,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     Context.MODE_PRIVATE
                 )
             sharedPreferences.all.filterValues {
-                AnimeNameAdapter.setSubDub(
+                MediaNameAdapter.setSubDub(
                     it.toString(),
-                    AnimeNameAdapter.Companion.SubDubType.NULL
+                    MediaNameAdapter.SubDubType.NULL
                 ) != null
             }
                 .forEach { _ -> return true }
@@ -150,7 +150,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             val sortedEpisodes = if (res[0].episode_number == -1f) {
                 // Find the number in the string and sort by that number
                 val sortedByStringNumber = res.sortedBy {
-                    val matchResult = AnimeNameAdapter.findEpisodeNumber(it.name)
+                    val matchResult = MediaNameAdapter.findEpisodeNumber(it.name)
                     val number = matchResult ?: Float.MAX_VALUE
                     it.episode_number = number  // Store the found number in episode_number
                     number
@@ -171,13 +171,13 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                 var episodeCounter = 1f
                 // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
                 val seasonGroups =
-                    res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
+                    res.groupBy { MediaNameAdapter.findSeasonNumber(it.name) ?: 0 }
                 seasonGroups.keys.sortedBy { it }
                     .flatMap { season ->
                         seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
                             if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
                                 val potentialNumber =
-                                    AnimeNameAdapter.findEpisodeNumber(episode.name)
+                                    MediaNameAdapter.findEpisodeNumber(episode.name)
                                 if (potentialNumber != null) {
                                     episode.episode_number = potentialNumber
                                 } else {

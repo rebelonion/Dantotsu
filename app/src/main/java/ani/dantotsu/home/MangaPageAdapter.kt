@@ -178,25 +178,76 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         trendingBinding.titleContainer.startAnimation(setSlideUp())
         binding.mangaListContainer.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
+
     }
 
+    fun updateTrendingManga(adaptor: MediaAdaptor) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaTrendingMangaRecyclerView,
+                mangaTrendingMangaProgressBar,
+                mangaTrendingManga
+            )
+        }
+    }
+    fun updateTrendingManhwa(adaptor: MediaAdaptor) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaTrendingManhwaRecyclerView,
+                mangaTrendingManhwaProgressBar,
+                mangaTrendingManhwa
+            )
+        }
+    }
     fun updateNovel(adaptor: MediaAdaptor) {
-        binding.mangaNovelProgressBar.visibility = View.GONE
-        binding.mangaNovelRecyclerView.adapter = adaptor
-        binding.mangaNovelRecyclerView.layoutManager =
+        binding.apply {
+            init(
+                adaptor,
+                mangaNovelRecyclerView,
+                mangaNovelProgressBar,
+                mangaNovel
+            )
+        }
+
+    }
+    fun updateTopRated(adaptor: MediaAdaptor) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaTopRatedRecyclerView,
+                mangaTopRatedProgressBar,
+                mangaTopRated
+            )
+        }
+    }
+    fun updateMostFav(adaptor: MediaAdaptor) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaMostFavRecyclerView,
+                mangaMostFavProgressBar,
+                mangaMostFav
+            )
+            mangaPopular.visibility = View.VISIBLE
+            mangaPopular.startAnimation(setSlideUp())
+        }
+    }
+    fun init(adaptor: MediaAdaptor,recyclerView: RecyclerView, progress: View, title: View){
+        progress.visibility = View.GONE
+        recyclerView.adapter = adaptor
+        recyclerView.layoutManager =
             LinearLayoutManager(
-                binding.mangaNovelRecyclerView.context,
+                recyclerView.context,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-        binding.mangaNovelRecyclerView.visibility = View.VISIBLE
-
-        binding.mangaNovel.visibility = View.VISIBLE
-        binding.mangaNovel.startAnimation(setSlideUp())
-        binding.mangaNovelRecyclerView.layoutAnimation =
+        recyclerView.visibility = View.VISIBLE
+        title.visibility = View.VISIBLE
+        title.startAnimation(setSlideUp())
+        recyclerView.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
-        binding.mangaPopular.visibility = View.VISIBLE
-        binding.mangaPopular.startAnimation(setSlideUp())
     }
 
     fun updateAvatar() {

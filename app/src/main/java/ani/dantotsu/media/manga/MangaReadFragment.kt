@@ -16,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -34,6 +35,7 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.DownloadsManager.Companion.findValidName
 import ani.dantotsu.download.manga.MangaDownloaderService
 import ani.dantotsu.download.manga.MangaServiceDataSingleton
 import ani.dantotsu.dp
@@ -41,6 +43,7 @@ import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaType
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
@@ -55,6 +58,8 @@ import ani.dantotsu.settings.extensionprefs.MangaSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.StoragePermissions.Companion.accessAlertDialog
+import ani.dantotsu.util.StoragePermissions.Companion.hasDirAccess
 import com.google.android.material.appbar.AppBarLayout
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.source.ConfigurableSource
@@ -189,7 +194,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                             )
 
                         for (download in downloadManager.mangaDownloadedTypes) {
-                            if (download.title == media.mainName()) {
+                            if (download.title == media.mainName().findValidName()) {
                                 chapterAdapter.stopDownload(download.chapter)
                             }
                         }
@@ -227,7 +232,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         val chapters = media.manga?.chapters?.values?.toList()
         //filter by selected language
         val progressChapterIndex = (chapters?.indexOfFirst {
-            MangaNameAdapter.findChapterNumber(it.number)?.toInt() == selected
+            MediaNameAdapter.findChapterNumber(it.number)?.toInt() == selected
         } ?: 0) + 1
 
         if (progressChapterIndex < 0 || n < 1 || chapters == null) return
@@ -433,50 +438,64 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
     }
 
     fun onMangaChapterDownloadClick(i: String) {
-        if (!isNotificationPermissionGranted()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                ActivityCompat.requestPermissions(
-                    requireActivity(),
-                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
-                    1
-                )
-            }
-        }
-
-        model.continueMedia = false
-        media.manga?.chapters?.get(i)?.let { chapter ->
-            val parser =
-                model.mangaReadSources?.get(media.selected!!.sourceIndex) as? DynamicMangaParser
-            parser?.let {
-                CoroutineScope(Dispatchers.IO).launch {
-                    val images = parser.imageList(chapter.sChapter)
-
-                    // Create a download task
-                    val downloadTask = MangaDownloaderService.DownloadTask(
-                        title = media.mainName(),
-                        chapter = chapter.title!!,
-                        imageData = images,
-                        sourceMedia = media,
-                        retries = 2,
-                        simultaneousDownloads = 2
+        activity?.let {
+            if (!isNotificationPermissionGranted()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    ActivityCompat.requestPermissions(
+                        it,
+                        arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                        1
                     )
+                }
+            }
+            fun continueDownload() {
+                model.continueMedia = false
+                media.manga?.chapters?.get(i)?.let { chapter ->
+                    val parser =
+                        model.mangaReadSources?.get(media.selected!!.sourceIndex) as? DynamicMangaParser
+                    parser?.let {
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val images = parser.imageList(chapter.sChapter)
 
-                    MangaServiceDataSingleton.downloadQueue.offer(downloadTask)
+                            // Create a download task
+                            val downloadTask = MangaDownloaderService.DownloadTask(
+                                title = media.mainName(),
+                                chapter = chapter.title!!,
+                                imageData = images,
+                                sourceMedia = media,
+                                retries = 2,
+                                simultaneousDownloads = 2
+                            )
 
-                    // If the service is not already running, start it
-                    if (!MangaServiceDataSingleton.isServiceRunning) {
-                        val intent = Intent(context, MangaDownloaderService::class.java)
-                        withContext(Dispatchers.Main) {
-                            ContextCompat.startForegroundService(requireContext(), intent)
+                            MangaServiceDataSingleton.downloadQueue.offer(downloadTask)
+
+                            // If the service is not already running, start it
+                            if (!MangaServiceDataSingleton.isServiceRunning) {
+                                val intent = Intent(context, MangaDownloaderService::class.java)
+                                withContext(Dispatchers.Main) {
+                                    ContextCompat.startForegroundService(requireContext(), intent)
+                                }
+                                MangaServiceDataSingleton.isServiceRunning = true
+                            }
+
+                            // Inform the adapter that the download has started
+                            withContext(Dispatchers.Main) {
+                                chapterAdapter.startDownload(i)
+                            }
                         }
-                        MangaServiceDataSingleton.isServiceRunning = true
-                    }
-
-                    // Inform the adapter that the download has started
-                    withContext(Dispatchers.Main) {
-                        chapterAdapter.startDownload(i)
                     }
                 }
+            }
+            if (!hasDirAccess(it)) {
+                (it as MediaDetailsActivity).accessAlertDialog(it.launcher) { success ->
+                    if (success) {
+                        continueDownload()
+                    } else {
+                        snackString("Permission is required to download")
+                    }
+                }
+            } else {
+                continueDownload()
             }
         }
     }
@@ -499,8 +518,9 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                 i,
                 MediaType.MANGA
             )
-        )
-        chapterAdapter.deleteDownload(i)
+        ) {
+            chapterAdapter.deleteDownload(i)
+        }
     }
 
     fun onMangaChapterStopDownloadClick(i: String) {
@@ -517,8 +537,9 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                 i,
                 MediaType.MANGA
             )
-        )
-        chapterAdapter.purgeDownload(i)
+        ) {
+            chapterAdapter.purgeDownload(i)
+        }
     }
 
     private val downloadStatusReceiver = object : BroadcastReceiver() {

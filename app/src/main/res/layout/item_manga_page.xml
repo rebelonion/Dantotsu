@@ -126,6 +126,84 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
+        android:id="@+id/mangaTrendingManga"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:padding="8dp"
+        android:text="@string/trending_manga"
+        android:visibility="invisible"
+        android:textSize="16sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp">
+
+        <ProgressBar
+            android:id="@+id/mangaTrendingMangaProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/mangaTrendingMangaRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/mangaTrendingManhwa"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:padding="8dp"
+        android:text="@string/trending_manhwa"
+        android:visibility="invisible"
+        android:textSize="16sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp">
+
+        <ProgressBar
+            android:id="@+id/mangaTrendingManhwaProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/mangaTrendingManhwaRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+    <TextView
         android:id="@+id/mangaNovel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -133,6 +211,7 @@
         android:fontFamily="@font/poppins_bold"
         android:padding="8dp"
         android:text="@string/trending_novel"
+        android:visibility="invisible"
         android:textSize="16sp" />
 
     <FrameLayout
@@ -163,6 +242,84 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/mangaTopRated"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:padding="8dp"
+        android:text="@string/top_rated"
+        android:visibility="invisible"
+        android:textSize="16sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp">
+
+        <ProgressBar
+            android:id="@+id/mangaTopRatedProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/mangaTopRatedRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/mangaMostFav"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:fontFamily="@font/poppins_bold"
+        android:padding="8dp"
+        android:text="@string/most_favourite"
+        android:visibility="invisible"
+        android:textSize="16sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="250dp">
+
+        <ProgressBar
+            android:id="@+id/mangaMostFavProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_gravity="center" />
+
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/mangaMostFavRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="true"
+            android:paddingStart="20dp"
+            android:paddingEnd="20dp"
+            android:requiresFadingEdge="horizontal"
+            tools:itemCount="4"
+            tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/item_media_compact"
+            tools:orientation="horizontal" />
+
+    </FrameLayout>
+
     <LinearLayout
         android:id="@+id/mangaPopular"
         android:layout_width="match_parent"
@@ -170,8 +327,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:orientation="horizontal"
-        android:visibility="invisible"
-        tools:visibility="visible">
+        android:visibility="invisible">
 
         <TextView
             android:layout_width="0dp"
@@ -190,7 +346,6 @@
             android:fontFamily="@font/poppins_bold"
             android:text="@string/include_media_in_list"
             android:textSize="12sp" />
-
 
     </LinearLayout>
 

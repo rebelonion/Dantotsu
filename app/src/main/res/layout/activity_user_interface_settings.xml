@@ -240,7 +240,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:checked="true"
-                android:drawableStart="@drawable/ic_round_animation_24"
+                android:drawableStart="@drawable/trail_length_short"
                 android:drawablePadding="16dp"
                 android:elegantTextHeight="true"
                 android:fontFamily="@font/poppins_bold"
@@ -302,7 +302,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:drawableStart="@drawable/ic_round_photo_size_select_actual_24"
+                android:drawableStart="@drawable/blur_on"
                 android:drawablePadding="16dp"
                 android:elegantTextHeight="true"
                 android:fontFamily="@font/poppins_bold"
@@ -328,7 +328,7 @@
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
                 android:text="@string/radius"
-                app:drawableStartCompat="@drawable/ic_internet"
+                app:drawableStartCompat="@drawable/adjust"
                 app:drawableTint="?attr/colorPrimary" />
 
             <com.google.android.material.slider.Slider
@@ -357,7 +357,7 @@
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
                 android:text="@string/sampling"
-                app:drawableStartCompat="@drawable/ic_globe_24"
+                app:drawableStartCompat="@drawable/stacks"
                 app:drawableTint="?attr/colorPrimary" />
 
             <com.google.android.material.slider.Slider

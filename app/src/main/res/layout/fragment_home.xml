@@ -32,6 +32,14 @@
                     tools:src="@tools:sample/backgrounds/scenic" />
 
                 <ImageView
+                    android:id="@+id/homeUserBgNoKen"
+                    android:layout_width="match_parent"
+                    android:layout_height="216dp"
+                    android:scaleType="centerCrop"
+                    tools:ignore="ContentDescription"
+                    tools:src="@tools:sample/backgrounds/scenic" />
+
+                <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="-94dp"
@@ -48,9 +56,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
+                        android:baselineAligned="false"
                         android:orientation="horizontal"
-                        android:padding="32dp"
-                        android:baselineAligned="false">
+                        android:padding="32dp">
 
                         <FrameLayout
                             android:layout_width="0dp"
@@ -94,6 +102,7 @@
                                         android:id="@+id/homeUserEpisodesWatched"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginStart="4dp"
                                         android:fontFamily="@font/poppins_bold"
                                         android:textColor="?attr/colorPrimaryVariant"
                                         android:textSize="12sp" />
@@ -117,6 +126,7 @@
                                         android:id="@+id/homeUserChaptersRead"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_marginStart="4dp"
                                         android:fontFamily="@font/poppins_bold"
                                         android:textColor="?attr/colorPrimaryVariant"
                                         android:textSize="12sp" />

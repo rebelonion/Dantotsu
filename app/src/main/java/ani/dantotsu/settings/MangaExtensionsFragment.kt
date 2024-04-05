@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.databinding.FragmentMangaExtensionsBinding
+import ani.dantotsu.databinding.FragmentExtensionsBinding
 import ani.dantotsu.settings.paging.MangaExtensionAdapter
 import ani.dantotsu.settings.paging.MangaExtensionsViewModel
 import ani.dantotsu.settings.paging.MangaExtensionsViewModelFactory
@@ -30,7 +30,7 @@ import uy.kohesive.injekt.api.get
 
 class MangaExtensionsFragment : Fragment(),
     SearchQueryHandler, OnMangaInstallClickListener {
-    private var _binding: FragmentMangaExtensionsBinding? = null
+    private var _binding: FragmentExtensionsBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel: MangaExtensionsViewModel by viewModels {
@@ -49,12 +49,12 @@ class MangaExtensionsFragment : Fragment(),
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMangaExtensionsBinding.inflate(inflater, container, false)
+        _binding = FragmentExtensionsBinding.inflate(inflater, container, false)
 
-        binding.allMangaExtensionsRecyclerView.isNestedScrollingEnabled = false
-        binding.allMangaExtensionsRecyclerView.adapter = adapter
-        binding.allMangaExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
-        (binding.allMangaExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =
+        binding.allExtensionsRecyclerView.isNestedScrollingEnabled = false
+        binding.allExtensionsRecyclerView.adapter = adapter
+        binding.allExtensionsRecyclerView.layoutManager = LinearLayoutManager(context)
+        (binding.allExtensionsRecyclerView.layoutManager as LinearLayoutManager).isItemPrefetchEnabled =
             true
 
         lifecycleScope.launch {
@@ -92,8 +92,8 @@ class MangaExtensionsFragment : Fragment(),
                             Notifications.CHANNEL_DOWNLOADER_PROGRESS
                         )
                             .setSmallIcon(R.drawable.ic_round_sync_24)
-                            .setContentTitle("Installing extension")
-                            .setContentText("Step: $installStep")
+                            .setContentTitle(getString(R.string.installing_extension))
+                            .setContentText(getString(R.string.install_step, installStep))
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                         notificationManager.notify(1, builder.build())
                     },
@@ -104,11 +104,11 @@ class MangaExtensionsFragment : Fragment(),
                             Notifications.CHANNEL_DOWNLOADER_ERROR
                         )
                             .setSmallIcon(R.drawable.ic_round_info_24)
-                            .setContentTitle("Installation failed: ${error.message}")
-                            .setContentText("Error: ${error.message}")
+                            .setContentTitle(getString(R.string.installation_failed, error.message))
+                            .setContentText(getString(R.string.error_message, error.message))
                             .setPriority(NotificationCompat.PRIORITY_HIGH)
                         notificationManager.notify(1, builder.build())
-                        snackString("Installation failed: ${error.message}")
+                        snackString(getString(R.string.installation_failed, error.message))
                     },
                     {
                         val builder = NotificationCompat.Builder(
@@ -116,12 +116,12 @@ class MangaExtensionsFragment : Fragment(),
                             Notifications.CHANNEL_DOWNLOADER_PROGRESS
                         )
                             .setSmallIcon(R.drawable.ic_download_24)
-                            .setContentTitle("Installation complete")
-                            .setContentText("The extension has been successfully installed.")
+                            .setContentTitle(getString(R.string.installation_complete))
+                            .setContentText(getString(R.string.extension_has_been_installed))
                             .setPriority(NotificationCompat.PRIORITY_LOW)
                         notificationManager.notify(1, builder.build())
                         viewModel.invalidatePager()
-                        snackString("Extension installed")
+                        snackString(getString(R.string.extension_installed))
                     }
                 )
         }

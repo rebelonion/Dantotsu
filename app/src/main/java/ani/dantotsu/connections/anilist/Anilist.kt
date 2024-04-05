@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.browser.customtabs.CustomTabsIntent
 import ani.dantotsu.R
 import ani.dantotsu.client
+import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.currContext
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.settings.saving.PrefManager
@@ -40,20 +41,54 @@ object Anilist {
         "SCORE_DESC",
         "POPULARITY_DESC",
         "TRENDING_DESC",
+        "START_DATE_DESC",
         "TITLE_ENGLISH",
         "TITLE_ENGLISH_DESC",
         "SCORE"
+    )
+
+    val source = listOf(
+        "ORIGINAL",
+        "MANGA",
+        "LIGHT NOVEL",
+        "VISUAL NOVEL",
+        "VIDEO GAME",
+        "OTHER",
+        "NOVEL",
+        "DOUJINSHI",
+        "ANIME",
+        "WEB NOVEL",
+        "LIVE ACTION",
+        "GAME",
+        "COMIC",
+        "MULTIMEDIA PROJECT",
+        "PICTURE BOOK"
+    )
+
+    val animeStatus = listOf(
+        "FINISHED",
+        "RELEASING",
+        "NOT YET RELEASED",
+        "CANCELLED"
+    )
+
+    val mangaStatus = listOf(
+        "FINISHED",
+        "RELEASING",
+        "NOT YET RELEASED",
+        "HIATUS",
+        "CANCELLED"
     )
 
     val seasons = listOf(
         "WINTER", "SPRING", "SUMMER", "FALL"
     )
 
-    val anime_formats = listOf(
+    val animeFormats = listOf(
         "TV", "TV SHORT", "MOVIE", "SPECIAL", "OVA", "ONA", "MUSIC"
     )
 
-    val manga_formats = listOf(
+    val mangaFormats = listOf(
         "MANGA", "NOVEL", "ONE SHOT"
     )
 
@@ -117,6 +152,9 @@ object Anilist {
         episodesWatched = null
         chapterRead = null
         PrefManager.removeVal(PrefName.AnilistToken)
+        //logout from comments api
+        CommentsAPI.logout()
+
     }
 
     suspend inline fun <reified T : Any> executeQuery(
