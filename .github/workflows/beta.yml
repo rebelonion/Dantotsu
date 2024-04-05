@@ -104,6 +104,10 @@ jobs:
         fi
         contentbody=$( jq -nc --arg msg "Alpha-Build: <@&1225347048321191996> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
         curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-arm64-v8a-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-x86-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-x86_64-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         
         #Telegram
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
