@@ -114,6 +114,22 @@ jobs:
           -F "document=@app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk" \
           -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk" \
+          -F "caption=armeabi-v7a" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-arm64-v8a-alpha.apk" \
+          -F "caption=arm64-v8a" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-x86-alpha.apk" \
+          -F "caption=x86" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-x86_64-alpha.apk" \
+          -F "caption=x86_64" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
