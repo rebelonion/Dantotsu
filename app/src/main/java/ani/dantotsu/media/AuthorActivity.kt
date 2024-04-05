@@ -32,7 +32,7 @@ class AuthorActivity : AppCompatActivity() {
     private val model: OtherDetailsViewModel by viewModels()
     private var author: Author? = null
     private var loaded = false
-
+    private var isVoiceArtist: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,43 +55,59 @@ class AuthorActivity : AppCompatActivity() {
         binding.studioClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
+        isVoiceArtist = intent.getBooleanExtra("isVoiceArtist", false)
+        if (isVoiceArtist) {
+            model.getVoiceActor().observe(this) {
+                if (it != null) {
+                    author = it
+                    loaded = true
+                    binding.studioProgressBar.visibility = View.GONE
+                    binding.studioRecycler.visibility = View.VISIBLE
+                    binding.studioRecycler.adapter = CharacterAdapter(author!!.character ?: arrayListOf())
+                    binding.studioRecycler.layoutManager = GridLayoutManager(
+                        this,
+                        (screenWidth / 120f).toInt()
+                    )
+                }
+            }
+        }else{
+            model.getAuthor().observe(this) {
+                if (it != null) {
+                    author = it
+                    loaded = true
+                    binding.studioProgressBar.visibility = View.GONE
+                    binding.studioRecycler.visibility = View.VISIBLE
 
-        model.getAuthor().observe(this) {
-            if (it != null) {
-                author = it
-                loaded = true
-                binding.studioProgressBar.visibility = View.GONE
-                binding.studioRecycler.visibility = View.VISIBLE
+                    val titlePosition = arrayListOf<Int>()
+                    val concatAdapter = ConcatAdapter()
+                    val map = author!!.yearMedia ?: return@observe
+                    val keys = map.keys.toTypedArray()
+                    var pos = 0
 
-                val titlePosition = arrayListOf<Int>()
-                val concatAdapter = ConcatAdapter()
-                val map = author!!.yearMedia ?: return@observe
-                val keys = map.keys.toTypedArray()
-                var pos = 0
-
-                val gridSize = (screenWidth / 124f).toInt()
-                val gridLayoutManager = GridLayoutManager(this, gridSize)
-                gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int): Int {
-                        return when (position in titlePosition) {
-                            true -> gridSize
-                            else -> 1
+                    val gridSize = (screenWidth / 124f).toInt()
+                    val gridLayoutManager = GridLayoutManager(this, gridSize)
+                    gridLayoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+                        override fun getSpanSize(position: Int): Int {
+                            return when (position in titlePosition) {
+                                true -> gridSize
+                                else -> 1
+                            }
                         }
                     }
-                }
-                for (i in keys.indices) {
-                    val medias = map[keys[i]]!!
-                    val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size
-                    titlePosition.add(pos)
-                    pos += (empty + medias.size + 1)
+                    for (i in keys.indices) {
+                        val medias = map[keys[i]]!!
+                        val empty = if (medias.size >= 4) medias.size % 4 else 4 - medias.size
+                        titlePosition.add(pos)
+                        pos += (empty + medias.size + 1)
 
-                    concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))
-                    concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))
-                    concatAdapter.addAdapter(EmptyAdapter(empty))
-                }
+                        concatAdapter.addAdapter(TitleAdapter("${keys[i]} (${medias.size})"))
+                        concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))
+                        concatAdapter.addAdapter(EmptyAdapter(empty))
+                    }
 
-                binding.studioRecycler.adapter = concatAdapter
-                binding.studioRecycler.layoutManager = gridLayoutManager
+                    binding.studioRecycler.adapter = concatAdapter
+                    binding.studioRecycler.layoutManager = gridLayoutManager
+                }
             }
         }
         val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
@@ -99,7 +115,7 @@ class AuthorActivity : AppCompatActivity() {
             if (it) {
                 scope.launch {
                     if (author != null)
-                        withContext(Dispatchers.IO) { model.loadAuthor(author!!) }
+                        withContext(Dispatchers.IO) { if (isVoiceArtist) model.loadVoiceActor(author!!) else model.loadAuthor(author!!)}
                     live.postValue(false)
                 }
             }

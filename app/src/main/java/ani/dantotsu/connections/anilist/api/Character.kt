@@ -55,7 +55,7 @@ data class CharacterConnection(
     @SerialName("nodes") var nodes: List<Character>?,
 
     // The pagination information
-    // @SerialName("pageInfo") var pageInfo: PageInfo?,
+    @SerialName("pageInfo") var pageInfo: PageInfo?,
 ) : java.io.Serializable
 
 @Serializable

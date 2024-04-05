@@ -1387,7 +1387,52 @@ Page(page:$page,perPage:50) {
         author.yearMedia = yearMedia
         return author
     }
+    suspend fun getVoiceActorsDetails(author: Author): Author {
+        fun query(page: Int = 0) = """ {
+  Staff(id:${author.id}) {
+    id
+    characters(page: $page,sort:FAVOURITES_DESC) {
+      pageInfo{
+        hasNextPage
+      }
+      nodes{
+        id
+        name {
+          first
+          middle
+          last
+          full
+          native
+          userPreferred
+        }
+        image {
+          large
+          medium
+        }
+        
+      }
+    }
+  }
+}""".replace("\n", " ").replace("""  """, "")
 
+        var hasNextPage = true
+        var page = 0
+        val characters = arrayListOf<Character>()
+        while (hasNextPage) {
+            page++
+            hasNextPage = executeQuery<Query.Author>(
+                query(page),
+                force = true
+            )?.data?.author?.characters?.let {
+                it.nodes?.forEach { i ->
+                    characters.add(Character(i.id, i.name?.userPreferred, i.image?.large, i.image?.medium, "", false))
+                }
+                it.pageInfo?.hasNextPage == true
+            } ?: false
+        }
+        author.character = characters
+        return author
+    }
     suspend fun toggleFollow(id: Int): Query.ToggleFollow? {
         return executeQuery<Query.ToggleFollow>(
             """mutation{ToggleFollow(userId:$id){id, isFollowing, isFollower}}"""
