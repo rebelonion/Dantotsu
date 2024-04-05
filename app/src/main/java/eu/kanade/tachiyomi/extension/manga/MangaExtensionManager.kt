@@ -6,7 +6,7 @@ import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.manga.api.MangaExtensionGithubApi
+import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
 import eu.kanade.tachiyomi.extension.manga.model.AvailableMangaSources
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.extension.manga.model.MangaLoadResult
@@ -47,7 +47,7 @@ class MangaExtensionManager(
     /**
      * API where all the available extensions can be found.
      */
-    private val api = MangaExtensionGithubApi()
+    private val api = ExtensionGithubApi()
 
     /**
      * The installer which installs, updates and uninstalls the extensions.
@@ -115,7 +115,7 @@ class MangaExtensionManager(
      */
     suspend fun findAvailableExtensions() {
         val extensions: List<MangaExtension.Available> = try {
-            api.findExtensions()
+            api.findMangaExtensions()
         } catch (e: Exception) {
             Logger.log(e)
             withUIContext { snackString("Failed to get manga extensions") }
@@ -203,7 +203,7 @@ class MangaExtensionManager(
      * @param extension The extension to be installed.
      */
     fun installExtension(extension: MangaExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getApkUrl(extension), extension)
+        return installer.downloadAndInstall(api.getMangaApkUrl(extension), extension)
     }
 
     /**

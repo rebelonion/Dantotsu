@@ -6,10 +6,10 @@ import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import eu.kanade.domain.source.service.SourcePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.anime.api.AnimeExtensionGithubApi
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
 import eu.kanade.tachiyomi.extension.anime.model.AvailableAnimeSources
+import eu.kanade.tachiyomi.extension.api.ExtensionGithubApi
 import eu.kanade.tachiyomi.extension.util.ExtensionInstallReceiver
 import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
 import eu.kanade.tachiyomi.extension.util.ExtensionLoader
@@ -47,7 +47,7 @@ class AnimeExtensionManager(
     /**
      * API where all the available anime extensions can be found.
      */
-    private val api = AnimeExtensionGithubApi()
+    private val api = ExtensionGithubApi()
 
     /**
      * The installer which installs, updates and uninstalls the anime extensions.
@@ -118,7 +118,7 @@ class AnimeExtensionManager(
      */
     suspend fun findAvailableExtensions() {
         val extensions: List<AnimeExtension.Available> = try {
-            api.findExtensions()
+            api.findAnimeExtensions()
         } catch (e: Exception) {
             Logger.log(e)
             withUIContext { snackString("Failed to get extensions list") }
@@ -206,7 +206,7 @@ class AnimeExtensionManager(
      * @param extension The anime extension to be installed.
      */
     fun installExtension(extension: AnimeExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getApkUrl(extension), extension)
+        return installer.downloadAndInstall(api.getAnimeApkUrl(extension), extension)
     }
 
     /**
