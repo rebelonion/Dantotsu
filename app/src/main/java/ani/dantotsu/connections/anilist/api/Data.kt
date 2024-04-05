@@ -157,9 +157,13 @@ class Query {
         @Serializable
         data class Data(
             @SerialName("recentUpdates") val recentUpdates: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("recentUpdates2") val recentUpdates2: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("trendingMovies") val trendingMovies: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingMovies2") val trendingMovies2: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated2") val topRated2: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav2") val mostFav2: ani.dantotsu.connections.anilist.api.Page?,
         )
     }
     @Serializable
@@ -170,10 +174,15 @@ class Query {
         @Serializable
         data class Data(
             @SerialName("trendingManga") val trendingManga: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingManga2") val trendingManga2: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("trendingManhwa") val trendingManhwa: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingManhwa2") val trendingManhwa2: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("trendingNovel") val trendingNovel: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingNovel2") val trendingNovel2: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated2") val topRated2: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav2") val mostFav2: ani.dantotsu.connections.anilist.api.Page?,
         )
     }
     @Serializable

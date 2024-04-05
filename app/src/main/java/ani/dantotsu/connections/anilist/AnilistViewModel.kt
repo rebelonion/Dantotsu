@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.webkit.internal.ApiFeature.M
 import androidx.webkit.internal.ApiFeature.P
 import androidx.webkit.internal.StartupApiFeature
 import ani.dantotsu.BuildConfig
@@ -203,32 +204,11 @@ class AnilistAnimeViewModel : ViewModel() {
         MutableLiveData<MutableList<Media>>(null)
     fun getMostFav(): LiveData<MutableList<Media>> = mostFavAnime
     suspend fun loadAll() {
-        val res = Anilist.query.loadAnimeList()?.data
-
-        val listOnly: Boolean = PrefManager.getVal(PrefName.RecentlyListOnly)
-        val adultOnly: Boolean = PrefManager.getVal(PrefName.AdultOnly)
-        res?.apply{
-            val idArr = mutableListOf<Int>()
-            updated.postValue(recentUpdates?.airingSchedules?.mapNotNull {i ->
-                i.media?.let {
-                    if (!idArr.contains(it.id))
-                        if (!listOnly && it.countryOfOrigin == "JP" && Anilist.adult && adultOnly && it.isAdult == true) {
-                            idArr.add(it.id)
-                            Media(it)
-                        }else if (!listOnly && !adultOnly && (it.countryOfOrigin == "JP" && it.isAdult == false)){
-                            idArr.add(it.id)
-                            Media(it)
-                        }else if ((listOnly && it.mediaListEntry != null)) {
-                            idArr.add(it.id)
-                            Media(it)
-                        }else null
-                    else null
-                }
-            }?.toMutableList() ?: arrayListOf())
-            popularMovies.postValue(trendingMovies?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
-            topRatedAnime.postValue(topRated?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
-            mostFavAnime.postValue(mostFav?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
-        }
+        val list= Anilist.query.loadAnimeList()
+        updated.postValue(list["recentUpdates"])
+        popularMovies.postValue(list["trendingMovies"])
+        topRatedAnime.postValue(list["topRated"])
+        mostFavAnime.postValue(list["mostFav"])
     }
 }
 
@@ -321,15 +301,12 @@ class AnilistMangaViewModel : ViewModel() {
         MutableLiveData<MutableList<Media>>(null)
     fun getMostFav(): LiveData<MutableList<Media>> = mostFavManga
     suspend fun loadAll() {
-        val response = Anilist.query.loadMangaList()?.data
-
-        response?.apply {
-            popularManga.postValue(trendingManga?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
-            popularManhwa.postValue(trendingManhwa?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
-            popularNovel.postValue(trendingNovel?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
-            topRatedManga.postValue(topRated?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
-            mostFavManga.postValue(mostFav?.media?.map { Media(it) }?.toMutableList() ?: arrayListOf())
-        }
+        val list = Anilist.query.loadMangaList()
+        popularManga.postValue(list["trendingManga"])
+        popularManhwa.postValue(list["trendingManhwa"])
+        popularNovel.postValue(list["trendingNovel"])
+        topRatedManga.postValue(list["topRated"])
+        mostFavManga.postValue(list["mostFav"])
     }
 }
 
