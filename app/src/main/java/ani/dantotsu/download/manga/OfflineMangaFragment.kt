@@ -30,6 +30,7 @@ import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
+import ani.dantotsu.download.DownloadsManager.Companion.compareName
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.Media
@@ -168,8 +169,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
             val media =
-                downloadManager.mangaDownloadedTypes.firstOrNull { it.title.contains(item.title) }
-                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title == item.title }
+                downloadManager.mangaDownloadedTypes.firstOrNull { it.title.compareName(item.title) }
+                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title.compareName(item.title) }
             media?.let {
                 lifecycleScope.launch {
                     ContextCompat.startActivity(
