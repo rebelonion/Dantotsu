@@ -48,9 +48,11 @@ jobs:
         echo "COMMIT_LOG=${COMMIT_LOGS}" >> $GITHUB_ENV
         # Debugging: Print the variable to check its content
         echo "$COMMIT_LOGS"
+        echo "$COMMIT_LOGS" > commit_log.txt
       shell: /usr/bin/bash -e {0}
       env:
         CI: true
+      continue-on-error: true
 
     - name: Save Current SHA for Next Run
       run: echo ${{ github.sha }} > last_sha.txt
@@ -75,7 +77,7 @@ jobs:
   
     - name: List files in the directory
       run: ls -l
-      
+  
     - name: Make gradlew executable
       run: chmod +x ./gradlew
   
@@ -85,11 +87,15 @@ jobs:
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v4.3.1
       with:
-          name: APKs
-          path: |
-            app/build/outputs/apk/google/alpha/*/*.apk
-            app/build/outputs/apk/google/alpha/*/*/*.apk
-            app/build/outputs/apk/google/alpha/*/*/*/*.apk
+          name: Dantotsu-Split
+          retention-days: 5
+          compression-level: 9
+          path: | 
+            app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk
+            app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk
+            app/build/outputs/apk/google/alpha/app-google-arm64-v8a-alpha.apk
+            app/build/outputs/apk/google/alpha/app-google-x86-alpha.apk
+            app/build/outputs/apk/google/alpha/app-google-x86_64-alpha.apk
             
     - name: Upload APK to Discord and Telegram
       if: ${{ github.repository == 'rebelonion/Dantotsu' }}
@@ -108,28 +114,24 @@ jobs:
         curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-arm64-v8a-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-x86-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-x86_64-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
-        
+     
         #Telegram
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-arm64-v8a-alpha.apk" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-x86-alpha.apk" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-x86_64-alpha.apk" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk" \
           -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk" \
-          -F "caption=armeabi-v7a" \
-          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-arm64-v8a-alpha.apk" \
-          -F "caption=arm64-v8a" \
-          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-x86-alpha.apk" \
-          -F "caption=x86" \
-          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-x86_64-alpha.apk" \
-          -F "caption=x86_64" \
-          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
@@ -141,6 +143,11 @@ jobs:
         name: last-sha
         path: last_sha.txt
 
+    - name: Upload Commit log as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: commit-log
+        path: commit_log.txt
 
     - name: Delete Old Pre-Releases
       id: delete-pre-releases
