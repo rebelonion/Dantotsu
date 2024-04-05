@@ -53,10 +53,10 @@ class DownloadsManager(private val context: Context) {
         saveDownloads()
     }
 
-    fun removeDownload(downloadedType: DownloadedType, onFinished: () -> Unit) {
+    fun removeDownload(downloadedType: DownloadedType, toast: Boolean = true, onFinished: () -> Unit) {
         downloadsList.remove(downloadedType)
         CoroutineScope(Dispatchers.IO).launch {
-            removeDirectory(downloadedType)
+            removeDirectory(downloadedType, toast)
             withContext(Dispatchers.Main) {
                 onFinished()
             }
@@ -213,7 +213,7 @@ class DownloadsManager(private val context: Context) {
         }
     }
 
-    private fun removeDirectory(downloadedType: DownloadedType) {
+    private fun removeDirectory(downloadedType: DownloadedType, toast: Boolean) {
         val baseDirectory = getBaseDirectory(context, downloadedType.type)
         val directory =
             baseDirectory?.findFolder(downloadedType.title)?.findFolder(downloadedType.chapter)
@@ -222,8 +222,7 @@ class DownloadsManager(private val context: Context) {
         if (directory?.exists() == true) {
             val deleted = directory.deleteRecursively(context, false)
             if (deleted) {
-                snackString("Successfully deleted")
-
+                if (toast) snackString("Successfully deleted")
             } else {
                 snackString("Failed to delete directory")
             }
