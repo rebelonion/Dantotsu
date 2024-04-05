@@ -16,7 +16,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -35,7 +34,7 @@ import ani.dantotsu.R
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.download.DownloadsManager.Companion.findValidName
+import ani.dantotsu.download.DownloadsManager.Companion.compareName
 import ani.dantotsu.download.manga.MangaDownloaderService
 import ani.dantotsu.download.manga.MangaServiceDataSingleton
 import ani.dantotsu.dp
@@ -194,7 +193,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                             )
 
                         for (download in downloadManager.mangaDownloadedTypes) {
-                            if (download.title == media.mainName().findValidName()) {
+                            if (media.compareName(download.title)) {
                                 chapterAdapter.stopDownload(download.chapter)
                             }
                         }

@@ -1,8 +1,6 @@
 package ani.dantotsu.parsers
 
 import android.app.Application
-import android.net.Uri
-import android.os.Environment
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
@@ -10,13 +8,13 @@ import ani.dantotsu.download.anime.AnimeDownloaderService.AnimeDownloadTask.Comp
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.animesource.model.SEpisodeImpl
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 import java.util.Locale
 
 class OfflineAnimeParser : AnimeParser() {
@@ -80,6 +78,7 @@ class OfflineAnimeParser : AnimeParser() {
         val titles = downloadManager.animeDownloadedTypes.map { it.title }.distinct()
         val returnTitles: MutableList<String> = mutableListOf()
         for (title in titles) {
+            Logger.log("Comparing $title to $query")
             if (FuzzySearch.ratio(title.lowercase(), query.lowercase()) > 80) {
                 returnTitles.add(title)
             }
@@ -112,7 +111,7 @@ class OfflineAnimeParser : AnimeParser() {
 
 }
 
-class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
+class OfflineVideoExtractor(private val videoServer: VideoServer) : VideoExtractor() {
     override val server: VideoServer
         get() = videoServer
 
@@ -132,7 +131,7 @@ class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
 
     private fun getSubtitle(title: String, episode: String): List<Subtitle>? {
         currContext()?.let {
-            DownloadsManager.getSubDirectory(
+            getSubDirectory(
                 it,
                 MediaType.ANIME,
                 false,
@@ -144,7 +143,7 @@ class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
                         Subtitle(
                             "Downloaded Subtitle",
                             file.uri.toString(),
-                            determineSubtitletype(file.name ?: "")
+                            determineSubtitleType(file.name ?: "")
                         )
                     )
                 }
@@ -153,7 +152,7 @@ class OfflineVideoExtractor(val videoServer: VideoServer) : VideoExtractor() {
         return null
     }
 
-    fun determineSubtitletype(url: String): SubtitleType {
+    private fun determineSubtitleType(url: String): SubtitleType {
         return when {
             url.lowercase(Locale.ROOT).endsWith("ass") -> SubtitleType.ASS
             url.lowercase(Locale.ROOT).endsWith("vtt") -> SubtitleType.VTT

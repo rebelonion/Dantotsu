@@ -33,7 +33,7 @@ import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.download.DownloadsManager.Companion.findValidName
+import ani.dantotsu.download.DownloadsManager.Companion.compareName
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
@@ -175,7 +175,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
             val media =
-                downloadManager.animeDownloadedTypes.firstOrNull { it.title == item.title.findValidName() }
+                downloadManager.animeDownloadedTypes.firstOrNull { it.title.compareName(item.title) }
             media?.let {
                 lifecycleScope.launch {
                     val mediaModel = getMedia(it)
