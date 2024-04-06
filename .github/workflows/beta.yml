@@ -57,6 +57,12 @@ jobs:
     - name: Save Current SHA for Next Run
       run: echo ${{ github.sha }} > last_sha.txt
 
+    - name: Upload Current SHA as Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: last-sha
+        path: last_sha.txt
+
     - name: Set variables
       run: |
         VER=$(grep -E -o "versionName \".*\"" app/build.gradle | sed -e 's/versionName //g' | tr -d '"')
@@ -117,7 +123,7 @@ jobs:
      
         #Telegram
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk" \
           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-arm64-v8a-alpha.apk" \
@@ -129,19 +135,13 @@ jobs:
           -F "document=@app/build/outputs/apk/google/alpha/app-google-x86_64-alpha.apk" \
           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-armabi-v7a-alpha.apk" \
           -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
       env:
         COMMIT_LOG: ${{ env.COMMIT_LOG }}
         VERSION: ${{ env.VERSION }}
-
-    - name: Upload Current SHA as Artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: last-sha
-        path: last_sha.txt
 
     - name: Upload Commit log as Artifact
       uses: actions/upload-artifact@v2
