@@ -35,16 +35,31 @@
             android:textColor="?attr/colorPrimary"
             android:textSize="16sp" />
 
-        <ImageButton
-            android:id="@+id/languageselect"
-            android:layout_width="48dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="?android:attr/selectableItemBackground"
-            android:contentDescription="@string/sort_by"
-            app:srcCompat="@drawable/ic_round_translate_24"
-            app:tint="?attr/colorOnBackground" />
+            android:layout_marginHorizontal="16dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/openSettingsButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/sort_by"
+                app:srcCompat="@drawable/ic_github"
+                app:tint="?attr/colorOnBackground" />
+
+            <ImageButton
+                android:id="@+id/languageselect"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:contentDescription="@string/sort_by"
+                app:srcCompat="@drawable/ic_round_translate_24"
+                app:tint="?attr/colorOnBackground" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

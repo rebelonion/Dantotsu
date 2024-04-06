@@ -14,7 +14,7 @@
     <string name="github" translatable="false">https://github.com/rebelonion/Dantotsu</string>
     <string name="telegram" translatable="false" tools:ignore="Typos">https://t.me/+gzBCQExtLQo1YTNh </string>
     <string name="coffee" translatable="false">https://www.buymeacoffee.com/rebelonion</string>
-    
+
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
@@ -864,13 +864,11 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="stat_text_color">Stats Text Color</string>
     <string name="placeholder">Placeholder</string>
 
-    <string name="anime_repo_listing">Anime Extension Repos</string>
     <string name="anime_add_repository">Add Anime Repo</string>
-    <string name="manga_repo_listing">Manga Extension Repos</string>
     <string name="manga_add_repository">Add Manga Repo</string>
-    <string name="add_repository">Add Repo</string>
-    <string name="long_click_delete">Long click to delete</string>
-    
+    <string name="edit_repositories">Edit repositories</string>
+    <string name="rem_repository">Remove repository?</string>
+
     <string name="trending_movies">Trending Movies</string>
     <string name="include_list">Include list</string>
     <string name="top_rated">Top rated</string>
