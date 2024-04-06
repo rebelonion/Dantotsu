@@ -34,8 +34,18 @@ class MangaUpdates {
                 }
             }
             val res = client.post(apiUrl, json = query).parsed<MangaUpdatesResponse>()
-            res.results?.forEach{ println("MangaUpdates: $it") }
-            res.results?.first { it.metadata.series.lastUpdated?.timestamp != null }
+            res.results?.first {
+                it.metadata.series.lastUpdated?.timestamp != null
+                        && (it.metadata.series.latestChapter != null
+                        || (it.record.volume.isNullOrBlank() && it.record.chapter != null))
+            }
+        }
+    }
+
+    companion object {
+        fun getLatestChapter(results: MangaUpdatesResponse.Results): Int {
+            return results.metadata.series.latestChapter
+                ?: results.record.chapter!!.substringAfterLast("-").trim().toInt()
         }
     }
 
