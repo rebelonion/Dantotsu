@@ -1,5 +1,7 @@
 package ani.dantotsu.connections.bakaupdates
 
+import android.content.Context
+import ani.dantotsu.R
 import ani.dantotsu.client
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.tryWithSuspend
@@ -43,9 +45,14 @@ class MangaUpdates {
     }
 
     companion object {
-        fun getLatestChapter(results: MangaUpdatesResponse.Results): String {
-            return results.metadata.series.latestChapter?.toString()
-                ?: results.record.chapter!!.substringAfterLast("-").trim()
+        fun getLatestChapter(context: Context, results: MangaUpdatesResponse.Results): String {
+            return results.metadata.series.latestChapter?.let {
+                context.getString(R.string.chapter_number, it)
+            } ?: results.record.chapter!!.substringAfterLast("-").trim().let { chapter ->
+                chapter.takeIf {
+                    it.toIntOrNull() == null
+                } ?: context.getString(R.string.chapter_number, chapter.toInt())
+            }
         }
     }
 
