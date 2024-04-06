@@ -993,7 +993,7 @@ fun countDown(media: Media, view: ViewGroup) {
 fun sinceWhen(media: Media, view: ViewGroup) {
     CoroutineScope(Dispatchers.IO).launch {
         MangaUpdates().search(media.name ?: media.nameRomaji, media.startDate)?.let {
-            val latestChapter = MangaUpdates.getLatestChapter(it)
+            val latestChapter = MangaUpdates.getLatestChapter(it) ?: return@let
             val timeSince = (System.currentTimeMillis() -
                     (it.metadata.series.lastUpdated!!.timestamp * 1000)) / 1000
 

@@ -43,9 +43,9 @@ class MangaUpdates {
     }
 
     companion object {
-        fun getLatestChapter(results: MangaUpdatesResponse.Results): Int {
+        fun getLatestChapter(results: MangaUpdatesResponse.Results): Int? {
             return results.metadata.series.latestChapter
-                ?: results.record.chapter!!.substringAfterLast("-").trim().toInt()
+                ?: results.record.chapter!!.substringAfterLast("-").trim().toIntOrNull()
         }
     }
 
