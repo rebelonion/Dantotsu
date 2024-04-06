@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -85,13 +86,17 @@ object AppUpdater {
                     setPositiveButton(currContext()!!.getString(R.string.lets_go)) {
                         MainScope().launch(Dispatchers.IO) {
                             try {
-                                client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
-                                    .parsed<GithubResponse>().assets?.find {
-                                        it.browserDownloadURL.endsWith("apk")
-                                    }?.browserDownloadURL.apply {
-                                        if (this != null) activity.downloadUpdate(version, this)
-                                        else openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
-                                    }
+                                val apks =
+                                    client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
+                                        .parsed<GithubResponse>().assets?.filter { it.browserDownloadURL.endsWith(".apk") }
+                                val apkToDownload =
+                                    apks?.find { it.browserDownloadURL.contains(getCurrentABI()) }
+                                        ?: apks?.find { it.browserDownloadURL.contains("universal") }
+                                        ?: apks?.first()
+                                apkToDownload?.browserDownloadURL.apply {
+                                    if (this != null) activity.downloadUpdate(version, this)
+                                    else openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
+                                }
                             } catch (e: Exception) {
                                 logError(e)
                             }
@@ -108,6 +113,16 @@ object AppUpdater {
                 if (post) snackString(currContext()?.getString(R.string.no_update_found))
             }
         }
+    }
+
+    /**
+     * Returns the ABI that the app is most likely running on.
+     * @return The primary ABI for the device.
+     */
+    private fun getCurrentABI(): String {
+        return if (Build.SUPPORTED_ABIS.isNotEmpty()) {
+            Build.SUPPORTED_ABIS[0]
+        } else "Unknown"
     }
 
     private fun compareVersion(version: String): Boolean {
