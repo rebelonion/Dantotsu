@@ -118,6 +118,7 @@ jobs:
         #Telegram
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk" \
+          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-arm64-v8a-alpha.apk" \
@@ -130,7 +131,6 @@ jobs:
           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk" \
-          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
       env:
