@@ -886,4 +886,5 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="report">Report</string>
     <string name="ban">Ban</string>
     <string name="voice_actors">Voice Actors</string>
+    <string name="download_permission_required">Permission is required to download</string>
 </resources>

@@ -65,7 +65,7 @@ internal class ExtensionGithubApi {
             val repos =
                 PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).toMutableList()
             if (repos.isEmpty()) {
-                repos.add("https://raw.githubusercontent.com/keiyoushi/extensions/main")
+                repos.add("https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo")
                 PrefManager.setVal(PrefName.MangaExtensionRepos, repos.toSet())
             }
 

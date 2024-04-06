@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import ani.dantotsu.R
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
@@ -27,12 +28,16 @@ import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.novel.NovelDownloaderService
 import ani.dantotsu.download.novel.NovelServiceDataSingleton
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.novel.novelreader.NovelReaderActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.parsers.ShowResponse
+import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.StoragePermissions
+import ani.dantotsu.util.StoragePermissions.Companion.accessAlertDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -62,26 +67,40 @@ class NovelReadFragment : Fragment(),
 
     override fun downloadTrigger(novelDownloadPackage: NovelDownloadPackage) {
         Logger.log("novel link: ${novelDownloadPackage.link}")
-        val downloadTask = NovelDownloaderService.DownloadTask(
-            title = media.mainName(),
-            chapter = novelDownloadPackage.novelName,
-            downloadLink = novelDownloadPackage.link,
-            originalLink = novelDownloadPackage.originalLink,
-            sourceMedia = media,
-            coverUrl = novelDownloadPackage.coverUrl,
-            retries = 2,
-        )
-        NovelServiceDataSingleton.downloadQueue.offer(downloadTask)
-        CoroutineScope(Dispatchers.IO).launch {
+        activity?.let {
+            fun continueDownload() {
+                val downloadTask = NovelDownloaderService.DownloadTask(
+                    title = media.mainName(),
+                    chapter = novelDownloadPackage.novelName,
+                    downloadLink = novelDownloadPackage.link,
+                    originalLink = novelDownloadPackage.originalLink,
+                    sourceMedia = media,
+                    coverUrl = novelDownloadPackage.coverUrl,
+                    retries = 2,
+                )
+                NovelServiceDataSingleton.downloadQueue.offer(downloadTask)
+                CoroutineScope(Dispatchers.IO).launch {
 
-            if (!NovelServiceDataSingleton.isServiceRunning) {
-                val intent = Intent(context, NovelDownloaderService::class.java)
-                withContext(Dispatchers.Main) {
-                    ContextCompat.startForegroundService(requireContext(), intent)
+                    if (!NovelServiceDataSingleton.isServiceRunning) {
+                        val intent = Intent(context, NovelDownloaderService::class.java)
+                        withContext(Dispatchers.Main) {
+                            ContextCompat.startForegroundService(requireContext(), intent)
+                        }
+                        NovelServiceDataSingleton.isServiceRunning = true
+                    }
                 }
-                NovelServiceDataSingleton.isServiceRunning = true
             }
-
+            if (!StoragePermissions.hasDirAccess(it)) {
+                (it as MediaDetailsActivity).accessAlertDialog(it.launcher) { success ->
+                    if (success) {
+                        continueDownload()
+                    } else {
+                        snackString(getString(R.string.download_permission_required))
+                    }
+                }
+            } else {
+                continueDownload()
+            }
         }
     }
 

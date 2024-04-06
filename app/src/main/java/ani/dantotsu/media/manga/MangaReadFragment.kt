@@ -490,7 +490,7 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                     if (success) {
                         continueDownload()
                     } else {
-                        snackString("Permission is required to download")
+                        snackString(getString(R.string.download_permission_required))
                     }
                 }
             } else {
