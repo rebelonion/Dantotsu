@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.widget.RemoteViews
 import androidx.core.content.res.ResourcesCompat
 import ani.dantotsu.MainActivity
@@ -89,7 +90,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
 
-            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val prefs = context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE)
             val backgroundColor =
                 prefs.getInt(PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
             val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
@@ -133,6 +134,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                                         1,
                                         Intent(context, ProfileStatsConfigure::class.java).apply {
                                             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                            data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
                                         },
                                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                                     )
@@ -248,7 +250,9 @@ class ProfileStatsWidget : AppWidgetProvider() {
             }
         }
 
-        const val PREFS_NAME = "ani.dantotsu.widgets.ResumableWidget"
+        fun getPrefsName(appWidgetId: Int): String {
+            return "ani.dantotsu.widgets.Statistics.${appWidgetId}"
+        }
         const val PREF_BACKGROUND_COLOR = "background_color"
         const val PREF_BACKGROUND_FADE = "background_fade"
         const val PREF_TITLE_TEXT_COLOR = "title_text_color"
