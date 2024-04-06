@@ -132,6 +132,8 @@ class UpcomingWidget : AppWidgetProvider() {
         const val PREF_BACKGROUND_FADE = "background_fade"
         const val PREF_TITLE_TEXT_COLOR = "title_text_color"
         const val PREF_COUNTDOWN_TEXT_COLOR = "countdown_text_color"
+        const val PREF_SERIALIZED_MEDIA = "serialized_media"
+        const val LAST_UPDATE = "last_update"
     }
 }
 
