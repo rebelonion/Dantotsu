@@ -5,6 +5,11 @@ import ani.dantotsu.R
 import ani.dantotsu.client
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import okio.ByteString.Companion.encode
@@ -36,6 +41,13 @@ class MangaUpdates {
                 }
             }
             val res = client.post(apiUrl, json = query).parsed<MangaUpdatesResponse>()
+            coroutineScope {
+                res.results?.map {
+                    async(Dispatchers.IO) {
+                        Logger.log(it.toString())
+                    }
+                }
+            }?.awaitAll()
             res.results?.first {
                 it.metadata.series.lastUpdated?.timestamp != null
                         && (it.metadata.series.latestChapter != null
