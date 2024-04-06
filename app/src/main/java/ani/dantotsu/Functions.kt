@@ -991,6 +991,7 @@ fun countDown(media: Media, view: ViewGroup) {
 }
 
 fun sinceWhen(media: Media, view: ViewGroup) {
+    if (media.status != "RELEASING" && media.status != "HIATUS") return
     CoroutineScope(Dispatchers.IO).launch {
         MangaUpdates().search(media.name ?: media.nameRomaji, media.startDate)?.let {
             val latestChapter = MangaUpdates.getLatestChapter(it)
