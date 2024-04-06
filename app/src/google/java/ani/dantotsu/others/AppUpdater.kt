@@ -126,8 +126,7 @@ object AppUpdater {
     }
 
     private fun compareVersion(version: String): Boolean {
-
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.BUILD_TYPE == "debug" || BuildConfig.BUILD_TYPE == "alpha") {
             return BuildConfig.VERSION_NAME != version
         } else {
             fun toDouble(list: List<String>): Double {
