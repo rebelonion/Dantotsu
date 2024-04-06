@@ -116,9 +116,10 @@ jobs:
         curl -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-x86_64-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
      
         #Telegram
-        curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
-          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
+        curl -X POST \
+            -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
+            -d text="Alpha-Build: ${VERSION}: ${commit_messages}" \
+            https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk" \
           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
