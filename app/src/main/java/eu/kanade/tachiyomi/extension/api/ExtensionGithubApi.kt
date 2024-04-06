@@ -63,10 +63,10 @@ internal class ExtensionGithubApi {
             val extensions: ArrayList<AnimeExtension.Available> = arrayListOf()
 
             val repos =
-                PrefManager.getVal<Set<String>>(PrefName.MangaExtensionRepos).toMutableList()
+                PrefManager.getVal<Set<String>>(PrefName.AnimeExtensionRepos).toMutableList()
             if (repos.isEmpty()) {
                 repos.add("https://raw.githubusercontent.com/aniyomiorg/aniyomi-extensions/repo")
-                PrefManager.setVal(PrefName.MangaExtensionRepos, repos.toSet())
+                PrefManager.setVal(PrefName.AnimeExtensionRepos, repos.toSet())
             }
 
             repos.forEach {
