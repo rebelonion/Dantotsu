@@ -888,4 +888,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="voice_actors">Voice Actors</string>
     <string name="download_permission_required">Permission is required to download</string>
     <string name="media">Media</string>
+    <string name="users">Users</string>
+    <string name="social">Social</string>
 </resources>

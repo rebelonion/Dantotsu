@@ -7,6 +7,7 @@ import ani.dantotsu.connections.anilist.api.MediaList
 import ani.dantotsu.connections.anilist.api.MediaType
 import ani.dantotsu.media.anime.Anime
 import ani.dantotsu.media.manga.Manga
+import ani.dantotsu.profile.User
 import java.io.Serializable
 import ani.dantotsu.connections.anilist.api.Media as ApiMedia
 
@@ -66,7 +67,7 @@ data class Media(
     var sequel: Media? = null,
     var relations: ArrayList<Media>? = null,
     var recommendations: ArrayList<Media>? = null,
-
+    var users: ArrayList<User>? = null,
     var vrvId: String? = null,
     var crunchySlug: String? = null,
 

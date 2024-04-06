@@ -24,7 +24,9 @@ class Query {
         @Serializable
         data class Data(
             @SerialName("Media")
-            val media: ani.dantotsu.connections.anilist.api.Media?
+            val media: ani.dantotsu.connections.anilist.api.Media?,
+            @SerialName("Page")
+            val page: ani.dantotsu.connections.anilist.api.Page?
         )
     }
 

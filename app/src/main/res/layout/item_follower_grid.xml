@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="8dp">
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/profileUserAvatarContainer"
         android:layout_width="wrap_content"
@@ -13,12 +14,13 @@
         android:layout_gravity="center"
         android:backgroundTint="@color/bg_white"
         app:cardCornerRadius="124dp">
+
         <ImageView
             android:id="@+id/profileUserAvatar"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            tools:tint="@color/transparent"
-            tools:ignore="ContentDescription,ImageContrastCheck" />
+            tools:ignore="ContentDescription,ImageContrastCheck"
+            tools:tint="@color/transparent" />
     </com.google.android.material.card.MaterialCardView>
 
     <TextView
@@ -26,11 +28,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
+        android:ellipsize="end"
         android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/username"
         android:textColor="?attr/colorOnBackground"
         android:textSize="12sp"
-        android:ellipsize="end"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/profileInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:ellipsize="end"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:singleLine="true"
+        android:text="@string/video_info_info"
+        android:textSize="12sp"
+        android:alpha="0.58"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </LinearLayout>

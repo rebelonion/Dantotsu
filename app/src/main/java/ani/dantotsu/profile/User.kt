@@ -5,4 +5,5 @@ data class User(
     val name: String,
     val pfp: String?,
     val banner: String?,
+    val info: String? = null,
 )

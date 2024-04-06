@@ -117,9 +117,9 @@ jobs:
      
         #Telegram
         curl -X POST \
-            -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
-            -d text="Alpha-Build: ${VERSION}: ${commit_messages}" \
-            https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage
+          -d chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }} \
+          -d text="Alpha-Build: ${VERSION}: ${commit_messages}" \
+          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
           -F "document=@app/build/outputs/apk/google/alpha/app-google-armeabi-v7a-alpha.apk" \
           https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument

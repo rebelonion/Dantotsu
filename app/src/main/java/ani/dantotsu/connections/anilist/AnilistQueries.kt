@@ -20,6 +20,7 @@ import ani.dantotsu.media.Character
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.Studio
 import ani.dantotsu.others.MalScraper
+import ani.dantotsu.profile.User
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -72,14 +73,14 @@ class AnilistQueries {
         media.cameFromContinue = false
 
         val query =
-            """{Media(id:${media.id}){id favourites popularity mediaListEntry{id status score(format:POINT_100)progress private notes repeat customLists updatedAt startedAt{year month day}completedAt{year month day}}isFavourite siteUrl idMal nextAiringEpisode{episode airingAt}source countryOfOrigin format duration season seasonYear startDate{year month day}endDate{year month day}genres studios(isMain:true){nodes{id name siteUrl}}description trailer{site id}synonyms tags{name rank isMediaSpoiler}characters(sort:[ROLE,FAVOURITES_DESC],perPage:25,page:1){edges{role voiceActors { id name { first middle last full native userPreferred } image { large medium } languageV2 } node{id image{medium}name{userPreferred}isFavourite}}}relations{edges{relationType(version:2)node{id idMal mediaListEntry{progress private score(format:POINT_100)status}episodes chapters nextAiringEpisode{episode}popularity meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}staffPreview:staff(perPage:8,sort:[RELEVANCE,ID]){edges{role node{id image{large medium}name{userPreferred}}}}recommendations(sort:RATING_DESC){nodes{mediaRecommendation{id idMal mediaListEntry{progress private score(format:POINT_100)status}episodes chapters nextAiringEpisode{episode}meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}externalLinks{url site}}}"""
+            """{Media(id:${media.id}){id favourites popularity mediaListEntry{id status score(format:POINT_100)progress private notes repeat customLists updatedAt startedAt{year month day}completedAt{year month day}}isFavourite siteUrl idMal nextAiringEpisode{episode airingAt}source countryOfOrigin format duration season seasonYear startDate{year month day}endDate{year month day}genres studios(isMain:true){nodes{id name siteUrl}}description trailer{site id}synonyms tags{name rank isMediaSpoiler}characters(sort:[ROLE,FAVOURITES_DESC],perPage:25,page:1){edges{role voiceActors { id name { first middle last full native userPreferred } image { large medium } languageV2 } node{id image{medium}name{userPreferred}isFavourite}}}relations{edges{relationType(version:2)node{id idMal mediaListEntry{progress private score(format:POINT_100)status}episodes chapters nextAiringEpisode{episode}popularity meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}staffPreview:staff(perPage:8,sort:[RELEVANCE,ID]){edges{role node{id image{large medium}name{userPreferred}}}}recommendations(sort:RATING_DESC){nodes{mediaRecommendation{id idMal mediaListEntry{progress private score(format:POINT_100)status}episodes chapters nextAiringEpisode{episode}meanScore isAdult isFavourite format title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}externalLinks{url site}}Page(page:1){pageInfo{total perPage currentPage lastPage hasNextPage}mediaList(isFollowing:true,sort:[STARTED_ON],mediaId:${media.id}){id status score progress progressVolumes user{id name avatar{large medium}}}}}"""
         runBlocking {
             val anilist = async {
                 var response = executeQuery<Query.Media>(query, force = true, show = true)
                 if (response != null) {
                     fun parse() {
                         val fetchedMedia = response?.data?.media ?: return
-
+                        val user = response?.data?.page
                         media.source = fetchedMedia.source?.toString()
                         media.countryOfOrigin = fetchedMedia.countryOfOrigin
                         media.format = fetchedMedia.format?.toString()
@@ -144,7 +145,7 @@ class AnilistQueries {
                                                 Author(
                                                     id = it.id,
                                                     name = it.name?.userPreferred,
-                                                    image = it.image?.medium,
+                                                    image = it.image?.large,
                                                     role = it.languageV2
                                                 )
                                             } as ArrayList<Author>
@@ -161,7 +162,7 @@ class AnilistQueries {
                                         Author(
                                             id = id,
                                             name = i.node?.name?.userPreferred,
-                                            image = i.node?.image?.medium,
+                                            image = i.node?.image?.large,
                                             role = when (i.role.toString()) {
                                                 "MAIN" -> currContext()?.getString(R.string.main_role)
                                                     ?: "MAIN"
@@ -208,7 +209,21 @@ class AnilistQueries {
                                 }
                             }
                         }
-
+                        if (user?.mediaList?.isNotEmpty() == true) {
+                            media.users = user.mediaList?.mapNotNull {
+                                it.user?.let { user ->
+                                    if (user.id != Anilist.userid) {
+                                        User(
+                                            user.id,
+                                            user.name ?: "Unknown",
+                                            user.avatar?.large,
+                                            "",
+                                            it.status?.toString(),
+                                        )
+                                    } else null
+                                }
+                            }?.toCollection(arrayListOf()) ?: arrayListOf()
+                        }
                         if (fetchedMedia.mediaListEntry != null) {
                             fetchedMedia.mediaListEntry?.apply {
                                 media.userProgress = progress
