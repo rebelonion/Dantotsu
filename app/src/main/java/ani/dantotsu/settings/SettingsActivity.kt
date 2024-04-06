@@ -688,9 +688,13 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                         (keyEvent?.action == KeyEvent.ACTION_UP
                                 && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)
                     ) {
-                        processUserInput(textView.text.toString(), mediaType)
-                        dialog.dismiss()
-                        return@setOnEditorActionListener true
+                        return@setOnEditorActionListener if (textView.text.isNullOrBlank()) {
+                            false
+                        } else {
+                            processUserInput(textView.text.toString(), mediaType)
+                            dialog.dismiss()
+                            true
+                        }
                     }
                     false
                 }
@@ -708,11 +712,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     .setMessage("Add additional repo for anime extensions")
                     .setView(dialogView)
                     .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                        processUserInput(editText.text.toString(), MediaType.ANIME)
+                        if (!editText.text.isNullOrBlank())
+                            processUserInput(editText.text.toString(), MediaType.ANIME)
                         dialog.dismiss()
                     }
                     .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
-                        PrefManager.removeVal(PrefName.DefaultUserAgent)
                         editText.setText("")
                         dialog.dismiss()
                     }
@@ -737,11 +741,11 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                     .setView(dialogView)
                     .setMessage("Add additional repo for manga extensions")
                     .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                        processUserInput(editText.text.toString(), MediaType.MANGA)
+                        if (!editText.text.isNullOrBlank())
+                            processUserInput(editText.text.toString(), MediaType.MANGA)
                         dialog.dismiss()
                     }
                     .setNeutralButton(getString(R.string.reset)) { dialog, _ ->
-                        PrefManager.removeVal(PrefName.DefaultUserAgent)
                         editText.setText("")
                         dialog.dismiss()
                     }
