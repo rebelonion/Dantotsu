@@ -16,7 +16,6 @@ import java.io.Serializable
 
 class AuthorAdapter(
     private val authorList: ArrayList<Author>,
-    private val isVA: Boolean = false,
 ) : RecyclerView.Adapter<AuthorAdapter.AuthorViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AuthorViewHolder {
         val binding =
@@ -44,7 +43,7 @@ class AuthorAdapter(
                     Intent(
                         itemView.context,
                         AuthorActivity::class.java
-                    ).putExtra("author", author as Serializable).putExtra("isVoiceArtist", isVA),
+                    ).putExtra("author", author as Serializable),
                     ActivityOptionsCompat.makeSceneTransitionAnimation(
                         itemView.context as Activity,
                         Pair.create(

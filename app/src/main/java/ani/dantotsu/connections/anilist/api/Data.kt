@@ -334,7 +334,7 @@ class Query {
         @SerialName("volumesRead") var volumesRead: Int,
     ): java.io.Serializable
 
-        @Serializable
+    @Serializable
     data class UserFavourites(
         @SerialName("anime")
         val anime: UserMediaFavouritesCollection,

@@ -1421,47 +1421,6 @@ Page(page:$page,perPage:50) {
         }
       }
     }
-  }
-}""".replace("\n", " ").replace("""  """, "")
-
-        var hasNextPage = true
-        val yearMedia = mutableMapOf<String, ArrayList<Media>>()
-        var page = 0
-
-        while (hasNextPage) {
-            page++
-            hasNextPage = executeQuery<Query.Author>(
-                query(page),
-                force = true
-            )?.data?.author?.staffMedia?.let {
-                it.edges?.forEach { i ->
-                    i.node?.apply {
-                        val status = status.toString()
-                        val year = startDate?.year?.toString() ?: "TBA"
-                        val title = if (status != "CANCELLED") year else status
-                        if (!yearMedia.containsKey(title))
-                            yearMedia[title] = arrayListOf()
-                        val media = Media(this)
-                        media.relation = i.staffRole
-                        yearMedia[title]?.add(media)
-                    }
-                }
-                it.pageInfo?.hasNextPage == true
-            } ?: false
-        }
-
-        if (yearMedia.contains("CANCELLED")) {
-            val a = yearMedia["CANCELLED"]!!
-            yearMedia.remove("CANCELLED")
-            yearMedia["CANCELLED"] = a
-        }
-        author.yearMedia = yearMedia
-        return author
-    }
-    suspend fun getVoiceActorsDetails(author: Author): Author {
-        fun query(page: Int = 0) = """ {
-  Staff(id:${author.id}) {
-    id
     characters(page: $page,sort:FAVOURITES_DESC) {
       pageInfo{
         hasNextPage
@@ -1480,28 +1439,48 @@ Page(page:$page,perPage:50) {
           large
           medium
         }
-        
       }
     }
   }
 }""".replace("\n", " ").replace("""  """, "")
 
         var hasNextPage = true
+        val yearMedia = mutableMapOf<String, ArrayList<Media>>()
         var page = 0
         val characters = arrayListOf<Character>()
         while (hasNextPage) {
             page++
-            hasNextPage = executeQuery<Query.Author>(
-                query(page),
-                force = true
-            )?.data?.author?.characters?.let {
-                it.nodes?.forEach { i ->
-                    characters.add(Character(i.id, i.name?.userPreferred, i.image?.large, i.image?.medium, "", false))
+            val query = executeQuery<Query.Author>(query(page), force = true
+            )?.data?.author
+            hasNextPage = query?.staffMedia?.let {
+                it.edges?.forEach { i ->
+                    i.node?.apply {
+                        val status = status.toString()
+                        val year = startDate?.year?.toString() ?: "TBA"
+                        val title = if (status != "CANCELLED") year else status
+                        if (!yearMedia.containsKey(title))
+                            yearMedia[title] = arrayListOf()
+                        val media = Media(this)
+                        media.relation = i.staffRole
+                        yearMedia[title]?.add(media)
+                    }
                 }
                 it.pageInfo?.hasNextPage == true
             } ?: false
+            query?.characters?.let {
+                it.nodes?.forEach { i ->
+                    characters.add(Character(i.id, i.name?.userPreferred, i.image?.large, i.image?.medium, "", false))
+                }
+            }
+        }
+
+        if (yearMedia.contains("CANCELLED")) {
+            val a = yearMedia["CANCELLED"]!!
+            yearMedia.remove("CANCELLED")
+            yearMedia["CANCELLED"] = a
         }
         author.character = characters
+        author.yearMedia = yearMedia
         return author
     }
     suspend fun toggleFollow(id: Int): Query.ToggleFollow? {
