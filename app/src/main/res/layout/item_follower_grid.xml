@@ -21,7 +21,60 @@
             android:layout_height="100dp"
             tools:ignore="ContentDescription,ImageContrastCheck"
             tools:tint="@color/transparent" />
+
+        <LinearLayout
+            android:id="@+id/profileCompactScoreBG"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:background="@drawable/user_score"
+            android:backgroundTint="#FFFFFF"
+            android:backgroundTintMode="multiply"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="8dp"
+            android:paddingEnd="6dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/profileCompactScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingTop="2dp"
+                android:textColor="?attr/colorOnPrimary"
+                android:textSize="12sp"
+                tools:ignore="TextContrastCheck"
+                tools:text="0.0" />
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="12dp"
+                android:layout_height="match_parent"
+                app:srcCompat="@drawable/ic_round_star_24"
+                app:tint="?attr/colorOnPrimary"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/profileInfo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|center_vertical"
+        android:alpha="0.58"
+        android:ellipsize="end"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="@string/slogan"
+        android:textSize="12sp"
+        android:textStyle="italic"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/profileUserName"
@@ -29,24 +82,36 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:ellipsize="end"
-        android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/username"
         android:textColor="?attr/colorOnBackground"
-        android:textSize="12sp"
-        android:textStyle="bold" />
+        android:textSize="14sp" />
 
-    <TextView
-        android:id="@+id/profileInfo"
+    <LinearLayout
+        android:id="@+id/profileCompactProgressContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:ellipsize="end"
-        android:fontFamily="@font/poppins_semi_bold"
-        android:singleLine="true"
-        android:text="@string/video_info_info"
-        android:textSize="12sp"
-        android:alpha="0.58"
+        android:layout_height="match_parent"
         android:gravity="center"
+        android:orientation="horizontal"
         android:visibility="gone"
-        tools:visibility="visible" />
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/profileCompactUserProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorSecondary"
+            android:textSize="14dp"
+            tools:ignore="SpUsage,TextContrastCheck"
+            tools:text="0" />
+
+        <TextView
+            android:id="@+id/profileCompactTotal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:alpha="0.58"
+            android:textSize="14dp"
+            tools:ignore="SpUsage,TextContrastCheck"
+            tools:text="/??" />
+    </LinearLayout>
+
 </LinearLayout>

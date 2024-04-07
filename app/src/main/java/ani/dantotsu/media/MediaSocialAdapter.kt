@@ -1,5 +1,6 @@
 package ani.dantotsu.media
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemFollowerGridBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.ProfileActivity
@@ -30,18 +32,39 @@ class MediaSocialAdapter(private val user: ArrayList<User>) :
         )
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: DeveloperViewHolder, position: Int) {
-        val b = holder.binding
-        setAnimation(b.root.context, b.root)
-        val user = user[position]
-        b.profileUserName.text = user.name
-        b.profileUserAvatar.loadImage(user.pfp)
-        b.profileInfo.text = user.info
-        b.profileInfo.visibility = View.VISIBLE
-        b.profileUserAvatar.setOnClickListener {
-            val intent = Intent(b.root.context, ProfileActivity::class.java)
-            intent.putExtra("userId", user.id)
-            ContextCompat.startActivity(b.root.context, intent, null)
+        holder.binding.apply {
+            val user = user[position]
+            val score = user.score?.div(10.0) ?: 0.0
+            setAnimation(root.context, root)
+            profileUserName.text = user.name
+            profileInfo.apply {
+                text = when (user.status) {
+                    "CURRENT" -> "WATCHING"
+                    else -> user.status ?: ""
+                }
+                visibility = View.VISIBLE
+            }
+            profileCompactUserProgress.text = user.progress.toString()
+            profileCompactScore.text = score.toString()
+            profileCompactTotal.text = " | ${user.totalEpisodes ?: "~"}"
+            profileUserAvatar.loadImage(user.pfp)
+
+            val scoreDrawable = if (score == 0.0) R.drawable.score else R.drawable.user_score
+            profileCompactScoreBG.apply {
+                visibility = View.VISIBLE
+                background = ContextCompat.getDrawable(root.context, scoreDrawable)
+            }
+
+            profileCompactProgressContainer.visibility = View.VISIBLE
+
+            profileUserAvatar.setOnClickListener {
+                val intent = Intent(root.context, ProfileActivity::class.java).apply {
+                    putExtra("userId", user.id)
+                }
+                ContextCompat.startActivity(root.context, intent, null)
+            }
         }
     }
 

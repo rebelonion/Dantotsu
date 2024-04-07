@@ -40,7 +40,7 @@ class UsersAdapter(private val user: ArrayList<User>) : RecyclerView.Adapter<Use
         setAnimation(b.root.context, b.root)
         val user = user[position]
         b.profileUserAvatar.loadImage(user.pfp)
-        blurImage(b.profileBannerImage, user.banner ?: user.pfp)
+        b.profileBannerImage.loadImage(user.banner ?: user.pfp)
         b.profileUserName.text = user.name
     }
 

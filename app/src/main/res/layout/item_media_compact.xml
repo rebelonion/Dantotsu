@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|end"
                 android:background="@drawable/item_score"
-                android:backgroundTint="#BFFFFFFF"
+                android:backgroundTint="#FFFFFF"
                 android:backgroundTintMode="multiply"
                 android:orientation="horizontal"
                 android:paddingStart="8dp"
