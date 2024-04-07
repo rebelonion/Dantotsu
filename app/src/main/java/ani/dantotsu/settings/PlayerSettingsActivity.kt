@@ -24,6 +24,7 @@ import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.settings.saving.internal.Pref
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -161,6 +162,12 @@ class PlayerSettingsActivity : AppCompatActivity() {
         binding.playerSettingsAutoSkipOpEd.isEnabled = binding.playerSettingsTimeStamps.isChecked
         binding.playerSettingsAutoSkipOpEd.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.AutoSkipOPED, isChecked)
+        }
+
+        binding.playerSettingsAutoSkipRecap.isChecked = PrefManager.getVal(PrefName.AutoSkipRecap)
+        binding.playerSettingsAutoSkipRecap.isEnabled = binding.playerSettingsTimeStamps.isChecked
+        binding.playerSettingsAutoSkipRecap.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.AutoSkipRecap, isChecked)
         }
 
         binding.playerSettingsAutoPlay.isChecked = PrefManager.getVal(PrefName.AutoPlay)

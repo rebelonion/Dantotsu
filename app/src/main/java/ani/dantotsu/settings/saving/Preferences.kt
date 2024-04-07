@@ -102,6 +102,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     UseProxyForTimeStamps(Pref(Location.Player, Boolean::class, false)),
     ShowTimeStampButton(Pref(Location.Player, Boolean::class, true)),
     AutoSkipOPED(Pref(Location.Player, Boolean::class, false)),
+    AutoSkipRecap(Pref(Location.Player, Boolean::class, false )),
     AutoPlay(Pref(Location.Player, Boolean::class, true)),
     AutoSkipFiller(Pref(Location.Player, Boolean::class, false)),
     AskIndividualPlayer(Pref(Location.Player, Boolean::class, true)),
