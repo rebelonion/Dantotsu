@@ -109,7 +109,7 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
         override fun handleOnBackPressed() = startMainActivity(this@SettingsActivity)
     }
     lateinit var binding: ActivitySettingsBinding
-    lateinit var launcher: LauncherWrapper
+    private lateinit var launcher: LauncherWrapper
     private lateinit var bindingAccounts: ActivitySettingsAccountsBinding
     private lateinit var bindingTheme: ActivitySettingsThemeBinding
     private lateinit var bindingExtensions: ActivitySettingsExtensionsBinding
@@ -230,7 +230,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                             PrefManager.getVal<String>(PrefName.AnilistUserName)
                         )
                         openLinkInBrowser(anilistLink)
-                        true
                     }
 
                     settingsMALLoginRequired.visibility = View.GONE
@@ -251,7 +250,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                             val myanilistLink = getString(R.string.myanilist_link, MAL.username)
                             openLinkInBrowser(myanilistLink)
-                            true
                         }
                     } else {
                         settingsMALAvatar.setImageResource(R.drawable.ic_round_person_24)
@@ -283,7 +281,6 @@ class SettingsActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListene
                             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
                             val discordLink = getString(R.string.discord_link, id)
                             openLinkInBrowser(discordLink)
-                            true
                         }
                     }
                     settingsDiscordUsername.visibility = View.VISIBLE

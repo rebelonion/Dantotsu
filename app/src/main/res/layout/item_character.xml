@@ -4,17 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginStart="-12dp"
-    android:layout_marginTop="-12dp"
-    android:layout_marginEnd="-12dp"
+    android:layout_marginStart="-16dp"
+    android:layout_marginEnd="-16dp"
     android:orientation="vertical">
 
 
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-16dp"
+        android:layout_marginBottom="-16dp"
         android:clipToPadding="false"
-        android:padding="24dp">
+        android:padding="22dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/itemCompactCard"
@@ -26,8 +27,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/itemCompactImage"
-                android:layout_width="108dp"
-                android:layout_height="160dp"
+                android:layout_width="102dp"
+                android:layout_height="154dp"
                 android:scaleType="centerCrop"
                 android:transitionName="characterCover"
                 app:shapeAppearanceOverlay="@style/roundedImageView"
@@ -47,8 +48,8 @@
         android:orientation="vertical">
 
         <View
-            android:layout_width="108dp"
-            android:layout_height="160dp"
+            android:layout_width="102dp"
+            android:layout_height="128dp"
             android:layout_marginBottom="8dp" />
 
         <TextView

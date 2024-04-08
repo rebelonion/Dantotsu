@@ -30,6 +30,16 @@ class Contributors {
                          "Owner and Maintainer",
                         first.htmlUrl
                     )
+                )
+            }
+            res.filter {it.login != "rebelonion"}.forEach {
+                developers = developers.plus(
+                    Developer(
+                        it.login,
+                        it.avatarUrl,
+                        "Contributor",
+                        it.htmlUrl
+                    )
                 ).plus(arrayOf(
                     Developer(
                         "Wai What",
@@ -56,16 +66,6 @@ class Contributors {
                         "https://youtube.com/watch?v=dQw4w9WgXcQ"
                     )
                 ))
-            }
-            res.filter {it.login != "rebelonion"}.forEach {
-                developers = developers.plus(
-                    Developer(
-                        it.login,
-                        it.avatarUrl,
-                        "Contributor",
-                        it.htmlUrl
-                    )
-                )
             }
         }
         return developers

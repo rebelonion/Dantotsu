@@ -433,7 +433,6 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
                     val selectedVideo =
                         if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
-                    val subtitles = extractor.subtitles
                     val subtitleNames = subtitles.map { it.language }
                     var subtitleToDownload: Subtitle? = null
                     val activity = currActivity()?:requireActivity()

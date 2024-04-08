@@ -33,7 +33,6 @@ class AuthorActivity : AppCompatActivity() {
     private val model: OtherDetailsViewModel by viewModels()
     private var author: Author? = null
     private var loaded = false
-    private var isVoiceArtist: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
