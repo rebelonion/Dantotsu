@@ -215,6 +215,11 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     companion object {
         var initialized = false
         lateinit var media: Media
+
+        private const val DEFAULT_MIN_BUFFER_MS = 600000
+        private const val DEFAULT_MAX_BUFFER_MS = 600000
+        private const val BUFFER_FOR_PLAYBACK_MS = 2500
+        private const val BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 5000
     }
 
     private lateinit var episode: Episode
@@ -372,16 +377,31 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             6 -> ResourcesCompat.getFont(this, R.font.blocky)
             else -> ResourcesCompat.getFont(this, R.font.poppins_semi_bold)
         }
-        playerView.subtitleView?.setStyle(
-            CaptionStyleCompat(
-                primaryColor,
-                subBackground,
-                subWindow,
-                outline,
-                secondaryColor,
-                font
+        val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
+
+        playerView.subtitleView?.let { subtitles ->
+            subtitles.setApplyEmbeddedStyles(false)
+            subtitles.setApplyEmbeddedFontSizes(false)
+
+            subtitles.setStyle(
+                CaptionStyleCompat(
+                    primaryColor,
+                    subBackground,
+                    subWindow,
+                    outline,
+                    secondaryColor,
+                    font
+                )
             )
-        )
+
+            subtitles.alpha =
+                when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
+                    true -> PrefManager.getVal(PrefName.SubAlpha)
+                    false -> 0f
+                }
+
+            subtitles.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -483,14 +503,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         setupSubFormatting(playerView)
-
-
-        playerView.subtitleView?.alpha = when (PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
-            true -> PrefManager.getVal(PrefName.SubAlpha)
-            false -> 0f
-        }
-        val fontSize = PrefManager.getVal<Int>(PrefName.FontSize).toFloat()
-        playerView.subtitleView?.setFixedTextSize(TypedValue.COMPLEX_UNIT_SP, fontSize)
 
         if (savedInstanceState != null) {
             currentWindow = savedInstanceState.getInt(resumeWindow)
@@ -903,7 +915,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 isFastForwarding = true
                 exoPlayer.setPlaybackSpeed(exoPlayer.playbackParameters.speed * 2)
                 fastForward.visibility = View.VISIBLE
-                fastForward.text = "${exoPlayer.playbackParameters.speed}x"
+                val speed = "${exoPlayer.playbackParameters.speed}x"
+                fastForward.text = speed
             }
 
             fun stopFastForward() {
@@ -1554,11 +1567,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     private fun buildExoplayer() {
         //Player
-        val DEFAULT_MIN_BUFFER_MS = 600000
-        val DEFAULT_MAX_BUFFER_MS = 600000
-        val BUFFER_FOR_PLAYBACK_MS = 2500
-        val BUFFER_FOR_PLAYBACK_AFTER_REBUFFER_MS = 5000
-
         val loadControl = DefaultLoadControl.Builder()
             .setBackBuffer(1000 * 60 * 2, true)
             .setBufferDurationsMs(
@@ -1878,25 +1886,28 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     override fun onTracksChanged(tracks: Tracks) {
         tracks.groups.forEach {
-            println("Track__: $it")
-            println("Track__: ${it.length}")
-            println("Track__: ${it.isSelected}")
-            println("Track__: ${it.type}")
-            println("Track__: ${it.mediaTrackGroup.id}")
-            if (it.type == 3 && it.mediaTrackGroup.id == "1:") {
-                playerView.player?.trackSelectionParameters =
-                    playerView.player?.trackSelectionParameters?.buildUpon()
-                        ?.setOverrideForType(
-                            TrackSelectionOverride(it.mediaTrackGroup, it.length - 1)
-                        )
-                        ?.build()!!
-            } else if (it.type == 3) {
-                playerView.player?.trackSelectionParameters =
-                    playerView.player?.trackSelectionParameters?.buildUpon()
-                        ?.addOverride(
-                            TrackSelectionOverride(it.mediaTrackGroup, listOf())
-                        )
-                        ?.build()!!
+            println("Track__: $it\nTrack__: ${it.length}\nTrack__: ${it.isSelected}\n" +
+                    "Track__: ${it.type}\nTrack__: ${it.mediaTrackGroup.id}")
+            when (it.type) {
+                C.TRACK_TYPE_AUDIO -> { }
+                C.TRACK_TYPE_TEXT -> {
+                    if (it.mediaTrackGroup.id == "1:") {
+                        playerView.player?.trackSelectionParameters =
+                            playerView.player?.trackSelectionParameters?.buildUpon()
+                                ?.setOverrideForType(
+                                    TrackSelectionOverride(it.mediaTrackGroup, it.length - 1)
+                                )
+                                ?.build()!!
+                    } else {
+                        playerView.player?.trackSelectionParameters =
+                            playerView.player?.trackSelectionParameters?.buildUpon()
+                                ?.addOverride(
+                                    TrackSelectionOverride(it.mediaTrackGroup, listOf())
+                                )
+                                ?.build()!!
+                    }
+                }
+                C.TRACK_TYPE_VIDEO -> { }
             }
         }
         println("Track: ${tracks.groups.size}")
