@@ -17,7 +17,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.util.BitmapUtil
+import ani.dantotsu.util.BitmapUtil.Companion.downloadImageAsBitmap
 import ani.dantotsu.widgets.WidgetSizeProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -52,32 +52,6 @@ class ProfileStatsWidget : AppWidgetProvider() {
     }
 
     companion object {
-        private fun downloadImageAsBitmap(imageUrl: String): Bitmap? {
-            var bitmap: Bitmap? = null
-
-            runBlocking(Dispatchers.IO) {
-                var inputStream: InputStream? = null
-                var urlConnection: HttpURLConnection? = null
-                try {
-                    val url = URL(imageUrl)
-                    urlConnection = url.openConnection() as HttpURLConnection
-                    urlConnection.requestMethod = "GET"
-                    urlConnection.connect()
-
-                    if (urlConnection.responseCode == HttpURLConnection.HTTP_OK) {
-                        inputStream = urlConnection.inputStream
-                        bitmap = BitmapFactory.decodeStream(inputStream)
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                } finally {
-                    inputStream?.close()
-                    urlConnection?.disconnect()
-                }
-            }
-            return bitmap?.let { BitmapUtil.roundCorners(it) }
-        }
-
         @OptIn(DelicateCoroutinesApi::class)
         fun updateAppWidget(
             context: Context,

@@ -1,12 +1,18 @@
 package ani.dantotsu.util
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.BitmapShader
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Shader
-import android.graphics.drawable.Drawable
+import androidx.collection.LruCache
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class BitmapUtil {
     companion object {
@@ -22,12 +28,39 @@ class BitmapUtil {
             return output
         }
 
-        fun convertDrawableToBitmap(drawable: Drawable, width: Int, height: Int): Bitmap {
-            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-            val canvas = Canvas(bitmap)
-            drawable.setBounds(0, 0, canvas.width, canvas.height)
-            drawable.draw(canvas)
-            return bitmap
+        private val cacheSize = (Runtime.getRuntime().maxMemory() / 1024 / 16).toInt()
+        private val bitmapCache = LruCache<String, Bitmap>(cacheSize)
+
+        fun downloadImageAsBitmap(imageUrl: String): Bitmap? {
+            var bitmap: Bitmap? = null
+
+            runBlocking(Dispatchers.IO) {
+
+                bitmapCache[imageUrl]?.let {
+                    bitmap = it
+                } ?: {
+                    var inputStream: InputStream? = null
+                    var urlConnection: HttpURLConnection? = null
+                    try {
+                        val url = URL(imageUrl)
+                        urlConnection = url.openConnection() as HttpURLConnection
+                        urlConnection.requestMethod = "GET"
+                        urlConnection.connect()
+
+                        if (urlConnection.responseCode == HttpURLConnection.HTTP_OK) {
+                            inputStream = urlConnection.inputStream
+                            bitmap = BitmapFactory.decodeStream(inputStream)
+                            bitmap?.let { bitmapCache.put(imageUrl, it) }
+                        }
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    } finally {
+                        inputStream?.close()
+                        urlConnection?.disconnect()
+                    }
+                }
+            }
+            return bitmap?.let { roundCorners(it) }
         }
     }
 }
