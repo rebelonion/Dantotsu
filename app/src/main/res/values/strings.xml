@@ -435,9 +435,9 @@
     <string name="view_my_anilist">View My AniList</string>
 
     <string name="jobless_message">DAMN! YOU TRULY ARE JOBLESS\nYOU REACHED THE END</string>
-    <string name="file_manager_not_found">Couldn\'t find any File Manager to open SD card</string>
+    <string name="file_manager_not_found">Couldn\'t find a File Manager to open SD card</string>
     <string name="error_loading_data">Error loading data %1$s</string>
-    <string name="long_click_to_check_update">You Long Click the button to check for App Update</string>
+    <string name="long_click_to_check_update">Long click to check for app updates</string>
     <string name="saved_to_path">Saved to:\n%s</string>
     <string name="setting_progress">Setting progress to %1$d</string>
     <string name="login_anilist_account">Please Login into AniList account!</string>
@@ -458,27 +458,27 @@
     <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
     <string name="copied_to_clipboard">Copied to Clipboard</string>
     <string name="first_episode">This is the 1st Episode!</string>
-    <string name="reset_auto_update">You can long click List Editor button to Reset Auto Update</string>
-    <string name="autoplay_cancelled">Autoplay cancelled, no Interaction for more than 1 Hour.</string>
+    <string name="reset_auto_update">Long click \"List Editor\" button to reset Auto Update</string>
+    <string name="autoplay_cancelled">Autoplay cancelled, no interaction for more than 1 Hour.</string>
     <string name="auto_select_server_error">Couldn\'t auto select the server, Please try again!</string>
     <string name="stream_selection_empty">No streams available! Try another source.</string>
-    <string name="logging_in_mal">Logging in MAL</string>
+    <string name="logging_in_mal">Logging into MAL</string>
     <string name="getting_user_data">Getting User Data</string>
-    <string name="no_next_episode">No next Episode Found!</string>
-    <string name="enable_banner_animations">Try Enabling Banner Animations from Settings</string>
+    <string name="no_next_episode">No next episode found!</string>
+    <string name="enable_banner_animations">Try enabling \"Banner Animations\" in settings</string>
     <string name="please_login_anilist">Please Login with Anilist!</string>
-    <string name="auto_update_reset">Auto Update Progress has now been Reset-ed</string>
-    <string name="cant_wait">Can\'t Wait, huh? fine X(</string>
+    <string name="auto_update_reset">Auto Update progress has now been reset-ed</string>
+    <string name="cant_wait">Can\'t wait, huh? fine X(</string>
     <string name="downloading">Downloading…</string>
     <string name="next_chapter_not_found">Next Chapter Not Found</string>
-    <string name="first_chapter">This is the 1st Chapter!</string>
+    <string name="first_chapter">This is the 1st chapter!</string>
     <string name="adult_stuff">Adult Stuff?&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
     <string name="what_did_you_open">What did you even open?</string>
-    <string name="error_getting_data">Error getting Data from Anilist.</string>
-    <string name="empty_response">Empty Response, Does your internet perhaps suck?</string>
-    <string name="error_loading_mal_user_data">Error loading MAL User Data</string>
+    <string name="error_getting_data">Error getting data from Anilist.</string>
+    <string name="empty_response">Empty response! Does your internet suck, perhaps?</string>
+    <string name="error_loading_mal_user_data">Error loading MAL user data</string>
     <string name="error_loading_mal_data">Failed to load data from MAL</string>
-    <string name="error_loading_anilist_user_data">Error loading Anilist User Data</string>
+    <string name="error_loading_anilist_user_data">Error loading Anilist user data</string>
     <string name="episode_not_found">Couldn\'t find episode : %1$s</string>
     <string name="list_updated">List Updated</string>
     <string name="deleted_from_list">Deleted from List</string>
@@ -491,7 +491,7 @@
     <string name="started_downloading">Started Downloading\n%1$s</string>
     <string name="install_1dm">Please install 1DM</string>
     <string name="install_adm">Please install ADM</string>
-    <string name="error_getting_image_data">Error getting Image Data</string>
+    <string name="error_getting_image_data">Error getting image data</string>
     <string name="loading_image_failed">Loading Image Failed</string>
     <string name="copied_device_info">Copied device info</string>
     <string name="anilist_down">Seems like Anilist is down, maybe try using a VPN or you can wait for it to come back.</string>
@@ -499,11 +499,12 @@
     <string name="access_not_available">Wasn\'t able to get access</string>
     <string name="mal_login_uri_not_found">Mal Login : Uri not Found</string>
     <string name="mal_login_code_challenge_not_found">Mal Login : codeChallenge not found</string>
-    <string name="mal_login_code_not_present">Mal Login : Code not present in Redirected URI</string>
-    <string name="refresh_token_load_failed">Refresh Token : Failed to load Saved Token</string>
+    <string name="mal_login_code_not_present">Mal Login : Code not present in redirected URI</string>
+    <string name="refresh_token_load_failed">Refresh Token : Failed to load saved token</string>
     <string name="refreshing_token_failed">Refreshing Token Failed</string>
     <string name="episode_release_countdown">Episode %1$d will be released in</string>
-    <string name="chapter_release_timeout">Chapter %1$s has been available for</string>
+    <string name="chapter_number">Chapter %1$d</string>
+    <string name="chapter_release_timeout">%1$s has been available for</string>
     <string name="time_format">%1$d days %2$d hrs %3$d mins %4$d secs</string>
     <string-array name="sort_by">
         <item>Score</item>
@@ -542,7 +543,7 @@
     <string name="episode_num">"Episode %1$s"</string>
     <string name="chapter">"Chapter "</string>
     <string name="chapter_num">"Chapter %1$s"</string>
-    <string name="just_released">- just got released!</string>
+    <string name="just_released">- Newly released!</string>
     <string name="checking_subscriptions_title">Checking Subscriptions</string>
     <string name="user_list">%1$s\'s %2$s List</string>
 
@@ -566,7 +567,7 @@
     <string name="reset">Reset</string>
     <string name="close">Close</string>
     <string name="no_chapter">No Chapter</string>
-    <string name="content_18">Turn on 18+ Content from your Anilist Settings</string>
+    <string name="content_18">Turn on 18+ content from your Anilist settings</string>
     <string name="available">Available</string>
     <string name="lets_go">Let\'s Go</string>
     <string name="cope">Cope</string>
@@ -632,10 +633,10 @@
     <string name="question_9">How to enable NSFW content?</string>
     <string name="answer_9">You can enable NSFW content by enabling 18+ contents from this [link](https://anilist.co/settings/media). You also have to enable NSFW extensions in \`Settings > Extensions > NSFW extensions\` </string>
 
-    <string name="question_10">How to import my MAL/Kitsu list to Anilist?</string>
+    <string name="question_10">How to import my MAL/Kitsu lists to Anilist?</string>
     <string name="answer_10">Here is how you do it,\n\nExport:\n\n1. Go to this [link](https://malscraper.azurewebsites.net).\n2. Give your Kitsu/MAL username and download both anime and manga list. (They will be in XML format)\nNote: You have to write the username of the tracker you selected\n\nImport:\n\n1. After exporting your anime and manga list from Kitsu/MAL, now go [here](https://anilist.co/settings/import) \n2. Select/drop the anime XML file on the box above.\n|→Select/drop the manga XML file on the box below.</string>
 
-    <string name="question_11">How to import my Anilist/Kitsu list to MAL?</string>
+    <string name="question_11">How to import my Anilist/Kitsu lists to MAL?</string>
     <string name="answer_11">Here is how you do it,\n\nExport:\n\n1. Go to this [link](https://malscraper.azurewebsites.net/). \n2. Give your Anilist username/Kitsu ID in the \'Username/Kitsu User ID\' box. \n3. Select list type and enable \'update_on_import\'. \n4. Download the file; it will be in .xml format. Be sure to download both Anime and Manga lists.\n\nImport:\n1. To import it in your MAL account, go to this [link](https://myanimelist.net/import.php) and choose \'MyAnimeList Import\' as import type. \n2. Press on \'Choose File\'and select the downloaded anime/manga list XML file. \n3. Press on \'Import Data\'. \nCongratulations, you just imported the selected list to your MAL account.</string>
 
     <string name="question_12">Why can\'t I find a specific anime/manga title?</string>
@@ -647,10 +648,10 @@
     <string name="question_14">How to read coloured mangas?</string>
     <string name="answer_14">Are you in search of coloured manga? Sorry to break it to you but an extremely small amount of mangas have coloured version. Those which has a coloured version is also available in Dantotsu. Let\'s say you want to read the coloured version of chainsaw man. Then follow the below steps ↓\n\n1) Go to Chainsaw Man\n2) Press on \'Read\'\n3) Select any working source\n4) Press on \'Wrong Title\'\n5) Select the colored version chainsaw man\n6) Enjoy\n\nNote: Many sources don\'t have the coloured version available even if it\'s available somewhere on the internet. So try a different source. If none of the sources have it, then a coloured version of your desired manga simply doesn\'t exist.</string>
 
-    <string name="question_15">Handshake fails? Why are no timestamps not loading?</string>
+    <string name="question_15">Handshake fails? Why are no timestamps loading?</string>
     <string name="answer_15">You can fix this issue by enabling \'Proxy\' from \n\`Settings > Anime > Player Settings > Timestamps > Proxy\`.\nIf the timestamps are still not loading but the handshake failed popup is fixed, then the episode you are watching just doesn\'t have timestamps yet for it.</string>
 
-    <string name="question_16">Can\'t find anything on a source?</string>
+    <string name="question_16">Can\'t find anything in a source?</string>
     <string name="answer_16">Some basic fixes would be : \n\n• Update your extensions if there are any. \n• Open Web View and wait for it to load. After loading has completed, go back. (If Web View shows error 404 or something similar, chances are that your source is down)\n• Use a different DNS from your settings, preferably, Libre. \n• Try a trustworthy VPN. (You\'ll have to repeat step 1 after this) \n\nIf none of the steps above work then use a different source or join our [discord](https://discord.gg/invite/4HPZ5nAWwM) for help.</string>
 
     <string name="question_17">Some useful tips and tricks</string>
