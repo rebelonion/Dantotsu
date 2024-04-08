@@ -67,7 +67,6 @@ class TrackGroupDialogFragment(
         override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
             val binding = holder.binding
             trackGroups[position].let { trackGroup ->
-
                 when (val language = trackGroup.getTrackFormat(0).language) {
                     null -> {
                         binding.subtitleTitle.text = getString(R.string.invalid_track)
@@ -91,6 +90,10 @@ class TrackGroupDialogFragment(
 
                         } ?: getString(R.string.unknown_track, language)
                     }
+                }
+                if (trackGroup.isSelected) {
+                    val selected = "✔ ${binding.subtitleTitle.text}"
+                    binding.subtitleTitle.text = selected
                 }
                 binding.root.setOnClickListener {
                     dismiss()

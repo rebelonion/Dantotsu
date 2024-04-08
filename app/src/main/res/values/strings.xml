@@ -858,7 +858,7 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="log_in">log in</string>
     <string name="or_join">or join</string>
 
-    <string name="udio_tracks">Audio Tracks</string>
+    <string name="audio_tracks">Audio Tracks</string>
     <string name="disabled_track">\[X\] Disabled</string>
     <string name="invalid_track">\[?\] Invalid</string>
     <string name="unknown_track">\[%1$s\] Unknown</string>
