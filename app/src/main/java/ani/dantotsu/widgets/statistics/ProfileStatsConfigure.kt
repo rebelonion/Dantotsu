@@ -60,7 +60,11 @@ class ProfileStatsConfigure : AppCompatActivity(),
         binding = StatisticsWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val prefs = getSharedPreferences(ProfileStatsWidget.PREFS_NAME, Context.MODE_PRIVATE)
+        appWidgetId = intent.getIntExtra(
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        )
+        val prefs = getSharedPreferences(ProfileStatsWidget.getPrefsName(appWidgetId), Context.MODE_PRIVATE)
         val topBackground = prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
         (binding.topBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(topBackground)
         binding.topBackgroundButton.setOnClickListener {
@@ -192,7 +196,7 @@ class ProfileStatsConfigure : AppCompatActivity(),
         )
         val subTextColor = typedValueOutline.data
 
-        getSharedPreferences(ProfileStatsWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
+        getSharedPreferences(ProfileStatsWidget.getPrefsName(appWidgetId), Context.MODE_PRIVATE).edit().apply {
             putInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, backgroundColor)
             putInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, backgroundColor)
             putInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, textColor)
@@ -204,12 +208,13 @@ class ProfileStatsConfigure : AppCompatActivity(),
     override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
         if (which == SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE) {
             if (!isMonetEnabled) {
+                val prefs = getSharedPreferences(
+                    ProfileStatsWidget.getPrefsName(appWidgetId),
+                    Context.MODE_PRIVATE
+                )
                 when (dialogTag) {
                     ProfileStatsWidget.PREF_BACKGROUND_COLOR -> {
-                        getSharedPreferences(
-                            ProfileStatsWidget.PREFS_NAME,
-                            Context.MODE_PRIVATE
-                        ).edit()
+                        prefs.edit()
                             .putInt(
                                 ProfileStatsWidget.PREF_BACKGROUND_COLOR,
                                 extras.getInt(SimpleColorDialog.COLOR)
@@ -220,10 +225,7 @@ class ProfileStatsConfigure : AppCompatActivity(),
                     }
 
                     ProfileStatsWidget.PREF_BACKGROUND_FADE -> {
-                        getSharedPreferences(
-                            ProfileStatsWidget.PREFS_NAME,
-                            Context.MODE_PRIVATE
-                        ).edit()
+                        prefs.edit()
                             .putInt(
                                 ProfileStatsWidget.PREF_BACKGROUND_FADE,
                                 extras.getInt(SimpleColorDialog.COLOR)
@@ -234,10 +236,7 @@ class ProfileStatsConfigure : AppCompatActivity(),
                     }
 
                     ProfileStatsWidget.PREF_TITLE_TEXT_COLOR -> {
-                        getSharedPreferences(
-                            ProfileStatsWidget.PREFS_NAME,
-                            Context.MODE_PRIVATE
-                        ).edit()
+                        prefs.edit()
                             .putInt(
                                 ProfileStatsWidget.PREF_TITLE_TEXT_COLOR,
                                 extras.getInt(SimpleColorDialog.COLOR)
@@ -248,10 +247,7 @@ class ProfileStatsConfigure : AppCompatActivity(),
                     }
 
                     ProfileStatsWidget.PREF_STATS_TEXT_COLOR -> {
-                        getSharedPreferences(
-                            ProfileStatsWidget.PREFS_NAME,
-                            Context.MODE_PRIVATE
-                        ).edit()
+                        prefs.edit()
                             .putInt(
                                 ProfileStatsWidget.PREF_STATS_TEXT_COLOR,
                                 extras.getInt(SimpleColorDialog.COLOR)

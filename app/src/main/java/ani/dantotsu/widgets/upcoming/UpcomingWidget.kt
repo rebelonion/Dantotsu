@@ -11,9 +11,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.RemoteViews
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
-import ani.dantotsu.util.BitmapUtil.Companion.convertDrawableToBitmap
 import ani.dantotsu.widgets.WidgetSizeProvider
 
 /**
@@ -97,7 +97,7 @@ class UpcomingWidget : AppWidgetProvider() {
             intentTemplate.putExtra("fromWidget", true)
 
             val views = RemoteViews(context.packageName, R.layout.upcoming_widget).apply {
-                setImageViewBitmap(R.id.backgroundView, convertDrawableToBitmap(gradientDrawable, width, height))
+                setImageViewBitmap(R.id.backgroundView, gradientDrawable.toBitmap(width, height))
                 setTextColor(R.id.text_show_title, titleTextColor)
                 setTextColor(R.id.text_show_countdown, countdownTextColor)
                 setTextColor(R.id.widgetTitle, titleTextColor)

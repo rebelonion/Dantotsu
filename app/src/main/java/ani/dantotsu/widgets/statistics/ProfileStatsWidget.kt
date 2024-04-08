@@ -5,28 +5,24 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
+import android.net.Uri
 import android.widget.RemoteViews
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.util.BitmapUtil
+import ani.dantotsu.util.BitmapUtil.Companion.downloadImageAsBitmap
 import ani.dantotsu.widgets.WidgetSizeProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.launchIO
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
 
 /**
  * Implementation of App Widget functionality.
@@ -56,32 +52,6 @@ class ProfileStatsWidget : AppWidgetProvider() {
     }
 
     companion object {
-        private fun downloadImageAsBitmap(imageUrl: String): Bitmap? {
-            var bitmap: Bitmap? = null
-
-            runBlocking(Dispatchers.IO) {
-                var inputStream: InputStream? = null
-                var urlConnection: HttpURLConnection? = null
-                try {
-                    val url = URL(imageUrl)
-                    urlConnection = url.openConnection() as HttpURLConnection
-                    urlConnection.requestMethod = "GET"
-                    urlConnection.connect()
-
-                    if (urlConnection.responseCode == HttpURLConnection.HTTP_OK) {
-                        inputStream = urlConnection.inputStream
-                        bitmap = BitmapFactory.decodeStream(inputStream)
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                } finally {
-                    inputStream?.close()
-                    urlConnection?.disconnect()
-                }
-            }
-            return bitmap?.let { BitmapUtil.roundCorners(it) }
-        }
-
         @OptIn(DelicateCoroutinesApi::class)
         fun updateAppWidget(
             context: Context,
@@ -89,7 +59,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
 
-            val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            val prefs = context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE)
             val backgroundColor =
                 prefs.getInt(PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
             val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
@@ -120,8 +90,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                             val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {
                                 setImageViewBitmap(
                                     R.id.backgroundView,
-                                    BitmapUtil.convertDrawableToBitmap(
-                                        gradientDrawable,
+                                    gradientDrawable.toBitmap(
                                         width,
                                         height
                                     )
@@ -133,6 +102,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                                         1,
                                         Intent(context, ProfileStatsConfigure::class.java).apply {
                                             putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+                                            data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
                                         },
                                         PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                                     )
@@ -248,7 +218,9 @@ class ProfileStatsWidget : AppWidgetProvider() {
             }
         }
 
-        const val PREFS_NAME = "ani.dantotsu.widgets.ResumableWidget"
+        fun getPrefsName(appWidgetId: Int): String {
+            return "ani.dantotsu.widgets.Statistics.${appWidgetId}"
+        }
         const val PREF_BACKGROUND_COLOR = "background_color"
         const val PREF_BACKGROUND_FADE = "background_fade"
         const val PREF_TITLE_TEXT_COLOR = "title_text_color"
