@@ -2,8 +2,6 @@ package ani.dantotsu.widgets.upcoming
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.widget.RemoteViews
 import android.widget.RemoteViewsService
@@ -12,8 +10,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.media.Media
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.util.BitmapUtil.Companion.downloadImageAsBitmap
-import ani.dantotsu.util.BitmapUtil.Companion.roundCorners
+import ani.dantotsu.util.BitmapUtil.downloadImageAsBitmap
 import ani.dantotsu.util.Logger
 import com.google.gson.GsonBuilder
 import com.google.gson.InstanceCreator
@@ -25,9 +22,6 @@ import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SChapterImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
 
 class UpcomingRemoteViewsFactory(private val context: Context) :
     RemoteViewsService.RemoteViewsFactory {

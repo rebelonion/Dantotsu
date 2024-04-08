@@ -17,7 +17,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.util.BitmapUtil.Companion.downloadImageAsBitmap
+import ani.dantotsu.util.BitmapUtil.downloadImageAsBitmap
 import ani.dantotsu.widgets.WidgetSizeProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
