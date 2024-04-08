@@ -40,33 +40,34 @@ class Contributors {
                         "Contributor",
                         it.htmlUrl
                     )
-                ).plus(arrayOf(
-                    Developer(
-                        "Wai What",
-                        "https://avatars.githubusercontent.com/u/149729762?v=4",
-                        "Icon Designer",
-                        "https://github.com/WaiWhat"
-                    ),
-                    Developer(
-                        "MarshMeadow",
-                        "https://avatars.githubusercontent.com/u/88599122?v=4",
-                        "Beta Icon Designer",
-                        "https://github.com/MarshMeadow?tab=repositories"
-                    ),
-                    Developer(
-                        "Zaxx69",
-                        "https://avatars.githubusercontent.com/u/138523882?v=4",
-                        "Telegram Admin",
-                        "https://github.com/Zaxx69"
-                    ),
-                    Developer(
-                        "Arif Alam",
-                        "https://avatars.githubusercontent.com/u/70383209?v=4",
-                        "Head Discord Moderator",
-                        "https://youtube.com/watch?v=dQw4w9WgXcQ"
-                    )
-                ))
+                )
             }
+            developers = developers.plus((arrayOf(
+                Developer(
+                    "Wai What",
+                    "https://avatars.githubusercontent.com/u/149729762?v=4",
+                    "Icon Designer",
+                    "https://github.com/WaiWhat"
+                ),
+                Developer(
+                    "MarshMeadow",
+                    "https://avatars.githubusercontent.com/u/88599122?v=4",
+                    "Beta Icon Designer",
+                    "https://github.com/MarshMeadow?tab=repositories"
+                ),
+                Developer(
+                    "Zaxx69",
+                    "https://avatars.githubusercontent.com/u/138523882?v=4",
+                    "Telegram Admin",
+                    "https://github.com/Zaxx69"
+                ),
+                Developer(
+                    "Arif Alam",
+                    "https://avatars.githubusercontent.com/u/70383209?v=4",
+                    "Head Discord Moderator",
+                    "https://youtube.com/watch?v=dQw4w9WgXcQ"
+                )
+            )))
         }
         return developers
     }
