@@ -5,13 +5,12 @@ import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.widget.RemoteViews
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toBitmap
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
@@ -22,12 +21,8 @@ import ani.dantotsu.util.BitmapUtil
 import ani.dantotsu.widgets.WidgetSizeProvider
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.launchIO
-import java.io.InputStream
-import java.net.HttpURLConnection
-import java.net.URL
 
 /**
  * Implementation of App Widget functionality.
@@ -121,8 +116,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
                             val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {
                                 setImageViewBitmap(
                                     R.id.backgroundView,
-                                    BitmapUtil.convertDrawableToBitmap(
-                                        gradientDrawable,
+                                    gradientDrawable.toBitmap(
                                         width,
                                         height
                                     )
