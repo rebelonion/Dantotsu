@@ -31,7 +31,10 @@ class DiscordDialogFragment: BottomSheetDialogFragment() {
             "anilist" -> binding.radioAnilist.isChecked = true
             else -> binding.radioAnilist.isChecked = true
         }
-
+        binding.showIcon.isChecked = PrefManager.getVal(PrefName.ShowIcon)
+        binding.showIcon.setOnCheckedChangeListener { _, isChecked ->
+            PrefManager.setVal(PrefName.ShowIcon, isChecked)
+        }
         binding.anilistLinkPreview.text = getString(R.string.anilist_link, PrefManager.getVal<String>(PrefName.AnilistUserName))
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->

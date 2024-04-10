@@ -412,7 +412,6 @@ class MangaReaderActivity : AppCompatActivity() {
                                     ?: getString(R.string.chapter_num, chap.number),
                                 state = "${chap.number}/${media.manga?.totalChapters ?: "??"}",
                                 largeImage = media.cover?.let { cover -> RPC.Link(media.userPreferredName, cover) },
-                                smallImage = RPC.Link("Dantotsu", Discord.small_Image),
                                 buttons = buttons
                             )
                         )
