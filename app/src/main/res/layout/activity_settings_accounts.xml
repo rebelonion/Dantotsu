@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/settingsAccountsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingStart="31dp"
-    android:paddingEnd="31dp">
-    <TextView
-        android:id="@+id/settingsaccountTitle"
+    tools:context=".settings.SettingsAccountActivity">
+
+    <LinearLayout
+        android:id="@+id/settingsAccountsLayout"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/poppins"
-        android:gravity="center"
-        android:paddingEnd="28dp"
-        android:text="@string/accounts"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:drawableStartCompat="@drawable/ic_round_arrow_back_ios_new_24"
-        app:drawableTint="?attr/colorOnBackground"
-        tools:ignore="RtlSymmetry" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="31dp"
+        android:paddingEnd="31dp">
+
+        <TextView
+            android:id="@+id/settingsaccountTitle"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:paddingEnd="28dp"
+            android:text="@string/accounts"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_round_arrow_back_ios_new_24"
+            app:drawableTint="?attr/colorOnBackground"
+            tools:ignore="RtlSymmetry" />
 
         <LinearLayout
             android:id="@+id/settingsAnilistLoginContainer"
@@ -222,8 +228,8 @@
                 android:id="@+id/settingsImageSwitcher"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/discord_status_idle"
-                android:padding="16dp" />
+                android:padding="16dp"
+                android:src="@drawable/discord_status_idle" />
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/settingsDiscordAvatarContainer"
@@ -266,4 +272,5 @@
             app:drawableStartCompat="@drawable/ic_round_help_24"
             app:drawableTint="?attr/colorPrimary" />
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

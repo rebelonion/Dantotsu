@@ -1,28 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/settingsNotificationsLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingStart="31dp"
-    android:paddingEnd="31dp">
+    tools:context=".settings.SettingsNotificationActivity">
 
-    <TextView
-        android:id="@+id/settingsNotificationsTitle"
+    <LinearLayout
+        android:id="@+id/settingsNotificationsLayout"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/poppins"
-        android:gravity="center"
-        android:paddingEnd="28dp"
-        android:text="@string/notifications"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:drawableStartCompat="@drawable/ic_round_arrow_back_ios_new_24"
-        app:drawableTint="?attr/colorOnBackground"
-        tools:ignore="RtlSymmetry" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingStart="31dp"
+        android:paddingEnd="31dp">
+
+        <TextView
+            android:id="@+id/settingsNotificationsTitle"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="center"
+            android:paddingEnd="28dp"
+            android:text="@string/notifications"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:drawableStartCompat="@drawable/ic_round_arrow_back_ios_new_24"
+            app:drawableTint="?attr/colorOnBackground"
+            tools:ignore="RtlSymmetry" />
+
         <Button
             android:id="@+id/settingsSubscriptionsTime"
             style="@style/Widget.Material3.Button.TextButton"
@@ -162,4 +168,5 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-</LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>
