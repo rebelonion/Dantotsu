@@ -74,19 +74,117 @@
             android:paddingStart="31dp"
             android:paddingEnd="31dp">
 
-            <include layout="@layout/activity_settings_accounts" />
-            <include layout="@layout/activity_settings_theme" />
-            <include layout="@layout/activity_settings_extensions" />
-            <include layout="@layout/activity_settings_common" />
-            <include layout="@layout/activity_settings_anime" />
-            <include layout="@layout/activity_settings_manga" />
-            <include layout="@layout/activity_settings_notifications" />
-            <include layout="@layout/activity_settings_about" />
+            <TextView
+                android:id="@+id/settingsAccount"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginEnd="-28dp"
+                android:background="@drawable/ui_bg"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:text="@string/accounts"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/settingsTheme"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginEnd="-28dp"
+                android:background="@drawable/ui_bg"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:text="@string/theme"
+                android:textColor="?attr/colorSecondary"
+
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/settingsExtension"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginEnd="-28dp"
+                android:background="@drawable/ui_bg"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:text="@string/extensions"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/settingsCommon"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginEnd="-28dp"
+                android:background="@drawable/ui_bg"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:text="@string/common"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/settingsNotification"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginEnd="-28dp"
+                android:background="@drawable/ui_bg"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:text="@string/notifications"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/settingsAnime"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginEnd="-28dp"
+                android:background="@drawable/ui_bg"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:text="@string/anime"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/settingsManga"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginEnd="-28dp"
+                android:background="@drawable/ui_bg"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:text="@string/manga"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
+
+
+            <TextView
+                android:id="@+id/settingsAbout"
+                android:layout_width="match_parent"
+                android:layout_height="64dp"
+                android:layout_marginEnd="-28dp"
+                android:background="@drawable/ui_bg"
+                android:backgroundTint="?attr/colorOnBackground"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center_vertical"
+                android:text="@string/about"
+                android:textColor="?attr/colorSecondary"
+                tools:ignore="TextContrastCheck" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="31dp"
+                android:layout_marginEnd="-28dp"
                 android:ellipsize="end"
                 android:fontFamily="@font/poppins_bold"
                 android:maxLines="3"
