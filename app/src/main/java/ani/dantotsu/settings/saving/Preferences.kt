@@ -166,7 +166,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Incognito(Pref(Location.Irrelevant, Boolean::class, false)),
     OfflineMode(Pref(Location.Irrelevant, Boolean::class, false)),
     DiscordStatus(Pref(Location.Irrelevant, String::class, "online")),
-    ShowIcon(Pref(Location.Irrelevant, Boolean::class, true)),
+    ShowAniListIcon(Pref(Location.Irrelevant, Boolean::class, false)),
     DownloadsKeys(Pref(Location.Irrelevant, String::class, "")),
     NovelLastExtCheck(Pref(Location.Irrelevant, Long::class, 0L)),
     ImageUrl(Pref(Location.Irrelevant, String::class, "")),

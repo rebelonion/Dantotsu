@@ -23,6 +23,7 @@ class Contributors {
                     Mapper.json.decodeFromJsonElement<GithubResponse>(it)
                 }
             res.forEach {
+                if (it.login == "SunglassJerry") return@forEach
                 val role = when (it.login) {
                     "rebelonion" -> "Owner & Maintainer"
                     "sneazy-ibo" -> "Contributor & Comment Moderator"
@@ -61,7 +62,7 @@ class Contributors {
                     Developer(
                         "SunglassJeery",
                         "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b5804776-FEKfP5wbz2xv.png",
-                        "Discord & Comment Moderator",
+                        "Head Discord & Comment Moderator",
                         "https://anilist.co/user/5804776"
                     ),
                     Developer(

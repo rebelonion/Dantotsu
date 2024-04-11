@@ -71,8 +71,8 @@ open class RPC(val token: String, val coroutineContext: CoroutineContext) {
                             assets = Activity.Assets(
                                 largeImage = data.largeImage?.url?.discordUrl(),
                                 largeText = data.largeImage?.label,
-                                smallImage = if (PrefManager.getVal(PrefName.ShowIcon))  Discord.small_Image_AniList.discordUrl() else Discord.small_Image.discordUrl(),
-                                smallText = if (PrefManager.getVal(PrefName.ShowIcon)) "Anilist" else "Dantotsu",
+                                smallImage = if (PrefManager.getVal(PrefName.ShowAniListIcon))  Discord.small_Image_AniList.discordUrl() else Discord.small_Image.discordUrl(),
+                                smallText = if (PrefManager.getVal(PrefName.ShowAniListIcon)) "Anilist" else "Dantotsu",
                             ),
                             buttons = data.buttons.map { it.label },
                             metadata = Activity.Metadata(

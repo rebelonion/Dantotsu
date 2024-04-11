@@ -292,7 +292,7 @@ class ExtensionsActivity : AppCompatActivity() {
                 val alertDialog = AlertDialog.Builder(this@ExtensionsActivity, R.style.MyPopup)
                     .setTitle(R.string.edit_repositories)
                     .setView(dialogView.root)
-                    .setPositiveButton(getString(R.string.add)) { dialog, _ ->
+                    .setPositiveButton(getString(R.string.add)) { _, _ ->
                         if (!dialogView.repositoryTextBox.text.isNullOrBlank())
                             processUserInput(dialogView.repositoryTextBox.text.toString(), type)
                     }
