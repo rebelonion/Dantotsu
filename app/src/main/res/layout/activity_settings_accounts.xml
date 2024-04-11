@@ -11,8 +11,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingStart="31dp"
-        android:paddingEnd="31dp">
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="-32dp"
+            android:paddingEnd="-32dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="wrap_content"
@@ -36,14 +43,17 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/accounts"
-                        android:textSize="28sp"/>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="32dp"
+                    android:layout_weight="1"
+                    android:text="@string/accounts"
+                    android:textSize="28sp" />
 
                 <ImageView
                     android:layout_width="96dp"
@@ -55,6 +65,8 @@
                     tools:ignore="ContentDescription" />
 
             </LinearLayout>
+
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/settingsAnilistLoginContainer"

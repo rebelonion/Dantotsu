@@ -33,7 +33,7 @@ class SettingsThemeActivity : AppCompatActivity() {
                 topMargin = statusBarHeight
                 bottomMargin = navBarHeight
             }
-            settingsThemeTitle.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+            themeSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
             settingsUseMaterialYou.apply {
                 isChecked = PrefManager.getVal(PrefName.UseMaterialYou)
