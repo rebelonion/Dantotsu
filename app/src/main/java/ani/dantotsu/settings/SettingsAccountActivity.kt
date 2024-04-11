@@ -47,7 +47,7 @@ class SettingsAccountActivity : AppCompatActivity() {
                 topMargin = statusBarHeight
                 bottomMargin = navBarHeight
             }
-            settingsaccountTitle.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+            accountSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
             settingsAccountHelp.setOnClickListener {
                 CustomBottomDialog.newInstance().apply {
