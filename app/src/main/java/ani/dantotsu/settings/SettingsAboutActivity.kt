@@ -41,7 +41,7 @@ class SettingsAboutActivity : AppCompatActivity() {
                 topMargin = statusBarHeight
                 bottomMargin = navBarHeight
             }
-            settingsAboutTitle.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+            aboutSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
             settingsDev.setOnClickListener {
                 DevelopersDialogFragment().show(supportFragmentManager, "dialog")
