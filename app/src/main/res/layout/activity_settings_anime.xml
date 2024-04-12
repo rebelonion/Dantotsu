@@ -61,7 +61,7 @@
                     android:layout_gravity="center"
                     android:layout_marginEnd="20dp"
                     android:padding="24dp"
-                    app:drawableTint="?attr/colorOnBackground"
+                    app:tint="?attr/colorOnBackground"
                     app:srcCompat="@drawable/ic_round_movie_filter_24"
                     tools:ignore="ContentDescription" />
 
