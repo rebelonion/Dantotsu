@@ -2,7 +2,6 @@ package ani.dantotsu.media
 
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Query
-import org.checkerframework.checker.units.qual.A
 import java.io.Serializable
 
 data class Character(

@@ -98,7 +98,7 @@ class SettingsCommonActivity: AppCompatActivity(){
                 topMargin = statusBarHeight
                 bottomMargin = navBarHeight
             }
-            settingsCommonTitle.setOnClickListener {
+            commonSettingsBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
             settingsDownloadManager.setOnClickListener {

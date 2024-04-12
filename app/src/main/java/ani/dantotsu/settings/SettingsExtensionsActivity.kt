@@ -149,7 +149,7 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                 topMargin = statusBarHeight
                 bottomMargin = navBarHeight
             }
-            settingsExtensionsTitle.setOnClickListener{
+            extensionSettingsBack.setOnClickListener{
                 onBackPressedDispatcher.onBackPressed()
             }
             setExtensionOutput(animeRepoInventory, MediaType.ANIME)
