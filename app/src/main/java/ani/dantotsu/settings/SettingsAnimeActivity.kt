@@ -40,7 +40,7 @@ class SettingsAnimeActivity: AppCompatActivity(){
             settingsPlayer.setOnClickListener {
                 startActivity(Intent(context, PlayerSettingsActivity::class.java))
             }
-            settingsAnimeTitle.setOnClickListener {
+            animeSettingsBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
             purgeAnimeDownloads.setOnClickListener {

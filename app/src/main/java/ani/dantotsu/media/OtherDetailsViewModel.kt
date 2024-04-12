@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import ani.dantotsu.connections.anilist.Anilist
-import org.checkerframework.checker.units.qual.A
 import java.text.DateFormat
 import java.util.Date
 
