@@ -54,9 +54,9 @@ class SettingsAboutActivity : AppCompatActivity() {
                 text.setText(R.string.full_disclaimer)
 
                 CustomBottomDialog.newInstance().apply {
-                    setTitleText(getString(R.string.disclaimer))
+                    setTitleText(context.getString(R.string.disclaimer))
                     addView(text)
-                    setNegativeButton(getString(R.string.close)) {
+                    setNegativeButton(context.getString(R.string.close)) {
                         dismiss()
                     }
                     show(supportFragmentManager, "dialog")
