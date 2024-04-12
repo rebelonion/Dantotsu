@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="32dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="@string/reader_settings"
                     android:textSize="28sp" />
 

@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="32dp"
                     android:layout_weight="1"
+                    android:fontFamily="@font/poppins_bold"
                     android:text="@string/player_settings"
                     android:textSize="28sp" />
 
@@ -193,9 +194,9 @@
                             android:id="@+id/subtitleTestText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:paddingHorizontal="32dp"
                             android:layout_gravity="center"
                             android:gravity="center"
+                            android:paddingHorizontal="32dp"
                             android:text="@string/sub_text_example" />
                     </LinearLayout>
 
@@ -336,6 +337,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="64dp"
                     android:layout_marginBottom="8dp"
+                    android:clickable="false"
                     android:fontFamily="@font/poppins_bold"
                     android:insetTop="0dp"
                     android:insetBottom="0dp"
@@ -347,17 +349,16 @@
                     app:cornerRadius="0dp"
                     app:icon="@drawable/ic_round_color_24"
                     app:iconPadding="16dp"
-                    app:iconSize="24dp"
-                    android:clickable="false" />
+                    app:iconSize="24dp" />
 
                 <com.google.android.material.slider.Slider
                     android:id="@+id/videoSubAlpha"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="32dp"
+                    android:stepSize="0.1"
                     android:valueFrom="0"
-                    android:valueTo="1"
-                    android:stepSize="0.1">
+                    android:valueTo="1">
 
                 </com.google.android.material.slider.Slider>
 
