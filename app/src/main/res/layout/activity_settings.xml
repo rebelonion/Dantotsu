@@ -69,7 +69,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="18dp"
+            android:layout_marginHorizontal="16dp"
             android:animateLayoutChanges="true"
             android:clipToPadding="false"
             android:orientation="vertical"
@@ -82,6 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -123,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -164,6 +166,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -207,6 +210,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
 
@@ -250,6 +254,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -291,6 +296,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -332,6 +338,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -373,6 +380,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
+                android:gravity="center_vertical|start"
                 android:orientation="horizontal">
 
                 <ImageView
