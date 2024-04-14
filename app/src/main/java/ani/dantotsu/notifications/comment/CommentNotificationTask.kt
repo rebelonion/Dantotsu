@@ -162,7 +162,7 @@ class CommentNotificationTask : Task {
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         if (notification != null) {
-                            NotificationManagerCompat.from(context)
+                                                        NotificationManagerCompat.from(context)
                                 .notify(
                                     type.id,
                                     System.currentTimeMillis().toInt(),
