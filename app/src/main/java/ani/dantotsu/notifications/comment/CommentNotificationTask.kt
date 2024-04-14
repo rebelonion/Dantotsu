@@ -70,30 +70,6 @@ class CommentNotificationTask : Task {
                         else -> CommentNotificationWorker.NotificationType.UNKNOWN
                     }
                     val notification = when (type) {
-                        CommentNotificationWorker.NotificationType.COMMENT_WARNING -> {
-                            val title = "You received a warning"
-                            val message = it.content ?: "Be more thoughtful with your comments"
-
-                            val commentStore = CommentStore(
-                                title,
-                                message,
-                                it.mediaId,
-                                it.commentId
-                            )
-                            addNotificationToStore(commentStore)
-
-                            createNotification(
-                                context,
-                                CommentNotificationWorker.NotificationType.COMMENT_WARNING,
-                                message,
-                                title,
-                                it.mediaId,
-                                it.commentId,
-                                "",
-                                ""
-                            )
-                        }
-
                         CommentNotificationWorker.NotificationType.COMMENT_REPLY -> {
                             val title = "New Comment Reply"
                             val mediaName = names[it.mediaId]?.title ?: "Unknown"
@@ -119,41 +95,7 @@ class CommentNotificationTask : Task {
                             )
                         }
 
-                        CommentNotificationWorker.NotificationType.APP_GLOBAL -> {
-                            val title = "Update from Dantotsu"
-                            val message = it.content ?: "New feature available"
-
-                            val commentStore = CommentStore(
-                                title,
-                                message,
-                                null,
-                                null
-                            )
-                            addNotificationToStore(commentStore)
-
-                            createNotification(
-                                context,
-                                CommentNotificationWorker.NotificationType.APP_GLOBAL,
-                                message,
-                                title,
-                                0,
-                                0,
-                                "",
-                                ""
-                            )
-                        }
-
-                        CommentNotificationWorker.NotificationType.NO_NOTIFICATION -> {
-                            PrefManager.removeCustomVal("genre_thumb")
-                            PrefManager.removeCustomVal("banner_ANIME_time")
-                            PrefManager.removeCustomVal("banner_MANGA_time")
-                            PrefManager.setVal(PrefName.ImageUrl, it.content ?: "")
-                            null
-                        }
-
-                        CommentNotificationWorker.NotificationType.UNKNOWN -> {
-                            null
-                        }
+                        else -> null
                     }
 
                     if (ActivityCompat.checkSelfPermission(
@@ -162,7 +104,7 @@ class CommentNotificationTask : Task {
                         ) == PackageManager.PERMISSION_GRANTED
                     ) {
                         if (notification != null) {
-                                                        NotificationManagerCompat.from(context)
+                            NotificationManagerCompat.from(context)
                                 .notify(
                                     type.id,
                                     System.currentTimeMillis().toInt(),
@@ -199,8 +141,8 @@ class CommentNotificationTask : Task {
     private fun createNotification(
         context: Context,
         notificationType: CommentNotificationWorker.NotificationType,
-        message: String,
-        title: String,
+        message: String
+                val title: String,
         mediaId: Int,
         commentId: Int,
         color: String,
@@ -211,29 +153,6 @@ class CommentNotificationTask : Task {
                     ", message: $message, title: $title, mediaId: $mediaId, commentId: $commentId"
         )
         val notification = when (notificationType) {
-            CommentNotificationWorker.NotificationType.COMMENT_WARNING -> {
-                val intent = Intent(context, MainActivity::class.java).apply {
-                    putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
-                    putExtra("mediaId", mediaId)
-                    putExtra("commentId", commentId)
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                val pendingIntent = PendingIntent.getActivity(
-                    context,
-                    commentId,
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                )
-                val builder = NotificationCompat.Builder(context, notificationType.id)
-                    .setContentTitle(title)
-                    .setContentText(message)
-                    .setSmallIcon(R.drawable.notification_icon)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-                builder.build()
-            }
-
             CommentNotificationWorker.NotificationType.COMMENT_REPLY -> {
                 val intent = Intent(context, MainActivity::class.java).apply {
                     putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
@@ -266,29 +185,7 @@ class CommentNotificationTask : Task {
                 builder.build()
             }
 
-            CommentNotificationWorker.NotificationType.APP_GLOBAL -> {
-                val intent = Intent(context, MainActivity::class.java).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                val pendingIntent = PendingIntent.getActivity(
-                    context,
-                    System.currentTimeMillis().toInt(),
-                    intent,
-                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-                )
-                val builder = NotificationCompat.Builder(context, notificationType.id)
-                    .setContentTitle(title)
-                    .setContentText(message)
-                    .setSmallIcon(R.drawable.notification_icon)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true)
-                builder.build()
-            }
-
-            else -> {
-                null
-            }
+            else -> null
         }
         return notification
     }
