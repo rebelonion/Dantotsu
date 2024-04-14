@@ -129,4 +129,4 @@ jobs:
         pre-release-keep-count: 3
         pre-release-drop-tag: true
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.Vanitas }}
