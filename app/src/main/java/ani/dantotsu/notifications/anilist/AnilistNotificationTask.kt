@@ -53,7 +53,7 @@ class AnilistNotificationTask : Task {
                                     NotificationManagerCompat.from(context)
                                         .notify(
                                             Notifications.CHANNEL_ANILIST,
-                                            System.currentTimeMillis().toInt(),
+                                            it.id,
                                             notification
                                         )
                                 }
@@ -82,6 +82,16 @@ class AnilistNotificationTask : Task {
         notificationId: Int? = null
     ): android.app.Notification {
         val title = "New Anilist Notification"
+        val markAsReadIntent = Intent(context, AnilistNotificationReceiver::class.java).apply {
+            action = AnilistNotificationReceiver.MARK_AS_READ_ACTION
+            putExtra("notificationId", notificationId)
+        }
+        val markAsReadPendingIntent = PendingIntent.getBroadcast(
+            context,
+            notificationId ?: 0,
+            markAsReadIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
@@ -103,6 +113,11 @@ class AnilistNotificationTask : Task {
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
             .setAutoCancel(true)
+            .addAction(
+                R.drawable.ic_mark_as_read,
+                "Mark as Read",
+                markAsReadPendingIntent
+            )
             .build()
     }
 
