@@ -66,6 +66,7 @@ class MediaNameFetch {
             val type = object : TypeToken<MediaResponse>() {}.type
             return gson.fromJson(response, type)
         }
+
         data class ReturnedData(val title: String, val coverImage: String, val color: String)
 
         data class MediaResponse(val data: Map<String, MediaItem>)
