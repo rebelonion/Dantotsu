@@ -2,7 +2,6 @@ package ani.dantotsu.notifications.comment
 
 import kotlinx.serialization.Serializable
 
-
 @Suppress("INAPPROPRIATE_CONST_NAME")
 @Serializable
 data class CommentStore(
