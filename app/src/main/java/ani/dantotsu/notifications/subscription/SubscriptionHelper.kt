@@ -151,7 +151,7 @@ class SubscriptionHelper {
             } else {
                 data.remove(media.id)
             }
-            PrefManager.setCustomVal(SUBSCRIPTIONS, data)
+            PrefManager.setCustomVal(SUBSCRIPTION, data)
         }
     }
 }
