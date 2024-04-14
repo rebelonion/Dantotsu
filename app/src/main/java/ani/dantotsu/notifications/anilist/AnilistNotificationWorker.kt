@@ -19,7 +19,7 @@ class AnilistNotificationWorker(appContext: Context, workerParams: WorkerParamet
     }
 
     companion object {
-        val checkIntervals = arrayOf(0L, 30, 60, 120, 240, 360, 720, 1440)
+        val checkIntervals = arrayOf(0L, 30, 60, 120, 240, 360, 720, 1440) // Update this array as needed
         const val WORK_NAME = "ani.dantotsu.notifications.anilist.AnilistNotificationWorker"
     }
 }
