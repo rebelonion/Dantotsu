@@ -18,7 +18,7 @@ class AnilistNotificationReceiver : BroadcastReceiver() {
             // Handle the mark as read action
             val notificationId = intent.getIntExtra("notificationId", -1)
             Logger.log("Marking notification with ID $notificationId as read...")
-            // TODO: Implement logic to mark notification as read
+            NotificationManager.markNotificationAsRead(notificationId)
             return
         }
 
@@ -35,5 +35,17 @@ class AnilistNotificationReceiver : BroadcastReceiver() {
 
     companion object {
         const val MARK_AS_READ_ACTION = "ani.dantotsu.notifications.anilist.ACTION_MARK_AS_READ"
+    }
+}
+
+object NotificationManager {
+    private val readNotificationIds = mutableSetOf<Int>()
+
+    fun markNotificationAsRead(notificationId: Int) {
+        readNotificationIds.add(notificationId)
+    }
+
+    fun isNotificationRead(notificationId: Int): Boolean {
+        return readNotificationIds.contains(notificationId)
     }
 }
