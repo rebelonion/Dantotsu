@@ -1518,7 +1518,6 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             }
         }
 
-
         //Source
         exoSource.setOnClickListener {
             sourceClick()
@@ -1572,6 +1571,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }.show()
             dialog.window?.setDimAmount(0.8f)
         } else buildExoplayer()
+
+        val isDisabled = (subtitle == null && hasExtSubtitles)
+        exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+            .buildUpon()
+            .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
+            .build()
     }
 
     private fun buildExoplayer() {
@@ -1912,16 +1917,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 }
                 TRACK_TYPE_TEXT -> {
                     if (!hasExtSubtitles) {
-                        if (
-                            it.isSupported(true) &&
-                            it.mediaTrackGroup.id != "Dummy Track"
-                            ) subTracks.add(it)
+                        if (it.isSupported(true)) subTracks.add(it)
                         return@forEach
-                    }
-                    if (it.mediaTrackGroup.id == "1:") {
-                        onSetTrackGroupOverride(it, TRACK_TYPE_TEXT, it.length - 1)
-                    } else {
-                        onSetTrackGroupOverride(dummyTrack, TRACK_TYPE_TEXT)
                     }
                 }
             }
