@@ -62,8 +62,8 @@ class MangaUpdates {
                 }?.awaitAll()
                 res.results?.first {
                     it.metadata.series.lastUpdated?.timestamp != null
-                            && (it.metadata.series.latestChapter != null
-                            || (it.record.volume.isNullOrBlank() && it.record.chapter != null))
+                            && it.metadata.series.latestChapter != null
+                            || it.record.volume.isNullOrBlank() && it.record.chapter != null
                 }
             }
         }
