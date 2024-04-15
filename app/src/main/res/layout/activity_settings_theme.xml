@@ -180,22 +180,6 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <View
-            android:id="@+id/themeDivider1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:background="?android:attr/listDivider" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/poppins_bold"
-            android:gravity="center"
-            android:padding="16dp"
-            android:text="@string/requires_android_12"
-            android:textColor="?attr/colorSecondary" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsUseMaterialYou"
@@ -210,10 +194,12 @@
             android:text="@string/use_material_you"
             android:textAlignment="viewStart"
             android:textColor="?attr/colorOnBackground"
+            android:visibility="gone"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
+            app:thumbTint="@color/button_switch_track"
+            tools:visibility="visible" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsUseSourceTheme"
@@ -229,18 +215,23 @@
             android:text="@string/use_unique_theme_for_each_item"
             android:textAlignment="viewStart"
             android:textColor="?attr/colorOnBackground"
+            android:visibility="gone"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
+            app:thumbTint="@color/button_switch_track"
+            tools:visibility="visible" />
 
         <TextView
+            android:id="@+id/customThemeTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="-11dp"
             android:alpha="0.58"
             android:fontFamily="@font/poppins_bold"
-            android:text="@string/custom_theme" />
+            android:text="@string/custom_theme"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsUseCustomTheme"
@@ -255,10 +246,12 @@
             android:text="@string/use_custom_theme"
             android:textAlignment="viewStart"
             android:textColor="?attr/colorOnBackground"
+            android:visibility="gone"
             app:cornerRadius="0dp"
             app:drawableTint="?attr/colorPrimary"
             app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
+            app:thumbTint="@color/button_switch_track"
+            tools:visibility="visible" />
 
         <Button
             android:id="@+id/customTheme"
@@ -278,11 +271,13 @@
             android:textAlignment="viewStart"
             android:textAllCaps="false"
             android:textColor="?attr/colorOnBackground"
+            android:visibility="gone"
             app:cornerRadius="0dp"
             app:icon="@drawable/ic_round_color_picker_24"
             app:iconPadding="16dp"
             app:iconSize="24dp"
-            app:iconTint="?attr/colorPrimary" />
+            app:iconTint="?attr/colorPrimary"
+            tools:visibility="visible" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
