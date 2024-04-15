@@ -10,6 +10,7 @@ import eu.kanade.tachiyomi.animesource.model.AnimesPage
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.animesource.model.SEpisode
 import eu.kanade.tachiyomi.util.storage.DiskUtil
+import kotlinx.coroutines.runBlocking
 import rx.Observable
 import tachiyomi.core.util.lang.withIOContext
 import tachiyomi.domain.entries.anime.model.Anime
@@ -35,17 +36,21 @@ class LocalAnimeSource(
     override val supportsLatest = true
 
     // Browse related
+    override suspend fun getPopularAnime(page: Int) = getSearchAnime(page, "", POPULAR_FILTERS)
+
+    override suspend fun getLatestUpdates(page: Int) = getSearchAnime(page, "", LATEST_FILTERS)
+
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getPopularAnime"))
     override fun fetchPopularAnime(page: Int) = fetchSearchAnime(page, "", POPULAR_FILTERS)
 
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getLatestUpdates"))
     override fun fetchLatestUpdates(page: Int) = fetchSearchAnime(page, "", LATEST_FILTERS)
 
-    override fun fetchSearchAnime(
-        page: Int,
-        query: String,
-        filters: AnimeFilterList
-    ): Observable<AnimesPage> {
-        //return emptyObservable()
-        return Observable.just(AnimesPage(emptyList(), false))
+    @Deprecated("Use the non-RxJava API instead", replaceWith = ReplaceWith("getSearchAnime"))
+    override fun fetchSearchAnime(page: Int, query: String, filters: AnimeFilterList): Observable<AnimesPage> {
+        return runBlocking {
+            Observable.just(getSearchAnime(page, query, filters))
+        }
     }
 
     // Anime details related

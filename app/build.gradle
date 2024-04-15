@@ -88,9 +88,9 @@ android {
 dependencies {
 
 //  FireBase
-    googleImplementation platform('com.google.firebase:firebase-bom:32.7.4')
-    googleImplementation 'com.google.firebase:firebase-analytics-ktx:21.5.1'
-    googleImplementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.2'
+    googleImplementation platform('com.google.firebase:firebase-bom:32.8.1')
+    googleImplementation 'com.google.firebase:firebase-analytics-ktx:21.6.2'
+    googleImplementation 'com.google.firebase:firebase-crashlytics-ktx:18.6.4'
 //  Core
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.browser:browser:1.8.0'
@@ -118,7 +118,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
 
 //  Exoplayer
-    ext.exo_version = '1.3.0'
+    ext.exo_version = '1.3.1'
     implementation "androidx.media3:media3-exoplayer:$exo_version"
     implementation "androidx.media3:media3-ui:$exo_version"
     implementation "androidx.media3:media3-exoplayer-hls:$exo_version"
@@ -138,7 +138,7 @@ dependencies {
     implementation 'com.github.VipulOG:ebook-reader:0.1.6'
     implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
     implementation 'com.github.eltos:simpledialogfragments:v3.7'
-    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:93972bc'
+    implementation 'com.github.AAChartModel:AAChartCore-Kotlin:7.2.1'
 
 //  Markwon
     ext.markwon_version = '4.6.2'
