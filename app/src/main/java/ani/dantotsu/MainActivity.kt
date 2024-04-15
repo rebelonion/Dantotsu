@@ -299,6 +299,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        var launched = false
         intent.extras?.let { extras ->
             val fragmentToLoad = extras.getString("FRAGMENT_TO_LOAD")
             val mediaId = extras.getInt("mediaId", -1)
@@ -311,6 +312,7 @@ class MainActivity : AppCompatActivity() {
                     putExtra("mediaId", mediaId)
                     putExtra("commentId", commentId)
                 }
+                launched = true
                 startActivity(detailIntent)
             } else if (fragmentToLoad == "FEED" && activityId != -1) {
                 val feedIntent = Intent(this, FeedActivity::class.java).apply {
@@ -318,6 +320,7 @@ class MainActivity : AppCompatActivity() {
                     putExtra("activityId", activityId)
 
                 }
+                launched = true
                 startActivity(feedIntent)
             } else if (fragmentToLoad == "NOTIFICATIONS" && activityId != -1) {
                 Logger.log("MainActivity, onCreate: $activityId")
@@ -325,6 +328,7 @@ class MainActivity : AppCompatActivity() {
                     putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
                     putExtra("activityId", activityId)
                 }
+                launched = true
                 startActivity(notificationIntent)
             }
         }
@@ -378,7 +382,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 //Load Data
-                if (!load) {
+                if (!load && !launched) {
                     scope.launch(Dispatchers.IO) {
                         model.loadMain(this@MainActivity)
                         val id = intent.extras?.getInt("mediaId", 0)
