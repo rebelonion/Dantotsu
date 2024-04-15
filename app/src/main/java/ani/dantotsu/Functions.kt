@@ -148,6 +148,7 @@ import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
+import java.lang.Thread.sleep
 import java.lang.reflect.Field
 import java.util.Calendar
 import java.util.TimeZone
@@ -303,7 +304,6 @@ fun Activity.reloadActivity() {
     Refresh.all()
     finish()
     startActivity(Intent(this, this::class.java))
-    initActivity(this)
 }
 
 fun Context.restartApp(view: View) {
@@ -325,6 +325,13 @@ fun Context.restartApp(view: View) {
     }
 }
 
+fun Activity.restartAppWithoutPrompt() {
+    sleep(150)
+    Runtime.getRuntime().exit(0)
+    Refresh.all()
+    finish()
+    startActivity(Intent(this, this::class.java))
+}
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
     override fun onStart() {
         super.onStart()

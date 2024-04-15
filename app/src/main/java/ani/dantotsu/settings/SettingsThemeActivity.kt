@@ -13,6 +13,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.reloadActivity
 import ani.dantotsu.restartApp
+import ani.dantotsu.restartAppWithoutPrompt
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -23,7 +24,6 @@ import eltos.simpledialogfragment.color.SimpleColorDialog
 
 class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListener {
     private lateinit var binding: ActivitySettingsThemeBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -86,14 +86,14 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                         ThemeManager.Companion.Theme.entries[i].theme
                     )
                     clearFocus()
-                    restartApp(binding.root)
+                    restartAppWithoutPrompt()
                 }
             }
             settingsUseOLED.apply {
                 isChecked = PrefManager.getVal(PrefName.UseOLED)
                 setOnCheckedChangeListener { _, isChecked ->
                     PrefManager.setVal(PrefName.UseOLED, isChecked)
-                    restartApp(binding.root)
+                    restartAppWithoutPrompt()
                 }
             }
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
@@ -103,7 +103,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                     setOnCheckedChangeListener { _, isChecked ->
                         PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
                         if (isChecked) settingsUseCustomTheme.isChecked = false
-                        restartApp(binding.root)
+                        restartAppWithoutPrompt()
                     }
                     visibility = View.VISIBLE
                 }
@@ -112,7 +112,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                     isChecked = PrefManager.getVal(PrefName.UseSourceTheme)
                     setOnCheckedChangeListener { _, isChecked ->
                         PrefManager.setVal(PrefName.UseSourceTheme, isChecked)
-                        restartApp(binding.root)
+                        restartAppWithoutPrompt()
                     }
                     visibility = View.VISIBLE
                 }
