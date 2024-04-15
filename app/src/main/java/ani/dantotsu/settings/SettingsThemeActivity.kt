@@ -1,5 +1,6 @@
 package ani.dantotsu.settings
 
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -16,9 +17,11 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.Logger
+import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.color.SimpleColorDialog
 
-class SettingsThemeActivity : AppCompatActivity() {
+class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListener {
     private lateinit var binding: ActivitySettingsThemeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,78 +37,6 @@ class SettingsThemeActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
             themeSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
-
-            settingsUseMaterialYou.apply {
-                isChecked = PrefManager.getVal(PrefName.UseMaterialYou)
-
-                setOnCheckedChangeListener { _, isChecked ->
-                    PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
-                    if (isChecked) settingsUseCustomTheme.isChecked = false
-                    restartApp(binding.root)
-                }
-            }
-
-            settingsUseCustomTheme.isChecked = PrefManager.getVal(PrefName.UseCustomTheme)
-            settingsUseCustomTheme.setOnCheckedChangeListener { _, isChecked ->
-                PrefManager.setVal(PrefName.UseCustomTheme, isChecked)
-                if (isChecked) {
-                    settingsUseMaterialYou.isChecked = false
-                }
-
-                restartApp(binding.root)
-            }
-
-            settingsUseSourceTheme.isChecked = PrefManager.getVal(PrefName.UseSourceTheme)
-            settingsUseSourceTheme.setOnCheckedChangeListener { _, isChecked ->
-                PrefManager.setVal(PrefName.UseSourceTheme, isChecked)
-                restartApp(binding.root)
-            }
-
-            settingsUseOLED.isChecked = PrefManager.getVal(PrefName.UseOLED)
-            settingsUseOLED.setOnCheckedChangeListener { _, isChecked ->
-                PrefManager.setVal(PrefName.UseOLED, isChecked)
-                restartApp(binding.root)
-            }
-
-            val themeString: String = PrefManager.getVal(PrefName.Theme)
-            val themeText = themeString.substring(0, 1) + themeString.substring(1).lowercase()
-            themeSwitcher.setText(themeText)
-
-            themeSwitcher.setAdapter(
-                ArrayAdapter(context,
-                    R.layout.item_dropdown,
-                    ThemeManager.Companion.Theme.entries.map {
-                        it.theme.substring(
-                            0,
-                            1
-                        ) + it.theme.substring(1).lowercase()
-                    })
-            )
-
-            themeSwitcher.setOnItemClickListener { _, _, i, _ ->
-                PrefManager.setVal(PrefName.Theme, ThemeManager.Companion.Theme.entries[i].theme)
-                //ActivityHelper.shouldRefreshMainActivity = true
-                themeSwitcher.clearFocus()
-                restartApp(binding.root)
-            }
-
-            customTheme.setOnClickListener {
-                val originalColor: Int = PrefManager.getVal(PrefName.CustomThemeInt)
-
-                class CustomColorDialog : SimpleColorDialog() { //idk where to put it
-                    override fun onPositiveButtonClick() {
-                        restartApp(binding.root)
-                        super.onPositiveButtonClick()
-                    }
-                }
-
-                val tag = "colorPicker"
-                CustomColorDialog().title(R.string.custom_theme).colorPreset(originalColor)
-                    .colors(context, SimpleColorDialog.MATERIAL_COLOR_PALLET)
-                    .allowCustom(true).showOutline(0x46000000).gridNumColumn(5)
-                    .choiceMode(SimpleColorDialog.SINGLE_CHOICE).neg()
-                    .show(context, tag)
-            }
 
             var previous: View = when (PrefManager.getVal<Int>(PrefName.DarkMode)) {
                 0 -> settingsUiAuto
@@ -134,6 +65,100 @@ class SettingsThemeActivity : AppCompatActivity() {
             settingsUiDark.setOnClickListener {
                 uiTheme(2, it)
             }
+
+            val themeString: String = PrefManager.getVal(PrefName.Theme)
+            val themeText = themeString.substring(0, 1) + themeString.substring(1).lowercase()
+            themeSwitcher.apply {
+                setText(themeText)
+                setAdapter(
+                    ArrayAdapter(context,
+                        R.layout.item_dropdown,
+                        ThemeManager.Companion.Theme.entries.map {
+                            it.theme.substring(
+                                0,
+                                1
+                            ) + it.theme.substring(1).lowercase()
+                        })
+                )
+                setOnItemClickListener { _, _, i, _ ->
+                    PrefManager.setVal(
+                        PrefName.Theme,
+                        ThemeManager.Companion.Theme.entries[i].theme
+                    )
+                    clearFocus()
+                    restartApp(binding.root)
+                }
+            }
+            settingsUseOLED.apply {
+                isChecked = PrefManager.getVal(PrefName.UseOLED)
+                setOnCheckedChangeListener { _, isChecked ->
+                    PrefManager.setVal(PrefName.UseOLED, isChecked)
+                    restartApp(binding.root)
+                }
+            }
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
+
+                settingsUseMaterialYou.apply {
+                    isChecked = PrefManager.getVal(PrefName.UseMaterialYou)
+                    setOnCheckedChangeListener { _, isChecked ->
+                        PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
+                        if (isChecked) settingsUseCustomTheme.isChecked = false
+                        restartApp(binding.root)
+                    }
+                    visibility = View.VISIBLE
+                }
+
+                settingsUseSourceTheme.apply {
+                    isChecked = PrefManager.getVal(PrefName.UseSourceTheme)
+                    setOnCheckedChangeListener { _, isChecked ->
+                        PrefManager.setVal(PrefName.UseSourceTheme, isChecked)
+                        restartApp(binding.root)
+                    }
+                    visibility = View.VISIBLE
+                }
+                settingsUseCustomTheme.apply {
+                    isChecked = PrefManager.getVal(PrefName.UseCustomTheme)
+                    setOnCheckedChangeListener { _, isChecked ->
+                        PrefManager.setVal(PrefName.UseCustomTheme, isChecked)
+                        if (isChecked) {
+                            settingsUseMaterialYou.isChecked = false
+                        }
+                        restartApp(binding.root)
+                    }
+                    visibility = View.VISIBLE
+                }
+
+                customTheme.apply {
+                    setOnClickListener {
+                        val originalColor: Int = PrefManager.getVal(PrefName.CustomThemeInt)
+                        class CustomColorDialog : SimpleColorDialog() {
+                            override fun onPositiveButtonClick() {
+                                restartApp(binding.root)
+                                super.onPositiveButtonClick()
+                            }
+                        }
+                        val tag = "colorPicker"
+                        CustomColorDialog().title(R.string.custom_theme).colorPreset(originalColor)
+                            .colors(context, SimpleColorDialog.MATERIAL_COLOR_PALLET)
+                            .allowCustom(true).showOutline(0x46000000).gridNumColumn(5)
+                            .choiceMode(SimpleColorDialog.SINGLE_CHOICE).neg()
+                            .show(context, tag)
+                    }
+                    visibility = View.VISIBLE
+                }
+                customThemeTitle.visibility = View.VISIBLE
+            }
         }
+    }
+
+    override fun onResult(dialogTag: String, which: Int, extras: Bundle): Boolean {
+        if (which == SimpleDialog.OnDialogResultListener.BUTTON_POSITIVE) {
+            if (dialogTag == "colorPicker") {
+                val color = extras.getInt(SimpleColorDialog.COLOR)
+                PrefManager.setVal(PrefName.CustomThemeInt, color)
+                Logger.log("Custom Theme: $color")
+            }
+        }
+        return true
     }
 }
