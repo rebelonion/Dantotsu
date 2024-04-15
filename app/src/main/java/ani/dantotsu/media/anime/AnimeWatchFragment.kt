@@ -36,6 +36,7 @@ import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.compareName
 import ani.dantotsu.download.anime.AnimeDownloaderService
 import ani.dantotsu.dp
+import ani.dantotsu.isOnline
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
@@ -198,10 +199,15 @@ class AnimeWatchFragment : Fragment() {
                         ConcatAdapter(headerAdapter, episodeAdapter)
 
                     lifecycleScope.launch(Dispatchers.IO) {
-                        awaitAll(
-                            async { model.loadKitsuEpisodes(media) },
-                            async { model.loadFillerEpisodes(media) }
-                        )
+                        val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
+                        if (offline) {
+                            media.selected!!.sourceIndex = model.watchSources!!.list.lastIndex
+                        } else {
+                            awaitAll(
+                                async { model.loadKitsuEpisodes(media) },
+                                async { model.loadFillerEpisodes(media) }
+                            )
+                        }
                         model.loadEpisodes(media, media.selected!!.sourceIndex)
                     }
                     loaded = true

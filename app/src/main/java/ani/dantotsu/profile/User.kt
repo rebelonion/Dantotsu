@@ -1,5 +1,8 @@
 package ani.dantotsu.profile
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class User(
     val id: Int,
     val name: String,
@@ -11,4 +14,8 @@ data class User(
     val progress: Int? = null,
     val totalEpisodes : Int? = null,
     val nextAiringEpisode : Int? = null,
-)
+) : java.io.Serializable {
+    companion object {
+        private const val serialVersionUID: Long = 1
+    }
+}

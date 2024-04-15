@@ -38,6 +38,7 @@ import ani.dantotsu.download.DownloadsManager.Companion.compareName
 import ani.dantotsu.download.manga.MangaDownloaderService
 import ani.dantotsu.download.manga.MangaServiceDataSingleton
 import ani.dantotsu.dp
+import ani.dantotsu.isOnline
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
@@ -202,6 +203,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                             ConcatAdapter(headerAdapter, chapterAdapter)
 
                         lifecycleScope.launch(Dispatchers.IO) {
+                            val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
+                            if (offline) media.selected!!.sourceIndex = model.mangaReadSources!!.list.lastIndex
                             model.loadMangaChapters(media, media.selected!!.sourceIndex)
                         }
                         loaded = true

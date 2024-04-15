@@ -65,7 +65,7 @@ class StoragePermissions {
                                                 force: Boolean = false,
                                                 complete: (Boolean) -> Unit
         ) {
-            if ((PrefManager.getVal<String>(PrefName.DownloadsDir).isNotEmpty() || hasDirAccess(this)) && !force) {
+            if (hasDirAccess(this) && !force) {
                 complete(true)
                 return
             }
