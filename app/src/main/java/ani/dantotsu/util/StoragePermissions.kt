@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import ani.dantotsu.R
+import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toast
@@ -110,6 +111,7 @@ class LauncherWrapper(
 
                 if (StoragePermissions.hasDirAccess(activity, uri)) {
                     PrefManager.setVal(PrefName.DownloadsDir, uri.toString())
+                    DownloadsManager.addNoMedia(activity)
                     complete(true)
                 } else {
                     toast(activity.getString(R.string.dir_error))

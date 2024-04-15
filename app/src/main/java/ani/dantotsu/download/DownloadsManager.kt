@@ -319,6 +319,19 @@ class DownloadsManager(private val context: Context) {
             return size
         }
 
+        fun addNoMedia(context: Context) {
+            val baseDirectory = getBaseDirectory(context) ?: return
+            if (baseDirectory.findFile(".nomedia") == null) {
+                baseDirectory.createFile("application/octet-stream", ".nomedia")
+            }
+        }
+
+        private fun getBaseDirectory(context: Context): DocumentFile? {
+            val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
+            if (baseDirectory == Uri.EMPTY) return null
+            return DocumentFile.fromTreeUri(context, baseDirectory)
+        }
+
         private fun DocumentFile.findOrCreateFolder(
             name: String, overwrite: Boolean
         ): DocumentFile? {
