@@ -17,7 +17,7 @@ class Forks {
     fun getForks(): Array<Developer> {
         var forks = arrayOf<Developer>()
         runBlocking(Dispatchers.IO) {
-            val res = client.get("https://api.github.com/repos/rebelonion/Dantotsu/forks")
+            val res = client.get("https://api.github.com/repos/rebelonion/Dantotsu/forks?sort=stargazers")
                 .parsed<JsonArray>().map {
                     Mapper.json.decodeFromJsonElement<GithubResponse>(it)
                 }
