@@ -35,10 +35,10 @@ import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.DynamicMangaParser
 import ani.dantotsu.parsers.MangaReadSources
 import ani.dantotsu.parsers.MangaSources
-import ani.dantotsu.px
 import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.sinceWhen
 import ani.dantotsu.toast
 import com.google.android.material.chip.Chip
 import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_SUBSCRIPTION_CHECK
@@ -53,7 +53,6 @@ class MangaReadAdapter(
     private val fragment: MangaReadFragment,
     private val mangaReadSources: MangaReadSources
 ) : RecyclerView.Adapter<MangaReadAdapter.ViewHolder>() {
-
     var subscribe: MediaDetailsActivity.PopImageButton? = null
     private var _binding: ItemAnimeWatchBinding? = null
     val hiddenScanlators = mutableListOf<String>()
@@ -229,7 +228,7 @@ class MangaReadAdapter(
                         refresh = true
                         val intent = Intent(fragment.requireContext(), CookieCatcher::class.java)
                             .putExtra("url", url)
-                        ContextCompat.startActivity(fragment.requireContext(), intent, null)
+                        startActivity(fragment.requireContext(), intent, null)
                     }
                 }
             }
@@ -367,7 +366,7 @@ class MangaReadAdapter(
     fun updateChips(limit: Int, names: Array<String>, arr: Array<Int>, selected: Int = 0) {
         val binding = _binding
         if (binding != null) {
-            val screenWidth = fragment.screenWidth.px
+            val screenWidth = fragment.resources.displayMetrics.widthPixels
             var select: Chip? = null
             for (position in arr.indices) {
                 val last = if (position + 1 == arr.size) names.size else (limit * (position + 1))
@@ -485,9 +484,8 @@ class MangaReadAdapter(
                     binding.animeSourceContinue.visibility = View.GONE
                 }
                 binding.animeSourceProgressBar.visibility = View.GONE
+
                 val sourceFound = media.manga.chapters!!.isNotEmpty()
-                binding.animeSourceNotFound.isGone = sourceFound
-                binding.faqbutton.isGone = sourceFound
                 if (!sourceFound && PrefManager.getVal(PrefName.SearchSources)) {
                     if (binding.animeSource.adapter.count > media.selected!!.sourceIndex + 1) {
                         val nextIndex = media.selected!!.sourceIndex + 1
@@ -504,6 +502,8 @@ class MangaReadAdapter(
                         fragment.loadChapters(nextIndex, invalidate)
                     }
                 }
+                binding.animeSourceNotFound.isGone = sourceFound
+                binding.faqbutton.isGone = sourceFound
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE
@@ -523,16 +523,19 @@ class MangaReadAdapter(
                     ext.sourceLanguage = lang
                 }
                 try {
-                    binding?.animeSourceLanguage?.setText(parser.extension.sources[lang].lang)
+                    binding?.animeSourceLanguage?.setText(
+                        LanguageMapper.getExtensionItem(parser.extension.sources[lang]))
                 } catch (e: IndexOutOfBoundsException) {
                     binding?.animeSourceLanguage?.setText(
-                        parser.extension.sources.firstOrNull()?.lang ?: "Unknown"
+                        parser.extension.sources.firstOrNull()?.let {
+                            LanguageMapper.getExtensionItem(it)
+                        } ?: "Unknown"
                     )
                 }
                 val adapter = ArrayAdapter(
                     fragment.requireContext(),
                     R.layout.item_dropdown,
-                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    parser.extension.sources.map { LanguageMapper.getExtensionItem(it) }
                 )
                 val items = adapter.count
                 binding?.animeSourceLanguageContainer?.isVisible = items > 1
@@ -546,7 +549,11 @@ class MangaReadAdapter(
     override fun getItemCount(): Int = 1
 
     inner class ViewHolder(val binding: ItemAnimeWatchBinding) :
-        RecyclerView.ViewHolder(binding.root)
+        RecyclerView.ViewHolder(binding.root) {
+        init {
+            sinceWhen(media, binding.animeSourceContainer)
+        }
+    }
 }
 
 interface ScanlatorSelectionListener {
