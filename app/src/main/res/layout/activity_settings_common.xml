@@ -10,15 +10,12 @@
         android:id="@+id/settingsCommonLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp">
-
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             app:cardBackgroundColor="@color/nav_bg_inv"
             app:cardCornerRadius="16dp"
@@ -44,7 +41,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="32dp"
+                android:layout_margin="32dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/common"
@@ -53,7 +50,8 @@
             <ImageView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:layout_gravity="center"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
                 android:padding="24dp"
                 app:srcCompat="@drawable/ic_lightbulb_24"
                 app:tint="?attr/colorOnBackground"
@@ -65,6 +63,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -133,87 +132,10 @@
             </androidx.cardview.widget.CardView>
         </LinearLayout>
 
-        <Button
-            android:id="@+id/settingsUi"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="-31dp"
-            android:layout_marginEnd="-31dp"
-            android:background="@drawable/ui_bg"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
-            android:text="@string/ui_settings"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:icon="@drawable/ic_round_auto_awesome_24"
-            app:iconPadding="16dp"
-            app:iconSize="24dp"
-            app:iconTint="?attr/colorPrimary" />
-
-        <Button
-            android:id="@+id/settingsDownloadManager"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="-31dp"
-            android:layout_marginEnd="-31dp"
-            android:background="@drawable/ui_bg"
-            android:backgroundTint="?attr/colorSecondary"
-            android:backgroundTintMode="src_atop"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
-            android:text="@string/download_manager_select"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:icon="@drawable/ic_download_24"
-            app:iconPadding="16dp"
-            app:iconSize="24dp"
-            app:iconTint="?attr/colorPrimary" />
-
-        <Button
-            android:id="@+id/importExportSettings"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="-31dp"
-            android:layout_marginEnd="-31dp"
-            android:background="@drawable/ui_bg"
-            android:backgroundTint="?attr/colorSecondary"
-            android:backgroundTintMode="src_atop"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
-            android:text="@string/backup_restore"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:icon="@drawable/backup_restore"
-            app:iconPadding="16dp"
-            app:iconSize="24dp"
-            app:iconTint="?attr/colorPrimary" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="-16dp"
-            android:layout_marginEnd="-16dp"
-            android:layout_marginBottom="16dp"
-            android:background="?android:attr/listDivider" />
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
             android:alpha="0.58"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/selected_dns" />
@@ -222,6 +144,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
             android:layout_marginBottom="8dp"
             app:boxCornerRadiusBottomEnd="8dp"
             app:boxCornerRadiusBottomStart="8dp"
@@ -246,101 +169,15 @@
                 tools:ignore="LabelFor,TextContrastCheck,DuplicateSpeakableTextCheck" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/settingsContinueMedia"
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/settingsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:drawableStart="@drawable/ic_round_play_disabled_24"
-            android:drawablePadding="16dp"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/poppins_bold"
-            android:minHeight="64dp"
-            android:text="@string/always_continue_content"
-            android:textAlignment="viewStart"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:drawableTint="?attr/colorPrimary"
-            app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/settingsSearchSources"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:drawableStart="@drawable/ic_round_search_sources_24"
-            android:drawablePadding="16dp"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/poppins_bold"
-            android:minHeight="64dp"
-            android:text="@string/search_source_list"
-            android:textAlignment="viewStart"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:drawableTint="?attr/colorPrimary"
-            app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/settingsRecentlyListOnly"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:drawableStart="@drawable/ic_round_new_releases_24"
-            android:drawablePadding="16dp"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/poppins_bold"
-            android:minHeight="64dp"
-            android:text="@string/recentlyListOnly"
-            android:textAlignment="viewStart"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:drawableTint="?attr/colorPrimary"
-            app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/settingsAdultAnimeOnly"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:drawableStart="@drawable/ic_round_nsfw_24"
-            android:drawablePadding="16dp"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/poppins_bold"
-            android:minHeight="64dp"
-            android:text="@string/adult_only_content"
-            android:textAlignment="viewStart"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:drawableTint="?attr/colorPrimary"
-            app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
-
-        <Button
-            android:id="@+id/settingsDownloadLocation"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="-31dp"
-            android:layout_marginEnd="-31dp"
-            android:background="@drawable/ui_bg"
-            android:backgroundTint="?attr/colorSecondary"
-            android:backgroundTintMode="src_atop"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
-            android:text="@string/change_download_location"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:icon="@drawable/ic_round_source_24"
-            app:iconPadding="16dp"
-            app:iconSize="24dp"
-            app:iconTint="?attr/colorPrimary" />
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="16dp"
+            android:nestedScrollingEnabled="false"
+            android:requiresFadingEdge="vertical"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_settings" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

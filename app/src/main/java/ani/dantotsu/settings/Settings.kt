@@ -1,10 +1,18 @@
 package ani.dantotsu.settings
 
-import android.app.Activity
+import ani.dantotsu.databinding.ItemSettingsBinding
+import ani.dantotsu.databinding.ItemSettingsSwitchBinding
+import java.lang.reflect.Array
 
 data class Settings(
+    val type: Int,
     val name : String,
-    val icon : Int,
     val desc: String,
-    val activity: Class<out Activity>
+    val icon : Int,
+    val onClick: ((ItemSettingsBinding) -> Unit)? = null,
+    val onLongClick: (() -> Unit)? = null,
+    var isChecked : Boolean = false,
+    val switch: ((isChecked:Boolean , view: ItemSettingsSwitchBinding ) -> Unit)? = null,
+    val isVisible: Boolean = true,
+    val isActivity: Boolean = false
 )

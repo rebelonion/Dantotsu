@@ -19,40 +19,37 @@
         tools:ignore="ContentDescription" />
 
     <LinearLayout
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:minHeight="44sp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/settingsTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/settingsButton"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:checked="false"
+            android:elegantTextHeight="true"
+            android:layout_marginEnd="24dp"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/name"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textAlignment="viewStart"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:drawableTint="?attr/colorPrimary"
+            app:showText="false"
+            app:thumbTint="@color/button_switch_track" />
 
         <TextView
             android:id="@+id/settingsDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="64dp"
             android:alpha="0.66"
             android:fontFamily="@font/poppins_semi_bold"
             android:text="@string/slogan"
             android:textColor="?attr/colorOnSurfaceVariant" />
 
     </LinearLayout>
-    <ImageView
-        android:id="@+id/settingsIconRight"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="16dp"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
-        app:tint="?attr/colorPrimary"
-        android:rotation="180"
-        tools:ignore="ContentDescription" />
 </LinearLayout>

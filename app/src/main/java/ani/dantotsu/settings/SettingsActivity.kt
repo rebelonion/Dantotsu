@@ -1,5 +1,6 @@
 package ani.dantotsu.settings
 
+import android.content.Intent
 import android.graphics.drawable.Animatable
 import android.os.Build.BRAND
 import android.os.Build.DEVICE
@@ -75,61 +76,93 @@ class SettingsActivity : AppCompatActivity() {
                 onBackPressedDispatcher.onBackPressed()
             }
 
-
-            val settings = arrayListOf(
-                Settings(
-                    getString(R.string.accounts),
-                    R.drawable.ic_round_person_24,
-                    getString(R.string.accounts_desc),
-                    SettingsAccountActivity::class.java
-                ),
-                Settings(
-                    getString(R.string.theme),
-                    R.drawable.ic_palette,
-                    getString(R.string.theme_desc),
-                    SettingsThemeActivity::class.java
-                ),
-                Settings(
-                    getString(R.string.common),
-                    R.drawable.ic_lightbulb_24,
-                    getString(R.string.common_desc),
-                    SettingsCommonActivity::class.java
-                ),
-                Settings(
-                    getString(R.string.anime),
-                    R.drawable.ic_round_movie_filter_24,
-                    getString(R.string.anime_desc),
-                    SettingsAnimeActivity::class.java
-                ),
-                Settings(
-                    getString(R.string.manga),
-                    R.drawable.ic_round_import_contacts_24,
-                    getString(R.string.manga_desc),
-                    SettingsMangaActivity::class.java
-                ),
-                Settings(
-                    getString(R.string.extensions),
-                    R.drawable.ic_extension,
-                    getString(R.string.extensions_desc),
-                    SettingsExtensionsActivity::class.java
-                ),
-                Settings(
-                    getString(R.string.notifications),
-                    R.drawable.ic_round_notifications_none_24,
-                    getString(R.string.notifications_desc),
-                    SettingsNotificationActivity::class.java
-                ),
-                Settings(
-                    getString(R.string.about),
-                    R.drawable.ic_round_info_24,
-                    getString(R.string.about_desc),
-                    SettingsAboutActivity::class.java
-                ),
+            binding.settingsRecyclerView.adapter = SettingsAdapter(
+                arrayListOf(
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.accounts),
+                        desc = getString(R.string.accounts_desc),
+                        icon = R.drawable.ic_round_person_24,
+                        onClick = {
+                            startActivity(Intent(context, SettingsAccountActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.theme),
+                        desc = getString(R.string.theme_desc),
+                        icon = R.drawable.ic_palette,
+                        onClick = {
+                            startActivity(Intent(context, SettingsThemeActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.common),
+                        desc = getString(R.string.common_desc),
+                        icon = R.drawable.ic_lightbulb_24,
+                        onClick = {
+                            startActivity(Intent(context, SettingsCommonActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.anime),
+                        desc = getString(R.string.anime_desc),
+                        icon = R.drawable.ic_round_movie_filter_24,
+                        onClick = {
+                            startActivity(Intent(context, SettingsAnimeActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.manga),
+                        desc = getString(R.string.manga_desc),
+                        icon = R.drawable.ic_round_import_contacts_24,
+                        onClick = {
+                            startActivity(Intent(context, SettingsMangaActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.extensions),
+                        desc = getString(R.string.extensions_desc),
+                        icon = R.drawable.ic_extension,
+                        onClick = {
+                            startActivity(Intent(context, SettingsExtensionsActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.notifications),
+                        desc = getString(R.string.notifications_desc),
+                        icon = R.drawable.ic_round_notifications_none_24,
+                        onClick = {
+                            startActivity(Intent(context, SettingsNotificationActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.about),
+                        desc = getString(R.string.about_desc),
+                        icon = R.drawable.ic_round_info_24,
+                        onClick = {
+                            startActivity(Intent(context, SettingsAboutActivity::class.java))
+                        },
+                        isActivity = true
+                    )
+                )
             )
 
             settingsRecyclerView.apply {
                 layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-                adapter = SettingsAdapter(settings)
                 setHasFixedSize(true)
             }
 

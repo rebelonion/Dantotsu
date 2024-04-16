@@ -2,28 +2,22 @@ package ani.dantotsu.settings
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
-import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivitySettingsAboutBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.util.Logger
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class SettingsAboutActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAboutBinding
@@ -43,84 +37,91 @@ class SettingsAboutActivity : AppCompatActivity() {
             }
             aboutSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
-            settingsDev.setOnClickListener {
-                DevelopersDialogFragment().show(supportFragmentManager, "dialog")
-            }
-            settingsForks.setOnClickListener {
-                ForksDialogFragment().show(supportFragmentManager, "dialog")
-            }
-            settingsDisclaimer.setOnClickListener {
-                val text = TextView(context)
-                text.setText(R.string.full_disclaimer)
-
-                CustomBottomDialog.newInstance().apply {
-                    setTitleText(context.getString(R.string.disclaimer))
-                    addView(text)
-                    setNegativeButton(context.getString(R.string.close)) {
-                        dismiss()
-                    }
-                    show(supportFragmentManager, "dialog")
-                }
-            }
-
-            settingsFAQ.setOnClickListener {
-                startActivity(Intent(context, FAQActivity::class.java))
-            }
-
-            if (!BuildConfig.FLAVOR.contains("fdroid")) {
-
-                settingsCheckUpdate.apply {
-                    isChecked = PrefManager.getVal(PrefName.CheckUpdate)
-
-                    setOnCheckedChangeListener { _, isChecked ->
-                        PrefManager.setVal(PrefName.CheckUpdate, isChecked)
-                        if (!isChecked) {
-                            snackString(getString(R.string.long_click_to_check_update))
+            settingsRecyclerView.adapter = SettingsAdapter(
+                arrayListOf(
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.faq),
+                        desc = getString(R.string.faq),
+                        icon = R.drawable.ic_round_help_24,
+                        onClick = {
+                            startActivity(Intent(context, FAQActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 2,
+                        name = getString(R.string.check_app_updates),
+                        desc = getString(R.string.check_app_updates),
+                        icon = R.drawable.ic_round_new_releases_24,
+                        isChecked = PrefManager.getVal(PrefName.CheckUpdate),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.CheckUpdate, isChecked)
+                        },
+                        isVisible = !BuildConfig.FLAVOR.contains("fdroid")
+                    ),
+                    Settings(
+                        type = 2,
+                        name = getString(R.string.share_username_in_crash_reports),
+                        desc = getString(R.string.share_username_in_crash_reports),
+                        icon = R.drawable.ic_round_search_24,
+                        isChecked = PrefManager.getVal(PrefName.SharedUserID),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.SharedUserID, isChecked)
+                        },
+                        isVisible = !BuildConfig.FLAVOR.contains("fdroid")
+                    ),
+                    Settings(
+                        type = 2,
+                        name = getString(R.string.log_to_file),
+                        desc = getString(R.string.logging_warning),
+                        icon = R.drawable.ic_round_edit_note_24,
+                        isChecked = PrefManager.getVal(PrefName.LogToFile),
+                        switch = { isChecked, _ ->
+                            PrefManager.setVal(PrefName.LogToFile, isChecked)
+                            restartApp(binding.root)
+                        },
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.devs),
+                        desc= getString(R.string.devs),
+                        icon = R.drawable.ic_round_accessible_forward_24,
+                        onClick = {
+                            DevelopersDialogFragment().show(supportFragmentManager, "dialog")
                         }
-                    }
-
-                    setOnLongClickListener {
-                        lifecycleScope.launch(Dispatchers.IO) {
-                            AppUpdater.check(context, true)
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.forks),
+                        desc = getString(R.string.forks),
+                        icon = R.drawable.ic_round_restaurant_24,
+                        onClick = {
+                            ForksDialogFragment().show(supportFragmentManager, "dialog")
                         }
-                        true
-                    }
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.disclaimer),
+                        desc = getString(R.string.disclaimer),
+                        icon = R.drawable.ic_round_info_24,
+                        onClick = {
+                            val text = TextView(context)
+                            text.setText(R.string.full_disclaimer)
 
-                }
-
-                settingsShareUsername.apply {
-                    isChecked = PrefManager.getVal(PrefName.SharedUserID)
-                    settingsShareUsername.setOnCheckedChangeListener { _, isChecked ->
-                        PrefManager.setVal(PrefName.SharedUserID, isChecked)
-                    }
-                }
-
-            } else {
-                settingsCheckUpdate.apply{
-                    visibility = View.GONE
-                    isEnabled = false
-                    isChecked = false
-                }
-                settingsShareUsername.apply{
-                    visibility = View.GONE
-                    isEnabled = false
-                    isChecked = false
-                }
-
-            }
-
-            settingsLogToFile.apply {
-                isChecked = PrefManager.getVal(PrefName.LogToFile)
-
-                setOnCheckedChangeListener { _, isChecked ->
-                    PrefManager.setVal(PrefName.LogToFile, isChecked)
-                    restartApp(binding.root)
-                }
-            }
-
-            settingsShareLog.setOnClickListener {
-                Logger.shareLog(context)
-            }
+                            CustomBottomDialog.newInstance().apply {
+                                setTitleText(context.getString(R.string.disclaimer))
+                                addView(text)
+                                setNegativeButton(context.getString(R.string.close)) {
+                                    dismiss()
+                                }
+                                show(supportFragmentManager, "dialog")
+                            }
+                        }
+                    ),
+                )
+            )
+            binding.settingsRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         }
     }
 }

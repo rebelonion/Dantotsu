@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
+import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivitySettingsMangaBinding
 import ani.dantotsu.download.DownloadsManager
@@ -39,39 +40,6 @@ class SettingsMangaActivity: AppCompatActivity(){
             mangaSettingsBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
-            purgeMangaDownloads.setOnClickListener {
-                val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                    .setTitle(R.string.purge_manga_downloads)
-                    .setMessage(getString(R.string.purge_confirm, getString(R.string.manga)))
-                    .setPositiveButton(R.string.yes) { dialog, _ ->
-                        val downloadsManager = Injekt.get<DownloadsManager>()
-                        downloadsManager.purgeDownloads(MediaType.MANGA)
-                        dialog.dismiss()
-                    }.setNegativeButton(R.string.no) { dialog, _ ->
-                        dialog.dismiss()
-                    }.create()
-                dialog.window?.setDimAmount(0.8f)
-                dialog.show()
-            }
-
-            purgeNovelDownloads.setOnClickListener {
-                val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                    .setTitle(R.string.purge_novel_downloads)
-                    .setMessage(getString(R.string.purge_confirm, getString(R.string.novels)))
-                    .setPositiveButton(R.string.yes) { dialog, _ ->
-                        val downloadsManager = Injekt.get<DownloadsManager>()
-                        downloadsManager.purgeDownloads(MediaType.NOVEL)
-                        dialog.dismiss()
-                    }.setNegativeButton(R.string.no) { dialog, _ ->
-                        dialog.dismiss()
-                    }.create()
-                dialog.window?.setDimAmount(0.8f)
-                dialog.show()
-            }
-
-            settingsReader.setOnClickListener {
-                startActivity(Intent(context, ReaderSettingsActivity::class.java))
-            }
 
             var previousChp: View = when (PrefManager.getVal<Int>(PrefName.MangaDefaultView)) {
                 0 -> settingsChpList
@@ -94,10 +62,75 @@ class SettingsMangaActivity: AppCompatActivity(){
                 uiChp(1, it)
             }
 
-            settingsIncludeMangaList.isChecked = PrefManager.getVal(PrefName.IncludeMangaList)
-            settingsIncludeMangaList.setOnCheckedChangeListener { _, isChecked ->
-                PrefManager.setVal(PrefName.IncludeMangaList, isChecked)
-                restartApp(binding.root)
+            settingsRecyclerView.adapter = SettingsAdapter(
+                arrayListOf(
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.reader_settings),
+                        desc = getString(R.string.reader_settings),
+                        icon = R.drawable.ic_round_reader_settings,
+                        onClick = {
+                            startActivity(Intent(context, ReaderSettingsActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.purge_manga_downloads),
+                        desc = getString(R.string.purge_manga_downloads),
+                        icon = R.drawable.ic_round_delete_24,
+                        onClick = {
+                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
+                                .setTitle(R.string.purge_manga_downloads)
+                                .setMessage(getString(R.string.purge_confirm, getString(R.string.manga)))
+                                .setPositiveButton(R.string.yes) { dialog, _ ->
+                                    val downloadsManager = Injekt.get<DownloadsManager>()
+                                    downloadsManager.purgeDownloads(MediaType.MANGA)
+                                    dialog.dismiss()
+                                }.setNegativeButton(R.string.no) { dialog, _ ->
+                                    dialog.dismiss()
+                                }.create()
+                            dialog.window?.setDimAmount(0.8f)
+                            dialog.show()
+                        }
+
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.purge_novel_downloads),
+                        desc = getString(R.string.purge_novel_downloads),
+                        icon = R.drawable.ic_round_delete_24,
+                        onClick = {
+                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
+                                .setTitle(R.string.purge_novel_downloads)
+                                .setMessage(getString(R.string.purge_confirm, getString(R.string.novels)))
+                                .setPositiveButton(R.string.yes) { dialog, _ ->
+                                    val downloadsManager = Injekt.get<DownloadsManager>()
+                                    downloadsManager.purgeDownloads(MediaType.NOVEL)
+                                    dialog.dismiss()
+                                }.setNegativeButton(R.string.no) { dialog, _ ->
+                                    dialog.dismiss()
+                                }.create()
+                            dialog.window?.setDimAmount(0.8f)
+                            dialog.show()
+                        }
+                    ),
+                    Settings(
+                        type = 2,
+                        name = getString(R.string.include_list),
+                        desc = getString(R.string.include_list),
+                        icon = R.drawable.view_list_24,
+                        isChecked = PrefManager.getVal(PrefName.IncludeMangaList),
+                        switch = {isChecked, _ ->
+                            PrefManager.setVal(PrefName.IncludeMangaList, isChecked)
+                            restartApp(binding.root)
+                        }
+                    ),
+                )
+            )
+            settingsRecyclerView.apply {
+                layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                setHasFixedSize(true)
             }
         }
     }

@@ -80,7 +80,7 @@
                 android:id="@+id/settingsRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="true"
+                android:nestedScrollingEnabled="false"
                 android:requiresFadingEdge="vertical"
                 tools:itemCount="5"
                 tools:listitem="@layout/item_settings" />

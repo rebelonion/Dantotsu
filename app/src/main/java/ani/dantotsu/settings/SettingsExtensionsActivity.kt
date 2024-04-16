@@ -11,9 +11,11 @@ import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivitySettingsExtensionsBinding
+import ani.dantotsu.databinding.DialogUserAgentBinding
 import ani.dantotsu.databinding.ItemRepositoryBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaType
@@ -199,48 +201,77 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                 alertDialog.show()
                 alertDialog.window?.setDimAmount(0.8f)
             }
+        }
 
-            settingsForceLegacyInstall.isChecked =
-                extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY
-            settingsForceLegacyInstall.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    extensionInstaller.set(BasePreferences.ExtensionInstaller.LEGACY)
-                } else {
-                    extensionInstaller.set(BasePreferences.ExtensionInstaller.PACKAGEINSTALLER)
-                }
-            }
+        binding.settingsRecyclerView.adapter = SettingsAdapter(
+            arrayListOf(
+                Settings(
+                    type = 1,
+                    name = getString(R.string.user_agent),
+                    desc = getString(R.string.NSFWExtention),
+                    icon = R.drawable.ic_round_video_settings_24,
+                    onClick = {
+                        val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
+                        val editText = dialogView.userAgentTextBox
+                        editText.setText(PrefManager.getVal<String>(PrefName.DefaultUserAgent))
+                        val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
+                            .setTitle(R.string.user_agent).setView(dialogView.root)
+                            .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+                                PrefManager.setVal(PrefName.DefaultUserAgent, editText.text.toString())
+                                dialog.dismiss()
+                            }.setNeutralButton(getString(R.string.reset)) { dialog, _ ->
+                                PrefManager.removeVal(PrefName.DefaultUserAgent)
+                                editText.setText("")
+                                dialog.dismiss()
+                            }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                                dialog.dismiss()
+                            }.create()
 
-            skipExtensionIcons.isChecked = PrefManager.getVal(PrefName.SkipExtensionIcons)
-            skipExtensionIcons.setOnCheckedChangeListener { _, isChecked ->
-                PrefManager.getVal(PrefName.SkipExtensionIcons, isChecked)
-            }
-            NSFWExtension.isChecked = PrefManager.getVal(PrefName.NSFWExtension)
-            NSFWExtension.setOnCheckedChangeListener { _, isChecked ->
-                PrefManager.setVal(PrefName.NSFWExtension, isChecked)
+                        alertDialog.show()
+                        alertDialog.window?.setDimAmount(0.8f)
+                    }
+                ),
+                Settings(
+                    type = 2,
+                    name = getString(R.string.force_legacy_installer),
+                    desc = getString(R.string.force_legacy_installer),
+                    icon = R.drawable.ic_round_new_releases_24,
+                    isChecked =  extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY,
+                    switch = { isChecked, _ ->
+                        if (isChecked) {
+                            extensionInstaller.set(BasePreferences.ExtensionInstaller.LEGACY)
+                        } else {
+                            extensionInstaller.set(BasePreferences.ExtensionInstaller.PACKAGEINSTALLER)
+                        }
+                    }
 
-            }
+                ),
+                Settings(
+                    type = 2,
+                    name = getString(R.string.skip_loading_extension_icons),
+                    desc = getString(R.string.skip_loading_extension_icons),
+                    icon = R.drawable.ic_round_no_icon_24,
+                    isChecked = PrefManager.getVal(PrefName.SkipExtensionIcons),
+                    switch = { isChecked, _ ->
+                        PrefManager.setVal(PrefName.SkipExtensionIcons, isChecked)
+                    }
+                ),
+                Settings(
+                    type = 2,
+                    name = getString(R.string.NSFWExtention),
+                    desc = getString(R.string.NSFWExtention),
+                    icon = R.drawable.ic_round_nsfw_24,
+                    isChecked = PrefManager.getVal(PrefName.NSFWExtension),
+                    switch = { isChecked, _ ->
+                        PrefManager.setVal(PrefName.NSFWExtension, isChecked)
+                    }
 
-            userAgent.setOnClickListener {
-                val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
-                val editText = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
-                editText.setText(PrefManager.getVal<String>(PrefName.DefaultUserAgent))
-                val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                    .setTitle(R.string.user_agent).setView(dialogView)
-                    .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                        PrefManager.setVal(PrefName.DefaultUserAgent, editText.text.toString())
-                        dialog.dismiss()
-                    }.setNeutralButton(getString(R.string.reset)) { dialog, _ ->
-                        PrefManager.removeVal(PrefName.DefaultUserAgent)
-                        editText.setText("")
-                        dialog.dismiss()
-                    }.setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                        dialog.dismiss()
-                    }.create()
-
-                alertDialog.show()
-                alertDialog.window?.setDimAmount(0.8f)
-            }
+                )
+            )
+        )
+        binding.settingsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+            setHasFixedSize(true)
         }
     }
-
 }
