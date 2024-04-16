@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
+    android:layout_marginBottom="8dp"
     android:padding="8dp">
 
     <TextView
@@ -28,6 +29,19 @@
         android:fontFamily="@font/poppins_bold"
         android:textAllCaps="true"
         android:textSize="16sp"
+        tools:text="00:00:00" />
+
+    <TextView
+        android:id="@+id/mediaPredication"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/poppins_bold"
+        android:textAllCaps="true"
+        android:textSize="12sp"
+        android:textColor="@color/fg"
+        android:visibility="gone"
         tools:text="00:00:00" />
 
 </LinearLayout>
