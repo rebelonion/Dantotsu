@@ -17,9 +17,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.media.MediaScannerConnection
 import android.net.ConnectivityManager
@@ -45,15 +45,15 @@ import android.telephony.TelephonyManager
 import android.text.InputFilter
 import android.text.Spanned
 import android.util.AttributeSet
-import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.GestureDetector
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -64,10 +64,10 @@ import android.view.animation.TranslateAnimation
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.DatePicker
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.annotation.AttrRes
-import androidx.annotation.ColorInt
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -80,9 +80,9 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -91,10 +91,10 @@ import ani.dantotsu.BuildConfig.APPLICATION_ID
 import ani.dantotsu.connections.anilist.Genre
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.bakaupdates.MangaUpdates
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.notifications.IncognitoNotificationClickReceiver
-import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.saving.PrefManager
@@ -120,6 +120,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.internal.ViewUtils
+import com.google.android.material.snackbar.Snackbar
 import eu.kanade.tachiyomi.data.notification.Notifications
 import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.Markwon
@@ -135,10 +136,13 @@ import io.noties.markwon.image.glide.GlideImagesPlugin
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -158,30 +162,8 @@ import kotlin.math.pow
 
 var statusBarHeight = 0
 var navBarHeight = 0
-
-val Number.toPx get() = TypedValue.applyDimension(
-    TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
-).toInt()
-
-val Number.toDp get() = TypedValue.applyDimension(
-    TypedValue.COMPLEX_UNIT_PX, this.toFloat(), Resources.getSystem().displayMetrics
-)
-
-val Number.dpToColumns: Int get() {
-    val columns = currContext()?.run {
-        val metrics = DisplayMetrics()
-        with(getSystemService(Context.WINDOW_SERVICE) as WindowManager) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                val bounds: Rect = currentWindowMetrics.bounds
-                ((bounds.width() / (resources.configuration.densityDpi / 160)) + 0.5)/ this@dpToColumns.toInt()
-            } else @Suppress("deprecation") {
-                defaultDisplay.getRealMetrics(metrics)
-                metrics.widthPixels.toDp / this@dpToColumns.toInt()
-            }
-        }
-    } ?: 1
-    return columns.toInt()
-}
+val Int.dp: Float get() = (this / getSystem().displayMetrics.density)
+val Float.px: Int get() = (this * getSystem().displayMetrics.density).toInt()
 
 lateinit var bottomBar: AnimatedBottomBar
 var selectedOption = 1
@@ -206,6 +188,10 @@ fun currActivity(): Activity? {
 
 var loadMedia: Int? = null
 var loadIsMAL = false
+
+val Int.toPx get() = TypedValue.applyDimension(
+    TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
+).toInt()
 
 fun initActivity(a: Activity) {
     val window = a.window
@@ -290,16 +276,6 @@ fun Activity.setNavigationTheme() {
     }
 }
 
-@ColorInt
-fun Context.getColorFromAttr(
-    @AttrRes attrColor: Int,
-    typedValue: TypedValue = TypedValue(),
-    resolveRefs: Boolean = true
-): Int {
-    theme.resolveAttribute(attrColor, typedValue, resolveRefs)
-    return typedValue.data
-}
-
 /**
  * Sets clipToPadding false and sets the combined height of navigation bars as bottom padding.
  *
@@ -323,48 +299,29 @@ fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, overlayView: View) {
     setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + navBar.measuredHeight + overlayView.measuredHeight)
 }
 
-/**
-* Finish the calling activity and launch it again within the same lifecycle scope
-*/
-
 fun Activity.reloadActivity() {
+    Refresh.all()
     finish()
     startActivity(Intent(this, this::class.java))
+    initActivity(this)
 }
 
-/**
- * Restarts the application from the launch intent and redirects to the calling activity
- */
-fun Activity.restartApp() {
+fun Context.restartApp(view: View) {
     val mainIntent = Intent.makeRestartActivityTask(
         packageManager.getLaunchIntentForPackage(this.packageName)!!.component
     )
     val component = ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
-    try {
-        startActivity(Intent().setComponent(component))
-    } catch (anything: Exception) {
-        startActivity(mainIntent)
-    }
-    finishAndRemoveTask()
-}
-
-suspend fun serverDownDialog(activity: FragmentActivity?) = withContext(Dispatchers.Main) {
-    activity?.let {
-        CustomBottomDialog.newInstance().apply {
-            title = it.getString(R.string.anilist_broken_title)
-            addView(TextView(activity).apply {
-                text = it.getString(R.string.anilist_broken)
-            })
-
-            setNegativeButton(it.getString(R.string.cancel)) {
-                dismiss()
+    Snackbar.make(view, R.string.restart_app, Snackbar.LENGTH_INDEFINITE).apply {
+        setAction(R.string.do_it) {
+            this.dismiss()
+            try {
+                startActivity(Intent().setComponent(component))
+            } catch (anything: Exception) {
+                startActivity(mainIntent)
             }
-
-            setPositiveButton(it.getString(R.string.close)) {
-                it.finishAffinity()
-            }
-            show(it.supportFragmentManager, "dialog")
+            Runtime.getRuntime().exit(0)
         }
+        show()
     }
 }
 
@@ -440,12 +397,16 @@ fun isOnline(context: Context): Boolean {
 fun startMainActivity(activity: Activity, bundle: Bundle? = null) {
     activity.finishAffinity()
     activity.startActivity(
-        Intent(activity, MainActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        Intent(
+            activity,
+            MainActivity::class.java
+        ).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             if (bundle != null) putExtras(bundle)
         }
     )
 }
+
 
 class DatePickerFragment(activity: Activity, var date: FuzzyDate = FuzzyDate().getToday()) :
     DialogFragment(),
@@ -644,6 +605,11 @@ fun MutableList<ShowResponse>.sortByTitle(string: String) {
     }
 }
 
+fun String.findBetween(a: String, b: String): String? {
+    val string = substringAfter(a, "").substringBefore(b, "")
+    return string.ifEmpty { null }
+}
+
 fun ImageView.loadImage(url: String?, size: Int = 0) {
     if (!url.isNullOrEmpty()) {
         val localFile = File(url)
@@ -655,13 +621,8 @@ fun ImageView.loadImage(url: String?, size: Int = 0) {
     }
 }
 
-fun geUrlOrTrolled(url: String?) : String {
-    return if (PrefManager.getVal(PrefName.DisableMitM)) url ?: "" else
-        PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { url ?: "" }
-}
-
 fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
-    file?.url = geUrlOrTrolled(file?.url)
+    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
     if (file?.url?.isNotEmpty() == true) {
         tryWith {
             if (file.url.startsWith("content://")) {
@@ -1164,6 +1125,68 @@ class EmptyAdapter(private val count: Int) : RecyclerView.Adapter<RecyclerView.V
     inner class EmptyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }
 
+fun getAppString(res: Int): String {
+    return currContext()?.getString(res) ?: ""
+}
+
+fun toast(string: String?) {
+    if (string != null) {
+        Logger.log(string)
+        MainScope().launch {
+            Toast.makeText(currActivity()?.application ?: return@launch, string, Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
+}
+
+fun toast(res: Int) {
+    toast(getAppString(res))
+}
+
+fun snackString(s: String?, activity: Activity? = null, clipboard: String? = null): Snackbar? {
+    try { //I have no idea why this sometimes crashes for some people...
+        if (s != null) {
+            (activity ?: currActivity())?.apply {
+                val snackBar = Snackbar.make(
+                    window.decorView.findViewById(android.R.id.content),
+                    s,
+                    Snackbar.LENGTH_SHORT
+                )
+                runOnUiThread {
+                    snackBar.view.apply {
+                        updateLayoutParams<FrameLayout.LayoutParams> {
+                            gravity = (Gravity.CENTER_HORIZONTAL or Gravity.BOTTOM)
+                            width = WRAP_CONTENT
+                        }
+                        translationY = -(navBarHeight.dp + 32f)
+                        translationZ = 32f
+                        updatePadding(16f.px, right = 16f.px)
+                        setOnClickListener {
+                            snackBar.dismiss()
+                        }
+                        setOnLongClickListener {
+                            copyToClipboard(clipboard ?: s, false)
+                            toast(getString(R.string.copied_to_clipboard))
+                            true
+                        }
+                    }
+                    snackBar.show()
+                }
+                return snackBar
+            }
+            Logger.log(s)
+        }
+    } catch (e: Exception) {
+        Logger.log(e)
+        Injekt.get<CrashlyticsInterface>().logException(e)
+    }
+    return null
+}
+
+fun snackString(r: Int, activity: Activity? = null, clipboard: String? = null): Snackbar? {
+    return snackString(getAppString(r), activity, clipboard)
+}
+
 open class NoPaddingArrayAdapter<T>(context: Context, layoutId: Int, items: List<T>) :
     ArrayAdapter<T>(context, layoutId, items) {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
@@ -1328,12 +1351,12 @@ fun openSettings(context: Context, channelId: String?): Boolean {
 }
 
 suspend fun View.pop() {
-    withContext(Dispatchers.Main) {
+    currActivity()?.runOnUiThread {
         ObjectAnimator.ofFloat(this@pop, "scaleX", 1f, 1.25f).setDuration(120).start()
         ObjectAnimator.ofFloat(this@pop, "scaleY", 1f, 1.25f).setDuration(120).start()
     }
     delay(120)
-    withContext(Dispatchers.Main) {
+    currActivity()?.runOnUiThread {
         ObjectAnimator.ofFloat(this@pop, "scaleX", 1.25f, 1f).setDuration(100).start()
         ObjectAnimator.ofFloat(this@pop, "scaleY", 1.25f, 1f).setDuration(100).start()
     }
@@ -1347,7 +1370,7 @@ fun blurImage(imageView: ImageView, banner: String?) {
         if (PrefManager.getVal(PrefName.BlurBanners)) {
             val context = imageView.context
             if (!(context as Activity).isDestroyed) {
-                val url = geUrlOrTrolled(banner)
+                val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
                 Glide.with(context as Context)
                     .load(
                         if (banner.startsWith("http")) GlideUrl(url) else if (banner.startsWith("content://")) Uri.parse(
@@ -1355,11 +1378,7 @@ fun blurImage(imageView: ImageView, banner: String?) {
                         ) else File(url)
                     )
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)
-                    .apply(if (PrefManager.getVal<String>(PrefName.ImageUrl).isEmpty()) {
-                        RequestOptions.noTransformation()
-                    } else {
-                        RequestOptions.bitmapTransform(BlurTransformation(radius, sampling))
-                    })
+                    .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))
                     .into(imageView)
             }
         } else {

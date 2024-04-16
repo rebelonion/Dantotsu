@@ -5,7 +5,6 @@ import ani.dantotsu.R
 import ani.dantotsu.client
 import ani.dantotsu.media.Media
 import ani.dantotsu.tryWithSuspend
-import ani.dantotsu.utf8
 import ani.dantotsu.util.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -15,6 +14,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.json.JSONException
 import org.json.JSONObject
+import java.net.URLEncoder
+import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -22,6 +23,8 @@ import java.util.TimeZone
 import java.util.concurrent.TimeUnit
 
 class MangaUpdates {
+
+    val String.utf8: String get() = URLEncoder.encode(this, Charset.forName("UTF-8").name())
 
     private val Int?.dateFormat get() = String.format("%02d", this)
 
@@ -123,32 +126,38 @@ class MangaUpdates {
 
     suspend fun predictRelease(media: Media, latest: Long): Long? {
         val releaseDates = findReleaseDates(media)
-        if (releaseDates.size < 3) return null
+        if (releaseDates.size < 5) return null
         releaseDates.forEach {
             Logger.log(it)
         }
-        val dateLatest = getCalendarInstance(releaseDates[0])
-        val dateMiddle = getCalendarInstance(releaseDates[1])
-        val dateOldest = getCalendarInstance(releaseDates[2])
-        val daysNew: Long = TimeUnit.MILLISECONDS.toDays(dateLatest.timeInMillis - dateMiddle.timeInMillis)
-        val daysOld: Long = TimeUnit.MILLISECONDS.toDays(dateMiddle.timeInMillis - dateOldest.timeInMillis)
+        val date01 = getCalendarInstance(releaseDates[0])
+        val date02 = getCalendarInstance(releaseDates[1])
+        val date03 = getCalendarInstance(releaseDates[2])
+        val date04 = getCalendarInstance(releaseDates[3])
+        val date05 = getCalendarInstance(releaseDates[4])
+        val days0102: Long = TimeUnit.MILLISECONDS.toDays(date01.timeInMillis - date02.timeInMillis)
+        val days0203: Long = TimeUnit.MILLISECONDS.toDays(date02.timeInMillis - date03.timeInMillis)
+        val days0304: Long = TimeUnit.MILLISECONDS.toDays(date03.timeInMillis - date04.timeInMillis)
+        val days0405: Long = TimeUnit.MILLISECONDS.toDays(date04.timeInMillis - date05.timeInMillis)
+
+        val average = (days0102 + days0203 + days0304 + days0405) / 4
 
         val date: Calendar = Calendar.getInstance()
         date.timeInMillis = latest
 
         return when {
-            daysNew in 5..14 && daysOld in 5..14 -> {
+            average in 5..14 -> {
                 latest + 604800000 // 7 days
             }
-            daysNew in 28..36 && daysOld in 28..36 -> {
+            average in 28..36 -> {
                 date.add(Calendar.MONTH, 1)
                 date.timeInMillis
             }
-            daysNew in 84..98 && daysOld in 84..98 -> {
+            average in 84..98 -> {
                 date.add(Calendar.MONTH, 3)
                 date.timeInMillis
             }
-            daysNew >= 358 && daysOld >= 358 -> {
+            average >= 358 -> {
                 date.add(Calendar.YEAR, 1)
                 date.timeInMillis
             }
