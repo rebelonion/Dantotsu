@@ -1,127 +1,157 @@
-package ani.dantotsu.connections.bakaupdates
+package ani.dantotsu.connections
 
-import android.content.Context
-import ani.dantotsu.R
-import ani.dantotsu.client
-import ani.dantotsu.connections.anilist.api.FuzzyDate
-import ani.dantotsu.tryWithSuspend
-import ani.dantotsu.util.Logger
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import okio.ByteString.Companion.encode
-import org.json.JSONException
-import org.json.JSONObject
-import java.nio.charset.Charset
+import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import okhttp3.*
+import java.io.IOException
 
+class AniListMangaUpdates(private val client: OkHttpClient) {
 
-class MangaUpdates {
+    private val aniListBaseUrl = "https://graphql.anilist.co"
+    private val mangaUpdatesBaseUrl = "https://api.mangaupdates.com/v1/series/"
+    private val json = Json
 
-    private val Int?.dateFormat get() = String.format("%02d", this)
-
-    private val apiUrl = "https://api.mangaupdates.com/v1/releases/search"
-
-    suspend fun search(title: String, startDate: FuzzyDate?) : MangaUpdatesResponse.Results? {
-        return tryWithSuspend {
-            val query = JSONObject().apply {
-                try {
-                    put("search", title.encode(Charset.forName("UTF-8")))
-                    startDate?.let {
-                        put(
-                            "start_date",
-                            "${it.year}-${it.month.dateFormat}-${it.day.dateFormat}"
-                        )
+    suspend fun getMediaId(mediaType: MediaType, mediaName: String): Int? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val query = """
+                    query {
+                        Media(search: "$mediaName", type: ${mediaType.typeName}) {
+                            id
+                        }
                     }
-                    put("include_metadata", true)
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-            }
-            val res = client.post(apiUrl, json = query).parsed<MangaUpdatesResponse>()
-            coroutineScope {
-                res.results?.map {
-                    async(Dispatchers.IO) {
-                        Logger.log(it.toString())
-                    }
-                }
-            }?.awaitAll()
-            res.results?.first {
-                it.metadata.series.lastUpdated?.timestamp != null
-                        && (it.metadata.series.latestChapter != null
-                        || (it.record.volume.isNullOrBlank() && it.record.chapter != null))
+                """.trimIndent()
+
+                val requestBody = query.toRequestBody("application/json".toMediaType())
+
+                val request = Request.Builder()
+                    .url(aniListBaseUrl)
+                    .post(requestBody)
+                    .build()
+
+                val response = client.newCall(request).execute()
+                val jsonData = response.body?.string()
+                parseMediaId(jsonData)
+            } catch (e: IOException) {
+                throw AniListMangaUpdateException("Error fetching media ID: ${e.message}", e)
             }
         }
     }
 
-    companion object {
-        fun getLatestChapter(context: Context, results: MangaUpdatesResponse.Results): String {
-            return results.metadata.series.latestChapter?.let {
-                context.getString(R.string.chapter_number, it)
-            } ?: results.record.chapter!!.substringAfterLast("-").trim().let { chapter ->
-                chapter.takeIf {
-                    it.toIntOrNull() == null
-                } ?: context.getString(R.string.chapter_number, chapter.toInt())
+    suspend fun getMangaId(mangaName: String): Int? {
+        return getMediaId(MediaType.Manga, mangaName)
+    }
+
+    suspend fun getLightNovelId(lightNovelName: String): Int? {
+        return getMediaId(MediaType.Novel, lightNovelName)
+    }
+
+    suspend fun getOneShotId(oneShotName: String): Int? {
+        return getMediaId(MediaType.OneShot, oneShotName)
+    }
+
+    suspend fun getLatestChapterSinceTime(mediaId: Int, time: Long): String? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val request = Request.Builder()
+                    .url("$mangaUpdatesBaseUrl$mediaId")
+                    .build()
+
+                val response = client.newCall(request).execute()
+                val jsonData = response.body?.string()
+                parseLatestChapterSinceTime(jsonData, time)
+            } catch (e: IOException) {
+                throw AniListMangaUpdateException("Error fetching latest chapter: ${e.message}", e)
             }
         }
     }
 
+    private fun parseMediaId(jsonData: String?): Int? {
+        return try {
+            val jsonObject = json.decodeFromString<JsonObject>(jsonData!!)
+            val media = jsonObject["data"]?.jsonObject?.get("Media")?.jsonObject
+            media?.get("id")?.jsonPrimitive?.int
+        } catch (e: Exception) {
+            throw AniListMangaUpdateException("Error parsing media ID: ${e.message}", e)
+        }
+    }
+
+    private fun parseLatestChapterSinceTime(jsonData: String?, time: Long): String? {
+        return try {
+            val response = json.decodeFromString<MangaUpdatesResponse>(jsonData!!)
+            val latestChapter = response.results?.firstOrNull { result ->
+                result.record.releaseDate.toLongOrNull() ?: 0 > time
+            }
+            latestChapter?.let { chapter ->
+                "${chapter.record.title}: ${chapter.record.chapter ?: "Unknown Chapter"}"
+            }
+        } catch (e: Exception) {
+            throw AniListMangaUpdateException("Error parsing latest chapter: ${e.message}", e)
+        }
+    }
+}
+
+sealed class MediaType(val typeName: String) {
+    object Manga : MediaType("MANGA")
+    object Novel : MediaType("NOVEL")
+    object OneShot : MediaType("ONE_SHOT")
+}
+
+@Serializable
+data class MangaUpdatesResponse(
+    @SerialName("total_hits")
+    val totalHits: Int?,
+    @SerialName("page")
+    val page: Int?,
+    @SerialName("per_page")
+    val perPage: Int?,
+    val results: List<Results>? = null
+) {
     @Serializable
-    data class MangaUpdatesResponse(
-        @SerialName("total_hits")
-        val totalHits: Int?,
-        @SerialName("page")
-        val page: Int?,
-        @SerialName("per_page")
-        val perPage: Int?,
-        val results: List<Results>? = null
+    data class Results(
+        val record: Record,
+        val metadata: MetaData
     ) {
         @Serializable
-        data class Results(
-            val record: Record,
-            val metadata: MetaData
+        data class Record(
+            val id: Int,
+            val title: String,
+            val volume: String?,
+            val chapter: String?,
+            @SerialName("release_date")
+            val releaseDate: String
+        )
+
+        @Serializable
+        data class MetaData(
+            val series: Series
         ) {
             @Serializable
-            data class Record(
-                @SerialName("id")
-                val id: Int,
-                @SerialName("title")
-                val title: String,
-                @SerialName("volume")
-                val volume: String?,
-                @SerialName("chapter")
-                val chapter: String?,
-                @SerialName("release_date")
-                val releaseDate: String
-            )
-            @Serializable
-            data class MetaData(
-                val series: Series
+            data class Series(
+                @SerialName("series_id")
+                val seriesId: Long?,
+                val title: String?,
+                @SerialName("latest_chapter")
+                val latestChapter: Int?,
+                @SerialName("last_updated")
+                val lastUpdated: LastUpdated?
             ) {
                 @Serializable
-                data class Series(
-                    @SerialName("series_id")
-                    val seriesId: Long?,
-                    @SerialName("title")
-                    val title: String?,
-                    @SerialName("latest_chapter")
-                    val latestChapter: Int?,
-                    @SerialName("last_updated")
-                    val lastUpdated: LastUpdated?
-                ) {
-                    @Serializable
-                    data class LastUpdated(
-                        @SerialName("timestamp")
-                        val timestamp: Long,
-                        @SerialName("as_rfc3339")
-                        val asRfc3339: String,
-                        @SerialName("as_string")
-                        val asString: String
-                    )
-                }
+                data class LastUpdated(
+                    @SerialName("timestamp")
+                    val timestamp: Long,
+                    @SerialName("as_rfc3339")
+                    val asRfc3339: String,
+                    @SerialName("as_string")
+                    val asString: String
+                )
             }
         }
     }
 }
+
+class AniListMangaUpdateException(message: String, cause: Throwable? = null) : RuntimeException(message, cause)
