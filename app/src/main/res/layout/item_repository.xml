@@ -3,8 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_marginBottom="16dp"
-    android:orientation="vertical">
+    android:layout_marginBottom="8dp"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="3dp"
+        android:alpha="0.7"
+        android:fontFamily="@font/poppins_bold"
+        android:text="•"
+        android:textSize="16sp"
+        tools:ignore="HardcodedText,RtlSymmetry" />
 
     <TextView
         android:id="@+id/repositoryItem"
@@ -12,8 +21,8 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:ellipsize="end"
+        android:layout_gravity="center"
         android:alpha="0.66"
-        android:textAlignment="viewStart"
         android:textColor="?attr/colorOnBackground"
         android:singleLine="true"
         tools:text="xyz repo"/>

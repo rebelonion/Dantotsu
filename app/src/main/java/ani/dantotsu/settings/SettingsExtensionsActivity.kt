@@ -161,13 +161,12 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                         desc = getString(R.string.anime_add_repository),
                         icon = R.drawable.ic_github,
                         onClick = {
-                            val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
-                            val editText =
-                                dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
+                            val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
+                            val editText = dialogView.userAgentTextBox.apply {
                                     hint = getString(R.string.anime_add_repository)
                                 }
                             val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.anime_add_repository).setView(dialogView)
+                                .setTitle(R.string.anime_add_repository).setView(dialogView.root)
                                 .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                                     if (!editText.text.isNullOrBlank()) processUserInput(
                                         editText.text.toString(),
@@ -183,8 +182,8 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                             alertDialog.show()
                             alertDialog.window?.setDimAmount(0.8f)
                         },
-                        attach = { view ->
-                            setExtensionOutput(view, MediaType.ANIME)
+                        attach = {
+                            setExtensionOutput(it.attachView, MediaType.ANIME)
                         }
                     ),
                     Settings(
@@ -193,13 +192,12 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                         desc = getString(R.string.manga_add_repository),
                         icon = R.drawable.ic_github,
                         onClick = {
-                            val dialogView = layoutInflater.inflate(R.layout.dialog_user_agent, null)
-                            val editText =
-                                dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox).apply {
+                            val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
+                            val editText = dialogView.userAgentTextBox.apply {
                                     hint = getString(R.string.manga_add_repository)
                                 }
                             val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.manga_add_repository).setView(dialogView)
+                                .setTitle(R.string.manga_add_repository).setView(dialogView.root)
                                 .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
                                     if (!editText.text.isNullOrBlank()) processUserInput(
                                         editText.text.toString(),
@@ -215,8 +213,8 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                             alertDialog.show()
                             alertDialog.window?.setDimAmount(0.8f)
                         },
-                        attach = { view ->
-                            setExtensionOutput(view, MediaType.MANGA)
+                        attach = {
+                            setExtensionOutput(it.attachView, MediaType.MANGA)
                         }
                     ),
                     Settings(

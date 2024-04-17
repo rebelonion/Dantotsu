@@ -11,9 +11,9 @@ data class Settings(
     val icon : Int,
     val onClick: ((ItemSettingsBinding) -> Unit)? = null,
     val onLongClick: (() -> Unit)? = null,
-    var isChecked : Boolean = false,
     val switch: ((isChecked:Boolean , view: ItemSettingsSwitchBinding ) -> Unit)? = null,
+    val attach:((ItemSettingsBinding) -> Unit)? = null,
     val isVisible: Boolean = true,
     val isActivity: Boolean = false,
-    val attach:((ViewGroup) -> Unit)? = null
+    var isChecked : Boolean = false,
 )

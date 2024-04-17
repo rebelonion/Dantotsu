@@ -100,7 +100,7 @@ class SettingsAnimeActivity: AppCompatActivity(){
                         isChecked = PrefManager.getVal(PrefName.IncludeAnimeList),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.IncludeAnimeList, isChecked)
-                            restartApp(binding.root)
+                            restartApp()
                         }
                     ),
                 )

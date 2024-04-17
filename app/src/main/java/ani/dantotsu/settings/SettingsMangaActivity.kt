@@ -123,7 +123,7 @@ class SettingsMangaActivity: AppCompatActivity(){
                         isChecked = PrefManager.getVal(PrefName.IncludeMangaList),
                         switch = {isChecked, _ ->
                             PrefManager.setVal(PrefName.IncludeMangaList, isChecked)
-                            restartApp(binding.root)
+                            restartApp()
                         }
                     ),
                 )
