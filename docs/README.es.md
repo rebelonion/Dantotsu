@@ -1,4 +1,4 @@
-![banner](assets/banner.png)
+![banner](../assets/banner.png)
 
 <h1 align="center">
 Un Cliente de <a href="https://anilist.co/">AniList</a> FOSS
@@ -15,9 +15,9 @@ Dantotsu (断トツ; Dan-totsu) "lo mejor de lo mejor". Pruebalo y juzga tu mism
    <a href="https://discord.gg/4HPZ5nAWwM"><img src="https://img.shields.io/discord/358599430502481920.svg?style=for-the-badge&logo=discord&colorB=7289DA"></a>
 </p>
 
-![screenshot](assets/dantotsu-screenshot.png)
+![screenshot](../assets/dantotsu-screenshot.png)
 
-*Lee este documento en otros idiomas: [Ingles](README.md), [Español](docs/README.es.md) (Puedes contribuir para añadir mas)*
+*Lee este documento en otros idiomas: [Ingles](../README.md), [Español](docs/README.es.md) (Puedes contribuir para añadir mas)*
 
 ## CARACTERÍSTICAS 📋
 
