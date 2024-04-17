@@ -19,7 +19,7 @@ Dantotsu (断トツ; Dan-totsu) "lo mejor de lo mejor". Pruebalo y juzga tu mism
 
 *Lee este documento en otros idiomas: [Ingles](../README.md), [Español](docs/README.es.md) (Puedes contribuir para añadir mas)*
 
-## CARACTERÍSTICAS 📋
+## 📋 CARACTERÍSTICAS 
 
 - [x] Open Source
 - [x] Sin Ads
@@ -35,27 +35,46 @@ Dantotsu (断トツ; Dan-totsu) "lo mejor de lo mejor". Pruebalo y juzga tu mism
 - [x] Notificaciones 
 - [x] Widgets
 - [x] Discord RPC
-- [x] Buckup de Ajustes
+- [x] Backup de Ajustes
 - [x] Sección de Comentarios
 
 
-## INSTALACIÓN Y ACTUALIZACIONES 💾
+## 💾 INSTALACIÓN Y ACTUALIZACIONES 
 
-<a href="https://github.com/ImranR98/Obtainium/releases"><img src="https://github.com/andrew1412/Dantotsu/blob/dev/assets/badge_obtainium.png?raw=true" width=20%></a>
+<a href="https://github.com/ImranR98/Obtainium/releases"><img src="https://github.com/andrew1412/Dantotsu/blob/dev/assets/badge_obtainium.png?raw=true" width=200px></a>
 
 1. Descarga Obtainium desde la insignia de arriba
 2. En `Añadir Aplicación`, añade la siguiente URL como origen de aplicación: https://github.com/rebelonion/Dantotsu/
 3. Activa `Comprobar la etiqueta 'latest'` y `Usar la versión detectada por el SO`
 4. Para recivir actualizaciónes Beta, activa `Incluir versiones preliminares`
-5. Para recivir actualizaciónes Alfa añade la siguiente URL como origen de aplicación: https://github.com/kaorlol/dantotsu-updater
-6. Disfruta!
+5. Disfruta!
 
-## ¿QUIERES CONTRIBUIR? 🤝
+## 🚧 VERSIONES ALFA
+
+Si quieres ayudar a probar la app puedes hacerlo con uno (1) de los siguientes metodos
+
+> [!warning]
+> ALFA ES SOLO PARA PRUEBAS, PODRIAS ENCONTRAR BUGS. SI LO HACES, ABRE UN ISSUE EN NUESTRO REPOSITORIO DE GITHUB O EN EL CANAL DE DISCORD.
+
+1. descarga el archivo `Dantotsu-Split` desde [Github Actions](https://github.com/rebelonion/Dantotsu/actions), descomprimelo e instala la APK correspondiente a tu arquitectura
+2. Entral al grupo de [Telegram](https://t.me/+gzBCQExtLQo1YTNh) e instala la APK correspondiente a tu arquitectura
+3. Entral al grupo de [Discord](https://discord.gg/4HPZ5nAWwM) elige el rol de `Pre Tester`, ve al canal `Pretest APK` e instala la APK correspondiente a tu arquitectura
+5. Añade la siguiente URL como origen de aplicación en Obtainium: https://github.com/kaorlol/dantotsu-updater
+
+> **Si no sabes que APK instalar**
+> * Universal: Una solucion todo en uno pero mas pesada
+> * ARM64-v8a: Elige este si tu smartphone o tablet es nueva (de 2016 en adelante). La mayoria de Androids modernos usan esta arquitectura.
+> * ARMeabi-v7a: Ideal para dispositivos antiguos o de gama baja. Compatible con la mayoria de dispositivos anteriores a 2016.
+> * x86: Para disposotivos Android con procesadores Intel, comun en algunas tablets.
+> * x86_64: Selecciona este para dispositivos nuevos con procesadores Intel de 64-bit, comun en algunas tablets modernas.
+
+
+## 🤝 ¿QUIERES CONTRIBUIR? 
 
 Todas las contribuciones son bienvenidas: desde código, documentación, diseño gráfico, sugerencias y hasta informes de errores. Por favor, usa GitHub al máximo, lo que sea que tengas para ofrecer, ¡podemos usarlo!
 
 
-## APOYA EL PROJECTO ⭐
+## ⭐ APOYA EL PROJECTO 
 Si te gusta Dantotsu, puede añadir a favoritos este repositorio para apoyar a los desarrolladores y alentar un mayor desarrollo de la aplicación, no olvide participar en la comunidad oficial de Discord.
 
 <p align="left">
@@ -68,10 +87,10 @@ Si deseas apoyar al mantenedor de Dantotsu, considera donarle
 
 <a href="https://www.buymeacoffee.com/rebelonion"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=&slug=rebelonion&button_colour=FFDD00&font_colour=030201&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" /></a>
 
-## VISITANTES 👀
+## 👀 VISITANTES 
 
 <img src="https://count.getloli.com/get/@:rebeloniondantotsu" alt=":rebeloniondantotsu" />
 
-## LICENCIA 📜
+## 📜 LICENCIA 
 
 Dantotsu esta licenciado bajo [GNU General Public License v3.0](LICENSE.md)
