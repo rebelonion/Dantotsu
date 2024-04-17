@@ -27,13 +27,12 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currActivity
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
 import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.video.Helper
-import ani.dantotsu.extensions.torrent.TorrentExtensionManager
+import ani.dantotsu.addons.torrent.TorrentExtensionManager
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
@@ -54,7 +53,6 @@ import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.launchIO

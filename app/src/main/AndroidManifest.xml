@@ -427,7 +427,7 @@
             android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service android:name=".extensions.torrent.ServerService"
+        <service android:name=".addons.torrent.ServerService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
 

@@ -1,4 +1,4 @@
-package ani.dantotsu.extensions.torrent
+package ani.dantotsu.addons.torrent
 
 import android.graphics.drawable.Drawable
 

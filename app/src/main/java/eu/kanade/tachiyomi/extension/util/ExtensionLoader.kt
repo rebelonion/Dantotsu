@@ -5,9 +5,9 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
-import ani.dantotsu.extensions.torrent.TorrentExtension
-import ani.dantotsu.extensions.torrent.TorrentExtensionApi
-import ani.dantotsu.extensions.torrent.TorrentLoadResult
+import ani.dantotsu.addons.torrent.TorrentExtension
+import ani.dantotsu.addons.torrent.TorrentExtensionApi
+import ani.dantotsu.addons.torrent.TorrentLoadResult
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.util.Logger
 import dalvik.system.PathClassLoader

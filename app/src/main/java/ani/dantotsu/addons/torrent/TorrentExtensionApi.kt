@@ -1,4 +1,4 @@
-package ani.dantotsu.extensions.torrent
+package ani.dantotsu.addons.torrent
 
 import eu.kanade.tachiyomi.data.torrentServer.model.Torrent
 

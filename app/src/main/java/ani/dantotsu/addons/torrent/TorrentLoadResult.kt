@@ -1,4 +1,4 @@
-package ani.dantotsu.extensions.torrent
+package ani.dantotsu.addons.torrent
 
 sealed class TorrentLoadResult {
     class Success(val extension: TorrentExtension.Installed) : TorrentLoadResult()

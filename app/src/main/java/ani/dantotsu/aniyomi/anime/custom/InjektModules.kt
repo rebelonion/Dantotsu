@@ -8,7 +8,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.database.StandaloneDatabaseProvider
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.download.DownloadsManager
-import ani.dantotsu.extensions.torrent.TorrentExtensionManager
+import ani.dantotsu.addons.torrent.TorrentExtensionManager
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.parsers.novel.NovelExtensionManager
 import eu.kanade.domain.base.BasePreferences

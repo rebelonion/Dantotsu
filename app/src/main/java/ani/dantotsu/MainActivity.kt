@@ -3,7 +3,6 @@ package ani.dantotsu
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.drawable.Animatable
@@ -20,7 +19,6 @@ import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
 import androidx.activity.addCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -35,16 +33,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.Download
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.OneTimeWorkRequest
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
 import ani.dantotsu.databinding.SplashScreenBinding
-import ani.dantotsu.download.video.Helper
-import ani.dantotsu.extensions.torrent.ServerService
-import ani.dantotsu.extensions.torrent.TorrentExtensionManager
+import ani.dantotsu.addons.torrent.ServerService
+import ani.dantotsu.addons.torrent.TorrentExtensionManager
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment

@@ -1,10 +1,9 @@
-package ani.dantotsu.extensions.torrent
+package ani.dantotsu.addons.torrent
 
 import android.app.ActivityManager
 import android.app.Application
 import android.app.PendingIntent
 import android.app.Service
-import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
