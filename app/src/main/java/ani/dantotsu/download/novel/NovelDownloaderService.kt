@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -50,8 +49,6 @@ import okio.sink
 import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL

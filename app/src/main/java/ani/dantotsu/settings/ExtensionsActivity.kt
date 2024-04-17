@@ -1,7 +1,6 @@
 package ani.dantotsu.settings
 
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,7 +30,6 @@ import ani.dantotsu.others.AndroidBug5497Workaround
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout

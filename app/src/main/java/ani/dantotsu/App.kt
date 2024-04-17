@@ -10,6 +10,7 @@ import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
+import ani.dantotsu.extensions.torrent.TorrentExtensionManager
 import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.others.DisabledReports
 import ani.dantotsu.parsers.AnimeSources
@@ -41,6 +42,8 @@ class App : MultiDexApplication() {
     private lateinit var animeExtensionManager: AnimeExtensionManager
     private lateinit var mangaExtensionManager: MangaExtensionManager
     private lateinit var novelExtensionManager: NovelExtensionManager
+    private lateinit var torrentExtensionManager: TorrentExtensionManager
+
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -96,6 +99,7 @@ class App : MultiDexApplication() {
         animeExtensionManager = Injekt.get()
         mangaExtensionManager = Injekt.get()
         novelExtensionManager = Injekt.get()
+        torrentExtensionManager = Injekt.get()
 
         val animeScope = CoroutineScope(Dispatchers.Default)
         animeScope.launch {
@@ -114,6 +118,10 @@ class App : MultiDexApplication() {
             novelExtensionManager.findAvailableExtensions()
             Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
+        }
+        val torrentScope = CoroutineScope(Dispatchers.Default)
+        torrentScope.launch {
+            torrentExtensionManager.init()
         }
         val commentsScope = CoroutineScope(Dispatchers.Default)
         commentsScope.launch {
