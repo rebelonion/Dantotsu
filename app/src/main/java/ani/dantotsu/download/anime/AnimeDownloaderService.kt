@@ -19,7 +19,7 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.media3.common.util.UnstableApi
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
-import ani.dantotsu.addons.download.Stub
+import ani.dantotsu.addons.download.DownloadAddonManager
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.defaultHeaders
 import ani.dantotsu.download.DownloadedType
@@ -73,6 +73,7 @@ class AnimeDownloaderService : Service() {
     private val mutex = Mutex()
     private var isCurrentlyProcessing = false
     private var currentTasks: MutableList<AnimeDownloadTask> = mutableListOf()
+    val ffExtension =  Injekt.get<DownloadAddonManager>().extension
 
     override fun onBind(intent: Intent?): IBinder? {
         // This is only required for bound services.
@@ -81,6 +82,11 @@ class AnimeDownloaderService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        if (ffExtension == null) {
+            toast(getString(R.string.download_addon_not_found))
+            stopSelf()
+            return
+        }
         notificationManager = NotificationManagerCompat.from(this)
         builder =
             NotificationCompat.Builder(this, Notifications.CHANNEL_DOWNLOADER_PROGRESS).apply {
@@ -162,7 +168,7 @@ class AnimeDownloaderService : Service() {
                 .map { it.sessionId }.toMutableList()
         sessionIds.addAll(currentTasks.filter { it.getTaskName() == taskName }.map { it.sessionId })
         sessionIds.forEach {
-            Stub().cancelDownload(it)
+            ffExtension!!.cancelDownload(it)
         }
         currentTasks.removeAll { it.getTaskName() == taskName }
         CoroutineScope(Dispatchers.Default).launch {
@@ -226,7 +232,7 @@ class AnimeDownloaderService : Service() {
 
                 var percent = 0
                 var totalLength = 0.0
-                val path = Stub().setDownloadPath(
+                val path = ffExtension!!.setDownloadPath(
                     this@AnimeDownloaderService,
                     outputFile.uri
                 )
@@ -239,7 +245,7 @@ class AnimeDownloaderService : Service() {
                         .append(defaultHeaders["User-Agent"]).append("\"\'\r\n\'")
                 }
                 val probeRequest = "-headers $headersStringBuilder -i ${task.video.file.url} -show_entries format=duration -v quiet -of csv=\"p=0\""
-                Stub().executeFFProbe(
+                ffExtension!!.executeFFProbe(
                     probeRequest
                 ) {
                     if (it.toDoubleOrNull() != null) {
@@ -252,7 +258,7 @@ class AnimeDownloaderService : Service() {
                 request += "-i ${task.video.file.url} -c copy -bsf:a aac_adtstoasc -tls_verify 0 $path -v trace"
                 Logger.log("Request: $request")
                 val ffTask =
-                    Stub().executeFFMpeg(request) {
+                    ffExtension!!.executeFFMpeg(request) {
                         // CALLED WHEN SESSION GENERATES STATISTICS
                         val timeInMilliseconds = it
                         if (timeInMilliseconds > 0 && totalLength > 0) {
@@ -278,8 +284,8 @@ class AnimeDownloaderService : Service() {
                 }
 
                 // periodically check if the download is complete
-                while (Stub().getState(ffTask) != "COMPLETED") {
-                    if (Stub().getState(ffTask) == "FAILED") {
+                while (ffExtension!!.getState(ffTask) != "COMPLETED") {
+                    if (ffExtension!!.getState(ffTask) == "FAILED") {
                         Logger.log("Download failed")
                         builder.setContentText(
                             "${
@@ -291,7 +297,7 @@ class AnimeDownloaderService : Service() {
                         )
                         notificationManager.notify(NOTIFICATION_ID, builder.build())
                         toast("${getTaskName(task.title, task.episode)} Download failed")
-                        Logger.log("Download failed: ${Stub().getStackTrace(ffTask)}")
+                        Logger.log("Download failed: ${ffExtension!!.getStackTrace(ffTask)}")
                         downloadsManager.removeDownload(
                             DownloadedType(
                                 task.title,
@@ -326,8 +332,8 @@ class AnimeDownloaderService : Service() {
                     }
                     kotlinx.coroutines.delay(2000)
                 }
-                if (Stub().getState(ffTask) == "COMPLETED") {
-                    if (Stub().hadError(ffTask)) {
+                if (ffExtension!!.getState(ffTask) == "COMPLETED") {
+                    if (ffExtension!!.hadError(ffTask)) {
                         Logger.log("Download failed")
                         builder.setContentText(
                             "${

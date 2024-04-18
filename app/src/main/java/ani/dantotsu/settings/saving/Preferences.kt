@@ -120,6 +120,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     UseInternalCast(Pref(Location.Player, Boolean::class, false)),
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
+    TorrentEnabled(Pref(Location.Player, Boolean::class, false)),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),

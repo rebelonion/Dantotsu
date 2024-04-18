@@ -454,27 +454,25 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
         val torrentManager = Injekt.get<TorrentAddonManager>()
-        if (torrentManager.isInitialized.value == false) {
-            torrentManager.isInitialized.observe(this) {
-                if (it) {
-                    if (torrentManager.isAvailable()) {
-                        launchIO {
-                            if (!ServerService.isRunning()) {
-                                ServerService.start()
-                            }
-                        }
-                    }
-                }
-            }
-        } else {
-            if (torrentManager.isAvailable()) {
+        fun startTorrent() {
+            if (torrentManager.isAvailable() && PrefManager.getVal(PrefName.TorrentEnabled)) {
                 launchIO {
                     if (!ServerService.isRunning()) {
                         ServerService.start()
                     }
                 }
             }
+        }
+        if (torrentManager.isInitialized.value == false) {
+            torrentManager.isInitialized.observe(this) {
+                if (it) {
+                    startTorrent()
+                }
+            }
+        } else {
+            startTorrent()
         }
     }
 

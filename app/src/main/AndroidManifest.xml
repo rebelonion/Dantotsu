@@ -148,6 +148,9 @@
             android:name=".settings.SettingsExtensionsActivity"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".settings.SettingsAddonActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".settings.SettingsMangaActivity"
             android:parentActivityName=".MainActivity" />
         <activity
@@ -429,6 +432,7 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service android:name=".addons.torrent.ServerService"
             android:exported="false"
+            android:stopWithTask="true"
             android:foregroundServiceType="dataSync" />
 
         <meta-data
