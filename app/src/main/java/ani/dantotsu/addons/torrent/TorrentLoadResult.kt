@@ -1,7 +1,7 @@
 package ani.dantotsu.addons.torrent
 
-sealed class TorrentLoadResult {
-    class Success(val extension: TorrentExtension.Installed) : TorrentLoadResult()
+import ani.dantotsu.addons.LoadResult
 
-    data object Error : TorrentLoadResult()
+open class TorrentLoadResult: LoadResult() {
+    class Success(val extension: TorrentAddon.Installed) : TorrentLoadResult()
 }

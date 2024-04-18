@@ -1,21 +1,18 @@
 package ani.dantotsu.addons.torrent
 
 import android.graphics.drawable.Drawable
+import ani.dantotsu.addons.Addon
 
-sealed class TorrentExtension {
-    abstract val name: String
-    abstract val pkgName: String
-    abstract val versionName: String
-    abstract val versionCode: Long
+sealed class TorrentAddon : Addon() {
 
     data class Installed(
         override val name: String,
         override val pkgName: String,
         override val versionName: String,
         override val versionCode: Long,
-        val extension: TorrentExtensionApi,
+        val extension: TorrentAddonApi,
         val icon: Drawable?,
         val hasUpdate: Boolean = false,
-    ) : TorrentExtension()
+    ) : Addon.Installed(name, pkgName, versionName, versionCode)
 
 }

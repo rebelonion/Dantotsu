@@ -32,7 +32,7 @@ import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.video.Helper
-import ani.dantotsu.addons.torrent.TorrentExtensionManager
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
@@ -266,7 +266,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             }?.videos?.getOrNull(ep.selectedVideo)
             video?.file?.url?.let { url ->
                 if (video.file.url.startsWith("magnet:") || video.file.url.endsWith(".torrent")) {
-                    val torrentExtension = Injekt.get<TorrentExtensionManager>()
+                    val torrentExtension = Injekt.get<TorrentAddonManager>()
                     if (torrentExtension.isAvailable()) {
                         val activity = currActivity() ?: requireActivity()
                         launchIO {

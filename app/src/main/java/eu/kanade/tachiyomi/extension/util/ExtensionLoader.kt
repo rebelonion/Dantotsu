@@ -5,9 +5,6 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
-import ani.dantotsu.addons.torrent.TorrentExtension
-import ani.dantotsu.addons.torrent.TorrentExtensionApi
-import ani.dantotsu.addons.torrent.TorrentLoadResult
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.util.Logger
 import dalvik.system.PathClassLoader
@@ -51,7 +48,6 @@ internal object ExtensionLoader {
 
     private const val ANIME_PACKAGE = "tachiyomi.animeextension"
     private const val MANGA_PACKAGE = "tachiyomi.extension"
-    private const val TORRENT_PACKAGE = "dantotsu.torrentextension"
 
     private const val XX_METADATA_SOURCE_CLASS = ".class"
     private const val XX_METADATA_SOURCE_FACTORY = ".factory"
@@ -64,7 +60,7 @@ internal object ExtensionLoader {
     const val MANGA_LIB_VERSION_MIN = 1.2
     const val MANGA_LIB_VERSION_MAX = 1.5
 
-    private val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or
+    val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or
             PackageManager.GET_META_DATA or
             @Suppress ("DEPRECATION") PackageManager.GET_SIGNATURES or
             (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
@@ -135,63 +131,6 @@ internal object ExtensionLoader {
             }
             deferred.map { it.await() }
         }
-    }
-
-    fun loadTorrentExtension(context: Context): TorrentLoadResult {
-        val pkgManager = context.packageManager
-
-        val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            pkgManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(PACKAGE_FLAGS.toLong()))
-        } else {
-            pkgManager.getInstalledPackages(PACKAGE_FLAGS)
-        }
-
-        val extPkgs = installedPkgs.filter { isPackageAnExtension(TORRENT_PACKAGE, it) }
-
-        if (extPkgs.isEmpty() || extPkgs.size > 1) return TorrentLoadResult.Error
-
-        val pkgName = extPkgs.first().packageName
-        val pkgInfo = extPkgs.first()
-
-        val appInfo = try {
-            pkgManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA)
-        } catch (error: PackageManager.NameNotFoundException) {
-            // Unlikely, but the package may have been uninstalled at this point
-            Logger.log(error)
-            return TorrentLoadResult.Error
-        }
-
-        val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Dantotsu: ")
-        val versionName = pkgInfo.versionName
-        val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
-
-        if (versionName.isNullOrEmpty()) {
-            Logger.log("Missing versionName for extension $extName")
-            return TorrentLoadResult.Error
-        }
-        val classLoader = PathClassLoader(appInfo.sourceDir, appInfo.nativeLibraryDir, context.classLoader)
-        val extensionClassName =
-            "ani.dantotsu.torrentExtension.TorrentExtension"
-        val loadedClass = try {
-            Class.forName(extensionClassName, false, classLoader)
-        } catch (e: Throwable) {
-            Logger.log("Extension load error: $extName ($extensionClassName)")
-            return TorrentLoadResult.Error
-        }
-        val instance = loadedClass.getDeclaredConstructor().newInstance()
-        val extension = instance as? TorrentExtensionApi ?: return TorrentLoadResult.Error
-
-        return TorrentLoadResult.Success(
-            TorrentExtension.Installed(
-                name = extName,
-                pkgName = pkgName,
-                versionName = versionName,
-                versionCode = versionCode,
-                extension = extension,
-                icon = context.getApplicationIcon(pkgName),
-            )
-        )
-
     }
 
     /**
@@ -467,10 +406,6 @@ internal object ExtensionLoader {
             MediaType.MANGA -> MANGA_PACKAGE
             else -> ""
         } }
-    }
-
-    private fun isPackageAnExtension(type: String, pkgInfo: PackageInfo): Boolean {
-        return pkgInfo.packageName.equals(type)
     }
 
     /**

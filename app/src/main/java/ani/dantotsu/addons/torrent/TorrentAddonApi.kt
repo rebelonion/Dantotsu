@@ -2,7 +2,7 @@ package ani.dantotsu.addons.torrent
 
 import eu.kanade.tachiyomi.data.torrentServer.model.Torrent
 
-interface TorrentExtensionApi {
+interface TorrentAddonApi {
 
     fun startServer(path: String)
 

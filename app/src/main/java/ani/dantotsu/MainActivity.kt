@@ -40,7 +40,7 @@ import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
 import ani.dantotsu.databinding.SplashScreenBinding
 import ani.dantotsu.addons.torrent.ServerService
-import ani.dantotsu.addons.torrent.TorrentExtensionManager
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
@@ -454,7 +454,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        val torrentManager = Injekt.get<TorrentExtensionManager>()
+        val torrentManager = Injekt.get<TorrentAddonManager>()
         if (torrentManager.isInitialized.value == false) {
             torrentManager.isInitialized.observe(this) {
                 if (it) {
