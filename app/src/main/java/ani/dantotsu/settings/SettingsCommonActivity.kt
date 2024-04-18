@@ -73,14 +73,14 @@ class SettingsCommonActivity: AppCompatActivity(){
                                         toast(getString(R.string.incorrect_password))
                                         return@passwordAlertDialog
                                     }
-                                    if (PreferencePackager.unpack(decryptedJson)) restartApp(binding.root)
+                                    if (PreferencePackager.unpack(decryptedJson)) restartApp()
                                 } else {
                                     toast(getString(R.string.password_cannot_be_empty))
                                 }
                             }
                         } else if (name.endsWith(".ani")) {
                             val decryptedJson = jsonString.toString(Charsets.UTF_8)
-                            if (PreferencePackager.unpack(decryptedJson)) restartApp(binding.root)
+                            if (PreferencePackager.unpack(decryptedJson)) restartApp()
                         } else {
                             toast(getString(R.string.unknown_file_type))
                         }
@@ -127,7 +127,7 @@ class SettingsCommonActivity: AppCompatActivity(){
             settingsExtensionDns.setOnItemClickListener { _, _, i, _ ->
                 PrefManager.setVal(PrefName.DohProvider, i)
                 settingsExtensionDns.clearFocus()
-                restartApp(binding.root)
+                restartApp()
             }
 
             settingsRecyclerView.adapter = SettingsAdapter(
@@ -294,7 +294,7 @@ class SettingsCommonActivity: AppCompatActivity(){
                         isChecked = PrefManager.getVal(PrefName.AdultOnly),
                         switch = {isChecked, _ ->
                             PrefManager.setVal(PrefName.AdultOnly, isChecked)
-                            restartApp(binding.root)
+                            restartApp()
                         },
                         isVisible = Anilist.adult
 

@@ -18,6 +18,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.Logger
 
 class SettingsAboutActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAboutBinding
@@ -42,7 +43,7 @@ class SettingsAboutActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.faq),
-                        desc = getString(R.string.faq),
+                        desc = getString(R.string.faq_desc),
                         icon = R.drawable.ic_round_help_24,
                         onClick = {
                             startActivity(Intent(context, FAQActivity::class.java))
@@ -52,7 +53,7 @@ class SettingsAboutActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.check_app_updates),
-                        desc = getString(R.string.check_app_updates),
+                        desc = getString(R.string.check_app_updates_desc),
                         icon = R.drawable.ic_round_new_releases_24,
                         isChecked = PrefManager.getVal(PrefName.CheckUpdate),
                         switch = { isChecked, _ ->
@@ -63,7 +64,7 @@ class SettingsAboutActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.share_username_in_crash_reports),
-                        desc = getString(R.string.share_username_in_crash_reports),
+                        desc = getString(R.string.share_username_in_crash_reports_desc),
                         icon = R.drawable.ic_round_search_24,
                         isChecked = PrefManager.getVal(PrefName.SharedUserID),
                         switch = { isChecked, _ ->
@@ -79,13 +80,19 @@ class SettingsAboutActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal(PrefName.LogToFile),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.LogToFile, isChecked)
-                            restartApp(binding.root)
+                            restartApp()
                         },
+                        attach = {
+                            it.settingsDesc.setOnLongClickListener {
+                                Logger.shareLog(context)
+                                true
+                            }
+                        }
                     ),
                     Settings(
                         type = 1,
                         name = getString(R.string.devs),
-                        desc= getString(R.string.devs),
+                        desc= getString(R.string.devs_desc),
                         icon = R.drawable.ic_round_accessible_forward_24,
                         onClick = {
                             DevelopersDialogFragment().show(supportFragmentManager, "dialog")
@@ -94,7 +101,7 @@ class SettingsAboutActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.forks),
-                        desc = getString(R.string.forks),
+                        desc = getString(R.string.forks_desc),
                         icon = R.drawable.ic_round_restaurant_24,
                         onClick = {
                             ForksDialogFragment().show(supportFragmentManager, "dialog")
@@ -103,7 +110,7 @@ class SettingsAboutActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.disclaimer),
-                        desc = getString(R.string.disclaimer),
+                        desc = getString(R.string.disclaimer_desc),
                         icon = R.drawable.ic_round_info_24,
                         onClick = {
                             val text = TextView(context)

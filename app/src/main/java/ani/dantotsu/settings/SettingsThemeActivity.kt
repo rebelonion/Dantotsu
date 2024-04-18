@@ -1,10 +1,13 @@
 package ani.dantotsu.settings
 
+import android.content.ComponentName
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,8 +40,21 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                 topMargin = statusBarHeight
                 bottomMargin = navBarHeight
             }
-            themeSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
-
+            onBackPressedDispatcher.addCallback(context) {
+                val mainIntent = Intent.makeRestartActivityTask(
+                    packageManager.getLaunchIntentForPackage(packageName)!!.component
+                )
+                val component = ComponentName(packageName, SettingsActivity::class.qualifiedName!!)
+                try {
+                    startActivity(Intent().setComponent(component))
+                } catch (anything: Exception) {
+                    startActivity(mainIntent)
+                }
+                finishAndRemoveTask()
+            }
+            themeSettingsBack.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
             var previous: View = when (PrefManager.getVal<Int>(PrefName.DarkMode)) {
                 0 -> settingsUiAuto
                 1 -> settingsUiLight
@@ -87,7 +103,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                         ThemeManager.Companion.Theme.entries[i].theme
                     )
                     clearFocus()
-                    restartApp(binding.root)
+                    reload()
                 }
             }
 
@@ -101,7 +117,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                         isChecked = PrefManager.getVal(PrefName.UseOLED),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.UseOLED, isChecked)
-                            restartApp(binding.root)
+                            reload()
                         }
                     ),
                     Settings(
@@ -113,7 +129,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
                             if (isChecked) PrefManager.setVal(PrefName.UseCustomTheme, false)
-                            restartApp(binding.root)
+                            reload()
                         },
                         isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
                     ),
@@ -125,7 +141,6 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                         isChecked = PrefManager.getVal(PrefName.UseSourceTheme),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.UseSourceTheme, isChecked)
-                            restartApp(binding.root)
                         },
                         isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
                     ),
@@ -138,7 +153,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.UseCustomTheme, isChecked)
                             if (isChecked) PrefManager.setVal(PrefName.UseMaterialYou, false)
-                            restartApp(binding.root)
+                            reload()
                         },
                         isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
                     ),
@@ -151,7 +166,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                             val originalColor: Int = PrefManager.getVal(PrefName.CustomThemeInt)
                             class CustomColorDialog : SimpleColorDialog() {
                                 override fun onPositiveButtonClick() {
-                                    restartApp(binding.root)
+                                    reload()
                                     super.onPositiveButtonClick()
                                 }
                             }
@@ -183,4 +198,9 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
         }
         return true
     }
+    fun reload(){
+        PrefManager.setCustomVal("reload", true)
+        restartApp()
+    }
+
 }

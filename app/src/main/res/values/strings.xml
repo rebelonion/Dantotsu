@@ -377,7 +377,7 @@
     <string name="search_source_list">Search next available source</string>
     <string name="timestamp_proxy_desc">Useful if you are getting Handshake Fails</string>
     <string name="timestamp_proxy">Use Proxy for Timestamps</string>
-    <string name="check_app_updates">Always check for App Updates</string>
+    <string name="check_app_updates">Check for Updates</string>
     <string name="author">Author</string>
     <string name="forks">Versions</string>
     <string name="faq">FAQ</string>
@@ -716,7 +716,7 @@
     <string name="purge_manga_downloads">Delete all Manga Downloads</string>
     <string name="purge_novel_downloads">Delete all Novel Downloads</string>
     <string name="requires_android_12">Requires Android 12+</string>
-    <string name="share_username_in_crash_reports">Share username in crash reports</string>
+    <string name="share_username_in_crash_reports">Share username</string>
     <string name="pinned_sources">Pinned Sources</string>
     <string name="backup_restore">Backup and Restore</string>
     <string name="restore_settings">Import Settings</string>
@@ -903,4 +903,10 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="anime_desc">Choose how you watch</string>
     <string name="manga_desc">Choose how you read</string>
     <string name="about_desc">Learn more about Dantotsu</string>
+    <string name="faq_desc">General questions about Dantotsu</string>
+    <string name="check_app_updates_desc">Check Github for app updates</string>
+    <string name="share_username_in_crash_reports_desc">Share username in crash reports</string>
+    <string name="devs_desc">Dantotsu\'s very own unpaid labours </string>
+    <string name="forks_desc">More like Dantotsu</string>
+    <string name="disclaimer_desc">Something to keep in mind</string>
 </resources>

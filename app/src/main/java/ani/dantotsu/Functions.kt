@@ -306,23 +306,18 @@ fun Activity.reloadActivity() {
     initActivity(this)
 }
 
-fun Context.restartApp(view: View) {
+fun Activity.restartApp() {
     val mainIntent = Intent.makeRestartActivityTask(
         packageManager.getLaunchIntentForPackage(this.packageName)!!.component
     )
     val component = ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
-    Snackbar.make(view, R.string.restart_app, Snackbar.LENGTH_INDEFINITE).apply {
-        setAction(R.string.do_it) {
-            this.dismiss()
-            try {
-                startActivity(Intent().setComponent(component))
-            } catch (anything: Exception) {
-                startActivity(mainIntent)
-            }
-            Runtime.getRuntime().exit(0)
-        }
-        show()
+    try {
+        startActivity(Intent().setComponent(component))
+    } catch (e: Exception) {
+        startActivity(mainIntent)
     }
+    finishAndRemoveTask()
+    PrefManager.setCustomVal("reload", true)
 }
 
 open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
