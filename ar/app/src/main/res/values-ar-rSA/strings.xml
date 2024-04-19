@@ -31,7 +31,7 @@
     <string name="updated">تم تحديثه مؤخرا</string>
     <string name="trending_anime">انمي شائع</string>
     <string name="popular_anime">انمي مشهور</string>
-    <string name="trending_manga">انمي شائعة</string>
+    <string name="trending_manga">مانجا شائعة</string>
     <string name="trending_novel">روايات شائعة</string>
     <string name="popular_manga">مانجا مشهورة</string>
     <string name="username">اسم المستخدم</string>
@@ -51,64 +51,64 @@
     <string name="notifications">الإشعارات</string>
     <string-array name="keys">
         <item>جاري القراءة</item>
-        <item>Watching</item>
-        <item>Completed</item>
-        <item>Paused</item>
-        <item>Dropped</item>
-        <item>Planning</item>
-        <item>Favourites</item>
-        <item>Rewatching</item>
-        <item>Rereading</item>
-        <item>All</item>
+        <item>جاري المشاهدة</item>
+        <item>مكتمل</item>
+        <item>متوقف مؤقتًا</item>
+        <item>متروك</item>
+        <item>سوف اشاهده</item>
+        <item>المفضلة</item>
+        <item>إعادة المشاهدة</item>
+        <item>إعادة القراءة</item>
+        <item>الكل</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
-    <string name="followers">Followers</string>
-    <string name="status">STATUS</string>
+    <string name="no_notifications">لا مزيد من الإشعارات</string>
+    <string name="followers">المتابعين</string>
+    <string name="status">الحالة</string>
     <string-array name="status_anime">
-        <item>PLANNING</item>
-        <item>WATCHING</item>
-        <item>COMPLETED</item>
-        <item>RE-WATCHING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>سوف اشاهده</item>
+        <item>جاري المشاهدة</item>
+        <item>مكتمل</item>
+        <item>إعادة المشاهدة</item>
+        <item>متوقف مؤقتًا</item>
+        <item>متروك</item>
     </string-array>
     <string-array name="status_manga">
-        <item>PLANNING</item>
-        <item>READING</item>
-        <item>COMPLETED</item>
-        <item>RE-READING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>سوف اشاهده</item>
+        <item>جاري القراءة</item>
+        <item>مكتمل</item>
+        <item>إعادة القراءة</item>
+        <item>متوقف مؤقتًا</item>
+        <item>متروك</item>
     </string-array>
     <string name="progress">PROGRESS</string>
-    <string name="score">SCORE</string>
+    <string name="score">التقييم</string>
     <string name="score_suffix">" / 10"</string>
-    <string name="started_at">STARTED AT</string>
-    <string name="completed_at">COMPLETED AT</string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
-    <string name="remove">Remove</string>
-    <string name="name">Name</string>
-    <string name="name_romaji">Name Romaji</string>
-    <string name="mean_score">Mean Score</string>
-    <string name="format">Format</string>
-    <string name="status_title">Status</string>
-    <string name="total_eps">Total Episodes</string>
-    <string name="episodes"> Episode(s)</string>
-    <string name="chapters"> Chapter(s)</string>
+    <string name="started_at">بدأت في</string>
+    <string name="completed_at">اكتمل في</string>
+    <string name="save">حفظ</string>
+    <string name="delete">حذف</string>
+    <string name="remove">حذف</string>
+    <string name="name">الاسم بالإنجليزية</string>
+    <string name="name_romaji">الاسم بالياباني</string>
+    <string name="mean_score">التقييم</string>
+    <string name="format">المحتوي</string>
+    <string name="status_title">الحالة</string>
+    <string name="total_eps">مجموع الحلقات</string>
+    <string name="episodes"> الحلقة (الحلَقات)</string>
+    <string name="chapters"> الفصل (الفصول)</string>
     <string name="total_divider"> | %1$s</string>
-    <string name="total_chaps">Total Chapters</string>
-    <string name="ep_duration">Average Duration</string>
-    <string name="min">" min"</string>
-    <string name="season">Season</string>
-    <string name="start_date">Start Date</string>
-    <string name="end_date">End Date</string>
-    <string name="source">Source</string>
-    <string name="main_studio">Studio</string>
-    <string name="genres">Genres</string>
-    <string name="description">Synopsis</string>
-    <string name="characters">Characters</string>
-    <string name="relations">Relations</string>
+    <string name="total_chaps">مجموع الفصول</string>
+    <string name="ep_duration">متوسط ​​مدة الحلقة</string>
+    <string name="min">" دقيقة"</string>
+    <string name="season">الموسم</string>
+    <string name="start_date">تاريخ البدء</string>
+    <string name="end_date">تاريخ الانتهاء</string>
+    <string name="source">المصدر</string>
+    <string name="main_studio">الاستوديو</string>
+    <string name="genres">الأنواع</string>
+    <string name="description">الملخص</string>
+    <string name="characters">الشخصيات</string>
+    <string name="relations">التوابع</string>
     <string name="staff">Staff</string>
     <string name="favourites">Favourites</string>
     <string name="popularity">Popularity</string>
