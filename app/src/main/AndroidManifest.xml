@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
     <uses-sdk tools:overrideLibrary="go.server.gojni" />
+
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
@@ -42,8 +44,10 @@
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="false" />
-    <uses-permission android:name="android.permission.BLUETOOTH"
-        android:maxSdkVersion="30"/>
+
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <!-- ExoPlayer: Bluetooth Headsets -->
 
@@ -88,7 +92,7 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        
+
         <receiver
             android:name=".widgets.statistics.ProfileStatsWidget"
             android:exported="false">
@@ -167,7 +171,7 @@
             android:name=".widgets.statistics.ProfileStatsConfigure"
             android:exported="true">
             <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
 
@@ -430,10 +434,11 @@
             android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
-        <service android:name=".addons.torrent.ServerService"
+        <service
+            android:name=".addons.torrent.ServerService"
             android:exported="false"
-            android:stopWithTask="true"
-            android:foregroundServiceType="dataSync" />
+            android:foregroundServiceType="dataSync"
+            android:stopWithTask="true" />
 
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"

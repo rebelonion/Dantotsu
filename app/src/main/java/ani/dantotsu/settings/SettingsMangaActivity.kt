@@ -22,7 +22,7 @@ import ani.dantotsu.themes.ThemeManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class SettingsMangaActivity: AppCompatActivity(){
+class SettingsMangaActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsMangaBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +82,12 @@ class SettingsMangaActivity: AppCompatActivity(){
                         onClick = {
                             val dialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.purge_manga_downloads)
-                                .setMessage(getString(R.string.purge_confirm, getString(R.string.manga)))
+                                .setMessage(
+                                    getString(
+                                        R.string.purge_confirm,
+                                        getString(R.string.manga)
+                                    )
+                                )
                                 .setPositiveButton(R.string.yes) { dialog, _ ->
                                     val downloadsManager = Injekt.get<DownloadsManager>()
                                     downloadsManager.purgeDownloads(MediaType.MANGA)
@@ -103,7 +108,12 @@ class SettingsMangaActivity: AppCompatActivity(){
                         onClick = {
                             val dialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.purge_novel_downloads)
-                                .setMessage(getString(R.string.purge_confirm, getString(R.string.novels)))
+                                .setMessage(
+                                    getString(
+                                        R.string.purge_confirm,
+                                        getString(R.string.novels)
+                                    )
+                                )
                                 .setPositiveButton(R.string.yes) { dialog, _ ->
                                     val downloadsManager = Injekt.get<DownloadsManager>()
                                     downloadsManager.purgeDownloads(MediaType.NOVEL)
@@ -121,7 +131,7 @@ class SettingsMangaActivity: AppCompatActivity(){
                         desc = getString(R.string.include_list),
                         icon = R.drawable.view_list_24,
                         isChecked = PrefManager.getVal(PrefName.IncludeMangaList),
-                        switch = {isChecked, _ ->
+                        switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.IncludeMangaList, isChecked)
                             restartApp()
                         }

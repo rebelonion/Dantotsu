@@ -93,6 +93,7 @@ data class StaffConnection(
     // The pagination information
     // @SerialName("pageInfo") var pageInfo: PageInfo?,
 )
+
 @Serializable
 data class StaffImage(
     // The character's image of media at its largest size
@@ -101,6 +102,7 @@ data class StaffImage(
     // The character's image of media at medium size
     @SerialName("medium") var medium: String?,
 ) : java.io.Serializable
+
 @Serializable
 data class StaffEdge(
     var role: String?,

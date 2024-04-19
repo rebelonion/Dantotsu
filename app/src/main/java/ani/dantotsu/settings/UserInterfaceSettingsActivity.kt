@@ -105,7 +105,7 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             PrefManager.setVal(PrefName.BlurBanners, isChecked)
             restartApp()
         }
-        binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as  Float)
+        binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as Float)
         binding.uiSettingsBlurRadius.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.BlurRadius, value)
             restartApp()

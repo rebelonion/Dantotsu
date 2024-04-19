@@ -24,7 +24,6 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import com.google.android.material.textfield.TextInputEditText
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -35,7 +34,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 
-class SettingsExtensionsActivity: AppCompatActivity() {
+class SettingsExtensionsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsExtensionsBinding
     private val extensionInstaller = Injekt.get<BasePreferences>().extensionInstaller()
     private val animeExtensionManager: AnimeExtensionManager by injectLazy()
@@ -52,7 +51,7 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                 topMargin = statusBarHeight
                 bottomMargin = navBarHeight
             }
-            extensionSettingsBack.setOnClickListener{
+            extensionSettingsBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
             fun setExtensionOutput(repoInventory: ViewGroup, type: MediaType) {
@@ -139,7 +138,12 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                 }
             }
 
-            fun processEditorAction(dialog: AlertDialog, editText: EditText, mediaType: MediaType, view: ViewGroup) {
+            fun processEditorAction(
+                dialog: AlertDialog,
+                editText: EditText,
+                mediaType: MediaType,
+                view: ViewGroup
+            ) {
                 editText.setOnEditorActionListener { textView, action, keyEvent ->
                     if (action == EditorInfo.IME_ACTION_SEARCH || action == EditorInfo.IME_ACTION_DONE || (keyEvent?.action == KeyEvent.ACTION_UP && keyEvent.keyCode == KeyEvent.KEYCODE_ENTER)) {
                         return@setOnEditorActionListener if (textView.text.isNullOrBlank()) {
@@ -163,8 +167,8 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                         onClick = {
                             val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
                             val editText = dialogView.userAgentTextBox.apply {
-                                    hint = getString(R.string.anime_add_repository)
-                                }
+                                hint = getString(R.string.anime_add_repository)
+                            }
                             val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.anime_add_repository).setView(dialogView.root)
                                 .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
@@ -178,7 +182,12 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                                     dialog.dismiss()
                                 }.create()
 
-                            processEditorAction(alertDialog, editText, MediaType.ANIME, it.attachView)
+                            processEditorAction(
+                                alertDialog,
+                                editText,
+                                MediaType.ANIME,
+                                it.attachView
+                            )
                             alertDialog.show()
                             alertDialog.window?.setDimAmount(0.8f)
                         },
@@ -194,8 +203,8 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                         onClick = {
                             val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
                             val editText = dialogView.userAgentTextBox.apply {
-                                    hint = getString(R.string.manga_add_repository)
-                                }
+                                hint = getString(R.string.manga_add_repository)
+                            }
                             val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.manga_add_repository).setView(dialogView.root)
                                 .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
@@ -209,7 +218,12 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                                     dialog.dismiss()
                                 }.create()
 
-                            processEditorAction(alertDialog, editText, MediaType.MANGA, it.attachView)
+                            processEditorAction(
+                                alertDialog,
+                                editText,
+                                MediaType.MANGA,
+                                it.attachView
+                            )
                             alertDialog.show()
                             alertDialog.window?.setDimAmount(0.8f)
                         },
@@ -229,7 +243,10 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                             val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.user_agent).setView(dialogView.root)
                                 .setPositiveButton(getString(R.string.ok)) { dialog, _ ->
-                                    PrefManager.setVal(PrefName.DefaultUserAgent, editText.text.toString())
+                                    PrefManager.setVal(
+                                        PrefName.DefaultUserAgent,
+                                        editText.text.toString()
+                                    )
                                     dialog.dismiss()
                                 }.setNeutralButton(getString(R.string.reset)) { dialog, _ ->
                                     PrefManager.removeVal(PrefName.DefaultUserAgent)
@@ -248,7 +265,7 @@ class SettingsExtensionsActivity: AppCompatActivity() {
                         name = getString(R.string.force_legacy_installer),
                         desc = getString(R.string.force_legacy_installer),
                         icon = R.drawable.ic_round_new_releases_24,
-                        isChecked =  extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY,
+                        isChecked = extensionInstaller.get() == BasePreferences.ExtensionInstaller.LEGACY,
                         switch = { isChecked, _ ->
                             if (isChecked) {
                                 extensionInstaller.set(BasePreferences.ExtensionInstaller.LEGACY)

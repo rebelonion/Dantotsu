@@ -267,7 +267,9 @@ class NovelDownloaderService : Service() {
                             task.coverUrl?.let {
                                 file.parentFile?.let { it1 -> downloadImage(it, it1, "cover.jpg") }
                             }
-                            val outputStream = this@NovelDownloaderService.contentResolver.openOutputStream(file.uri) ?: throw Exception("Could not open OutputStream")
+                            val outputStream =
+                                this@NovelDownloaderService.contentResolver.openOutputStream(file.uri)
+                                    ?: throw Exception("Could not open OutputStream")
 
                             val sink = outputStream.sink().buffer()
                             val responseBody = response.body

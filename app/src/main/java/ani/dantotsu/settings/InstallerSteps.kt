@@ -11,7 +11,10 @@ import eu.kanade.tachiyomi.extension.InstallStep
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class InstallerSteps(private val notificationManager: NotificationManager, private val context: Context) {
+class InstallerSteps(
+    private val notificationManager: NotificationManager,
+    private val context: Context
+) {
 
     fun onInstallStep(installStep: InstallStep, extra: () -> Unit) {
         val builder = NotificationCompat.Builder(

@@ -8,7 +8,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.widget.TextView
 import androidx.core.content.ContextCompat
@@ -88,7 +87,11 @@ object AppUpdater {
                             try {
                                 val apks =
                                     client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
-                                        .parsed<GithubResponse>().assets?.filter { it.browserDownloadURL.endsWith(".apk") }
+                                        .parsed<GithubResponse>().assets?.filter {
+                                            it.browserDownloadURL.endsWith(
+                                                ".apk"
+                                            )
+                                        }
                                 val apkToDownload = apks?.first()
                                 apkToDownload?.browserDownloadURL.apply {
                                     if (this != null) activity.downloadUpdate(version, this)

@@ -16,7 +16,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.content.res.Resources.getSystem
 import android.graphics.Bitmap
 import android.graphics.Color
@@ -68,12 +67,9 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
@@ -189,9 +185,10 @@ fun currActivity(): Activity? {
 var loadMedia: Int? = null
 var loadIsMAL = false
 
-val Int.toPx get() = TypedValue.applyDimension(
-    TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), getSystem().displayMetrics
-).toInt()
+val Int.toPx
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), getSystem().displayMetrics
+    ).toInt()
 
 fun initActivity(a: Activity) {
     val window = a.window
@@ -220,7 +217,8 @@ fun initActivity(a: Activity) {
             window.decorView
         ).hide(WindowInsetsCompat.Type.statusBars())
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P && statusBarHeight == 0
-            && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            && a.resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT
+        ) {
             window.decorView.rootWindowInsets?.displayCutout?.apply {
                 if (boundingRects.size > 0) {
                     statusBarHeight = min(boundingRects[0].width(), boundingRects[0].height())
@@ -296,7 +294,12 @@ fun ViewGroup.setBaseline(navBar: AnimatedBottomBar, overlayView: View) {
     navBar.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     overlayView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
     clipToPadding = false
-    setPadding(paddingLeft, paddingTop, paddingRight, navBarHeight + navBar.measuredHeight + overlayView.measuredHeight)
+    setPadding(
+        paddingLeft,
+        paddingTop,
+        paddingRight,
+        navBarHeight + navBar.measuredHeight + overlayView.measuredHeight
+    )
 }
 
 fun Activity.reloadActivity() {
@@ -310,7 +313,8 @@ fun Activity.restartApp() {
     val mainIntent = Intent.makeRestartActivityTask(
         packageManager.getLaunchIntentForPackage(this.packageName)!!.component
     )
-    val component = ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
+    val component =
+        ComponentName(this@restartApp.packageName, this@restartApp::class.qualifiedName!!)
     try {
         startActivity(Intent().setComponent(component))
     } catch (e: Exception) {
@@ -953,7 +957,8 @@ fun copyToClipboard(string: String, toast: Boolean = true) {
 
 fun countDown(media: Media, view: ViewGroup) {
     if (media.anime?.nextAiringEpisode != null && media.anime.nextAiringEpisodeTime != null
-        && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()) {
+        && (media.anime.nextAiringEpisodeTime!! - System.currentTimeMillis() / 1000) <= 86400 * 28.toLong()
+    ) {
         val v = ItemCountDownBinding.inflate(LayoutInflater.from(view.context), view, false)
         view.addView(v.root, 0)
         v.mediaCountdownText.text =
@@ -1025,7 +1030,7 @@ fun displayTimer(media: Media, view: ViewGroup) {
     when {
         media.anime != null -> countDown(media, view)
         media.format == "MANGA" || media.format == "ONE_SHOT" -> sinceWhen(media, view)
-        else -> { } // No timer yet
+        else -> {} // No timer yet
     }
 }
 

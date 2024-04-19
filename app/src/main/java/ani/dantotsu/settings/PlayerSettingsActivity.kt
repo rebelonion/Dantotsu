@@ -24,7 +24,6 @@ import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.settings.saving.internal.Pref
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
@@ -40,9 +39,10 @@ class PlayerSettingsActivity : AppCompatActivity() {
     var media: Media? = null
     var subtitle: Subtitle? = null
 
-    private val Int.toSP get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics
-    )
+    private val Int.toSP
+        get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP, this.toFloat(), Resources.getSystem().displayMetrics
+        )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,8 +151,10 @@ class PlayerSettingsActivity : AppCompatActivity() {
             binding.playerSettingsTimeStampsAutoHide.isEnabled = isChecked
         }
 
-        binding.playerSettingsTimeStampsAutoHide.isChecked = PrefManager.getVal(PrefName.AutoHideTimeStamps)
-        binding.playerSettingsTimeStampsAutoHide.isEnabled = binding.playerSettingsShowTimeStamp.isChecked
+        binding.playerSettingsTimeStampsAutoHide.isChecked =
+            PrefManager.getVal(PrefName.AutoHideTimeStamps)
+        binding.playerSettingsTimeStampsAutoHide.isEnabled =
+            binding.playerSettingsShowTimeStamp.isChecked
         binding.playerSettingsTimeStampsAutoHide.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.AutoHideTimeStamps, isChecked)
         }
@@ -484,10 +486,11 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 updateSubPreview()
             }
         }
-        binding.subtitleTest.addOnChangeListener(object: Xpandable.OnChangeListener {
+        binding.subtitleTest.addOnChangeListener(object : Xpandable.OnChangeListener {
             override fun onExpand() {
                 updateSubPreview()
             }
+
             override fun onRetract() {}
         })
         updateSubPreview()
@@ -496,24 +499,26 @@ class PlayerSettingsActivity : AppCompatActivity() {
     private fun updateSubPreview() {
         binding.subtitleTestWindow.run {
             alpha = PrefManager.getVal(PrefName.SubAlpha)
-            setBackgroundColor(when (PrefManager.getVal<Int>(PrefName.SubWindow)) {
-                0 -> Color.TRANSPARENT
-                1 -> Color.BLACK
-                2 -> Color.DKGRAY
-                3 -> Color.GRAY
-                4 -> Color.LTGRAY
-                5 -> Color.WHITE
-                6 -> Color.RED
-                7 -> Color.YELLOW
-                8 -> Color.GREEN
-                9 -> Color.CYAN
-                10 -> Color.BLUE
-                11 -> Color.MAGENTA
-                else -> Color.TRANSPARENT
-            })
+            setBackgroundColor(
+                when (PrefManager.getVal<Int>(PrefName.SubWindow)) {
+                    0 -> Color.TRANSPARENT
+                    1 -> Color.BLACK
+                    2 -> Color.DKGRAY
+                    3 -> Color.GRAY
+                    4 -> Color.LTGRAY
+                    5 -> Color.WHITE
+                    6 -> Color.RED
+                    7 -> Color.YELLOW
+                    8 -> Color.GREEN
+                    9 -> Color.CYAN
+                    10 -> Color.BLUE
+                    11 -> Color.MAGENTA
+                    else -> Color.TRANSPARENT
+                }
+            )
         }
         binding.subtitleTestText.run {
-            textSize =  PrefManager.getVal<Int>(PrefName.FontSize).toSP
+            textSize = PrefManager.getVal<Int>(PrefName.FontSize).toSP
             typeface = when (PrefManager.getVal<Int>(PrefName.Font)) {
                 0 -> ResourcesCompat.getFont(this.context, R.font.poppins_semi_bold)
                 1 -> ResourcesCompat.getFont(this.context, R.font.poppins_bold)
@@ -524,36 +529,40 @@ class PlayerSettingsActivity : AppCompatActivity() {
                 6 -> ResourcesCompat.getFont(this.context, R.font.blocky)
                 else -> ResourcesCompat.getFont(this.context, R.font.poppins_semi_bold)
             }
-            setTextColor(when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
-                0 -> Color.BLACK
-                1 -> Color.DKGRAY
-                2 -> Color.GRAY
-                3 -> Color.LTGRAY
-                4 -> Color.WHITE
-                5 -> Color.RED
-                6 -> Color.YELLOW
-                7 -> Color.GREEN
-                8 -> Color.CYAN
-                9 -> Color.BLUE
-                10 -> Color.MAGENTA
-                11 -> Color.TRANSPARENT
-                else -> Color.WHITE
-            })
-            setBackgroundColor(when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
-                0 -> Color.TRANSPARENT
-                1 -> Color.BLACK
-                2 -> Color.DKGRAY
-                3 -> Color.GRAY
-                4 -> Color.LTGRAY
-                5 -> Color.WHITE
-                6 -> Color.RED
-                7 -> Color.YELLOW
-                8 -> Color.GREEN
-                9 -> Color.CYAN
-                10 -> Color.BLUE
-                11 -> Color.MAGENTA
-                else -> Color.TRANSPARENT
-            })
+            setTextColor(
+                when (PrefManager.getVal<Int>(PrefName.PrimaryColor)) {
+                    0 -> Color.BLACK
+                    1 -> Color.DKGRAY
+                    2 -> Color.GRAY
+                    3 -> Color.LTGRAY
+                    4 -> Color.WHITE
+                    5 -> Color.RED
+                    6 -> Color.YELLOW
+                    7 -> Color.GREEN
+                    8 -> Color.CYAN
+                    9 -> Color.BLUE
+                    10 -> Color.MAGENTA
+                    11 -> Color.TRANSPARENT
+                    else -> Color.WHITE
+                }
+            )
+            setBackgroundColor(
+                when (PrefManager.getVal<Int>(PrefName.SubBackground)) {
+                    0 -> Color.TRANSPARENT
+                    1 -> Color.BLACK
+                    2 -> Color.DKGRAY
+                    3 -> Color.GRAY
+                    4 -> Color.LTGRAY
+                    5 -> Color.WHITE
+                    6 -> Color.RED
+                    7 -> Color.YELLOW
+                    8 -> Color.GREEN
+                    9 -> Color.CYAN
+                    10 -> Color.BLUE
+                    11 -> Color.MAGENTA
+                    else -> Color.TRANSPARENT
+                }
+            )
         }
     }
 }

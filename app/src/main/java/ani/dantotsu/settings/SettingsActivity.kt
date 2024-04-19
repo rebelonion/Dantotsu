@@ -12,7 +12,6 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.addCallback
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
@@ -69,11 +68,11 @@ class SettingsActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
 
-            onBackPressedDispatcher.addCallback(context){
+            onBackPressedDispatcher.addCallback(context) {
                 if (PrefManager.getCustomVal("reload", false)) {
                     startMainActivity(context)
                     PrefManager.setCustomVal("reload", false)
-                }else{
+                } else {
                     finish()
                 }
             }
@@ -278,6 +277,7 @@ class SettingsActivity : AppCompatActivity() {
             ?: "Unknown Architecture"
         }
     }
+
     override fun onResume() {
         ThemeManager(this).applyTheme()
         super.onResume()

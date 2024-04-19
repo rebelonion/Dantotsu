@@ -21,6 +21,7 @@ enum class NotificationType(val value: String) {
     MEDIA_DATA_CHANGE("MEDIA_DATA_CHANGE"),
     MEDIA_MERGE("MEDIA_MERGE"),
     MEDIA_DELETION("MEDIA_DELETION"),
+
     //custom
     COMMENT_REPLY("COMMENT_REPLY"),
 }

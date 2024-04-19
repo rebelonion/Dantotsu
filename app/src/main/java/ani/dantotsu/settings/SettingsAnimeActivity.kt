@@ -22,7 +22,7 @@ import ani.dantotsu.themes.ThemeManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class SettingsAnimeActivity: AppCompatActivity(){
+class SettingsAnimeActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsAnimeBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +59,12 @@ class SettingsAnimeActivity: AppCompatActivity(){
                         onClick = {
                             val dialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.purge_anime_downloads)
-                                .setMessage(getString(R.string.purge_confirm, getString(R.string.anime)))
+                                .setMessage(
+                                    getString(
+                                        R.string.purge_confirm,
+                                        getString(R.string.anime)
+                                    )
+                                )
                                 .setPositiveButton(R.string.yes) { dialog, _ ->
                                     val downloadsManager = Injekt.get<DownloadsManager>()
                                     downloadsManager.purgeDownloads(MediaType.ANIME)

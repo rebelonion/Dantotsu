@@ -73,7 +73,7 @@ class AnimeDownloaderService : Service() {
     private val mutex = Mutex()
     private var isCurrentlyProcessing = false
     private var currentTasks: MutableList<AnimeDownloadTask> = mutableListOf()
-    private val ffExtension =  Injekt.get<DownloadAddonManager>().extension?.extension
+    private val ffExtension = Injekt.get<DownloadAddonManager>().extension?.extension
 
     override fun onBind(intent: Intent?): IBinder? {
         // This is only required for bound services.
@@ -244,7 +244,8 @@ class AnimeDownloaderService : Service() {
                     headersStringBuilder.append("\"").append("User-Agent: ")
                         .append(defaultHeaders["User-Agent"]).append("\"\'\r\n\'")
                 }
-                val probeRequest = "-headers $headersStringBuilder -i ${task.video.file.url} -show_entries format=duration -v quiet -of csv=\"p=0\""
+                val probeRequest =
+                    "-headers $headersStringBuilder -i ${task.video.file.url} -show_entries format=duration -v quiet -of csv=\"p=0\""
                 ffExtension.executeFFProbe(
                     probeRequest
                 ) {

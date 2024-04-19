@@ -164,14 +164,17 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                         icon = R.drawable.ic_palette,
                         onClick = {
                             val originalColor: Int = PrefManager.getVal(PrefName.CustomThemeInt)
+
                             class CustomColorDialog : SimpleColorDialog() {
                                 override fun onPositiveButtonClick() {
                                     reload()
                                     super.onPositiveButtonClick()
                                 }
                             }
+
                             val tag = "colorPicker"
-                            CustomColorDialog().title(R.string.custom_theme).colorPreset(originalColor)
+                            CustomColorDialog().title(R.string.custom_theme)
+                                .colorPreset(originalColor)
                                 .colors(context, SimpleColorDialog.MATERIAL_COLOR_PALLET)
                                 .allowCustom(true).showOutline(0x46000000).gridNumColumn(5)
                                 .choiceMode(SimpleColorDialog.SINGLE_CHOICE).neg()
@@ -198,7 +201,8 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
         }
         return true
     }
-    fun reload(){
+
+    fun reload() {
         PrefManager.setCustomVal("reload", true)
         restartApp()
     }

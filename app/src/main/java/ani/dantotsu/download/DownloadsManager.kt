@@ -53,7 +53,11 @@ class DownloadsManager(private val context: Context) {
         saveDownloads()
     }
 
-    fun removeDownload(downloadedType: DownloadedType, toast: Boolean = true, onFinished: () -> Unit) {
+    fun removeDownload(
+        downloadedType: DownloadedType,
+        toast: Boolean = true,
+        onFinished: () -> Unit
+    ) {
         downloadsList.remove(downloadedType)
         CoroutineScope(Dispatchers.IO).launch {
             removeDirectory(downloadedType, toast)

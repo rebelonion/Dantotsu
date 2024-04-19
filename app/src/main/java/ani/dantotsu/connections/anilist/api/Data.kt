@@ -149,8 +149,10 @@ class Query {
         @Serializable
         data class Data(
             @SerialName("favoriteAnime") val favoriteAnime: ani.dantotsu.connections.anilist.api.User?,
-            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?)
+            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?
+        )
     }
+
     @Serializable
     data class AnimeList(
         @SerialName("data")
@@ -168,6 +170,7 @@ class Query {
             @SerialName("mostFav2") val mostFav2: ani.dantotsu.connections.anilist.api.Page?,
         )
     }
+
     @Serializable
     data class MangaList(
         @SerialName("data")
@@ -187,6 +190,7 @@ class Query {
             @SerialName("mostFav2") val mostFav2: ani.dantotsu.connections.anilist.api.Page?,
         )
     }
+
     @Serializable
     data class ToggleFollow(
         @SerialName("data")
@@ -317,13 +321,13 @@ class Query {
         val statistics: NNUserStatisticTypes,
         @SerialName("siteUrl")
         val siteUrl: String,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class NNUserStatisticTypes(
         @SerialName("anime") var anime: NNUserStatistics,
         @SerialName("manga") var manga: NNUserStatistics
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class NNUserStatistics(
@@ -334,7 +338,7 @@ class Query {
         @SerialName("episodesWatched") var episodesWatched: Int,
         @SerialName("chaptersRead") var chaptersRead: Int,
         @SerialName("volumesRead") var volumesRead: Int,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserFavourites(
@@ -348,13 +352,13 @@ class Query {
         val staff: UserStaffFavouritesCollection,
         @SerialName("studios")
         val studios: UserStudioFavouritesCollection,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserMediaFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserMediaImageFavorite>,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserMediaImageFavorite(
@@ -362,13 +366,13 @@ class Query {
         val id: Int,
         @SerialName("coverImage")
         val coverImage: MediaCoverImage
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserCharacterFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserCharacterImageFavorite(
@@ -380,19 +384,19 @@ class Query {
         val image: CharacterImage,
         @SerialName("isFavourite")
         val isFavourite: Boolean
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserStaffFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>, //downstream it's the same as character
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserStudioFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserStudioFavorite>,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserStudioFavorite(
@@ -400,7 +404,7 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: String,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     //----------------------------------------
     // Statistics
@@ -409,12 +413,12 @@ class Query {
     data class StatisticsResponse(
         @SerialName("data")
         val data: Data
-    ): java.io.Serializable {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("User")
             val user: StatisticsUser?
-        ): java.io.Serializable
+        ) : java.io.Serializable
     }
 
     @Serializable

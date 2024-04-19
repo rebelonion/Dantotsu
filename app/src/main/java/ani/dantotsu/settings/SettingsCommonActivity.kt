@@ -41,9 +41,10 @@ import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class SettingsCommonActivity: AppCompatActivity(){
+class SettingsCommonActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsCommonBinding
     private lateinit var launcher: LauncherWrapper
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -138,7 +139,12 @@ class SettingsCommonActivity: AppCompatActivity(){
                         desc = getString(R.string.ui_settings),
                         icon = R.drawable.ic_round_auto_awesome_24,
                         onClick = {
-                            startActivity(Intent(context, UserInterfaceSettingsActivity::class.java))
+                            startActivity(
+                                Intent(
+                                    context,
+                                    UserInterfaceSettingsActivity::class.java
+                                )
+                            )
                         },
                         isActivity = true
                     ),
@@ -150,7 +156,8 @@ class SettingsCommonActivity: AppCompatActivity(){
                         onClick = {
                             val managers = arrayOf("Default", "1DM", "ADM")
                             val downloadManagerDialog =
-                                AlertDialog.Builder(context, R.style.MyPopup).setTitle(R.string.download_manager)
+                                AlertDialog.Builder(context, R.style.MyPopup)
+                                    .setTitle(R.string.download_manager)
                             var downloadManager: Int = PrefManager.getVal(PrefName.DownloadManager)
                             val dialog = downloadManagerDialog.setSingleChoiceItems(
                                 managers, downloadManager
@@ -231,7 +238,8 @@ class SettingsCommonActivity: AppCompatActivity(){
                                     launcher.registerForCallback { success ->
                                         if (success) {
                                             toast(getString(R.string.please_wait))
-                                            val newUri = PrefManager.getVal<String>(PrefName.DownloadsDir)
+                                            val newUri =
+                                                PrefManager.getVal<String>(PrefName.DownloadsDir)
                                             GlobalScope.launch(Dispatchers.IO) {
                                                 Injekt.get<DownloadsManager>().moveDownloadsDir(
                                                     context, Uri.parse(oldUri), Uri.parse(newUri)
@@ -262,7 +270,7 @@ class SettingsCommonActivity: AppCompatActivity(){
                         desc = getString(R.string.always_continue_content),
                         icon = R.drawable.ic_round_delete_24,
                         isChecked = PrefManager.getVal(PrefName.ContinueMedia),
-                        switch = {isChecked, _ ->
+                        switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.ContinueMedia, isChecked)
                         }
                     ),
@@ -272,7 +280,7 @@ class SettingsCommonActivity: AppCompatActivity(){
                         desc = getString(R.string.search_source_list),
                         icon = R.drawable.ic_round_search_sources_24,
                         isChecked = PrefManager.getVal(PrefName.SearchSources),
-                        switch = {isChecked, _ ->
+                        switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.SearchSources, isChecked)
                         }
                     ),
@@ -282,7 +290,7 @@ class SettingsCommonActivity: AppCompatActivity(){
                         desc = getString(R.string.recentlyListOnly),
                         icon = R.drawable.ic_round_new_releases_24,
                         isChecked = PrefManager.getVal(PrefName.RecentlyListOnly),
-                        switch = {isChecked, _ ->
+                        switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.RecentlyListOnly, isChecked)
                         }
                     ),
@@ -292,7 +300,7 @@ class SettingsCommonActivity: AppCompatActivity(){
                         desc = getString(R.string.adult_only_content),
                         icon = R.drawable.ic_round_nsfw_24,
                         isChecked = PrefManager.getVal(PrefName.AdultOnly),
-                        switch = {isChecked, _ ->
+                        switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.AdultOnly, isChecked)
                             restartApp()
                         },
@@ -334,6 +342,7 @@ class SettingsCommonActivity: AppCompatActivity(){
 
         }
     }
+
     private fun passwordAlertDialog(isExporting: Boolean, callback: (CharArray?) -> Unit) {
         val password = CharArray(16).apply { fill('0') }
 
