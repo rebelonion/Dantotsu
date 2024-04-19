@@ -47,7 +47,6 @@ class SettingsAddonActivity : AppCompatActivity() {
     private val downloadAddonManager: DownloadAddonManager = Injekt.get()
     private val torrentAddonManager: TorrentAddonManager = Injekt.get()
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -193,7 +192,7 @@ class SettingsAddonActivity : AppCompatActivity() {
                             Injekt.get<TorrentAddonManager>().extension?.let {
                                 if (isChecked) {
                                     lifecycleScope.launchIO {
-                                        if (!ServerService.isRunning()) {
+                                        if (!ServerService.isRunning() && torrentAddonManager.isAvailable()) {
                                             ServerService.start()
                                         }
                                     }

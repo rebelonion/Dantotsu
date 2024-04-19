@@ -1570,7 +1570,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     }
                 }.show()
             dialog.window?.setDimAmount(0.8f)
-        } else buildExoplayer()
+        }
+        if (!this::exoPlayer.isInitialized) buildExoplayer()
 
         val isDisabled = (subtitle == null && hasExtSubtitles)
         exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
