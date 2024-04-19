@@ -54,6 +54,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
@@ -266,7 +267,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 it.server.name == ep.selectedExtractor
             }?.videos?.getOrNull(ep.selectedVideo)
             video?.file?.url?.let { url ->
-                if (video.file.url.startsWith("magnet:") || video.file.url.endsWith(".torrent")) {
+                if (url.startsWith("magnet:") || url.endsWith(".torrent")) {
                     val torrentExtension = Injekt.get<TorrentAddonManager>()
                     if (torrentExtension.isAvailable()) {
                         val activity = currActivity() ?: requireActivity()
@@ -275,12 +276,12 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             torrentExtension.torrentHash?.let {
                                 extension.removeTorrent(it)
                             }
-                            val index = if (video.file.url.contains("index=")) {
-                                video.file.url.substringAfter("index=").toIntOrNull() ?: 0
+                            val index = if (url.contains("index=")) {
+                                url.substringAfter("index=").toIntOrNull() ?: 0
                             } else 0
-                            Logger.log("Sending: ${video.file.url}, ${video.quality}, $index")
+                            Logger.log("Sending: ${url}, ${video.quality}, $index")
                             val currentTorrent = extension.addTorrent(
-                                video.file.url, video.quality.toString(), "", "", false
+                                url, video.quality.toString(), "", "", false
                             )
                             torrentExtension.torrentHash = currentTorrent.hash
                             video.file.url = extension.getLink(currentTorrent, index)
@@ -483,6 +484,34 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     val subtitleNames = subtitles.map { it.language }
                     var subtitleToDownload: Subtitle? = null
                     val activity = currActivity() ?: requireActivity()
+                    selectedVideo?.file?.url?.let { url ->
+                        if (url.startsWith("magnet:") || url.endsWith(".torrent")) {
+                            val torrentExtension = Injekt.get<TorrentAddonManager>()
+                            if (!torrentExtension.isAvailable()) {
+                                snackString("Torrent Extension not available")
+                                return@setSafeOnClickListener
+                            }
+                            runBlocking {
+                                withContext(Dispatchers.IO) {
+                                    val extension = torrentExtension.extension!!.extension
+                                    torrentExtension.torrentHash?.let {
+                                        extension.removeTorrent(it)
+                                    }
+                                    val index = if (url.contains("index=")) {
+                                        url.substringAfter("index=").toIntOrNull() ?: 0
+                                    } else 0
+                                    Logger.log("Sending: ${url}, ${selectedVideo.quality}, $index")
+                                    val currentTorrent = extension.addTorrent(
+                                        url, selectedVideo.quality.toString(), "", "", false
+                                    )
+                                    torrentExtension.torrentHash = currentTorrent.hash
+                                    selectedVideo.file.url =
+                                        extension.getLink(currentTorrent, index)
+                                    Logger.log("Received: ${selectedVideo.file.url}")
+                                }
+                            }
+                        }
+                    }
                     if (subtitles.isNotEmpty()) {
                         val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
                             .setTitle("Download Subtitle")
