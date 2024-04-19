@@ -85,7 +85,7 @@ jobs:
       run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
     - name: Upload a Build Artifact
-      uses: actions/upload-artifact@v4.3.1
+      uses: actions/upload-artifact@v4
       with:
           name: Dantotsu
           retention-days: 5
@@ -117,23 +117,13 @@ jobs:
         VERSION: ${{ env.VERSION }}
 
     - name: Upload Current SHA as Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: last-sha
         path: last_sha.txt
 
     - name: Upload Commit log as Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: commit-log
         path: commit_log.txt
-
-    - name: Delete Old Pre-Releases
-      id: delete-pre-releases
-      uses: sgpublic/delete-release-action@master
-      with:
-        pre-release-drop: true
-        pre-release-keep-count: 3
-        pre-release-drop-tag: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
