@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="zh-rCN">
+    <string name="slogan">全新的最佳动漫与漫画应用程序，适用于Android。</string>
+    <string name="login">登录</string>
+    <string name="logout">登出</string>
+    <string name="anilist_link">https://anilist.co/user/%1$s/</string>
+    <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
+    <string name="discord_link">https://discord.com/users/%1$s/</string>
+    <string name="home">主页</string>
+    <string name="anime">动画</string>
+    <string name="browse_anime">浏览动画</string>
+    <string name="manga">漫画</string>
+    <string name="browse_manga">浏览漫画</string>
+    <string name="novels">Novels</string>
+    <string name="info">信息</string>
+    <string name="watch">观看</string>
+    <string name="read">阅读</string>
+    <string name="language">Language</string>
+    <string name="anime_list">动画列表</string>
+    <string name="manga_list">漫画列表</string>
+    <string name="sad">X(</string>
+    <string name="oh">:o</string>
+    <string name="colon">" : "</string>
+    <string name="no_internet">无网络连接</string>
+    <string name="refresh">刷新</string>
+    <string name="search">搜索</string>
+    <string name="search_results">搜索结果</string>
+    <string name="sort_by">排序方式</string>
+    <string name="genre">类型</string>
+    <string name="top_score">最高评分</string>
+    <string name="updated">最近更新</string>
+    <string name="trending_anime">热门动画</string>
+    <string name="popular_anime">流行动画</string>
+    <string name="trending_manga">热门漫画</string>
+    <string name="trending_novel">热门小说</string>
+    <string name="popular_manga">流行漫画</string>
+    <string name="username">用户名</string>
+    <string name="chapters_read">阅读章节 </string>
+    <string name="chapters_read_n">Chapters\nRead</string>
+    <string name="episodes_watched">观看集数 </string>
+    <string name="episodes_watched_n">Episodes\nWatched</string>
+    <string name="continue_reading">继续阅读</string>
+    <string name="continue_watching">继续观看</string>
+    <string name="recommended">推荐</string>
+    <string name="get_recommendations">观看/阅读一些动画或漫画以获取推荐</string>
+    <string name="empty">全部完成，何时更新？</string>
+    <string name="action_settings">设置</string>
+    <string name="add">添加到列表</string>
+    <string name="list_editor">列表编辑器</string>
+    <string name="add_fav">添加到收藏夹</string>
+    <string name="notifications">通知</string>
+    <string-array name="keys">
+        <item>阅读中</item>
+        <item>观看中</item>
+        <item>已完成</item>
+        <item>已暂停</item>
+        <item>已放弃</item>
+        <item>计划中</item>
+        <item>收藏夹</item>
+        <item>重新观看</item>
+        <item>重新阅读</item>
+        <item>全部</item>
+    </string-array>
+    <string name="no_notifications">No more notifications</string>
+    <string name="followers">Followers</string>
+    <string name="status">状态</string>
+    <string-array name="status_anime">
+        <item>计划中</item>
+        <item>观看中</item>
+        <item>已完成</item>
+        <item>重新观看</item>
+        <item>已暂停</item>
+        <item>已放弃</item>
+    </string-array>
+    <string-array name="status_manga">
+        <item>计划中</item>
+        <item>阅读中</item>
+        <item>已完成</item>
+        <item>重新阅读</item>
+        <item>已暂停</item>
+        <item>已放弃</item>
+    </string-array>
+    <string name="progress">进度</string>
+    <string name="score">评分</string>
+    <string name="score_suffix">" / 10"</string>
+    <string name="started_at">开始于</string>
+    <string name="completed_at">完成于</string>
+    <string name="save">保存</string>
+    <string name="delete">删除</string>
+    <string name="remove">移除</string>
+    <string name="name">名称</string>
+    <string name="name_romaji">罗马字名称</string>
+    <string name="mean_score">平均分</string>
+    <string name="format">格式</string>
+    <string name="status_title">状态</string>
+    <string name="total_eps">总集数</string>
+    <string name="episodes"> Episode(s)</string>
+    <string name="chapters"> Chapter(s)</string>
+    <string name="total_divider"> | %1$s</string>
+    <string name="total_chaps">总章节数</string>
+    <string name="ep_duration">平均持续时间</string>
+    <string name="min">" 分钟"</string>
+    <string name="season">季节</string>
+    <string name="start_date">开始日期</string>
+    <string name="end_date">结束日期</string>
+    <string name="source">来源</string>
+    <string name="main_studio">制作公司</string>
+    <string name="genres">类型</string>
+    <string name="description">简介</string>
+    <string name="characters">角色</string>
+    <string name="relations">关系</string>
+    <string name="staff">工作人员</string>
+    <string name="favourites">收藏夹</string>
+    <string name="popularity">Popularity</string>
+    <string name="roles">角色</string>
+    <string name="details">详情</string>
+    <string name="play_yt">在 Youtube 上播放</string>
+    <string name="eps">集数</string>
+    <string name="ep">集</string>
+    <string name="chaps">章节</string>
+    <string name="chap">章</string>
+    <string name="wrong"><u>错误的标题？</u></string>
+    <string name="source_not_found">        找不到任何内容 X( \n
+        请尝试其他来源。
+    </string>
+    <string name="not_supported">%1$s 不支持！</string>
+    <string name="server_selector">选择服务器</string>
+    <string name="auto_select_server">自动选择服务器</string>
+    <string name="make_default">设为默认</string>
+    <string name="filler">填充</string>
+    <string name="adult">成人内容</string>
+    <string name="list_only">仅显示列表</string>
+    <string name="tag">标签</string>
+    <string name="tags">标签</string>
+    <string name="synonyms">同义词</string>
+    <string name="trailer">预告片</string>
+    <string name="opening">片头曲</string>
+    <string name="ending">片尾曲</string>
+    <string name="prequel">前传</string>
+    <string name="sequel">续集</string>
+    <string name="anilist_settings">Anilist 设置</string>
+    <string name="extension_settings">扩展</string>
+    <string name="downloads">下载</string>
+    <string name="offline_mode">离线模式</string>
+    <string name="settings">设置</string>
+    <string name="extensions">扩展</string>
+    <string name="extension_updates_available">Extension updates available</string>
+    <string name="player_settings">播放器设置</string>
+    <string name="recentlyListOnly">仅在最近更新中显示我的节目</string>
+    <string name="download_manager_select">下载管理器</string>
+    <string name="downloadInSd">在 SD 卡中下载</string>
+    <string name="noSdFound">未找到 SD 卡。</string>
+    <string name="reader_settings">阅读器设置</string>
+    <string name="default_source">默认来源</string>
+    <string name="show_yt">显示 Youtube 链接</string>
+    <string name="default_ep_view">默认集数布局</string>
+    <string name="default_chp_view">默认章节布局</string>
+    <string name="ui">用户界面</string>
+    <string name="common">通用</string>
+    <string name="theme">主题</string>
+    <string name="ui_settings">UI 设置</string>
+    <string name="about">关于</string>
+    <string name="desc">"    Dantotsu 是从 Saikou 的残骸中精心制作而成，基于简约而又先进的优雅。它是一个仅限于 Anilist 的客户端，还允许您通过扩展和漫画来流式传输 - 下载动画。\nDantotsu 在日语中的意思是“最好的”，我们想说这是 Android 上最好的开源动画和漫画应用程序，您会说什么呢？"</string>
+    <string name="devs">开发者/帮助者</string>
+    <string name="disclaimer">免责声明</string>
+    <string name="full_disclaimer">         - Dantotsu 本身仅提供动画和漫画跟踪器，并不提供任何动画或漫画的流式传输或下载能力。
+        \n\n - Dantotsu 或其任何开发者/工作人员不承载 Dantotsu 中找到的任何内容。应用程序中找到的任何图像和动画/漫画信息都来自各种公共 API（AniList、MyAnimeList、Kitsu）。
+        \n\n - 此外，Dantotsu 中找到的所有动画/漫画链接都来自各种第三方插件，与 Dantotsu 或其工作人员无关。
+        \n\n - Dantotsu 或其所有者不对应用程序内或外找到的任何内容的任何误用负责，并且不能对应用程序内找到的任何内容的分发负责。
+        \n\n - 使用 Dantotsu，您同意应用程序的开发者不对应用程序中找到的任何内容负责。您还同意，您不得使用 Dantotsu 下载或流式传输任何受版权保护的内容。
+        \n\n - 如果涉及到互联网侵权问题，请联系来源网站。开发者不承担任何法律责任。
+    </string>
+    <string name="version_current">版本 %1$s</string>
+    <string-array name="tips">
+        <item>您可以长按一集/章节将其标记为已读。</item>
+        <item>长按显示可以直接打开列表编辑器。</item>
+        <item>应用程序中还隐藏了一些彩蛋。</item>
+        <item>挑战：转到流行动画和漫画的底部。</item>
+        <item>尝试长按显示的标题。</item>
+        <item>该死的，你为什么在浪费你的时间？</item>
+        <item>您可以长按以复制此消息。</item>
+        <item>哦，我的天啊！您找到了一个彩蛋！？</item>
+        <item>您知道还有谁喜欢这个动画吗？</item>
+        <item>MAL 支持？这是开发人员的。</item>
+        <item>小说？更像是无小说。</item>
+        <item>长按应用程序图标检查更新。</item>
+    </string-array>
+    <string-array name="themes">
+        <item>默认</item>
+        <item>主题1</item>
+        <item>主题2</item>
+        <item>主题3</item>
+        <item>主题4</item>
+    </string-array>
+    <string name="video">视频</string>
+    <string name="video_info">显示视频信息</string>
+    <string name="source_info">显示来源名称</string>
+    <string name="video_info_info">显示当前视频播放的分辨率信息，对于<b>“多种质量”</b>服务器很有用。</string>
+    <string name="default_quality">自动选择默认质量</string>
+    <string name="height">高度</string>
+    <string name="width">宽度</string>
+    <string name="default_quality_info">默认情况下自动选择提供的最接近的质量，仅适用于“多种质量”服务器。播放视频时自动更改。</string>
+    <string name="default_playback_speed">默认播放速度：%1$s</string>
+    <string name="cursed_speeds">诅咒的速度</string>
+    <string name="resize_mode_button">默认调整大小模式</string>
+    <string name="subtitles">字幕</string>
+    <string name="subtitle_toggle">字幕</string>
+    <string name="primary_sub_color_select">字幕颜色</string>
+    <string name="secondary_sub_color_select">字幕轮廓颜色</string>
+    <string name="secondary_sub_outline_type_select">字幕轮廓类型</string>
+    <string name="sub_background_color_select">字幕背景颜色</string>
+    <string name="sub_window_color_select">字幕窗口颜色</string>
+    <string name="sub_window_color_info">"字幕窗口是左右两侧的部分。（其中背景不是）"</string>
+    <string name="sub_color_info"><b>注意：</b>更改上述设置仅影响软字幕！</string>
+    <string name="sub_alpha">Subtitle Transparency</string>
+    <string name="sub_text_example">Example Sub</string>
+    <string name="sub_font_select">字幕字体</string>
+    <string name="subtitle_font_size">字幕大小</string>
+    <string name="auto">自动</string>
+    <string name="auto_play_next_episode">自动播放下一集</string>
+    <string name="auto_play_next_episode_info">如果与播放器没有交互1小时后自动停用。</string>
+    <string name="auto_skip_fillers">自动跳过填充剧集</string>
+    <string name="auto_skip_fillers_info">在切换到下一集时跳过填充剧集。</string>
+    <string name="update_progress">更新进度</string>
+    <string name="ask_update_progress_anime">为每部动画“单独”询问</string>
+    <string name="ask_update_progress_manga">为每部漫画“单独”询问</string>
+    <string name="ask_update_progress_info_ep">关闭后，当观看完一集时将始终自动更新进度。</string>
+    <string name="ask_update_progress_info_chap">关闭后，当阅读完一章时将始终自动更新进度。</string>
+    <string name="ask_update_progress_chapter_zero">为第0章更新进度</string>
+    <string name="ask_update_progress_info_zero">开启后，将新开始的项目添加到 Anilist 中，进度设置为第0章。</string>
+    <string name="ask_update_progress_hentai">更新Hentai的进度</string>
+    <string name="ask_update_progress_doujin">更新Doujins的进度</string>
+    <string name="very_bold">你很大胆，sar</string>
+    <string name="watch_complete_percentage">观看更新百分比</string>
+    <string name="watch_complete_percentage_info">在观看一集后，Anilist进度应更新的百分比。\n这还设置了下一集预加载链接的\%。</string>
+    <string name="behaviour">行为</string>
+    <string name="always_continue">总是从上次离开的地方继续</string>
+    <string name="pause_video_focus">失去焦点时暂停</string>
+    <string name="gestures">音量和亮度手势</string>
+    <string name="double_tap">双击跳转</string>
+    <string name="fast_forward">快进</string>
+    <string name="double_tap_info">关闭后将显示快进和后退按钮</string>
+    <string name="seek_time">寻找时间</string>
+    <string name="seek_time_info">快进和后退的时间，以秒为单位。</string>
+    <string name="skip_time">跳过时间</string>
+    <string name="skip_time_info">将设置为0，隐藏跳过按钮。</string>
+    <string name="show_cast_button">显示投射按钮</string>
+    <string name="show_cast_button_info">需要“Web Video Caster”应用来投射。</string>
+    <string name="picture_in_picture">画中画</string>
+    <string name="always_minimize">总是最小化</string>
+    <string name="always_minimize_info">需要启用画中画，使播放器的行为类似于Youtube播放器但更好。\n还隐藏了画中画按钮。</string>
+    <string name="app">应用程序</string>
+    <string name="immersive_mode">隐藏状态栏</string>
+    <string name="immersive_modelist">在列表上隐藏状态栏</string>
+    <string name="immersive_mode_info">需要完全重新启动应用程序才能应用。</string>
+    <string name="home_layout_show">显示/隐藏主页布局</string>
+    <string-array name="home_layouts">
+        <item>继续观看</item>
+        <item>喜欢的动画</item>
+        <item>计划中的动画</item>
+        <item>继续阅读</item>
+        <item>喜欢的漫画</item>
+        <item>计划中的漫画</item>
+        <item>推荐</item>
+    </string-array>
+    <string name="startUpTab">默认启动选项卡</string>
+    <string name="small_view">在热门节目中显示小视图</string>
+    <string name="animations">动画</string>
+    <string name="banner_animations">横幅动画</string>
+    <string name="layout_animations">布局动画</string>
+    <string name="trending_scroller">Trending Scroller</string>
+    <string name="animation_speed">整体速度</string>
+    <string name="empty_fav">看起来你什么都不喜欢，\n尝试喜欢一部节目以保留在此处。</string>
+    <string name="fav_anime">喜欢的动画</string>
+    <string name="fav_manga">喜欢的漫画</string>
+    <string name="restart_app">重新启动应用程序？</string>
+    <string name="next">下一个</string>
+    <string name="previous">上一个</string>
+    <string name="current_page">当前页</string>
+    <string name="dubbed">配音</string>
+    <string name="subbed">字幕</string>
+    <string name="prefer_dub">更喜欢配音动画</string>
+    <string name="none">无</string>
+    <string name="selected_dns">已选择的DNS</string>
+    <string name="dns_info">如果您的ISP阻止任何来源，请更改</string>
+    <string name="keep_screen_on">保持屏幕常亮</string>
+    <string name="layout">布局</string>
+    <string name="spaced_pages">间隔页面</string>
+    <string name="direction">方向</string>
+    <string name="general">常规</string>
+    <string name="show_system_bars">显示状态栏和导航栏</string>
+    <string name="auto_detect_webtoon">自动检测Webtoon</string>
+    <string name="auto_detect_webtoon_info">如果漫画不是来自日本，阅读器将默认为Webtoon阅读器设置</string>
+    <string name="default_settings">默认设置</string>
+    <string name="horizontal_scroll_bar">水平滚动条</string>
+    <string name="dual_page">双页</string>
+    <string name="dual_page_info">一页显示2张图片，如果图片尺寸不同可能会看起来奇怪</string>
+    <string name="true_colors">真实色彩</string>
+    <string name="true_colors_info">(32位色彩模式) 减少图像的色带效应，可能会影响性能。</string>
+    <string name="image_rotation">图像旋转</string>
+    <string name="hide_page_numbers">隐藏页码</string>
+    <string name="sort_by_title">按标题排序</string>
+    <string name="sort_by_last_updated">按最后更新时间排序</string>
+    <string name="sort_by_score">按评分排序</string>
+    <string name="over_scroll">滚动超出到下一个/上一个章节</string>
+    <string name="volume_buttons">使用音量按钮翻页</string>
+    <string name="list_private">私人</string>
+    <string name="wrap_images">包裹图片</string>
+    <string name="wrap_images_info">对于较大的设备非常有用，删除图片之间的间距（如果存在）。</string>
+    <string name="reload">重新加载</string>
+    <string name="share">分享</string>
+    <string name="skip">跳过</string>
+    <string name="other">其他</string>
+    <string name="total_repeats">总重复</string>
+    <string name="custom_lists">自定义列表</string>
+    <string name="donate_desc">想要支持Dantotsu的维护者吗？\n考虑捐赠</string>
+    <string name="donate_goal">目前没有捐赠目标</string>
+    <string name="filter">过滤器</string>
+    <string name="year">年份</string>
+    <string name="apply">应用</string>
+    <string name="cancel">取消</string>
+    <string name="edit">编辑</string>
+    <string name="this_season">本季</string>
+    <string name="next_season">下一季</string>
+    <string name="previous_season">上一季</string>
+    <string name="include_media_in_list">包括媒体在列表中</string>
+    <string name="release_calendar">发布日历</string>
+    <string name="planned_anime">计划中的动画</string>
+    <string name="planned_manga">计划中的漫画</string>
+    <string name="image_long_clicking">长按打开图片</string>
+    <string name="always_continue_content">Always continue previous items</string>
+    <string name="search_source_list">Search next available source</string>
+    <string name="timestamp_proxy_desc">如果遇到握手失败，这很有用</string>
+    <string name="timestamp_proxy">使用代理进行时间戳</string>
+    <string name="check_app_updates">始终检查应用程序更新</string>
+    <string name="author">作者</string>
+    <string name="forks">版本</string>
+    <string name="faq">常见问题</string>
+    <string name="accounts">帐户</string>
+    <string name="addons">Addons</string>
+    <string name="addons_desc">Addons are extensions that provide additional functionality.</string>
+    <string name="myanimelist">MyAnimeList</string>
+    <string name="login_with_anilist">使用Anilist登录！</string>
+    <string name="anilist">Anilist</string>
+    <string name="account_help">这是如何工作的？</string>
+    <string name="full_account_help">        Dantotsu是一个基于Anilist的应用程序，因此，为了与您的MAL帐户同步，它需要登录一个Anilist帐户。
+        \n一旦同时使用Anilist和MAL帐户登录，该应用程序将自动更新您的MAL帐户，以便在：
+        \n- 添加新的媒体
+        \n- 编辑媒体
+        \n- 删除媒体
+    
+        \n\n注意：该应用程序不会将旧的媒体从Anilist同步到MAL，建议同步它们。
+        \n- 查看 __FAQs__ 以获取 _简单方法_
+    
+        \n\n对于 _中级用户_：
+        \n- [如何将Anilist数据与MAL同步](https://anilist.co/forum/thread/2654)
+        \n- [如何将MAL数据与Anilist同步](https://anilist.co/forum/thread/3393)
+    
+        \n\n_不需要同步MAL和Anilist帐户。_
+    </string>
+    <string name="notification_for_checking_subscriptions">显示通知以检查订阅</string>
+    <string name="use_alarm_manager">使用Alarm Manager可靠地发送通知</string>
+    <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
+    <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
+    <string name="use">Use</string>
+    <string name="checking_subscriptions">检查订阅的通知</string>
+    <string name="subscriptions_checking_time_s">订阅更新频率：%1$s</string>
+    <string name="subscriptions_checking_time">订阅更新频率</string>
+    <string name="subscriptions_info">Dantotsu定期检查新的剧集/章节的时间量\n（时间越短，电池消耗越大）</string>
+    <string name="do_not_update">不更新</string>
+    <string name="loading_chap_number">Loading Chapter %1$s</string>
+    <string name="sort_by_release_date">按发布日期排序</string>
+    <string name="crop_borders">裁剪边框</string>
+    <string name="note">注意</string>
+    <string name="manage_extension_repos">Manage Extension Repos</string>
+    <string name="installing_extension">Installing extension</string>
+    <string name="installation_failed">Installation failed: %1$s</string>
+    <string name="installation_complete">Installation complete</string>
+    <string name="extension_has_been_installed">The extension has been successfully installed.</string>
+    <string name="extension_installed">Extension installed</string>
+    <string name="installed">Installed</string>
+    <string name="error_message">Error: %1$s</string>
+    <string name="install_step">Step: %1$s</string>
+    <string name="review">Review</string>
+    <string name="discord_nothing_button">Display only the first button</string>
+    <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
+    <string name="discord_anilist_button">Display your AniList profile instead</string>
+    <string name="discord_rich_presence">Discord Rich Presence</string>
+    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
+    <string name="view_my_anilist">View My AniList</string>
+    <string name="jobless_message">天啊！你真的是无业游民\n你已经到达了末尾</string>
+    <string name="file_manager_not_found">找不到任何文件管理器以打开SD卡</string>
+    <string name="error_loading_data">加载数据出错 %1$s</string>
+    <string name="long_click_to_check_update">您长按按钮以检查应用更新</string>
+    <string name="saved_to_path">保存到：\n%s</string>
+    <string name="setting_progress">设置进度为 %1$d</string>
+    <string name="login_anilist_account">请登录Anilist帐户！</string>
+    <string name="congrats_vro">恭喜，伙计</string>
+    <string name="please_reload">请重新加载。</string>
+    <string name="copied_text">已复制 \"%1$s\"</string>
+    <string name="back_to_exit">请再次按BACK以退出</string>
+    <string name="no_internet_connection">无互联网连接</string>
+    <string name="anilist_not_found">看起来在Anilist上找不到那个。</string>
+    <string name="disabled_auto_skip">已禁用自动跳过OP和ED</string>
+    <string name="auto_skip">自动跳过OP和ED</string>
+    <string name="show_skip_time_stamp_button">显示跳过时间戳按钮</string>
+    <string name="always_load_time_stamps">始终加载时间戳</string>
+    <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>
+    <string name="timestamps">时间戳</string>
+    <string name="auto_skip_op_ed">自动跳过OP / ED</string>
+    <string name="requires_time_stamps_to_be_enabled">需要启用时间戳</string>
+    <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
+    <string name="copied_to_clipboard">已复制到剪贴板</string>
+    <string name="first_episode">这是第1集！</string>
+    <string name="reset_auto_update">您可以长按列表编辑器按钮以重置自动更新</string>
+    <string name="autoplay_cancelled">自动播放已取消，超过1小时没有交互。</string>
+    <string name="auto_select_server_error">无法自动选择服务器，请重试！</string>
+    <string name="stream_selection_empty">内容没有可用的流。尝试其他来源。</string>
+    <string name="logging_in_mal">登录MAL中</string>
+    <string name="getting_user_data">获取用户数据</string>
+    <string name="no_next_episode">找不到下一集！</string>
+    <string name="enable_banner_animations">尝试从设置中启用横幅动画</string>
+    <string name="please_login_anilist">请使用Anilist登录！</string>
+    <string name="auto_update_reset">自动更新进度现在已重置</string>
+    <string name="cant_wait">等不及了，哈？好吧 X(</string>
+    <string name="downloading">下载中…</string>
+    <string name="next_chapter_not_found">找不到下一章节</string>
+    <string name="first_chapter">这是第1章！</string>
+    <string name="adult_stuff">成人内容？&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
+    <string name="what_did_you_open">你到底打开了什么？</string>
+    <string name="error_getting_data">获取Anilist数据出错。</string>
+    <string name="empty_response">空响应，也许是您的互联网速度太慢了？</string>
+    <string name="error_loading_mal_user_data">加载MAL用户数据出错</string>
+    <string name="error_loading_mal_data">加载MAL数据失败</string>
+    <string name="error_loading_anilist_user_data">加载Anilist用户数据出错</string>
+    <string name="episode_not_found">找不到剧集：%1$s</string>
+    <string name="list_updated">列表已更新</string>
+    <string name="deleted_from_list">从列表中删除</string>
+    <string name="no_list_id">未找到列表ID…</string>
+    <string name="checking_for_update">正在检查更新</string>
+    <string name="dont_show_again">不要再显示版本 %1$s 的更新</string>
+    <string name="no_update_found">找不到更新</string>
+    <string name="downloading_update">正在下载更新 %1$s</string>
+    <string name="permission_required">请在设置中授予对文件和文件夹的访问权限，然后重试。</string>
+    <string name="started_downloading">开始下载\n%1$s</string>
+    <string name="install_1dm">请安装1DM</string>
+    <string name="install_adm">请安装ADM</string>
+    <string name="error_getting_image_data">获取图像数据出错</string>
+    <string name="loading_image_failed">加载图像失败</string>
+    <string name="copied_device_info">已复制设备信息</string>
+    <string name="anilist_down">看起来Anilist已经关闭了，也许尝试使用VPN，或者您可以等待其恢复。</string>
+    <string name="failed_to_load_data">无法加载 %1$d 的保存数据</string>
+    <string name="access_not_available">无法获取访问权限</string>
+    <string name="mal_login_uri_not_found">Mal登录：找不到Uri</string>
+    <string name="mal_login_code_challenge_not_found">Mal登录：找不到codeChallenge</string>
+    <string name="mal_login_code_not_present">Mal登录：重定向URI中不存在代码</string>
+    <string name="refresh_token_load_failed">刷新令牌：加载保存的令牌失败</string>
+    <string name="refreshing_token_failed">刷新令牌失败</string>
+    <string name="episode_release_countdown">第 %1$d 集将在以下时间发布</string>
+    <string name="chapter_number">章节 %1$d</string>
+    <string name="chapter_release_timeout">%1$s has been available for</string>
+    <string name="time_format">%1$d 天 %2$d 小时 %3$d 分钟 %4$d 秒</string>
+    <string-array name="sort_by">
+        <item>评分</item>
+        <item>热门</item>
+        <item>趋势</item>
+        <item>字母升序</item>
+        <item>字母降序</item>
+        <item>纯粹痛苦</item>
+        <item>Pure pain</item>
+    </string-array>
+    <string name="main_role">主要</string>
+    <string name="supporting_role">配角</string>
+    <string name="status_finished">已完结</string>
+    <string name="status_releasing">连载中</string>
+    <string name="status_not_yet_released">尚未发布</string>
+    <string name="status_cancelled">已取消</string>
+    <string name="status_hiatus">暂停</string>
+    <string name="type_adaptation">改编</string>
+    <string name="type_parent">原作</string>
+    <string name="type_character">角色</string>
+    <string name="type_summary">摘要</string>
+    <string name="type_alternative">替代</string>
+    <string name="type_other">其他</string>
+    <string name="type_source">来源</string>
+    <string name="type_contains">包含</string>
+    <string name="read_on_dantotsu">在Dantotsu上阅读</string>
+    <string name="watch_on_dantotsu">在Dantotsu上观看</string>
+    <string name="view_profile_in_dantotsu">在Dantotsu中查看个人资料</string>
+    <string name="continue_episode">继续：剧集 </string>
+    <string name="filler_tag"> - Filler</string>
+    <string name="continue_chapter">继续：</string>
+    <string name="episode">"剧集 "</string>
+    <string name="episode_num">"剧集 %1$s"</string>
+    <string name="chapter">"章节 "</string>
+    <string name="chapter_num">"章节 %1$s"</string>
+    <string name="just_released">- 刚刚发布了！</string>
+    <string name="checking_subscriptions_title">检查订阅</string>
+    <string name="user_list">%1$s\'s %2$s List</string>
+    <string name="speed">速度</string>
+    <string name="auto_update">自动更新 %1$s 的进度？</string>
+    <string name="continue_from">从 %1$s 继续？</string>
+    <string name="title_update_progress">在 Anilist 上更新进度？</string>
+    <string name="incognito_will_not_update">隐身模式仍然会忽略进度。</string>
+    <string name="dont_ask_again">"不再询问 %1$s"</string>
+    <string name="default_speed">默认速度</string>
+    <string name="default_resize_mode">默认调整大小模式</string>
+    <string name="primary_sub_color">主要字幕颜色</string>
+    <string name="outline_sub_color">轮廓字幕颜色</string>
+    <string name="outline_type">轮廓类型</string>
+    <string name="subtitle_font">字幕字体</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+    <string name="ok">OK</string>
+    <string name="reset">Reset</string>
+    <string name="close">关闭</string>
+    <string name="no_chapter">无章节</string>
+    <string name="content_18">从你的 Anilist 设置中启用 18+ 内容</string>
+    <string name="available">可用</string>
+    <string name="lets_go">开始吧</string>
+    <string name="cope">应付</string>
+    <string name="watched_num">"已观看 "</string>
+    <string name="read_num">"已阅读 "</string>
+    <string name="episodes_out_of">" 共 "</string>
+    <string name="chapters_out_of">" 共 "</string>
+    <string name="episodes_total_of">"总共 "</string>
+    <string name="chapters_total_of">"总共 "</string>
+    <string name="no_description_available">"暂无描述"</string>
+    <string-array name="manga_directions">
+        <item>从上到下</item>
+        <item>从右到左</item>
+        <item>从下到上</item>
+        <item>从左到右</item>
+    </string-array>
+    <string-array name="manga_layouts">
+        <item>分页</item>
+        <item>连续分页</item>
+        <item>连续</item>
+    </string-array>
+    <string name="selected">已选择</string>
+    <string name="found">已找到</string>
+    <string name="age">"__年龄：__ "</string>
+    <string name="birthday">\n\"__生日：__ \"</string>
+    <string name="gender">\n\"__性别：__ \"</string>
+    <string name="male">男性</string>
+    <string name="female">女性</string>
+    <string name="question_1">Dantotsu 是什么？</string>
+    <string name="answer_1">Dantotsu 从 Saikou 的余烬中诞生，基于简洁而高雅的最新技术。它是一个仅支持 Anilist 的客户端，还可以通过扩展来流式传输和下载动画/漫画。\n&gt;Dantotsu（断トツ; Dan-totsu）在日语中的意思是最好的。嗯，我们想说这是安卓上最好的开源动画和漫画应用程序，但是，嘿，你自己试试 &amp; 判断！</string>
+    <string name="question_2">Dantotsu 的一些特点是什么？</string>
+    <string name="answer_2">Dantotsu 的一些值得一提的特点是\n\n- 轻松功能强大地观看动画和阅读漫画和轻小说，无广告。\n- 完全开源的应用程序，具有良好的用户界面和动画\n- 支持第三方插件\n- 与 AniList 实时同步动画和漫画。根据您当前的状态轻松对动画和漫画进行分类。（由 AniList 提供支持）\n- 查找所有正在趋势、热门和正在进行的动画的全面详细信息。还可以倒计时到正在播出的动画的下一集。（由 AniList &amp; MyAnimeList 提供支持）</string>
+    <string name="question_3">稳定版、测试版和Alpha 版之间有什么区别？</string>
+    <string name="answer_3">稳定版是经过尽可能全面测试的版本，尽可能可靠。\n\n测试版是用于测试新功能或提供热修复的版本。\n\nAlpha 版类似于测试版，但有很多 bug，您只能在我们的 [discord](https://discord.gg/invite/4HPZ5nAWwM) 服务器上找到。它经常更新，很可能会崩溃。\n\n如果您想要可靠的应用程序，请选择稳定版。如果您想要最新和最棒的功能和 bug，请选择 Alpha 版。</string>
+    <string name="question_4">Dantotsu 是否适用于 PC？</string>
+    <string name="answer_4">目前不适用于 PC（包括 Windows 和 Linux）。还没有任何估计的时间。但是您可以下载任何安卓模拟器并在其上运行 Dantotsu。对于 Windows 11 用户，他们可以使用 Windows 子系统 for Android（WSA）在 Windows 中运行 Dantotsu。</string>
+    <string name="question_5">Dantotsu 是否适用于 iOS？</string>
+    <string name="answer_5">不，我们能做的最好就是把 Dantotsu 雕刻在苹果上。</string>
+    <string name="question_6">为什么我的统计数据没有更新？</string>
+    <string name="answer_6">这是因为它每 48 小时自动更新一次（由 Anilist）。如果您确实需要更新您的统计数据，您可以在此 [链接](https://anilist.co/settings/lists) 中强制更新您的统计数据。</string>
+    <string name="question_7">如何下载动画？</string>
+    <string name="answer_7">目前有两种下载方法。一种是内部下载，另一种是外部下载。如果您内部下载，则可以在应用程序中查看它，但只有应用程序才能打开该剧集，您不能移动或共享它。另一种选择是使用外部下载。它需要一个下载管理器来下载，以及一个单独的视频播放器来观看。外部下载可以共享，但您不能在 Dantotsu 应用程序中查看它。\n\n•要进行内部下载：\n\n1. 点击下载按钮。\n2. 选择服务器和视频质量。\n3. 利润。\n\n•要进行外部下载：\n\n 1. 从 Google Play 商店下载 1DM 或 ADM。\n2. 进入应用程序，授予存储访问权限并设置您的首选项（下载速度、下载路径等（可选））\n3. 现在转到 \`Dantotsu &gt; 设置 &gt; 通用 &gt; 下载管理器\`，并选择您刚刚设置的下载管理器。\n4. 转到所需的剧集，并按下任何服务器的下载图标。可能会弹出一个窗口来再次设置您的首选项，只需按“下载”即可保存到指定路径。\n\n注意：也可以使用没有管理器的直接下载，但不建议使用。\n\nNerd 注意：内部下载的剧集存储在 \`Android/data/ani.dantotsu.*/files/Anime_Downloads\` 中\n您无法播放这些文件，因为它们是以 \`.exo\` 格式存储的，分成数百个片段并进行了加密。</string>
+    <string name="question_9">如何启用 NSFW 内容？</string>
+    <string name="answer_9">您可以通过从此 [链接](https://anilist.co/settings/media) 启用 18+ 内容来启用 NSFW 内容。您还必须在 \`设置 &gt; 扩展 &gt; NSFW 扩展\` 中启用 NSFW 扩展</string>
+    <string name="question_10">如何将我的 MAL/Kitsu 列表导入到 Anilist？</string>
+    <string name="answer_10">这是如何操作的，\n\n导出：\n\n1. 前往此 [链接](https://malscraper.azurewebsites.net)。\n2. 输入您的 Kitsu/MAL 用户名并下载动画和漫画列表。（它们将以 XML 格式存在）\n注意：您必须写入您选择的追踪器的用户名\n\n导入：\n\n1. 从 Kitsu/MAL 导出您的动画和漫画列表后，现在转到 [此处](https://anilist.co/settings/import) \n2. 选择/拖放上面的动画 XML 文件。\n|→选择/拖放下面的漫画 XML 文件。</string>
+    <string name="question_11">如何将我的 Anilist/Kitsu 列表导入到 MAL？</string>
+    <string name="answer_11">这是如何操作的，\n\n导出：\n\n1. 前往此 [链接](https://malscraper.azurewebsites.net/)。\n2. 在“用户名/Kitsu 用户 ID”框中输入您的 Anilist 用户名/Kitsu ID。\n3. 选择列表类型并启用 \'update_on_import\'。\n4. 下载文件；它将以 .xml 格式存在。确保下载动画和漫画列表。\n\n导入：\n1. 要将其导入到您的 MAL 帐户中，请转到此 [链接](https://myanimelist.net/import.php) 并选择 \'MyAnimeList Import\' 作为导入类型。\n2. 按下“选择文件”，并选择下载的动画/漫画列表 XML 文件。\n3. 按下“导入数据”。\n恭喜，您刚刚将所选列表导入到您的 MAL 帐户。</string>
+    <string name="question_12">为什么我找不到特定的动画/漫画标题？</string>
+    <string name="answer_12">假设您在 Dantotsu 中正在寻找 Castlevania。但是 Anilist 没有它，所以 Dantotsu 也没有。\n解决上述问题的方法如下：\n1）前往任何未在您列表中的动画。\n2）转到观看部分。\n3）选择任何来源并按“错误的标题？”。\n4）现在搜索 Castlevania（您正在寻找的动画）并选择它。\n5）尽情享受！\n\n如果即使通过这些步骤也找不到动画，则对您来说很不幸，伙计。即使该来源也没有它。尝试使用不同的来源。</string>
+    <string name="question_13">如何修复选择完全错误标题的来源？</string>
+    <string name="answer_13">Dantotsu 本身不提供任何内容，而是依赖于其他来源。在显示剧集时，它会在搜索标题后选择来源给出的第一个结果。Dantotsu 无法检测到这是否合法。因此，对于此问题，我们在来源名称下方（布局上方）有“错误的标题？”选项。您可以通过点击它来选择正确的结果/标题，并享受其剧集。</string>
+    <string name="question_14">如何阅读彩色漫画？</string>
+    <string name="answer_14">您是否在寻找彩色漫画？很抱歉告诉您，但极少量的漫画有彩色版本。即使有彩色版本，Dantotsu 也可以提供。假设您想阅读 Chainsaw Man 的彩色版本。然后按照以下步骤进行↓\n\n1）转到 Chainsaw Man\n2）按“阅读”\n3）选择任何可用的来源\n4）按“错误的标题”\n5）选择 Chainsaw Man 的彩色版本\n6）享受\n\n注意：即使在互联网上某处有彩色版本，许多来源也没有彩色版本。因此，请尝试其他来源。如果没有任何来源有它，则您所需的漫画的彩色版本根本不存在。</string>
+    <string name="question_15">握手失败？为什么时间戳不加载？</string>
+    <string name="answer_15">您可以通过从 \n\`设置 &gt; 动画 &gt; 播放器设置 &gt; 时间戳 &gt; 代理\` 中启用 \'Proxy\' 来解决此问题。\n如果时间戳仍然不加载，但是握手失败的弹出窗口已经修复，则您正在观看的剧集仅没有为其提供时间戳。</string>
+    <string name="question_16">在来源上找不到任何内容？</string>
+    <string name="answer_16">一些基本的修复方法是：\n\n• 如果有的话，请更新您的扩展。\n• 打开 Web View 并等待加载完成。加载完成后，返回。（如果 Web View 显示错误 404 或类似的错误，那么您的来源可能已关闭）\n• 使用您设置的不同 DNS，最好是 Libre。\n• 尝试可信赖的 VPN。（之后您需要重复步骤 1）\n\n如果以上步骤都不起作用，请使用其他来源或加入我们的 [discord](https://discord.gg/invite/4HPZ5nAWwM) 寻求帮助。</string>
+    <string name="question_17">一些有用的技巧和诀窍</string>
+    <string name="answer_17">以下是一些您可能已经知道或者不知道的技巧和诀窍 - \n \n \n- 通过长按设置中的 Dantotsu 徽标，您可以手动检查是否有新更新。\n \n- 长按错误消息/标签/同义词或标题将复制它。\n \n- 您可以通过长按任何剧集的任何服务器来使用其他应用程序打开剧集。这有助于使用其他视频播放器流式传输剧集或使用下载管理器下载剧集。\n \n- 您可以使用此 [链接](https://anilist.co/settings/lists) 设置自定义列表（您需要登录）\n \n- 如果您的剧集/章节在您完成观看/阅读后仍然没有自动进行，那么长按该动画/漫画的状态栏（计划/重复/观看按钮）。下次您开始章节/完成剧集时，您将遇到一个弹出窗口。在那里按是。</string>
+    <string name="subscribed_notification">已订阅！当 %1$s 发布新剧集时，您将收到通知。</string>
+    <string name="unsubscribed_notification">已取消订阅，您将不会收到任何通知。</string>
+    <string name="episode_plural">剧集</string>
+    <string name="episode_singular">剧集</string>
+    <string name="chapter_singular">章节</string>
+    <string name="chapter_plural">章节</string>
+    <string name="filter_status">"Status : %1$s"</string>
+    <string name="filter_source">"Source : %1$s"</string>
+    <string name="filter_format">"格式：%1$s"</string>
+    <string name="filter_country">"Country : %1$s"</string>
+    <string name="filter_sort">"排序：%1$s"</string>
+    <string name="filter_exclude">"不包括：%1$s"</string>
+    <string name="search_by_image">通过图像搜索</string>
+    <string name="upload_image">上传图像</string>
+    <string name="similarity_text">相似度：%1$s%%</string>
+    <string name="time_range">从 %1$s 到 %2$s</string>
+    <string name="invalid_url">无效的 URL</string>
+    <string name="no_anilist_id_found">未找到 Anilist ID</string>
+    <string name="error_loading_image">加载图像时出错</string>
+    <string name="discord_logout_success">成功登出</string>
+    <string name="discord_try_again">请再次尝试登录</string>
+    <string name="error_loading_discord_user_data">加载 Discord 用户数据时出错</string>
+    <string name="discord_warning"><![CDATA[通过登录，您的 Discord 将显示您在 Dantotsu 上观看和阅读的内容\n\n如果您处于隐身模式，登录后将使您在线，当您打开 Dantotsu 时。\n\n这会违反 Discord 的 TOS。\n虽然 Discord 从未因使用自定义 Rich Presence（Dantotsu 使用的内容）而封禁任何人，但您仍然受到警告。\n\nDantotsu 对您的帐户发生的任何事情概不负责。]]></string>
+    <string name="warning">警告</string>
+    <string name="view_anime">查看动画</string>
+    <string name="view_manga">查看漫画</string>
+    <string name="force_legacy_installer">强制使用旧版安装程序</string>
+    <string name="extensions_settings">扩展</string>
+    <string name="NSFWExtention">NSFW 扩展</string>
+    <string name="skip_loading_extension_icons">跳过加载扩展图标</string>
+    <string name="use_material_you">Material You</string>
+    <string name="use_app_theme">Use App Theme</string>
+    <string name="extension_specific_dns">特定扩展的 DNS</string>
+    <string name="theme_">主题：</string>
+    <string name="user_agent">用户代理</string>
+    <string name="custom_theme">自定义主题：</string>
+    <string name="use_custom_theme">自定义主题</string>
+    <string name="use_unique_theme_for_each_item">每个项目的独特主题</string>
+    <string name="oled_theme_variant">OLED 主题变体</string>
+    <string name="installed_anime">已安装的动画</string>
+    <string name="available_anime">可用的动画</string>
+    <string name="installed_manga">已安装的漫画</string>
+    <string name="color_picker">颜色选择器</string>
+    <string name="random_selection">随机选择</string>
+    <string name="incognito_mode">隐身模式</string>
+    <string name="appwidget_text">示例</string>
+    <string name="configure">配置</string>
+    <string name="add_widget">添加小部件</string>
+    <string name="app_widget_description">这是一个应用小部件描述</string>
+    <string name="upcoming_anime">Upcoming Anime</string>
+    <string name="airing_image">播放中的图片</string>
+    <string name="anime_downloads">动画下载</string>
+    <string name="purge_anime_downloads">删除所有动画下载</string>
+    <string name="purge_manga_downloads">删除所有漫画下载</string>
+    <string name="purge_novel_downloads">删除所有小说下载</string>
+    <string name="requires_android_12">需要 Android 12+</string>
+    <string name="share_username_in_crash_reports">在崩溃报告中分享用户名</string>
+    <string name="pinned_sources">固定的来源</string>
+    <string name="backup_restore">Backup and Restore</string>
+    <string name="restore_settings">Import Settings</string>
+    <string name="restore_settings_underline"><u>Restore Settings</u></string>
+    <string name="try_internal_cast_experimental">尝试内部投射（实验性）</string>
+    <string name="comments">评论</string>
+    <string name="newest">最新</string>
+    <string name="oldest">最旧</string>
+    <string name="highest_rated">评分最高</string>
+    <string name="lowest_rated">评分最低</string>
+    <string name="compare"><u>比较</u></string>
+    <string name="view_following">查看关注</string>
+    <string name="menu">菜单</string>
+    <string name="view_followers">查看关注者</string>
+    <string name="no_fav_anime">用户没有收藏的动画</string>
+    <string name="no_fav_manga">用户没有收藏的漫画</string>
+    <string name="fav_character">喜爱的角色</string>
+    <string name="fav_staff">喜爱的工作人员</string>
+    <string name="stats">统计</string>
+    <string name="days_watched">观看天数</string>
+    <string name="total_anime">总动画数</string>
+    <string name="anime_mean_score">动画平均评分</string>
+    <string name="volume_read">已读卷数</string>
+    <string name="total_manga">总漫画数</string>
+    <string name="manga_mean_score">漫画平均评分</string>
+    <string name="about_me">关于我</string>
+    <string name="follow">关注</string>
+    <string name="following">Following</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="follows_you">Follows you</string>
+    <string name="mutual">Mutual</string>
+    <string name="success">Success</string>
+    <string name="error">Some error occurred</string>
+    <string name="error_msg">Error: %1$s</string>
+    <string name="please_wait">Please wait</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="no_shows_to_display">No shows to display</string>
+    <string name="extension_name">Extension Name</string>
+    <string name="extension_version">version</string>
+    <string name="enter_password_to_decrypt_file">Enter your password to decrypt the file</string>
+    <string name="show_rotate_button">Show Rotate Button</string>
+    <string name="default_manga_settings">Default Manga Settings</string>
+    <string name="use_dark_theme">Use Dark Theme</string>
+    <string name="use_oled_theme">Use OLED Theme</string>
+    <string name="scanlators">Scanlators</string>
+    <string name="exporting_requires_encryption">Exporting credentials requires a password for encryption.</string>
+    <string name="manga_queue">Manga Queue (WIP)</string>
+    <string name="anime_queue">Anime Queue (WIP)</string>
+    <string name="no_offline_manga_found">No offline manga found</string>
+    <string name="sort">Sort</string>
+    <string name="download">Download</string>
+    <string name="scanlator">Scanlator</string>
+    <string name="set_cookies">Set Cookies</string>
+    <string name="open_website">Open Website</string>
+    <string name="log_to_file">记录到文件</string>
+    <string name="logging_warning">记录到文件会降低应用速度。只有在遇到问题时才启用。</string>
+    <string name="radius">半径</string>
+    <string name="sampling">采样</string>
+    <string name="blur_banners">模糊横幅</string>
+    <string name="blur">模糊</string>
+    <string name="hide_scroll_bar">隐藏滚动条</string>
+    <string name="view_on_anilist">在 AniList 上查看</string>
+    <string name="anilist_notification_filters">选择要忽略的类别</string>
+    <string name="anilist_notifications_checking_time">Anilist 通知更新频率：%1$s</string>
+    <string name="comment_notification_checking_time">评论通知更新频率：%1$s</string>
+    <string name="activities">活动</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="password_cannot_be_empty">Password cannot be empty</string>
+    <string name="unknown_file_type">Unknown file type</string>
+    <string name="error_importing_settings">Error importing settings</string>
+    <string name="download_manager">下载管理器</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="you_cursed">youwu have been cuwsed :pwayge:</string>
+    <string name="purge_confirm">Are you sure you want to purge all %1$s downloads?</string>
+    <string name="delete_fail_reason">Failed to delete because of… %1$s</string>
+    <string name="hide_replies">Hide replies</string>
+    <string name="view_reply">View reply</string>
+    <string name="view_replies">View replies</string>
+    <string name="view_replies_count">View %1$d replies</string>
+    <string name="replying_to">Replying to %1$s</string>
+    <string name="delete_comment">Delete Comment</string>
+    <string name="delete_comment_confirm">Are you sure you want to delete this comment?</string>
+    <string name="comment_deleted">Comment Deleted</string>
+    <string name="ban_user">Ban User</string>
+    <string name="ban_user_confirm">Are you sure you want to ban this user?</string>
+    <string name="user_banned">User Banned</string>
+    <string name="report_comment">Report Comment</string>
+    <string name="report_comment_confirm">Only report comments that violate the rules. Are you sure you want to report this comment?</string>
+    <string name="comment_reported">Comment Reported</string>
+    <string name="list">List</string>
+    <string name="grid">网格</string>
+    <string name="compact">Compact</string>
+    <string name="webview_not_installed">WebView not installed</string>
+    <string name="video_quality">Quality: %1$dp</string>
+    <string name="size_unknown">Unknown Size</string>
+    <string name="mb_size">%1$s MB</string>
+    <string name="button_restore">Restore</string>
+    <string name="button_backup">Backup</string>
+    <string name="no_location_selected">No location selected</string>
+    <string name="enjoying_app">Enjoying the App?</string>
+    <string name="consider_donating">Consider donating!</string>
+    <string name="no_moners">no moners :(</string>
+    <string name="you_be_rich">That\'s alright, you\'ll be a rich man soon :prayge:</string>
+    <string name="donate">donate :)</string>
+    <string name="do_it">Do it!</string>
+    <string name="password">Password</string>
+    <string name="search_title">Search %1$s</string>
+    <string name="profile_stats_widget">Track progress directly from your home screen</string>
+    <string name="anime_watched">Anime\nWatched</string>
+    <string name="manga_read">Manga\nRead</string>
+    <string name="loading">Loading…</string>
+    <string name="user_stats">%1$s\'s Stats</string>
+    <string name="please">Please</string>
+    <string name="log_in">log in</string>
+    <string name="or_join">or join</string>
+    <string name="top_background_color">Top background color</string>
+    <string name="bottom_background_color">Bottom Background Color</string>
+    <string name="countdown_text_color">Countdown Text Color</string>
+    <string name="title_color">Title Color</string>
+    <string name="stat_text_color">Stats Text Color</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="anime_add_repository">Add Anime Repo</string>
+    <string name="manga_add_repository">Add Manga Repo</string>
+    <string name="edit_repositories">Edit repositories</string>
+    <string name="rem_repository">Remove repository?</string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="include_list">Include list</string>
+    <string name="top_rated">Top rated</string>
+    <string name="most_favourite">Most Favourite</string>
+    <string name="trending_manhwa">Trending Manhwa</string>
+    <string name="liked_by">Liked By</string>
+    <string name="adult_only_content">Adult only content</string>
+    <string name="dir_error">Your path could not be set</string>
+    <string name="dir_access">Downloads access</string>
+    <string name="dir_access_msg">Please choose a directory to save your downloads</string>
+    <string name="change_download_location">Change Download Location</string>
+    <string name="download_location_msg">Are you sure you want to change the download location?\nOld downloads may no longer be accessible.</string>
+    <string name="report">Report</string>
+    <string name="ban">Ban</string>
+    <string name="voice_actors">Voice Actors</string>
+    <string name="download_permission_required">Permission is required to download</string>
+    <string name="media">Media</string>
+    <string name="users">Users</string>
+    <string name="social">Social</string>
+    <string name="auto_skip_recap">Auto Skip Recap</string>
+    <string name="use_anilist_icon">Use AniList Icon</string>
+    <string name="audio_tracks">Audio Tracks</string>
+    <string name="disabled_track">Disabled</string>
+    <string name="invalid_track">Invalid</string>
+    <string name="unknown_track">\[%1$s\] Unknown</string>
+    <string name="accounts_desc">Anilist, MAL and Discord.\nWhat more could you need?</string>
+    <string name="theme_desc">Change the vibe of your app</string>
+    <string name="extensions_desc">Manage your reliable repositories</string>
+    <string name="common_desc">UI and other mischievous stuff</string>
+    <string name="notifications_desc">Customise your news and updates</string>
+    <string name="anime_desc">Choose how you watch</string>
+    <string name="manga_desc">Choose how you read</string>
+    <string name="about_desc">Learn more about Dantotsu</string>
+    <string name="faq_desc">General questions about Dantotsu</string>
+    <string name="check_app_updates_desc">Check Github for app updates</string>
+    <string name="share_username_in_crash_reports_desc">Share username in crash reports</string>
+    <string name="devs_desc">Dantotsu\'s very own unpaid labours </string>
+    <string name="forks_desc">More like Dantotsu</string>
+    <string name="disclaimer_desc">Something to keep in mind</string>
+    <string name="torrent_addon">Torrent Addon</string>
+    <string name="enable_torrent">Enable torrent</string>
+    <string name="anime_downloader_addon">Anime Downloader Addon</string>
+    <string name="loaded_successfully">Loaded Successfully</string>
+    <string name="not_installed">Not Installed</string>
+    <string name="torrent_extension_not_supported">Torrent extension not supported on this device</string>
+    <string name="update_addon">Update Addon</string>
+    <string name="install_addon">Install Addon</string>
+    <string name="download_addon_not_found">Download addon not found</string>
+</resources>
