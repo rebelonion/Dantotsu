@@ -61,7 +61,7 @@
         <item>পুনরালোচনা</item>
         <item>সব</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
+    <string name="no_notifications">নটিফিকেশন বন্ধ</string>
     <string name="followers">অনুসারী</string>
     <string name="status">অবস্থা</string>
     <string-array name="status_anime">
@@ -369,21 +369,21 @@
     <string name="subscriptions_info">Dantotsu-কে প্রতিনির্দিষ্ট সময়ে নতুন পর্ব/অধ্যায় চেক করার জন্য সময়ের পরিমাণ
     (কম সময় ব্যাটারি ব্যবহারের কারণ হতে পারে)</string>
     <string name="do_not_update">আপডেট করবেন না</string>
-    <string name="loading_chap_number">Loading Chapter %1$s</string>
+    <string name="loading_chap_number">অধ্যায় লদিং %1$s</string>
     <string name="sort_by_release_date">প্রকাশের তারিখ অনুযায়ী সাজান</string>
     <string name="crop_borders">ক্রপ বর্ডার</string>
     <string name="note">মন্তব্য</string>
-    <string name="manage_extension_repos">Manage Extension Repos</string>
-    <string name="installing_extension">Installing extension</string>
-    <string name="installation_failed">Installation failed: %1$s</string>
-    <string name="installation_complete">Installation complete</string>
+    <string name="manage_extension_repos">এক্সটেনশন রেপো মেনেজ করুন</string>
+    <string name="installing_extension">এক্সটেনশন ইন্সটল হচ্ছে</string>
+    <string name="installation_failed">ইন্সটল ব্যর্থ %1$s</string>
+    <string name="installation_complete">ইন্সটল সম্পুর্ণ</string>
     <string name="extension_has_been_installed">The extension has been successfully installed.</string>
-    <string name="extension_installed">Extension installed</string>
-    <string name="installed">Installed</string>
-    <string name="error_message">Error: %1$s</string>
-    <string name="install_step">Step: %1$s</string>
-    <string name="review">Review</string>
-    <string name="discord_nothing_button">Display only the first button</string>
+    <string name="extension_installed">এক্সটেনশন ইন্সটল হয়েছে</string>
+    <string name="installed">ইন্সটল হয়েছে</string>
+    <string name="error_message">ভূল %1$s</string>
+    <string name="install_step">ধাপ %1$s</string>
+    <string name="review">পুনরায় দেখুন</string>
+    <string name="discord_nothing_button">শুধুমাত্র প্রথম বাটনটি দেখাবেন</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile instead</string>
     <string name="discord_rich_presence">Discord Rich Presence</string>
