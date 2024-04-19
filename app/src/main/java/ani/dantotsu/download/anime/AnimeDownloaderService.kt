@@ -73,7 +73,7 @@ class AnimeDownloaderService : Service() {
     private val mutex = Mutex()
     private var isCurrentlyProcessing = false
     private var currentTasks: MutableList<AnimeDownloadTask> = mutableListOf()
-    val ffExtension =  Injekt.get<DownloadAddonManager>().extension
+    private val ffExtension =  Injekt.get<DownloadAddonManager>().extension?.extension
 
     override fun onBind(intent: Intent?): IBinder? {
         // This is only required for bound services.
@@ -245,7 +245,7 @@ class AnimeDownloaderService : Service() {
                         .append(defaultHeaders["User-Agent"]).append("\"\'\r\n\'")
                 }
                 val probeRequest = "-headers $headersStringBuilder -i ${task.video.file.url} -show_entries format=duration -v quiet -of csv=\"p=0\""
-                ffExtension!!.executeFFProbe(
+                ffExtension.executeFFProbe(
                     probeRequest
                 ) {
                     if (it.toDoubleOrNull() != null) {
@@ -258,7 +258,7 @@ class AnimeDownloaderService : Service() {
                 request += "-i ${task.video.file.url} -c copy -bsf:a aac_adtstoasc -tls_verify 0 $path -v trace"
                 Logger.log("Request: $request")
                 val ffTask =
-                    ffExtension!!.executeFFMpeg(request) {
+                    ffExtension.executeFFMpeg(request) {
                         // CALLED WHEN SESSION GENERATES STATISTICS
                         val timeInMilliseconds = it
                         if (timeInMilliseconds > 0 && totalLength > 0) {
@@ -284,8 +284,8 @@ class AnimeDownloaderService : Service() {
                 }
 
                 // periodically check if the download is complete
-                while (ffExtension!!.getState(ffTask) != "COMPLETED") {
-                    if (ffExtension!!.getState(ffTask) == "FAILED") {
+                while (ffExtension.getState(ffTask) != "COMPLETED") {
+                    if (ffExtension.getState(ffTask) == "FAILED") {
                         Logger.log("Download failed")
                         builder.setContentText(
                             "${
@@ -297,7 +297,7 @@ class AnimeDownloaderService : Service() {
                         )
                         notificationManager.notify(NOTIFICATION_ID, builder.build())
                         toast("${getTaskName(task.title, task.episode)} Download failed")
-                        Logger.log("Download failed: ${ffExtension!!.getStackTrace(ffTask)}")
+                        Logger.log("Download failed: ${ffExtension.getStackTrace(ffTask)}")
                         downloadsManager.removeDownload(
                             DownloadedType(
                                 task.title,
@@ -332,8 +332,8 @@ class AnimeDownloaderService : Service() {
                     }
                     kotlinx.coroutines.delay(2000)
                 }
-                if (ffExtension!!.getState(ffTask) == "COMPLETED") {
-                    if (ffExtension!!.hadError(ffTask)) {
+                if (ffExtension.getState(ffTask) == "COMPLETED") {
+                    if (ffExtension.hadError(ffTask)) {
                         Logger.log("Download failed")
                         builder.setContentText(
                             "${

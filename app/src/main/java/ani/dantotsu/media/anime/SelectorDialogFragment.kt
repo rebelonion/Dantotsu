@@ -270,7 +270,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     if (torrentExtension.isAvailable()) {
                         val activity = currActivity() ?: requireActivity()
                         launchIO {
-                            val extension = torrentExtension.extension!!
+                            val extension = torrentExtension.extension!!.extension
                             torrentExtension.torrentHash?.let {
                                 extension.removeTorrent(it)
                             }
@@ -326,6 +326,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             }
         }
 
+        dismiss()
         if (launch!! || model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)) {
             stopAddingToList()
             val intent = Intent(activity, ExoplayerView::class.java)

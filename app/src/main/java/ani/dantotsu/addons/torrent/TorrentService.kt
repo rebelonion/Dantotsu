@@ -25,7 +25,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 class ServerService: Service() {
     private val serviceScope = CoroutineScope(EmptyCoroutineContext)
     private val applicationContext = Injekt.get<Application>()
-    private val extension = Injekt.get<TorrentAddonManager>().extension!!
+    private val extension = Injekt.get<TorrentAddonManager>().extension!!.extension
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -150,14 +150,14 @@ class ServerService: Service() {
             if (timeout < 0) {
                 count = -20
             }
-            var echo = Injekt.get<TorrentAddonManager>().extension?.echo()
+            var echo = Injekt.get<TorrentAddonManager>().extension?.extension?.echo()
             while (echo == "") {
                 Thread.sleep(1000)
                 count++
                 if (count > timeout) {
                     return false
                 }
-                echo = Injekt.get<TorrentAddonManager>().extension?.echo()
+                echo = Injekt.get<TorrentAddonManager>().extension?.extension?.echo()
             }
             Logger.log("ServerService: Server started: $echo")
             return true

@@ -7,10 +7,13 @@ import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import ani.dantotsu.addons.download.DownloadAddon
 import ani.dantotsu.addons.download.DownloadAddonApi
+import ani.dantotsu.addons.download.DownloadAddonManager
 import ani.dantotsu.addons.download.DownloadLoadResult
 import ani.dantotsu.addons.torrent.TorrentAddonApi
 import ani.dantotsu.addons.torrent.TorrentAddon
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.addons.torrent.TorrentLoadResult
+import ani.dantotsu.media.AddonType
 import ani.dantotsu.util.Logger
 import dalvik.system.PathClassLoader
 import eu.kanade.tachiyomi.extension.util.ExtensionLoader
@@ -64,7 +67,15 @@ class AddonLoader {
             val classLoader = PathClassLoader(appInfo.sourceDir, appInfo.nativeLibraryDir, context.classLoader)
             val loadedClass = try {
                 Class.forName(className, false, classLoader)
-            } catch (e: Throwable) {
+            } catch (e: ClassNotFoundException) {
+                Logger.log("Extension load error: $extName ($className)")
+                Logger.log(e)
+                throw e
+            } catch (e: NoClassDefFoundError) {
+                Logger.log("Extension load error: $extName ($className)")
+                Logger.log(e)
+                throw e
+            }catch (e: Exception) {
                 Logger.log("Extension load error: $extName ($className)")
                 Logger.log(e)
                 throw e
@@ -99,16 +110,27 @@ class AddonLoader {
                     )
                 }
             }
+        }
 
+        fun loadFromPkgName(context: Context, packageName: String, type: AddonType): LoadResult? {
+            return when (type) {
+                AddonType.TORRENT -> loadExtension(
+                    context,
+                    packageName,
+                    TorrentAddonManager.TORRENT_CLASS,
+                    type
+                )
+                AddonType.DOWNLOAD -> loadExtension(
+                    context,
+                    packageName,
+                    DownloadAddonManager.DOWNLOAD_CLASS,
+                    type
+                )
+            }
         }
 
         private fun isPackageAnExtension(type: String, pkgInfo: PackageInfo): Boolean {
             return pkgInfo.packageName.equals(type)
-        }
-
-        enum class AddonType {
-            TORRENT,
-            DOWNLOAD,
         }
     }
 

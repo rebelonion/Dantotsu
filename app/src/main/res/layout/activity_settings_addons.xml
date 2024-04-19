@@ -58,6 +58,7 @@
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>
+
         <ani.dantotsu.FadingEdgeRecyclerView
             android:id="@+id/settingsRecyclerView"
             android:layout_width="match_parent"

@@ -6,30 +6,34 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ani.dantotsu.R
 import ani.dantotsu.addons.AddonDownloader.Companion.hasUpdate
+import ani.dantotsu.addons.AddonListener
 import ani.dantotsu.addons.AddonLoader
+import ani.dantotsu.addons.AddonManager
+import ani.dantotsu.addons.LoadResult
+import ani.dantotsu.addons.download.AddonInstallReceiver
+import ani.dantotsu.media.AddonType
 import ani.dantotsu.util.Logger
+import eu.kanade.tachiyomi.extension.InstallStep
+import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class TorrentAddonManager(
     private val context: Context
-) {
-
-    var result: TorrentLoadResult? = null
-        private set
-    var extension: TorrentAddonApi? = null
-        private set
+) : AddonManager<TorrentAddon.Installed>(context) {
+    override var extension: TorrentAddon.Installed? = null
+    override var name: String = "Torrent Addon"
+    override var type: AddonType = AddonType.TORRENT
     var torrentHash: String? = null
-    var hasUpdate: Boolean = false
-        private set
 
     private val _isInitialized = MutableLiveData<Boolean>().apply { value = false }
     val isInitialized: LiveData<Boolean> = _isInitialized
 
     private var error: String? = null
 
-    suspend fun init() {
-        result = null
+    override suspend fun init() {
         extension = null
         error = null
         hasUpdate = false
@@ -41,16 +45,20 @@ class TorrentAddonManager(
             error = context.getString(R.string.torrent_extension_not_supported)
             return
         }
+
+        AddonInstallReceiver()
+            .setListener(InstallationListener(), type)
+            .register(context)
         try {
-            result = AddonLoader.loadExtension(
+            val result = AddonLoader.loadExtension(
                 context,
                 TORRENT_PACKAGE,
                 TORRENT_CLASS,
-                AddonLoader.Companion.AddonType.TORRENT
-            ) as TorrentLoadResult
+                type
+            ) as TorrentLoadResult?
             result?.let {
                 if (it is TorrentLoadResult.Success) {
-                    extension = it.extension.extension
+                    extension = it.extension
                     hasUpdate = hasUpdate(REPO, it.extension.versionName)
                 }
             }
@@ -64,28 +72,69 @@ class TorrentAddonManager(
         }
     }
 
-    fun isAvailable(): Boolean {
-        return extension != null
+    override fun isAvailable(): Boolean {
+        return extension?.extension != null
     }
 
-    fun getVersion(): String? {
-        return result?.let {
-            if (it is TorrentLoadResult.Success) it.extension.versionName else null
-        }
+    override fun getVersion(): String? {
+        return extension?.versionName
     }
 
-    fun hadError(context: Context): String? {
+    override fun getPackageName(): String? {
+        return extension?.pkgName
+    }
+
+    override fun hadError(context: Context): String? {
         return if (isInitialized.value == true) {
-            error ?: context.getString(R.string.loaded_successfully)
+            if (error != null) {
+                error
+            } else if (extension != null) {
+                context.getString(R.string.loaded_successfully)
+            } else {
+                null
+            }
         } else {
             null
         }
     }
 
-    companion object {
+   private inner class InstallationListener : AddonListener {
+        override fun onAddonInstalled(result: LoadResult?) {
+            if (result is TorrentLoadResult.Success) {
+                extension = result.extension
+                hasUpdate = false
+                onListenerAction?.invoke(AddonListener.ListenerAction.INSTALL)
+            }
+        }
 
-        private const val TORRENT_PACKAGE = "dantotsu.torrentAddon"
-        private const val TORRENT_CLASS = "ani.dantotsu.torrentAddon.TorrentAddon"
+        override fun onAddonUpdated(result: LoadResult?) {
+            if (result is TorrentLoadResult.Success) {
+                extension = result.extension
+                hasUpdate = false
+                onListenerAction?.invoke(AddonListener.ListenerAction.UPDATE)
+            }
+        }
+
+        override fun onAddonUninstalled(pkgName: String) {
+            if (pkgName == TORRENT_PACKAGE) {
+                extension = null
+                hasUpdate = false
+                onListenerAction?.invoke(AddonListener.ListenerAction.UNINSTALL)
+            }
+        }
+    }
+
+    override fun updateInstallStep(id: Long, step: InstallStep) {
+        installer.updateInstallStep(id, step)
+    }
+
+    override fun setInstalling(id: Long) {
+        installer.updateInstallStep(id, InstallStep.Installing)
+    }
+
+    companion object {
+        const val TORRENT_PACKAGE = "dantotsu.torrentAddon"
+        const val TORRENT_CLASS = "ani.dantotsu.torrentAddon.TorrentAddon"
         const val REPO = "rebelonion/Dantotsu-Torrent-Addon"
     }
 }
