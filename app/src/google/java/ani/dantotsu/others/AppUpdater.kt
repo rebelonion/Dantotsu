@@ -89,10 +89,7 @@ object AppUpdater {
                                 val apks =
                                     client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
                                         .parsed<GithubResponse>().assets?.filter { it.browserDownloadURL.endsWith(".apk") }
-                                val apkToDownload =
-                                    apks?.find { it.browserDownloadURL.contains(getCurrentABI()) }
-                                        ?: apks?.find { it.browserDownloadURL.contains("universal") }
-                                        ?: apks?.first()
+                                val apkToDownload = apks?.first()
                                 apkToDownload?.browserDownloadURL.apply {
                                     if (this != null) activity.downloadUpdate(version, this)
                                     else openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
@@ -113,16 +110,6 @@ object AppUpdater {
                 if (post) snackString(currContext()?.getString(R.string.no_update_found))
             }
         }
-    }
-
-    /**
-     * Returns the ABI that the app is most likely running on.
-     * @return The primary ABI for the device.
-     */
-    private fun getCurrentABI(): String {
-        return if (Build.SUPPORTED_ABIS.isNotEmpty()) {
-            Build.SUPPORTED_ABIS[0]
-        } else "Unknown"
     }
 
     private fun compareVersion(version: String): Boolean {

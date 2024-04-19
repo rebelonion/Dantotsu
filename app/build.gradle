@@ -151,9 +151,6 @@ dependencies {
 //  String Matching
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
-    //implementation group: 'com.arthenica', name: 'ffmpeg-kit-full-gpl', version: '6.0-2.LTS'
-    //implementation 'com.github.yausername.youtubedl-android:library:0.15.0'
-
 //  Aniyomi
     implementation 'io.reactivex:rxjava:1.3.8'
     implementation 'io.reactivex:rxandroid:1.2.1'
