@@ -40,6 +40,12 @@ object Notifications {
     const val GROUP_NEW_EPISODES = "eu.kanade.tachiyomi.NEW_EPISODES"
 
     /**
+     * Notification channel and ids used by the torrent server.
+     */
+    const val ID_TORRENT_SERVER = -1100
+    const val CHANNEL_TORRENT_SERVER = "dantotsu_torrent_server"
+
+    /**
      * Notification channel used for Incognito Mode
      */
     const val CHANNEL_INCOGNITO_MODE = "incognito_mode_channel"
@@ -153,6 +159,9 @@ object Notifications {
                 },
                 buildNotificationChannel(CHANNEL_INCOGNITO_MODE, IMPORTANCE_LOW) {
                     setName("Incognito Mode")
+                },
+                buildNotificationChannel(CHANNEL_TORRENT_SERVER, IMPORTANCE_LOW) {
+                    setName("Torrent Server")
                 },
                 buildNotificationChannel(CHANNEL_COMMENTS, IMPORTANCE_HIGH) {
                     setName("Comments")

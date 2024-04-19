@@ -28,7 +28,7 @@
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/settingsButton"
             android:layout_width="match_parent"
-            android:layout_height="12dp"
+            android:layout_height="wrap_content"
             android:checked="false"
             android:elegantTextHeight="true"
             android:fontFamily="@font/poppins_bold"
@@ -41,15 +41,34 @@
             app:showText="false"
             app:thumbTint="@color/button_switch_track" />
 
-        <TextView
-            android:id="@+id/settingsDesc"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:alpha="0.66"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="@string/slogan"
-            android:textColor="?attr/colorOnSurfaceVariant" />
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
 
+            <TextView
+                android:id="@+id/settingsDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="32dp"
+                android:layout_weight="1"
+                android:alpha="0.66"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/slogan"
+                android:textColor="?attr/colorOnSurfaceVariant" />
+
+            <ImageView
+                android:id="@+id/settingsExtraIcon"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="top"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="12dp"
+                app:srcCompat="@drawable/ic_circle_add"
+                app:tint="?attr/colorPrimary"
+                android:visibility="gone"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

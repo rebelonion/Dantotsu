@@ -36,6 +36,7 @@
             android:textSize="16sp" />
 
         <TextView
+            android:layout_marginTop="8dp"
             android:id="@+id/settingsDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

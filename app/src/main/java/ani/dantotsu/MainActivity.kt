@@ -3,7 +3,6 @@ package ani.dantotsu
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.drawable.Animatable
@@ -20,7 +19,6 @@ import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
 import androidx.activity.addCallback
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -35,14 +33,14 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.Download
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.work.OneTimeWorkRequest
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
 import ani.dantotsu.databinding.SplashScreenBinding
-import ani.dantotsu.download.video.Helper
+import ani.dantotsu.addons.torrent.ServerService
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
@@ -70,11 +68,13 @@ import com.google.android.material.textfield.TextInputEditText
 import eu.kanade.domain.source.service.SourcePreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.Serializable
@@ -87,6 +87,7 @@ class MainActivity : AppCompatActivity() {
     private var load = false
 
 
+    @kotlin.OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("InternalInsetResource", "DiscouragedApi")
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -453,16 +454,26 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        /*lifecycleScope.launch(Dispatchers.IO) {  //simple cleanup
-            val index = Helper.downloadManager(this@MainActivity).downloadIndex
-            val downloadCursor = index.getDownloads()
-            while (downloadCursor.moveToNext()) {
-                val download = downloadCursor.download
-                if (download.state == Download.STATE_FAILED) {
-                    Helper.downloadManager(this@MainActivity).removeDownload(download.request.id)
+
+        val torrentManager = Injekt.get<TorrentAddonManager>()
+        fun startTorrent() {
+            if (torrentManager.isAvailable() && PrefManager.getVal(PrefName.TorrentEnabled)) {
+                launchIO {
+                    if (!ServerService.isRunning()) {
+                        ServerService.start()
+                    }
                 }
             }
-        }*/ //TODO: remove this
+        }
+        if (torrentManager.isInitialized.value == false) {
+            torrentManager.isInitialized.observe(this) {
+                if (it) {
+                    startTorrent()
+                }
+            }
+        } else {
+            startTorrent()
+        }
     }
 
     override fun onRestart() {
@@ -473,7 +484,7 @@ class MainActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 8 else 32
-        val params : ViewGroup.MarginLayoutParams =
+        val params: ViewGroup.MarginLayoutParams =
             binding.includedNavbar.navbar.layoutParams as ViewGroup.MarginLayoutParams
         params.updateMargins(bottom = margin.toPx)
     }

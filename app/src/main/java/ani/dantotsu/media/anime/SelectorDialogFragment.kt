@@ -32,6 +32,7 @@ import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.video.Helper
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
@@ -50,9 +51,11 @@ import ani.dantotsu.snackString
 import ani.dantotsu.tryWith
 import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat
@@ -252,32 +255,70 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("UnsafeOptInUsageError")
     fun startExoplayer(media: Media) {
         prevEpisode = null
-
-        dismiss()
 
         episode?.let { ep ->
             val video = ep.extractors?.find {
                 it.server.name == ep.selectedExtractor
             }?.videos?.getOrNull(ep.selectedVideo)
             video?.file?.url?.let { url ->
-                if (url.startsWith("magnet:")) {
-                    try {
-                        externalPlayerResult.launch(exportMagnetIntent(ep, video))
-                    } catch (e: ActivityNotFoundException) {
-                        val amnis = "com.amnis"
-                        try {
-                            startActivity(Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("market://details?id=$amnis"))
+                if (video.file.url.startsWith("magnet:") || video.file.url.endsWith(".torrent")) {
+                    val torrentExtension = Injekt.get<TorrentAddonManager>()
+                    if (torrentExtension.isAvailable()) {
+                        val activity = currActivity() ?: requireActivity()
+                        launchIO {
+                            val extension = torrentExtension.extension!!.extension
+                            torrentExtension.torrentHash?.let {
+                                extension.removeTorrent(it)
+                            }
+                            val index = if (video.file.url.contains("index=")) {
+                                video.file.url.substringAfter("index=").toIntOrNull() ?: 0
+                            } else 0
+                            Logger.log("Sending: ${video.file.url}, ${video.quality}, $index")
+                            val currentTorrent = extension.addTorrent(
+                                video.file.url, video.quality.toString(), "", "", false
                             )
+                            torrentExtension.torrentHash = currentTorrent.hash
+                            video.file.url = extension.getLink(currentTorrent, index)
+                            Logger.log("Received: ${video.file.url}")
+                            if (launch == true) {
+                                Intent(activity, ExoplayerView::class.java).apply {
+                                    ExoplayerView.media = media
+                                    ExoplayerView.initialized = true
+                                    startActivity(this)
+                                }
+                            } else {
+                                model.setEpisode(
+                                    media.anime!!.episodes!![media.anime.selectedEpisode!!]!!,
+                                    "startExo no launch"
+                                )
+                            }
+                            dismiss()
+                        }
+                    } else {
+                        try {
+                            externalPlayerResult.launch(exportMagnetIntent(ep, video))
                         } catch (e: ActivityNotFoundException) {
-                            startActivity(Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://play.google.com/store/apps/details?id=$amnis")
-                            ))
+                            val amnis = "com.amnis"
+                            try {
+                                startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("market://details?id=$amnis")
+                                    )
+                                )
+                                dismiss()
+                            } catch (e: ActivityNotFoundException) {
+                                startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://play.google.com/store/apps/details?id=$amnis")
+                                    )
+                                )
+                            }
                         }
                     }
                     return
@@ -285,6 +326,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             }
         }
 
+        dismiss()
         if (launch!! || model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)) {
             stopAddingToList()
             val intent = Intent(activity, ExoplayerView::class.java)

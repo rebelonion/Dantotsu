@@ -2,6 +2,7 @@ package ani.dantotsu.settings
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -82,11 +83,13 @@ class SettingsAboutActivity : AppCompatActivity() {
                             PrefManager.setVal(PrefName.LogToFile, isChecked)
                             restartApp()
                         },
-                        attach = {
-                            it.settingsDesc.setOnLongClickListener {
+                        attachToSwitch = {
+                            it.settingsExtraIcon.visibility = View.VISIBLE
+                            it.settingsExtraIcon.setImageResource(R.drawable.ic_round_share_24)
+                            it.settingsExtraIcon.setOnClickListener {
                                 Logger.shareLog(context)
-                                true
                             }
+
                         }
                     ),
                     Settings(

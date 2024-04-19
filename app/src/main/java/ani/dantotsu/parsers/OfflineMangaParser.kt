@@ -1,8 +1,6 @@
 package ani.dantotsu.parsers
 
 import android.app.Application
-import android.os.Environment
-import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.media.MediaNameAdapter
@@ -13,7 +11,6 @@ import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 class OfflineMangaParser : MangaParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()

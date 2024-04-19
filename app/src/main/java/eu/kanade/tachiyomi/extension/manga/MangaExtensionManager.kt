@@ -2,6 +2,7 @@ package eu.kanade.tachiyomi.extension.manga
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import eu.kanade.domain.source.service.SourcePreferences
@@ -203,7 +204,8 @@ class MangaExtensionManager(
      * @param extension The extension to be installed.
      */
     fun installExtension(extension: MangaExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getMangaApkUrl(extension), extension)
+        return installer.downloadAndInstall(api.getMangaApkUrl(extension), extension.pkgName,
+            extension.name, MediaType.MANGA)
     }
 
     /**

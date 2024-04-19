@@ -21,14 +21,7 @@ android {
         versionName "3.0.0"
         versionCode 300000000
         signingConfig signingConfigs.debug
-        splits {
-            abi {
-                enable true
-                reset()
-                include 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-                universalApk true
-            }
-        }
+
     }
 
     flavorDimensions += "store"
@@ -158,7 +151,7 @@ dependencies {
 //  String Matching
     implementation 'me.xdrop:fuzzywuzzy:1.4.0'
 
-    implementation group: 'com.arthenica', name: 'ffmpeg-kit-full-gpl', version: '6.0-2.LTS'
+    //implementation group: 'com.arthenica', name: 'ffmpeg-kit-full-gpl', version: '6.0-2.LTS'
     //implementation 'com.github.yausername.youtubedl-android:library:0.15.0'
 
 //  Aniyomi

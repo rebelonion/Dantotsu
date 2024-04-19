@@ -60,7 +60,7 @@ internal object ExtensionLoader {
     const val MANGA_LIB_VERSION_MIN = 1.2
     const val MANGA_LIB_VERSION_MAX = 1.5
 
-    private val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or
+    val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or
             PackageManager.GET_META_DATA or
             @Suppress ("DEPRECATION") PackageManager.GET_SIGNATURES or
             (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)

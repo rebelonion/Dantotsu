@@ -87,6 +87,7 @@ class SettingsAdapter(private val settings: ArrayList<Settings>) :
                     true
                 }
                 b.settingsLayout.visibility = if (settings.isVisible) View.VISIBLE else View.GONE
+                settings.attachToSwitch?.invoke(b)
             }
         }
     }

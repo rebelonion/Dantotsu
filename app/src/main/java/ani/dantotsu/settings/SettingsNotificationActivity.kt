@@ -13,22 +13,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.databinding.ActivitySettingsNotificationsBinding
-import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
-import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
 import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.notifications.subscription.SubscriptionNotificationWorker
 import ani.dantotsu.openSettings
-import ani.dantotsu.restartApp
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
-import uy.kohesive.injekt.Injekt
-import uy.kohesive.injekt.api.get
 
 class SettingsNotificationActivity: AppCompatActivity(){
     private lateinit var binding: ActivitySettingsNotificationsBinding

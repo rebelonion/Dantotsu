@@ -136,7 +136,7 @@
             android:id="@+id/settingsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="16dp"
+            android:layout_marginHorizontal="24dp"
             android:nestedScrollingEnabled="false"
             android:requiresFadingEdge="vertical"
             tools:itemCount="5"
