@@ -120,7 +120,7 @@
     <string name="chaps">الفصول</string>
     <string name="chap">الفصل</string>
     <string name="wrong"><u>اسم خطأ؟</u></string>
-    <string name="source_not_found">        لا يمكن العثور علي شيء :( \n
+    <string name="source_not_found">        لا يمكن العثور علي شيء:( \n
         حاول مع مصدر آخر.
     </string>
     <string name="not_supported">%1$s غير مدعوم!</string>
