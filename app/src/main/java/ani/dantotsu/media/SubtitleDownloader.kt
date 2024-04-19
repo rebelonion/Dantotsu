@@ -12,7 +12,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 class SubtitleDownloader {
 

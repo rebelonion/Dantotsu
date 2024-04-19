@@ -343,6 +343,7 @@ class MangaChapterAdapter(
     fun updateType(t: Int) {
         type = t
     }
+
     private fun formatDate(timestamp: Long?): String {
         timestamp ?: return "" // Return empty string if timestamp is null
 
@@ -366,6 +367,7 @@ class MangaChapterAdapter(
                     else -> "Just now"
                 }
             }
+
             1L -> "1 day ago"
             in 2..6 -> "$daysDifference days ago"
             else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(targetDate)

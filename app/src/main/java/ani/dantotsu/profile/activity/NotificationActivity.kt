@@ -22,7 +22,6 @@ import ani.dantotsu.notifications.comment.CommentStore
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.Logger

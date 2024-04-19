@@ -105,7 +105,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         setSortByFilterImage()
 
         binding.resetSearchFilter.setOnClickListener {
-            val rotateAnimation = ObjectAnimator.ofFloat(binding.resetSearchFilter, "rotation", 180f, 540f)
+            val rotateAnimation =
+                ObjectAnimator.ofFloat(binding.resetSearchFilter, "rotation", 180f, 540f)
             rotateAnimation.duration = 500
             rotateAnimation.interpolator = AccelerateDecelerateInterpolator()
             rotateAnimation.start()
@@ -113,7 +114,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         }
 
         binding.resetSearchFilter.setOnLongClickListener {
-            val rotateAnimation = ObjectAnimator.ofFloat(binding.resetSearchFilter, "rotation", 180f, 540f)
+            val rotateAnimation =
+                ObjectAnimator.ofFloat(binding.resetSearchFilter, "rotation", 180f, 540f)
             rotateAnimation.duration = 500
             rotateAnimation.interpolator = AccelerateDecelerateInterpolator()
             rotateAnimation.start()
@@ -125,8 +127,10 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
 
                 CoroutineScope(Dispatchers.Main).launch {
                     activity.result.apply {
-                        status = binding.searchStatus.text.toString().replace(" ", "_").ifBlank { null }
-                        source = binding.searchSource.text.toString().replace(" ", "_").ifBlank { null }
+                        status =
+                            binding.searchStatus.text.toString().replace(" ", "_").ifBlank { null }
+                        source =
+                            binding.searchSource.text.toString().replace(" ", "_").ifBlank { null }
                         format = binding.searchFormat.text.toString().ifBlank { null }
                         season = binding.searchSeason.text.toString().ifBlank { null }
                         startYear = binding.searchYear.text.toString().toIntOrNull()
@@ -206,21 +210,25 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_search_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
+
                     R.id.country_china -> {
                         activity.result.countryOfOrigin = "CN"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_china_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
+
                     R.id.country_south_korea -> {
                         activity.result.countryOfOrigin = "KR"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_south_korea_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
+
                     R.id.country_japan -> {
                         activity.result.countryOfOrigin = "JP"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_japan_googlefonts)
                         startBounceZoomAnimation(binding.countryFilter)
                     }
+
                     R.id.country_taiwan -> {
                         activity.result.countryOfOrigin = "TW"
                         binding.countryFilter.setImageResource(R.drawable.ic_round_globe_taiwan_googlefonts)
@@ -257,7 +265,8 @@ class SearchFilterBottomDialog : BottomSheetDialogFragment() {
         binding.searchFilterCancel.setOnClickListener {
             dismiss()
         }
-        val format = if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus
+        val format =
+            if (activity.result.type == "ANIME") Anilist.animeStatus else Anilist.mangaStatus
         binding.searchStatus.setText(activity.result.status?.replace("_", " "))
         binding.searchStatus.setAdapter(
             ArrayAdapter(

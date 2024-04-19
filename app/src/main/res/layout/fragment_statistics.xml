@@ -14,9 +14,9 @@
         android:layout_height="wrap_content"
         android:baselineAligned="false"
         android:orientation="vertical"
-        android:paddingBottom="16dp"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingEnd="16dp"
+        android:paddingBottom="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,16 +95,16 @@
             android:id="@+id/compare"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="true"
-            android:fontFamily="@font/poppins_bold"
-            android:textColor="?attr/colorPrimary"
             android:layout_gravity="center_horizontal"
-            android:paddingTop="4dp"
+            android:enabled="true"
+            android:focusable="true"
+            android:fontFamily="@font/poppins_bold"
             android:insetTop="0dp"
             android:insetBottom="0dp"
+            android:paddingTop="4dp"
             android:text="@string/compare"
-            android:textSize="12sp"
-            android:focusable="true" />
+            android:textColor="?attr/colorPrimary"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
@@ -125,7 +125,7 @@
         android:id="@+id/statisticList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:nestedScrollingEnabled="true"
+        android:orientation="vertical"
         tools:listitem="@layout/item_chart" />
 </LinearLayout>

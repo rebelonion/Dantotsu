@@ -5,8 +5,8 @@ import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.anime.AnimeDownloaderService.AnimeDownloadTask.Companion.getTaskName
-import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.MediaNameAdapter
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.tryWithSuspend
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.model.SAnime
@@ -43,7 +43,7 @@ class OfflineAnimeParser : AnimeParser() {
                 if (it.isDirectory) {
                     val episode = Episode(
                         it.name!!,
-                        getTaskName(animeLink,it.name!!),
+                        getTaskName(animeLink, it.name!!),
                         it.name,
                         null,
                         null,

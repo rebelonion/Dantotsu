@@ -41,9 +41,11 @@ class ExtensionInstallActivity : AppCompatActivity() {
         ThemeManager(this).applyTheme()
 
         if (intent.hasExtra(ExtensionInstaller.EXTRA_EXTENSION_TYPE))
-            mediaType = intent.getSerializableExtraCompat<MediaType>(ExtensionInstaller.EXTRA_EXTENSION_TYPE)
+            mediaType =
+                intent.getSerializableExtraCompat<MediaType>(ExtensionInstaller.EXTRA_EXTENSION_TYPE)
         if (intent.hasExtra(ExtensionInstaller.EXTRA_ADDON_TYPE))
-            addonType = intent.getSerializableExtraCompat<AddonType>(ExtensionInstaller.EXTRA_ADDON_TYPE)
+            addonType =
+                intent.getSerializableExtraCompat<AddonType>(ExtensionInstaller.EXTRA_ADDON_TYPE)
 
         @Suppress("DEPRECATION")
         val installIntent = Intent(Intent.ACTION_INSTALL_PACKAGE)

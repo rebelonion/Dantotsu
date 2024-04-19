@@ -62,9 +62,10 @@ class StoragePermissions {
             return hasDirAccess(context, path)
         }
 
-        fun AppCompatActivity.accessAlertDialog(launcher: LauncherWrapper,
-                                                force: Boolean = false,
-                                                complete: (Boolean) -> Unit
+        fun AppCompatActivity.accessAlertDialog(
+            launcher: LauncherWrapper,
+            force: Boolean = false,
+            complete: (Boolean) -> Unit
         ) {
             if (hasDirAccess(this) && !force) {
                 complete(true)
@@ -97,11 +98,12 @@ class StoragePermissions {
 
 class LauncherWrapper(
     activity: AppCompatActivity,
-    contract:  ActivityResultContracts.OpenDocumentTree)
-{
+    contract: ActivityResultContracts.OpenDocumentTree
+) {
     private var launcher: ActivityResultLauncher<Uri?>
     var complete: (Boolean) -> Unit = {}
-    init{
+
+    init {
         launcher = activity.registerForActivityResult(contract) { uri ->
             if (uri != null) {
                 activity.contentResolver.takePersistableUriPermission(

@@ -355,7 +355,7 @@ class NovelDownloaderService : Service() {
     private fun saveMediaInfo(task: DownloadTask) {
         launchIO {
             val directory =
-                DownloadsManager.getSubDirectory(
+                getSubDirectory(
                     this@NovelDownloaderService,
                     MediaType.NOVEL,
                     false,

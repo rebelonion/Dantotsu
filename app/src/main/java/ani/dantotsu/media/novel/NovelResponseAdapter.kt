@@ -181,7 +181,7 @@ class NovelResponseAdapter(
         if (position != -1) {
             list[position].extra?.remove("0")
             list[position].extra?.set("0", "Downloading: $progress%")
-            Logger.log( "updateDownloadProgress: $progress, position: $position")
+            Logger.log("updateDownloadProgress: $progress, position: $position")
             notifyItemChanged(position)
         }
     }

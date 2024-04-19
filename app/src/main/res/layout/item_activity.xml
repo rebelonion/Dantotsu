@@ -150,8 +150,8 @@
                     android:layout_height="160dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    tools:srcCompat="@tools:sample/backgrounds/scenic"
                     tools:ignore="ContentDescription,ImageContrastCheck"
+                    tools:srcCompat="@tools:sample/backgrounds/scenic"
                     tools:tint="@color/transparent" />
 
             </com.google.android.material.card.MaterialCardView>

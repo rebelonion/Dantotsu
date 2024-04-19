@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginBottom="8dp"
     android:orientation="horizontal">
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,12 +20,12 @@
         android:id="@+id/repositoryItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:ellipsize="end"
         android:layout_gravity="center"
         android:alpha="0.66"
-        android:textColor="?attr/colorOnBackground"
+        android:ellipsize="end"
         android:singleLine="true"
-        tools:text="xyz repo"/>
+        android:textColor="?attr/colorOnBackground"
+        android:textSize="12sp"
+        tools:text="xyz repo" />
 
 </LinearLayout>

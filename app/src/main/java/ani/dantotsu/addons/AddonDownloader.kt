@@ -1,38 +1,23 @@
 package ani.dantotsu.addons
 
-import android.annotation.SuppressLint
 import android.app.Activity
-import android.app.DownloadManager
 import android.app.NotificationManager
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
-import androidx.core.content.ContextCompat
-import androidx.core.content.getSystemService
-import androidx.core.net.toUri
-import ani.dantotsu.BuildConfig
 import ani.dantotsu.Mapper
 import ani.dantotsu.R
 import ani.dantotsu.client
 import ani.dantotsu.logError
-import ani.dantotsu.media.MediaType
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.settings.InstallerSteps
 import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
-import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
-import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
 
 class AddonDownloader {
@@ -44,8 +29,8 @@ class AddonDownloader {
                         Mapper.json.decodeFromJsonElement<AppUpdater.GithubResponse>(it)
                     }
                 val r = res.maxByOrNull {
-                        it.timeStamp()
-                    } ?: throw Exception("No Pre Release Found")
+                    it.timeStamp()
+                } ?: throw Exception("No Pre Release Found")
                 val v = r.tagName.substringAfter("v", "")
                 val md = r.body ?: ""
                 val version = v.ifEmpty { throw Exception("Weird Version : ${r.tagName}") }
@@ -101,8 +86,7 @@ class AddonDownloader {
                                     { error -> installerSteps.onError(error) {} },
                                     { installerSteps.onComplete {} }
                                 )
-                        }
-                        else openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
+                        } else openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
                     }
                 } catch (e: Exception) {
                     logError(e)

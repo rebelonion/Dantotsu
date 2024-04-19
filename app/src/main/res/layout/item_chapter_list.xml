@@ -42,7 +42,7 @@
                 android:background="?android:attr/selectableItemBackground"
                 app:srcCompat="@drawable/ic_round_remove_red_eye_24"
                 app:tint="?attr/colorOnBackground"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
             <ImageButton
                 android:id="@+id/itemDownload"
@@ -52,19 +52,20 @@
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/ic_download_24"
                 app:tint="?attr/colorOnBackground"
-                tools:ignore="ContentDescription"/>
+                tools:ignore="ContentDescription" />
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/itemChapterDateLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="10dp"
             android:layout_marginTop="-20dp"
-            android:layout_marginBottom="10dp"
             android:layout_marginEnd="100dp"
-            android:visibility="gone"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal"
+            android:visibility="gone"
             tools:visibility="visible">
 
             <TextView
@@ -77,9 +78,9 @@
                 android:fontFamily="@font/poppins_bold"
                 android:maxLines="1"
                 android:textSize="12dp"
+                tools:ignore="SpUsage"
                 tools:text="Aug/12/1969"
-                tools:visibility="visible"
-                tools:ignore="SpUsage" />
+                tools:visibility="visible" />
 
             <TextView
                 android:id="@+id/itemChapterDateDivider"
@@ -101,9 +102,9 @@
                 android:fontFamily="@font/poppins_bold"
                 android:maxLines="1"
                 android:textSize="12dp"
+                tools:ignore="SpUsage"
                 tools:text="Manga"
-                tools:visibility="visible"
-                tools:ignore="SpUsage" />
+                tools:visibility="visible" />
         </LinearLayout>
 
         <TextView

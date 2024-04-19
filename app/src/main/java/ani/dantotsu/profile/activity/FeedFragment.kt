@@ -19,7 +19,6 @@ import ani.dantotsu.databinding.FragmentFeedBinding
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.setBaseline
-import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
@@ -57,7 +56,7 @@ class FeedFragment : Fragment() {
 
         val navBar = if (userId != null) {
             (activity as ProfileActivity).navBar
-        }else{
+        } else {
             (activity as FeedActivity).navBar
         }
         binding.listRecyclerView.setBaseline(navBar)
@@ -74,7 +73,7 @@ class FeedFragment : Fragment() {
             binding.root.requestLayout()
             val navBar = if (userId != null) {
                 (activity as ProfileActivity).navBar
-            }else{
+            } else {
                 (activity as FeedActivity).navBar
             }
             binding.listRecyclerView.setBaseline(navBar)
@@ -85,10 +84,17 @@ class FeedFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         res?.data?.page?.activities?.let { activities ->
                             activityList = activities
-                            val filtered = activityList.filterNot {  //filter out messages that are not directed to the user
-                                it.recipient?.id != null && it.recipient.id != Anilist.userid
-                            }
-                            adapter.update(filtered.map { ActivityItem(it, ::onActivityClick,requireActivity()) })
+                            val filtered =
+                                activityList.filterNot {  //filter out messages that are not directed to the user
+                                    it.recipient?.id != null && it.recipient.id != Anilist.userid
+                                }
+                            adapter.update(filtered.map {
+                                ActivityItem(
+                                    it,
+                                    ::onActivityClick,
+                                    requireActivity()
+                                )
+                            })
                         }
                         binding.listProgressBar.visibility = ViewGroup.GONE
                         val scrollView = binding.listRecyclerView
@@ -134,7 +140,13 @@ class FeedFragment : Fragment() {
                     val filtered = activities.filterNot {
                         it.recipient?.id != null && it.recipient.id != Anilist.userid
                     }
-                    adapter.addAll(filtered.map { ActivityItem(it, ::onActivityClick,requireActivity()) })
+                    adapter.addAll(filtered.map {
+                        ActivityItem(
+                            it,
+                            ::onActivityClick,
+                            requireActivity()
+                        )
+                    })
                 }
                 binding.feedSwipeRefresh.isRefreshing = false
                 onFinish()
@@ -150,6 +162,7 @@ class FeedFragment : Fragment() {
                         .putExtra("userId", id), null
                 )
             }
+
             "MEDIA" -> {
                 ContextCompat.startActivity(
                     activity, Intent(activity, MediaDetailsActivity::class.java)

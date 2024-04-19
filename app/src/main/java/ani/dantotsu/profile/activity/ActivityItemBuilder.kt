@@ -5,6 +5,7 @@ import ani.dantotsu.connections.anilist.api.NotificationType
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 class ActivityItemBuilder {
 
     companion object {
@@ -109,6 +110,7 @@ class ActivityItemBuilder {
                         else -> "Just now"
                     }
                 }
+
                 1L -> "1 day ago"
                 in 2..6 -> "$daysDifference days ago"
                 else -> SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(targetDate)

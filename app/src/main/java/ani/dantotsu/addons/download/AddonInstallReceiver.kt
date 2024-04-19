@@ -3,7 +3,6 @@ package ani.dantotsu.addons.download
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import androidx.core.content.ContextCompat
 import ani.dantotsu.addons.AddonListener
 import ani.dantotsu.addons.AddonLoader
@@ -26,7 +25,7 @@ internal class AddonInstallReceiver : BroadcastReceiver() {
         ContextCompat.registerReceiver(context, this, filter, ContextCompat.RECEIVER_EXPORTED)
     }
 
-    fun setListener(listener: AddonListener, type: AddonType) : AddonInstallReceiver {
+    fun setListener(listener: AddonListener, type: AddonType): AddonInstallReceiver {
         this.listener = listener
         this.type = type
         return this

@@ -204,8 +204,10 @@ class MangaExtensionManager(
      * @param extension The extension to be installed.
      */
     fun installExtension(extension: MangaExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getMangaApkUrl(extension), extension.pkgName,
-            extension.name, MediaType.MANGA)
+        return installer.downloadAndInstall(
+            api.getMangaApkUrl(extension), extension.pkgName,
+            extension.name, MediaType.MANGA
+        )
     }
 
     /**

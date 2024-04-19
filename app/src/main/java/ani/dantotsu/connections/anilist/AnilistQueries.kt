@@ -1188,7 +1188,7 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
     suspend fun recentlyUpdated(
         greater: Long = 0,
         lesser: Long = System.currentTimeMillis() / 1000 - 10000
-    ): MutableList<Media>? {
+    ): MutableList<Media> {
         suspend fun execute(page: Int = 1): Page? {
             val query = """{
 Page(page:$page,perPage:50) {

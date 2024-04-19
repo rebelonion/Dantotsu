@@ -44,8 +44,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="32dp"
                 android:layout_weight="1"
-                android:text="@string/notifications"
                 android:fontFamily="@font/poppins_bold"
+                android:text="@string/notifications"
                 android:textSize="28sp" />
 
             <ImageView

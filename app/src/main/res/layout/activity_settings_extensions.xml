@@ -51,9 +51,9 @@
             <ImageView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:padding="24dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginBottom="20dp"
+                android:padding="24dp"
                 app:srcCompat="@drawable/ic_extension"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />

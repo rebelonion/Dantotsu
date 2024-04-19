@@ -14,7 +14,7 @@ class FollowerItem(
     private val avatar: String?,
     private val banner: String?,
     val clickCallback: (Int) -> Unit
-): BindableItem<ItemFollowerBinding>() {
+) : BindableItem<ItemFollowerBinding>() {
     private lateinit var binding: ItemFollowerBinding
 
     override fun bind(viewBinding: ItemFollowerBinding, position: Int) {

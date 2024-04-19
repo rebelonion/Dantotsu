@@ -112,8 +112,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="true"
-                tools:listitem="@layout/item_follower"
-                android:requiresFadingEdge="vertical" />
+                android:requiresFadingEdge="vertical"
+                tools:listitem="@layout/item_follower" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

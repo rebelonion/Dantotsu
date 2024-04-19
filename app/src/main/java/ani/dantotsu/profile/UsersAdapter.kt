@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.blurImage
 import ani.dantotsu.databinding.ItemFollowerBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.setAnimation
 
 
-class UsersAdapter(private val user: ArrayList<User>) : RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
+class UsersAdapter(private val user: ArrayList<User>) :
+    RecyclerView.Adapter<UsersAdapter.UsersViewHolder>() {
 
     inner class UsersViewHolder(val binding: ItemFollowerBinding) :
         RecyclerView.ViewHolder(binding.root) {

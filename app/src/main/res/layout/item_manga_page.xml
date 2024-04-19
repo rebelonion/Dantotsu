@@ -133,8 +133,8 @@
         android:fontFamily="@font/poppins_bold"
         android:padding="8dp"
         android:text="@string/trending_manga"
-        android:visibility="invisible"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -172,8 +172,8 @@
         android:fontFamily="@font/poppins_bold"
         android:padding="8dp"
         android:text="@string/trending_manhwa"
-        android:visibility="invisible"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -211,8 +211,8 @@
         android:fontFamily="@font/poppins_bold"
         android:padding="8dp"
         android:text="@string/trending_novel"
-        android:visibility="invisible"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -250,8 +250,8 @@
         android:fontFamily="@font/poppins_bold"
         android:padding="8dp"
         android:text="@string/top_rated"
-        android:visibility="invisible"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -289,8 +289,8 @@
         android:fontFamily="@font/poppins_bold"
         android:padding="8dp"
         android:text="@string/most_favourite"
-        android:visibility="invisible"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:visibility="invisible" />
 
     <FrameLayout
         android:layout_width="match_parent"

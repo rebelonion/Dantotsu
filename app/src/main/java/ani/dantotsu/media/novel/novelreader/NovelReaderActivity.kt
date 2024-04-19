@@ -292,7 +292,11 @@ class NovelReaderActivity : AppCompatActivity(), EbookReaderEventListener {
             applySettings()
         }
 
-        val cfi = PrefManager.getNullableCustomVal("${sanitizedBookId}_progress", null, String::class.java)
+        val cfi = PrefManager.getNullableCustomVal(
+            "${sanitizedBookId}_progress",
+            null,
+            String::class.java
+        )
 
         cfi?.let { binding.bookReader.goto(it) }
         binding.progress.visibility = View.GONE

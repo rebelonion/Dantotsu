@@ -199,7 +199,8 @@ class AnimeWatchFragment : Fragment() {
                         ConcatAdapter(headerAdapter, episodeAdapter)
 
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
+                        val offline =
+                            !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
                         if (offline) {
                             media.selected!!.sourceIndex = model.watchSources!!.list.lastIndex
                         } else {

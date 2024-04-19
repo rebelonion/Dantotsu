@@ -133,7 +133,11 @@ object Logger {
         shareIntent.type = "text/plain"
         shareIntent.putExtra(
             Intent.EXTRA_STREAM,
-            FileProvider.getUriForFile(context, "${BuildConfig.APPLICATION_ID}.provider", fileToUse!!)
+            FileProvider.getUriForFile(
+                context,
+                "${BuildConfig.APPLICATION_ID}.provider",
+                fileToUse!!
+            )
         )
         shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Log file")
         shareIntent.putExtra(Intent.EXTRA_TEXT, "Log file")

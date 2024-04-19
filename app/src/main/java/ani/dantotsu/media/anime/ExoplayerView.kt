@@ -486,12 +486,14 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                                     }
                                     rotation = ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE
                                 }
+
                                 in 225..315 -> {
                                     if (rotation != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
                                         exoRotate.visibility = View.VISIBLE
                                     }
                                     rotation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                                 }
+
                                 in 315..360, in 0..45 -> {
                                     if (rotation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
                                         exoRotate.visibility = View.VISIBLE
@@ -1396,7 +1398,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 subClick()
             }
         }
-        val sub: MutableList<MediaItem.SubtitleConfiguration> = emptyList<MediaItem.SubtitleConfiguration>().toMutableList()
+        val sub: MutableList<MediaItem.SubtitleConfiguration> =
+            emptyList<MediaItem.SubtitleConfiguration>().toMutableList()
         ext.subtitles.forEach { subtitle ->
             val subtitleUrl = if (!hasExtSubtitles) video!!.file.url else subtitle.file.url
             //var localFile: String? = null
@@ -1865,7 +1868,10 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                     skippedTimeStamps.add(new)
                 }
-                if (PrefManager.getVal(PrefName.AutoSkipRecap) && new.skipType == "recap" && !skippedTimeStamps.contains(new)) {
+                if (PrefManager.getVal(PrefName.AutoSkipRecap) && new.skipType == "recap" && !skippedTimeStamps.contains(
+                        new
+                    )
+                ) {
                     exoPlayer.seekTo((new.interval.endTime * 1000).toLong())
                     skippedTimeStamps.add(new)
                 }
@@ -1910,12 +1916,15 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val audioTracks: ArrayList<Tracks.Group> = arrayListOf()
         val subTracks: ArrayList<Tracks.Group> = arrayListOf(dummyTrack)
         tracks.groups.forEach {
-            println("Track__: $it\nTrack__: ${it.length}\nTrack__: ${it.isSelected}\n" +
-                    "Track__: ${it.type}\nTrack__: ${it.mediaTrackGroup.id}")
+            println(
+                "Track__: $it\nTrack__: ${it.length}\nTrack__: ${it.isSelected}\n" +
+                        "Track__: ${it.type}\nTrack__: ${it.mediaTrackGroup.id}"
+            )
             when (it.type) {
                 TRACK_TYPE_AUDIO -> {
                     if (it.isSupported(true)) audioTracks.add(it)
                 }
+
                 TRACK_TYPE_TEXT -> {
                     if (!hasExtSubtitles) {
                         if (it.isSupported(true)) subTracks.add(it)
@@ -1951,7 +1960,8 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                             onSetTrackGroupOverride(dummyTrack, TRACK_TYPE_TEXT)
                         }
                     }
-                    else -> { }
+
+                    else -> {}
                 }
             }
         }
@@ -1966,6 +1976,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 isPlayerPlaying = true
                 sourceClick()
             }
+
             else -> {
                 toast("Player Error ${error.errorCode} (${error.errorCodeName}) : ${error.message}")
                 Injekt.get<CrashlyticsInterface>().logException(error)

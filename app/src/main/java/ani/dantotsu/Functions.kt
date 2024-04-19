@@ -190,7 +190,7 @@ var loadMedia: Int? = null
 var loadIsMAL = false
 
 val Int.toPx get() = TypedValue.applyDimension(
-    TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
+    TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), getSystem().displayMetrics
 ).toInt()
 
 fun initActivity(a: Activity) {
@@ -464,7 +464,7 @@ class InputFilterMinMax(
 }
 
 
-class ZoomOutPageTransformer() :
+class ZoomOutPageTransformer :
     ViewPager2.PageTransformer {
     override fun transformPage(view: View, position: Float) {
         if (position == 0.0f && PrefManager.getVal(PrefName.LayoutAnimations)) {

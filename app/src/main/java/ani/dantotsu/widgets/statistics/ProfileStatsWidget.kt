@@ -59,7 +59,8 @@ class ProfileStatsWidget : AppWidgetProvider() {
             appWidgetId: Int
         ) {
 
-            val prefs = context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE)
+            val prefs =
+                context.getSharedPreferences(getPrefsName(appWidgetId), Context.MODE_PRIVATE)
             val backgroundColor =
                 prefs.getInt(PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
             val backgroundFade = prefs.getInt(PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
@@ -87,88 +88,95 @@ class ProfileStatsWidget : AppWidgetProvider() {
                     val respond = Anilist.query.getUserProfile(userPref.toInt())
                     respond?.data?.user?.let { user ->
                         withContext(Dispatchers.Main) {
-                            val views = RemoteViews(context.packageName, R.layout.statistics_widget).apply {
-                                setImageViewBitmap(
-                                    R.id.backgroundView,
-                                    gradientDrawable.toBitmap(
-                                        width,
-                                        height
+                            val views =
+                                RemoteViews(context.packageName, R.layout.statistics_widget).apply {
+                                    setImageViewBitmap(
+                                        R.id.backgroundView,
+                                        gradientDrawable.toBitmap(
+                                            width,
+                                            height
+                                        )
                                     )
-                                )
-                                setOnClickPendingIntent(
-                                    R.id.userAvatar,
-                                    PendingIntent.getActivity(
-                                        context,
-                                        1,
-                                        Intent(context, ProfileStatsConfigure::class.java).apply {
-                                            putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-                                            data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
-                                        },
-                                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                                    setOnClickPendingIntent(
+                                        R.id.userAvatar,
+                                        PendingIntent.getActivity(
+                                            context,
+                                            1,
+                                            Intent(
+                                                context,
+                                                ProfileStatsConfigure::class.java
+                                            ).apply {
+                                                putExtra(
+                                                    AppWidgetManager.EXTRA_APPWIDGET_ID,
+                                                    appWidgetId
+                                                )
+                                                data = Uri.parse(toUri(Intent.URI_INTENT_SCHEME))
+                                            },
+                                            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+                                        )
                                     )
-                                )
-                                setTextColor(R.id.userLabel, titleTextColor)
-                                setTextColor(R.id.topLeftItem, titleTextColor)
-                                setTextColor(R.id.topLeftLabel, statsTextColor)
-                                setTextColor(R.id.topRightItem, titleTextColor)
-                                setTextColor(R.id.topRightLabel, statsTextColor)
-                                setTextColor(R.id.bottomLeftItem, titleTextColor)
-                                setTextColor(R.id.bottomLeftLabel, statsTextColor)
-                                setTextColor(R.id.bottomRightItem, titleTextColor)
-                                setTextColor(R.id.bottomRightLabel, statsTextColor)
+                                    setTextColor(R.id.userLabel, titleTextColor)
+                                    setTextColor(R.id.topLeftItem, titleTextColor)
+                                    setTextColor(R.id.topLeftLabel, statsTextColor)
+                                    setTextColor(R.id.topRightItem, titleTextColor)
+                                    setTextColor(R.id.topRightLabel, statsTextColor)
+                                    setTextColor(R.id.bottomLeftItem, titleTextColor)
+                                    setTextColor(R.id.bottomLeftLabel, statsTextColor)
+                                    setTextColor(R.id.bottomRightItem, titleTextColor)
+                                    setTextColor(R.id.bottomRightLabel, statsTextColor)
 
-                                setImageViewBitmap(
-                                    R.id.userAvatar,
-                                    user.avatar?.medium?.let { it1 -> downloadImageAsBitmap(it1) }
-                                )
-                                setTextViewText(
-                                    R.id.userLabel,
-                                    context.getString(R.string.user_stats, user.name)
-                                )
+                                    setImageViewBitmap(
+                                        R.id.userAvatar,
+                                        user.avatar?.medium?.let { it1 -> downloadImageAsBitmap(it1) }
+                                    )
+                                    setTextViewText(
+                                        R.id.userLabel,
+                                        context.getString(R.string.user_stats, user.name)
+                                    )
 
-                                setTextViewText(
-                                    R.id.topLeftItem,
-                                    user.statistics.anime.count.toString()
-                                )
-                                setTextViewText(
-                                    R.id.topLeftLabel,
-                                    context.getString(R.string.anime_watched)
-                                )
+                                    setTextViewText(
+                                        R.id.topLeftItem,
+                                        user.statistics.anime.count.toString()
+                                    )
+                                    setTextViewText(
+                                        R.id.topLeftLabel,
+                                        context.getString(R.string.anime_watched)
+                                    )
 
-                                setTextViewText(
-                                    R.id.topRightItem,
-                                    user.statistics.anime.episodesWatched.toString()
-                                )
-                                setTextViewText(
-                                    R.id.topRightLabel,
-                                    context.getString(R.string.episodes_watched_n)
-                                )
+                                    setTextViewText(
+                                        R.id.topRightItem,
+                                        user.statistics.anime.episodesWatched.toString()
+                                    )
+                                    setTextViewText(
+                                        R.id.topRightLabel,
+                                        context.getString(R.string.episodes_watched_n)
+                                    )
 
-                                setTextViewText(
-                                    R.id.bottomLeftItem,
-                                    user.statistics.manga.count.toString()
-                                )
-                                setTextViewText(
-                                    R.id.bottomLeftLabel,
-                                    context.getString(R.string.manga_read)
-                                )
+                                    setTextViewText(
+                                        R.id.bottomLeftItem,
+                                        user.statistics.manga.count.toString()
+                                    )
+                                    setTextViewText(
+                                        R.id.bottomLeftLabel,
+                                        context.getString(R.string.manga_read)
+                                    )
 
-                                setTextViewText(
-                                    R.id.bottomRightItem,
-                                    user.statistics.manga.chaptersRead.toString()
-                                )
-                                setTextViewText(
-                                    R.id.bottomRightLabel,
-                                    context.getString(R.string.chapters_read_n)
-                                )
+                                    setTextViewText(
+                                        R.id.bottomRightItem,
+                                        user.statistics.manga.chaptersRead.toString()
+                                    )
+                                    setTextViewText(
+                                        R.id.bottomRightLabel,
+                                        context.getString(R.string.chapters_read_n)
+                                    )
 
-                                val intent = Intent(context, ProfileActivity::class.java)
-                                    .putExtra("userId", userPref.toInt())
-                                val pendingIntent = PendingIntent.getActivity(
-                                    context, 0, intent, PendingIntent.FLAG_IMMUTABLE
-                                )
-                                setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)
-                            }
+                                    val intent = Intent(context, ProfileActivity::class.java)
+                                        .putExtra("userId", userPref.toInt())
+                                    val pendingIntent = PendingIntent.getActivity(
+                                        context, 0, intent, PendingIntent.FLAG_IMMUTABLE
+                                    )
+                                    setOnClickPendingIntent(R.id.widgetContainer, pendingIntent)
+                                }
                             // Instruct the widget manager to update the widget
                             appWidgetManager.updateAppWidget(appWidgetId, views)
                         }
@@ -221,6 +229,7 @@ class ProfileStatsWidget : AppWidgetProvider() {
         fun getPrefsName(appWidgetId: Int): String {
             return "ani.dantotsu.widgets.Statistics.${appWidgetId}"
         }
+
         const val PREF_BACKGROUND_COLOR = "background_color"
         const val PREF_BACKGROUND_FADE = "background_fade"
         const val PREF_TITLE_TEXT_COLOR = "title_text_color"

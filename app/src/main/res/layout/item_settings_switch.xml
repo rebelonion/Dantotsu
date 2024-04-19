@@ -65,9 +65,9 @@
                 android:layout_gravity="top"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="12dp"
+                android:visibility="gone"
                 app:srcCompat="@drawable/ic_circle_add"
                 app:tint="?attr/colorPrimary"
-                android:visibility="gone"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
     </LinearLayout>

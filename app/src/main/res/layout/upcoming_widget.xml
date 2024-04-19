@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:theme="@style/Theme.Dantotsu.AppWidgetContainer">
 
     <ImageView
@@ -10,7 +10,7 @@
         android:layout_height="match_parent"
         android:scaleType="fitXY"
         android:src="@drawable/linear_gradient_black"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <RelativeLayout
         android:id="@+id/widgetContainer"
@@ -26,7 +26,7 @@
             android:layout_alignParentTop="true"
             android:foregroundGravity="center_vertical"
             android:src="@drawable/ic_dantotsu_round"
-            tools:ignore="ContentDescription"/>
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/widgetTitle"
@@ -36,11 +36,11 @@
             android:layout_alignParentEnd="true"
             android:layout_marginStart="0dp"
             android:layout_toEndOf="@+id/logoView"
-            android:gravity="center_vertical|start"
-            android:textAlignment="viewStart"
-            android:maxLines="2"
             android:ellipsize="none"
+            android:gravity="center_vertical|start"
+            android:maxLines="2"
             android:text="@string/upcoming"
+            android:textAlignment="viewStart"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -48,16 +48,16 @@
             android:id="@+id/widgetListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
-            android:layout_below="@id/widgetTitle" />
+            android:layout_below="@id/widgetTitle"
+            android:scrollbars="none" />
 
         <TextView
             android:id="@+id/empty_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:ellipsize="end"
             android:text="@string/no_shows_to_display"
             android:textColor="#ffffff"
             android:textSize="20sp"

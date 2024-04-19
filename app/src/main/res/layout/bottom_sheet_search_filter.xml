@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -32,8 +31,8 @@
                     android:layout_gravity="start|center_vertical"
                     android:layout_marginStart="17dp"
                     android:background="@null"
-                    android:scaleType="fitCenter"
                     android:rotation="180"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/ic_round_reset_star_24"
                     app:tint="?attr/colorPrimary" />
 
@@ -182,8 +181,8 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:id="@+id/searchSeasonCont"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginStart="8dp"
@@ -264,14 +263,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
                     android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/grid" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/searchGenresGrid"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -307,14 +306,14 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/poppins_semi_bold"
                     android:layout_marginEnd="10dp"
+                    android:fontFamily="@font/poppins_semi_bold"
                     android:text="@string/grid" />
 
                 <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/searchTagsGrid"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView

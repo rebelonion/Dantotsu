@@ -67,7 +67,11 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                 binding.subtitleTitle.setText(R.string.none)
                 model.getMedia().observe(viewLifecycleOwner) { media ->
                     val mediaID: Int = media.id
-                    val selSubs = PrefManager.getNullableCustomVal("subLang_${mediaID}", null, String::class.java)
+                    val selSubs = PrefManager.getNullableCustomVal(
+                        "subLang_${mediaID}",
+                        null,
+                        String::class.java
+                    )
                     if (episode.selectedSubtitle != null && selSubs != "None") {
                         binding.root.setCardBackgroundColor(TRANSPARENT)
                     }
@@ -107,7 +111,11 @@ class SubtitleDialogFragment : BottomSheetDialogFragment() {
                 model.getMedia().observe(viewLifecycleOwner) { media ->
                     val mediaID: Int = media.id
                     val selSubs: String? =
-                        PrefManager.getNullableCustomVal("subLang_${mediaID}", null, String::class.java)
+                        PrefManager.getNullableCustomVal(
+                            "subLang_${mediaID}",
+                            null,
+                            String::class.java
+                        )
                     if (episode.selectedSubtitle != position - 1 && selSubs != subtitles[position - 1].language) {
                         binding.root.setCardBackgroundColor(TRANSPARENT)
                     }

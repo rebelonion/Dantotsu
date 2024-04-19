@@ -10,8 +10,7 @@ import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import com.github.aachartmodel.aainfographics.aachartcreator.AAOptions
 
-class SingleStatActivity : AppCompatActivity()
-{
+class SingleStatActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySingleStatBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -207,8 +207,10 @@ class AnimeExtensionManager(
      * @param extension The anime extension to be installed.
      */
     fun installExtension(extension: AnimeExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getAnimeApkUrl(extension), extension.pkgName,
-            extension.name, MediaType.ANIME)
+        return installer.downloadAndInstall(
+            api.getAnimeApkUrl(extension), extension.pkgName,
+            extension.name, MediaType.ANIME
+        )
     }
 
     /**

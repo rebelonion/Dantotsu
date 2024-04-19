@@ -62,7 +62,7 @@ internal object ExtensionLoader {
 
     val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or
             PackageManager.GET_META_DATA or
-            @Suppress ("DEPRECATION") PackageManager.GET_SIGNATURES or
+            @Suppress("DEPRECATION") PackageManager.GET_SIGNATURES or
             (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 PackageManager.GET_SIGNING_CERTIFICATES else 0)
 
@@ -145,7 +145,7 @@ internal object ExtensionLoader {
             Logger.log(error)
             return AnimeLoadResult.Error
         }
-        if (!isPackageAnExtension(MediaType.ANIME,pkgInfo)) {
+        if (!isPackageAnExtension(MediaType.ANIME, pkgInfo)) {
             Logger.log("Tried to load a package that wasn't a extension ($pkgName)")
             return AnimeLoadResult.Error
         }
@@ -201,8 +201,9 @@ internal object ExtensionLoader {
         // Validate lib version
         val libVersion = versionName.substringBeforeLast('.').toDoubleOrNull()
         if (libVersion == null || libVersion < ANIME_LIB_VERSION_MIN || libVersion > ANIME_LIB_VERSION_MAX) {
-            Logger.log("Lib version is $libVersion, while only versions " +
-                    "$ANIME_LIB_VERSION_MIN to $ANIME_LIB_VERSION_MAX are allowed"
+            Logger.log(
+                "Lib version is $libVersion, while only versions " +
+                        "$ANIME_LIB_VERSION_MIN to $ANIME_LIB_VERSION_MAX are allowed"
             )
             return AnimeLoadResult.Error
         }
@@ -232,7 +233,8 @@ internal object ExtensionLoader {
         }
 
         val hasReadme = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_README", 0) == 1
-        val hasChangelog = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
+        val hasChangelog =
+            appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
 
         val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
 
@@ -248,7 +250,8 @@ internal object ExtensionLoader {
             }
             .flatMap {
                 try {
-                    when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor().newInstance()) {
+                    when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor()
+                        .newInstance()) {
                         is AnimeSource -> listOf(obj)
                         is AnimeSourceFactory -> obj.createSources()
                         else -> throw Exception("Unknown source class type! ${obj.javaClass}")
@@ -314,8 +317,9 @@ internal object ExtensionLoader {
         // Validate lib version
         val libVersion = versionName.substringBeforeLast('.').toDoubleOrNull()
         if (libVersion == null || libVersion < MANGA_LIB_VERSION_MIN || libVersion > MANGA_LIB_VERSION_MAX) {
-            Logger.log("Lib version is $libVersion, while only versions " +
-                    "$MANGA_LIB_VERSION_MIN to $MANGA_LIB_VERSION_MAX are allowed"
+            Logger.log(
+                "Lib version is $libVersion, while only versions " +
+                        "$MANGA_LIB_VERSION_MIN to $MANGA_LIB_VERSION_MAX are allowed"
             )
             return MangaLoadResult.Error
         }
@@ -340,7 +344,8 @@ internal object ExtensionLoader {
         }
 
         val hasReadme = appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_HAS_README", 0) == 1
-        val hasChangelog = appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
+        val hasChangelog =
+            appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
 
         val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
 
@@ -401,11 +406,13 @@ internal object ExtensionLoader {
      * @param pkgInfo The package info of the application.
      */
     private fun isPackageAnExtension(type: MediaType, pkgInfo: PackageInfo): Boolean {
-        return pkgInfo.reqFeatures.orEmpty().any { it.name == when (type) {
-            MediaType.ANIME -> ANIME_PACKAGE
-            MediaType.MANGA -> MANGA_PACKAGE
-            else -> ""
-        } }
+        return pkgInfo.reqFeatures.orEmpty().any {
+            it.name == when (type) {
+                MediaType.ANIME -> ANIME_PACKAGE
+                MediaType.MANGA -> MANGA_PACKAGE
+                else -> ""
+            }
+        }
     }
 
     /**
@@ -417,7 +424,7 @@ internal object ExtensionLoader {
         val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             pkgInfo.signingInfo.signingCertificateHistory
         else
-            @Suppress ("DEPRECATION") pkgInfo.signatures
+            @Suppress("DEPRECATION") pkgInfo.signatures
         return if (signatures != null && signatures.isNotEmpty()) {
             Hash.sha256(signatures.first().toByteArray())
         } else {

@@ -23,7 +23,7 @@ class AuthorAdapter(
         return AuthorViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder:AuthorViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AuthorViewHolder, position: Int) {
         val binding = holder.binding
         setAnimation(binding.root.context, holder.binding.root)
         val author = authorList[position]

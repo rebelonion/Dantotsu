@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.R
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currActivity
@@ -32,7 +33,6 @@ import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.video.Helper
-import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
@@ -233,11 +233,12 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
     }
 
     private val externalPlayerResult = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
         Logger.log(result.data.toString())
     }
 
-    private fun exportMagnetIntent(episode: Episode, video: Video) : Intent {
+    private fun exportMagnetIntent(episode: Episode, video: Video): Intent {
         val amnis = "com.amnis"
         return Intent(Intent.ACTION_VIEW).apply {
             component = ComponentName(amnis, "$amnis.gui.player.PlayerActivity")
@@ -445,7 +446,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                     SubtitleDownloader.downloadSubtitle(
                                         requireContext(),
                                         subtitleToDownload!!.file.url,
-                                        DownloadedType(media!!.mainName(), media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.number, MediaType.ANIME)
+                                        DownloadedType(
+                                            media!!.mainName(),
+                                            media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.number,
+                                            MediaType.ANIME
+                                        )
                                     )
                                 }
                             }
@@ -477,7 +482,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
                     val subtitleNames = subtitles.map { it.language }
                     var subtitleToDownload: Subtitle? = null
-                    val activity = currActivity()?:requireActivity()
+                    val activity = currActivity() ?: requireActivity()
                     if (subtitles.isNotEmpty()) {
                         val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
                             .setTitle("Download Subtitle")
@@ -551,9 +556,13 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             if (video.format == VideoType.CONTAINER) {
                 binding.urlSize.isVisible = video.size != null
                 // if video size is null or 0, show "Unknown Size" else show the size in MB
-                val sizeText = getString(R.string.mb_size, "${if (video.extraNote != null) " : " else ""}${
-                    if (video.size == 0.0) getString(R.string.size_unknown) else DecimalFormat("#.##").format(video.size ?: 0)
-                }")
+                val sizeText = getString(
+                    R.string.mb_size, "${if (video.extraNote != null) " : " else ""}${
+                        if (video.size == 0.0) getString(R.string.size_unknown) else DecimalFormat("#.##").format(
+                            video.size ?: 0
+                        )
+                    }"
+                )
                 binding.urlSize.text = sizeText
             }
             binding.urlNote.visibility = View.VISIBLE

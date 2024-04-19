@@ -37,14 +37,14 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
         ContextCompat.registerReceiver(context, this, filter, ContextCompat.RECEIVER_EXPORTED)
     }
 
-    fun setAnimeListener(listener: AnimeListener) : ExtensionInstallReceiver {
+    fun setAnimeListener(listener: AnimeListener): ExtensionInstallReceiver {
         this.type = MediaType.ANIME
         animeListener = listener
         this.animeListener
         return this
     }
 
-    fun setMangaListener(listener: MangaListener) : ExtensionInstallReceiver {
+    fun setMangaListener(listener: MangaListener): ExtensionInstallReceiver {
         this.type = MediaType.MANGA
         mangaListener = listener
         return this
@@ -66,21 +66,33 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
                     when (type) {
                         MediaType.ANIME -> {
                             when (val result = getAnimeExtensionFromIntent(context, intent)) {
-                                is AnimeLoadResult.Success -> animeListener?.onExtensionInstalled(result.extension)
+                                is AnimeLoadResult.Success -> animeListener?.onExtensionInstalled(
+                                    result.extension
+                                )
 
-                                is AnimeLoadResult.Untrusted -> animeListener?.onExtensionUntrusted(result.extension)
+                                is AnimeLoadResult.Untrusted -> animeListener?.onExtensionUntrusted(
+                                    result.extension
+                                )
+
                                 else -> {}
                             }
                         }
+
                         MediaType.MANGA -> {
                             when (val result = getMangaExtensionFromIntent(context, intent)) {
-                                is MangaLoadResult.Success -> mangaListener?.onExtensionInstalled(result.extension)
+                                is MangaLoadResult.Success -> mangaListener?.onExtensionInstalled(
+                                    result.extension
+                                )
 
-                                is MangaLoadResult.Untrusted -> mangaListener?.onExtensionUntrusted(result.extension)
+                                is MangaLoadResult.Untrusted -> mangaListener?.onExtensionUntrusted(
+                                    result.extension
+                                )
+
                                 else -> {}
                             }
                         }
-                        else -> { }
+
+                        else -> {}
                     }
                 }
             }
@@ -90,17 +102,25 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
                     when (type) {
                         MediaType.ANIME -> {
                             when (val result = getAnimeExtensionFromIntent(context, intent)) {
-                                is AnimeLoadResult.Success -> animeListener?.onExtensionUpdated(result.extension)
+                                is AnimeLoadResult.Success -> animeListener?.onExtensionUpdated(
+                                    result.extension
+                                )
+
                                 else -> {}
                             }
                         }
+
                         MediaType.MANGA -> {
                             when (val result = getMangaExtensionFromIntent(context, intent)) {
-                                is MangaLoadResult.Success -> mangaListener?.onExtensionUpdated(result.extension)
+                                is MangaLoadResult.Success -> mangaListener?.onExtensionUpdated(
+                                    result.extension
+                                )
+
                                 else -> {}
                             }
                         }
-                        else -> { }
+
+                        else -> {}
                     }
                 }
             }
@@ -114,10 +134,12 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
                         MediaType.ANIME -> {
                             animeListener?.onPackageUninstalled(pkgName)
                         }
+
                         MediaType.MANGA -> {
                             mangaListener?.onPackageUninstalled(pkgName)
                         }
-                        else -> { }
+
+                        else -> {}
                     }
                 }
             }
@@ -131,7 +153,10 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
      * @param intent The intent containing the package name of the extension.
      */
     @OptIn(DelicateCoroutinesApi::class)
-    private suspend fun getAnimeExtensionFromIntent(context: Context, intent: Intent?): AnimeLoadResult {
+    private suspend fun getAnimeExtensionFromIntent(
+        context: Context,
+        intent: Intent?
+    ): AnimeLoadResult {
         val pkgName = getPackageNameFromIntent(intent)
         if (pkgName == null) {
             Logger.log("Package name not found")
@@ -146,7 +171,10 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private suspend fun getMangaExtensionFromIntent(context: Context, intent: Intent?): MangaLoadResult {
+    private suspend fun getMangaExtensionFromIntent(
+        context: Context,
+        intent: Intent?
+    ): MangaLoadResult {
         val pkgName = getPackageNameFromIntent(intent)
         if (pkgName == null) {
             Logger.log("Package name not found")

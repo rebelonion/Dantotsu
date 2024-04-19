@@ -5,7 +5,10 @@ import android.graphics.Rect
 import android.view.View
 import android.widget.FrameLayout
 
-class AndroidBug5497Workaround private constructor(activity: Activity, private val callback: (Boolean) -> Unit) {
+class AndroidBug5497Workaround private constructor(
+    activity: Activity,
+    private val callback: (Boolean) -> Unit
+) {
     private val mChildOfContent: View
     private var usableHeightPrevious = 0
     private val frameLayoutParams: FrameLayout.LayoutParams

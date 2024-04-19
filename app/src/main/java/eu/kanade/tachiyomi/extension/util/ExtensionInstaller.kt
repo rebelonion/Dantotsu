@@ -14,14 +14,11 @@ import androidx.core.net.toUri
 import ani.dantotsu.media.AddonType
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.Type
-import ani.dantotsu.parsers.novel.NovelExtension
 import ani.dantotsu.util.Logger
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.installer.Installer
-import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -67,7 +64,12 @@ class ExtensionInstaller(private val context: Context) {
      * @param url The url of the apk.
      * @param extension The extension to install.
      */
-    fun <T : Type> downloadAndInstall(url: String, pkgName: String, name: String, type: T): Observable<InstallStep> = Observable.defer {
+    fun <T : Type> downloadAndInstall(
+        url: String,
+        pkgName: String,
+        name: String,
+        type: T
+    ): Observable<InstallStep> = Observable.defer {
         val oldDownload = activeDownloads[pkgName]
         if (oldDownload != null) {
             deleteDownload(pkgName)
@@ -264,11 +266,15 @@ class ExtensionInstaller(private val context: Context) {
                     val localUri = cursor.getString(
                         cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI),
                     ).removePrefix(FILE_SCHEME)
-                    val type = MediaType.fromText(cursor.getString(
-                        cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_DESCRIPTION),
-                    )) ?: AddonType.fromText(cursor.getString(
-                        cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_DESCRIPTION),
-                    )) ?: return
+                    val type = MediaType.fromText(
+                        cursor.getString(
+                            cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_DESCRIPTION),
+                        )
+                    ) ?: AddonType.fromText(
+                        cursor.getString(
+                            cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_DESCRIPTION),
+                        )
+                    ) ?: return
 
                     installApk(type, id, File(localUri).getUriCompat(context))
                 }

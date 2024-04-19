@@ -9,8 +9,8 @@ import ani.dantotsu.addons.download.DownloadAddon
 import ani.dantotsu.addons.download.DownloadAddonApi
 import ani.dantotsu.addons.download.DownloadAddonManager
 import ani.dantotsu.addons.download.DownloadLoadResult
-import ani.dantotsu.addons.torrent.TorrentAddonApi
 import ani.dantotsu.addons.torrent.TorrentAddon
+import ani.dantotsu.addons.torrent.TorrentAddonApi
 import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.addons.torrent.TorrentLoadResult
 import ani.dantotsu.media.AddonType
@@ -56,7 +56,8 @@ class AddonLoader {
                 throw error
             }
 
-            val extName = pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Dantotsu: ")
+            val extName =
+                pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Dantotsu: ")
             val versionName = pkgInfo.versionName
             val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
 
@@ -64,7 +65,8 @@ class AddonLoader {
                 Logger.log("Missing versionName for extension $extName")
                 throw IllegalStateException("Missing versionName for extension $extName")
             }
-            val classLoader = PathClassLoader(appInfo.sourceDir, appInfo.nativeLibraryDir, context.classLoader)
+            val classLoader =
+                PathClassLoader(appInfo.sourceDir, appInfo.nativeLibraryDir, context.classLoader)
             val loadedClass = try {
                 Class.forName(className, false, classLoader)
             } catch (e: ClassNotFoundException) {
@@ -75,7 +77,7 @@ class AddonLoader {
                 Logger.log("Extension load error: $extName ($className)")
                 Logger.log(e)
                 throw e
-            }catch (e: Exception) {
+            } catch (e: Exception) {
                 Logger.log("Extension load error: $extName ($className)")
                 Logger.log(e)
                 throw e
@@ -84,7 +86,8 @@ class AddonLoader {
 
             return when (type) {
                 AddonType.TORRENT -> {
-                    val extension = instance as? TorrentAddonApi ?: throw IllegalStateException("Extension is not a TorrentAddonApi")
+                    val extension = instance as? TorrentAddonApi
+                        ?: throw IllegalStateException("Extension is not a TorrentAddonApi")
                     TorrentLoadResult.Success(
                         TorrentAddon.Installed(
                             name = extName,
@@ -96,8 +99,10 @@ class AddonLoader {
                         )
                     )
                 }
+
                 AddonType.DOWNLOAD -> {
-                    val extension = instance as? DownloadAddonApi ?: throw IllegalStateException("Extension is not a DownloadAddonApi")
+                    val extension = instance as? DownloadAddonApi
+                        ?: throw IllegalStateException("Extension is not a DownloadAddonApi")
                     DownloadLoadResult.Success(
                         DownloadAddon.Installed(
                             name = extName,
@@ -120,6 +125,7 @@ class AddonLoader {
                     TorrentAddonManager.TORRENT_CLASS,
                     type
                 )
+
                 AddonType.DOWNLOAD -> loadExtension(
                     context,
                     packageName,

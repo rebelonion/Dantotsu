@@ -81,7 +81,10 @@ class HomeFragment : Fragment() {
                 binding.homeUserChaptersRead.text = Anilist.chapterRead.toString()
                 binding.homeUserAvatar.loadImage(Anilist.avatar)
                 val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
-                blurImage(if (bannerAnimations) binding.homeUserBg else binding.homeUserBgNoKen, Anilist.bg)
+                blurImage(
+                    if (bannerAnimations) binding.homeUserBg else binding.homeUserBgNoKen,
+                    Anilist.bg
+                )
                 binding.homeUserDataProgressBar.visibility = View.GONE
                 binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
@@ -128,7 +131,7 @@ class HomeFragment : Fragment() {
             it.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             ContextCompat.startActivity(
                 requireContext(), Intent(requireContext(), ProfileActivity::class.java)
-                    .putExtra("userId", Anilist.userid),null
+                    .putExtra("userId", Anilist.userid), null
             )
             false
         }
@@ -376,6 +379,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     override fun onResume() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
         if (_binding != null) {

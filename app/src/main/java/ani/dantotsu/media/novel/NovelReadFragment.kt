@@ -113,7 +113,12 @@ class NovelReadFragment : Fragment(),
         ) {
             try {
                 val directory =
-                    DownloadsManager.getSubDirectory(context?:currContext()!!, MediaType.NOVEL, false, novel.name)
+                    DownloadsManager.getSubDirectory(
+                        context ?: currContext()!!,
+                        MediaType.NOVEL,
+                        false,
+                        novel.name
+                    )
                 val file = directory?.findFile(novel.name)
                 if (file?.exists() == false) return false
                 val fileUri = file?.uri ?: return false

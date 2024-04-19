@@ -84,9 +84,9 @@ data class Notification(
     @SerialName("createdAt")
     val createdAt: Int,
     @SerialName("media")
-    val media: ani.dantotsu.connections.anilist.api.Media? = null,
+    val media: Media? = null,
     @SerialName("user")
-    val user: ani.dantotsu.connections.anilist.api.User? = null,
+    val user: User? = null,
     @SerialName("message")
     val message: MessageActivity? = null,
     @SerialName("activity")

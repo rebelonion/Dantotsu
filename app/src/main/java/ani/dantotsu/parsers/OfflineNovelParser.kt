@@ -28,7 +28,7 @@ class OfflineNovelParser : NovelParser() {
             directory.listFiles().forEach {
                 if (it.isDirectory) {
                     val chapter = Book(
-                        it.name?:"Unknown",
+                        it.name ?: "Unknown",
                         it.uri.toString(),
                         null,
                         listOf(it.uri.toString())
@@ -63,7 +63,7 @@ class OfflineNovelParser : NovelParser() {
             if (directory?.exists() == true) {
                 directory.listFiles().forEach {
                     if (it.isDirectory) {
-                        names.add(it.name?: "Unknown")
+                        names.add(it.name ?: "Unknown")
                     }
                 }
             }

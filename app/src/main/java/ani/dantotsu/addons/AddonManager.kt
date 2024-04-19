@@ -6,7 +6,7 @@ import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
 import rx.Observable
 
-abstract class AddonManager<T: Addon.Installed>(
+abstract class AddonManager<T : Addon.Installed>(
     private val context: Context
 ) {
     abstract var extension: T?
@@ -31,14 +31,16 @@ abstract class AddonManager<T: Addon.Installed>(
             installer.uninstallApk(it)
         }
     }
+
     fun addListenerAction(action: (AddonListener.ListenerAction) -> Unit) {
         onListenerAction = action
     }
+
     fun removeListenerAction() {
         onListenerAction = null
     }
 
     fun install(url: String): Observable<InstallStep> {
-        return installer.downloadAndInstall(url, getPackageName()?: "", name, type)
+        return installer.downloadAndInstall(url, getPackageName() ?: "", name, type)
     }
 }

@@ -172,7 +172,13 @@ class MangaFragment : Fragment() {
                 }
                 model.getPopularManhwa().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        mangaPageAdapter.updateTrendingManhwa(MediaAdaptor(0, it, requireActivity()))
+                        mangaPageAdapter.updateTrendingManhwa(
+                            MediaAdaptor(
+                                0,
+                                it,
+                                requireActivity()
+                            )
+                        )
                     }
                 }
                 model.getTopRated().observe(viewLifecycleOwner) {

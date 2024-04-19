@@ -65,6 +65,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
         <ImageButton
             android:id="@+id/urlSub"
             android:layout_width="wrap_content"
@@ -78,6 +79,7 @@
             app:tint="?attr/colorOnBackground"
             tools:ignore="ContentDescription,SpeakableTextPresentCheck"
             tools:visibility="visible" />
+
         <ImageButton
             android:id="@+id/urlDownload"
             android:layout_width="wrap_content"

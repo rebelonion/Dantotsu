@@ -28,18 +28,19 @@ class PackageInstallerInstaller(private val service: Service) : Installer(servic
                 PackageInstaller.STATUS_FAILURE
             )) {
                 PackageInstaller.STATUS_PENDING_USER_ACTION -> {
-                    val userAction = intent.getParcelableExtraCompat<Intent>(Intent.EXTRA_INTENT)?.run {
-                        IntentSanitizer.Builder()
-                            .allowAction(this.action!!)
-                            .allowExtra(PackageInstaller.EXTRA_SESSION_ID) { id -> id == activeSession?.second }
-                            .allowAnyComponent()
-                            .allowPackage {
-                                // There is no way to check the actual installer name so allow all.
-                                true
-                            }
-                            .build()
-                            .sanitizeByFiltering(this)
-                    }
+                    val userAction =
+                        intent.getParcelableExtraCompat<Intent>(Intent.EXTRA_INTENT)?.run {
+                            IntentSanitizer.Builder()
+                                .allowAction(this.action!!)
+                                .allowExtra(PackageInstaller.EXTRA_SESSION_ID) { id -> id == activeSession?.second }
+                                .allowAnyComponent()
+                                .allowPackage {
+                                    // There is no way to check the actual installer name so allow all.
+                                    true
+                                }
+                                .build()
+                                .sanitizeByFiltering(this)
+                        }
                     if (userAction == null) {
                         Logger.log("Fatal error for $intent")
                         continueQueue(InstallStep.Error)

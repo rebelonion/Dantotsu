@@ -22,7 +22,7 @@ import uy.kohesive.injekt.api.get
 import kotlin.coroutines.EmptyCoroutineContext
 
 
-class ServerService: Service() {
+class ServerService : Service() {
     private val serviceScope = CoroutineScope(EmptyCoroutineContext)
     private val applicationContext = Injekt.get<Application>()
     private val extension = Injekt.get<TorrentAddonManager>().extension!!.extension
@@ -42,6 +42,7 @@ class ServerService: Service() {
                         notification(applicationContext)
                         return START_STICKY
                     }
+
                     ACTION_STOP -> {
                         stopServer()
                         return START_NOT_STICKY
@@ -109,7 +110,7 @@ class ServerService: Service() {
         const val ACTION_STOP = "stop_torrent_server"
 
         fun isRunning(): Boolean {
-            with (Injekt.get<Application>().getSystemService(ACTIVITY_SERVICE) as ActivityManager) {
+            with(Injekt.get<Application>().getSystemService(ACTIVITY_SERVICE) as ActivityManager) {
                 @Suppress("DEPRECATION") // We only need our services
                 getRunningServices(Int.MAX_VALUE).forEach {
                     if (ServerService::class.java.name.equals(it.service.className)) {

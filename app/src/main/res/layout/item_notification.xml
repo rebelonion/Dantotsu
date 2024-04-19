@@ -13,8 +13,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="start|center_vertical"
         app:cardBackgroundColor="@color/nav_bg"
-        app:strokeColor="@color/transparent"
-        app:cardCornerRadius="24dp">
+        app:cardCornerRadius="24dp"
+        app:strokeColor="@color/transparent">
 
         <ImageView
             android:id="@+id/notificationBannerImage"
@@ -83,8 +83,8 @@
             android:layout_marginStart="125dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="4dp"
-            android:padding="8dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="8dp">
 
             <TextView
                 android:id="@+id/notificationText"

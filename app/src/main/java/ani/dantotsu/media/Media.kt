@@ -100,7 +100,7 @@ data class Media(
         startDate = apiMedia.startDate,
         endDate = apiMedia.endDate,
         favourites = apiMedia.favourites,
-        timeUntilAiring = apiMedia.nextAiringEpisode?.timeUntilAiring?.let { it.toLong() * 1000},
+        timeUntilAiring = apiMedia.nextAiringEpisode?.timeUntilAiring?.let { it.toLong() * 1000 },
         anime = if (apiMedia.type == MediaType.ANIME) Anime(
             totalEpisodes = apiMedia.episodes,
             nextAiringEpisode = apiMedia.nextAiringEpisode?.episode?.minus(1)
@@ -115,7 +115,8 @@ data class Media(
         this.userScore = mediaList.score?.toInt() ?: 0
         this.userStatus = mediaList.status?.toString()
         this.userUpdatedAt = mediaList.updatedAt?.toLong()
-        this.genres = mediaList.media?.genres?.toMutableList() as? ArrayList<String>? ?: arrayListOf()
+        this.genres =
+            mediaList.media?.genres?.toMutableList() as? ArrayList<String>? ?: arrayListOf()
     }
 
     constructor(mediaEdge: MediaEdge) : this(mediaEdge.node!!) {

@@ -338,7 +338,7 @@
         <item name="colorSurface">@color/darkest_Black</item>
         <item name="colorSurfaceVariant">@color/nav_bg</item>
     </style>
-    
+
     <style name="Theme.Dantotsu.LavenderOLED" parent="Theme.Dantotsu.Lavender">
         <item name="android:colorBackground">@color/darkest_Black</item>
         <item name="colorSurface">@color/darkest_Black</item>

@@ -12,8 +12,8 @@ data class User(
     val status: String? = null,
     val score: Float? = null,
     val progress: Int? = null,
-    val totalEpisodes : Int? = null,
-    val nextAiringEpisode : Int? = null,
+    val totalEpisodes: Int? = null,
+    val nextAiringEpisode: Int? = null,
 ) : java.io.Serializable {
     companion object {
         private const val serialVersionUID: Long = 1

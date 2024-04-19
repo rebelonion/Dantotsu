@@ -62,54 +62,56 @@ internal class NovelExtensionInstaller(private val context: Context) {
      * @param url The url of the apk.
      * @param extension The extension to install.
      */
-    fun downloadAndInstall(url: String, extension: NovelExtension): Observable<InstallStep> = Observable.defer {
-        val pkgName = extension.pkgName
+    fun downloadAndInstall(url: String, extension: NovelExtension): Observable<InstallStep> =
+        Observable.defer {
+            val pkgName = extension.pkgName
 
-        val oldDownload = activeDownloads[pkgName]
-        if (oldDownload != null) {
-            deleteDownload(pkgName)
-        }
-
-        val sourcePath = context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath
-        //if the file is already downloaded, remove it
-        val fileToDelete = File("$sourcePath/${url.toUri().lastPathSegment}")
-        if (fileToDelete.exists()) {
-            if (fileToDelete.delete()) {
-                Logger.log("APK file deleted successfully.")
-            } else {
-                Logger.log("Failed to delete APK file.")
+            val oldDownload = activeDownloads[pkgName]
+            if (oldDownload != null) {
+                deleteDownload(pkgName)
             }
-        } else {
-            Logger.log("APK file not found.")
+
+            val sourcePath =
+                context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)?.absolutePath
+            //if the file is already downloaded, remove it
+            val fileToDelete = File("$sourcePath/${url.toUri().lastPathSegment}")
+            if (fileToDelete.exists()) {
+                if (fileToDelete.delete()) {
+                    Logger.log("APK file deleted successfully.")
+                } else {
+                    Logger.log("Failed to delete APK file.")
+                }
+            } else {
+                Logger.log("APK file not found.")
+            }
+
+            // Register the receiver after removing (and unregistering) the previous download
+            downloadReceiver.register()
+
+            val downloadUri = url.toUri()
+            val request = DownloadManager.Request(downloadUri)
+                .setTitle(extension.name)
+                .setMimeType(APK_MIME)
+                .setDestinationInExternalFilesDir(
+                    context,
+                    Environment.DIRECTORY_DOWNLOADS,
+                    downloadUri.lastPathSegment
+                )
+                .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+            val id = downloadManager.enqueue(request)
+            activeDownloads[pkgName] = id
+
+            downloadsRelay.filter { it.first == id }
+                .map { it.second }
+                // Poll download status
+                .mergeWith(pollStatus(id))
+                // Stop when the application is installed or errors
+                .takeUntil { it.isCompleted() }
+                // Always notify on main thread
+                .observeOn(AndroidSchedulers.mainThread())
+                // Always remove the download when unsubscribed
+                .doOnUnsubscribe { deleteDownload(pkgName) }
         }
-
-        // Register the receiver after removing (and unregistering) the previous download
-        downloadReceiver.register()
-
-        val downloadUri = url.toUri()
-        val request = DownloadManager.Request(downloadUri)
-            .setTitle(extension.name)
-            .setMimeType(APK_MIME)
-            .setDestinationInExternalFilesDir(
-                context,
-                Environment.DIRECTORY_DOWNLOADS,
-                downloadUri.lastPathSegment
-            )
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        val id = downloadManager.enqueue(request)
-        activeDownloads[pkgName] = id
-
-        downloadsRelay.filter { it.first == id }
-            .map { it.second }
-            // Poll download status
-            .mergeWith(pollStatus(id))
-            // Stop when the application is installed or errors
-            .takeUntil { it.isCompleted() }
-            // Always notify on main thread
-            .observeOn(AndroidSchedulers.mainThread())
-            // Always remove the download when unsubscribed
-            .doOnUnsubscribe { deleteDownload(pkgName) }
-    }
 
     /**
      * Returns an observable that polls the given download id for its status every second, as the

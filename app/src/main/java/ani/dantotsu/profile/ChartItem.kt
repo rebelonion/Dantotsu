@@ -15,7 +15,8 @@ import com.xwray.groupie.viewbinding.GroupieViewHolder
 class ChartItem(
     private val title: String,
     private val aaOptions: AAOptions,
-    private val activity: ProfileActivity): BindableItem<ItemChartBinding>() {
+    private val activity: ProfileActivity
+) : BindableItem<ItemChartBinding>() {
     private lateinit var binding: ItemChartBinding
     override fun bind(viewBinding: ItemChartBinding, position: Int) {
         binding = viewBinding
@@ -78,6 +79,7 @@ class ChartItem(
         viewHolder.setIsRecyclable(false)
         super.bind(viewHolder, position, payloads, onItemClickListener, onItemLongClickListener)
     }
+
     override fun getViewType(): Int {
         return 0
     }

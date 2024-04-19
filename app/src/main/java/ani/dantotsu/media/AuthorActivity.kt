@@ -95,8 +95,10 @@ class AuthorActivity : AppCompatActivity() {
 
                 binding.charactersRecycler.visibility = View.VISIBLE
                 binding.charactersText.visibility = View.VISIBLE
-                binding.charactersRecycler.adapter = CharacterAdapter(author!!.character ?: arrayListOf())
-                binding.charactersRecycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                binding.charactersRecycler.adapter =
+                    CharacterAdapter(author!!.character ?: arrayListOf())
+                binding.charactersRecycler.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
                 if (author!!.character.isNullOrEmpty()) {
                     binding.charactersRecycler.visibility = View.GONE
                     binding.charactersText.visibility = View.GONE
@@ -108,7 +110,7 @@ class AuthorActivity : AppCompatActivity() {
             if (it) {
                 scope.launch {
                     if (author != null)
-                        withContext(Dispatchers.IO) { model.loadAuthor(author!!)}
+                        withContext(Dispatchers.IO) { model.loadAuthor(author!!) }
                     live.postValue(false)
                 }
             }

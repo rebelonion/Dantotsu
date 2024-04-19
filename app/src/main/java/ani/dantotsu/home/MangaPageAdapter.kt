@@ -101,7 +101,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             ContextCompat.startActivity(
                 view.context,
                 Intent(view.context, ProfileActivity::class.java)
-                    .putExtra("userId", Anilist.userid),null
+                    .putExtra("userId", Anilist.userid), null
             )
             false
         }
@@ -156,7 +156,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         trendingBinding.trendingProgressBar.visibility = View.GONE
         trendingBinding.trendingViewPager.adapter = adaptor
         trendingBinding.trendingViewPager.offscreenPageLimit = 3
-        trendingBinding.trendingViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        trendingBinding.trendingViewPager.getChildAt(0).overScrollMode =
+            RecyclerView.OVER_SCROLL_NEVER
         trendingBinding.trendingViewPager.setPageTransformer(MediaPageTransformer())
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
@@ -191,6 +192,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             )
         }
     }
+
     fun updateTrendingManhwa(adaptor: MediaAdaptor) {
         binding.apply {
             init(
@@ -201,6 +203,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             )
         }
     }
+
     fun updateNovel(adaptor: MediaAdaptor) {
         binding.apply {
             init(
@@ -212,6 +215,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         }
 
     }
+
     fun updateTopRated(adaptor: MediaAdaptor) {
         binding.apply {
             init(
@@ -222,6 +226,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             )
         }
     }
+
     fun updateMostFav(adaptor: MediaAdaptor) {
         binding.apply {
             init(
@@ -234,7 +239,8 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             mangaPopular.startAnimation(setSlideUp())
         }
     }
-    fun init(adaptor: MediaAdaptor,recyclerView: RecyclerView, progress: View, title: View){
+
+    fun init(adaptor: MediaAdaptor, recyclerView: RecyclerView, progress: View, title: View) {
         progress.visibility = View.GONE
         recyclerView.adapter = adaptor
         recyclerView.layoutManager =
