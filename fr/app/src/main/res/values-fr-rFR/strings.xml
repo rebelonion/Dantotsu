@@ -1,0 +1,816 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:locale="fr">
+    <string name="slogan">La nouvelle meilleure application Android pour Anime &amp; Manga.</string>
+    <string name="login">Connexion</string>
+    <string name="logout">Déconnexion</string>
+    <string name="anilist_link">https://anilist.co/user/%1$s/</string>
+    <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
+    <string name="discord_link">https://discord.com/users/%1$s/</string>
+    <string name="home">Accueil</string>
+    <string name="anime">Anime</string>
+    <string name="browse_anime">Parcourir les Anime</string>
+    <string name="manga">Manga</string>
+    <string name="browse_manga">Parcourir les Manga</string>
+    <string name="novels">Novels</string>
+    <string name="info">Info</string>
+    <string name="watch">Regarder</string>
+    <string name="read">Lire</string>
+    <string name="language">Language</string>
+    <string name="anime_list">Liste des Anime</string>
+    <string name="manga_list">Liste des Manga</string>
+    <string name="sad">X(</string>
+    <string name="oh">:o</string>
+    <string name="colon">" : "</string>
+    <string name="no_internet">Pas de connexion Internet</string>
+    <string name="refresh">Actualiser</string>
+    <string name="search">Recherche</string>
+    <string name="search_results">Résultats de recherche</string>
+    <string name="sort_by">Trier par</string>
+    <string name="genre">Genre</string>
+    <string name="top_score">Meilleure note</string>
+    <string name="updated">Mis à jour récemment</string>
+    <string name="trending_anime">Anime tendance</string>
+    <string name="popular_anime">Anime populaire</string>
+    <string name="trending_manga">Manga tendance</string>
+    <string name="trending_novel">Roman tendance</string>
+    <string name="popular_manga">Manga populaire</string>
+    <string name="username">Nom d\'utilisateur</string>
+    <string name="chapters_read">Chapitres lus </string>
+    <string name="chapters_read_n">Chapters\nRead</string>
+    <string name="episodes_watched">Épisodes regardés </string>
+    <string name="episodes_watched_n">Episodes\nWatched</string>
+    <string name="continue_reading">Continuer la lecture</string>
+    <string name="continue_watching">Continuer le visionnage</string>
+    <string name="recommended">Recommandé</string>
+    <string name="get_recommendations">Regardez/Lisez quelques Anime ou Manga pour obtenir des recommandations</string>
+    <string name="empty">Vous êtes à jour, quand la nouveauté ?</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="add">Ajouter à la liste</string>
+    <string name="list_editor">Éditeur de liste</string>
+    <string name="add_fav">Ajouter aux favoris</string>
+    <string name="notifications">Notifications</string>
+    <string-array name="keys">
+        <item>Lecture</item>
+        <item>Visionnage</item>
+        <item>Terminé</item>
+        <item>En pause</item>
+        <item>Abandonné</item>
+        <item>Planification</item>
+        <item>Favoris</item>
+        <item>Relecture</item>
+        <item>Relecture</item>
+        <item>Tous</item>
+    </string-array>
+    <string name="no_notifications">No more notifications</string>
+    <string name="followers">Followers</string>
+    <string name="status">État</string>
+    <string-array name="status_anime">
+        <item>PLANIFICATION</item>
+        <item>VISIONNAGE</item>
+        <item>TERMINÉ</item>
+        <item>RE-VISIONNAGE</item>
+        <item>EN PAUSE</item>
+        <item>ABANDONNÉ</item>
+    </string-array>
+    <string-array name="status_manga">
+        <item>PLANIFICATION</item>
+        <item>LECTURE</item>
+        <item>TERMINÉ</item>
+        <item>RE-LECTURE</item>
+        <item>EN PAUSE</item>
+        <item>ABANDONNÉ</item>
+    </string-array>
+    <string name="progress">PROGRÈS</string>
+    <string name="score">SCORE</string>
+    <string name="score_suffix">" / 10"</string>
+    <string name="started_at">COMMENCÉ LE</string>
+    <string name="completed_at">TERMINÉ LE</string>
+    <string name="save">Enregistrer</string>
+    <string name="delete">Supprimer</string>
+    <string name="remove">Retirer</string>
+    <string name="name">Nom</string>
+    <string name="name_romaji">Nom en romaji</string>
+    <string name="mean_score">Moyenne des notes</string>
+    <string name="format">Format</string>
+    <string name="status_title">Statut</string>
+    <string name="total_eps">Épisodes totaux</string>
+    <string name="episodes"> Episode(s)</string>
+    <string name="chapters"> Chapter(s)</string>
+    <string name="total_divider"> | %1$s</string>
+    <string name="total_chaps">Chapitres totaux</string>
+    <string name="ep_duration">Durée moyenne</string>
+    <string name="min">" min"</string>
+    <string name="season">Saison</string>
+    <string name="start_date">Date de début</string>
+    <string name="end_date">Date de fin</string>
+    <string name="source">Source</string>
+    <string name="main_studio">Studio principal</string>
+    <string name="genres">Genres</string>
+    <string name="description">Synopsis</string>
+    <string name="characters">Personnages</string>
+    <string name="relations">Relations</string>
+    <string name="staff">Équipe</string>
+    <string name="favourites">Favoris</string>
+    <string name="popularity">Popularity</string>
+    <string name="roles">Rôles</string>
+    <string name="details">Détails</string>
+    <string name="play_yt">Lire sur Youtube</string>
+    <string name="eps">Épisodes</string>
+    <string name="ep">Épisode</string>
+    <string name="chaps">Chapitres</string>
+    <string name="chap">Chapitre</string>
+    <string name="wrong"><u>Titre incorrect ?</u></string>
+    <string name="source_not_found">        Rien trouvé X( \n
+        Essayez une autre source.
+    </string>
+    <string name="not_supported">%1$s n\'est pas pris en charge !</string>
+    <string name="server_selector">Sélectionnez un serveur</string>
+    <string name="auto_select_server">Sélection automatique du serveur</string>
+    <string name="make_default">Définir par défaut</string>
+    <string name="filler">Hors-série</string>
+    <string name="adult">Pour adulte</string>
+    <string name="list_only">Liste uniquement</string>
+    <string name="tag">Tag</string>
+    <string name="tags">Tags</string>
+    <string name="synonyms">Synonymes</string>
+    <string name="trailer">Bande-annonce</string>
+    <string name="opening">Opening</string>
+    <string name="ending">Ending</string>
+    <string name="prequel">Préquelle</string>
+    <string name="sequel">Suite</string>
+    <string name="anilist_settings">Paramètres Anilist</string>
+    <string name="extension_settings">Extensions</string>
+    <string name="downloads">Téléchargements</string>
+    <string name="offline_mode">Mode hors-ligne</string>
+    <string name="settings">Paramètres</string>
+    <string name="extensions">Extensions</string>
+    <string name="extension_updates_available">Extension updates available</string>
+    <string name="player_settings">Paramètres du lecteur</string>
+    <string name="recentlyListOnly">Afficher uniquement Mes Émissions dans les mises à jour récentes</string>
+    <string name="download_manager_select">Gestionnaire de téléchargement</string>
+    <string name="downloadInSd">Télécharger sur la carte SD</string>
+    <string name="noSdFound">Aucune carte SD n\'a été trouvée.</string>
+    <string name="reader_settings">Paramètres du lecteur</string>
+    <string name="default_source">Source par défaut</string>
+    <string name="show_yt">Afficher le lien Youtube</string>
+    <string name="default_ep_view">Disposition des épisodes par défaut</string>
+    <string name="default_chp_view">Disposition des chapitres par défaut</string>
+    <string name="ui">Interface utilisateur</string>
+    <string name="common">Commun</string>
+    <string name="theme">Thème</string>
+    <string name="ui_settings">Paramètres de l\'interface utilisateur</string>
+    <string name="about">À propos</string>
+    <string name="desc">"    Dantotsu est conçu à partir des cendres de Saikou et basé sur une élégance simpliste mais à la pointe de la technologie. C'est un client uniquement Anilist, qui vous permet également de diffuser-télécharger des anime via des extensions &amp; Manga.\nDantotsu signifie littéralement le \"meilleur du meilleur\" en japonais. Eh bien, nous aimerions dire que c'est la meilleure application open source pour les anime et manga sur Android, que diriez-vous?"</string>
+    <string name="devs">Développeurs/Aides</string>
+    <string name="disclaimer">Avertissement</string>
+    <string name="full_disclaimer">         - Dantotsu en soi ne fournit qu\'un suivi des anime et manga et ne fournit aucune capacité de diffusion ou de téléchargement d\'anime ou de manga.
+        \n\n - Dantotsu ou l\'un de ses développeurs/employés n\'hébergent aucun contenu trouvé dans Dantotsu. Toutes les images et informations sur les anime/manga trouvées dans l\'application proviennent de différentes API publiques (AniList, MyAnimeList, Kitsu).
+        \n\n - De plus, tous les liens d\'anime/manga trouvés dans Dantotsu proviennent de différents plugins tiers et n\'ont aucune affiliation avec Dantotsu ou son personnel.
+        \n\n - Dantotsu ou ses propriétaires ne sont pas responsables de tout abus de contenu trouvé à l\'intérieur ou à l\'extérieur de l\'application et ne peuvent être tenus responsables de la distribution de tout contenu trouvé à l\'intérieur de l\'application.
+        \n\n - En utilisant Dantotsu, vous acceptez le fait que le développeur de l\'application n\'est pas responsable de tout le contenu trouvé dans l\'application. Vous acceptez également le fait que vous ne pouvez pas utiliser Dantotsu pour télécharger ou diffuser un contenu protégé par des droits d\'auteur.
+        \n\n - Si des problèmes de violation sur Internet sont impliqués, veuillez contacter le site source. Le développeur n\'assume aucune responsabilité légale.
+    </string>
+    <string name="version_current">Version %1$s</string>
+    <string-array name="tips">
+        <item>Vous pouvez appuyer longuement sur un épisode/chapitre pour le marquer comme lu.</item>
+        <item>Appuyer longuement sur les Émissions peut ouvrir directement l\'Éditeur de liste.</item>
+        <item>Il y a quelques œufs de Pâques supplémentaires cachés dans l\'application.</item>
+        <item>Défi : Allez tout en bas des Anime &amp; Manga populaires</item>
+        <item>Essayez d\'appuyer longuement sur le titre de l\'émission.</item>
+        <item>Allez, pourquoi perdez-vous votre temps?</item>
+        <item>Vous pouvez appuyer longuement pour copier ce message.</item>
+        <item>OMG REGARDEZ ! VOUS AVEZ TROUVÉ UN ŒUF DE PÂQUES !?</item>
+        <item>Vous savez qui d\'autre aime cette animation ?</item>
+        <item>Soutien MAL ? bruh.</item>
+        <item>Des romans ? plutôt comme PAS de romans.</item>
+        <item>Appuyez longuement sur le logo pour vérifier les mises à jour de l\'application</item>
+    </string-array>
+    <string-array name="themes">
+        <item>Par défaut</item>
+        <item>Thème 1</item>
+        <item>Thème 2</item>
+        <item>Thème 3</item>
+        <item>Thème 4</item>
+    </string-array>
+    <string name="video">Vidéo</string>
+    <string name="video_info">Afficher les infos de la vidéo</string>
+    <string name="source_info">Afficher le nom de la source</string>
+    <string name="video_info_info">Affiche la résolution de la vidéo en cours de lecture, utile pour les serveurs avec <b>\"Multi Qualité\"</b>.</string>
+    <string name="default_quality">Sélection automatique de la qualité</string>
+    <string name="height">Hauteur</string>
+    <string name="width">Largeur</string>
+    <string name="default_quality_info">Utilise automatiquement la qualité la plus proche par défaut, uniquement appliquée aux serveurs avec \"Multi Qualité\". Changements automatiques lors de la lecture d\'une vidéo.</string>
+    <string name="default_playback_speed">Vitesse de lecture par défaut : %1$s</string>
+    <string name="cursed_speeds">Vitesses maudites</string>
+    <string name="resize_mode_button">Mode de redimensionnement par défaut</string>
+    <string name="subtitles">Sous-titres</string>
+    <string name="subtitle_toggle">Sous-titres</string>
+    <string name="primary_sub_color_select">Couleur des sous-titres</string>
+    <string name="secondary_sub_color_select">Couleur du contour des sous-titres</string>
+    <string name="secondary_sub_outline_type_select">Type de contour des sous-titres</string>
+    <string name="sub_background_color_select">Couleur de fond des sous-titres</string>
+    <string name="sub_window_color_select">Couleur de la fenêtre des sous-titres</string>
+    <string name="sub_window_color_info">"La fenêtre des sous-titres est la partie gauche et droite d'eux. (où l'arrière-plan n'est pas)"</string>
+    <string name="sub_color_info"><b>Note :</b> Modifier les paramètres ci-dessus n\'affecte que les sous-titres souples !</string>
+    <string name="sub_alpha">Subtitle Transparency</string>
+    <string name="sub_text_example">Example Sub</string>
+    <string name="sub_font_select">Police des sous-titres</string>
+    <string name="subtitle_font_size">Taille des sous-titres</string>
+    <string name="auto">Auto</string>
+    <string name="auto_play_next_episode">Lecture automatique de l\'épisode suivant</string>
+    <string name="auto_play_next_episode_info">Désactivée automatiquement s\'il n\'y a pas d\'interaction avec le lecteur après 1 heure.</string>
+    <string name="auto_skip_fillers">Passer automatiquement les hors-série</string>
+    <string name="auto_skip_fillers_info">Passe les épisodes hors-série lors du passage à l\'épisode suivant.</string>
+    <string name="update_progress">Mettre à jour la progression</string>
+    <string name="ask_update_progress_anime">Demander pour chaque anime \"Individuellement\"</string>
+    <string name="ask_update_progress_manga">Demander pour chaque manga \"Individuellement\"</string>
+    <string name="ask_update_progress_info_ep">Désactiver mettra toujours automatiquement à jour la progression lorsque l\'épisode est regardé.</string>
+    <string name="ask_update_progress_info_chap">Désactiver mettra toujours automatiquement à jour la progression lorsque le chapitre est lu.</string>
+    <string name="ask_update_progress_chapter_zero">Mettre à jour la progression pour le Chapitre 0</string>
+    <string name="ask_update_progress_info_zero">Activer ajoutera les éléments nouvellement démarrés à Anilist avec une progression définie sur le chapitre 0.</string>
+    <string name="ask_update_progress_hentai">Mettre à jour la progression pour les Hentai</string>
+    <string name="ask_update_progress_doujin">Mettre à jour la progression pour les Doujins</string>
+    <string name="very_bold">très audacieux de ta part</string>
+    <string name="watch_complete_percentage">Pourcentage de mise à jour de visionnage</string>
+    <string name="watch_complete_percentage_info">Le pourcentage auquel votre progression Anilist doit être mise à jour après avoir regardé un épisode.\nCela définit également le \% pour le préchargement des liens vers l\'épisode suivant.</string>
+    <string name="behaviour">Comportement</string>
+    <string name="always_continue">Continuer toujours là où vous vous êtes arrêté</string>
+    <string name="pause_video_focus">Mettre en pause lorsque le focus est perdu</string>
+    <string name="gestures">Gestes de volume et de luminosité</string>
+    <string name="double_tap">Double tap pour chercher</string>
+    <string name="fast_forward">Avance rapide</string>
+    <string name="double_tap_info">Désactiver affichera les boutons d\'avance rapide et de retour rapide</string>
+    <string name="seek_time">Temps de recherche</string>
+    <string name="seek_time_info">Durée en secondes pour l\'avance rapide et le retour rapide.</string>
+    <string name="skip_time">Temps de saut</string>
+    <string name="skip_time_info">Réglage à 0 cache le bouton de saut.</string>
+    <string name="show_cast_button">Afficher le bouton de diffusion</string>
+    <string name="show_cast_button_info">Nécessite l\'application \"Web Video Caster\" pour diffuser.</string>
+    <string name="picture_in_picture">Image dans l\'image</string>
+    <string name="always_minimize">Toujours minimiser</string>
+    <string name="always_minimize_info">Nécessite que l\'image dans l\'image soit activée, fait en sorte que le lecteur se comporte comme le lecteur Youtube mais mieux.\nCache également le bouton d\'image dans l\'image.</string>
+    <string name="app">Application</string>
+    <string name="immersive_mode">Masquer la barre d\'état</string>
+    <string name="immersive_modelist">Masquer la barre d\'état pour la liste</string>
+    <string name="immersive_mode_info">Nécessite un redémarrage de l\'application pour être entièrement appliqué.</string>
+    <string name="home_layout_show">Afficher/Masquer les mises en page sur l\'accueil</string>
+    <string-array name="home_layouts">
+        <item>Continuer à regarder</item>
+        <item>Anime favoris</item>
+        <item>Anime prévus</item>
+        <item>Continuer la lecture</item>
+        <item>Manga favoris</item>
+        <item>Manga prévus</item>
+        <item>Recommandations</item>
+    </string-array>
+    <string name="startUpTab">Onglet de démarrage par défaut</string>
+    <string name="small_view">Petite vue dans les émissions populaires</string>
+    <string name="animations">Animations</string>
+    <string name="banner_animations">Animations de bannière</string>
+    <string name="layout_animations">Animations de mise en page</string>
+    <string name="trending_scroller">Trending Scroller</string>
+    <string name="animation_speed">Vitesse globale</string>
+    <string name="empty_fav">On dirait que vous n\'aimez rien,\nEssayez d\'aimer une émission pour la garder ici.</string>
+    <string name="fav_anime">Anime favoris</string>
+    <string name="fav_manga">Manga favoris</string>
+    <string name="restart_app">Redémarrer l\'application ?</string>
+    <string name="next">Suivant</string>
+    <string name="previous">Précédent</string>
+    <string name="current_page">Page actuelle</string>
+    <string name="dubbed">Doublé</string>
+    <string name="subbed">Sous-titré</string>
+    <string name="prefer_dub">Préférer les anime doublés</string>
+    <string name="none">Aucun</string>
+    <string name="selected_dns">DNS sélectionné</string>
+    <string name="dns_info">Changer si votre FAI bloque une source quelconque</string>
+    <string name="keep_screen_on">Maintenir l\'écran allumé</string>
+    <string name="layout">Mise en page</string>
+    <string name="spaced_pages">Pages espacées</string>
+    <string name="direction">Direction</string>
+    <string name="general">Général</string>
+    <string name="show_system_bars">Afficher les barres d\'état et de navigation</string>
+    <string name="auto_detect_webtoon">Détection automatique des webtoons</string>
+    <string name="auto_detect_webtoon_info">Si le manga n\'est pas du Japon, le lecteur passera automatiquement aux paramètres de lecture des webtoons</string>
+    <string name="default_settings">Paramètres par défaut</string>
+    <string name="horizontal_scroll_bar">Barre de défilement horizontale</string>
+    <string name="dual_page">Double page</string>
+    <string name="dual_page_info">Affiche 2 images sur 1 page, cela paraîtra étrange si les images ne sont pas de la même taille</string>
+    <string name="true_colors">Vraies couleurs</string>
+    <string name="true_colors_info">(Mode couleur 32 bits) Réduit le banding sur les images, peut affecter les performances.</string>
+    <string name="image_rotation">Rotation de l\'image</string>
+    <string name="hide_page_numbers">Masquer les numéros de page</string>
+    <string name="sort_by_title">Trier par titre</string>
+    <string name="sort_by_last_updated">Trier par dernière mise à jour</string>
+    <string name="sort_by_score">Trier par score</string>
+    <string name="over_scroll">Défilement excessif vers le chapitre suivant/précédent</string>
+    <string name="volume_buttons">Changer de page avec les boutons de volume</string>
+    <string name="list_private">Privé</string>
+    <string name="wrap_images">Envelopper les images</string>
+    <string name="wrap_images_info">Principalement utile pour les appareils plus grands, supprime l\'espace entre les images, s\'il existe.</string>
+    <string name="reload">Recharger</string>
+    <string name="share">Partager</string>
+    <string name="skip">Sauter</string>
+    <string name="other">Autre</string>
+    <string name="total_repeats">TOTAL RÉPÉTITIONS</string>
+    <string name="custom_lists">Listes personnalisées</string>
+    <string name="donate_desc">Vous voulez soutenir le mainteneur de Dantotsu ?\nEnvisagez de faire un don</string>
+    <string name="donate_goal">Pas d\'objectif de don pour le moment</string>
+    <string name="filter">Filtre</string>
+    <string name="year">Année</string>
+    <string name="apply">Appliquer</string>
+    <string name="cancel">Annuler</string>
+    <string name="edit">Modifier</string>
+    <string name="this_season">Cette saison</string>
+    <string name="next_season">Saison suivante</string>
+    <string name="previous_season">Saison précédente</string>
+    <string name="include_media_in_list">Inclure la liste</string>
+    <string name="release_calendar">Calendrier</string>
+    <string name="planned_anime">Anime prévus</string>
+    <string name="planned_manga">Manga prévus</string>
+    <string name="image_long_clicking">Ouvrir l\'image en cliquant longuement</string>
+    <string name="always_continue_content">Always continue previous items</string>
+    <string name="search_source_list">Search next available source</string>
+    <string name="timestamp_proxy_desc">Utile si vous obtenez des échecs de poignée de main</string>
+    <string name="timestamp_proxy">Utiliser un proxy pour les horodatages</string>
+    <string name="check_app_updates">Toujours vérifier les mises à jour de l\'application</string>
+    <string name="author">Auteur</string>
+    <string name="forks">Versions</string>
+    <string name="faq">FAQ</string>
+    <string name="accounts">Comptes</string>
+    <string name="addons">Addons</string>
+    <string name="addons_desc">Addons are extensions that provide additional functionality.</string>
+    <string name="myanimelist">MyAnimeList</string>
+    <string name="login_with_anilist">Connectez-vous avec Anilist !</string>
+    <string name="anilist">Anilist</string>
+    <string name="account_help">Comment cela fonctionne-t-il\?</string>
+    <string name="full_account_help">        Dantotsu est une application basée sur Anilist, donc pour synchroniser avec votre compte MAL, elle a besoin d\'un compte Anilist pour être connectée.
+        \nUne fois connecté avec les comptes Anilist et MAL, l\'application mettra automatiquement à jour votre compte MAL chaque fois que :
+        \n- Vous ajoutez un nouveau média
+        \n- Vous modifiez un média
+        \n- Vous supprimez un média
+    
+        \n\nRemarque : L\'application ne synchronisera pas les anciens médias d\'Anilist vers MAL, il est recommandé de les synchroniser.
+        \n- Consultez les __FAQ__ pour la _Méthode facile_
+    
+        \n\nEt pour les _Intermédiaires_ :
+        \n- [Comment synchroniser les données Anilist avec MAL](https://anilist.co/forum/thread/2654)
+        \n- [Comment synchroniser les données MAL avec Anilist](https://anilist.co/forum/thread/3393)
+    
+        \n\n_Il n\'est pas nécessaire de synchroniser à la fois les comptes MAL et Anilist._
+    </string>
+    <string name="notification_for_checking_subscriptions">Afficher une notification pour la vérification des abonnements</string>
+    <string name="use_alarm_manager">Utiliser le gestionnaire d\'alarme pour des notifications fiables</string>
+    <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
+    <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
+    <string name="use">Use</string>
+    <string name="checking_subscriptions">Notification pour la vérification des abonnements</string>
+    <string name="subscriptions_checking_time_s">Fréquence de mise à jour des abonnements : %1$s</string>
+    <string name="subscriptions_checking_time">Fréquence de mise à jour des abonnements</string>
+    <string name="subscriptions_info">Quantité de temps pour que Dantotsu vérifie périodiquement les nouveaux épisodes/chapitres
+    (Moins de temps causera une consommation de batterie plus élevée)</string>
+    <string name="do_not_update">Ne pas mettre à jour</string>
+    <string name="loading_chap_number">Loading Chapter %1$s</string>
+    <string name="sort_by_release_date">Trier par date de sortie</string>
+    <string name="crop_borders">Recadrer les bordures</string>
+    <string name="note">REMARQUE</string>
+    <string name="manage_extension_repos">Manage Extension Repos</string>
+    <string name="installing_extension">Installing extension</string>
+    <string name="installation_failed">Installation failed: %1$s</string>
+    <string name="installation_complete">Installation complete</string>
+    <string name="extension_has_been_installed">The extension has been successfully installed.</string>
+    <string name="extension_installed">Extension installed</string>
+    <string name="installed">Installed</string>
+    <string name="error_message">Error: %1$s</string>
+    <string name="install_step">Step: %1$s</string>
+    <string name="review">Review</string>
+    <string name="discord_nothing_button">Display only the first button</string>
+    <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
+    <string name="discord_anilist_button">Display your AniList profile instead</string>
+    <string name="discord_rich_presence">Discord Rich Presence</string>
+    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
+    <string name="view_my_anilist">View My AniList</string>
+    <string name="jobless_message">BON SANG! TU ES VRAIMENT CHÔMEUR\nTU AS ATTEINT LA FIN</string>
+    <string name="file_manager_not_found">Aucun gestionnaire de fichiers trouvé pour ouvrir la carte SD</string>
+    <string name="error_loading_data">Erreur lors du chargement des données %1$s</string>
+    <string name="long_click_to_check_update">Veuillez appuyer longuement sur le bouton pour vérifier les mises à jour de l\'application</string>
+    <string name="saved_to_path">Sauvegardé dans :\n%s</string>
+    <string name="setting_progress">Progression définie à %1$d</string>
+    <string name="login_anilist_account">Veuillez vous connecter à votre compte Anilist !</string>
+    <string name="congrats_vro">Félicitations Vro</string>
+    <string name="please_reload">Veuillez recharger.</string>
+    <string name="copied_text">Texte copié \"%1$s\"</string>
+    <string name="back_to_exit">Veuillez appuyer de nouveau sur RETOUR pour quitter</string>
+    <string name="no_internet_connection">Pas de connexion Internet</string>
+    <string name="anilist_not_found">Il semble que cela n\'ait pas été trouvé sur Anilist.</string>
+    <string name="disabled_auto_skip">Ignorer automatiquement les génériques d\'ouverture et de fin désactivé</string>
+    <string name="auto_skip">Ignorer automatiquement les génériques d\'ouverture et de fin</string>
+    <string name="show_skip_time_stamp_button">Afficher le bouton de saut temporel</string>
+    <string name="always_load_time_stamps">Toujours charger les horodatages</string>
+    <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>
+    <string name="timestamps">Horodatages</string>
+    <string name="auto_skip_op_ed">Passer automatiquement les OP / ED</string>
+    <string name="requires_time_stamps_to_be_enabled">Nécessite l\'activation des horodatages</string>
+    <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
+    <string name="copied_to_clipboard">Copié dans le presse-papiers</string>
+    <string name="first_episode">C\'est le 1er épisode !</string>
+    <string name="reset_auto_update">Vous pouvez longuement cliquer sur le bouton d\'édition de liste pour réinitialiser la mise à jour automatique</string>
+    <string name="autoplay_cancelled">Lecture automatique annulée, aucune interaction pendant plus d\'une heure.</string>
+    <string name="auto_select_server_error">Impossible de sélectionner automatiquement le serveur, veuillez réessayer !</string>
+    <string name="stream_selection_empty">Aucun flux disponible pour le contenu. Essayez une autre source.</string>
+    <string name="logging_in_mal">Connexion à MAL en cours</string>
+    <string name="getting_user_data">Récupération des données utilisateur</string>
+    <string name="no_next_episode">Aucun épisode suivant trouvé !</string>
+    <string name="enable_banner_animations">Essayez d\'activer les animations de bannière depuis les paramètres</string>
+    <string name="please_login_anilist">Veuillez vous connecter avec Anilist !</string>
+    <string name="auto_update_reset">La progression de la mise à jour automatique a maintenant été réinitialisée</string>
+    <string name="cant_wait">Vous ne pouvez pas attendre, hein ? D\'accord X(</string>
+    <string name="downloading">Téléchargement en cours…</string>
+    <string name="next_chapter_not_found">Chapitre suivant non trouvé</string>
+    <string name="first_chapter">C\'est le 1er chapitre !</string>
+    <string name="adult_stuff">Des trucs pour adultes ? &#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
+    <string name="what_did_you_open">Qu\'avez-vous ouvert, au juste ?</string>
+    <string name="error_getting_data">Erreur lors de la récupération des données depuis Anilist.</string>
+    <string name="empty_response">Réponse vide, votre connexion Internet est peut-être mauvaise ?</string>
+    <string name="error_loading_mal_user_data">Erreur lors du chargement des données utilisateur MAL</string>
+    <string name="error_loading_mal_data">Échec du chargement des données depuis MAL</string>
+    <string name="error_loading_anilist_user_data">Erreur lors du chargement des données utilisateur Anilist</string>
+    <string name="episode_not_found">Impossible de trouver l\'épisode : %1$s</string>
+    <string name="list_updated">Liste mise à jour</string>
+    <string name="deleted_from_list">Supprimé de la liste</string>
+    <string name="no_list_id">Aucun ID de liste trouvé…</string>
+    <string name="checking_for_update">Recherche de mise à jour</string>
+    <string name="dont_show_again">Ne pas afficher à nouveau pour la version %1$s</string>
+    <string name="no_update_found">Aucune mise à jour trouvée</string>
+    <string name="downloading_update">Téléchargement de la mise à jour %1$s</string>
+    <string name="permission_required">Veuillez accorder l\'autorisation d\'accéder aux fichiers et dossiers depuis les paramètres, puis réessayez.</string>
+    <string name="started_downloading">Téléchargement commencé\n%1$s</string>
+    <string name="install_1dm">Veuillez installer 1DM</string>
+    <string name="install_adm">Veuillez installer ADM</string>
+    <string name="error_getting_image_data">Erreur lors de la récupération des données d\'image</string>
+    <string name="loading_image_failed">Échec du chargement de l\'image</string>
+    <string name="copied_device_info">Informations sur l\'appareil copiées</string>
+    <string name="anilist_down">Il semble qu\'Anilist soit hors service, peut-être essayez d\'utiliser un VPN ou vous pouvez attendre qu\'il revienne.</string>
+    <string name="failed_to_load_data">Échec du chargement des données enregistrées de %1$d</string>
+    <string name="access_not_available">Impossible d\'obtenir l\'accès</string>
+    <string name="mal_login_uri_not_found">Connexion MAL : URI non trouvée</string>
+    <string name="mal_login_code_challenge_not_found">Connexion MAL : codeChallenge non trouvé</string>
+    <string name="mal_login_code_not_present">Connexion MAL : Code non présent dans l\'URI redirigée</string>
+    <string name="refresh_token_load_failed">Token de rafraîchissement : Échec du chargement du token enregistré</string>
+    <string name="refreshing_token_failed">Échec du rafraîchissement du token</string>
+    <string name="episode_release_countdown">L\'épisode %1$d sera publié dans</string>
+    <string name="chapter_number">Chapitre %1$d</string>
+    <string name="chapter_release_timeout">%1$s has been available for</string>
+    <string name="time_format">%1$d jours %2$d heures %3$d minutes %4$d secondes</string>
+    <string-array name="sort_by">
+        <item>Score</item>
+        <item>Populaire</item>
+        <item>Tendance</item>
+        <item>A-Z</item>
+        <item>Z-A</item>
+        <item>Pure douleur</item>
+        <item>Pure pain</item>
+    </string-array>
+    <string name="main_role">RÔLE PRINCIPAL</string>
+    <string name="supporting_role">RÔLE DE SOUTIEN</string>
+    <string name="status_finished">TERMINÉ</string>
+    <string name="status_releasing">EN COURS DE DIFFUSION</string>
+    <string name="status_not_yet_released">PAS ENCORE PUBLIÉ</string>
+    <string name="status_cancelled">ANNULÉ</string>
+    <string name="status_hiatus">EN PAUSE</string>
+    <string name="type_adaptation">ADAPTATION</string>
+    <string name="type_parent">ORIGINAL</string>
+    <string name="type_character">PERSONNAGE</string>
+    <string name="type_summary">RÉSUMÉ</string>
+    <string name="type_alternative">ALTERNATIVE</string>
+    <string name="type_other">AUTRE</string>
+    <string name="type_source">SOURCE</string>
+    <string name="type_contains">CONTIENT</string>
+    <string name="read_on_dantotsu">Lire sur Dantotsu</string>
+    <string name="watch_on_dantotsu">Regarder sur Dantotsu</string>
+    <string name="view_profile_in_dantotsu">Voir le profil sur Dantotsu</string>
+    <string name="continue_episode">Continuer : Épisode </string>
+    <string name="filler_tag"> - Filler</string>
+    <string name="continue_chapter">Continuer : </string>
+    <string name="episode">"Épisode "</string>
+    <string name="episode_num">"Épisode %1$s"</string>
+    <string name="chapter">"Chapitre "</string>
+    <string name="chapter_num">"Chapitre %1$s"</string>
+    <string name="just_released">- vient juste de sortir !</string>
+    <string name="checking_subscriptions_title">Vérification des abonnements</string>
+    <string name="user_list">%1$s\'s %2$s List</string>
+    <string name="speed">Vitesse</string>
+    <string name="auto_update">Mettre à jour automatiquement le progrès de %1$s ?</string>
+    <string name="continue_from">Continuer à partir de %1$s ?</string>
+    <string name="title_update_progress">Mettre à jour le progrès sur Anilist ?</string>
+    <string name="incognito_will_not_update">Le mode incognito continuera d\'ignorer le progrès.</string>
+    <string name="dont_ask_again">"Ne plus demander pour %1$s"</string>
+    <string name="default_speed">Vitesse par défaut</string>
+    <string name="default_resize_mode">Mode de redimensionnement par défaut</string>
+    <string name="primary_sub_color">Couleur principale des sous-titres</string>
+    <string name="outline_sub_color">Couleur du contour des sous-titres</string>
+    <string name="outline_type">Type de contour</string>
+    <string name="subtitle_font">Police des sous-titres</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="ok">OK</string>
+    <string name="reset">Reset</string>
+    <string name="close">Fermer</string>
+    <string name="no_chapter">Pas de chapitre</string>
+    <string name="content_18">Activer le contenu 18+ depuis vos paramètres Anilist</string>
+    <string name="available">Disponible</string>
+    <string name="lets_go">Allons-y</string>
+    <string name="cope">Faire face</string>
+    <string name="watched_num">"Regardé "</string>
+    <string name="read_num">"Lu "</string>
+    <string name="episodes_out_of">" sur "</string>
+    <string name="chapters_out_of">" sur "</string>
+    <string name="episodes_total_of">"Total de "</string>
+    <string name="chapters_total_of">"Total de "</string>
+    <string name="no_description_available">"Aucune description disponible"</string>
+    <string-array name="manga_directions">
+        <item>De haut en bas</item>
+        <item>De droite à gauche</item>
+        <item>De bas en haut</item>
+        <item>De gauche à droite</item>
+    </string-array>
+    <string-array name="manga_layouts">
+        <item>Par page</item>
+        <item>Continue par page</item>
+        <item>Continue</item>
+    </string-array>
+    <string name="selected">Sélectionné</string>
+    <string name="found">Trouvé</string>
+    <string name="age">"Âge : "</string>
+    <string name="birthday">\n\"Anniversaire : \"</string>
+    <string name="gender">\n\"Genre : \"</string>
+    <string name="male">Homme</string>
+    <string name="female">Femme</string>
+    <string name="question_1">Qu\'est-ce que Dantotsu ?</string>
+    <string name="answer_1">Dantotsu est élaboré à partir des cendres de Saikou et repose sur une élégance à la fois simpliste et ultramoderne. C\'est un client exclusif d\'Anilist, qui vous permet également de diffuser et de télécharger des anime / manga via des extensions. \n&gt;Dantotsu (断トツ; Dan-totsu) signifie littéralement le meilleur du meilleur en japonais. Eh bien, nous aimerions dire que c\'est la meilleure application open source pour les anime et manga sur Android, mais hé, essayez-la vous-même et jugez-en !</string>
+    <string name="question_2">Quelles sont quelques fonctionnalités de Dantotsu ?</string>
+    <string name="answer_2">Quelques fonctionnalités notables de Dantotsu sont\n\n- Facile et fonctionnel à la fois pour regarder des anime et lire des manga et des light novels, sans publicité. \n- Une application entièrement open source avec une belle interface utilisateur et des animations. \n- Prise en charge des plugins tiers. \n- Synchronisation en temps réel des anime et manga avec AniList. Catégorisez facilement les anime et manga en fonction de votre statut actuel. (Alimenté par AniList) \n- Trouvez tous les anime en utilisant une liste complète et fréquemment mise à jour de tous les anime tendance, populaires et en cours basés sur les scores. \n- Consultez des détails étendus sur les anime, les films et les manga.  L\'application peut également faire un compte à rebours jusqu\'au prochain épisode de l\'anime en cours de diffusion. (Alimenté par AniList &amp; MyAnimeList)</string>
+    <string name="question_3">Quelle est la différence entre les versions Stable, Beta et Alpha ?</string>
+    <string name="answer_3">Une version Stable est une version qui a été testée aussi rigoureusement que possible et est aussi fiable que possible.\n\nUne version Beta est une version destinée à tester de nouvelles fonctionnalités ou à fournir des correctifs rapides.\n\nUne version Alpha est comme une version bêta mais comporte de nombreux bugs et vous ne pouvez la trouver que sur notre serveur [discord](https://discord.gg/invite/4HPZ5nAWwM). Elle reçoit des mises à jour fréquentes et a une forte probabilité de rencontrer des problèmes.\n\nSi vous voulez une application fiable, optez pour la Stable. Si vous voulez les dernières fonctionnalités et les meilleurs bugs, optez pour l\'Alpha.</string>
+    <string name="question_4">Dantotsu est-il disponible pour PC ?</string>
+    <string name="answer_4">Actuellement non (pour Windows et Linux). Il n\'y a pas d\'estimation quant à sa disponibilité. Mais vous pouvez télécharger n\'importe quel émulateur Android et exécuter Dantotsu dessus. Pour les utilisateurs de Windows 11, ils peuvent utiliser le Sous-système Windows pour Android (WSA) pour exécuter Dantotsu sous Windows.</string>
+    <string name="question_5">Dantotsu est-il disponible pour iOS ?</string>
+    <string name="answer_5">Non, le mieux que nous puissions faire est de sculpter Dantotsu sur une pomme.</string>
+    <string name="question_6">Pourquoi mes statistiques ne se mettent-elles pas à jour ?</string>
+    <string name="answer_6">C\'est parce qu\'elles se mettent à jour automatiquement toutes les 48 heures (par Anilist). Si vous avez vraiment besoin de mettre à jour vos statistiques, vous pouvez forcer la mise à jour après avoir accédé à ce [lien](https://anilist.co/settings/lists).</string>
+    <string name="question_7">Comment télécharger des anime ?</string>
+    <string name="answer_7">Il existe actuellement deux méthodes de téléchargement. L\'une est interne et l\'autre est externe. Si vous téléchargez en interne, alors vous pouvez le visionner dans l\'application mais seule l\'application peut ouvrir cet épisode, vous ne pouvez pas le déplacer ou le partager. L\'autre option est d\'utiliser le téléchargement externe. Cela nécessite un gestionnaire de téléchargement pour télécharger et un lecteur vidéo séparé pour regarder. Les téléchargements externes peuvent être partagés mais vous ne pouvez pas les visionner dans l\'application Dantotsu.\n\n•Pour télécharger en interne :\n\n1. Appuyez sur le bouton de téléchargement.\n2. Choisissez le serveur et la qualité vidéo.\n3. Profit.\n\n•Pour télécharger en externe :\n\n1. Téléchargez 1DM ou ADM depuis Google Play Store.
+            \n2. Lancez l\'application, accordez l\'accès au stockage et configurez vos préférences (vitesse de téléchargement, chemin de téléchargement, etc. (facultatif))
+            \n3. Maintenant, allez à \`Dantotsu &gt; Paramètres &gt; Communs &gt; Gestionnaires de téléchargement\` et choisissez le gestionnaire de téléchargement que vous venez de configurer.
+            \n4. Allez à l\'épisode désiré et appuyez sur l\'icône de téléchargement de n\'importe quel serveur. Il peut y avoir une fenêtre contextuelle pour définir à nouveau vos préférences, appuyez simplement sur \"Télécharger\" et il sera enregistré dans le chemin indiqué.
+    
+            \n\nRemarque : Les téléchargements directs sont également possibles sans gestionnaire mais ce n\'est pas recommandé.
+    \n\nNote de Geek : Les épisodes téléchargés en interne sont stockés dans \`Android/data/ani.dantotsu.*/files/Anime_Downloads\`\nVous ne pouvez pas lire ces fichiers car ils sont au format \`.exo\`, divisés en centaines de morceaux et sont chiffrés.</string>
+    <string name="question_9">Comment activer le contenu NSFW ?</string>
+    <string name="answer_9">Vous pouvez activer le contenu NSFW en activant le contenu 18+ à partir de ce [lien](https://anilist.co/settings/media). Vous devez également activer les extensions NSFW dans \`Paramètres &gt; Extensions &gt; Extensions NSFW\` </string>
+    <string name="question_10">Comment importer ma liste MAL/Kitsu vers Anilist ?</string>
+    <string name="answer_10">Voici comment faire,\n\nExportation :\n\n1. Allez sur ce [lien](https://malscraper.azurewebsites.net).\n2. Entrez votre nom d\'utilisateur Kitsu/MAL et téléchargez à la fois la liste des anime et des manga. (Ils seront au format XML)\nRemarque : Vous devez écrire le nom d\'utilisateur du tracker que vous avez sélectionné\n\nImportation :\n\n1. Après avoir exporté votre liste d\'anime et de manga depuis Kitsu/MAL, allez maintenant [ici](https://anilist.co/settings/import) \n2. Sélectionnez/déposez le fichier XML anime dans la boîte ci-dessus.\n|→Sélectionnez/déposez le fichier XML manga dans la boîte ci-dessous.</string>
+    <string name="question_11">Comment importer ma liste Anilist/Kitsu vers MAL ?</string>
+    <string name="answer_11">Voici comment faire,\n\nExportation :\n\n1. Allez sur ce [lien](https://malscraper.azurewebsites.net/). \n2. Entrez votre nom d\'utilisateur Anilist/ID utilisateur Kitsu dans la case \'Nom d\'utilisateur/ID utilisateur Kitsu\'. \n3. Sélectionnez le type de liste et activez \'update_on_import\'. \n4. Téléchargez le fichier ; il sera au format .xml. Assurez-vous de télécharger à la fois les listes Anime et Manga.\n\nImportation :\n1. Pour l\'importer dans votre compte MAL, allez sur ce [lien](https://myanimelist.net/import.php) et choisissez \'Importation MyAnimeList\' comme type d\'importation. \n2. Cliquez sur \'Choisir un fichier\' et sélectionnez le fichier XML de la liste anime/manga téléchargé. \n3. Cliquez sur \'Importer les données\'. \nFélicitations, vous venez d\'importer la liste sélectionnée dans votre compte MAL.</string>
+    <string name="question_12">Pourquoi ne puis-je pas trouver un titre d\'anime/manga spécifique ?</string>
+    <string name="answer_12">Disons que vous recherchez Castlevania dans Dantotsu. Mais Anilist ne l\'a pas, donc Dantotsu non plus.\nUne solution au problème ci-dessus est la suivante :\n1) Allez à n\'importe quel anime qui ne figure pas dans votre liste.\n2) Allez à la section \"Regarder\".\n3) Sélectionnez n\'importe quelle source et appuyez sur \'Mauvais titre ?\'.\n4) Maintenant, recherchez Castlevania (l\'anime que vous cherchiez) et sélectionnez-le.\n5) PROFITEZ !\n\nSi vous ne trouvez pas l\'anime même avec ces étapes, alors c\'est la malchance pour vous, mon ami. Même cette source ne l\'a pas. Essayez une autre source.</string>
+    <string name="question_13">Comment corriger les sources qui sélectionnent un titre complètement incorrect ?</string>
+    <string name="answer_13">Dantotsu n\'héberge rien lui-même mais repose sur d\'autres sources. Lors de l\'affichage des épisodes, il choisit le 1er résultat donné par la source après avoir recherché le titre. Dantotsu n\'a aucun moyen de savoir si c\'est légitime ou non. Pour cela, nous avons le \'Mauvais titre ?\' juste en dessous du nom de la source (au-dessus des mises en page). Vous pouvez choisir le résultat/titre correct en appuyant dessus et profiter de ses épisodes.</string>
+    <string name="question_14">Comment lire des mangas en couleur ?</string>
+    <string name="answer_14">Êtes-vous à la recherche de mangas en couleur ? Désolé de vous décevoir, mais un nombre extrêmement petit de mangas ont une version en couleur. Ceux qui ont une version en couleur sont également disponibles dans Dantotsu. Disons que vous voulez lire la version en couleur de Chainsaw Man. Suivez alors les étapes ci-dessous ↓\n\n1) Allez à Chainsaw Man\n2) Appuyez sur \'Lire\'\n3) Sélectionnez n\'importe quelle source fonctionnelle\n4) Appuyez sur \'Mauvais titre\'\n5) Sélectionnez la version couleur de Chainsaw Man\n6) Profitez\n\nRemarque : De nombreuses sources n\'ont pas la version couleur disponible même si elle est disponible quelque part sur Internet. Essayez une autre source. Si aucune des sources ne l\'a, alors une version couleur de votre manga désiré n\'existe tout simplement pas.</string>
+    <string name="question_15">Échec de la poignée de main ? Pourquoi les horodatages ne se chargent-ils pas ?</string>
+    <string name="answer_15">Vous pouvez résoudre ce problème en activant \'Proxy\' depuis \n\`Paramètres &gt; Anime &gt; Paramètres du lecteur &gt; Horodatages &gt; Proxy\`.\nSi les horodatages ne se chargent toujours pas mais que le popup d\'échec de la poignée de main est résolu, alors l\'épisode que vous regardez n\'a tout simplement pas encore d\'horodatages pour cela.</string>
+    <string name="question_16">Impossible de trouver quoi que ce soit sur une source ?</string>
+    <string name="answer_16">Quelques correctifs de base seraient : \n\n• Mettez à jour vos extensions s\'il y en a. \n• Ouvrez la vue Web et attendez qu\'elle se charge. Une fois le chargement terminé, revenez en arrière. (Si la vue Web affiche une erreur 404 ou quelque chose de similaire, il est probable que votre source soit hors service)\n• Utilisez un DNS différent de celui de vos paramètres, de préférence Libre. \n• Essayez un VPN de confiance. (Vous devrez répéter l\'étape 1 après cela) \n\nSi aucune des étapes ci-dessus ne fonctionne, utilisez une autre source ou rejoignez notre [discord](https://discord.gg/invite/4HPZ5nAWwM) pour obtenir de l\'aide.</string>
+    <string name="question_17">Quelques astuces et conseils utiles</string>
+    <string name="answer_17">Ce qui suit présente quelques astuces et conseils que vous connaissez peut-être ou non - \n \n \n - En maintenant pressé le logo Dantotsu dans les paramètres, vous pouvez vérifier s\'il y a de nouvelles mises à jour manuellement. \n \n - En maintenant pressé un message d\'erreur/étiquette/synonyme ou titre, vous le copiez. \n \n - Vous pouvez ouvrir un épisode avec d\'autres applications en maintenant pressé n\'importe quel serveur pour cet épisode. Cela aide à diffuser l\'épisode en utilisant d\'autres lecteurs vidéo ou à télécharger l\'épisode en utilisant des gestionnaires de téléchargement. \n \n - Vous pouvez configurer des listes personnalisées en utilisant ce [lien](https://anilist.co/settings/lists). (vous devez être connecté) \n \n - Si votre épisode/chapitre ne progresse pas automatiquement après l\'avoir regardé/lu, alors maintenez pressé la barre d\'état (bouton de planification/de répétition/de visionnage) de cet anime/manga. La prochaine fois que vous commencerez un chapitre/finirez un épisode, vous rencontrerez une fenêtre contextuelle. Appuyez sur oui là-bas.</string>
+    <string name="subscribed_notification">Abonné ! Vous recevrez des notifications lorsque de nouveaux épisodes seront diffusés sur %1$s.</string>
+    <string name="unsubscribed_notification">Désabonné, vous ne recevrez aucune notification.</string>
+    <string name="episode_plural">Épisodes</string>
+    <string name="episode_singular">Épisode</string>
+    <string name="chapter_singular">Chapitre</string>
+    <string name="chapter_plural">Chapitres</string>
+    <string name="filter_status">"Status : %1$s"</string>
+    <string name="filter_source">"Source : %1$s"</string>
+    <string name="filter_format">"Format : %1$s"</string>
+    <string name="filter_country">"Country : %1$s"</string>
+    <string name="filter_sort">"Tri : %1$s"</string>
+    <string name="filter_exclude">"Pas %1$s"</string>
+    <string name="search_by_image">Recherche par Image</string>
+    <string name="upload_image">Téléverser une Image</string>
+    <string name="similarity_text">Similarité : %1$s %%</string>
+    <string name="time_range">De %1$s à %2$s</string>
+    <string name="invalid_url">URL invalide</string>
+    <string name="no_anilist_id_found">Aucun ID Anilist trouvé</string>
+    <string name="error_loading_image">Erreur lors du chargement de l\'image</string>
+    <string name="discord_logout_success">Déconnexion réussie</string>
+    <string name="discord_try_again">Try logging-in again</string>
+    <string name="error_loading_discord_user_data">Error loading Discord User Data</string>
+    <string name="discord_warning"><![CDATA[By logging in, your discord will now show what you are watching & reading on Dantotsu\n\nIf you are on invisible mode, logging in will make you online, when you open Dantotsu.\n\nThis does break the Discord TOS. \nAlthough Discord has never banned anyone for using Custom Rich Presence(what Dantotsu uses), You have still been warned.\n\nDantotsu is not responsible for anything that happens to your account.]]></string>
+    <string name="warning">Warning</string>
+    <string name="view_anime">View Anime</string>
+    <string name="view_manga">View Manga</string>
+    <string name="force_legacy_installer">Force Legacy Installer</string>
+    <string name="extensions_settings">Extensions</string>
+    <string name="NSFWExtention">NSFW Extensions</string>
+    <string name="skip_loading_extension_icons">Skip loading extension icons</string>
+    <string name="use_material_you">Material You</string>
+    <string name="use_app_theme">Use App Theme</string>
+    <string name="extension_specific_dns">Extension-specific DNS</string>
+    <string name="theme_">Theme:</string>
+    <string name="user_agent">User Agent</string>
+    <string name="custom_theme">Custom Theme:</string>
+    <string name="use_custom_theme">Custom theme</string>
+    <string name="use_unique_theme_for_each_item">Theme as Anime/Manga </string>
+    <string name="oled_theme_variant">OLED theme variant</string>
+    <string name="installed_anime">Installed Anime</string>
+    <string name="available_anime">Available Anime</string>
+    <string name="installed_manga">Installed Manga</string>
+    <string name="color_picker">Color Picker</string>
+    <string name="random_selection">Random Selection</string>
+    <string name="incognito_mode">Incognito Mode</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="configure">Configure</string>
+    <string name="add_widget">Add widget</string>
+    <string name="app_widget_description">This is an app widget description</string>
+    <string name="upcoming_anime">Upcoming Anime</string>
+    <string name="airing_image">Airing Image</string>
+    <string name="anime_downloads">animeDownloads</string>
+    <string name="purge_anime_downloads">Delete all Anime downloads</string>
+    <string name="purge_manga_downloads">Delete all Manga Downloads</string>
+    <string name="purge_novel_downloads">Delete all Novel Downloads</string>
+    <string name="requires_android_12">Requires Android 12+</string>
+    <string name="share_username_in_crash_reports">Share username</string>
+    <string name="pinned_sources">Pinned Sources</string>
+    <string name="backup_restore">Backup and Restore</string>
+    <string name="restore_settings">Import Settings</string>
+    <string name="restore_settings_underline"><u>Restore Settings</u></string>
+    <string name="try_internal_cast_experimental">Try Internal Cast (Experimental)</string>
+    <string name="comments">Comments</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
+    <string name="highest_rated">Highest rated</string>
+    <string name="lowest_rated">Lowest rated</string>
+    <string name="compare"><u>Compare</u></string>
+    <string name="view_following">View Following</string>
+    <string name="menu">menu</string>
+    <string name="view_followers">View Followers</string>
+    <string name="no_fav_anime">User has no favorite Anime</string>
+    <string name="no_fav_manga">User has no favorite Manga</string>
+    <string name="fav_character">Favourite Characters</string>
+    <string name="fav_staff">Favorite Staff</string>
+    <string name="stats">Stats</string>
+    <string name="days_watched">Days watched</string>
+    <string name="total_anime">Total Anime</string>
+    <string name="anime_mean_score">Anime Mean Score</string>
+    <string name="volume_read">Volume read</string>
+    <string name="total_manga">Total Manga</string>
+    <string name="manga_mean_score">Manga Mean Score</string>
+    <string name="about_me">About me</string>
+    <string name="follow">Follow</string>
+    <string name="following">Following</string>
+    <string name="unfollow">Unfollow</string>
+    <string name="follows_you">Follows you</string>
+    <string name="mutual">Mutual</string>
+    <string name="success">Success</string>
+    <string name="error">Some error occurred</string>
+    <string name="error_msg">Error: %1$s</string>
+    <string name="please_wait">Please wait</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="no_shows_to_display">No shows to display</string>
+    <string name="extension_name">Extension Name</string>
+    <string name="extension_version">version</string>
+    <string name="enter_password_to_decrypt_file">Enter your password to decrypt the file</string>
+    <string name="show_rotate_button">Show Rotate Button</string>
+    <string name="default_manga_settings">Default Manga Settings</string>
+    <string name="use_dark_theme">Use Dark Theme</string>
+    <string name="use_oled_theme">Use OLED Theme</string>
+    <string name="scanlators">Scanlators</string>
+    <string name="exporting_requires_encryption">Exporting credentials requires a password for encryption.</string>
+    <string name="manga_queue">Manga Queue (WIP)</string>
+    <string name="anime_queue">Anime Queue (WIP)</string>
+    <string name="no_offline_manga_found">No offline manga found</string>
+    <string name="sort">Sort</string>
+    <string name="download">Download</string>
+    <string name="scanlator">Scanlator</string>
+    <string name="set_cookies">Set Cookies</string>
+    <string name="open_website">Open Website</string>
+    <string name="log_to_file">Log to File</string>
+    <string name="logging_warning">Logging to a file will slow down the app. Only enable if you are experiencing issues.</string>
+    <string name="radius">Radius</string>
+    <string name="sampling">Sampling</string>
+    <string name="blur_banners">Blur Banners</string>
+    <string name="blur">Blur</string>
+    <string name="hide_scroll_bar">Hide Scroll Bar</string>
+    <string name="view_on_anilist">View on AniList</string>
+    <string name="anilist_notification_filters">Choose category to ignore</string>
+    <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
+    <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
+    <string name="activities">Activities</string>
+    <string name="incorrect_password">Incorrect password</string>
+    <string name="password_cannot_be_empty">Password cannot be empty</string>
+    <string name="unknown_file_type">Unknown file type</string>
+    <string name="error_importing_settings">Error importing settings</string>
+    <string name="download_manager">Download Manager</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="you_cursed">youwu have been cuwsed :pwayge:</string>
+    <string name="purge_confirm">Are you sure you want to purge all %1$s downloads?</string>
+    <string name="delete_fail_reason">Failed to delete because of… %1$s</string>
+    <string name="hide_replies">Hide replies</string>
+    <string name="view_reply">View reply</string>
+    <string name="view_replies">View replies</string>
+    <string name="view_replies_count">View %1$d replies</string>
+    <string name="replying_to">Replying to %1$s</string>
+    <string name="delete_comment">Delete Comment</string>
+    <string name="delete_comment_confirm">Are you sure you want to delete this comment?</string>
+    <string name="comment_deleted">Comment Deleted</string>
+    <string name="ban_user">Ban User</string>
+    <string name="ban_user_confirm">Are you sure you want to ban this user?</string>
+    <string name="user_banned">User Banned</string>
+    <string name="report_comment">Report Comment</string>
+    <string name="report_comment_confirm">Only report comments that violate the rules. Are you sure you want to report this comment?</string>
+    <string name="comment_reported">Comment Reported</string>
+    <string name="list">List</string>
+    <string name="grid">Grid</string>
+    <string name="compact">Compact</string>
+    <string name="webview_not_installed">WebView not installed</string>
+    <string name="video_quality">Quality: %1$dp</string>
+    <string name="size_unknown">Unknown Size</string>
+    <string name="mb_size">%1$s MB</string>
+    <string name="button_restore">Restore</string>
+    <string name="button_backup">Backup</string>
+    <string name="no_location_selected">No location selected</string>
+    <string name="enjoying_app">Enjoying the App?</string>
+    <string name="consider_donating">Consider donating!</string>
+    <string name="no_moners">no moners :(</string>
+    <string name="you_be_rich">That\'s alright, you\'ll be a rich man soon :prayge:</string>
+    <string name="donate">donate :)</string>
+    <string name="do_it">Do it!</string>
+    <string name="password">Password</string>
+    <string name="search_title">Search %1$s</string>
+    <string name="profile_stats_widget">Track progress directly from your home screen</string>
+    <string name="anime_watched">Anime\nWatched</string>
+    <string name="manga_read">Manga\nRead</string>
+    <string name="loading">Loading…</string>
+    <string name="user_stats">%1$s\'s Stats</string>
+    <string name="please">Please</string>
+    <string name="log_in">log in</string>
+    <string name="or_join">or join</string>
+    <string name="top_background_color">Top background color</string>
+    <string name="bottom_background_color">Bottom Background Color</string>
+    <string name="countdown_text_color">Countdown Text Color</string>
+    <string name="title_color">Title Color</string>
+    <string name="stat_text_color">Stats Text Color</string>
+    <string name="placeholder">Placeholder</string>
+    <string name="anime_add_repository">Add Anime Repo</string>
+    <string name="manga_add_repository">Add Manga Repo</string>
+    <string name="edit_repositories">Edit repositories</string>
+    <string name="rem_repository">Remove repository?</string>
+    <string name="trending_movies">Trending Movies</string>
+    <string name="include_list">Include list</string>
+    <string name="top_rated">Top rated</string>
+    <string name="most_favourite">Most Favourite</string>
+    <string name="trending_manhwa">Trending Manhwa</string>
+    <string name="liked_by">Liked By</string>
+    <string name="adult_only_content">Adult only content</string>
+    <string name="dir_error">Your path could not be set</string>
+    <string name="dir_access">Downloads access</string>
+    <string name="dir_access_msg">Please choose a directory to save your downloads</string>
+    <string name="change_download_location">Change Download Location</string>
+    <string name="download_location_msg">Are you sure you want to change the download location?\nOld downloads may no longer be accessible.</string>
+    <string name="report">Report</string>
+    <string name="ban">Ban</string>
+    <string name="voice_actors">Voice Actors</string>
+    <string name="download_permission_required">Permission is required to download</string>
+    <string name="media">Media</string>
+    <string name="users">Users</string>
+    <string name="social">Social</string>
+    <string name="auto_skip_recap">Auto Skip Recap</string>
+    <string name="use_anilist_icon">Use AniList Icon</string>
+    <string name="audio_tracks">Audio Tracks</string>
+    <string name="disabled_track">Disabled</string>
+    <string name="invalid_track">Invalid</string>
+    <string name="unknown_track">\[%1$s\] Unknown</string>
+    <string name="accounts_desc">Anilist, MAL and Discord.\nWhat more could you need?</string>
+    <string name="theme_desc">Change the vibe of your app</string>
+    <string name="extensions_desc">Manage your reliable repositories</string>
+    <string name="common_desc">UI and other mischievous stuff</string>
+    <string name="notifications_desc">Customise your news and updates</string>
+    <string name="anime_desc">Choose how you watch</string>
+    <string name="manga_desc">Choose how you read</string>
+    <string name="about_desc">Learn more about Dantotsu</string>
+    <string name="faq_desc">General questions about Dantotsu</string>
+    <string name="check_app_updates_desc">Check Github for app updates</string>
+    <string name="share_username_in_crash_reports_desc">Share username in crash reports</string>
+    <string name="devs_desc">Dantotsu\'s very own unpaid labours </string>
+    <string name="forks_desc">More like Dantotsu</string>
+    <string name="disclaimer_desc">Something to keep in mind</string>
+    <string name="torrent_addon">Torrent Addon</string>
+    <string name="enable_torrent">Enable torrent</string>
+    <string name="anime_downloader_addon">Anime Downloader Addon</string>
+    <string name="loaded_successfully">Loaded Successfully</string>
+    <string name="not_installed">Not Installed</string>
+    <string name="torrent_extension_not_supported">Torrent extension not supported on this device</string>
+    <string name="update_addon">Update Addon</string>
+    <string name="install_addon">Install Addon</string>
+    <string name="download_addon_not_found">Download addon not found</string>
+</resources>
