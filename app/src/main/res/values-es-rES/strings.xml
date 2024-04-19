@@ -384,8 +384,8 @@
     <string name="discord_dantotsu_button">Mostrar dantotsu en el segundo botón</string>
     <string name="discord_anilist_button">Mostrar tu perfil de AniList</string>
     <string name="discord_rich_presence">Presencia en Discord</string>
-    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
-    <string name="view_my_anilist">View My AniList</string>
+    <string name="stream_on_dantotsu">Transmitir en Dantotsu</string>
+    <string name="view_my_anilist">Ver Mi AniList</string>
     <string name="jobless_message">¡Maldición! REALMENTE ESTÁS SIN TRABAJO\n¡HAS LLEGADO AL FINAL!</string>
     <string name="file_manager_not_found">No se pudo encontrar ningún administrador de archivos para abrir la tarjeta SD</string>
     <string name="error_loading_data">Error al cargar datos %1$s</string>
@@ -403,11 +403,11 @@
     <string name="auto_skip">Salto automático de OP y ED</string>
     <string name="show_skip_time_stamp_button">Mostrar botón de salto de marca de tiempo</string>
     <string name="always_load_time_stamps">Cargar siempre marcas de tiempo</string>
-    <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>
+    <string name="auto_hide_time_stamps">Ocultar automáticamente marcas de tiempo</string>
     <string name="timestamps">Marcas de tiempo</string>
     <string name="auto_skip_op_ed">Saltar automáticamente OP / ED</string>
     <string name="requires_time_stamps_to_be_enabled">Requiere que se habiliten las marcas de tiempo</string>
-    <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
+    <string name="hide_skip_button">Hacer que el botón de salto de marca de tiempo desaparezca después de 5 segundos</string>
     <string name="copied_to_clipboard">Copiado al portapapeles</string>
     <string name="first_episode">¡Este es el 1er episodio!</string>
     <string name="reset_auto_update">Puedes hacer clic largo en el botón del Editor de lista para restablecer la actualización automática</string>
@@ -456,7 +456,7 @@
     <string name="refreshing_token_failed">Error al actualizar el token</string>
     <string name="episode_release_countdown">El episodio %1$d se lanzará en</string>
     <string name="chapter_number">Capítulo %1$d</string>
-    <string name="chapter_release_timeout">%1$s has been available for</string>
+    <string name="chapter_release_timeout">%1$s está disponible desde</string>
     <string name="time_format">%1$d días %2$d horas %3$d minutos %4$d segundos</string>
     <string-array name="sort_by">
         <item>Calificación</item>
@@ -465,7 +465,7 @@
         <item>A-Z</item>
         <item>Z-A</item>
         <item>Puro dolor</item>
-        <item>Pure pain</item>
+        <item>Dolor Puro</item>
     </string-array>
     <string name="main_role">PRINCIPAL</string>
     <string name="supporting_role">SECUNDARIO</string>
@@ -486,7 +486,7 @@
     <string name="watch_on_dantotsu">Ver en Dantotsu</string>
     <string name="view_profile_in_dantotsu">Ver perfil en Dantotsu</string>
     <string name="continue_episode">Continuar: Episodio </string>
-    <string name="filler_tag"> - Filler</string>
+    <string name="filler_tag"> - Relleno</string>
     <string name="continue_chapter">Continuar: </string>
     <string name="episode">"Episodio "</string>
     <string name="episode_num">"Episodio %1$s"</string>
@@ -494,7 +494,7 @@
     <string name="chapter_num">"Capítulo %1$s"</string>
     <string name="just_released">- ¡acaba de ser lanzado!</string>
     <string name="checking_subscriptions_title">Verificando suscripciones</string>
-    <string name="user_list">%1$s\'s %2$s List</string>
+    <string name="user_list">%1$s\'s %2$s Lista</string>
     <string name="speed">Velocidad</string>
     <string name="auto_update">¿Actualizar automáticamente el progreso de %1$s?</string>
     <string name="continue_from">¿Continuar desde %1$s?</string>
@@ -509,8 +509,8 @@
     <string name="subtitle_font">Fuente de subtítulos</string>
     <string name="yes">Sí</string>
     <string name="no">No</string>
-    <string name="ok">OK</string>
-    <string name="reset">Reset</string>
+    <string name="ok">Okay</string>
+    <string name="reset">Reiniciar</string>
     <string name="close">Cerrar</string>
     <string name="no_chapter">Sin capítulo</string>
     <string name="content_18">Activa el contenido para mayores de 18 años desde la Configuración de Anilist</string>
@@ -586,10 +586,10 @@
     <string name="episode_singular">Episodio</string>
     <string name="chapter_singular">Capítulo</string>
     <string name="chapter_plural">Capítulos</string>
-    <string name="filter_status">"Status : %1$s"</string>
-    <string name="filter_source">"Source : %1$s"</string>
+    <string name="filter_status">"Estado: %1$s"</string>
+    <string name="filter_source">"Fuente: %1$s"</string>
     <string name="filter_format">"Formato: %1$s"</string>
-    <string name="filter_country">"Country : %1$s"</string>
+    <string name="filter_country">"País: %1$s"</string>
     <string name="filter_sort">"Ordenar: %1$s"</string>
     <string name="filter_exclude">"No %1$s"</string>
     <string name="search_by_image">Buscar por imagen</string>
@@ -611,7 +611,7 @@
     <string name="NSFWExtention">Extensiones para mayores de edad</string>
     <string name="skip_loading_extension_icons">Saltar carga de iconos de extensión</string>
     <string name="use_material_you">Material You</string>
-    <string name="use_app_theme">Use App Theme</string>
+    <string name="use_app_theme">Usar tema de aplicación</string>
     <string name="extension_specific_dns">DNS específico de la extensión</string>
     <string name="theme_">Tema:</string>
     <string name="user_agent">Agente de usuario</string>
@@ -629,7 +629,7 @@
     <string name="configure">Configurar</string>
     <string name="add_widget">Agregar widget</string>
     <string name="app_widget_description">Esta es una descripción del widget de la aplicación</string>
-    <string name="upcoming_anime">Upcoming Anime</string>
+    <string name="upcoming_anime">Próximo anime</string>
     <string name="airing_image">Imagen de emisión</string>
     <string name="anime_downloads">Descargas de anime</string>
     <string name="purge_anime_downloads">Eliminar todas las descargas de anime</string>
@@ -638,9 +638,9 @@
     <string name="requires_android_12">Requiere Android 12+</string>
     <string name="share_username_in_crash_reports">Compartir nombre de usuario en informes de errores</string>
     <string name="pinned_sources">Fuentes fijadas</string>
-    <string name="backup_restore">Backup and Restore</string>
-    <string name="restore_settings">Import Settings</string>
-    <string name="restore_settings_underline"><u>Restore Settings</u></string>
+    <string name="backup_restore">Respaldo y restauración</string>
+    <string name="restore_settings">Importar configuración</string>
+    <string name="restore_settings_underline"><u>Restaurar ajustes</u></string>
     <string name="try_internal_cast_experimental">Intentar transmitir internamente (Experimental)</string>
     <string name="comments">Comentarios</string>
     <string name="newest">Más reciente</string>
@@ -664,14 +664,14 @@
     <string name="manga_mean_score">Calificación promedio de Mangas</string>
     <string name="about_me">Sobre mí</string>
     <string name="follow">Seguir</string>
-    <string name="following">Following</string>
-    <string name="unfollow">Unfollow</string>
-    <string name="follows_you">Follows you</string>
-    <string name="mutual">Mutual</string>
-    <string name="success">Success</string>
-    <string name="error">Some error occurred</string>
+    <string name="following">Seguir</string>
+    <string name="unfollow">Dejar de seguir</string>
+    <string name="follows_you">Te sigue</string>
+    <string name="mutual">Mutua</string>
+    <string name="success">Éxito</string>
+    <string name="error">Ha ocurrido un error</string>
     <string name="error_msg">Error: %1$s</string>
-    <string name="please_wait">Please wait</string>
+    <string name="please_wait">Espere, por favor</string>
     <string name="upcoming">Upcoming</string>
     <string name="no_shows_to_display">No shows to display</string>
     <string name="extension_name">Extension Name</string>
