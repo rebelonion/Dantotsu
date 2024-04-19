@@ -338,7 +338,7 @@
     <string name="faq">सामान्य प्रश्न</string>
     <string name="accounts">खाते</string>
     <string name="addons">Addons</string>
-    <string name="addons_desc">Addons are extensions that provide additional functionality.</string>
+    <string name="addons_desc">ऐडौन ऐसे एक्सटेंशन है जो फंकशनो को बढ़ाता है।</string>
     <string name="myanimelist">मेरा एनिमेलिस्ट</string>
     <string name="login_with_anilist">Anilist के साथ लॉगिन करें!</string>
     <string name="anilist">अनिलिस्ट</string>
@@ -368,7 +368,7 @@
     <string name="subscriptions_checking_time">सब्सक्रिप्शन्स अपडेट अवधि</string>
     <string name="subscriptions_info">यहाँ देखें कि Dantotsu नए एपिसोड/अध्याय के लिए नियमित रूप से कितना समय लेता है(कम समय से अधिक बैटरी खपत होगी)</string>
     <string name="do_not_update">अपडेट न करें</string>
-    <string name="loading_chap_number">Loading Chapter %1$s</string>
+    <string name="loading_chap_number">चैपटर %1$s लोड हो रहा है</string>
     <string name="sort_by_release_date">प्रकाशन तिथि के अनुसार क्रमबद्ध करें</string>
     <string name="crop_borders">बॉर्डर्स क्रॉप करें</string>
     <string name="note">ध्यान दें</string>
@@ -467,7 +467,7 @@
         <item>ए-जेड</item>
         <item>जेड-ए</item>
         <item>साफ़ दर्द</item>
-        <item>Pure pain</item>
+        <item>शुद्घ दर्द</item>
     </string-array>
     <string name="main_role">मुख्य</string>
     <string name="supporting_role">सहायक</string>
@@ -588,7 +588,7 @@
     <string name="filter_status">"Status : %1$s"</string>
     <string name="filter_source">"Source : %1$s"</string>
     <string name="filter_format">"फ़ॉर्मेट: %1$s"</string>
-    <string name="filter_country">"Country : %1$s"</string>
+    <string name="filter_country">"देश : %1$s"</string>
     <string name="filter_sort">"क्रमबद्ध करें: %1$s"</string>
     <string name="filter_exclude">"नहीं %1$s"</string>
     <string name="search_by_image">छवि से खोजें</string>
