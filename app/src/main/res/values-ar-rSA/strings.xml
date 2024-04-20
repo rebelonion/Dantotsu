@@ -179,9 +179,9 @@
         <item>جرب الضغط لفترة طويلة علي عنوان انمي \ مانجا.</item>
         <item>انت بتعمل ايه؟ كده بضيع وقتك.</item>
         <item>يمكن الضغط لمدة طويلة علي هذه الرسالة.</item>
-        <item>دي المفروض أسرار في الابلكيشن فقولك اكتب فيها بالمصري لول</item>
+        <item>دي المفروض أسرار في الابلكيشن فقولت اكتب فيها قلشات لول</item>
         <item>مرة خياط مشى ف حتى مقطوعة راح خيطها.</item>
-        <item>في حبة قلشات في الاسرار دي.</item>
+        <item>مرة دكتور أشترى عيش، لقاه سخن، وداه المستشفى.</item>
         <item>مرة واحد طوَّر الطيارة الهليكوبتر راح شال المروحة وحط تكييف.</item>
         <item>اضغط لفتره طويلة علي الايقونة اللي فوق علي اليمين دي</item>
     </string-array>
@@ -194,31 +194,31 @@
     </string-array>
     <string name="video">الفيديو</string>
     <string name="video_info">بيانات الفيديو</string>
-    <string name="source_info">Show Source Name</string>
+    <string name="source_info">إظهار اسم المصدر</string>
     <string name="video_info_info">يوضح دِقَّة تشغيل الفيديو الحالي، مفيدة في السيرفرات &lt;/b&gt;متعددة الجودة&lt;b&gt;.</string>
-    <string name="default_quality">Auto Quality Selection</string>
-    <string name="height">Height</string>
-    <string name="width">Width</string>
-    <string name="default_quality_info">Automatically uses the closest quality provided by default, ONLY applied for \"Multi Quality\" Servers. Auto changes upon playing a video.</string>
-    <string name="default_playback_speed">Default Playback Speed : %1$s</string>
-    <string name="cursed_speeds">Cursed Speeds</string>
-    <string name="resize_mode_button">Default Resize Mode</string>
-    <string name="subtitles">Subtitles</string>
-    <string name="subtitle_toggle">Subtitles</string>
-    <string name="primary_sub_color_select">Subtitle Color</string>
-    <string name="secondary_sub_color_select">Subtitle Outline Color</string>
-    <string name="secondary_sub_outline_type_select">Subtitle Outline Type</string>
-    <string name="sub_background_color_select">Subtitle Background Color</string>
-    <string name="sub_window_color_select">Subtitle Window Color</string>
-    <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn't)"</string>
-    <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
-    <string name="sub_alpha">Subtitle Transparency</string>
-    <string name="sub_text_example">Example Sub</string>
-    <string name="sub_font_select">Subtitle Font</string>
-    <string name="subtitle_font_size">Subtitle Size</string>
-    <string name="auto">Auto</string>
-    <string name="auto_play_next_episode">Autoplay Next Episode</string>
-    <string name="auto_play_next_episode_info">Automatically disables if there is no interaction with player after 1 hour.</string>
+    <string name="default_quality">اختيار الجودة التلقائي</string>
+    <string name="height">ارتفاع</string>
+    <string name="width">عرض</string>
+    <string name="default_quality_info">يستخدم تلقائيًا أقرب جودة مقدمة افتراضيًا، تعمل فقط مع الفيديوهات متعددة الجودة.</string>
+    <string name="default_playback_speed">سرعة تشغيل الفيديو الافتراضية : %1$s</string>
+    <string name="cursed_speeds">سرعات مجنونه</string>
+    <string name="resize_mode_button">وضع حجم الفيديو الافتراضي</string>
+    <string name="subtitles">التَّرْجَمَةً</string>
+    <string name="subtitle_toggle">التَّرْجَمَةً</string>
+    <string name="primary_sub_color_select">لون التَّرْجَمَةً</string>
+    <string name="secondary_sub_color_select">لون التحديد الخارجي للترجمة</string>
+    <string name="secondary_sub_outline_type_select">نوع التحديد الخارجي للترجمة</string>
+    <string name="sub_background_color_select">لون خلفية التَّرْجَمَةً</string>
+    <string name="sub_window_color_select">لون نافذة الترجمة</string>
+    <string name="sub_window_color_info">"نافذة التَّرْجَمَةً هي الجزء الأيسر والأيمن منها. (حيث لا تكون الخلفية)"</string>
+    <string name="sub_color_info"><b>ملحوظة:</b> تغيير الإعدادات أعلاه يؤثر فقط على التَّرْجَمَةً الخارجية!</string>
+    <string name="sub_alpha">شفافية التَّرْجَمَةً</string>
+    <string name="sub_text_example">مثال للترجمة</string>
+    <string name="sub_font_select">خط الترجمة</string>
+    <string name="subtitle_font_size">حجم الترجمة</string>
+    <string name="auto">تلقائي</string>
+    <string name="auto_play_next_episode">التشغيل التلقائي للحلقة التالية</string>
+    <string name="auto_play_next_episode_info">يتم التعطيل تلقائيًا في حالة عدم التفاعل مع مشغل الفيديو بعد ساعة واحدة.</string>
     <string name="auto_skip_fillers">Auto Skip Fillers</string>
     <string name="auto_skip_fillers_info">Skips filler episodes when going to next episode.</string>
     <string name="update_progress">Update Progress</string>
