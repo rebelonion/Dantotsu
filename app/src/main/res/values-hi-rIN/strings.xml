@@ -111,7 +111,7 @@
     <string name="relations">संबंध</string>
     <string name="staff">कर्मचारी</string>
     <string name="favourites">पसंदीदा</string>
-    <string name="popularity">Popularity</string>
+    <string name="popularity">लोकप्रियता</string>
     <string name="roles">भूमिकाएँ</string>
     <string name="details">विवरण</string>
     <string name="play_yt">YouTube पर प्ले करें</string>
@@ -144,7 +144,7 @@
     <string name="offline_mode">ऑफ़लाइन मोड</string>
     <string name="settings">सेटिंग्स</string>
     <string name="extensions">एक्सटेंशन्स</string>
-    <string name="extension_updates_available">Extension updates available</string>
+    <string name="extension_updates_available">एक्सटेंशन अपडेट्स उपलब्ध हैं</string>
     <string name="player_settings">प्लेयर सेटिंग्स</string>
     <string name="recentlyListOnly">केवल मेरे शो को हाल ही में अपडेट किया गया में दिखाएं</string>
     <string name="download_manager_select">डाउनलोड प्रबंधक</string>
@@ -212,7 +212,7 @@
     <string name="sub_window_color_select">उपशीर्षक विंडो रंग</string>
     <string name="sub_window_color_info">"उपशीर्षक विंडो उन भागों को दिखाती है जो उनके दाहिने और बाईं ओर हैं। (जहां पृष्ठभूमि नहीं है)"</string>
     <string name="sub_color_info"><b>नोट:</b> उपरोक्त सेटिंग्स को बदलने से केवल सॉफ्ट-उपशीर्षक प्रभावित होते हैं!</string>
-    <string name="sub_alpha">Subtitle Transparency</string>
+    <string name="sub_alpha">उपशीर्षक पारदर्शिता</string>
     <string name="sub_text_example">Example Sub</string>
     <string name="sub_font_select">उपशीर्षक फ़ॉन्ट</string>
     <string name="subtitle_font_size">उपशीर्षक आकार</string>
