@@ -11,11 +11,11 @@
     <string name="browse_anime">アニメを閲覧</string>
     <string name="manga">マンガ</string>
     <string name="browse_manga">マンガを閲覧</string>
-    <string name="novels">Novels</string>
+    <string name="novels">Shōsetsu</string>
     <string name="info">情報</string>
     <string name="watch">視聴</string>
     <string name="read">読む</string>
-    <string name="language">Language</string>
+    <string name="language">Gengo</string>
     <string name="anime_list">アニメ一覧表</string>
     <string name="manga_list">漫画一覧表</string>
     <string name="sad">X(</string>
