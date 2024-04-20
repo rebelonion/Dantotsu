@@ -409,7 +409,7 @@
     <string name="timestamps">टाइम स्टैंप</string>
     <string name="auto_skip_op_ed">ऑटो स्किप ओपी / ईडी</string>
     <string name="requires_time_stamps_to_be_enabled">टाइम स्टैंप को सक्षम करने की आवश्यकता है</string>
-    <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
+    <string name="hide_skip_button">स्किप टाइम स्टैम्प बटन को 5 सेकंड के बाद गायब कर दें</string>
     <string name="copied_to_clipboard">क्लिपबोर्ड पर कॉपी किया गया</string>
     <string name="first_episode">यह पहला एपिसोड है!</string>
     <string name="reset_auto_update">ऑटो अपडेट को रीसेट करने के लिए आप लिस्ट संपादक बटन पर लंबी क्लिक कर सकते हैं</string>
