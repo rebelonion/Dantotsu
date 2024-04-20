@@ -61,8 +61,8 @@
         <item>পুনৰ পড়া</item>
         <item>সকল</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
-    <string name="followers">Followers</string>
+    <string name="no_notifications">আৰু কোনো অধিসূচনা নাই </string>
+    <string name="followers">অনুসৰণকাৰী</string>
     <string name="status">ষ্টেটাছ</string>
     <string-array name="status_anime">
         <item>পৰিকল্পনা</item>
@@ -94,8 +94,8 @@
     <string name="format">বিন্যাস</string>
     <string name="status_title">ষ্টেটাছ</string>
     <string name="total_eps">মুঠ এপিষদছ</string>
-    <string name="episodes"> Episode(s)</string>
-    <string name="chapters"> Chapter(s)</string>
+    <string name="episodes">খণ্ড(বোৰ)</string>
+    <string name="chapters">অধ্যায়(বোৰ)</string>
     <string name="total_divider"> | %1$s</string>
     <string name="total_chaps">মুঠ চাপ্তেৰ</string>
     <string name="ep_duration">গড় সময়কাল</string>
@@ -212,7 +212,7 @@
     <string name="sub_window_color_select">উপশিৰোণৰ পিচা ৰং</string>
     <string name="sub_window_color_info">"উপশিৰোণৰ পিচা তালৰ আৰু তলৰ দিশত (যেখন প্ৰস্তুত সন্ধান নহয়)।"</string>
     <string name="sub_color_info"><b>মন্তব্য:</b> উপৰৰ উল্লেখিত সেটিংস প্ৰত্যুৎপন্ন উপশিৰোণসমূহত প্ৰভাব ডালে নিবে।</string>
-    <string name="sub_alpha">Subtitle Transparency</string>
+    <string name="sub_alpha">উপশীৰ্ষক স্বচ্ছতা </string>
     <string name="sub_text_example">Example Sub</string>
     <string name="sub_font_select">উপশিৰোণৰ ফন্ট</string>
     <string name="subtitle_font_size">উপশিৰোণৰ মাপ</string>
