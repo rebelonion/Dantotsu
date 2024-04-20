@@ -219,72 +219,72 @@
     <string name="auto">تلقائي</string>
     <string name="auto_play_next_episode">التشغيل التلقائي للحلقة التالية</string>
     <string name="auto_play_next_episode_info">يتم التعطيل تلقائيًا في حالة عدم التفاعل مع مشغل الفيديو بعد ساعة واحدة.</string>
-    <string name="auto_skip_fillers">Auto Skip Fillers</string>
-    <string name="auto_skip_fillers_info">Skips filler episodes when going to next episode.</string>
-    <string name="update_progress">Update Progress</string>
-    <string name="ask_update_progress_anime">Ask for each Anime \"Individually\"</string>
-    <string name="ask_update_progress_manga">Ask for each Manga \"Individually\"</string>
-    <string name="ask_update_progress_info_ep">Turning off will always automatically update progress when the episode is watched.</string>
-    <string name="ask_update_progress_info_chap">Turning off will always automatically update progress when the chapter is read.</string>
-    <string name="ask_update_progress_chapter_zero">Update Progress for Chapter 0</string>
-    <string name="ask_update_progress_info_zero">Turning on will add newly started items to Anilist with progress set to chapter 0.</string>
-    <string name="ask_update_progress_hentai">Update Progress for Hentai</string>
-    <string name="ask_update_progress_doujin">Update Progress for Doujins</string>
-    <string name="very_bold">very bold of you sar</string>
-    <string name="watch_complete_percentage">Watch Update Percentage</string>
-    <string name="watch_complete_percentage_info">The percentage at which your Anilist progress should be updated after watching an episode. \nThis also sets the \% for when to preload links for the next episode.</string>
-    <string name="behaviour">Behaviour</string>
-    <string name="always_continue">Always Continue from where you left off</string>
-    <string name="pause_video_focus">Pause when not in Focus</string>
-    <string name="gestures">Volume &amp; Brightness Gestures</string>
-    <string name="double_tap">Double tap to Seek</string>
-    <string name="fast_forward">Fast Forward</string>
-    <string name="double_tap_info">Turning off will show fast forward &amp; rewind buttons</string>
-    <string name="seek_time">Seek Time</string>
-    <string name="seek_time_info">Amount of time in seconds for fast forward &amp; rewind.</string>
-    <string name="skip_time">Skip Time</string>
-    <string name="skip_time_info">Setting to 0, hides the Skip Button.</string>
-    <string name="show_cast_button">Show Cast Button</string>
-    <string name="show_cast_button_info">Requires \"Web Video Caster\" app to cast.</string>
-    <string name="picture_in_picture">Picture in Picture</string>
-    <string name="always_minimize">Always Minimize</string>
-    <string name="always_minimize_info">Requires PiP to be enabled, makes the player behave like Youtube Player but better.\nAlso hides the PiP button.</string>
-    <string name="app">App</string>
-    <string name="immersive_mode">Hide Status Bar</string>
-    <string name="immersive_modelist">Hide Status Bar for list</string>
-    <string name="immersive_mode_info">Requires App restart to fully apply.</string>
-    <string name="home_layout_show">Show/Hide Layouts on Home</string>
+    <string name="auto_skip_fillers">تخطي حلقات الفلر</string>
+    <string name="auto_skip_fillers_info">تخطي حلقات الفلر عند الانتقال إلى الحلقة التالية.</string>
+    <string name="update_progress">تحديث تقدمك</string>
+    <string name="ask_update_progress_anime">اسأل مع كل أنمي \"على حدة\"</string>
+    <string name="ask_update_progress_manga">اسأل مع كل مانجا \"على حدة\"</string>
+    <string name="ask_update_progress_info_ep">سيؤدي إيقاف التشغيل إلى تحديث التقدم تلقائيًا عند مشاهدة الحلقة.</string>
+    <string name="ask_update_progress_info_chap">سيؤدي إيقاف التشغيل إلى تحديث التقدم تلقائيًا عند قراءة فصل.</string>
+    <string name="ask_update_progress_chapter_zero">تحديث التقدم للفصل 0</string>
+    <string name="ask_update_progress_info_zero">سيؤدي التشغيل إلى إضافة العناصر التي بدأت حديثًا إلى Anilist مع تعيين التقدم على الفصل 0.</string>
+    <string name="ask_update_progress_hentai">تحديث التقدم للهنتاي</string>
+    <string name="ask_update_progress_doujin">تحديث التقدم لDoujins</string>
+    <string name="very_bold">جريئة جدا منك</string>
+    <string name="watch_complete_percentage">نسبة المشاهدة للتحديث</string>
+    <string name="watch_complete_percentage_info">النسبة التي يجب أن يتم عندها تحديث تقدم Anilist الخاص بك بعد مشاهدة حلقة. \nيقوم هذا أيضًا بتعيين \% لموعد تحميل الروابط مسبقًا للحلقة التالية.</string>
+    <string name="behaviour">السلوك</string>
+    <string name="always_continue">تابع دائمًا من حيث توقفت</string>
+    <string name="pause_video_focus">إيقاف الفيديو عندما يخرج من رؤيتك</string>
+    <string name="gestures">إيماءات الصوت &amp; السطوع</string>
+    <string name="double_tap">الضغط مرتين للتقدم</string>
+    <string name="fast_forward">تسريع الفيديو</string>
+    <string name="double_tap_info">إيقاف التشغيل سيظهر ازرار التسريع &amp; الترجيع</string>
+    <string name="seek_time">مدّة التخطي</string>
+    <string name="seek_time_info">مقدار الوقت بالثواني للتسريع &amp; الترجيع.</string>
+    <string name="skip_time">زر التقدم</string>
+    <string name="skip_time_info">التعيين الي 0 يخفي زر التقدم.</string>
+    <string name="show_cast_button">اظهار زر البث اللاسلكي</string>
+    <string name="show_cast_button_info">يلزم تطبيق \"Web Video Caster\" للبث.</string>
+    <string name="picture_in_picture">وضع الفيديو المصغر</string>
+    <string name="always_minimize">التصغير دائما</string>
+    <string name="always_minimize_info">يلزم تشغيل اعداد \"PiP\" ليجعل المشغل يعمل بشكل افضل.\nايضا يخفي زر ال \"PiP\".</string>
+    <string name="app">تطبيق</string>
+    <string name="immersive_mode">اخفاء شريط الحالة</string>
+    <string name="immersive_modelist">اخفي شريط الحالة للقائمة</string>
+    <string name="immersive_mode_info">يتطلب إعادة تشغيل التطبيق لتطبيق الإعداد بالكامل.</string>
+    <string name="home_layout_show">اظهار\اخفاء العناصر في الصفحة الرئيسة</string>
     <string-array name="home_layouts">
         <item>اكمل المشاهدة</item>
-        <item>Favourite Anime</item>
-        <item>Planned Anime</item>
+        <item>الانمي المفضل</item>
+        <item>الانمي المخطط مشاهدته</item>
         <item>اكمل القراءة</item>
-        <item>Favourite Manga</item>
-        <item>Planned Manga</item>
+        <item>المانجا المفضلة</item>
+        <item>المانجا المخطط قراءتها</item>
         <item>موصى به</item>
     </string-array>
-    <string name="startUpTab">Default Start Up Tab</string>
-    <string name="small_view">Small View in Trending Shows</string>
-    <string name="animations">Animations</string>
-    <string name="banner_animations">Banner Animations</string>
-    <string name="layout_animations">Layout Animations</string>
-    <string name="trending_scroller">Trending Scroller</string>
-    <string name="animation_speed">Overall Speed</string>
-    <string name="empty_fav">Looks like you don\'t like anything,\nTry liking a show to keep it here.</string>
-    <string name="fav_anime">Favourite Anime</string>
-    <string name="fav_manga">Favourite Manga</string>
-    <string name="restart_app">Restart the app?</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="current_page">Current Page</string>
-    <string name="dubbed">Dubbed</string>
-    <string name="subbed">Subbed</string>
-    <string name="prefer_dub">Prefer Dubbed Anime</string>
-    <string name="none">None</string>
-    <string name="selected_dns">Selected DNS</string>
-    <string name="dns_info">Change if your ISP blocks any source</string>
-    <string name="keep_screen_on">Keep Screen On</string>
-    <string name="layout">Layout</string>
+    <string name="startUpTab">الصفحة الافتراضية عند التشغيل</string>
+    <string name="small_view">عرض صغير في العروض الشائعة</string>
+    <string name="animations">الحركة (الانيميشن)</string>
+    <string name="banner_animations">حركة الخلفيات</string>
+    <string name="layout_animations">حركة واجهة الاستخدام</string>
+    <string name="trending_scroller">العرض التلقائي للعناصر الشائعة</string>
+    <string name="animation_speed">سرعة الحركة</string>
+    <string name="empty_fav">شكلك مش عاجبك حاجه :\ ،\nجرب تضغط علي القلب في أي انمي أو مانجا.</string>
+    <string name="fav_anime">الانمي المفضل</string>
+    <string name="fav_manga">المانجا المفضلة</string>
+    <string name="restart_app">تعيد تشغيل التطبيق؟</string>
+    <string name="next">التالي</string>
+    <string name="previous">السابق</string>
+    <string name="current_page">الصفحة الحالية</string>
+    <string name="dubbed">مدبلج</string>
+    <string name="subbed">مترجم</string>
+    <string name="prefer_dub">تفضيل الانمي المدبلج</string>
+    <string name="none">لا شئ</string>
+    <string name="selected_dns">ال DNS المحدد</string>
+    <string name="dns_info">قم بتغييره إذا حظر مزود خدمة الإنترنت الخاص بك أي مصدر</string>
+    <string name="keep_screen_on">إبقاء الشاشة قيد التشغيل</string>
+    <string name="layout">التَخطِيط</string>
     <string name="spaced_pages">Spaced Pages</string>
     <string name="direction">Direction</string>
     <string name="general">General</string>
