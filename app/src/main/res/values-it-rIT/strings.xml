@@ -8,9 +8,9 @@
     <string name="discord_link">https://discord.com/users/%1$s/</string>
     <string name="home">Pagina iniziale</string>
     <string name="anime">Anime</string>
-    <string name="browse_anime">Browse Anime</string>
+    <string name="browse_anime">Esplora gli Anime</string>
     <string name="manga">Manga</string>
-    <string name="browse_manga">Browse Manga</string>
+    <string name="browse_manga">Esplora i Manga</string>
     <string name="novels">Romanzi</string>
     <string name="info">Info</string>
     <string name="watch">Guarda</string>
@@ -24,7 +24,7 @@
     <string name="no_internet">Nessuna Connessione Internet</string>
     <string name="refresh">Aggiorna</string>
     <string name="search">Cerca</string>
-    <string name="search_results">Search Results</string>
+    <string name="search_results">Risultati della Ricerca</string>
     <string name="sort_by">Ordina Per</string>
     <string name="genre">Genere</string>
     <string name="top_score">Punteggio Massimo</string>
@@ -36,124 +36,124 @@
     <string name="popular_manga">Manga Popolari</string>
     <string name="username">Nome Utente</string>
     <string name="chapters_read">Capitoli Letti</string>
-    <string name="chapters_read_n">Chapters\nRead</string>
+    <string name="chapters_read_n">Capitoli\nLetti</string>
     <string name="episodes_watched">Episodi Guardati</string>
     <string name="episodes_watched_n">Episodi\nGuardati</string>
     <string name="continue_reading">Continua a Leggere</string>
     <string name="continue_watching">Continua a Guardare</string>
     <string name="recommended">Raccomandati</string>
     <string name="get_recommendations">Guarda/Leggi un po\' di Anime o Manga per ottenere Raccomandazioni</string>
-    <string name="empty">All caught up, when New?</string>
-    <string name="action_settings">Settings</string>
-    <string name="add">Add to List</string>
-    <string name="list_editor">List Editor</string>
-    <string name="add_fav">Add to Favourites</string>
-    <string name="notifications">Notifications</string>
+    <string name="empty">Tutto in regola, quando qualcosa di Nuovo?</string>
+    <string name="action_settings">Impostazioni</string>
+    <string name="add">Aggiungi all\'Elenco</string>
+    <string name="list_editor">Editor di Elenchi</string>
+    <string name="add_fav">Aggiungi ai Preferiti</string>
+    <string name="notifications">Notifiche</string>
     <string-array name="keys">
-        <item>Reading</item>
-        <item>Watching</item>
-        <item>Completed</item>
-        <item>Paused</item>
-        <item>Dropped</item>
-        <item>Planning</item>
-        <item>Favourites</item>
-        <item>Rewatching</item>
-        <item>Rereading</item>
-        <item>All</item>
+        <item>Lettura</item>
+        <item>Guardando</item>
+        <item>Completato</item>
+        <item>In Pausa</item>
+        <item>Droppato</item>
+        <item>Pianificato</item>
+        <item>Preferiti</item>
+        <item>Riguardando</item>
+        <item>Rileggendo</item>
+        <item>Tutto</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
+    <string name="no_notifications">Niente Più Notifiche</string>
     <string name="followers">Followers</string>
-    <string name="status">STATUS</string>
+    <string name="status">STATO</string>
     <string-array name="status_anime">
-        <item>PLANNING</item>
-        <item>WATCHING</item>
-        <item>COMPLETED</item>
-        <item>RE-WATCHING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>IN PIANIFICA</item>
+        <item>GUARDANDO</item>
+        <item>COMPLETATO</item>
+        <item>RI-GUARDANDO</item>
+        <item>IN PAUSA</item>
+        <item>DROPPATO</item>
     </string-array>
     <string-array name="status_manga">
-        <item>PLANNING</item>
-        <item>READING</item>
-        <item>COMPLETED</item>
-        <item>RE-READING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>IN PIANIFICA</item>
+        <item>LEGGENDO</item>
+        <item>COMPLETATO</item>
+        <item>RI-LEGGENDO</item>
+        <item>IN PAUSA</item>
+        <item>DROPPATO</item>
     </string-array>
-    <string name="progress">PROGRESS</string>
-    <string name="score">SCORE</string>
+    <string name="progress">PROGRESSO</string>
+    <string name="score">PUNTEGGIO</string>
     <string name="score_suffix">" / 10"</string>
-    <string name="started_at">STARTED AT</string>
-    <string name="completed_at">COMPLETED AT</string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
-    <string name="remove">Remove</string>
-    <string name="name">Name</string>
-    <string name="name_romaji">Name Romaji</string>
-    <string name="mean_score">Mean Score</string>
-    <string name="format">Format</string>
-    <string name="status_title">Status</string>
-    <string name="total_eps">Total Episodes</string>
-    <string name="episodes"> Episode(s)</string>
-    <string name="chapters"> Chapter(s)</string>
+    <string name="started_at">INIZIATO IL</string>
+    <string name="completed_at">COMPLETATO IL</string>
+    <string name="save">Salva</string>
+    <string name="delete">Cancella</string>
+    <string name="remove">Rimuovi</string>
+    <string name="name">Nome</string>
+    <string name="name_romaji">Nome Romaji</string>
+    <string name="mean_score">Punteggio Medio</string>
+    <string name="format">Formato</string>
+    <string name="status_title">Stato</string>
+    <string name="total_eps">Episodi Totali</string>
+    <string name="episodes"> Episodio(i)</string>
+    <string name="chapters"> Capitolo(i)</string>
     <string name="total_divider"> | %1$s</string>
-    <string name="total_chaps">Total Chapters</string>
-    <string name="ep_duration">Average Duration</string>
+    <string name="total_chaps">Capitoli Totali</string>
+    <string name="ep_duration">Durata Media</string>
     <string name="min">" min"</string>
-    <string name="season">Season</string>
-    <string name="start_date">Start Date</string>
-    <string name="end_date">End Date</string>
-    <string name="source">Source</string>
+    <string name="season">Stagione</string>
+    <string name="start_date">Data di Inizio</string>
+    <string name="end_date">Data Finale</string>
+    <string name="source">Fonte</string>
     <string name="main_studio">Studio</string>
-    <string name="genres">Genres</string>
-    <string name="description">Synopsis</string>
-    <string name="characters">Characters</string>
-    <string name="relations">Relations</string>
+    <string name="genres">Generi</string>
+    <string name="description">Sinossi</string>
+    <string name="characters">Personaggi</string>
+    <string name="relations">Relazioni</string>
     <string name="staff">Staff</string>
-    <string name="favourites">Favourites</string>
-    <string name="popularity">Popularity</string>
-    <string name="roles">Roles</string>
-    <string name="details">Details</string>
-    <string name="play_yt">Play on Youtube</string>
-    <string name="eps">Episodes</string>
-    <string name="ep">Episode</string>
-    <string name="chaps">Chapters</string>
-    <string name="chap">Chapter</string>
-    <string name="wrong"><u>Wrong Title?</u></string>
-    <string name="source_not_found">        Couldn\'t find anything X( \n
-        Try another source.
+    <string name="favourites">Preferiti</string>
+    <string name="popularity">Popolarità</string>
+    <string name="roles">Ruoli</string>
+    <string name="details">Dettagli</string>
+    <string name="play_yt">Riproduci su Youtube</string>
+    <string name="eps">Episodi</string>
+    <string name="ep">Episodio</string>
+    <string name="chaps">Capitoli</string>
+    <string name="chap">Capitolo</string>
+    <string name="wrong"><u>Titolo Errato?</u></string>
+    <string name="source_not_found">        Non ho trovato nulla X( \n
+        Prova un\'altra fonte.
     </string>
-    <string name="not_supported">%1$s is not supported!</string>
-    <string name="server_selector">Select Server</string>
-    <string name="auto_select_server">Auto Selecting Server</string>
-    <string name="make_default">Make Default</string>
+    <string name="not_supported">%1$s non è supportato!</string>
+    <string name="server_selector">Seleziona il Server</string>
+    <string name="auto_select_server">Selezione Automatica del Server</string>
+    <string name="make_default">Rendi Predefinito</string>
     <string name="filler">Filler</string>
-    <string name="adult">Adult</string>
-    <string name="list_only">List Only</string>
+    <string name="adult">Adulto</string>
+    <string name="list_only">Solo la Lista</string>
     <string name="tag">Tag</string>
     <string name="tags">Tags</string>
-    <string name="synonyms">Synonyms</string>
+    <string name="synonyms">Sinonimi</string>
     <string name="trailer">Trailer</string>
-    <string name="opening">Opening</string>
-    <string name="ending">Ending</string>
+    <string name="opening">Apertura</string>
+    <string name="ending">Finale</string>
     <string name="prequel">Prequel</string>
     <string name="sequel">Sequel</string>
-    <string name="anilist_settings">Anilist Settings</string>
-    <string name="extension_settings">Extensions</string>
+    <string name="anilist_settings">Impostazioni di Anilist</string>
+    <string name="extension_settings">Estensioni</string>
     <string name="downloads">Downloads</string>
-    <string name="offline_mode">Offline Mode</string>
-    <string name="settings">Settings</string>
-    <string name="extensions">Extensions</string>
-    <string name="extension_updates_available">Extension updates available</string>
-    <string name="player_settings">Player Settings</string>
-    <string name="recentlyListOnly">Only show my content in \"Recently Updated\"</string>
-    <string name="download_manager_select">Download Manager</string>
-    <string name="downloadInSd">Download in SD card</string>
-    <string name="noSdFound">No SD card was Found.</string>
-    <string name="reader_settings">Reader Settings</string>
-    <string name="default_source">Default Source</string>
-    <string name="show_yt">Show Youtube Link</string>
-    <string name="default_ep_view">Default Episode Layout</string>
+    <string name="offline_mode">Modalità Offline</string>
+    <string name="settings">Impostazioni</string>
+    <string name="extensions">Estensioni</string>
+    <string name="extension_updates_available">Aggiornamenti dell\'estensioni disponibili</string>
+    <string name="player_settings">Impostazioni Player</string>
+    <string name="recentlyListOnly">Mostra i miei contenuti solo in \"Aggiornamenti recenti\"</string>
+    <string name="download_manager_select">Gestore Download</string>
+    <string name="downloadInSd">Download nella scheda SD</string>
+    <string name="noSdFound">Non è stata trovata alcuna scheda SD.</string>
+    <string name="reader_settings">Impostazioni del Lettore</string>
+    <string name="default_source">Fonte Predefinita</string>
+    <string name="show_yt">Mostra il Collegamento di Youtube</string>
+    <string name="default_ep_view">Layout Predefinito dell\'Episodio</string>
     <string name="default_chp_view">Default Chapter Layout</string>
     <string name="ui">User Interface</string>
     <string name="common">Common</string>
