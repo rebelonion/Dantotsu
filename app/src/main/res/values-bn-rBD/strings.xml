@@ -385,7 +385,7 @@
     <string name="review">পুনরায় দেখুন</string>
     <string name="discord_nothing_button">শুধুমাত্র প্রথম বাটনটি দেখাবেন</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
-    <string name="discord_anilist_button">Display your AniList profile instead</string>
+    <string name="discord_anilist_button">আমার আনিলিস্ত প্রফাইল টি এর বিপরিতে দেখাও</string>
     <string name="discord_rich_presence">দিস্করদ বরলক্স উপস্থিতি</string>
     <string name="stream_on_dantotsu">দান্ততসু তে স্ত্রীম করুন</string>
     <string name="view_my_anilist">আমার আনিলিস্ট (AniList)</string>
@@ -410,7 +410,7 @@
     <string name="timestamps">সময়সূচী</string>
     <string name="auto_skip_op_ed">অটো স্কিপ ওপেনিং/এন্ডিং</string>
     <string name="requires_time_stamps_to_be_enabled">সময়সূচী সক্রিয় করা প্রয়োজন</string>
-    <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
+    <string name="hide_skip_button">সময় বাদের স্ট্যাম্প বাটন পাচ সেকেন্দ পরে হারিয়া যাবে</string>
     <string name="copied_to_clipboard">ক্লিপবোর্ডে কপি করা হয়েছে</string>
     <string name="first_episode">এটা প্রথম পর্ব!</string>
     <string name="reset_auto_update">অটো আপডেট রিসেট করতে লিস্ট সম্পাদক বাটনটি দীর্ঘ ক্লিক করুন</string>
@@ -458,7 +458,7 @@
     <string name="refresh_token_load_failed">রিফ্রেশ টোকেন: সংরক্ষিত টোকেন লোড করতে ব্যর্থ</string>
     <string name="refreshing_token_failed">টোকেন রিফ্রেশ করা ব্যর্থ হয়েছে</string>
     <string name="episode_release_countdown">%1$d পর্ব মুক্তি পেতে হবে</string>
-    <string name="chapter_number">Chapter %1$d</string>
+    <string name="chapter_number">অধ্যায় %1$d</string>
     <string name="chapter_release_timeout">%1$s has been available for</string>
     <string name="time_format">%1$d দিন %2$d ঘণ্টা %3$d মিনিট %4$d সেকেন্ড</string>
     <string-array name="sort_by">
@@ -497,7 +497,7 @@
     <string name="chapter_num">"অধ্যায় %1$s"</string>
     <string name="just_released">- সম্প্রতি মুক্তি পেয়েছেন!</string>
     <string name="checking_subscriptions_title">সাবস্ক্রিপশন চেক করা হচ্ছে</string>
-    <string name="user_list">%1$s\'s %2$s List</string>
+    <string name="user_list">%1$s\'s %2$s লিস্ট</string>
     <string name="speed">গতি</string>
     <string name="auto_update">%1$s এর জন্য অটো আপডেট করতে?</string>
     <string name="continue_from">%1$s থেকে চালিয়ে যান?</string>
