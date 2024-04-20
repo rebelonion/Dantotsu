@@ -386,9 +386,9 @@
     <string name="discord_nothing_button">শুধুমাত্র প্রথম বাটনটি দেখাবেন</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile instead</string>
-    <string name="discord_rich_presence">Discord Rich Presence</string>
-    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
-    <string name="view_my_anilist">View My AniList</string>
+    <string name="discord_rich_presence">দিস্করদ বরলক্স উপস্থিতি</string>
+    <string name="stream_on_dantotsu">দান্ততসু তে স্ত্রীম করুন</string>
+    <string name="view_my_anilist">আমার আনিলিস্ট (AniList)</string>
     <string name="jobless_message">আইসি! তুমি সত্যিই বেকার\nতুমি শেষ পর্যন্ত এসেছো</string>
     <string name="file_manager_not_found">SD কার্ড খোলার জন্য কোনও ফাইল ম্যানেজার খুঁজে পাওয়া যাচ্ছে না</string>
     <string name="error_loading_data">%1$s তথ্য লোড করার সময় ত্রুটি</string>
@@ -406,7 +406,7 @@
     <string name="auto_skip">OP এবং ED এর স্বয়ংক্রিয় অতিক্রম করা হবে</string>
     <string name="show_skip_time_stamp_button">স্কিপ সময় স্ট্যাম্প বোতাম দেখান</string>
     <string name="always_load_time_stamps">সবসময় সময়সূচী লোড করুন</string>
-    <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>
+    <string name="auto_hide_time_stamps">নিজের থেকেই সময়ের স্ট্যাম্প গোপন</string>
     <string name="timestamps">সময়সূচী</string>
     <string name="auto_skip_op_ed">অটো স্কিপ ওপেনিং/এন্ডিং</string>
     <string name="requires_time_stamps_to_be_enabled">সময়সূচী সক্রিয় করা প্রয়োজন</string>
@@ -468,7 +468,7 @@
         <item>এ-জেড</item>
         <item>জেড-এ</item>
         <item>পিওর পেইন</item>
-        <item>Pure pain</item>
+        <item>বিশুদ্ধ ব্যাথা</item>
     </string-array>
     <string name="main_role">প্রধান</string>
     <string name="supporting_role">সাহায্যী</string>
@@ -489,7 +489,7 @@
     <string name="watch_on_dantotsu">Dantotsu এ দেখুন</string>
     <string name="view_profile_in_dantotsu">Dantotsu এ প্রোফাইল দেখুন</string>
     <string name="continue_episode">অবশ্যই: পর্ব </string>
-    <string name="filler_tag"> - Filler</string>
+    <string name="filler_tag"> - স্থানদখলদার</string>
     <string name="continue_chapter">অবশ্যই: </string>
     <string name="episode">"পর্ব "</string>
     <string name="episode_num">"পর্ব %1$s"</string>
@@ -512,7 +512,7 @@
     <string name="subtitle_font">সাবটাইটেল ফন্ট</string>
     <string name="yes">হ্যাঁ</string>
     <string name="no">না</string>
-    <string name="ok">OK</string>
+    <string name="ok">আচ্ছা</string>
     <string name="reset">Reset</string>
     <string name="close">বন্ধ করুন</string>
     <string name="no_chapter">কোন অধ্যায় নেই</string>
