@@ -55,7 +55,7 @@
         <item>مكتمل</item>
         <item>متوقف مؤقتًا</item>
         <item>متروك</item>
-        <item>سوف اشاهده</item>
+        <item>اخطط للشاهده</item>
         <item>المفضلة</item>
         <item>إعادة المشاهدة</item>
         <item>إعادة القراءة</item>
@@ -65,7 +65,7 @@
     <string name="followers">المتابعين</string>
     <string name="status">الحالة</string>
     <string-array name="status_anime">
-        <item>سوف اشاهده</item>
+        <item>اخطط للشاهده</item>
         <item>جاري المشاهدة</item>
         <item>مكتمل</item>
         <item>إعادة المشاهدة</item>
@@ -73,16 +73,16 @@
         <item>متروك</item>
     </string-array>
     <string-array name="status_manga">
-        <item>سوف اشاهده</item>
+        <item>اخطط للشاهده</item>
         <item>جاري القراءة</item>
         <item>مكتمل</item>
         <item>إعادة القراءة</item>
         <item>متوقف مؤقتًا</item>
         <item>متروك</item>
     </string-array>
-    <string name="progress">PROGRESS</string>
+    <string name="progress">التقدم</string>
     <string name="score">التقييم</string>
-    <string name="score_suffix">" / 10"</string>
+    <string name="score_suffix">" /10"</string>
     <string name="started_at">بدأت في</string>
     <string name="completed_at">اكتمل في</string>
     <string name="save">حفظ</string>
@@ -176,9 +176,9 @@
         <item>الضغط لمدة طويلة يمكنه فتح محرر القائمة مباشرة.</item>
         <item>هناك عدد بعض الأسرار المخفية في التطبيق.</item>
         <item>تحدي: اذهب إلى الجزء السفلي من الأنمي المشهور &amp; المانجا</item>
-        <item>Try Long Clicking the Show\'s Title.</item>
-        <item>Damn, why are you wasting your Time?</item>
-        <item>You can Long Click to copy this Message.</item>
+        <item>جرب الضغط لفترة طويلة علي عنوان انمي \ مانجا.</item>
+        <item>انت بتعمل ايه؟ كده بضيع وقتك.</item>
+        <item>يمكن الضغط لمدة طويلة علي هذه الرسالة.</item>
         <item>OMG LOOK! YOU FOUND AN EASTER EGG!?</item>
         <item>You know who else likes this Animation?</item>
         <item>MAL support? bruh.</item>
