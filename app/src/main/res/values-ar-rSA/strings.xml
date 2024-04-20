@@ -179,23 +179,23 @@
         <item>جرب الضغط لفترة طويلة علي عنوان انمي \ مانجا.</item>
         <item>انت بتعمل ايه؟ كده بضيع وقتك.</item>
         <item>يمكن الضغط لمدة طويلة علي هذه الرسالة.</item>
-        <item>OMG LOOK! YOU FOUND AN EASTER EGG!?</item>
-        <item>You know who else likes this Animation?</item>
-        <item>MAL support? bruh.</item>
-        <item>Novels? more like NO vels.</item>
-        <item>Long Click the logo to check for App Update</item>
+        <item>دي المفروض أسرار في الابلكيشن فقولك اكتب فيها بالمصري لول</item>
+        <item>مرة خياط مشى ف حتى مقطوعة راح خيطها.</item>
+        <item>في حبة قلشات في الاسرار دي.</item>
+        <item>مرة واحد طوَّر الطيارة الهليكوبتر راح شال المروحة وحط تكييف.</item>
+        <item>اضغط لفتره طويلة علي الايقونة اللي فوق علي اليمين دي</item>
     </string-array>
     <string-array name="themes">
-        <item>Default</item>
-        <item>Theme 1</item>
-        <item>Theme 2</item>
-        <item>Theme 3</item>
-        <item> Theme 4</item>
+        <item>الافتراضي</item>
+        <item>المظهر 1</item>
+        <item>المظهر 2</item>
+        <item>المظهر 3</item>
+        <item> المظهر 4</item>
     </string-array>
-    <string name="video">Video</string>
-    <string name="video_info">Show Video Info</string>
+    <string name="video">الفيديو</string>
+    <string name="video_info">بيانات الفيديو</string>
     <string name="source_info">Show Source Name</string>
-    <string name="video_info_info">Shows what the Resolution of the current video playing, useful for <b>\"Multi Quality\"</b> servers.</string>
+    <string name="video_info_info">يوضح دِقَّة تشغيل الفيديو الحالي، مفيدة في السيرفرات &lt;/b&gt;متعددة الجودة&lt;b&gt;.</string>
     <string name="default_quality">Auto Quality Selection</string>
     <string name="height">Height</string>
     <string name="width">Width</string>
