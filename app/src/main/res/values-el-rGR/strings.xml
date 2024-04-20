@@ -14,26 +14,26 @@
     <string name="novels">Νουβέλες</string>
     <string name="info">Info</string>
     <string name="watch">Watch</string>
-    <string name="read">Read</string>
-    <string name="language">Language</string>
-    <string name="anime_list">Anime List</string>
-    <string name="manga_list">Manga List</string>
+    <string name="read">Διάβασε</string>
+    <string name="language">Γλώσσα</string>
+    <string name="anime_list">Λίστα Anime</string>
+    <string name="manga_list">Λίστα Manga</string>
     <string name="sad">X(</string>
     <string name="oh">:o</string>
     <string name="colon">" : "</string>
     <string name="no_internet">No Internet Connection</string>
-    <string name="refresh">Refresh</string>
-    <string name="search">Search</string>
-    <string name="search_results">Search Results</string>
+    <string name="refresh">Ανανέωση</string>
+    <string name="search">Αναζήτηση</string>
+    <string name="search_results">Αποτελέσματα Αναζήτησης</string>
     <string name="sort_by">Sort By</string>
     <string name="genre">Genre</string>
     <string name="top_score">Top Score</string>
     <string name="updated">Recently Updated</string>
     <string name="trending_anime">Trending Anime</string>
-    <string name="popular_anime">Popular Anime</string>
+    <string name="popular_anime">Δημοφιλής Anime</string>
     <string name="trending_manga">Trending Manga</string>
     <string name="trending_novel">Trending Novel</string>
-    <string name="popular_manga">Popular Manga</string>
+    <string name="popular_manga">Δημοφιλής Manga</string>
     <string name="username">Username</string>
     <string name="chapters_read">Chapters Read</string>
     <string name="chapters_read_n">Chapters\nRead</string>
@@ -44,25 +44,25 @@
     <string name="recommended">Recommended</string>
     <string name="get_recommendations">Watch/Read some Anime or Manga to get Recommendations</string>
     <string name="empty">All caught up, when New?</string>
-    <string name="action_settings">Settings</string>
-    <string name="add">Add to List</string>
+    <string name="action_settings">Ρύθμισης</string>
+    <string name="add">Προσθήκη στη Λίστα</string>
     <string name="list_editor">List Editor</string>
-    <string name="add_fav">Add to Favourites</string>
-    <string name="notifications">Notifications</string>
+    <string name="add_fav">Προσθήκη στα Αγαπημένα</string>
+    <string name="notifications">Ειδοποίησης</string>
     <string-array name="keys">
         <item>Reading</item>
         <item>Watching</item>
-        <item>Completed</item>
+        <item>Ολοκληρωμένα</item>
         <item>Paused</item>
         <item>Dropped</item>
         <item>Planning</item>
-        <item>Favourites</item>
+        <item>Αγαπημένα</item>
         <item>Rewatching</item>
         <item>Rereading</item>
-        <item>All</item>
+        <item>Όλα</item>
     </string-array>
     <string name="no_notifications">No more notifications</string>
-    <string name="followers">Followers</string>
+    <string name="followers">Ακόλουθη</string>
     <string name="status">STATUS</string>
     <string-array name="status_anime">
         <item>PLANNING</item>
@@ -85,11 +85,11 @@
     <string name="score_suffix">" / 10"</string>
     <string name="started_at">STARTED AT</string>
     <string name="completed_at">COMPLETED AT</string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
+    <string name="save">Αποθήκευση</string>
+    <string name="delete">Διαγραφή</string>
     <string name="remove">Remove</string>
-    <string name="name">Name</string>
-    <string name="name_romaji">Name Romaji</string>
+    <string name="name">Όνομα</string>
+    <string name="name_romaji">Όνομα Romaji</string>
     <string name="mean_score">Mean Score</string>
     <string name="format">Format</string>
     <string name="status_title">Status</string>
@@ -110,25 +110,25 @@
     <string name="characters">Characters</string>
     <string name="relations">Relations</string>
     <string name="staff">Staff</string>
-    <string name="favourites">Favourites</string>
-    <string name="popularity">Popularity</string>
-    <string name="roles">Roles</string>
-    <string name="details">Details</string>
+    <string name="favourites">Αγαπημένα</string>
+    <string name="popularity">Δημοτικότητα</string>
+    <string name="roles">Ρόλοι</string>
+    <string name="details">Λεπτομέρειές</string>
     <string name="play_yt">Play on Youtube</string>
-    <string name="eps">Episodes</string>
-    <string name="ep">Episode</string>
+    <string name="eps">Επεισόδια</string>
+    <string name="ep">Επεισόδιο</string>
     <string name="chaps">Chapters</string>
     <string name="chap">Chapter</string>
-    <string name="wrong"><u>Wrong Title?</u></string>
-    <string name="source_not_found">        Couldn\'t find anything X( \n
-        Try another source.
+    <string name="wrong"><u>Λάθος Τίτλος?</u></string>
+    <string name="source_not_found">        Δεν βρέθηκε τίποτα Χ( \n
+        Προσπάθησε άλλη πηγή.
     </string>
-    <string name="not_supported">%1$s is not supported!</string>
-    <string name="server_selector">Select Server</string>
-    <string name="auto_select_server">Auto Selecting Server</string>
+    <string name="not_supported">%1$s δεν υποστηρίζετε!</string>
+    <string name="server_selector">Επέλεξε Διακομιστή</string>
+    <string name="auto_select_server">Αυτόματη Επιλογή Διακομιστή</string>
     <string name="make_default">Make Default</string>
     <string name="filler">Filler</string>
-    <string name="adult">Adult</string>
+    <string name="adult">Ενήλικας</string>
     <string name="list_only">List Only</string>
     <string name="tag">Tag</string>
     <string name="tags">Tags</string>
