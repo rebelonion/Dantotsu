@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="es-rMX">
-    <string name="slogan">The NEW Best Anime &amp; Manga app for Android.</string>
-    <string name="login">Login</string>
+    <string name="slogan">El NUEVO mejor anime y &amp; Aplicación Manga para Android.</string>
+    <string name="login">Acceso</string>
     <string name="logout">Logout</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
