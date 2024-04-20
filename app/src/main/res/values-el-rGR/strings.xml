@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="el">
-    <string name="slogan">The NEW Best Anime &amp; Manga app for Android.</string>
-    <string name="login">Login</string>
-    <string name="logout">Logout</string>
+    <string name="slogan">Η ΝΕΑ καλύτερη εφαρμογή &amp; Anime &amp; Manga για Android.</string>
+    <string name="login">Είσοδος</string>
+    <string name="logout">Έξοδος</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
-    <string name="home">Home</string>
-    <string name="anime">Anime</string>
-    <string name="browse_anime">Browse Anime</string>
-    <string name="manga">Manga</string>
-    <string name="browse_manga">Browse Manga</string>
-    <string name="novels">Novels</string>
+    <string name="home">Σπίτι</string>
+    <string name="anime">Άνιμε</string>
+    <string name="browse_anime">Αναζήτηση Anime</string>
+    <string name="manga">Μάγκα</string>
+    <string name="browse_manga">Αναζήτηση Μάγκα</string>
+    <string name="novels">Νουβέλες</string>
     <string name="info">Info</string>
     <string name="watch">Watch</string>
     <string name="read">Read</string>
