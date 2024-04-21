@@ -43,12 +43,8 @@ class OfflineMangaParser : MangaParser() {
                     chapters.add(chapter)
                 }
             }
-            return if (chapters.isNotEmpty()) {
-                chapters.sortBy { MediaNameAdapter.findChapterNumber(it.number) }
-                chapters
-            } else {
-                loadChaptersCompat(mangaLink, extra, sManga)
-            }
+            chapters.addAll(loadChaptersCompat(mangaLink, extra, sManga))
+            chapters.distinctBy { it.number }.sortedBy { MediaNameAdapter.findChapterNumber(it.number) }
         }
         return emptyList()
     }
