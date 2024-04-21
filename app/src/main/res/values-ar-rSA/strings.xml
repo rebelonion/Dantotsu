@@ -139,12 +139,12 @@
     <string name="prequel">السابق</string>
     <string name="sequel">التالي</string>
     <string name="anilist_settings">إعدادات Anilist</string>
-    <string name="extension_settings">الإضافات</string>
+    <string name="extension_settings">Extensions</string>
     <string name="downloads">التحميلات</string>
     <string name="offline_mode">وضع بدون انترنت</string>
     <string name="settings">الإعدادات</string>
-    <string name="extensions">الإضافات</string>
-    <string name="extension_updates_available">يوجد تحديثات للإضافات</string>
+    <string name="extensions">Extensions</string>
+    <string name="extension_updates_available">يوجد تحديثات لل \"Extensions\"</string>
     <string name="player_settings">إعدادات المشغل</string>
     <string name="recentlyListOnly">عرض المحتوى الخاص بي فقط في \"تم التحديث مؤخرًا\"</string>
     <string name="download_manager_select">مسؤول التحميل</string>
@@ -152,7 +152,7 @@
     <string name="noSdFound">لم يتم العثور علي SD Card.</string>
     <string name="reader_settings">إعدادات القراءة</string>
     <string name="default_source">المصدر الافتراضي</string>
-    <string name="show_yt">Youtube Link</string>
+    <string name="show_yt">رابط اليوتيوب</string>
     <string name="default_ep_view">الشكل الافتراضي للحلقة</string>
     <string name="default_chp_view">الشكل الافتراضي للفصل</string>
     <string name="ui">واجهة المستخدم</string>
@@ -160,14 +160,14 @@
     <string name="theme">المظهر</string>
     <string name="ui_settings">إعدادات واجهة المستخدم</string>
     <string name="about">عن التطبيق</string>
-    <string name="desc">"    دانتوتسو مصنوع من رماد تطبيق سايكو و مبني على الأناقة المبسطة والحديثة. هو تطبيق مربوط ب Anilist و يتيح لك أيضًا مشاهدة - تحميل الانمي &amp; المانجا بواسطة الاضافات.\n\"دانتوتسو\" يعني حرفيًا \"الأفضل على الإطلاق\" باللغة اليابانية. حسنًا، نود أن نقول أن هذا هو أفضل تطبيق مفتوح المصدر للأنيمي والمانجا على نظام الاندرويد ، فما رأيك؟"</string>
+    <string name="desc">"    \"Dantotsu\" مصنوع من رماد تطبيق \"Saikou\" و مبني على الأناقة المبسطة والحديثة. هو تطبيق مربوط ب Anilist و يتيح لك أيضًا مشاهدة - تحميل الانمي &amp; المانجا بواسطة الاضافات.\nاسم التطبيق يعني حرفيًا \"الأفضل على الإطلاق\" باللغة اليابانية. حسنًا، نود أن نقول أن هذا هو أفضل تطبيق مفتوح المصدر للأنمي والمانجا على نظام الاندرويد ، فما رأيك؟"</string>
     <string name="devs">المطورين/المساعدين</string>
     <string name="disclaimer">إخلاءُ المسؤولية</string>
-    <string name="full_disclaimer">- دانتوتسو يوفر في حد ذاته أداة تعقب لانمي والمانجا فقط ولا يوفر أي إمكانات لبث أو تنزيل الانمي أو المانجا
+    <string name="full_disclaimer">- \"Dantotsu\" يوفر في حد ذاته أداة تعقب لانمي والمانجا فقط ولا يوفر أي إمكانات لبث أو تنزيل الانمي أو المانجا
         \n\n - دانتوتسو لا يستضيف أو أي من مطوريه/موظفيه أيًا من المحتوى الموجود داخل دانتوتسو. جميع الصور ومعلومات الأنمي/المانجا الموجودة في التطبيق مأخوذة من APIs مثل (Kiistu - MAL - Anilist)
-        \n\n - علاوة على ذلك، فإن جميع روابط الأنمي/المانجا الموجودة في دانتوتسو مأخوذة من مكونات إضافية مختلفة تابعة لجهات خارجية وليس لها أي علاقة بـ دانتوتسو أو موظفيها.
+        \n\n - علاوة على ذلك، فإن جميع روابط الأنمي/المانجا الموجودة في \"Dantotsu\" مأخوذة من مكونات إضافية مختلفة تابعة لجهات خارجية وليس لها أي علاقة بـ \"Dantotsu\" أو موظفيها.
         \n\n - دانتوتسو أو مالكوه ليسوا مسؤولين عن أي سوء استخدام لأي من المحتويات الموجودة داخل التطبيق أو خارجه ولا يمكن مساءلتهم عن توزيع أي من المحتويات الموجودة داخل التطبيق.
-        \n\n - بإستخدامك لدانتوتسو، أنت تلتزم بحقيقة أن مطور التطبيق ليس مسؤولاً عن أي من المحتويات الموجودة في التطبيق. أنت توافق أيضًا على حقيقة أنه لا يجوز لك استخدام دانتوتسو لتنزيل أو بث أي محتوى محمي بحقوق الطبع والنشر.
+        \n\n - بإستخدامك ل\"Dantotsu\"، أنت تلتزم بحقيقة أن مطور التطبيق ليس مسؤولاً عن أي من المحتويات الموجودة في التطبيق. أنت توافق أيضًا على حقيقة أنه لا يجوز لك استخدام \"Dantotsu\" لتنزيل أو بث أي محتوى محمي بحقوق الطبع والنشر.
         \n\n - إذا كانت هناك مشكلات تتعلق بإنتهاكات الإنترنت، فيرجى الاتصال بالموقع الإلكتروني للمصدر. المطور لا يتحمل أي مسؤولية قانونية.
     </string>
     <string name="version_current">إصدار %1$s</string>
@@ -313,7 +313,7 @@
     <string name="other">أخري</string>
     <string name="total_repeats">إجمالي التكرارات</string>
     <string name="custom_lists">قوائم مخصصة</string>
-    <string name="donate_desc">هل ترغب في دعم مشرف دانتوتسو؟\nفكر في التبرع</string>
+    <string name="donate_desc">هل ترغب في دعم مشرف \"Dantotsu\"؟\nفكر في التبرع</string>
     <string name="donate_goal">لا يوجد هدف التبرعات حاليا</string>
     <string name="filter">فلتر</string>
     <string name="year">السنة</string>
@@ -338,7 +338,7 @@
     <string name="faq">سؤال و أجابة</string>
     <string name="accounts">حسابات</string>
     <string name="addons">Addons</string>
-    <string name="addons_desc">الإضافات هي امتدادات توفر وظائف إضافية.</string>
+    <string name="addons_desc">ال \"Extensions\" هي امتدادات توفر وظائف إضافية.</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">تسجيل دخول Anilist!</string>
     <string name="anilist">Anilist</string>
@@ -373,11 +373,11 @@
     <string name="crop_borders">Crop Borders</string>
     <string name="note">ملوحظة</string>
     <string name="manage_extension_repos">Manage Extension Repos</string>
-    <string name="installing_extension">تثبيت الإضافة</string>
+    <string name="installing_extension">جاري تثبيت ال \"Extension\"</string>
     <string name="installation_failed">Installation failed: %1$s</string>
     <string name="installation_complete">تم التثبيت</string>
     <string name="extension_has_been_installed">The extension has been successfully installed.</string>
-    <string name="extension_installed">تم تثبيت الإضافة</string>
+    <string name="extension_installed">تم تثبيت ال \"Extension\"</string>
     <string name="installed">تم تثبيت</string>
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
@@ -609,7 +609,7 @@
     <string name="view_anime">عرض الأنمي</string>
     <string name="view_manga">عرض المانجا</string>
     <string name="force_legacy_installer">Force Legacy Installer</string>
-    <string name="extensions_settings">أضافات</string>
+    <string name="extensions_settings">Extensions</string>
     <string name="NSFWExtention">أضافات NSFW</string>
     <string name="skip_loading_extension_icons">Skip loading extension icons</string>
     <string name="use_material_you">Material You</string>
@@ -797,7 +797,7 @@
     <string name="anime_desc">أختار كيفية المشاهدة</string>
     <string name="manga_desc">أختار كيفية القراءة</string>
     <string name="about_desc">أعرف المزيد عن Dantotsu</string>
-    <string name="faq_desc">حظر</string>
+    <string name="faq_desc">أسئلة عامة حول \"Dantotsu\"</string>
     <string name="check_app_updates_desc">Check Github for app updates</string>
     <string name="share_username_in_crash_reports_desc">مشاركة اسم المستخدم في تقارير الأعطال</string>
     <string name="devs_desc">Dantotsu\'s very own unpaid labours </string>
