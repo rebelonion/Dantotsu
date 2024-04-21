@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemNovelResponseBinding
+import ani.dantotsu.loadImage
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
@@ -37,10 +38,7 @@ class NovelResponseAdapter(
         val binding = holder.binding
         val novel = list[position]
         setAnimation(fragment.requireContext(), holder.binding.root)
-
-        val cover = GlideUrl(novel.coverUrl.url) { novel.coverUrl.headers }
-        Glide.with(binding.itemEpisodeImage).load(cover).override(400, 0)
-            .into(binding.itemEpisodeImage)
+        binding.itemEpisodeImage.loadImage(novel.coverUrl, 400, 0)
 
         val typedValue = TypedValue()
         fragment.requireContext().theme?.resolveAttribute(
