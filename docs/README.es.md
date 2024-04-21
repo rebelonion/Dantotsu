@@ -27,6 +27,8 @@ Dantotsu (断トツ; Dan-totsu) "lo mejor de lo mejor". Pruebalo y juzga tu mism
 - [ ] Cliente Completo de AniList (WIP)
 - [x] Temas
 - [x] Extensiones
+- [x] Addons
+- [x] Torrents
 - [x] Descargas
 - [x] Modo Offline
 - [x] Modo Incognito
