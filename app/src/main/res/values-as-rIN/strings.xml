@@ -6,7 +6,7 @@
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
-    <string name="home">ঘৰ</string>
+    <string name="home">হম</string>
     <string name="anime">এনিমে</string>
     <string name="browse_anime">এনিমে ব্ৰাউজ কৰক</string>
     <string name="manga">মাংগা</string>
@@ -28,18 +28,18 @@
     <string name="sort_by">বাছনি কৰক</string>
     <string name="genre">ধৰণ</string>
     <string name="top_score">টপ স্কৰ</string>
-    <string name="updated">উপডাতেদ</string>
+    <string name="updated">শেহতীয়াকৈ আপদেত হৈছে</string>
     <string name="trending_anime">ট্ৰেণ্ডিং আনিমে</string>
     <string name="popular_anime">জনপ্ৰিয় আনিমে</string>
     <string name="trending_manga">ট্ৰেণ্ডিং মাংগা</string>
     <string name="trending_novel">ট্ৰেণ্ডিং নৱেল</string>
     <string name="popular_manga">জনপ্ৰিয় মাংগা</string>
-    <string name="username">উজাৰ্ণমে</string>
-    <string name="chapters_read">পড়া চাপ্তেৰছ</string>
+    <string name="username">ইউজাৰনেম</string>
+    <string name="chapters_read">পঢ়া অধ্যায়সমূহ</string>
     <string name="chapters_read_n">পঢ়া\nঅধ্যায়সমূহ</string>
     <string name="episodes_watched">দেখা এপিষদছ </string>
     <string name="episodes_watched_n">চোৱা\n খণ্ডসমূহ</string>
-    <string name="continue_reading">পড়া অব্যাহত হোৱাটো</string>
+    <string name="continue_reading">পঢ়া অব্যাহত হোৱাটো</string>
     <string name="continue_watching">দেখা অব্যাহত হোৱাটো</string>
     <string name="recommended">পৰামৰ্শিত</string>
     <string name="get_recommendations">পৰামৰ্শ লাভ কৰিবলৈ কিছু এনিমে বা মাংগা দেখি অথবা পঢ়িব</string>
@@ -83,13 +83,13 @@
     <string name="progress">প্ৰগ্ৰেছ</string>
     <string name="score">স্কৰ</string>
     <string name="score_suffix">" / 10"</string>
-    <string name="started_at">আৰম্ভ হোৱা</string>
-    <string name="completed_at">সম্পন্ন হোৱা</string>
+    <string name="started_at">আৰম্ভ হল</string>
+    <string name="completed_at">সম্পন্ন হল</string>
     <string name="save">সংৰক্ষণ কৰক</string>
     <string name="delete">মচি পোৱা</string>
     <string name="remove">আঁতৰাওক</string>
     <string name="name">নাম</string>
-    <string name="name_romaji">নাম ৰোমাজি</string>
+    <string name="name_romaji">নাম ৰোমানজি</string>
     <string name="mean_score">গড় স্কৰ</string>
     <string name="format">বিন্যাস</string>
     <string name="status_title">ষ্টেটাছ</string>
@@ -160,14 +160,14 @@
     <string name="theme">থীম</string>
     <string name="ui_settings">ইউজাৰ ইন্টাৰফেচ চেটিংসমূহ</string>
     <string name="about">বিষয়ে</string>
-    <string name="desc">"    Dantotsu সাইকউ তৰ খৰাৰ থৰ পৰা তৈয়াৰ হৈছে আৰু প্ৰত্যক্ষতাবাদীত তত্ত্বসমূহে ভিত্তি কৰি সাধাৰণত সজীব হৈ গড়ে উঠিব। এই হৈছে একটি Anilist মাত্ৰিত ক্লায়েণ্ট, যি আপুনি প্ৰতিনিধি আৰু মাংগাৰ সৈকতিকতাৰ এপ্‌ৰৱাহ কৰাৰ সুযোগও দিয়ে।\nদন্তোসু অনুবাদে শিখত অনেক ভাল মানুহককে বোধ কৰাটো আমি মন্তব্য কৰিছো নাহলে আপুনি কি বোধ কৰিব?\n"</string>
+    <string name="desc">"    Dantotsu, Saikouৰ খৰাৰ থৰ পৰা তৈয়াৰ হৈছে আৰু প্ৰত্যক্ষতাবাদীত তত্ত্বসমূহে ভিত্তি কৰি সাধাৰণত সজীব হৈ গড়ে উঠিব। এই হৈছে একটি Anilist মাত্ৰিত ক্লায়েণ্ট, যি আপুনি প্ৰতিনিধি আৰু মাংগাৰ সৈকতিকতাৰ এপ্‌ৰৱাহ কৰাৰ সুযোগও দিয়ে।\nদন্তোসু অনুবাদে শিখত অনেক ভাল মানুহককে বোধ কৰাটো আমি মন্তব্য কৰিছো নাহলে আপুনি কি বোধ কৰিব?\n"</string>
     <string name="devs">ডেভেলপাৰ/সহায়কসমূহ</string>
     <string name="disclaimer">বিবেচনা</string>
-    <string name="full_disclaimer">         - ডান্টোসু অত্যন্ত অনুসৰি কৰিছে এনিমে আৰু মাঙ্গা ট্ৰেকাৰ দিয়া আৰু কোনো এনিমে বা মাঙ্গাৰ স্ট্ৰিমিং বা ডাউনল\'ডিংৰ সুবিধা দিয়া নাই।
-        \n\n - ডান্টোসু বা তাহৰ ডেভেলপাৰ/ক\'ৰ্মকৰ্তাৰ কোনো বাস্তৱিক নিহিত ক\'ৰা বস্তু অনুসৰি বাস্তু দেৱাওঁক নকৰে। অ্যাপত থকা সকলো চিত্ৰ আৰু এনিমে/মাঙ্গাৰ তথ্য বিভিন্ন পাবলিক API (AniList, MyAnimeList, Kitsu) লৈ ল\'বা হৈছে।
+    <string name="full_disclaimer">         - Dantotsu অত্যন্ত অনুসৰি কৰিছে এনিমে আৰু মাঙ্গা ট্ৰেকাৰ দিয়া আৰু কোনো এনিমে বা মাঙ্গাৰ স্ট্ৰিমিং বা ডাউনল\'ডিংৰ সুবিধা দিয়া নাই।
+        \n\n - Dantotsu বা তাহৰ ডেভেলপাৰ/ক\'ৰ্মকৰ্তাৰ কোনো বাস্তৱিক নিহিত ক\'ৰা বস্তু অনুসৰি বাস্তু দেৱাওঁক নকৰে। অ্যাপত থকা সকলো চিত্ৰ আৰু এনিমে/মাঙ্গাৰ তথ্য বিভিন্ন পাবলিক API (AniList, MyAnimeList, Kitsu) লৈ ল\'বা হৈছে।
         \n\n - অধিকবোৰ একাৰে 3ৰ্ড পাৰ্টি প্লাগইনৰ পৰা লব্ধ এনিমে/মাঙ্গাৰ লিংকসমূহ ডান্টোসু বা তাহৰ ক\'ৰ্মকৰ্তাৰ কোনো সম্পৰ্ক নাই আৰু সংস্থানৰ সাথে সম্পৰ্ক নাই।
-        \n\n - ডান্টোসু বা তাহৰ মালিকানাৰ কোনোবোৰ এইখনেই বাস্তুৰ অসদাচৰণ বা মালৈমালৰ বিতৰণৰ দায়ৰে নহয় আৰু এটাৰ বাহিৰে বাস্তুৰ কেৱলমতি সাহিত্য কোনো দায়ৰে নাই।
-        \n\n - ডান্টোসু ব্যৱহাৰ কৰি আপুনি অনুস্বাৰিক হৈ যে, অ্যাপটোৰ ডেভেলপাৰ অৰ্থাৎ অ্যাপটোৰ সকলো বাস্তুৰ বাবে দায়ী নহয়। আপুনি এইটোলৈ সম্মতি কৰিব পৰা যে আপুনি কোনো কপিৰাইটেড বাস্তু ডাউনল\'ড বা স্ট্ৰিম কৰিব নাপাৰিব।
+        \n\n - Dantotsu বা তাহৰ মালিকানাৰ কোনোবোৰ এইখনেই বাস্তুৰ অসদাচৰণ বা মালৈমালৰ বিতৰণৰ দায়ৰে নহয় আৰু এটাৰ বাহিৰে বাস্তুৰ কেৱলমতি সাহিত্য কোনো দায়ৰে নাই।
+        \n\n - Dantotsu ব্যৱহাৰ কৰি আপুনি অনুস্বাৰিক হৈ যে, অ্যাপটোৰ ডেভেলপাৰ অৰ্থাৎ অ্যাপটোৰ সকলো বাস্তুৰ বাবে দায়ী নহয়। আপুনি এইটোলৈ সম্মতি কৰিব পৰা যে আপুনি কোনো কপিৰাইটেড বাস্তু ডাউনল\'ড বা স্ট্ৰিম কৰিব নাপাৰিব।
         \n\n - ইন্টাৰনেট অধিকাৰ লঙ্ঘনৰ কেইটা ঘটে, তলিকাৰ ওপৰ যোগাযোগ কৰক। ডেভেলপাৰ কোনো কানূনী দায়ৰে ধাৰণ নহয়।
     </string>
     <string name="version_current">সংস্কৰণ %1$s</string>
