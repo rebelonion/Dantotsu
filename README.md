@@ -29,6 +29,7 @@ Dantotsu (断トツ; Dan-totsu) "the best of the best". Try it out for yourself 
 - [x] Themes
 - [x] Extensions
 - [x] Addons
+- [x] Torrents
 - [x] Downloads
 - [x] Offline Mode
 - [x] Incognito Mode
