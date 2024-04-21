@@ -358,7 +358,7 @@
 
         \n\n_আপুনি অনিলিস্ট আৰু MAL দুটা একাউণ্ট সিংক কৰিবলৈ প্ৰয়াজন নহয়।_
     </string>
-    <string name="notification_for_checking_subscriptions">সাবস্ক্ৰিপশন পৰীক্ষাৰ বাবে বিজ্ঞপ্তি দেখুৱাওক</string>
+    <string name="notification_for_checking_subscriptions">চেক কৰী আছো জাননীসমূহ</string>
     <string name="use_alarm_manager">নিশ্চিত বিজ্ঞপ্তিসমূহৰ বাবে অ্যালাৰ্ম মেনেজাৰ ব্যৱহাৰ কৰক</string>
     <string name="use_alarm_manager_reliable">নিৰ্ভৰযোগ্য অধিসূচনাৰ বাবে এলাৰ্ম মেনেজাৰ ব্যৱহাৰ কৰক </string>
     <string name="use_alarm_manager_confirm">এলাৰ্ম মেঞ্জাৰ ব্যৱহাৰ কৰিলে বেটাৰি অপ্টিমাইজেচনৰ বিৰুদ্ধে যুঁজ দিয়াত সহায় কৰিব পাৰে, কিন্তু অধিক বেটাৰী ব্যৱহাৰ কৰিব পাৰে। ইয়াৰ বাবে এলাৰ্ম মেনেজাৰৰ অনুমতিও প্ৰয়োজন।</string>
@@ -698,7 +698,7 @@
     <string name="blur">ব্লাৰ</string>
     <string name="hide_scroll_bar">স্ক্ৰ’ল বাৰ লুকাওক</string>
     <string name="view_on_anilist">এনিলিষ্টত দেখুৱাওক</string>
-    <string name="anilist_notification_filters">বিজ্ঞপ্তি ফিল্টাৰ নিৰ্বাচন কৰক</string>
+    <string name="anilist_notification_filters">ফিল্টাৰ কৰক জাননীসমূহ</string>
     <string name="anilist_notifications_checking_time">এনিলিষ্ট বিজ্ঞপ্তি আপডেট সময়সূচী: %1$s</string>
     <string name="comment_notification_checking_time">মন্তব্য বিজ্ঞপ্তি আপডেট সময়সূচী: %1$s</string>
     <string name="activities">ক্ৰিয়াকলাপসমূহ</string>
@@ -800,9 +800,44 @@
     <string name="devs_desc">ডান্তত্সুৰ স্বনিশ্পন্ন শ্রমিকসমূহ</string>
     <string name="forks_desc">বেছিদুলৈ ডান্তত্সু</string>
     <string name="disclaimer_desc">ধ্যানধাৰক হ\'বলৈ এটা কিছু</string>
+    <string name="enable_torrent_desc">ই বেকগ্ৰাউণ্ডত এটা টৰেন্ট চাৰ্ভাৰ চলাব</string>
+    <string name="player_settings_desc">সকলো প্লেয়াৰ সম্পৰ্কীয় ছেটিংছ</string>
+    <string name="purge_anime_downloads_desc">সকলো ডাউনলোড কৰা এনিম ডিলিট কৰক</string>
+    <string name="prefer_dub_desc">ডিফল্ট ভাৱে ডাব মিডিয়াক চিলেক্ট কৰক</string>
+    <string name="show_yt_desc">সমৰ্থিত মেডিয়াৰ কাৰনে ইউটিউব লিংকসমূহ দেখুৱাওক</string>
+    <string name="include_list_anime_desc">এনিমে এক্সপলৰ পেজৰ বাবে তালিকাৰ আইটেমসমূহ অন্তৰ্ভুক্ত কৰক</string>
+    <string name="ui_settings_desc">সকলো UI সম্পৰ্কীয় ছেটিংছ</string>
+    <string name="download_manager_select_desc">এনিমে ডাউনলোড কৰিবলৈ ডিফল্ট মেনেজাৰ</string>
+    <string name="backup_restore_desc">আপোনাৰ পছন্দৰ ছেটিংছ সকলোতে</string>
+    <string name="change_download_location_desc">সকলো ডাউনলোড কৰা সামগ্ৰী য\'লৈ যায় সেই অৱস্থান সলনি কৰক</string>
+    <string name="always_continue_content_desc">আপুনি য\'ত এৰিছিল তাৰ পৰা কণ্টিনিউ কৰক</string>
+    <string name="search_source_list_desc">আগৰ চাৰ্ভাৰৰ মিডিয়া নাথাকিলে নতুন চাৰ্ভাৰ স্বয়ং-নিৰ্বাচন কৰক</string>
+    <string name="recentlyListOnly_desc">শেহতীয়া টেবত কেৱল আপোনাৰ তালিকাৰ আইটেমসমূহ দেখুৱাওক</string>
+    <string name="adult_only_content_desc">এক্সপলৰ পেজত মাত্ৰ এদালট কণ্টেনত হে দেখুৱাওক</string>
+    <string name="anime_add_repository_desc">বিভিন্ন চৌছৰ পৰা এনিমে এক্সটেনচন যোগ কৰক</string>
+    <string name="manga_add_repository_desc">বিভিন্ন চৌছৰ পৰা মাংগা এক্সটেনচন যোগ কৰক</string>
+    <string name="user_agent_desc">Change your default user agent</string>
+    <string name="force_legacy_installer_desc">Use the legacy installer to install extensions (For older android phones)</string>
+    <string name="skip_loading_extension_icons_desc">Don\'t load icons of extensions on the extension page</string>
+    <string name="NSFWExtention_desc">Remove 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="reader_settings_desc">All the Reader related settings</string>
+    <string name="purge_manga_downloads_desc">Delete all downloaded Manga</string>
+    <string name="purge_novel_downloads_desc">Delete all downloaded Novels</string>
+    <string name="include_list_desc">Include list items in Manga explore page</string>
+    <string name="anilist_notification_filters_desc">Choose category to Ignore</string>
+    <string name="anilist_notifications_checking_time_desc">Set the frequency you want the app to check for Anilist notifications</string>
+    <string name="comment_notification_checking_time_desc">Set the frequency you want the app to check for Comment notifications</string>
+    <string name="notification_for_checking_subscriptions_desc">Show notification for checking Subscriptions</string>
+    <string name="use_alarm_manager_reliable_desc">Use to bypass the phone\'s battery optimizer</string>
+    <string name="oled_theme_variant_desc">As dark as it gets</string>
+    <string name="use_material_you_desc">Use the same color as your wallpaper</string>
+    <string name="use_unique_theme_for_each_item_desc">Use color from media\'s banner</string>
+    <string name="use_custom_theme_desc">Use your own color for the theme</string>
+    <string name="color_picker_desc">Choose a color</string>
     <string name="torrent_addon">টৰেণ্ট অ‍্যাড-অন</string>
     <string name="enable_torrent">টৰেণ্ট সক্ৰিয় কৰক</string>
     <string name="anime_downloader_addon">আনিমে ডাউনল\'ডাৰ অ‍্যাড-অন</string>
+    <string name="install_torrent_addon">Install Torrent Addon</string>
     <string name="loaded_successfully">সফলতাত ল\'ড হৈছে</string>
     <string name="not_installed">ইনষ্টল কৰা নাই</string>
     <string name="torrent_extension_not_supported">এই ডিভাইচত টৰেণ্ট এক্সটেণ্সন সমৰ্থন কৰা নাই</string>
