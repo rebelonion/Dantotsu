@@ -845,4 +845,6 @@
     <string name="update_addon">Actualizar complemento</string>
     <string name="install_addon">Instalar complemento</string>
     <string name="download_addon_not_found">No se encuentra el complemento de descarga</string>
+    <string name="image">Image</string>
+    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
 </resources>
