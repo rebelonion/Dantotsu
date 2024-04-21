@@ -57,11 +57,11 @@
                 android:id="@+id/characterTitle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
+                android:layout_marginStart="24dp"
 
+                android:layout_weight="1"
                 android:ellipsize="marquee"
                 android:focusable="true"
-                android:layout_marginStart="24dp"
                 android:focusableInTouchMode="true"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center_vertical"

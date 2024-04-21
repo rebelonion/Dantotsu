@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.OptIn
-import androidx.core.view.isVisible
 import androidx.media3.common.C.TRACK_TYPE_AUDIO
 import androidx.media3.common.C.TrackType
 import androidx.media3.common.Tracks
@@ -20,7 +19,7 @@ import java.util.Locale
 
 @OptIn(UnstableApi::class)
 class TrackGroupDialogFragment(
-    instance: ExoplayerView, trackGroups: ArrayList<Tracks.Group>, type : @TrackType Int
+    instance: ExoplayerView, trackGroups: ArrayList<Tracks.Group>, type: @TrackType Int
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSubtitlesBinding? = null
     private val binding get() = _binding!!
@@ -70,21 +69,28 @@ class TrackGroupDialogFragment(
             trackGroups[position].let { trackGroup ->
                 when (val language = trackGroup.getTrackFormat(0).language?.lowercase()) {
                     null -> {
-                        binding.subtitleTitle.text = getString(R.string.unknown_track, "Track $position")
+                        binding.subtitleTitle.text =
+                            getString(R.string.unknown_track, "Track $position")
                     }
+
                     "none" -> {
                         binding.subtitleTitle.text = getString(R.string.disabled_track)
                     }
+
                     else -> {
                         val locale = if (language.contains("-")) {
                             val parts = language.split("-")
                             try {
                                 Locale(parts[0], parts[1])
-                            } catch (ignored: Exception) { null }
+                            } catch (ignored: Exception) {
+                                null
+                            }
                         } else {
                             try {
                                 Locale(language)
-                            } catch (ignored: Exception) { null }
+                            } catch (ignored: Exception) {
+                                null
+                            }
                         }
                         binding.subtitleTitle.text = locale?.let {
                             "[${it.language}] ${it.displayName}"

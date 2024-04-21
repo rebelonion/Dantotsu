@@ -1,7 +1,6 @@
 package ani.dantotsu.settings
 
 import android.app.AlertDialog
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -31,7 +30,6 @@ import ani.dantotsu.others.AndroidBug5497Workaround
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.tabs.TabLayout
@@ -215,9 +213,17 @@ class ExtensionsActivity : AppCompatActivity() {
     private fun getSavedRepositories(repoInventory: ViewGroup, type: MediaType) {
         repoInventory.removeAllViews()
         val prefName: PrefName? = when (type) {
-            MediaType.ANIME -> { PrefName.AnimeExtensionRepos }
-            MediaType.MANGA -> { PrefName.MangaExtensionRepos }
-            else -> { null }
+            MediaType.ANIME -> {
+                PrefName.AnimeExtensionRepos
+            }
+
+            MediaType.MANGA -> {
+                PrefName.MangaExtensionRepos
+            }
+
+            else -> {
+                null
+            }
         }
         prefName?.let { repoList ->
             PrefManager.getVal<Set<String>>(repoList).forEach { item ->
@@ -235,9 +241,15 @@ class ExtensionsActivity : AppCompatActivity() {
                             repoInventory.removeView(view.root)
                             CoroutineScope(Dispatchers.IO).launch {
                                 when (type) {
-                                    MediaType.ANIME -> { animeExtensionManager.findAvailableExtensions() }
-                                    MediaType.MANGA -> { mangaExtensionManager.findAvailableExtensions() }
-                                    else -> {  }
+                                    MediaType.ANIME -> {
+                                        animeExtensionManager.findAvailableExtensions()
+                                    }
+
+                                    MediaType.MANGA -> {
+                                        mangaExtensionManager.findAvailableExtensions()
+                                    }
+
+                                    else -> {}
                                 }
                             }
                             dialog.dismiss()
@@ -276,9 +288,17 @@ class ExtensionsActivity : AppCompatActivity() {
 
     private fun generateRepositoryButton(type: MediaType) {
         val hintResource: Int? = when (type) {
-            MediaType.ANIME -> { R.string.anime_add_repository }
-            MediaType.MANGA -> { R.string.manga_add_repository }
-            else -> { null }
+            MediaType.ANIME -> {
+                R.string.anime_add_repository
+            }
+
+            MediaType.MANGA -> {
+                R.string.manga_add_repository
+            }
+
+            else -> {
+                null
+            }
         }
         hintResource?.let { res ->
             binding.openSettingsButton.setOnClickListener {

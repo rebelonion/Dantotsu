@@ -75,7 +75,10 @@ class CommentsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as MediaDetailsActivity
 
-        binding.commentsListContainer.setBaseline(activity.navBar, activity.binding.commentInputLayout)
+        binding.commentsListContainer.setBaseline(
+            activity.navBar,
+            activity.binding.commentInputLayout
+        )
 
         //get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
@@ -118,7 +121,6 @@ class CommentsFragment : Fragment() {
                 }
             }
         } else {
-            toast("Not logged in")
             activity.binding.commentMessageContainer.visibility = View.GONE
         }
 
@@ -301,7 +303,7 @@ class CommentsFragment : Fragment() {
 
             activity.binding.commentLabel.setOnClickListener {
                 //alert dialog to enter a number, with a cancel and ok button
-                val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+                val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
                     .setTitle("Enter a chapter/episode number tag")
                     .setView(R.layout.dialog_edittext)
                     .setPositiveButton("OK") { dialog, _ ->
@@ -577,7 +579,7 @@ class CommentsFragment : Fragment() {
      * Called when the user tries to comment for the first time
      */
     private fun showCommentRulesDialog() {
-        val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+        val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
             .setTitle("Commenting Rules")
             .setMessage(
                 "I WILL BAN YOU WITHOUT HESITATION\n" +

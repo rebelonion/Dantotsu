@@ -1,10 +1,13 @@
 package ani.dantotsu.settings
 
+import android.content.ComponentName
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,7 +27,7 @@ import eltos.simpledialogfragment.color.SimpleColorDialog
 
 class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListener {
     private lateinit var binding: ActivitySettingsThemeBinding
-
+    private var reload = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -37,8 +40,27 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                 topMargin = statusBarHeight
                 bottomMargin = navBarHeight
             }
-            themeSettingsBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
-
+            onBackPressedDispatcher.addCallback(context) {
+                if (reload) {
+                    val packageName = context.packageName
+                    val mainIntent = Intent.makeRestartActivityTask(
+                        packageManager.getLaunchIntentForPackage(packageName)!!.component
+                    )
+                    val component = ComponentName(packageName, SettingsActivity::class.qualifiedName!!)
+                    try {
+                        startActivity(Intent().setComponent(component))
+                    } catch (e: Exception) {
+                        startActivity(mainIntent)
+                    }
+                    finishAndRemoveTask()
+                    reload = false
+                } else {
+                    finish()
+                }
+            }
+            themeSettingsBack.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
             var previous: View = when (PrefManager.getVal<Int>(PrefName.DarkMode)) {
                 0 -> settingsUiAuto
                 1 -> settingsUiLight
@@ -87,7 +109,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                         ThemeManager.Companion.Theme.entries[i].theme
                     )
                     clearFocus()
-                    restartApp(binding.root)
+                    reload()
                 }
             }
 
@@ -96,67 +118,69 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                     Settings(
                         type = 2,
                         name = getString(R.string.oled_theme_variant),
-                        desc = getString(R.string.oled_theme_variant),
+                        desc = getString(R.string.oled_theme_variant_desc),
                         icon = R.drawable.ic_round_brightness_4_24,
                         isChecked = PrefManager.getVal(PrefName.UseOLED),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.UseOLED, isChecked)
-                            restartApp(binding.root)
+                            reload()
                         }
                     ),
                     Settings(
                         type = 2,
                         name = getString(R.string.use_material_you),
-                        desc = getString(R.string.use_material_you),
+                        desc = getString(R.string.use_material_you_desc),
                         icon = R.drawable.ic_round_new_releases_24,
                         isChecked = PrefManager.getVal(PrefName.UseMaterialYou),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.UseMaterialYou, isChecked)
                             if (isChecked) PrefManager.setVal(PrefName.UseCustomTheme, false)
-                            restartApp(binding.root)
+                            reload()
                         },
                         isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
                     ),
                     Settings(
                         type = 2,
                         name = getString(R.string.use_unique_theme_for_each_item),
-                        desc = getString(R.string.use_unique_theme_for_each_item),
+                        desc = getString(R.string.use_unique_theme_for_each_item_desc),
                         icon = R.drawable.ic_palette,
                         isChecked = PrefManager.getVal(PrefName.UseSourceTheme),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.UseSourceTheme, isChecked)
-                            restartApp(binding.root)
                         },
                         isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
                     ),
                     Settings(
                         type = 2,
                         name = getString(R.string.use_custom_theme),
-                        desc = getString(R.string.use_custom_theme),
+                        desc = getString(R.string.use_custom_theme_desc),
                         icon = R.drawable.ic_palette,
                         isChecked = PrefManager.getVal(PrefName.UseCustomTheme),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.UseCustomTheme, isChecked)
                             if (isChecked) PrefManager.setVal(PrefName.UseMaterialYou, false)
-                            restartApp(binding.root)
+                            reload()
                         },
                         isVisible = Build.VERSION.SDK_INT > Build.VERSION_CODES.R
                     ),
                     Settings(
                         type = 1,
                         name = getString(R.string.color_picker),
-                        desc = getString(R.string.color_picker),
+                        desc = getString(R.string.color_picker_desc),
                         icon = R.drawable.ic_palette,
                         onClick = {
                             val originalColor: Int = PrefManager.getVal(PrefName.CustomThemeInt)
+
                             class CustomColorDialog : SimpleColorDialog() {
                                 override fun onPositiveButtonClick() {
-                                    restartApp(binding.root)
+                                    reload()
                                     super.onPositiveButtonClick()
                                 }
                             }
+
                             val tag = "colorPicker"
-                            CustomColorDialog().title(R.string.custom_theme).colorPreset(originalColor)
+                            CustomColorDialog().title(R.string.custom_theme)
+                                .colorPreset(originalColor)
                                 .colors(context, SimpleColorDialog.MATERIAL_COLOR_PALLET)
                                 .allowCustom(true).showOutline(0x46000000).gridNumColumn(5)
                                 .choiceMode(SimpleColorDialog.SINGLE_CHOICE).neg()
@@ -183,4 +207,11 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
         }
         return true
     }
+
+    fun reload() {
+        PrefManager.setCustomVal("reload", true)
+        restartApp()
+        reload = true
+    }
+
 }

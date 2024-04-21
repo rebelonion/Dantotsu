@@ -70,8 +70,10 @@ class ListActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val anime = intent.getBooleanExtra("anime", true)
-        binding.listTitle.text = getString(R.string.user_list, intent.getStringExtra("username"),
-            if (anime) getString(R.string.anime) else getString(R.string.manga))
+        binding.listTitle.text = getString(
+            R.string.user_list, intent.getStringExtra("username"),
+            if (anime) getString(R.string.anime) else getString(R.string.manga)
+        )
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@ListActivity.selectedTabIdx = tab?.position ?: 0
@@ -158,7 +160,8 @@ class ListActivity : AppCompatActivity() {
         }
 
         binding.filter.setOnClickListener {
-            val genres = PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()
+            val genres =
+                PrefManager.getVal<Set<String>>(PrefName.GenresList).toMutableSet().sorted()
             val popup = PopupMenu(this, it)
             popup.menu.add("All")
             genres.forEach { genre ->

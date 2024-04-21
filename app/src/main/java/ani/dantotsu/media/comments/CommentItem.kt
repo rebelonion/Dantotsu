@@ -60,7 +60,8 @@ class CommentItem(
     override fun bind(viewBinding: ItemCommentsBinding, position: Int) {
         binding = viewBinding
         setAnimation(binding.root.context, binding.root)
-        viewBinding.commentRepliesList.layoutManager = LinearLayoutManager(commentsFragment.activity)
+        viewBinding.commentRepliesList.layoutManager =
+            LinearLayoutManager(commentsFragment.activity)
         viewBinding.commentRepliesList.adapter = adapter
         val isUserComment = CommentsAPI.userId == comment.userId
         val levelColor = getAvatarColor(comment.totalVotes, backgroundColor)
@@ -112,16 +113,20 @@ class CommentItem(
 
         viewBinding.commentUserName.setOnClickListener {
             ContextCompat.startActivity(
-                commentsFragment.activity, Intent(commentsFragment.activity, ProfileActivity::class.java)
+                commentsFragment.activity,
+                Intent(commentsFragment.activity, ProfileActivity::class.java)
                     .putExtra("userId", comment.userId.toInt())
-                    .putExtra("userLVL","[${levelColor.second}]"), null
+                    .putExtra("userLVL", "[${levelColor.second}]"),
+                null
             )
         }
         viewBinding.commentUserAvatar.setOnClickListener {
             ContextCompat.startActivity(
-                commentsFragment.activity, Intent(commentsFragment.activity, ProfileActivity::class.java)
+                commentsFragment.activity,
+                Intent(commentsFragment.activity, ProfileActivity::class.java)
                     .putExtra("userId", comment.userId.toInt())
-                    .putExtra("userLVL","[${levelColor.second}]"), null
+                    .putExtra("userLVL", "[${levelColor.second}]"),
+                null
             )
         }
         viewBinding.commentText.setOnLongClickListener {
@@ -143,8 +148,10 @@ class CommentItem(
         viewBinding.commentInfo.setOnClickListener {
             val popup = PopupMenu(commentsFragment.requireContext(), viewBinding.commentInfo)
             popup.menuInflater.inflate(R.menu.profile_details_menu, popup.menu)
-            popup.menu.findItem(R.id.commentDelete)?.isVisible = isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod
-            popup.menu.findItem(R.id.commentBanUser)?.isVisible = (CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment
+            popup.menu.findItem(R.id.commentDelete)?.isVisible =
+                isUserComment || CommentsAPI.isAdmin || CommentsAPI.isMod
+            popup.menu.findItem(R.id.commentBanUser)?.isVisible =
+                (CommentsAPI.isAdmin || CommentsAPI.isMod) && !isUserComment
             popup.menu.findItem(R.id.commentReport)?.isVisible = !isUserComment
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
@@ -273,12 +280,16 @@ class CommentItem(
     }
 
     fun replying(isReplying: Boolean) {
-        binding.commentReply.text = if (isReplying) commentsFragment.activity.getString(R.string.cancel) else "Reply"
+        binding.commentReply.text =
+            if (isReplying) commentsFragment.activity.getString(R.string.cancel) else "Reply"
         this.isReplying = isReplying
     }
 
     fun editing(isEditing: Boolean) {
-        binding.commentEdit.text = if (isEditing) commentsFragment.activity.getString(R.string.cancel) else commentsFragment.activity.getString(R.string.edit)
+        binding.commentEdit.text =
+            if (isEditing) commentsFragment.activity.getString(R.string.cancel) else commentsFragment.activity.getString(
+                R.string.edit
+            )
         this.isEditing = isEditing
     }
 
@@ -286,7 +297,7 @@ class CommentItem(
         subCommentIds.add(id)
     }
 
-    private fun removeSubCommentIds(){
+    private fun removeSubCommentIds() {
         subCommentIds.forEach { id ->
             @Suppress("UNCHECKED_CAST")
             val parentComments = parentSection.groups as? List<CommentItem> ?: emptyList()
@@ -306,11 +317,13 @@ class CommentItem(
                 viewBinding.commentUpVote.alpha = 1f
                 viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
             }
+
             -1 -> {
                 viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
                 viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_active_24)
                 viewBinding.commentDownVote.alpha = 1f
             }
+
             else -> {
                 viewBinding.commentUpVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
                 viewBinding.commentDownVote.setImageResource(R.drawable.ic_round_upvote_inactive_24)
@@ -355,7 +368,8 @@ class CommentItem(
 
     private fun getAvatarColor(voteCount: Int, backgroundColor: Int): Pair<Int, Int> {
         val level = if (voteCount < 0) 0 else sqrt(abs(voteCount.toDouble()) / 0.8).toInt()
-        val colorString = if (level > usernameColors.size - 1) usernameColors[usernameColors.size - 1] else usernameColors[level]
+        val colorString =
+            if (level > usernameColors.size - 1) usernameColors[usernameColors.size - 1] else usernameColors[level]
         var color = Color.parseColor(colorString)
         val ratio = getContrastRatio(color, backgroundColor)
         if (ratio < 4.5) {
@@ -373,16 +387,17 @@ class CommentItem(
      * @param callback the callback to call when the user clicks yes
      */
     private fun dialogBuilder(title: String, message: String, callback: () -> Unit) {
-        val alertDialog = android.app.AlertDialog.Builder(commentsFragment.activity, R.style.MyPopup)
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton("Yes") { dialog, _ ->
-                callback()
-                dialog.dismiss()
-            }
-            .setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
-            }
+        val alertDialog =
+            android.app.AlertDialog.Builder(commentsFragment.activity, R.style.MyPopup)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton("Yes") { dialog, _ ->
+                    callback()
+                    dialog.dismiss()
+                }
+                .setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }
         val dialog = alertDialog.show()
         dialog?.window?.setDimAmount(0.8f)
     }

@@ -195,24 +195,25 @@
             android:id="@+id/commentTotalReplies"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center"
             android:layout_marginStart="4dp"
             android:alpha="0.6"
             android:fontFamily="@font/poppins_semi_bold"
+            android:gravity="center"
             android:text="View replies"
             android:textSize="12sp"
             tools:ignore="HardcodedText" />
+
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/commentInfo"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:alpha="0.6"
             android:layout_marginEnd="16dp"
+            android:alpha="0.6"
             app:srcCompat="@drawable/ic_round_dots_vertical_24"
             tools:ignore="ContentDescription" />
 
@@ -235,13 +236,14 @@
             android:layout_height="match_parent"
             android:layout_marginStart="12dp"
             android:alpha="0.6"
-            android:gravity="center"
             android:fontFamily="@font/poppins_semi_bold"
+            android:gravity="center"
             android:text="Edit"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="@+id/commentReply"
             app:layout_constraintStart_toEndOf="@+id/commentReply"
             tools:ignore="HardcodedText" />
+
         <ImageView
             android:id="@+id/commentUpVote"
             android:layout_width="24dp"
@@ -292,8 +294,6 @@
 
 
     </LinearLayout>
-
-
 
 
     <androidx.recyclerview.widget.RecyclerView

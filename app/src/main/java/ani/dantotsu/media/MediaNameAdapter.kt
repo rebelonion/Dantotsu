@@ -70,7 +70,7 @@ object MediaNameAdapter {
         return if (seasonMatcher.find()) {
             seasonMatcher.group(2)?.toInt()
         } else {
-            null
+            text.toIntOrNull()
         }
     }
 
@@ -93,7 +93,7 @@ object MediaNameAdapter {
                 }
             }
         } else {
-            null
+            text.toFloatOrNull()
         }
     }
 
@@ -139,7 +139,7 @@ object MediaNameAdapter {
             if (failedChapterNumberMatcher.find()) {
                 failedChapterNumberMatcher.group(1)?.toFloat()
             } else {
-                null
+                text.toFloatOrNull()
             }
         }
     }

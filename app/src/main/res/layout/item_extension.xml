@@ -18,7 +18,7 @@
         android:layout_marginStart="-10dp"
         android:layout_marginEnd="3dp"
         android:src="@drawable/ic_round_equal_24"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/extensionIconImageView"
@@ -26,7 +26,7 @@
         android:layout_height="40dp"
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="3dp"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:layout_width="245dp"
@@ -61,7 +61,7 @@
         android:layout_weight="0"
         android:src="@drawable/ic_round_delete_24"
         app:tint="?attr/colorOnBackground"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/settingsImageView"
@@ -72,6 +72,6 @@
         android:layout_weight="0"
         android:src="@drawable/ic_round_dots_vertical_24"
         app:tint="?attr/colorOnBackground"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription" />
 
 </LinearLayout>

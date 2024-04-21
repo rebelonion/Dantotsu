@@ -24,7 +24,8 @@ class CookieCatcher : AppCompatActivity() {
 
         //get url from intent
         val url = intent.getStringExtra("url") ?: getString(R.string.cursed_yt)
-        val headers: Map<String, String> = intent.getSerializableExtraCompat("headers") as? Map<String, String> ?: emptyMap()
+        val headers: Map<String, String> =
+            intent.getSerializableExtraCompat("headers") as? Map<String, String> ?: emptyMap()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             val process = Application.getProcessName()

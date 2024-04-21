@@ -74,15 +74,15 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
             binding.settingsLogin.setText(R.string.logout)
             binding.settingsLogin.setOnClickListener {
                 val alertDialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
-                .setTitle("Logout")
-                .setMessage("Are you sure you want to logout?")
-                .setPositiveButton("Yes") { _, _ ->
-                    Anilist.removeSavedToken()
-                    dismiss()
-                    startMainActivity(requireActivity())
-                }
-                .setNegativeButton("No") { _, _ -> }
-                .create()
+                    .setTitle("Logout")
+                    .setMessage("Are you sure you want to logout?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        Anilist.removeSavedToken()
+                        dismiss()
+                        startMainActivity(requireActivity())
+                    }
+                    .setNegativeButton("No") { _, _ -> }
+                    .create()
                 alertDialog.window?.setDimAmount(0.8f)
                 alertDialog.show()
             }
@@ -98,7 +98,7 @@ class SettingsDialogFragment : BottomSheetDialogFragment() {
         }
         binding.settingsNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
         binding.settingsNotificationCount.text = Anilist.unreadNotificationCount.toString()
-        binding.settingsUserAvatar.setOnClickListener{
+        binding.settingsUserAvatar.setOnClickListener {
             ContextCompat.startActivity(
                 requireContext(), Intent(requireContext(), ProfileActivity::class.java)
                     .putExtra("userId", Anilist.userid), null

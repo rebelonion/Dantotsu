@@ -42,8 +42,8 @@ import ani.dantotsu.isOnline
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
-import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.MediaNameAdapter
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.manga.mangareader.ChapterLoaderDialog
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
@@ -194,8 +194,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                             )
 
                         for (download in downloadManager.mangaDownloadedTypes) {
-                            if (media.compareName(download.title)) {
-                                chapterAdapter.stopDownload(download.chapter)
+                            if (media.compareName(download.titleName)) {
+                                chapterAdapter.stopDownload(download.chapterName)
                             }
                         }
 
@@ -203,8 +203,10 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                             ConcatAdapter(headerAdapter, chapterAdapter)
 
                         lifecycleScope.launch(Dispatchers.IO) {
-                            val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
-                            if (offline) media.selected!!.sourceIndex = model.mangaReadSources!!.list.lastIndex
+                            val offline =
+                                !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
+                            if (offline) media.selected!!.sourceIndex =
+                                model.mangaReadSources!!.list.lastIndex
                             model.loadMangaChapters(media, media.selected!!.sourceIndex)
                         }
                         loaded = true

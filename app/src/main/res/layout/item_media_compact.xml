@@ -93,12 +93,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_marginBottom="4dp"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
+        android:layout_marginBottom="4dp"
         android:gravity="center"
-        android:visibility="gone"
         android:orientation="horizontal"
+        android:visibility="gone"
         tools:ignore="UseCompoundDrawables">
 
         <ImageView

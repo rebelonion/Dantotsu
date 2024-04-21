@@ -111,7 +111,7 @@ data class UserAvatar(
 
     // The avatar of user at medium size
     @SerialName("medium") var medium: String?,
-): java.io.Serializable
+) : java.io.Serializable
 
 @Serializable
 data class UserStatisticTypes(

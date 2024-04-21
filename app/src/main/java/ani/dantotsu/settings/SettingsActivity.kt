@@ -11,7 +11,7 @@ import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
@@ -28,6 +28,7 @@ import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.pop
 import ani.dantotsu.setSafeOnClickListener
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.startMainActivity
 import ani.dantotsu.statusBarHeight
@@ -40,9 +41,6 @@ import kotlin.random.Random
 
 
 class SettingsActivity : AppCompatActivity() {
-    private val restartMainActivity = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() = startMainActivity(this@SettingsActivity)
-    }
     lateinit var binding: ActivitySettingsBinding
     private var cursedCounter = 0
 
@@ -70,7 +68,14 @@ class SettingsActivity : AppCompatActivity() {
                 bottomMargin = navBarHeight
             }
 
-            onBackPressedDispatcher.addCallback(context, restartMainActivity)
+            onBackPressedDispatcher.addCallback(context) {
+                if (PrefManager.getCustomVal("reload", false)) {
+                    startMainActivity(context)
+                    PrefManager.setCustomVal("reload", false)
+                } else {
+                    finish()
+                }
+            }
 
             settingsBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
@@ -135,6 +140,16 @@ class SettingsActivity : AppCompatActivity() {
                         icon = R.drawable.ic_extension,
                         onClick = {
                             startActivity(Intent(context, SettingsExtensionsActivity::class.java))
+                        },
+                        isActivity = true
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.addons),
+                        desc = getString(R.string.addons_desc),
+                        icon = R.drawable.ic_round_restaurant_24,
+                        onClick = {
+                            startActivity(Intent(context, SettingsAddonActivity::class.java))
                         },
                         isActivity = true
                     ),
@@ -261,5 +276,10 @@ class SettingsActivity : AppCompatActivity() {
             return System.getProperty("os.arch") ?: System.getProperty("os.product.cpu.abi")
             ?: "Unknown Architecture"
         }
+    }
+
+    override fun onResume() {
+        ThemeManager(this).applyTheme()
+        super.onResume()
     }
 }

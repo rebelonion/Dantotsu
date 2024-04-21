@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
@@ -13,7 +12,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -44,7 +42,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 class NovelReadFragment : Fragment(),
     DownloadTriggerCallback,
@@ -116,8 +113,14 @@ class NovelReadFragment : Fragment(),
         ) {
             try {
                 val directory =
-                    DownloadsManager.getSubDirectory(context?:currContext()!!, MediaType.NOVEL, false, novel.name)
-                val file = directory?.findFile(novel.name)
+                    DownloadsManager.getSubDirectory(
+                        context ?: currContext()!!,
+                        MediaType.NOVEL,
+                        false,
+                        media.mainName(),
+                        novel.name
+                    )
+                val file = directory?.findFile("0.epub")
                 if (file?.exists() == false) return false
                 val fileUri = file?.uri ?: return false
                 val intent = Intent(context, NovelReaderActivity::class.java).apply {

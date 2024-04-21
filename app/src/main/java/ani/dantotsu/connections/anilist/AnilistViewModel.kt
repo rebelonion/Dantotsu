@@ -5,9 +5,6 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.webkit.internal.ApiFeature.M
-import androidx.webkit.internal.ApiFeature.P
-import androidx.webkit.internal.StartupApiFeature
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
 import ani.dantotsu.connections.discord.Discord
@@ -190,21 +187,25 @@ class AnilistAnimeViewModel : ViewModel() {
     var loaded: Boolean = false
     private val updated: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getUpdated(): LiveData<MutableList<Media>> = updated
 
     private val popularMovies: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getMovies(): LiveData<MutableList<Media>> = popularMovies
 
     private val topRatedAnime: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getTopRated(): LiveData<MutableList<Media>> = topRatedAnime
 
     private val mostFavAnime: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getMostFav(): LiveData<MutableList<Media>> = mostFavAnime
     suspend fun loadAll() {
-        val list= Anilist.query.loadAnimeList()
+        val list = Anilist.query.loadAnimeList()
         updated.postValue(list["recentUpdates"])
         popularMovies.postValue(list["trendingMovies"])
         topRatedAnime.postValue(list["topRated"])
@@ -283,22 +284,27 @@ class AnilistMangaViewModel : ViewModel() {
 
     private val popularManga: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getPopularManga(): LiveData<MutableList<Media>> = popularManga
 
     private val popularManhwa: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getPopularManhwa(): LiveData<MutableList<Media>> = popularManhwa
 
     private val popularNovel: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getPopularNovel(): LiveData<MutableList<Media>> = popularNovel
 
     private val topRatedManga: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getTopRated(): LiveData<MutableList<Media>> = topRatedManga
 
     private val mostFavManga: MutableLiveData<MutableList<Media>> =
         MutableLiveData<MutableList<Media>>(null)
+
     fun getMostFav(): LiveData<MutableList<Media>> = mostFavManga
     suspend fun loadAll() {
         val list = Anilist.query.loadMangaList()

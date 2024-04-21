@@ -59,9 +59,11 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
         navBar = binding.profileNavBar
         val navBarRightMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
+            Configuration.ORIENTATION_LANDSCAPE
+        ) navBarHeight else 0
         val navBarBottomMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+            Configuration.ORIENTATION_LANDSCAPE
+        ) 0 else navBarHeight
         navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             rightMargin = navBarRightMargin
             bottomMargin = navBarBottomMargin
@@ -284,7 +286,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         if (mMaxScrollSize == 0) mMaxScrollSize = appBar.totalScrollRange
         val percentage = abs(i) * 100 / mMaxScrollSize
 
-        with (bindingProfileAppBar) {
+        with(bindingProfileAppBar) {
             profileUserAvatarContainer.visibility =
                 if (profileUserAvatarContainer.scaleX == 0f) View.GONE else View.VISIBLE
             val duration = (200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
@@ -315,10 +317,12 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         val rightMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
+            Configuration.ORIENTATION_LANDSCAPE
+        ) navBarHeight else 0
         val bottomMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
-        val params : ViewGroup.MarginLayoutParams =
+            Configuration.ORIENTATION_LANDSCAPE
+        ) 0 else navBarHeight
+        val params: ViewGroup.MarginLayoutParams =
             navBar.layoutParams as ViewGroup.MarginLayoutParams
         params.updateMargins(right = rightMargin, bottom = bottomMargin)
     }

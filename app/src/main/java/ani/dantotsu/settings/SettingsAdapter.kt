@@ -12,10 +12,10 @@ import ani.dantotsu.setAnimation
 class SettingsAdapter(private val settings: ArrayList<Settings>) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     inner class SettingsViewHolder(val binding: ItemSettingsBinding) :
-        RecyclerView.ViewHolder(binding.root) {}
+        RecyclerView.ViewHolder(binding.root)
 
     inner class SettingsSwitchViewHolder(val binding: ItemSettingsSwitchBinding) :
-        RecyclerView.ViewHolder(binding.root) {}
+        RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -63,6 +63,8 @@ class SettingsAdapter(private val settings: ArrayList<Settings>) :
                 b.settingsLayout.visibility = if (settings.isVisible) View.VISIBLE else View.GONE
                 b.settingsIconRight.visibility =
                     if (settings.isActivity) View.VISIBLE else View.GONE
+                b.attachView.visibility = if (settings.attach != null) View.VISIBLE else View.GONE
+                settings.attach?.invoke(b)
             }
 
             2 -> {
@@ -80,11 +82,12 @@ class SettingsAdapter(private val settings: ArrayList<Settings>) :
                 b.settingsButton.setOnCheckedChangeListener { _, isChecked ->
                     settings.switch?.invoke(isChecked, b)
                 }
-                b.settingsLayout.setOnLongClickListener() {
+                b.settingsLayout.setOnLongClickListener {
                     settings.onLongClick?.invoke()
                     true
                 }
                 b.settingsLayout.visibility = if (settings.isVisible) View.VISIBLE else View.GONE
+                settings.attachToSwitch?.invoke(b)
             }
         }
     }

@@ -92,7 +92,8 @@
     </style>
 
     <style name="CircularImageView" parent="">
-        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.App.CircularImageView</item>
+        <item name="shapeAppearanceOverlay">@style/ShapeAppearanceOverlay.App.CircularImageView
+        </item>
     </style>
 
     <style name="ShapeAppearanceOverlay.App.CircularImageView" parent="">
@@ -101,5 +102,5 @@
     </style>
 
 
-    <style name="ThemeOverlay_Dantotsu_MediaRouter" parent="ThemeOverlay.AppCompat"/>
+    <style name="ThemeOverlay_Dantotsu_MediaRouter" parent="ThemeOverlay.AppCompat" />
 </resources>

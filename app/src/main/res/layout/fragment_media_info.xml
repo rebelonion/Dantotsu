@@ -297,6 +297,7 @@
                             android:fontFamily="@font/poppins_bold"
                             android:textAlignment="textEnd" />
                     </TableRow>
+
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="24dp"
@@ -317,26 +318,28 @@
                             android:fontFamily="@font/poppins_bold"
                             android:textAlignment="textEnd" />
                     </TableRow>
+
                     <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="24dp"
                         android:orientation="horizontal">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:alpha="0.58"
-                        android:text="@string/favourites"
-                        android:textStyle="bold" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.58"
+                            android:text="@string/favourites"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/mediaInfoFavorites"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/poppins_bold"
-                        android:textAlignment="textEnd" />
-                </TableRow>
+                        <TextView
+                            android:id="@+id/mediaInfoFavorites"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/poppins_bold"
+                            android:textAlignment="textEnd" />
+                    </TableRow>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="16dp" />

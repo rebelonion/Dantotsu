@@ -11,15 +11,14 @@ import android.os.Environment
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
+import ani.dantotsu.media.AddonType
 import ani.dantotsu.media.MediaType
-import ani.dantotsu.parsers.novel.NovelExtension
+import ani.dantotsu.media.Type
 import ani.dantotsu.util.Logger
 import com.jakewharton.rxrelay.PublishRelay
 import eu.kanade.domain.base.BasePreferences
 import eu.kanade.tachiyomi.extension.InstallStep
-import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.installer.Installer
-import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import eu.kanade.tachiyomi.util.storage.getUriCompat
 import rx.Observable
 import rx.android.schedulers.AndroidSchedulers
@@ -33,7 +32,7 @@ import java.util.concurrent.TimeUnit
  *
  * @param context The application context.
  */
-internal class ExtensionInstaller(private val context: Context) {
+class ExtensionInstaller(private val context: Context) {
 
     /**
      * The system's download manager
@@ -65,27 +64,31 @@ internal class ExtensionInstaller(private val context: Context) {
      * @param url The url of the apk.
      * @param extension The extension to install.
      */
-    fun downloadAndInstall(url: String, extension: AnimeExtension): Observable<InstallStep> = Observable.defer {
-        val pkgName = extension.pkgName
-
+    fun <T : Type> downloadAndInstall(
+        url: String,
+        pkgName: String,
+        name: String,
+        type: T
+    ): Observable<InstallStep> = Observable.defer {
         val oldDownload = activeDownloads[pkgName]
         if (oldDownload != null) {
             deleteDownload(pkgName)
         }
 
-        // Register the receiver after removing (and unregistering) the previous download
         downloadReceiver.register()
 
         val downloadUri = url.toUri()
         val request = DownloadManager.Request(downloadUri)
-            .setTitle(extension.name)
+            .setTitle(name)
             .setMimeType(APK_MIME)
             .setDestinationInExternalFilesDir(
                 context,
                 Environment.DIRECTORY_DOWNLOADS,
                 downloadUri.lastPathSegment
             )
-            .setDescription(MediaType.ANIME.asText())
+            .setDescription(type.asText())
+            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+            .setAllowedOverRoaming(true)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
         val id = downloadManager.enqueue(request)
@@ -93,91 +96,12 @@ internal class ExtensionInstaller(private val context: Context) {
 
         downloadsRelay.filter { it.first == id }
             .map { it.second }
-            // Poll download status
             .mergeWith(pollStatus(id))
-            // Stop when the application is installed or errors
             .takeUntil { it.isCompleted() }
-            // Always notify on main thread
             .observeOn(AndroidSchedulers.mainThread())
-            // Always remove the download when unsubscribed
             .doOnUnsubscribe { deleteDownload(pkgName) }
     }
 
-    fun downloadAndInstall(url: String, extension: MangaExtension): Observable<InstallStep> = Observable.defer {
-        val pkgName = extension.pkgName
-
-        val oldDownload = activeDownloads[pkgName]
-        if (oldDownload != null) {
-            deleteDownload(pkgName)
-        }
-
-        // Register the receiver after removing (and unregistering) the previous download
-        downloadReceiver.register()
-
-        val downloadUri = url.toUri()
-        val request = DownloadManager.Request(downloadUri)
-            .setTitle(extension.name)
-            .setMimeType(APK_MIME)
-            .setDestinationInExternalFilesDir(
-                context,
-                Environment.DIRECTORY_DOWNLOADS,
-                downloadUri.lastPathSegment
-            )
-            .setDescription(MediaType.MANGA.asText())
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-
-        val id = downloadManager.enqueue(request)
-        activeDownloads[pkgName] = id
-
-        downloadsRelay.filter { it.first == id }
-            .map { it.second }
-            // Poll download status
-            .mergeWith(pollStatus(id))
-            // Stop when the application is installed or errors
-            .takeUntil { it.isCompleted() }
-            // Always notify on main thread
-            .observeOn(AndroidSchedulers.mainThread())
-            // Always remove the download when unsubscribed
-            .doOnUnsubscribe { deleteDownload(pkgName) }
-    }
-
-    fun downloadAndInstall(url: String, extension: NovelExtension) = Observable.defer {
-        val pkgName = extension.pkgName
-
-        val oldDownload = activeDownloads[pkgName]
-        if (oldDownload != null) {
-            deleteDownload(pkgName)
-        }
-
-        // Register the receiver after removing (and unregistering) the previous download
-        downloadReceiver.register()
-
-        val downloadUri = url.toUri()
-        val request = DownloadManager.Request(downloadUri)
-            .setTitle(extension.name)
-            .setMimeType(APK_MIME)
-            .setDestinationInExternalFilesDir(
-                context,
-                Environment.DIRECTORY_DOWNLOADS,
-                downloadUri.lastPathSegment
-            )
-            .setDescription(MediaType.MANGA.asText())
-            .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-
-        val id = downloadManager.enqueue(request)
-        activeDownloads[pkgName] = id
-
-        downloadsRelay.filter { it.first == id }
-            .map { it.second }
-            // Poll download status
-            .mergeWith(pollStatus(id))
-            // Stop when the application is installed or errors
-            .takeUntil { it.isCompleted() }
-            // Always notify on main thread
-            .observeOn(AndroidSchedulers.mainThread())
-            // Always remove the download when unsubscribed
-            .doOnUnsubscribe { deleteDownload(pkgName) }
-    }
 
     /**
      * Returns an observable that polls the given download id for its status every second, as the
@@ -215,14 +139,18 @@ internal class ExtensionInstaller(private val context: Context) {
      *
      * @param uri The uri of the extension to install.
      */
-    fun installApk(type: MediaType, downloadId: Long, uri: Uri) {
+    fun installApk(type: Type, downloadId: Long, uri: Uri) {
         when (val installer = extensionInstaller.get()) {
             BasePreferences.ExtensionInstaller.LEGACY -> {
                 val intent = Intent(context, ExtensionInstallActivity::class.java)
                     .setDataAndType(uri, APK_MIME)
-                    .putExtra(EXTRA_EXTENSION_TYPE, type)
                     .putExtra(EXTRA_DOWNLOAD_ID, downloadId)
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                if (type is MediaType) {
+                    intent.putExtra(EXTRA_EXTENSION_TYPE, type)
+                } else if (type is AddonType) {
+                    intent.putExtra(EXTRA_ADDON_TYPE, type)
+                }
 
                 context.startActivity(intent)
             }
@@ -340,9 +268,15 @@ internal class ExtensionInstaller(private val context: Context) {
                     val localUri = cursor.getString(
                         cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_LOCAL_URI),
                     ).removePrefix(FILE_SCHEME)
-                    val type = MediaType.fromText(cursor.getString(
-                        cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_DESCRIPTION),
-                    ))
+                    val type = MediaType.fromText(
+                        cursor.getString(
+                            cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_DESCRIPTION),
+                        )
+                    ) ?: AddonType.fromText(
+                        cursor.getString(
+                            cursor.getColumnIndexOrThrow(DownloadManager.COLUMN_DESCRIPTION),
+                        )
+                    ) ?: return
 
                     installApk(type, id, File(localUri).getUriCompat(context))
                 }
@@ -354,6 +288,7 @@ internal class ExtensionInstaller(private val context: Context) {
         const val APK_MIME = "application/vnd.android.package-archive"
         const val EXTRA_DOWNLOAD_ID = "ExtensionInstaller.extra.DOWNLOAD_ID"
         const val EXTRA_EXTENSION_TYPE = "ExtensionInstaller.extra.EXTENSION_TYPE"
+        const val EXTRA_ADDON_TYPE = "ExtensionInstaller.extra.ADDON_TYPE"
         const val FILE_SCHEME = "file://"
     }
 }

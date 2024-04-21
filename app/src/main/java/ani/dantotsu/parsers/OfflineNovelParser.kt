@@ -1,16 +1,14 @@
 package ani.dantotsu.parsers
 
 import android.app.Application
-import android.os.Environment
-import ani.dantotsu.currContext
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.MediaType
+import ani.dantotsu.util.Logger
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 class OfflineNovelParser : NovelParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()
@@ -31,7 +29,7 @@ class OfflineNovelParser : NovelParser() {
             directory.listFiles().forEach {
                 if (it.isDirectory) {
                     val chapter = Book(
-                        it.name?:"Unknown",
+                        it.name ?: "Unknown",
                         it.uri.toString(),
                         null,
                         listOf(it.uri.toString())
@@ -51,13 +49,16 @@ class OfflineNovelParser : NovelParser() {
     }
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val titles = downloadManager.novelDownloadedTypes.map { it.title }.distinct()
-        val returnTitles: MutableList<String> = mutableListOf()
+        val titles = downloadManager.novelDownloadedTypes.map { it.titleName }.distinct()
+        val returnTitlesPair: MutableList<Pair<String, Int>> = mutableListOf()
         for (title in titles) {
-            if (FuzzySearch.ratio(title.lowercase(), query.lowercase()) > 80) {
-                returnTitles.add(title)
+            Logger.log("Comparing $title to $query")
+            val score = FuzzySearch.ratio(title.lowercase(), query.lowercase())
+            if (score > 80) {
+                returnTitlesPair.add(Pair(title, score))
             }
         }
+        val returnTitles = returnTitlesPair.sortedByDescending { it.second }.map { it.first }
         val returnList: MutableList<ShowResponse> = mutableListOf()
         for (title in returnTitles) {
             //need to search the subdirectories for the ShowResponses
@@ -66,13 +67,13 @@ class OfflineNovelParser : NovelParser() {
             if (directory?.exists() == true) {
                 directory.listFiles().forEach {
                     if (it.isDirectory) {
-                        names.add(it.name?: "Unknown")
+                        names.add(it.name ?: "Unknown")
                     }
                 }
             }
             val cover = directory?.findFile("cover.jpg")?.uri.toString()
             names.forEach {
-                returnList.add(ShowResponse(it, it, cover))
+                returnList.add(ShowResponse(it, query, cover))
             }
         }
         return returnList

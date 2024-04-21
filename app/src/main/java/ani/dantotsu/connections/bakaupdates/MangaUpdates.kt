@@ -24,7 +24,7 @@ class MangaUpdates {
 
     private val apiUrl = "https://api.mangaupdates.com/v1/releases/search"
 
-    suspend fun search(title: String, startDate: FuzzyDate?) : MangaUpdatesResponse.Results? {
+    suspend fun search(title: String, startDate: FuzzyDate?): MangaUpdatesResponse.Results? {
         return tryWithSuspend {
             val query = JSONObject().apply {
                 try {
@@ -96,6 +96,7 @@ class MangaUpdates {
                 @SerialName("release_date")
                 val releaseDate: String
             )
+
             @Serializable
             data class MetaData(
                 val series: Series

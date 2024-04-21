@@ -1,6 +1,5 @@
 package ani.dantotsu.widgets.statistics
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
@@ -12,9 +11,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import ani.dantotsu.R
 import ani.dantotsu.databinding.StatisticsWidgetConfigureBinding
-
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.widgets.upcoming.UpcomingWidget
 import com.google.android.material.button.MaterialButton
 import eltos.simpledialogfragment.SimpleDialog
 import eltos.simpledialogfragment.color.SimpleColorDialog
@@ -64,9 +61,12 @@ class ProfileStatsConfigure : AppCompatActivity(),
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID
         )
-        val prefs = getSharedPreferences(ProfileStatsWidget.getPrefsName(appWidgetId), Context.MODE_PRIVATE)
-        val topBackground = prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
-        (binding.topBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(topBackground)
+        val prefs =
+            getSharedPreferences(ProfileStatsWidget.getPrefsName(appWidgetId), Context.MODE_PRIVATE)
+        val topBackground =
+            prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
+        (binding.topBackgroundButton as MaterialButton).iconTint =
+            ColorStateList.valueOf(topBackground)
         binding.topBackgroundButton.setOnClickListener {
             val tag = ProfileStatsWidget.PREF_BACKGROUND_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
@@ -83,8 +83,10 @@ class ProfileStatsConfigure : AppCompatActivity(),
                 .neg()
                 .show(this@ProfileStatsConfigure, tag)
         }
-        val bottomBackground = prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
-        (binding.bottomBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(bottomBackground)
+        val bottomBackground =
+            prefs.getInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
+        (binding.bottomBackgroundButton as MaterialButton).iconTint =
+            ColorStateList.valueOf(bottomBackground)
         binding.bottomBackgroundButton.setOnClickListener {
             val tag = ProfileStatsWidget.PREF_BACKGROUND_FADE
             SimpleColorDialog().title(R.string.custom_theme)
@@ -196,7 +198,10 @@ class ProfileStatsConfigure : AppCompatActivity(),
         )
         val subTextColor = typedValueOutline.data
 
-        getSharedPreferences(ProfileStatsWidget.getPrefsName(appWidgetId), Context.MODE_PRIVATE).edit().apply {
+        getSharedPreferences(
+            ProfileStatsWidget.getPrefsName(appWidgetId),
+            Context.MODE_PRIVATE
+        ).edit().apply {
             putInt(ProfileStatsWidget.PREF_BACKGROUND_COLOR, backgroundColor)
             putInt(ProfileStatsWidget.PREF_BACKGROUND_FADE, backgroundColor)
             putInt(ProfileStatsWidget.PREF_TITLE_TEXT_COLOR, textColor)

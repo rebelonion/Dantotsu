@@ -6,12 +6,12 @@ import ani.dantotsu.databinding.ItemFollowerGridBinding
 import ani.dantotsu.loadImage
 import com.xwray.groupie.viewbinding.BindableItem
 
-class GridFollowerItem (
+class GridFollowerItem(
     private val id: Int,
     private val name: String,
     private val avatar: String?,
     val clickCallback: (Int) -> Unit
-): BindableItem<ItemFollowerGridBinding>() {
+) : BindableItem<ItemFollowerGridBinding>() {
     private lateinit var binding: ItemFollowerGridBinding
 
     override fun bind(viewBinding: ItemFollowerGridBinding, position: Int) {

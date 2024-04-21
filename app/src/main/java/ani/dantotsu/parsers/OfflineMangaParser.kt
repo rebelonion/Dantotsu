@@ -1,8 +1,8 @@
 package ani.dantotsu.parsers
 
 import android.app.Application
-import android.os.Environment
-import ani.dantotsu.currContext
+import ani.dantotsu.download.DownloadCompat.Companion.loadChaptersCompat
+import ani.dantotsu.download.DownloadCompat.Companion.loadImagesCompat
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.media.MediaNameAdapter
@@ -13,7 +13,6 @@ import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 class OfflineMangaParser : MangaParser() {
     private val downloadManager = Injekt.get<DownloadsManager>()
@@ -44,8 +43,9 @@ class OfflineMangaParser : MangaParser() {
                     chapters.add(chapter)
                 }
             }
-            chapters.sortBy { MediaNameAdapter.findChapterNumber(it.number) }
-            return chapters
+            chapters.addAll(loadChaptersCompat(mangaLink, extra, sManga))
+            return chapters.distinctBy { it.number }
+                .sortedBy { MediaNameAdapter.findChapterNumber(it.number) }
         }
         return emptyList()
     }
@@ -63,26 +63,32 @@ class OfflineMangaParser : MangaParser() {
                     images.add(image)
                 }
             }
-            images.sortBy { image ->
-                val matchResult = imageNumberRegex.find(image.url.url)
-                matchResult?.groups?.get(1)?.value?.toIntOrNull() ?: Int.MAX_VALUE
-            }
             for (image in images) {
                 Logger.log("imageNumber: ${image.url.url}")
             }
-            return images
+            return if (images.isNotEmpty()) {
+                images.sortBy { image ->
+                    val matchResult = imageNumberRegex.find(image.url.url)
+                    matchResult?.groups?.get(1)?.value?.toIntOrNull() ?: Int.MAX_VALUE
+                }
+                images
+            } else {
+                loadImagesCompat(chapterLink, sChapter)
+            }
         }
         return emptyList()
     }
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val titles = downloadManager.mangaDownloadedTypes.map { it.title }.distinct()
-        val returnTitles: MutableList<String> = mutableListOf()
+        val titles = downloadManager.mangaDownloadedTypes.map { it.titleName }.distinct()
+        val returnTitlesPair: MutableList<Pair<String, Int>> = mutableListOf()
         for (title in titles) {
-            if (FuzzySearch.ratio(title.lowercase(), query.lowercase()) > 80) {
-                returnTitles.add(title)
+            val score = FuzzySearch.ratio(title.lowercase(), query.lowercase())
+            if (score > 80) {
+                returnTitlesPair.add(Pair(title, score))
             }
         }
+        val returnTitles = returnTitlesPair.sortedByDescending { it.second }.map { it.first }
         val returnList: MutableList<ShowResponse> = mutableListOf()
         for (title in returnTitles) {
             returnList.add(ShowResponse(title, title, title))

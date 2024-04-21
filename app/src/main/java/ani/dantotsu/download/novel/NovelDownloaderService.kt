@@ -9,7 +9,6 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.pm.ServiceInfo
 import android.os.Build
-import android.os.Environment
 import android.os.IBinder
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -50,8 +49,6 @@ import okio.sink
 import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL
@@ -270,7 +267,9 @@ class NovelDownloaderService : Service() {
                             task.coverUrl?.let {
                                 file.parentFile?.let { it1 -> downloadImage(it, it1, "cover.jpg") }
                             }
-                            val outputStream = this@NovelDownloaderService.contentResolver.openOutputStream(file.uri) ?: throw Exception("Could not open OutputStream")
+                            val outputStream =
+                                this@NovelDownloaderService.contentResolver.openOutputStream(file.uri)
+                                    ?: throw Exception("Could not open OutputStream")
 
                             val sink = outputStream.sink().buffer()
                             val responseBody = response.body
@@ -358,7 +357,7 @@ class NovelDownloaderService : Service() {
     private fun saveMediaInfo(task: DownloadTask) {
         launchIO {
             val directory =
-                DownloadsManager.getSubDirectory(
+                getSubDirectory(
                     this@NovelDownloaderService,
                     MediaType.NOVEL,
                     false,

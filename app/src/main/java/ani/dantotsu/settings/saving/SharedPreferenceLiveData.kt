@@ -82,6 +82,7 @@ class SharedPreferenceStringSetLiveData(
 fun SharedPreferences.intLiveData(key: String, defValue: Int): SharedPreferenceLiveData<Int> {
     return SharedPreferenceIntLiveData(this, key, defValue)
 }
+
 @Suppress("unused")
 
 fun SharedPreferences.stringLiveData(

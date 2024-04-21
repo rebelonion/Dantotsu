@@ -6,20 +6,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.NotificationCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import ani.dantotsu.R
-import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.FragmentExtensionsBinding
 import ani.dantotsu.settings.paging.MangaExtensionAdapter
 import ani.dantotsu.settings.paging.MangaExtensionsViewModel
 import ani.dantotsu.settings.paging.MangaExtensionsViewModelFactory
 import ani.dantotsu.settings.paging.OnMangaInstallClickListener
-import ani.dantotsu.snackString
-import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import eu.kanade.tachiyomi.extension.manga.model.MangaExtension
 import kotlinx.coroutines.flow.collectLatest
@@ -81,48 +76,15 @@ class MangaExtensionsFragment : Fragment(),
             val context = requireContext()
             val notificationManager =
                 context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val installerSteps = InstallerSteps(notificationManager, context)
 
             // Start the installation process
             mangaExtensionManager.installExtension(pkg)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                    { installStep ->
-                        val builder = NotificationCompat.Builder(
-                            context,
-                            Notifications.CHANNEL_DOWNLOADER_PROGRESS
-                        )
-                            .setSmallIcon(R.drawable.ic_round_sync_24)
-                            .setContentTitle(getString(R.string.installing_extension))
-                            .setContentText(getString(R.string.install_step, installStep))
-                            .setPriority(NotificationCompat.PRIORITY_LOW)
-                        notificationManager.notify(1, builder.build())
-                    },
-                    { error ->
-                        Injekt.get<CrashlyticsInterface>().logException(error)
-                        val builder = NotificationCompat.Builder(
-                            context,
-                            Notifications.CHANNEL_DOWNLOADER_ERROR
-                        )
-                            .setSmallIcon(R.drawable.ic_round_info_24)
-                            .setContentTitle(getString(R.string.installation_failed, error.message))
-                            .setContentText(getString(R.string.error_message, error.message))
-                            .setPriority(NotificationCompat.PRIORITY_HIGH)
-                        notificationManager.notify(1, builder.build())
-                        snackString(getString(R.string.installation_failed, error.message))
-                    },
-                    {
-                        val builder = NotificationCompat.Builder(
-                            context,
-                            Notifications.CHANNEL_DOWNLOADER_PROGRESS
-                        )
-                            .setSmallIcon(R.drawable.ic_download_24)
-                            .setContentTitle(getString(R.string.installation_complete))
-                            .setContentText(getString(R.string.extension_has_been_installed))
-                            .setPriority(NotificationCompat.PRIORITY_LOW)
-                        notificationManager.notify(1, builder.build())
-                        viewModel.invalidatePager()
-                        snackString(getString(R.string.extension_installed))
-                    }
+                    { installStep -> installerSteps.onInstallStep(installStep) {} },
+                    { error -> installerSteps.onError(error) {} },
+                    { installerSteps.onComplete { viewModel.invalidatePager() } }
                 )
         }
     }

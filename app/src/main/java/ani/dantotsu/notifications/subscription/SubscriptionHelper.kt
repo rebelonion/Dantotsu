@@ -32,7 +32,7 @@ class SubscriptionHelper {
             return data
         }
 
-        private fun saveSelected( mediaId: Int, data: Selected) {
+        private fun saveSelected(mediaId: Int, data: Selected) {
             PrefManager.setCustomVal("${mediaId}-select", data)
         }
 

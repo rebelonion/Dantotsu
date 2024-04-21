@@ -149,14 +149,22 @@ class MediaAdaptor(
                         (if (media.userScore != 0) R.drawable.item_user_score else R.drawable.item_score)
                     )
                     if (media.anime != null) {
-                        val itemTotal =  " " + if ((media.anime.totalEpisodes ?: 0) != 1) currActivity()!!.getString(R.string.episode_plural) else currActivity()!!.getString(R.string.episode_singular)
+                        val itemTotal = " " + if ((media.anime.totalEpisodes
+                                ?: 0) != 1
+                        ) currActivity()!!.getString(R.string.episode_plural) else currActivity()!!.getString(
+                            R.string.episode_singular
+                        )
                         b.itemTotal.text = itemTotal
                         b.itemCompactTotal.text =
                             if (media.anime.nextAiringEpisode != null) (media.anime.nextAiringEpisode.toString() + " / " + (media.anime.totalEpisodes
                                 ?: "??").toString()) else (media.anime.totalEpisodes
                                 ?: "??").toString()
                     } else if (media.manga != null) {
-                        val itemTotal = " " + if ((media.manga.totalChapters ?: 0) != 1) currActivity()!!.getString(R.string.chapter_plural) else currActivity()!!.getString(R.string.chapter_singular)
+                        val itemTotal = " " + if ((media.manga.totalChapters
+                                ?: 0) != 1
+                        ) currActivity()!!.getString(R.string.chapter_plural) else currActivity()!!.getString(
+                            R.string.chapter_singular
+                        )
                         b.itemTotal.text = itemTotal
                         b.itemCompactTotal.text = "${media.manga.totalChapters ?: "??"}"
                     }
@@ -183,7 +191,10 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    blurImage(if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen , media.banner ?: media.cover)
+                    blurImage(
+                        if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen,
+                        media.banner ?: media.cover
+                    )
                     b.itemCompactOngoing.isVisible =
                         media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName
@@ -232,7 +243,10 @@ class MediaAdaptor(
                                 AccelerateDecelerateInterpolator()
                             )
                         )
-                    blurImage(if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen , media.banner ?: media.cover)
+                    blurImage(
+                        if (bannerAnimations) b.itemCompactBanner else b.itemCompactBannerNoKen,
+                        media.banner ?: media.cover
+                    )
                     b.itemCompactOngoing.isVisible =
                         media.status == currActivity()!!.getString(R.string.status_releasing)
                     b.itemCompactTitle.text = media.userPreferredName

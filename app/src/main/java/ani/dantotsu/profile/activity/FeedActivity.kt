@@ -31,7 +31,8 @@ class FeedActivity : AppCompatActivity() {
         setContentView(binding.root)
         navBar = binding.feedNavBar
         val navBarMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+            Configuration.ORIENTATION_LANDSCAPE
+        ) 0 else navBarHeight
         navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarMargin }
         val personalTab = navBar.createTab(R.drawable.ic_round_person_24, "Following")
         val globalTab = navBar.createTab(R.drawable.ic_globe_24, "Global")
@@ -67,10 +68,12 @@ class FeedActivity : AppCompatActivity() {
 
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
-        val params : ViewGroup.MarginLayoutParams =
+        val margin =
+            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+        val params: ViewGroup.MarginLayoutParams =
             binding.feedViewPager.layoutParams as ViewGroup.MarginLayoutParams
-        val paramsNav : ViewGroup.MarginLayoutParams = navBar.layoutParams as ViewGroup.MarginLayoutParams
+        val paramsNav: ViewGroup.MarginLayoutParams =
+            navBar.layoutParams as ViewGroup.MarginLayoutParams
         params.updateMargins(bottom = margin)
         paramsNav.updateMargins(bottom = margin)
     }

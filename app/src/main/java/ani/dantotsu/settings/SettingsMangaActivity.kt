@@ -22,7 +22,7 @@ import ani.dantotsu.themes.ThemeManager
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
-class SettingsMangaActivity: AppCompatActivity(){
+class SettingsMangaActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsMangaBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,7 +67,7 @@ class SettingsMangaActivity: AppCompatActivity(){
                     Settings(
                         type = 1,
                         name = getString(R.string.reader_settings),
-                        desc = getString(R.string.reader_settings),
+                        desc = getString(R.string.reader_settings_desc),
                         icon = R.drawable.ic_round_reader_settings,
                         onClick = {
                             startActivity(Intent(context, ReaderSettingsActivity::class.java))
@@ -77,12 +77,17 @@ class SettingsMangaActivity: AppCompatActivity(){
                     Settings(
                         type = 1,
                         name = getString(R.string.purge_manga_downloads),
-                        desc = getString(R.string.purge_manga_downloads),
+                        desc = getString(R.string.purge_manga_downloads_desc),
                         icon = R.drawable.ic_round_delete_24,
                         onClick = {
                             val dialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.purge_manga_downloads)
-                                .setMessage(getString(R.string.purge_confirm, getString(R.string.manga)))
+                                .setMessage(
+                                    getString(
+                                        R.string.purge_confirm,
+                                        getString(R.string.manga)
+                                    )
+                                )
                                 .setPositiveButton(R.string.yes) { dialog, _ ->
                                     val downloadsManager = Injekt.get<DownloadsManager>()
                                     downloadsManager.purgeDownloads(MediaType.MANGA)
@@ -98,12 +103,17 @@ class SettingsMangaActivity: AppCompatActivity(){
                     Settings(
                         type = 1,
                         name = getString(R.string.purge_novel_downloads),
-                        desc = getString(R.string.purge_novel_downloads),
+                        desc = getString(R.string.purge_novel_downloads_desc),
                         icon = R.drawable.ic_round_delete_24,
                         onClick = {
                             val dialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.purge_novel_downloads)
-                                .setMessage(getString(R.string.purge_confirm, getString(R.string.novels)))
+                                .setMessage(
+                                    getString(
+                                        R.string.purge_confirm,
+                                        getString(R.string.novels)
+                                    )
+                                )
                                 .setPositiveButton(R.string.yes) { dialog, _ ->
                                     val downloadsManager = Injekt.get<DownloadsManager>()
                                     downloadsManager.purgeDownloads(MediaType.NOVEL)
@@ -118,12 +128,12 @@ class SettingsMangaActivity: AppCompatActivity(){
                     Settings(
                         type = 2,
                         name = getString(R.string.include_list),
-                        desc = getString(R.string.include_list),
+                        desc = getString(R.string.include_list_desc),
                         icon = R.drawable.view_list_24,
                         isChecked = PrefManager.getVal(PrefName.IncludeMangaList),
-                        switch = {isChecked, _ ->
+                        switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.IncludeMangaList, isChecked)
-                            restartApp(binding.root)
+                            restartApp()
                         }
                     ),
                 )
