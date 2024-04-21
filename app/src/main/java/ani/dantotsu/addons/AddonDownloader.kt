@@ -80,7 +80,6 @@ class AddonDownloader {
                             val installerSteps = InstallerSteps(notificationManager, activity)
                             manager.install(this)
                                 .observeOn(AndroidSchedulers.mainThread())
-                                .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(
                                     { installStep -> installerSteps.onInstallStep(installStep) {} },
                                     { error -> installerSteps.onError(error) {} },

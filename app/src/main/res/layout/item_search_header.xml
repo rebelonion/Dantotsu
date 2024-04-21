@@ -111,7 +111,7 @@
                 android:layout_gravity="center"
                 android:drawablePadding="4dp"
                 android:fontFamily="@font/poppins_bold"
-                android:text="Image"
+                android:text="@string/image"
                 android:textColor="?attr/colorPrimary"
                 app:drawableStartCompat="@drawable/ic_round_search_24"
                 app:drawableTint="?attr/colorPrimary" />

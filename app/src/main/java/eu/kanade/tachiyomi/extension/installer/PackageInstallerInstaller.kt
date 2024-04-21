@@ -10,7 +10,9 @@ import android.content.pm.PackageInstaller
 import android.os.Build
 import androidx.core.content.ContextCompat
 import androidx.core.content.IntentSanitizer
+import ani.dantotsu.R
 import ani.dantotsu.snackString
+import ani.dantotsu.toast
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.util.lang.use
@@ -55,7 +57,16 @@ class PackageInstallerInstaller(private val service: Service) : Installer(servic
                 }
 
                 PackageInstaller.STATUS_SUCCESS -> continueQueue(InstallStep.Installed)
-                else -> continueQueue(InstallStep.Error)
+                PackageInstaller.STATUS_FAILURE_CONFLICT -> {
+                    Logger.log("Failed to install extension due to conflict")
+                    toast(context.getString(R.string.failed_ext_install_conflict))
+                    continueQueue(InstallStep.Error)
+                }
+                else -> {
+                    Logger.log("Fatal error for $intent")
+                    Logger.log("Status: ${intent.getIntExtra(PackageInstaller.EXTRA_STATUS, -1)}")
+                    continueQueue(InstallStep.Error)
+                }
             }
         }
     }
