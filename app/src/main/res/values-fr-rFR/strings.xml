@@ -62,7 +62,7 @@
         <item>Tous</item>
     </string-array>
     <string name="no_notifications">Plus de notifications</string>
-    <string name="followers">Followers</string>
+    <string name="followers">Abonnés</string>
     <string name="status">État</string>
     <string-array name="status_anime">
         <item>PLANIFICATION</item>
@@ -94,7 +94,7 @@
     <string name="format">Format</string>
     <string name="status_title">Statut</string>
     <string name="total_eps">Épisodes totaux</string>
-    <string name="episodes"> Episode(s)</string>
+    <string name="episodes"> Épisode(s)</string>
     <string name="chapters">Chapitre(s)</string>
     <string name="total_divider"> | %1$s</string>
     <string name="total_chaps">Chapitres totaux</string>
@@ -111,7 +111,7 @@
     <string name="relations">Relations</string>
     <string name="staff">Équipe</string>
     <string name="favourites">Favoris</string>
-    <string name="popularity">Popularity</string>
+    <string name="popularity">Popularité</string>
     <string name="roles">Rôles</string>
     <string name="details">Détails</string>
     <string name="play_yt">Lire sur Youtube</string>
@@ -144,7 +144,7 @@
     <string name="offline_mode">Mode hors-ligne</string>
     <string name="settings">Paramètres</string>
     <string name="extensions">Extensions</string>
-    <string name="extension_updates_available">Extension updates available</string>
+    <string name="extension_updates_available">Mises à jour d\'extensions disponibles</string>
     <string name="player_settings">Paramètres du lecteur</string>
     <string name="recentlyListOnly">Afficher uniquement Mes Émissions dans les mises à jour récentes</string>
     <string name="download_manager_select">Gestionnaire de téléchargement</string>
@@ -152,7 +152,7 @@
     <string name="noSdFound">Aucune carte SD n\'a été trouvée.</string>
     <string name="reader_settings">Paramètres du lecteur</string>
     <string name="default_source">Source par défaut</string>
-    <string name="show_yt">Youtube Link</string>
+    <string name="show_yt">Afficher le lien YouTube</string>
     <string name="default_ep_view">Disposition des épisodes par défaut</string>
     <string name="default_chp_view">Disposition des chapitres par défaut</string>
     <string name="ui">Interface utilisateur</string>
@@ -212,8 +212,8 @@
     <string name="sub_window_color_select">Couleur de la fenêtre des sous-titres</string>
     <string name="sub_window_color_info">"La fenêtre des sous-titres est la partie gauche et droite d'eux. (où l'arrière-plan n'est pas)"</string>
     <string name="sub_color_info"><b>Note :</b> Modifier les paramètres ci-dessus n\'affecte que les sous-titres souples !</string>
-    <string name="sub_alpha">Subtitle Transparency</string>
-    <string name="sub_text_example">Example Sub</string>
+    <string name="sub_alpha">Transparence des sous-titres</string>
+    <string name="sub_text_example">Exemple de sous-titre</string>
     <string name="sub_font_select">Police des sous-titres</string>
     <string name="subtitle_font_size">Taille des sous-titres</string>
     <string name="auto">Auto</string>
@@ -268,7 +268,7 @@
     <string name="animations">Animations</string>
     <string name="banner_animations">Animations de bannière</string>
     <string name="layout_animations">Animations de mise en page</string>
-    <string name="trending_scroller">Trending Scroller</string>
+    <string name="trending_scroller">Défilement des tendances</string>
     <string name="animation_speed">Vitesse globale</string>
     <string name="empty_fav">On dirait que vous n\'aimez rien,\nEssayez d\'aimer une émission pour la garder ici.</string>
     <string name="fav_anime">Anime favoris</string>
@@ -328,8 +328,8 @@
     <string name="planned_anime">Anime prévus</string>
     <string name="planned_manga">Manga prévus</string>
     <string name="image_long_clicking">Ouvrir l\'image en cliquant longuement</string>
-    <string name="always_continue_content">Always continue previous items</string>
-    <string name="search_source_list">Search next available source</string>
+    <string name="always_continue_content">Toujours continuer les éléments précédents</string>
+    <string name="search_source_list">Rechercher la prochaine source disponible</string>
     <string name="timestamp_proxy_desc">Utile si vous obtenez des échecs de poignée de main</string>
     <string name="timestamp_proxy">Utiliser un proxy pour les horodatages</string>
     <string name="check_app_updates">Toujours vérifier les mises à jour de l\'application</string>
@@ -337,8 +337,8 @@
     <string name="forks">Versions</string>
     <string name="faq">FAQ</string>
     <string name="accounts">Comptes</string>
-    <string name="addons">Addons</string>
-    <string name="addons_desc">Addons are extensions that provide additional functionality.</string>
+    <string name="addons">Add-ons</string>
+    <string name="addons_desc">Les add-ons sont des extensions qui offrent des fonctionnalités supplémentaires.</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">Connectez-vous avec Anilist !</string>
     <string name="anilist">Anilist</string>
@@ -358,10 +358,10 @@
     
         \n\n_Il n\'est pas nécessaire de synchroniser à la fois les comptes MAL et Anilist._
     </string>
-    <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
+    <string name="notification_for_checking_subscriptions">Vérification des notifications d\'abonnements</string>
     <string name="use_alarm_manager">Utiliser le gestionnaire d\'alarme pour des notifications fiables</string>
-    <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
-    <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
+    <string name="use_alarm_manager_reliable">Utilisez le Gestionnaire d\'Alarmes pour des Notifications fiables</string>
+    <string name="use_alarm_manager_confirm">Utiliser le Gestionnaire d\'Alarmes peut aider à lutter contre l\'économiseur de batterie, mais peut consommer plus de batterie. Cela nécessite la permission Gestionnaire d\'Alarmes.</string>
     <string name="use">Utiliser</string>
     <string name="checking_subscriptions">Notification pour la vérification des abonnements</string>
     <string name="subscriptions_checking_time_s">Fréquence de mise à jour des abonnements : %1$s</string>
@@ -369,18 +369,18 @@
     <string name="subscriptions_info">Quantité de temps pour que Dantotsu vérifie périodiquement les nouveaux épisodes/chapitres
     (Moins de temps causera une consommation de batterie plus élevée)</string>
     <string name="do_not_update">Ne pas mettre à jour</string>
-    <string name="loading_chap_number">Loading Chapter %1$s</string>
+    <string name="loading_chap_number">Chargement du Chapitre %1$s</string>
     <string name="sort_by_release_date">Trier par date de sortie</string>
     <string name="crop_borders">Recadrer les bordures</string>
     <string name="note">REMARQUE</string>
-    <string name="manage_extension_repos">Manage Extension Repos</string>
+    <string name="manage_extension_repos">Gérer les Dépôts d\'Extensions</string>
     <string name="installing_extension">Installation des extensions</string>
-    <string name="installation_failed">Installation failed: %1$s</string>
-    <string name="installation_complete">Installation complete</string>
-    <string name="extension_has_been_installed">The extension has been successfully installed.</string>
-    <string name="extension_installed">Extension installed</string>
-    <string name="installed">Installed</string>
-    <string name="error_message">Error: %1$s</string>
+    <string name="installation_failed">Échec de l\'installation: %1$s</string>
+    <string name="installation_complete">Installation terminée</string>
+    <string name="extension_has_been_installed">L\'extension a été installée avec succès.</string>
+    <string name="extension_installed">Extension installée</string>
+    <string name="installed">Installée</string>
+    <string name="error_message">Erreur: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">Review</string>
     <string name="discord_nothing_button">Display only the first button</string>
