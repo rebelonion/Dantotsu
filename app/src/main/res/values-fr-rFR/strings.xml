@@ -11,11 +11,11 @@
     <string name="browse_anime">Parcourir les Anime</string>
     <string name="manga">Manga</string>
     <string name="browse_manga">Parcourir les Manga</string>
-    <string name="novels">Novels</string>
+    <string name="novels">Romans</string>
     <string name="info">Info</string>
     <string name="watch">Regarder</string>
     <string name="read">Lire</string>
-    <string name="language">Language</string>
+    <string name="language">Langue</string>
     <string name="anime_list">Liste des Anime</string>
     <string name="manga_list">Liste des Manga</string>
     <string name="sad">X(</string>
@@ -36,9 +36,9 @@
     <string name="popular_manga">Manga populaire</string>
     <string name="username">Nom d\'utilisateur</string>
     <string name="chapters_read">Chapitres lus </string>
-    <string name="chapters_read_n">Chapters\nRead</string>
+    <string name="chapters_read_n">Chapitres\nLus</string>
     <string name="episodes_watched">Épisodes regardés </string>
-    <string name="episodes_watched_n">Episodes\nWatched</string>
+    <string name="episodes_watched_n">Épisodes\nRegardés</string>
     <string name="continue_reading">Continuer la lecture</string>
     <string name="continue_watching">Continuer le visionnage</string>
     <string name="recommended">Recommandé</string>
@@ -61,7 +61,7 @@
         <item>Relecture</item>
         <item>Tous</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
+    <string name="no_notifications">Plus de notifications</string>
     <string name="followers">Followers</string>
     <string name="status">État</string>
     <string-array name="status_anime">
@@ -848,4 +848,6 @@
     <string name="update_addon">Update Addon</string>
     <string name="install_addon">Install Addon</string>
     <string name="download_addon_not_found">Download addon not found</string>
+    <string name="image">Image</string>
+    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
 </resources>
