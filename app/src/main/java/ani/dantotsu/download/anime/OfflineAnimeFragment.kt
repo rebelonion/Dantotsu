@@ -31,6 +31,8 @@ import ani.dantotsu.bottomBar
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
+import ani.dantotsu.download.DownloadCompat.Companion.loadMediaCompat
+import ani.dantotsu.download.DownloadCompat.Companion.loadOfflineAnimeModelCompat
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.compareName
@@ -175,7 +177,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             // Get the OfflineAnimeModel that was clicked
             val item = adapter.getItem(position) as OfflineAnimeModel
             val media =
-                downloadManager.animeDownloadedTypes.firstOrNull { it.title.compareName(item.title) }
+                downloadManager.animeDownloadedTypes.firstOrNull { it.titleName.compareName(item.title) }
             media?.let {
                 lifecycleScope.launch {
                     val mediaModel = getMedia(it)
@@ -287,10 +289,10 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         }
         downloadsJob = Job()
         CoroutineScope(Dispatchers.IO + downloadsJob).launch {
-            val animeTitles = downloadManager.animeDownloadedTypes.map { it.title }.distinct()
+            val animeTitles = downloadManager.animeDownloadedTypes.map { it.titleName }.distinct()
             val newAnimeDownloads = mutableListOf<OfflineAnimeModel>()
             for (title in animeTitles) {
-                val tDownloads = downloadManager.animeDownloadedTypes.filter { it.title == title }
+                val tDownloads = downloadManager.animeDownloadedTypes.filter { it.titleName == title }
                 val download = tDownloads.first()
                 val offlineAnimeModel = loadOfflineAnimeModel(download)
                 newAnimeDownloads += offlineAnimeModel
@@ -313,7 +315,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         return try {
             val directory = DownloadsManager.getSubDirectory(
                 context ?: currContext()!!, downloadedType.type,
-                false, downloadedType.title
+                false, downloadedType.titleName
             )
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
@@ -327,7 +329,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 })
                 .create()
             val media = directory?.findFile("media.json")
-                ?: return null
+                ?: return loadMediaCompat(downloadedType)
             val mediaJson =
                 media.openInputStream(context ?: currContext()!!)?.bufferedReader().use {
                     it?.readText()
@@ -352,7 +354,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         try {
             val directory = DownloadsManager.getSubDirectory(
                 context ?: currContext()!!, downloadedType.type,
-                false, downloadedType.title
+                false, downloadedType.titleName
             )
             val mediaModel = getMedia(downloadedType)!!
             val cover = directory?.findFile("cover.jpg")
@@ -391,22 +393,26 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 bannerUri
             )
         } catch (e: Exception) {
-            Logger.log("Error loading media.json: ${e.message}")
-            Logger.log(e)
-            Injekt.get<CrashlyticsInterface>().logException(e)
-            return OfflineAnimeModel(
-                "unknown",
-                "0",
-                "??",
-                "??",
-                "??",
-                "movie",
-                "hmm",
-                isOngoing = false,
-                isUserScored = false,
-                null,
-                null
-            )
+            return try {
+                loadOfflineAnimeModelCompat(downloadedType)
+            } catch (e: Exception) {
+                Logger.log("Error loading media.json: ${e.message}")
+                Logger.log(e)
+                Injekt.get<CrashlyticsInterface>().logException(e)
+                OfflineAnimeModel(
+                    "unknown",
+                    "0",
+                    "??",
+                    "??",
+                    "??",
+                    "movie",
+                    "hmm",
+                    isOngoing = false,
+                    isUserScored = false,
+                    null,
+                    null
+                )
+            }
         }
     }
 }

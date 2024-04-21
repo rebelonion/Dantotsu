@@ -28,6 +28,8 @@ import ani.dantotsu.bottomBar
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
+import ani.dantotsu.download.DownloadCompat
+import ani.dantotsu.download.DownloadCompat.Companion.loadOfflineMangaModelCompat
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.compareName
@@ -169,8 +171,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
             val media =
-                downloadManager.mangaDownloadedTypes.firstOrNull { it.title.compareName(item.title) }
-                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.title.compareName(item.title) }
+                downloadManager.mangaDownloadedTypes.firstOrNull { it.titleName.compareName(item.title) }
+                    ?: downloadManager.novelDownloadedTypes.firstOrNull { it.titleName.compareName(item.title) }
             media?.let {
                 lifecycleScope.launch {
                     ContextCompat.startActivity(
@@ -190,7 +192,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             // Get the OfflineMangaModel that was clicked
             val item = adapter.getItem(position) as OfflineMangaModel
             val type: MediaType =
-                if (downloadManager.mangaDownloadedTypes.any { it.title == item.title }) {
+                if (downloadManager.mangaDownloadedTypes.any { it.titleName == item.title }) {
                     MediaType.MANGA
                 } else {
                     MediaType.NOVEL
@@ -278,19 +280,19 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         downloads = listOf()
         downloadsJob = Job()
         CoroutineScope(Dispatchers.IO + downloadsJob).launch {
-            val mangaTitles = downloadManager.mangaDownloadedTypes.map { it.title }.distinct()
+            val mangaTitles = downloadManager.mangaDownloadedTypes.map { it.titleName }.distinct()
             val newMangaDownloads = mutableListOf<OfflineMangaModel>()
             for (title in mangaTitles) {
-                val tDownloads = downloadManager.mangaDownloadedTypes.filter { it.title == title }
+                val tDownloads = downloadManager.mangaDownloadedTypes.filter { it.titleName == title }
                 val download = tDownloads.first()
                 val offlineMangaModel = loadOfflineMangaModel(download)
                 newMangaDownloads += offlineMangaModel
             }
             downloads = newMangaDownloads
-            val novelTitles = downloadManager.novelDownloadedTypes.map { it.title }.distinct()
+            val novelTitles = downloadManager.novelDownloadedTypes.map { it.titleName }.distinct()
             val newNovelDownloads = mutableListOf<OfflineMangaModel>()
             for (title in novelTitles) {
-                val tDownloads = downloadManager.novelDownloadedTypes.filter { it.title == title }
+                val tDownloads = downloadManager.novelDownloadedTypes.filter { it.titleName == title }
                 val download = tDownloads.first()
                 val offlineMangaModel = loadOfflineMangaModel(download)
                 newNovelDownloads += offlineMangaModel
@@ -315,7 +317,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         return try {
             val directory = getSubDirectory(
                 context ?: currContext()!!, downloadedType.type,
-                false, downloadedType.title
+                false, downloadedType.titleName
             )
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
@@ -323,7 +325,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 })
                 .create()
             val media = directory?.findFile("media.json")
-                ?: return null
+                ?: return DownloadCompat.loadMediaCompat(downloadedType)
             val mediaJson =
                 media.openInputStream(context ?: currContext()!!)?.bufferedReader().use {
                     it?.readText()
@@ -343,7 +345,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         try {
             val directory = getSubDirectory(
                 context ?: currContext()!!, downloadedType.type,
-                false, downloadedType.title
+                false, downloadedType.titleName
             )
             val mediaModel = getMedia(downloadedType)!!
             val cover = directory?.findFile("cover.jpg")
@@ -376,21 +378,25 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
                 bannerUri
             )
         } catch (e: Exception) {
-            Logger.log("Error loading media.json: ${e.message}")
-            Logger.log(e)
-            Injekt.get<CrashlyticsInterface>().logException(e)
-            return OfflineMangaModel(
-                "unknown",
-                "0",
-                "??",
-                "??",
-                "movie",
-                "hmm",
-                isOngoing = false,
-                isUserScored = false,
-                null,
-                null
-            )
+            return try {
+                loadOfflineMangaModelCompat(downloadedType)
+            } catch (e: Exception) {
+                Logger.log("Error loading media.json: ${e.message}")
+                Logger.log(e)
+                Injekt.get<CrashlyticsInterface>().logException(e)
+                return OfflineMangaModel(
+                    "unknown",
+                    "0",
+                    "??",
+                    "??",
+                    "movie",
+                    "hmm",
+                    isOngoing = false,
+                    isUserScored = false,
+                    null,
+                    null
+                )
+            }
         }
     }
 }

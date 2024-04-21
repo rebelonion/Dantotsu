@@ -194,8 +194,8 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
                             )
 
                         for (download in downloadManager.mangaDownloadedTypes) {
-                            if (media.compareName(download.title)) {
-                                chapterAdapter.stopDownload(download.chapter)
+                            if (media.compareName(download.titleName)) {
+                                chapterAdapter.stopDownload(download.chapterName)
                             }
                         }
 

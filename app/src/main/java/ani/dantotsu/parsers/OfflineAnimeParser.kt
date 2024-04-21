@@ -2,6 +2,8 @@ package ani.dantotsu.parsers
 
 import android.app.Application
 import ani.dantotsu.currContext
+import ani.dantotsu.download.DownloadCompat.Companion.loadEpisodesCompat
+import ani.dantotsu.download.DownloadCompat.Companion.loadSubtitleCompat
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.anime.AnimeDownloaderService.AnimeDownloadTask.Companion.getTaskName
@@ -53,8 +55,12 @@ class OfflineAnimeParser : AnimeParser() {
                     episodes.add(episode)
                 }
             }
-            episodes.sortBy { MediaNameAdapter.findEpisodeNumber(it.number) }
-            return episodes
+            return if (episodes.isNotEmpty()) {
+                episodes.sortBy { MediaNameAdapter.findEpisodeNumber(it.number) }
+                episodes
+            } else {
+                loadEpisodesCompat(animeLink, extra, sAnime)
+            }
         }
         return emptyList()
     }
@@ -75,14 +81,16 @@ class OfflineAnimeParser : AnimeParser() {
 
 
     override suspend fun search(query: String): List<ShowResponse> {
-        val titles = downloadManager.animeDownloadedTypes.map { it.title }.distinct()
-        val returnTitles: MutableList<String> = mutableListOf()
+        val titles = downloadManager.animeDownloadedTypes.map { it.titleName }.distinct()
+        val returnTitlesPair: MutableList<Pair<String, Int>> = mutableListOf()
         for (title in titles) {
             Logger.log("Comparing $title to $query")
-            if (FuzzySearch.ratio(title.lowercase(), query.lowercase()) > 80) {
-                returnTitles.add(title)
+            val score = FuzzySearch.ratio(title.lowercase(), query.lowercase())
+            if (score > 80) {
+                returnTitlesPair.add(Pair(title, score))
             }
         }
+        val returnTitles = returnTitlesPair.sortedByDescending { it.second }.map { it.first }
         val returnList: MutableList<ShowResponse> = mutableListOf()
         for (title in returnTitles) {
             returnList.add(ShowResponse(title, title, title))
@@ -148,6 +156,7 @@ class OfflineVideoExtractor(private val videoServer: VideoServer) : VideoExtract
                     )
                 }
             }
+            loadSubtitleCompat(title, episode)?.let { return it }
         }
         return null
     }

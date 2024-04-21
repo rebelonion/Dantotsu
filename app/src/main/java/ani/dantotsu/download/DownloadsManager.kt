@@ -3,6 +3,8 @@ package ani.dantotsu.download
 import android.content.Context
 import android.net.Uri
 import androidx.documentfile.provider.DocumentFile
+import ani.dantotsu.download.DownloadCompat.Companion.removeDownloadCompat
+import ani.dantotsu.download.DownloadCompat.Companion.removeMediaCompat
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.settings.saving.PrefManager
@@ -58,6 +60,7 @@ class DownloadsManager(private val context: Context) {
         toast: Boolean = true,
         onFinished: () -> Unit
     ) {
+        removeDownloadCompat(context, downloadedType)
         downloadsList.remove(downloadedType)
         CoroutineScope(Dispatchers.IO).launch {
             removeDirectory(downloadedType, toast)
@@ -69,6 +72,7 @@ class DownloadsManager(private val context: Context) {
     }
 
     fun removeMedia(title: String, type: MediaType) {
+        removeMediaCompat(context, title, type)
         val baseDirectory = getBaseDirectory(context, type)
         val directory = baseDirectory?.findFolder(title)
         if (directory?.exists() == true) {
@@ -84,15 +88,15 @@ class DownloadsManager(private val context: Context) {
         }
         when (type) {
             MediaType.MANGA -> {
-                downloadsList.removeAll { it.title == title && it.type == MediaType.MANGA }
+                downloadsList.removeAll { it.titleName == title && it.type == MediaType.MANGA }
             }
 
             MediaType.ANIME -> {
-                downloadsList.removeAll { it.title == title && it.type == MediaType.ANIME }
+                downloadsList.removeAll { it.titleName == title && it.type == MediaType.ANIME }
             }
 
             MediaType.NOVEL -> {
-                downloadsList.removeAll { it.title == title && it.type == MediaType.NOVEL }
+                downloadsList.removeAll { it.titleName == title && it.type == MediaType.NOVEL }
             }
         }
         saveDownloads()
@@ -115,7 +119,7 @@ class DownloadsManager(private val context: Context) {
         if (directory?.exists() == true && directory.isDirectory) {
             val files = directory.listFiles()
             for (file in files) {
-                if (!downloadsSubLists.any { it.title == file.name }) {
+                if (!downloadsSubLists.any { it.titleName == file.name }) {
                     file.deleteRecursively(context, false)
                 }
             }
@@ -124,8 +128,8 @@ class DownloadsManager(private val context: Context) {
         val iterator = downloadsList.iterator()
         while (iterator.hasNext()) {
             val download = iterator.next()
-            val downloadDir = directory?.findFolder(download.title)
-            if ((downloadDir?.exists() == false && download.type == type) || download.title.isBlank()) {
+            val downloadDir = directory?.findFolder(download.titleName)
+            if ((downloadDir?.exists() == false && download.type == type) || download.titleName.isBlank()) {
                 iterator.remove()
             }
         }
@@ -211,16 +215,17 @@ class DownloadsManager(private val context: Context) {
 
     fun queryDownload(title: String, chapter: String, type: MediaType? = null): Boolean {
         return if (type == null) {
-            downloadsList.any { it.title == title && it.chapter == chapter }
+            downloadsList.any { it.titleName == title && it.chapterName == chapter }
         } else {
-            downloadsList.any { it.title == title && it.chapter == chapter && it.type == type }
+            downloadsList.any { it.titleName == title && it.chapterName == chapter && it.type == type }
         }
     }
 
     private fun removeDirectory(downloadedType: DownloadedType, toast: Boolean) {
         val baseDirectory = getBaseDirectory(context, downloadedType.type)
         val directory =
-            baseDirectory?.findFolder(downloadedType.title)?.findFolder(downloadedType.chapter)
+            baseDirectory?.findFolder(downloadedType.titleName)
+                ?.findFolder(downloadedType.chapterName)
         downloadsList.remove(downloadedType)
         // Check if the directory exists and delete it recursively
         if (directory?.exists() == true) {
@@ -369,10 +374,16 @@ private fun String?.findValidName(): String {
 }
 
 data class DownloadedType(
-    val pTitle: String, val pChapter: String, val type: MediaType
+    private val pTitle: String?,
+    private val pChapter: String?,
+    val type: MediaType,
+    @Deprecated("use pTitle instead")
+    private val title: String? = null,
+    @Deprecated("use pChapter instead")
+    private val chapter: String? = null
 ) : Serializable {
-    val title: String
-        get() = pTitle.findValidName()
-    val chapter: String
-        get() = pChapter.findValidName()
+    val titleName: String
+        get() = title?:pTitle.findValidName()
+    val chapterName: String
+        get() = chapter?:pChapter.findValidName()
 }

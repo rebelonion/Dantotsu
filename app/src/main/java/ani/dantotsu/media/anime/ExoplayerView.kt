@@ -111,6 +111,7 @@ import ani.dantotsu.connections.updateProgress
 import ani.dantotsu.databinding.ActivityExoplayerBinding
 import ani.dantotsu.defaultHeaders
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
+import ani.dantotsu.download.video.Helper
 import ani.dantotsu.dp
 import ani.dantotsu.getCurrentBrightnessValue
 import ani.dantotsu.hideSystemBars
@@ -1481,26 +1482,38 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val downloadedMediaItem = if (ext.server.offline) {
             val titleName = ext.server.name.split("/").first()
             val episodeName = ext.server.name.split("/").last()
+            downloadId = PrefManager.getAnimeDownloadPreferences()
+                .getString("$titleName - $episodeName", null) ?:
+                    PrefManager.getAnimeDownloadPreferences()
+                        .getString(ext.server.name, null)
+            val exoItem = if (downloadId != null) {
+                Helper.downloadManager(this)
+                    .downloadIndex.getDownload(downloadId!!)?.request?.toMediaItem()
+            } else null
+            if (exoItem != null) {
+                exoItem
+            } else {
 
-            val directory = getSubDirectory(this, MediaType.ANIME, false, titleName, episodeName)
-            if (directory != null) {
-                val files = directory.listFiles()
-                println(files)
-                val docFile = directory.listFiles().firstOrNull {
-                    it.name?.endsWith(".mp4") == true || it.name?.endsWith(".mkv") == true
-                }
-                if (docFile != null) {
-                    val uri = docFile.uri
-                    MediaItem.Builder().setUri(uri).setMimeType(mimeType).build()
+                val directory =
+                    getSubDirectory(this, MediaType.ANIME, false, titleName, episodeName)
+                if (directory != null) {
+                    val files = directory.listFiles()
+                    println(files)
+                    val docFile = directory.listFiles().firstOrNull {
+                        it.name?.endsWith(".mp4") == true || it.name?.endsWith(".mkv") == true
+                    }
+                    if (docFile != null) {
+                        val uri = docFile.uri
+                        MediaItem.Builder().setUri(uri).setMimeType(mimeType).build()
+                    } else {
+                        snackString("File not found")
+                        null
+                    }
                 } else {
-                    snackString("File not found")
+                    snackString("Directory not found")
                     null
                 }
-            } else {
-                snackString("Directory not found")
-                null
             }
-
         } else null
 
         mediaItem = if (downloadedMediaItem == null) {

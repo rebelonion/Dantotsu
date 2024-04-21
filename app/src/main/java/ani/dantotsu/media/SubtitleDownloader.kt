@@ -55,8 +55,8 @@ class SubtitleDownloader {
                     context,
                     downloadedType.type,
                     false,
-                    downloadedType.title,
-                    downloadedType.chapter
+                    downloadedType.titleName,
+                    downloadedType.chapterName
                 ) ?: throw Exception("Could not create directory")
                 val type = loadSubtitleType(url)
                 directory.findFile("subtitle.${type}")?.delete()
