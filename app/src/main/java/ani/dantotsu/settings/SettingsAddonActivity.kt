@@ -61,7 +61,7 @@ class SettingsAddonActivity : AppCompatActivity() {
                         type = 1,
                         name = getString(R.string.anime_downloader_addon),
                         desc = getString(R.string.not_installed),
-                        icon = R.drawable.anim_play_to_pause,
+                        icon = R.drawable.ic_download_24,
                         isActivity = true,
                         attach = {
                             setStatus(
@@ -85,7 +85,7 @@ class SettingsAddonActivity : AppCompatActivity() {
                             it.settingsIconRight.setOnClickListener { _ ->
                                 if (it.settingsDesc.text == getString(R.string.installed)) {
                                     downloadAddonManager.uninstall()
-                                    return@setOnClickListener //uninstall logic here
+                                    return@setOnClickListener
                                 } else {
                                     job = Job()
                                     val scope = CoroutineScope(Dispatchers.Main + job)
@@ -118,7 +118,7 @@ class SettingsAddonActivity : AppCompatActivity() {
                         type = 1,
                         name = getString(R.string.torrent_addon),
                         desc = getString(R.string.not_installed),
-                        icon = R.drawable.anim_play_to_pause,
+                        icon = R.drawable.ic_round_magnet_24,
                         isActivity = true,
                         attach = {
                             setStatus(
@@ -176,15 +176,21 @@ class SettingsAddonActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.enable_torrent),
-                        desc = getString(R.string.enable_torrent),
+                        desc = getString(R.string.enable_torrent_desc),
                         icon = R.drawable.ic_round_dns_24,
                         isChecked = PrefManager.getVal(PrefName.TorrentEnabled),
-                        switch = { isChecked, _ ->
+                        switch = { isChecked, it ->
+                            if (isChecked && !torrentAddonManager.isAvailable()) {
+                                snackString(getString(R.string.install_torrent_addon))
+                                it.settingsButton.isChecked = false
+                                PrefManager.setVal(PrefName.TorrentEnabled, false)
+                                return@Settings
+                            }
                             PrefManager.setVal(PrefName.TorrentEnabled, isChecked)
                             Injekt.get<TorrentAddonManager>().extension?.let {
                                 if (isChecked) {
                                     lifecycleScope.launchIO {
-                                        if (!ServerService.isRunning() && torrentAddonManager.isAvailable()) {
+                                        if (!ServerService.isRunning()) {
                                             ServerService.start()
                                         }
                                     }
@@ -196,13 +202,12 @@ class SettingsAddonActivity : AppCompatActivity() {
                                     }
                                 }
                             }
-                        }
+                        },
                     )
                 )
             )
             binding.settingsRecyclerView.layoutManager =
                 LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-
 
         }
     }

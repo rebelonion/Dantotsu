@@ -105,7 +105,7 @@ class SettingsNotificationActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.anilist_notification_filters),
-                        desc = getString(R.string.anilist_notification_filters),
+                        desc = getString(R.string.anilist_notification_filters_desc),
                         icon = R.drawable.ic_anilist,
                         onClick = {
                             val types = NotificationType.entries.map { it.name }
@@ -138,10 +138,7 @@ class SettingsNotificationActivity : AppCompatActivity() {
                             R.string.anilist_notifications_checking_time,
                             aItems[PrefManager.getVal(PrefName.AnilistNotificationInterval)]
                         ),
-                        desc = getString(
-                            R.string.anilist_notifications_checking_time,
-                            aItems[PrefManager.getVal(PrefName.AnilistNotificationInterval)]
-                        ),
+                        desc = getString(R.string.anilist_notifications_checking_time_desc),
                         icon = R.drawable.ic_round_notifications_none_24,
                         onClick = {
                             val selected =
@@ -173,10 +170,7 @@ class SettingsNotificationActivity : AppCompatActivity() {
                             R.string.comment_notification_checking_time,
                             cItems[PrefManager.getVal(PrefName.CommentNotificationInterval)]
                         ),
-                        desc = getString(
-                            R.string.comment_notification_checking_time,
-                            cItems[PrefManager.getVal(PrefName.CommentNotificationInterval)]
-                        ),
+                        desc = getString(R.string.comment_notification_checking_time_desc),
                         icon = R.drawable.ic_round_notifications_none_24,
                         onClick = {
                             val selected =
@@ -205,7 +199,7 @@ class SettingsNotificationActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.notification_for_checking_subscriptions),
-                        desc = getString(R.string.notification_for_checking_subscriptions),
+                        desc = getString(R.string.notification_for_checking_subscriptions_desc),
                         icon = R.drawable.ic_round_smart_button_24,
                         isChecked = PrefManager.getVal(PrefName.SubscriptionCheckingNotifications),
                         switch = { isChecked, _ ->
@@ -221,7 +215,7 @@ class SettingsNotificationActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.use_alarm_manager_reliable),
-                        desc = getString(R.string.use_alarm_manager_reliable),
+                        desc = getString(R.string.use_alarm_manager_reliable_desc),
                         icon = R.drawable.ic_anilist,
                         isChecked = PrefManager.getVal(PrefName.UseAlarmManager),
                         switch = { isChecked, view ->

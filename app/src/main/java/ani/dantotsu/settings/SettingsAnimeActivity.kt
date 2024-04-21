@@ -44,7 +44,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.player_settings),
-                        desc = getString(R.string.player_settings),
+                        desc = getString(R.string.player_settings_desc),
                         icon = R.drawable.ic_round_video_settings_24,
                         onClick = {
                             startActivity(Intent(context, PlayerSettingsActivity::class.java))
@@ -54,7 +54,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.purge_anime_downloads),
-                        desc = getString(R.string.purge_anime_downloads),
+                        desc = getString(R.string.purge_anime_downloads_desc),
                         icon = R.drawable.ic_round_delete_24,
                         onClick = {
                             val dialog = AlertDialog.Builder(context, R.style.MyPopup)
@@ -80,7 +80,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.prefer_dub),
-                        desc = getString(R.string.prefer_dub),
+                        desc = getString(R.string.prefer_dub_desc),
                         icon = R.drawable.ic_round_audiotrack_24,
                         isChecked = PrefManager.getVal(PrefName.SettingsPreferDub),
                         switch = { isChecked, _ ->
@@ -90,7 +90,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.show_yt),
-                        desc = getString(R.string.show_yt),
+                        desc = getString(R.string.show_yt_desc),
                         icon = R.drawable.ic_round_play_circle_24,
                         isChecked = PrefManager.getVal(PrefName.ShowYtButton),
                         switch = { isChecked, _ ->
@@ -100,7 +100,7 @@ class SettingsAnimeActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.include_list),
-                        desc = getString(R.string.include_list),
+                        desc = getString(R.string.include_list_anime_desc),
                         icon = R.drawable.view_list_24,
                         isChecked = PrefManager.getVal(PrefName.IncludeAnimeList),
                         switch = { isChecked, _ ->

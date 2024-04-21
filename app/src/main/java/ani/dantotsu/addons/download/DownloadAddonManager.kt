@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import ani.dantotsu.R
 import ani.dantotsu.addons.AddonDownloader
+import ani.dantotsu.addons.AddonInstallReceiver
 import ani.dantotsu.addons.AddonListener
 import ani.dantotsu.addons.AddonLoader
 import ani.dantotsu.addons.AddonManager

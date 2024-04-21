@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ActivitySettingsCommonBinding
+import ani.dantotsu.databinding.DialogUserAgentBinding
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
@@ -33,7 +34,6 @@ import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
 import ani.dantotsu.util.LauncherWrapper
 import ani.dantotsu.util.StoragePermissions
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -136,7 +136,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.ui_settings),
-                        desc = getString(R.string.ui_settings),
+                        desc = getString(R.string.ui_settings_desc),
                         icon = R.drawable.ic_round_auto_awesome_24,
                         onClick = {
                             startActivity(
@@ -151,7 +151,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.download_manager_select),
-                        desc = getString(R.string.download_manager_select),
+                        desc = getString(R.string.download_manager_select_desc),
                         icon = R.drawable.ic_download_24,
                         onClick = {
                             val managers = arrayOf("Default", "1DM", "ADM")
@@ -172,7 +172,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.backup_restore),
-                        desc = getString(R.string.backup_restore),
+                        desc = getString(R.string.backup_restore_desc),
                         icon = R.drawable.backup_restore,
                         onClick = {
                             StoragePermissions.downloadsPermission(context)
@@ -227,7 +227,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                     Settings(
                         type = 1,
                         name = getString(R.string.change_download_location),
-                        desc = getString(R.string.change_download_location),
+                        desc = getString(R.string.change_download_location_desc),
                         icon = R.drawable.ic_round_source_24,
                         onClick = {
                             val dialog = AlertDialog.Builder(context, R.style.MyPopup)
@@ -267,7 +267,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.always_continue_content),
-                        desc = getString(R.string.always_continue_content),
+                        desc = getString(R.string.always_continue_content_desc),
                         icon = R.drawable.ic_round_delete_24,
                         isChecked = PrefManager.getVal(PrefName.ContinueMedia),
                         switch = { isChecked, _ ->
@@ -277,7 +277,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.search_source_list),
-                        desc = getString(R.string.search_source_list),
+                        desc = getString(R.string.search_source_list_desc),
                         icon = R.drawable.ic_round_search_sources_24,
                         isChecked = PrefManager.getVal(PrefName.SearchSources),
                         switch = { isChecked, _ ->
@@ -287,7 +287,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.recentlyListOnly),
-                        desc = getString(R.string.recentlyListOnly),
+                        desc = getString(R.string.recentlyListOnly_desc),
                         icon = R.drawable.ic_round_new_releases_24,
                         isChecked = PrefManager.getVal(PrefName.RecentlyListOnly),
                         switch = { isChecked, _ ->
@@ -297,7 +297,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                     Settings(
                         type = 2,
                         name = getString(R.string.adult_only_content),
-                        desc = getString(R.string.adult_only_content),
+                        desc = getString(R.string.adult_only_content_desc),
                         icon = R.drawable.ic_round_nsfw_24,
                         isChecked = PrefManager.getVal(PrefName.AdultOnly),
                         switch = { isChecked, _ ->
@@ -347,14 +347,15 @@ class SettingsCommonActivity : AppCompatActivity() {
         val password = CharArray(16).apply { fill('0') }
 
         // Inflate the dialog layout
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_user_agent, null)
-        val box = dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)
-        box?.hint = getString(R.string.password)
-        box?.setSingleLine()
+        val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
+        val box = dialogView.userAgentTextBox
+        box.hint = getString(R.string.password)
+        box.setSingleLine()
 
         val dialog =
             AlertDialog.Builder(this, R.style.MyPopup).setTitle(getString(R.string.enter_password))
-                .setView(dialogView).setPositiveButton(R.string.ok, null)
+                .setView(dialogView.root)
+                .setPositiveButton(R.string.ok, null)
                 .setNegativeButton(R.string.cancel) { dialog, _ ->
                     password.fill('0')
                     dialog.dismiss()
@@ -362,8 +363,8 @@ class SettingsCommonActivity : AppCompatActivity() {
                 }.create()
 
         fun handleOkAction() {
-            val editText = dialog.findViewById<TextInputEditText>(R.id.userAgentTextBox)
-            if (editText?.text?.isNotBlank() == true) {
+            val editText = dialogView.userAgentTextBox
+            if (editText.text?.isNotBlank() == true) {
                 editText.text?.toString()?.trim()?.toCharArray(password)
                 dialog.dismiss()
                 callback(password)
@@ -371,7 +372,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                 toast(getString(R.string.password_cannot_be_empty))
             }
         }
-        box?.setOnEditorActionListener { _, actionId, _ ->
+        box.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 handleOkAction()
                 true
@@ -379,9 +380,8 @@ class SettingsCommonActivity : AppCompatActivity() {
                 false
             }
         }
-        val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
-        subtitleTextView?.visibility = View.VISIBLE
-        if (!isExporting) subtitleTextView?.text =
+        dialogView.subtitle.visibility = View.VISIBLE
+        if (!isExporting) dialogView.subtitle.text =
             getString(R.string.enter_password_to_decrypt_file)
 
 
