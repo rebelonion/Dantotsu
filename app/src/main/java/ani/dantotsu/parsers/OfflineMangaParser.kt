@@ -44,7 +44,8 @@ class OfflineMangaParser : MangaParser() {
                 }
             }
             chapters.addAll(loadChaptersCompat(mangaLink, extra, sManga))
-            chapters.distinctBy { it.number }.sortedBy { MediaNameAdapter.findChapterNumber(it.number) }
+            return chapters.distinctBy { it.number }
+                .sortedBy { MediaNameAdapter.findChapterNumber(it.number) }
         }
         return emptyList()
     }
