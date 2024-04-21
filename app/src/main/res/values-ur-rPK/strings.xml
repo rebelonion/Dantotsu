@@ -39,12 +39,12 @@
     <string name="chapters_read_n">Chapters\nRead</string>
     <string name="episodes_watched">Episodes Watched</string>
     <string name="episodes_watched_n">Episodes\nWatched</string>
-    <string name="continue_reading">Continue Reading</string>
-    <string name="continue_watching">Continue Watching</string>
+    <string name="continue_reading">پڑھنا جاری کرے</string>
+    <string name="continue_watching">پڑھنا جاری کرے</string>
     <string name="recommended">Recommended</string>
     <string name="get_recommendations">Watch/Read some Anime or Manga to get Recommendations</string>
     <string name="empty">All caught up, when New?</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">سیٹنگز</string>
     <string name="add">Add to List</string>
     <string name="list_editor">List Editor</string>
     <string name="add_fav">Add to Favourites</string>
@@ -847,4 +847,6 @@
     <string name="update_addon">Update Addon</string>
     <string name="install_addon">Install Addon</string>
     <string name="download_addon_not_found">Download addon not found</string>
+    <string name="image">Image</string>
+    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
 </resources>
