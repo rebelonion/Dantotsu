@@ -87,6 +87,8 @@ class ExtensionInstaller(private val context: Context) {
                 downloadUri.lastPathSegment
             )
             .setDescription(type.asText())
+            .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+            .setAllowedOverRoaming(true)
             .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
         val id = downloadManager.enqueue(request)
