@@ -324,13 +324,13 @@
     <string name="next_season">الموسم القادم</string>
     <string name="previous_season">الموسم السابق</string>
     <string name="include_media_in_list">يشمل القائمة</string>
-    <string name="release_calendar">Calendar</string>
+    <string name="release_calendar">التقويم</string>
     <string name="planned_anime">الانمي المخطط مشاهدته</string>
     <string name="planned_manga">المانجا المخطط قراءتها</string>
     <string name="image_long_clicking">افتح الصورة عند ضغطة مطولة</string>
     <string name="always_continue_content">Always continue previous items</string>
-    <string name="search_source_list">Search next available source</string>
-    <string name="timestamp_proxy_desc">Useful if you are getting Handshake Fails</string>
+    <string name="search_source_list">البحث عن المصدر المتاح التالي</string>
+    <string name="timestamp_proxy_desc">مفيد إذا كنت تواجه فشل المصافحة</string>
     <string name="timestamp_proxy">Use Proxy for Timestamps</string>
     <string name="check_app_updates">تحقق من التحديثات</string>
     <string name="author">مؤلف</string>
