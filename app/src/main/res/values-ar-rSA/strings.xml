@@ -285,7 +285,7 @@
     <string name="dns_info">قم بتغييره إذا حظر مزود خدمة الإنترنت الخاص بك أي مصدر</string>
     <string name="keep_screen_on">إبقاء الشاشة قيد التشغيل</string>
     <string name="layout">التَخطِيط</string>
-    <string name="spaced_pages">Spaced Pages</string>
+    <string name="spaced_pages">صفحات متباعدة</string>
     <string name="direction">الاتجاه</string>
     <string name="general">عام</string>
     <string name="show_system_bars">اظهر الحالة &amp; أدوات التحكم</string>
@@ -323,7 +323,7 @@
     <string name="this_season">هذا الموسم</string>
     <string name="next_season">الموسم القادم</string>
     <string name="previous_season">الموسم السابق</string>
-    <string name="include_media_in_list">Include List</string>
+    <string name="include_media_in_list">يشمل القائمة</string>
     <string name="release_calendar">Calendar</string>
     <string name="planned_anime">Planned Anime</string>
     <string name="planned_manga">Planned Manga</string>
@@ -335,14 +335,14 @@
     <string name="check_app_updates">Check for Updates</string>
     <string name="author">Author</string>
     <string name="forks">Versions</string>
-    <string name="faq">FAQ</string>
-    <string name="accounts">Accounts</string>
-    <string name="addons">Addons</string>
-    <string name="addons_desc">Addons are extensions that provide additional functionality.</string>
+    <string name="faq">سؤال و أجابة</string>
+    <string name="accounts">حسابات</string>
+    <string name="addons">إضافات</string>
+    <string name="addons_desc">الإضافات هي امتدادات توفر وظائف إضافية.</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">Login with Anilist!</string>
     <string name="anilist">Anilist</string>
-    <string name="account_help">How does this work\?</string>
+    <string name="account_help">كيف يعمل هذا؟</string>
     <string name="full_account_help">        Dantotsu is an Anilist Based App, so for syncing with your MAL Account, It needs an Anilist account to be logged in.
         \nOnce logged in with both Anilist and MAL accounts, the app will automatically update your MAL account whenever:
         \n- Add a new Media
@@ -377,11 +377,11 @@
     <string name="installation_failed">Installation failed: %1$s</string>
     <string name="installation_complete">Installation complete</string>
     <string name="extension_has_been_installed">The extension has been successfully installed.</string>
-    <string name="extension_installed">Extension installed</string>
-    <string name="installed">Installed</string>
+    <string name="extension_installed">تم تثبيت الإضافة</string>
+    <string name="installed">تم تثبيت</string>
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
-    <string name="review">Review</string>
+    <string name="review">مراجعة</string>
     <string name="discord_nothing_button">Display only the first button</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile instead</string>
@@ -638,7 +638,7 @@
     <string name="purge_manga_downloads">Delete all Manga Downloads</string>
     <string name="purge_novel_downloads">Delete all Novel Downloads</string>
     <string name="requires_android_12">Requires Android 12+</string>
-    <string name="share_username_in_crash_reports">Share username</string>
+    <string name="share_username_in_crash_reports">مشاركة اسم المستخدم</string>
     <string name="pinned_sources">Pinned Sources</string>
     <string name="backup_restore">Backup and Restore</string>
     <string name="restore_settings">Import Settings</string>
@@ -770,7 +770,7 @@
     <string name="most_favourite">Most Favourite</string>
     <string name="trending_manhwa">Trending Manhwa</string>
     <string name="liked_by">Liked By</string>
-    <string name="adult_only_content">Adult only content</string>
+    <string name="adult_only_content">محتوى للكبار فقط</string>
     <string name="dir_error">Your path could not be set</string>
     <string name="dir_access">Downloads access</string>
     <string name="dir_access_msg">Please choose a directory to save your downloads</string>
@@ -804,7 +804,7 @@
     <string name="forks_desc">More like Dantotsu</string>
     <string name="disclaimer_desc">Something to keep in mind</string>
     <string name="torrent_addon">Torrent Addon</string>
-    <string name="enable_torrent">Enable torrent</string>
+    <string name="enable_torrent">تفعيل Torrent</string>
     <string name="anime_downloader_addon">Anime Downloader Addon</string>
     <string name="loaded_successfully">Loaded Successfully</string>
     <string name="not_installed">Not Installed</string>
