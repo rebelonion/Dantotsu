@@ -152,7 +152,7 @@
     <string name="noSdFound">No se encontró ninguna tarjeta SD.</string>
     <string name="reader_settings">Ajustes del lector</string>
     <string name="default_source">Fuente predeterminada</string>
-    <string name="show_yt">Mostrar enlace de Youtube</string>
+    <string name="show_yt">Youtube Link</string>
     <string name="default_ep_view">Diseño de episodios predeterminado</string>
     <string name="default_chp_view">Diseño de capítulos predeterminado</string>
     <string name="ui">Interfaz de usuario</string>
@@ -356,7 +356,7 @@
         \n- [Cómo sincronizar datos de Anilist con MAL](https://anilist.co/forum/thread/2654)
         \n- [Cómo sincronizar datos de MAL con Anilist](https://anilist.co/forum/thread/3393)\n\n_No es necesario sincronizar ambas cuentas de MAL y Anilist._
     </string>
-    <string name="notification_for_checking_subscriptions">Mostrar notificación para revisar suscripciones</string>
+    <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
     <string name="use_alarm_manager">Usar Alarm Manager para notificaciones confiables</string>
     <string name="use_alarm_manager_reliable">Utiliza el gestor de alarmas para notificaciones confiables</string>
     <string name="use_alarm_manager_confirm">El uso de opción Administrador de Alarma puede ayudar a luchar contra la optimización de la batería, pero puede consumir más batería. También requiere el permiso Administrador de Alarma.</string>
@@ -699,7 +699,7 @@
     <string name="blur">Desenfocar</string>
     <string name="hide_scroll_bar">Ocultar barra de desplazamiento</string>
     <string name="view_on_anilist">Ver en AniList</string>
-    <string name="anilist_notification_filters">Elegir categoría a ignorar</string>
+    <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">Frecuencia de actualización de notificaciones de AniList: %1$s</string>
     <string name="comment_notification_checking_time">Frecuencia de actualización de notificaciones de comentarios: %1$s</string>
     <string name="activities">Actividades</string>
@@ -801,9 +801,44 @@
     <string name="devs_desc">El trabajo no remunerado de Dantotsu </string>
     <string name="forks_desc">Más como Dantotsu</string>
     <string name="disclaimer_desc">A tener en cuenta</string>
+    <string name="enable_torrent_desc">This will run a torrent server in the background</string>
+    <string name="player_settings_desc">All the player related settings</string>
+    <string name="purge_anime_downloads_desc">Delete all downloaded Anime</string>
+    <string name="prefer_dub_desc">Select Dub media by default</string>
+    <string name="show_yt_desc">Show YouTube links for supported media</string>
+    <string name="include_list_anime_desc">Include list items in Anime explore page</string>
+    <string name="ui_settings_desc">All the UI related settings</string>
+    <string name="download_manager_select_desc">Default manager to download Anime</string>
+    <string name="backup_restore_desc">Your preferred settings everywhere</string>
+    <string name="change_download_location_desc">Change the location where all the downloaded stuff goes</string>
+    <string name="always_continue_content_desc">Continue where you left off</string>
+    <string name="search_source_list_desc">Auto-select the next server if the previous server doesn\'t have the media</string>
+    <string name="recentlyListOnly_desc">Show only your list items in the recent tab</string>
+    <string name="adult_only_content_desc">Show only adult content in the explore page</string>
+    <string name="anime_add_repository_desc">Add Anime Extensions from various sources</string>
+    <string name="manga_add_repository_desc">Add Manga Extensions from various sources</string>
+    <string name="user_agent_desc">Change your default user agent</string>
+    <string name="force_legacy_installer_desc">Use the legacy installer to install extensions (For older android phones)</string>
+    <string name="skip_loading_extension_icons_desc">Don\'t load icons of extensions on the extension page</string>
+    <string name="NSFWExtention_desc">Remove 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="reader_settings_desc">All the Reader related settings</string>
+    <string name="purge_manga_downloads_desc">Delete all downloaded Manga</string>
+    <string name="purge_novel_downloads_desc">Delete all downloaded Novels</string>
+    <string name="include_list_desc">Include list items in Manga explore page</string>
+    <string name="anilist_notification_filters_desc">Choose category to Ignore</string>
+    <string name="anilist_notifications_checking_time_desc">Set the frequency you want the app to check for Anilist notifications</string>
+    <string name="comment_notification_checking_time_desc">Set the frequency you want the app to check for Comment notifications</string>
+    <string name="notification_for_checking_subscriptions_desc">Show notification for checking Subscriptions</string>
+    <string name="use_alarm_manager_reliable_desc">Use to bypass the phone\'s battery optimizer</string>
+    <string name="oled_theme_variant_desc">As dark as it gets</string>
+    <string name="use_material_you_desc">Use the same color as your wallpaper</string>
+    <string name="use_unique_theme_for_each_item_desc">Use color from media\'s banner</string>
+    <string name="use_custom_theme_desc">Use your own color for the theme</string>
+    <string name="color_picker_desc">Choose a color</string>
     <string name="torrent_addon">Complemento Torrent</string>
     <string name="enable_torrent">Activar torrent</string>
     <string name="anime_downloader_addon">Complemento descargador de anime</string>
+    <string name="install_torrent_addon">Install Torrent Addon</string>
     <string name="loaded_successfully">Cargado correctamente</string>
     <string name="not_installed">No instalado</string>
     <string name="torrent_extension_not_supported">La extensión Torrent no es compatible con este dispositivo</string>
