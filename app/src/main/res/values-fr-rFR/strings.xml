@@ -95,7 +95,7 @@
     <string name="status_title">Statut</string>
     <string name="total_eps">Épisodes totaux</string>
     <string name="episodes"> Episode(s)</string>
-    <string name="chapters"> Chapter(s)</string>
+    <string name="chapters">Chapitre(s)</string>
     <string name="total_divider"> | %1$s</string>
     <string name="total_chaps">Chapitres totaux</string>
     <string name="ep_duration">Durée moyenne</string>
@@ -362,7 +362,7 @@
     <string name="use_alarm_manager">Utiliser le gestionnaire d\'alarme pour des notifications fiables</string>
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
-    <string name="use">Use</string>
+    <string name="use">Utiliser</string>
     <string name="checking_subscriptions">Notification pour la vérification des abonnements</string>
     <string name="subscriptions_checking_time_s">Fréquence de mise à jour des abonnements : %1$s</string>
     <string name="subscriptions_checking_time">Fréquence de mise à jour des abonnements</string>
@@ -374,7 +374,7 @@
     <string name="crop_borders">Recadrer les bordures</string>
     <string name="note">REMARQUE</string>
     <string name="manage_extension_repos">Manage Extension Repos</string>
-    <string name="installing_extension">Installing extension</string>
+    <string name="installing_extension">Installation des extensions</string>
     <string name="installation_failed">Installation failed: %1$s</string>
     <string name="installation_complete">Installation complete</string>
     <string name="extension_has_been_installed">The extension has been successfully installed.</string>
