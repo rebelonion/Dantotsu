@@ -152,45 +152,45 @@
     <string name="noSdFound">Δε βρέθηκες κάρτα SD.</string>
     <string name="reader_settings">Ρυθμίσεις Αναγνώστη</string>
     <string name="default_source">Προεπιλεγμένη πηγή</string>
-    <string name="show_yt">Youtube Link</string>
+    <string name="show_yt">Σύνδεσμος Youtube</string>
     <string name="default_ep_view">Προεπιλεγμένη διάταξη επεισοδίου</string>
-    <string name="default_chp_view">Default Chapter Layout</string>
-    <string name="ui">User Interface</string>
-    <string name="common">Common</string>
-    <string name="theme">Theme</string>
-    <string name="ui_settings">UI Settings</string>
-    <string name="about">About</string>
-    <string name="desc">"    Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream-download Anime through extensions &amp; Manga.\nDantotsu literally means the \"best of the best\" in japanese. Well, we would like to say this is the best open source app for anime and manga on Android, what would you say?"</string>
-    <string name="devs">Developers/Helpers</string>
-    <string name="disclaimer">Disclaimer</string>
-    <string name="full_disclaimer">         - Dantotsu by itself only provides an anime and manga tracker and does not provide any anime or manga streaming or downloading capabilities.
-        \n\n - Dantotsu or any of its developer/staff don\'t host any of the content found inside Dantotsu. Any and all images and anime/manga information found in the app are taken from various public APIs (AniList, MyAnimeList, Kitsu).
-        \n\n - Furthermore, all of the anime/manga links found in Dantotsu are taken from various 3rd party plugins and have no affiliation with Dantotsu or its staff.
-        \n\n - Dantotsu or it\'s owners aren\'t liable for any misuse of any of the contents found inside or outside of the app and cannot be held accountable for the distribution of any of the contents found inside the app.
-        \n\n - By using Dantotsu, you comply to the fact that the developer of the app is not responsible for any of the contents found in the app. You also agree to the fact that you may not use Dantotsu to download or stream any copyrighted content.
-        \n\n - If the internet infringement issues are involved, please contact the source website. The developer does not assume any legal responsibility.
+    <string name="default_chp_view">Προεπιλεγμένη διάταξη κεφαλαίων</string>
+    <string name="ui">Διεπαφή χρήστη</string>
+    <string name="common">Σύνηθες</string>
+    <string name="theme">Θέμα</string>
+    <string name="ui_settings">Ρύθμισης Διεπαφής χρήστη</string>
+    <string name="about">Σχετικά με</string>
+    <string name="desc">"    Το Dantotsu είναι φτιαγμένο από τις στάχτες του Saikou και βασίζεται στην απλοϊκή αλλά τελευταίας τεχνολογίας κομψότητα. Είναι ένα client μόνο για Anilist, ο οποίος σας επιτρέπει επίσης να κατεβάζετε Anime μέσω ροής μέσω επεκτάσεων &amp; Manga.\nDantotsu κυριολεκτικά σημαίνει \"το καλύτερο από τα καλύτερα\" στα ιαπωνικά. Λοιπόν, θα θέλαμε να πούμε ότι αυτή είναι η καλύτερη εφαρμογή ανοιχτού κώδικα για anime και manga στο Android, τι θα έλεγες;"</string>
+    <string name="devs">Προγραμματιστές/Βοηθοί</string>
+    <string name="disclaimer">Αποποίηση ευθυνών</string>
+    <string name="full_disclaimer">         - Το Dantotsu από μόνο του παρέχει μόνο anime και manga tracker και δεν παρέχει δυνατότητες ροής ή λήψης anime ή manga.
+         \n\n - Η Dantotsu ή οποιοσδήποτε από τους προγραμματιστές/το προσωπικό της δεν φιλοξενεί κανένα από το περιεχόμενο που βρίσκεται στο Dantotsu. Όλες οι εικόνες και οι πληροφορίες anime/manga που βρίσκονται στην εφαρμογή λαμβάνονται από διάφορα δημόσια API (AniList, MyAnimeList, Kitsu).
+         \n\n - Επιπλέον, όλοι οι σύνδεσμοι anime/manga που βρίσκονται στο Dantotsu προέρχονται από διάφορες προσθήκες τρίτου μέρους και δεν έχουν καμία σχέση με την Dantotsu ή το προσωπικό της.
+         \n\n - Η Dantotsu ή οι κάτοχοί της δεν φέρουν ευθύνη για οποιαδήποτε κακή χρήση οποιουδήποτε από τα περιεχόμενα που βρίσκονται εντός ή εκτός της εφαρμογής και δεν μπορούν να θεωρηθούν υπεύθυνοι για τη διανομή οποιουδήποτε από τα περιεχόμενα που βρίσκονται μέσα στην εφαρμογή.
+         \n\n - Χρησιμοποιώντας το Dantotsu, συμμορφώνεστε με το γεγονός ότι ο προγραμματιστής της εφαρμογής δεν είναι υπεύθυνος για οποιοδήποτε από τα περιεχόμενα που βρίσκονται στην εφαρμογή. Συμφωνείτε επίσης με το γεγονός ότι δεν μπορείτε να χρησιμοποιήσετε το Dantotsu για λήψη ή ροή περιεχομένου που προστατεύεται από πνευματικά δικαιώματα.
+         \n\n - Εάν εμπλέκονται ζητήματα παραβίασης του διαδικτύου, επικοινωνήστε με τον ιστότοπο της πηγής. Ο προγραμματιστής δεν αναλαμβάνει καμία νομική ευθύνη.
     </string>
-    <string name="version_current">Version %1$s</string>
+    <string name="version_current">Έκδοση %1$s</string>
     <string-array name="tips">
-        <item>You can Long Click an episode/chapter to Mark it as Read.</item>
-        <item>Long Clicking Shows can directly open List Editor.</item>
-        <item>There are few more easter eggs hidden in the App.</item>
-        <item>Challenge: Go to the very bottom of the Popular Anime &amp; Manga</item>
-        <item>Try Long Clicking the Show\'s Title.</item>
-        <item>Damn, why are you wasting your Time?</item>
-        <item>You can Long Click to copy this Message.</item>
-        <item>OMG LOOK! YOU FOUND AN EASTER EGG!?</item>
-        <item>You know who else likes this Animation?</item>
-        <item>MAL support? bruh.</item>
-        <item>Novels? more like NO vels.</item>
-        <item>Long Click the logo to check for App Update</item>
+        <item>Μπορείτε να κάνετε παρατεταμένο κλικ σε ένα επεισόδιο/κεφάλαιο για να το επισημάνετε ως αναγνωσμένο.</item>
+        <item>Παρατεταμένα κλικ σε Shows ανοίγουν απευθείας τον επεξεργαστή λίστας.</item>
+        <item>Υπάρχουν λίγα περισσότερα πασχαλινά αυγά κρυμμένα στην εφαρμογή.</item>
+        <item>Πρόκληση: Μεταβείτε στο τέρμα κάτω μέρος του Δημοφιλούς Anime &amp; Manga</item>
+        <item>Δοκιμάστε να κάνετε παρατεταμένο κλικ στον τίτλο της εκπομπής.</item>
+        <item>Γαμώτο, γιατί σπαταλάς τον χρόνο σου;</item>
+        <item>Μπορείτε να κάνετε παρατεταμένο κλικ για να αντιγράψετε αυτό το μήνυμα.</item>
+        <item>OMG ΚΟΙΤΑ! ΒΡΗΚΕΣ ΕΝΑ ΠΑΣΧΑΛΙΝΟ ΑΥΓΟ!;</item>
+        <item>Ξέρετε σε ποιον άλλο αρέσει αυτό το Animation;</item>
+        <item>Υποστήριξη MAL; bruh.</item>
+        <item>Novels; περισσότερο σαν NO vels.</item>
+        <item>Κάντε παρατεταμένο κλικ στο λογότυπο για να ελέγξετε για Ενημέρωση εφαρμογής</item>
     </string-array>
     <string-array name="themes">
-        <item>Default</item>
-        <item>Theme 1</item>
-        <item>Theme 2</item>
-        <item>Theme 3</item>
-        <item> Theme 4</item>
+        <item>Προκαθορισμένο</item>
+        <item>Θέμα 1</item>
+        <item>Θέμα 2</item>
+        <item>Θέμα 3</item>
+        <item> Θέμα 4</item>
     </string-array>
     <string name="video">Video</string>
     <string name="video_info">Show Video Info</string>
@@ -847,4 +847,6 @@
     <string name="update_addon">Update Addon</string>
     <string name="install_addon">Install Addon</string>
     <string name="download_addon_not_found">Download addon not found</string>
+    <string name="image">Image</string>
+    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
 </resources>
