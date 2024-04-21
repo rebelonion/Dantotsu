@@ -844,4 +844,6 @@
     <string name="update_addon">অ‍্যাড-অন আপডেট কৰক</string>
     <string name="install_addon">অ‍্যাড-অন ইনষ্টল কৰক</string>
     <string name="download_addon_not_found">ডাউনল\'ড অ‍্যাড-অন পোৱা নাই</string>
+    <string name="image">Image</string>
+    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
 </resources>
