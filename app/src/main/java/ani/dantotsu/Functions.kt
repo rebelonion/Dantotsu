@@ -636,6 +636,23 @@ fun ImageView.loadImage(file: FileUrl?, size: Int = 0) {
     }
 }
 
+fun ImageView.loadImage(file: FileUrl?, width: Int = 0, height: Int = 0) {
+    file?.url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { file?.url ?: "" }
+    if (file?.url?.isNotEmpty() == true) {
+        tryWith {
+            if (file.url.startsWith("content://")) {
+                Glide.with(this.context).load(Uri.parse(file.url)).transition(withCrossFade())
+                    .override(width, height).into(this)
+            } else {
+                val glideUrl = GlideUrl(file.url) { file.headers }
+                Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(width, height)
+                    .into(this)
+            }
+        }
+    }
+}
+
+
 fun ImageView.loadLocalImage(file: File?, size: Int = 0) {
     if (file?.exists() == true) {
         tryWith {

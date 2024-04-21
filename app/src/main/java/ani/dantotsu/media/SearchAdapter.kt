@@ -305,14 +305,12 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
     private fun fadeInAnimation(): Animation {
         return AlphaAnimation(0f, 1f).apply {
             duration = 150
-            fillAfter = true
         }
     }
 
     private fun fadeOutAnimation(): Animation {
         return AlphaAnimation(1f, 0f).apply {
             duration = 150
-            fillAfter = true
         }
     }
 

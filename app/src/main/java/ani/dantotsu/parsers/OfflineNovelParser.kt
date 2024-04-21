@@ -73,7 +73,7 @@ class OfflineNovelParser : NovelParser() {
             }
             val cover = directory?.findFile("cover.jpg")?.uri.toString()
             names.forEach {
-                returnList.add(ShowResponse(it, it, cover))
+                returnList.add(ShowResponse(it, query, cover))
             }
         }
         return returnList

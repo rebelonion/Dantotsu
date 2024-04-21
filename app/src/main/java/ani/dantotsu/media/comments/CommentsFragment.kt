@@ -121,7 +121,6 @@ class CommentsFragment : Fragment() {
                 }
             }
         } else {
-            toast("Not logged in")
             activity.binding.commentMessageContainer.visibility = View.GONE
         }
 

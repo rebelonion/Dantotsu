@@ -55,12 +55,11 @@ class OfflineAnimeParser : AnimeParser() {
                     episodes.add(episode)
                 }
             }
-            return if (episodes.isNotEmpty()) {
-                episodes.sortBy { MediaNameAdapter.findEpisodeNumber(it.number) }
-                episodes
-            } else {
-                loadEpisodesCompat(animeLink, extra, sAnime)
-            }
+            //episodes.sortBy { MediaNameAdapter.findEpisodeNumber(it.number) }
+            episodes.addAll(loadEpisodesCompat(animeLink, extra, sAnime))
+            //filter those with the same name
+            return episodes.distinctBy { it.number }
+                .sortedBy { MediaNameAdapter.findEpisodeNumber(it.number) }
         }
         return emptyList()
     }

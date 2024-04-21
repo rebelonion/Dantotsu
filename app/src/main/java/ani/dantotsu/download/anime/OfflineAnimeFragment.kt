@@ -36,6 +36,7 @@ import ani.dantotsu.download.DownloadCompat.Companion.loadOfflineAnimeModelCompa
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.compareName
+import ani.dantotsu.download.findValidName
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
@@ -289,7 +290,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
         }
         downloadsJob = Job()
         CoroutineScope(Dispatchers.IO + downloadsJob).launch {
-            val animeTitles = downloadManager.animeDownloadedTypes.map { it.titleName }.distinct()
+            val animeTitles = downloadManager.animeDownloadedTypes.map { it.titleName.findValidName() }.distinct()
             val newAnimeDownloads = mutableListOf<OfflineAnimeModel>()
             for (title in animeTitles) {
                 val tDownloads = downloadManager.animeDownloadedTypes.filter { it.titleName == title }
@@ -365,6 +366,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             val bannerUri: Uri? = if (banner?.exists() == true) {
                 banner.uri
             } else null
+            if (coverUri == null && bannerUri == null) throw Exception("No cover or banner found, probably compat")
             val title = mediaModel.mainName()
             val score = ((if (mediaModel.userScore == 0) (mediaModel.meanScore
                 ?: 0) else mediaModel.userScore) / 10.0).toString()

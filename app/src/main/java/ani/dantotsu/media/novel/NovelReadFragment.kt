@@ -117,9 +117,10 @@ class NovelReadFragment : Fragment(),
                         context ?: currContext()!!,
                         MediaType.NOVEL,
                         false,
+                        media.mainName(),
                         novel.name
                     )
-                val file = directory?.findFile(novel.name)
+                val file = directory?.findFile("0.epub")
                 if (file?.exists() == false) return false
                 val fileUri = file?.uri ?: return false
                 val intent = Intent(context, NovelReaderActivity::class.java).apply {
