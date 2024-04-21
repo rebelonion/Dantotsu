@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.R
+import ani.dantotsu.addons.download.DownloadAddonManager
 import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.copyToClipboard
@@ -48,6 +49,7 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.toast
 import ani.dantotsu.tryWith
 import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
@@ -478,6 +480,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         media!!.userPreferredName
                     )
                 } else {
+                    val downloadAddonManager: DownloadAddonManager = Injekt.get()
+                    if (!downloadAddonManager.isAvailable()){
+                        toast("Download Extension not available")
+                        return@setSafeOnClickListener
+                    }
                     val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
                     val selectedVideo =
                         if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
@@ -488,7 +495,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         if (url.startsWith("magnet:") || url.endsWith(".torrent")) {
                             val torrentExtension = Injekt.get<TorrentAddonManager>()
                             if (!torrentExtension.isAvailable()) {
-                                snackString("Torrent Extension not available")
+                                toast("Torrent Extension not available")
                                 return@setSafeOnClickListener
                             }
                             runBlocking {

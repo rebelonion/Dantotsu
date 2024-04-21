@@ -10,7 +10,7 @@ import ani.dantotsu.addons.AddonListener
 import ani.dantotsu.addons.AddonLoader
 import ani.dantotsu.addons.AddonManager
 import ani.dantotsu.addons.LoadResult
-import ani.dantotsu.addons.download.AddonInstallReceiver
+import ani.dantotsu.addons.AddonInstallReceiver
 import ani.dantotsu.media.AddonType
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.InstallStep

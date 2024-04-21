@@ -66,7 +66,7 @@
             android:layout_marginHorizontal="24dp"
             android:nestedScrollingEnabled="false"
             android:requiresFadingEdge="vertical"
-            tools:itemCount="1"
+            tools:itemCount="5"
             tools:listitem="@layout/item_settings" />
 
     </LinearLayout>
