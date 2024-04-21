@@ -28,6 +28,7 @@ Dantotsu (断トツ; Dan-totsu) "the best of the best". Try it out for yourself 
 - [ ] Full AniList Client (WIP)
 - [x] Themes
 - [x] Extensions
+- [x] Addons
 - [x] Downloads
 - [x] Offline Mode
 - [x] Incognito Mode
