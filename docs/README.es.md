@@ -56,17 +56,10 @@ Si quieres ayudar a probar la app puedes hacerlo con uno (1) de los siguientes m
 > [!warning]
 > ALFA ES SOLO PARA PRUEBAS, PODRIAS ENCONTRAR BUGS. SI LO HACES, ABRE UN ISSUE EN NUESTRO REPOSITORIO DE GITHUB O EN EL CANAL DE DISCORD.
 
-1. descarga el archivo `Dantotsu-Split` desde [Github Actions](https://github.com/rebelonion/Dantotsu/actions), descomprimelo e instala la APK correspondiente a tu arquitectura
-2. Entral al grupo de [Telegram](https://t.me/+gzBCQExtLQo1YTNh) e instala la APK correspondiente a tu arquitectura
-3. Entral al grupo de [Discord](https://discord.gg/4HPZ5nAWwM) elige el rol de `Pre Tester`, ve al canal `Pretest APK` e instala la APK correspondiente a tu arquitectura
+1. descarga el archivo `Dantotsu-Split` desde [Github Actions](https://github.com/rebelonion/Dantotsu/actions), descomprimelo e instala la APK
+2. Entral al grupo de [Telegram](https://t.me/+gzBCQExtLQo1YTNh) e instala la APK
+3. Entral al grupo de [Discord](https://discord.gg/4HPZ5nAWwM) elige el rol de `Pre Tester`, ve al canal `Pretest APK` e instala la APK
 5. Añade la siguiente URL como origen de aplicación en Obtainium: https://github.com/kaorlol/dantotsu-updater
-
-> **Si no sabes que APK instalar**
-> * Universal: Una solucion todo en uno pero mas pesada
-> * ARM64-v8a: Elige este si tu smartphone o tablet es nueva (de 2016 en adelante). La mayoria de Androids modernos usan esta arquitectura.
-> * ARMeabi-v7a: Ideal para dispositivos antiguos o de gama baja. Compatible con la mayoria de dispositivos anteriores a 2016.
-> * x86: Para disposotivos Android con procesadores Intel, comun en algunas tablets.
-> * x86_64: Selecciona este para dispositivos nuevos con procesadores Intel de 64-bit, comun en algunas tablets modernas.
 
 
 ## 🤝 ¿QUIERES CONTRIBUIR? 
