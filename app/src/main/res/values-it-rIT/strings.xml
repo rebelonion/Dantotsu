@@ -152,17 +152,17 @@
     <string name="noSdFound">Non è stata trovata alcuna scheda SD.</string>
     <string name="reader_settings">Impostazioni del Lettore</string>
     <string name="default_source">Fonte Predefinita</string>
-    <string name="show_yt">Youtube Link</string>
+    <string name="show_yt">Link di YouTube</string>
     <string name="default_ep_view">Layout Predefinito dell\'Episodio</string>
-    <string name="default_chp_view">Default Chapter Layout</string>
-    <string name="ui">User Interface</string>
-    <string name="common">Common</string>
-    <string name="theme">Theme</string>
-    <string name="ui_settings">UI Settings</string>
-    <string name="about">About</string>
-    <string name="desc">"    Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream-download Anime through extensions &amp; Manga.\nDantotsu literally means the \"best of the best\" in japanese. Well, we would like to say this is the best open source app for anime and manga on Android, what would you say?"</string>
-    <string name="devs">Developers/Helpers</string>
-    <string name="disclaimer">Disclaimer</string>
+    <string name="default_chp_view">Impostazioni Predefinite dei Capitoli</string>
+    <string name="ui">Interfaccia Utente</string>
+    <string name="common">Comune</string>
+    <string name="theme">Tema</string>
+    <string name="ui_settings">Impostazioni UI</string>
+    <string name="about">Informazioni</string>
+    <string name="desc">"    Dantotsu nasce dalle ceneri di Saikou e si basa su un'eleganza semplicistica ma all'avanguardia. È un client solo per Anilist, che consente anche di scaricare Anime in streaming tramite estensioni &amp; Manga.\nDantotsu significa letteralmente \"il meglio del meglio\" in giapponese. Noi vorremmo dire che questa è la migliore applicazione open source per anime e manga su Android, voi che ne dite?"</string>
+    <string name="devs">Sviluppatori/Aiutanti</string>
+    <string name="disclaimer">Dichiarazione di Responsabilità</string>
     <string name="full_disclaimer">         - Dantotsu by itself only provides an anime and manga tracker and does not provide any anime or manga streaming or downloading capabilities.
         \n\n - Dantotsu or any of its developer/staff don\'t host any of the content found inside Dantotsu. Any and all images and anime/manga information found in the app are taken from various public APIs (AniList, MyAnimeList, Kitsu).
         \n\n - Furthermore, all of the anime/manga links found in Dantotsu are taken from various 3rd party plugins and have no affiliation with Dantotsu or its staff.
@@ -170,17 +170,17 @@
         \n\n - By using Dantotsu, you comply to the fact that the developer of the app is not responsible for any of the contents found in the app. You also agree to the fact that you may not use Dantotsu to download or stream any copyrighted content.
         \n\n - If the internet infringement issues are involved, please contact the source website. The developer does not assume any legal responsibility.
     </string>
-    <string name="version_current">Version %1$s</string>
+    <string name="version_current">Versione %1$s</string>
     <string-array name="tips">
-        <item>You can Long Click an episode/chapter to Mark it as Read.</item>
-        <item>Long Clicking Shows can directly open List Editor.</item>
-        <item>There are few more easter eggs hidden in the App.</item>
-        <item>Challenge: Go to the very bottom of the Popular Anime &amp; Manga</item>
-        <item>Try Long Clicking the Show\'s Title.</item>
-        <item>Damn, why are you wasting your Time?</item>
-        <item>You can Long Click to copy this Message.</item>
-        <item>OMG LOOK! YOU FOUND AN EASTER EGG!?</item>
-        <item>You know who else likes this Animation?</item>
+        <item>È possibile fare un Clic Lungo su un episodio/capitolo per Contrassegnarlo come Letto.</item>
+        <item>Facendo un Clic Lungo sulle Schermate è possibile aprire direttamente l\'Editor di Elenchi.</item>
+        <item>Ci sono altri easter egg nascosti nell\'App.</item>
+        <item>Sfida: Vai in fondo alla classifica degli Anime e dei &amp; Manga più popolari</item>
+        <item>Provare a fare un Click Lungo sul Titolo della Mostra.</item>
+        <item>Dannazione, perché stai sprecando il tuo Tempo?</item>
+        <item>È possibile fare un Clic Lungo per copiare questo Messaggio.</item>
+        <item>ODDIO GUARDA! HAI TROVATO UN EASTER EGG!?</item>
+        <item>Sai a chi altro piace questa Animazione?</item>
         <item>MAL support? bruh.</item>
         <item>Novels? more like NO vels.</item>
         <item>Long Click the logo to check for App Update</item>
