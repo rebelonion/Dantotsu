@@ -378,7 +378,7 @@
     <string name="installation_complete">تم التثبيت</string>
     <string name="extension_has_been_installed">The extension has been successfully installed.</string>
     <string name="extension_installed">تم تثبيت ال \"Extension\"</string>
-    <string name="installed">تم تثبيت</string>
+    <string name="installed">تم التثبيت</string>
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">مراجعة</string>
@@ -401,7 +401,7 @@
     <string name="back_to_exit">Press BACK again to exit</string>
     <string name="no_internet_connection">لا يوجد اتصال بالإنترنت</string>
     <string name="anilist_not_found">Seems like that wasn\'t found on Anilist.</string>
-    <string name="disabled_auto_skip">إقاف تخطي تلقائي OP &amp; ED</string>
+    <string name="disabled_auto_skip">إيقاف تخطي تلقائي OP &amp; ED</string>
     <string name="auto_skip">تخطي تلقائي OP &amp; ED</string>
     <string name="show_skip_time_stamp_button">Show Skip Time Stamp Button</string>
     <string name="always_load_time_stamps">Always Load Time Stamps</string>
@@ -762,7 +762,7 @@
     <string name="placeholder">Placeholder</string>
     <string name="anime_add_repository">Add Anime Repo</string>
     <string name="manga_add_repository">Add Manga Repo</string>
-    <string name="edit_repositories">Edit repositories</string>
+    <string name="edit_repositories">تعديل \"repositories\"</string>
     <string name="rem_repository">Remove repository?</string>
     <string name="trending_movies">Trending Movies</string>
     <string name="include_list">تشمل القائمة</string>
