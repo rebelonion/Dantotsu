@@ -848,4 +848,6 @@
     <string name="update_addon">Addon aktualisieren</string>
     <string name="install_addon">Addon installieren</string>
     <string name="download_addon_not_found">Addon nicht gefunden</string>
+    <string name="image">Image</string>
+    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
 </resources>
