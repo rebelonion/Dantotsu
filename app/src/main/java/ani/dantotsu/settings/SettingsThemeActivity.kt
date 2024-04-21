@@ -27,7 +27,7 @@ import eltos.simpledialogfragment.color.SimpleColorDialog
 
 class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListener {
     private lateinit var binding: ActivitySettingsThemeBinding
-
+    private var reload = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -41,16 +41,22 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
                 bottomMargin = navBarHeight
             }
             onBackPressedDispatcher.addCallback(context) {
-                val mainIntent = Intent.makeRestartActivityTask(
-                    packageManager.getLaunchIntentForPackage(packageName)!!.component
-                )
-                val component = ComponentName(packageName, SettingsActivity::class.qualifiedName!!)
-                try {
-                    startActivity(Intent().setComponent(component))
-                } catch (anything: Exception) {
-                    startActivity(mainIntent)
+                if (reload) {
+                    val packageName = context.packageName
+                    val mainIntent = Intent.makeRestartActivityTask(
+                        packageManager.getLaunchIntentForPackage(packageName)!!.component
+                    )
+                    val component = ComponentName(packageName, SettingsActivity::class.qualifiedName!!)
+                    try {
+                        startActivity(Intent().setComponent(component))
+                    } catch (e: Exception) {
+                        startActivity(mainIntent)
+                    }
+                    finishAndRemoveTask()
+                    reload = false
+                } else {
+                    finish()
                 }
-                finishAndRemoveTask()
             }
             themeSettingsBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
@@ -205,6 +211,7 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
     fun reload() {
         PrefManager.setCustomVal("reload", true)
         restartApp()
+        reload = true
     }
 
 }
