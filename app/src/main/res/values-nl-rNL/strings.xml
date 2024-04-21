@@ -152,7 +152,7 @@
     <string name="noSdFound">No SD card was Found.</string>
     <string name="reader_settings">Reader Settings</string>
     <string name="default_source">Default Source</string>
-    <string name="show_yt">Show Youtube Link</string>
+    <string name="show_yt">Youtube Link</string>
     <string name="default_ep_view">Default Episode Layout</string>
     <string name="default_chp_view">Default Chapter Layout</string>
     <string name="ui">User Interface</string>
@@ -358,7 +358,7 @@
 
         \n\n_It is not required to sync both MAL and Anilist accounts._
     </string>
-    <string name="notification_for_checking_subscriptions">Show notification for Checking Subscriptions</string>
+    <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
     <string name="use_alarm_manager">Use Alarm Manager</string>
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
@@ -701,7 +701,7 @@
     <string name="blur">Blur</string>
     <string name="hide_scroll_bar">Hide Scroll Bar</string>
     <string name="view_on_anilist">View on AniList</string>
-    <string name="anilist_notification_filters">Choose category to ignore</string>
+    <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
     <string name="activities">Activities</string>
@@ -803,9 +803,44 @@
     <string name="devs_desc">Dantotsu\'s very own unpaid labours </string>
     <string name="forks_desc">More like Dantotsu</string>
     <string name="disclaimer_desc">Something to keep in mind</string>
+    <string name="enable_torrent_desc">This will run a torrent server in the background</string>
+    <string name="player_settings_desc">All the player related settings</string>
+    <string name="purge_anime_downloads_desc">Delete all downloaded Anime</string>
+    <string name="prefer_dub_desc">Select Dub media by default</string>
+    <string name="show_yt_desc">Show YouTube links for supported media</string>
+    <string name="include_list_anime_desc">Include list items in Anime explore page</string>
+    <string name="ui_settings_desc">All the UI related settings</string>
+    <string name="download_manager_select_desc">Default manager to download Anime</string>
+    <string name="backup_restore_desc">Your preferred settings everywhere</string>
+    <string name="change_download_location_desc">Change the location where all the downloaded stuff goes</string>
+    <string name="always_continue_content_desc">Continue where you left off</string>
+    <string name="search_source_list_desc">Auto-select the next server if the previous server doesn\'t have the media</string>
+    <string name="recentlyListOnly_desc">Show only your list items in the recent tab</string>
+    <string name="adult_only_content_desc">Show only adult content in the explore page</string>
+    <string name="anime_add_repository_desc">Add Anime Extensions from various sources</string>
+    <string name="manga_add_repository_desc">Add Manga Extensions from various sources</string>
+    <string name="user_agent_desc">Change your default user agent</string>
+    <string name="force_legacy_installer_desc">Use the legacy installer to install extensions (For older android phones)</string>
+    <string name="skip_loading_extension_icons_desc">Don\'t load icons of extensions on the extension page</string>
+    <string name="NSFWExtention_desc">Remove 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="reader_settings_desc">All the Reader related settings</string>
+    <string name="purge_manga_downloads_desc">Delete all downloaded Manga</string>
+    <string name="purge_novel_downloads_desc">Delete all downloaded Novels</string>
+    <string name="include_list_desc">Include list items in Manga explore page</string>
+    <string name="anilist_notification_filters_desc">Choose category to Ignore</string>
+    <string name="anilist_notifications_checking_time_desc">Set the frequency you want the app to check for Anilist notifications</string>
+    <string name="comment_notification_checking_time_desc">Set the frequency you want the app to check for Comment notifications</string>
+    <string name="notification_for_checking_subscriptions_desc">Show notification for checking Subscriptions</string>
+    <string name="use_alarm_manager_reliable_desc">Use to bypass the phone\'s battery optimizer</string>
+    <string name="oled_theme_variant_desc">As dark as it gets</string>
+    <string name="use_material_you_desc">Use the same color as your wallpaper</string>
+    <string name="use_unique_theme_for_each_item_desc">Use color from media\'s banner</string>
+    <string name="use_custom_theme_desc">Use your own color for the theme</string>
+    <string name="color_picker_desc">Choose a color</string>
     <string name="torrent_addon">Torrent Addon</string>
     <string name="enable_torrent">Enable torrent</string>
     <string name="anime_downloader_addon">Anime Downloader Addon</string>
+    <string name="install_torrent_addon">Install Torrent Addon</string>
     <string name="loaded_successfully">Loaded Successfully</string>
     <string name="not_installed">Not Installed</string>
     <string name="torrent_extension_not_supported">Torrent extension not supported on this device</string>
