@@ -362,7 +362,7 @@
     <string name="use_alarm_manager">Use Alarm Manager</string>
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
-    <string name="use">Use</string>
+    <string name="use">أستخدم</string>
     <string name="checking_subscriptions">Notification for Checking Subscriptions</string>
     <string name="subscriptions_checking_time_s">Subscriptions Update Frequency : %1$s</string>
     <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
@@ -387,8 +387,8 @@
     <string name="discord_anilist_button">Display your AniList profile instead</string>
     <string name="discord_rich_presence">Discord Rich Presence</string>
     <string name="stream_on_dantotsu">Stream on Dantotsu</string>
-    <string name="view_my_anilist">View My AniList</string>
-    <string name="jobless_message">DAMN! YOU TRULY ARE JOBLESS\nYOU REACHED THE END</string>
+    <string name="view_my_anilist">عرض Anilist الخاص</string>
+    <string name="jobless_message">سحقًا! أنت حقا عاطل\nلقد وصلت إلى النهاية</string>
     <string name="file_manager_not_found">Couldn\'t find a File Manager to open SD card</string>
     <string name="error_loading_data">Error loading data %1$s</string>
     <string name="long_click_to_check_update">Long click to check for app updates</string>
@@ -588,7 +588,7 @@
     <string name="episode_singular">الحلقة</string>
     <string name="chapter_singular">الفصل</string>
     <string name="chapter_plural">الفصول</string>
-    <string name="filter_status">"Status : %1$s"</string>
+    <string name="filter_status">"حالة : %1$s"</string>
     <string name="filter_source">"Source : %1$s"</string>
     <string name="filter_format">"Format : %1$s"</string>
     <string name="filter_country">"Country : %1$s"</string>
@@ -767,7 +767,7 @@
     <string name="trending_movies">Trending Movies</string>
     <string name="include_list">تشمل القائمة</string>
     <string name="top_rated">أعلي تقيم</string>
-    <string name="most_favourite">الأكثر تفضيلاً</string>
+    <string name="most_favourite">الأكثر تفضيلًا</string>
     <string name="trending_manhwa">Trending Manhwa</string>
     <string name="liked_by">Liked By</string>
     <string name="adult_only_content">محتوى للكبار فقط</string>
