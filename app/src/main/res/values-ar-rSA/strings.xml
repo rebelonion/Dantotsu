@@ -397,12 +397,12 @@
     <string name="login_anilist_account">Please Login into AniList account!</string>
     <string name="congrats_vro">Congrats Vro</string>
     <string name="please_reload">Please Reload.</string>
-    <string name="copied_text">Copied \"%1$s\"</string>
+    <string name="copied_text">تم نسخ \"%1$s\"</string>
     <string name="back_to_exit">Press BACK again to exit</string>
     <string name="no_internet_connection">لا يوجد اتصال بالإنترنت</string>
     <string name="anilist_not_found">Seems like that wasn\'t found on Anilist.</string>
-    <string name="disabled_auto_skip">Disabled Auto Skipping OP &amp; ED</string>
-    <string name="auto_skip">Auto Skipping OP &amp; ED</string>
+    <string name="disabled_auto_skip">إقاف تخطي تلقائي OP &amp; ED</string>
+    <string name="auto_skip">تخطي تلقائي OP &amp; ED</string>
     <string name="show_skip_time_stamp_button">Show Skip Time Stamp Button</string>
     <string name="always_load_time_stamps">Always Load Time Stamps</string>
     <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>
@@ -422,7 +422,7 @@
     <string name="enable_banner_animations">Try enabling \"Banner Animations\" in settings</string>
     <string name="please_login_anilist">Please Login with Anilist!</string>
     <string name="auto_update_reset">Auto Update progress has now been reset-ed</string>
-    <string name="cant_wait">Can\'t wait, huh? fine X(</string>
+    <string name="cant_wait">لا يمكنك الأنظار, ها؟ حسنا X(</string>
     <string name="downloading">جاري التنزيل…</string>
     <string name="next_chapter_not_found">لم يوجد فصل التالي</string>
     <string name="first_chapter">هذا هو الفصل الأول!</string>
