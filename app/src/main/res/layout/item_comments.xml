@@ -135,7 +135,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginEnd="6dp"
             android:layout_weight="0"
             android:scaleX="0.9"
             android:scaleY="0.9"
@@ -148,11 +147,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top"
-            android:layout_marginEnd="6dp"
             android:layout_weight="0"
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:src="@drawable/ic_shield"
+            android:visibility="visible"
+            tools:ignore="ContentDescription,RtlSymmetry" />
+
+        <ImageView
+            android:id="@+id/devBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_weight="0"
+            android:scaleX="0.75"
+            android:scaleY="0.75"
+            android:src="@drawable/ic_dev"
             android:visibility="visible"
             tools:ignore="ContentDescription,RtlSymmetry" />
     </LinearLayout>

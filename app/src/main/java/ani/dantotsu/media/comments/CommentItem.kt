@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Color
 import android.view.View
+import android.widget.Toast
 import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -143,8 +144,24 @@ class CommentItem(
             commentsFragment.replyTo(this, comment.username)
             commentsFragment.replyCallback(this)
         }
-        viewBinding.modBadge.visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
-        viewBinding.adminBadge.visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
+        viewBinding.devBadge.apply {
+            visibility = if (comment.isDev == true) View.VISIBLE else View.GONE
+            setOnClickListener {
+                Toast.makeText(context, "App Developer", Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewBinding.modBadge.apply {
+            visibility = if (comment.isMod == true) View.VISIBLE else View.GONE
+            setOnClickListener {
+                Toast.makeText(context, "Comment Moderator", Toast.LENGTH_SHORT).show()
+            }
+        }
+        viewBinding.adminBadge.apply {
+            visibility = if (comment.isAdmin == true) View.VISIBLE else View.GONE
+            setOnClickListener {
+                Toast.makeText(context, "Owner", Toast.LENGTH_SHORT).show()
+            }
+        }
         viewBinding.commentInfo.setOnClickListener {
             val popup = PopupMenu(commentsFragment.requireContext(), viewBinding.commentInfo)
             popup.menuInflater.inflate(R.menu.profile_details_menu, popup.menu)
