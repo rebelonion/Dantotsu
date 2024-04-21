@@ -847,4 +847,6 @@
     <string name="update_addon">تحديث Addon</string>
     <string name="install_addon">تثبيت Addon</string>
     <string name="download_addon_not_found">تحميل Addon لا يوجد</string>
+    <string name="image">Image</string>
+    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
 </resources>
