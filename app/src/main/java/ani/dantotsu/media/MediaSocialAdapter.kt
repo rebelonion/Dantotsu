@@ -1,28 +1,32 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemFollowerGridBinding
 import ani.dantotsu.getAppString
 import ani.dantotsu.loadImage
+import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.User
 import ani.dantotsu.setAnimation
 
-class MediaSocialAdapter(private val user: ArrayList<User>, private val type: String) :
-    RecyclerView.Adapter<MediaSocialAdapter.DeveloperViewHolder>() {
+class MediaSocialAdapter(
+    val user: ArrayList<User>,
+    val type: String,
+    val activity: FragmentActivity
+) : RecyclerView.Adapter<MediaSocialAdapter.FollowerGridViewHolder>() {
 
-    inner class DeveloperViewHolder(val binding: ItemFollowerGridBinding) :
+    inner class FollowerGridViewHolder(val binding: ItemFollowerGridBinding) :
         RecyclerView.ViewHolder(binding.root)
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DeveloperViewHolder {
-        return DeveloperViewHolder(
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowerGridViewHolder {
+        return FollowerGridViewHolder(
             ItemFollowerGridBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
@@ -31,8 +35,8 @@ class MediaSocialAdapter(private val user: ArrayList<User>, private val type: St
         )
     }
 
-    @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: DeveloperViewHolder, position: Int) {
+
+    override fun onBindViewHolder(holder: FollowerGridViewHolder, position: Int) {
         holder.binding.apply {
             val user = user[position]
             val score = user.score?.div(10.0) ?: 0.0
@@ -47,7 +51,7 @@ class MediaSocialAdapter(private val user: ArrayList<User>, private val type: St
             }
             profileCompactUserProgress.text = user.progress.toString()
             profileCompactScore.text = score.toString()
-            profileCompactTotal.text = " | ${user.totalEpisodes ?: "~"}"
+            " | ${user.totalEpisodes ?: "~"}".also { profileCompactTotal.text = it }
             profileUserAvatar.loadImage(user.pfp)
 
             val scoreDrawable = if (score == 0.0) R.drawable.score else R.drawable.user_score
@@ -59,10 +63,17 @@ class MediaSocialAdapter(private val user: ArrayList<User>, private val type: St
             profileCompactProgressContainer.visibility = View.VISIBLE
 
             profileUserAvatar.setOnClickListener {
-                val intent = Intent(root.context, ProfileActivity::class.java).apply {
-                    putExtra("userId", user.id)
-                }
-                ContextCompat.startActivity(root.context, intent, null)
+                ContextCompat.startActivity(root.context,
+                    Intent(root.context, ProfileActivity::class.java)
+                        .putExtra("userId", user.id),
+                    null)
+            }
+            profileUserAvatarContainer.setOnLongClickListener {
+                ImageViewDialog.newInstance(
+                    activity,
+                    activity.getString(R.string.avatar, user.name),
+                    user.pfp
+                )
             }
         }
     }

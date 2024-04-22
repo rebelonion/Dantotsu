@@ -6,6 +6,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -56,6 +57,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
         initActivity(this)
         binding = ActivityProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val context = this
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
         navBar = binding.profileNavBar
         val navBarRightMargin = if (resources.configuration.orientation ==
@@ -89,8 +91,7 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 finish()
                 return@launch
             }
-            val following = respond.data.followingPage?.pageInfo?.total ?: 0
-            val followers = respond.data.followerPage?.pageInfo?.total ?: 0
+
             withContext(Dispatchers.Main) {
                 binding.profileViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = navBarHeight
@@ -114,19 +115,23 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                 })
 
                 bindingProfileAppBar = ItemProfileAppBarBinding.bind(binding.root).apply {
-
-                    val userLevel = intent.getStringExtra("userLVL") ?: ""
+                    binding.profileProgressBar.visibility = View.GONE
                     followButton.isGone =
                         user.id == Anilist.userid || Anilist.userid == null
-                    followButton.text = getString(
-                        when {
-                            user.isFollowing -> R.string.unfollow
-                            user.isFollower -> R.string.follows_you
-                            else -> R.string.follow
-                        }
-                    )
-                    if (user.isFollowing && user.isFollower) followButton.text =
-                        getString(R.string.mutual)
+
+                    fun followText(): String {
+                        return getString(
+                            when {
+                                user.isFollowing && user.isFollower -> R.string.mutual
+                                user.isFollowing -> R.string.unfollow
+                                user.isFollower -> R.string.follows_you
+                                else -> R.string.follow
+                            }
+                        )
+                    }
+
+                    followButton.text = followText()
+
                     followButton.setOnClickListener {
                         lifecycleScope.launch(Dispatchers.IO) {
                             val res = Anilist.query.toggleFollow(user.id)
@@ -134,53 +139,21 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                                 withContext(Dispatchers.Main) {
                                     snackString(R.string.success)
                                     user.isFollowing = res.data.toggleFollow.isFollowing
-                                    followButton.text = getString(
-                                        when {
-                                            user.isFollowing -> R.string.unfollow
-                                            user.isFollower -> R.string.follows_you
-                                            else -> R.string.follow
-                                        }
-                                    )
-                                    if (user.isFollowing && user.isFollower)
-                                        followButton.text = getString(R.string.mutual)
+                                    followButton.text = followText()
                                 }
                             }
                         }
                     }
-                    binding.profileProgressBar.visibility = View.GONE
                     profileAppBar.visibility = View.VISIBLE
                     profileMenuButton.setOnClickListener {
-                        val popup = PopupMenu(this@ProfileActivity, profileMenuButton)
+                        val popup = PopupMenu(context, profileMenuButton)
                         popup.menuInflater.inflate(R.menu.menu_profile, popup.menu)
                         popup.setOnMenuItemClickListener { item ->
                             when (item.itemId) {
-                                R.id.action_view_following -> {
-                                    ContextCompat.startActivity(
-                                        this@ProfileActivity,
-                                        Intent(this@ProfileActivity, FollowActivity::class.java)
-                                            .putExtra("title", "Following")
-                                            .putExtra("userId", user.id),
-                                        null
-                                    )
-                                    true
-                                }
-
-                                R.id.action_view_followers -> {
-                                    ContextCompat.startActivity(
-                                        this@ProfileActivity,
-                                        Intent(this@ProfileActivity, FollowActivity::class.java)
-                                            .putExtra("title", "Followers")
-                                            .putExtra("userId", user.id),
-                                        null
-                                    )
-                                    true
-                                }
-
                                 R.id.action_view_on_anilist -> {
                                     openLinkInBrowser("https://anilist.co/user/${user.name}")
                                     true
                                 }
-
                                 else -> false
                             }
                         }
@@ -190,18 +163,16 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     profileUserAvatar.loadImage(user.avatar?.medium)
                     profileUserAvatar.setOnLongClickListener {
                         ImageViewDialog.newInstance(
-                            this@ProfileActivity,
-                            "${user.name}'s [Avatar]",
+                            context,
+                            getString(R.string.avatar, user.name),
                             user.avatar?.medium
                         )
                     }
-
-                    val userLevelText = "${user.name} $userLevel"
-                    profileUserName.text = userLevelText
-                    val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+                    profileUserName.text = user.name
+                    val bannerAnimations: ImageView= if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
 
                     blurImage(
-                        if (bannerAnimations) profileBannerImage else profileBannerImageNoKen,
+                        bannerAnimations,
                         user.bannerImage ?: user.avatar?.medium
                     )
                     profileBannerImage.updateLayoutParams { height += statusBarHeight }
@@ -210,34 +181,34 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     profileCloseButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                     profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                     profileButtonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
+
                     profileBannerImage.setOnLongClickListener {
                         ImageViewDialog.newInstance(
-                            this@ProfileActivity,
-                            user.name + " [Banner]",
+                            context,
+                            getString(R.string.banner, user.name),
                             user.bannerImage
                         )
                     }
 
                     mMaxScrollSize = profileAppBar.totalScrollRange
-                    profileAppBar.addOnOffsetChangedListener(this@ProfileActivity)
+                    profileAppBar.addOnOffsetChangedListener(context)
 
 
-                    profileFollowerCount.text = followers.toString()
+                    profileFollowerCount.text = (respond.data.followerPage?.pageInfo?.total ?: 0).toString()
                     profileFollowerCountContainer.setOnClickListener {
                         ContextCompat.startActivity(
-                            this@ProfileActivity,
-                            Intent(this@ProfileActivity, FollowActivity::class.java)
+                            context,
+                            Intent(context, FollowActivity::class.java)
                                 .putExtra("title", getString(R.string.followers))
                                 .putExtra("userId", user.id),
                             null
                         )
                     }
-
-                    profileFollowingCount.text = following.toString()
+                    profileFollowingCount.text = (respond.data.followingPage?.pageInfo?.total ?: 0).toString()
                     profileFollowingCountContainer.setOnClickListener {
                         ContextCompat.startActivity(
-                            this@ProfileActivity,
-                            Intent(this@ProfileActivity, FollowActivity::class.java)
+                            context,
+                            Intent(context, FollowActivity::class.java)
                                 .putExtra("title", "Following")
                                 .putExtra("userId", user.id),
                             null
@@ -247,8 +218,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     profileAnimeCount.text = user.statistics.anime.count.toString()
                     profileAnimeCountContainer.setOnClickListener {
                         ContextCompat.startActivity(
-                            this@ProfileActivity,
-                            Intent(this@ProfileActivity, ListActivity::class.java)
+                            context,
+                            Intent(context, ListActivity::class.java)
                                 .putExtra("anime", true)
                                 .putExtra("userId", user.id)
                                 .putExtra("username", user.name),
@@ -259,8 +230,8 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     profileMangaCount.text = user.statistics.manga.count.toString()
                     profileMangaCountContainer.setOnClickListener {
                         ContextCompat.startActivity(
-                            this@ProfileActivity,
-                            Intent(this@ProfileActivity, ListActivity::class.java)
+                            context,
+                            Intent(context, ListActivity::class.java)
                                 .putExtra("anime", false)
                                 .putExtra("userId", user.id)
                                 .putExtra("username", user.name),

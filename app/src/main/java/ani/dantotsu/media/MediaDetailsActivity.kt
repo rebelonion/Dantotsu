@@ -172,7 +172,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         binding.mediaCoverImage.loadImage(media.cover)
         binding.mediaCoverImage.setOnLongClickListener {
-            val coverTitle = "${media.userPreferredName}[Cover]"
+            val coverTitle = getString(R.string.cover, media.userPreferredName)
             ImageViewDialog.newInstance(
                 this,
                 coverTitle,
@@ -192,7 +192,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
 
             override fun onLongClick(event: MotionEvent) {
-                val bannerTitle = "${media.userPreferredName}[Banner]"
+                val bannerTitle = getString(R.string.banner, media.userPreferredName)
                 ImageViewDialog.newInstance(
                     this@MediaDetailsActivity,
                     bannerTitle,
