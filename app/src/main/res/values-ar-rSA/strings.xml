@@ -357,28 +357,28 @@
         \n- الطريقة 2 [How to sync MAL data with Anilist](https://anilist.co/forum/thread/3393)
 
         \n\n_ليس من الضروري مزامنة حسابات MAL وAnilist._</string>
-    <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
-    <string name="use_alarm_manager">Use Alarm Manager</string>
-    <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
-    <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
+    <string name="notification_for_checking_subscriptions">جاري التحقق من الاشتراكات</string>
+    <string name="use_alarm_manager">استخدم مدير المنبهات</string>
+    <string name="use_alarm_manager_reliable">استخدم مدير المنبهات للحصول على إشعارات يعتمد عليها</string>
+    <string name="use_alarm_manager_confirm">يمكن أن يساعد استخدام مدير المنبهات كبديل لخاصية \"battery optimization\"، ولكنه قد يستهلك المزيد من البطارية. كما يتطلب أيضًا إذن مدير المنبهات.</string>
     <string name="use">أستخدم</string>
-    <string name="checking_subscriptions">Notification for Checking Subscriptions</string>
-    <string name="subscriptions_checking_time_s">Subscriptions Update Frequency : %1$s</string>
-    <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
-    <string name="subscriptions_info">Amount of time for Dantotsu to periodically check for new Episodes/Chapters\n(Less time will cause more battery consumption)</string>
+    <string name="checking_subscriptions">اشعار التحقق من الاشتراكات</string>
+    <string name="subscriptions_checking_time_s">التحقق من تحديثات الاشتراكات كل : %1$s</string>
+    <string name="subscriptions_checking_time">التحقق من تحديثات الاشتراكات كل</string>
+    <string name="subscriptions_info">مقدار الوقت الذي يستغرقه \"Dantotsu\" للتحقق بشكل دوري من وجود حلقات/فصول جديدة\n(كلما يقل الوقت يزداد استهلاك البطارية)</string>
     <string name="do_not_update">لا تقم بالتحديث</string>
-    <string name="loading_chap_number">Loading Chapter %1$s</string>
+    <string name="loading_chap_number">جاري تحميل الفصل %1$s</string>
     <string name="sort_by_release_date">ترتيب حسب تاريخ الإصدار</string>
-    <string name="crop_borders">Crop Borders</string>
+    <string name="crop_borders">قص حدود الصور</string>
     <string name="note">ملوحظة</string>
     <string name="manage_extension_repos">Manage Extension Repos</string>
-    <string name="installing_extension">جاري تثبيت ال \"Extension\"</string>
-    <string name="installation_failed">Installation failed: %1$s</string>
+    <string name="installing_extension">تثبيت الإضافة</string>
+    <string name="installation_failed">فشل تثبيت: %1$s</string>
     <string name="installation_complete">تم التثبيت</string>
-    <string name="extension_has_been_installed">The extension has been successfully installed.</string>
-    <string name="extension_installed">تم تثبيت ال \"Extension\"</string>
+    <string name="extension_has_been_installed">تم تثبيت الإضافة بنجاح.</string>
+    <string name="extension_installed">تم تثبيت الإضافة</string>
     <string name="installed">تم التثبيت</string>
-    <string name="error_message">Error: %1$s</string>
+    <string name="error_message">خطأ: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">مراجعة</string>
     <string name="discord_nothing_button">Display only the first button</string>
