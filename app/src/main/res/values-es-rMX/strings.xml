@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="es-rMX">
-    <string name="slogan">La  mejor aplicación de Anime &amp; manga para Android.</string>
+    <string name="slogan">La mejor aplicación de Anime &amp; Manga para Android.</string>
     <string name="login">Acceso</string>
     <string name="logout">Cerrar sesión</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
@@ -16,8 +16,8 @@
     <string name="watch">Ver</string>
     <string name="read">Leer</string>
     <string name="language">Idioma</string>
-    <string name="anime_list">Lista De Animes</string>
-    <string name="manga_list">Lista de manga</string>
+    <string name="anime_list">Mis Animes</string>
+    <string name="manga_list">Mis Mangas</string>
     <string name="sad">X(</string>
     <string name="oh">:o</string>
     <string name="colon">" : "</string>
@@ -835,10 +835,10 @@
     <string name="use_unique_theme_for_each_item_desc">Utilice el color del banner de los medios</string>
     <string name="use_custom_theme_desc">Usa tu propio color para el tema</string>
     <string name="color_picker_desc">Elige un color</string>
-    <string name="torrent_addon">Complemento Torrent</string>
+    <string name="torrent_addon">Torrent</string>
     <string name="enable_torrent">Activar torrent</string>
-    <string name="anime_downloader_addon">Complemento descargador de anime</string>
-    <string name="install_torrent_addon">Instalar el complemento Torrent</string>
+    <string name="anime_downloader_addon">Descargador de Anime</string>
+    <string name="install_torrent_addon">Instalar complemento Torrent</string>
     <string name="loaded_successfully">Cargado correctamente</string>
     <string name="not_installed">No instalado</string>
     <string name="torrent_extension_not_supported">La extensión Torrent no es compatible con este dispositivo</string>
