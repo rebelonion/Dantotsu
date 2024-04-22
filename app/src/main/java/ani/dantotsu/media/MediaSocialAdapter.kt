@@ -9,12 +9,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemFollowerGridBinding
+import ani.dantotsu.getAppString
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.User
 import ani.dantotsu.setAnimation
 
-class MediaSocialAdapter(private val user: ArrayList<User>) :
+class MediaSocialAdapter(private val user: ArrayList<User>, private val type: String) :
     RecyclerView.Adapter<MediaSocialAdapter.DeveloperViewHolder>() {
 
     inner class DeveloperViewHolder(val binding: ItemFollowerGridBinding) :
@@ -39,7 +40,7 @@ class MediaSocialAdapter(private val user: ArrayList<User>) :
             profileUserName.text = user.name
             profileInfo.apply {
                 text = when (user.status) {
-                    "CURRENT" -> "WATCHING"
+                    "CURRENT" -> if (type == "ANIME") getAppString(R.string.watching) else getAppString(R.string.reading)
                     else -> user.status ?: ""
                 }
                 visibility = View.VISIBLE
