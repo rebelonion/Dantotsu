@@ -846,4 +846,9 @@
     <string name="download_addon_not_found">ডাউনল\'ড অ‍্যাড-অন পোৱা নাই</string>
     <string name="image">চিত্ৰ</string>
     <string name="failed_ext_install_conflict">বিঘটনাটো কাৰণে এক্সটেনছন ইনষ্টল কৰিব অসমৰ্থ</string>
+    <string name="reading">READING</string>
+    <string name="watching">WATCHING</string>
+    <string name="avatar">%1$s\ [Avatar]</string>
+    <string name="cover">%1$s\ [Cover]</string>
+    <string name="banner">%1$s\ [Banner]</string>
 </resources>
