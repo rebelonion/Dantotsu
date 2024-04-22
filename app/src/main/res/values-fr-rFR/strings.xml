@@ -850,4 +850,9 @@
     <string name="download_addon_not_found">Add-on pour le téléchargement pas trouvé</string>
     <string name="image">Image</string>
     <string name="failed_ext_install_conflict">Échec de l\'installation de l\'extension à cause d\'un conflit</string>
+    <string name="reading">READING</string>
+    <string name="watching">WATCHING</string>
+    <string name="avatar">%1$s\ [Avatar]</string>
+    <string name="cover">%1$s\ [Cover]</string>
+    <string name="banner">%1$s\ [Banner]</string>
 </resources>
