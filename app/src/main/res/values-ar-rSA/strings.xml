@@ -460,7 +460,7 @@
     <string name="chapter_release_timeout">%1$s has been available for</string>
     <string name="time_format">%1$d days %2$d hrs %3$d mins %4$d secs</string>
     <string-array name="sort_by">
-        <item>Score</item>
+        <item>التقيم</item>
         <item>Popular</item>
         <item>Trending</item>
         <item>New Releases</item>
@@ -490,15 +490,15 @@
     <string name="filler_tag"> - Filler</string>
     <string name="continue_chapter">Continue : %1$s\n%2$s</string>
     <string name="episode">"الحلقة "</string>
-    <string name="episode_num">"Episode %1$s"</string>
+    <string name="episode_num">"الحلقة %1$s"</string>
     <string name="chapter">"الفصل "</string>
-    <string name="chapter_num">"Chapter %1$s"</string>
+    <string name="chapter_num">"الفصل %1$s"</string>
     <string name="just_released">- Newly released!</string>
     <string name="checking_subscriptions_title">Checking Subscriptions</string>
     <string name="user_list">%1$s\'s %2$s List</string>
     <string name="speed">السرعة</string>
     <string name="auto_update">Auto Update progress for %1$s?</string>
-    <string name="continue_from">Continue from %1$s?</string>
+    <string name="continue_from">أكمل من %1$s؟</string>
     <string name="title_update_progress">Update progress on AniList?</string>
     <string name="incognito_will_not_update">Incognito mode will still ignore progress.</string>
     <string name="dont_ask_again">"Don't ask again for %1$s"</string>
