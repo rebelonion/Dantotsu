@@ -343,21 +343,20 @@
     <string name="login_with_anilist">تسجيل دخول Anilist!</string>
     <string name="anilist">Anilist</string>
     <string name="account_help">كيف يعمل هذا؟</string>
-    <string name="full_account_help">        Dantotsu is an Anilist Based App, so for syncing with your MAL Account, It needs an Anilist account to be logged in.
-        \nOnce logged in with both Anilist and MAL accounts, the app will automatically update your MAL account whenever:
-        \n- Add a new Media
-        \n- Edit a Media
-        \n- Delete a Media
+    <string name="full_account_help">        \"Dantotsu\" هو تطبيق قائم على Anilist، لذلك للمزامنة مع حساب MAL الخاص بك، فإنه يحتاج إلى حساب Anilist لتسجيل الدخول.
+        \nبمجرد تسجيل الدخول باستخدام حسابي Anilist وMAL، سيقوم التطبيق تلقائيًا بتحديث حساب MAL الخاص بك حين تقوم ب:
+        \n- إضافة انمي\مانجا
+        \n- تعديل انمي\مانجا
+        \n- حذف انمي\مانجا
 
-        \n\nNote: The app will not sync old Media\'s from Anilist to MAL, It\'s recommended to sync them.
-        \n- Check __FAQs__ for _Easy Method_
+        \n\nملاحظة: لن يقوم التطبيق بمزامنة الانمي\المانجا القديمة من Anilist إلى MAL، يوصى بمزامنتها.
+        \n- تفحص __FAQs__ لطريقة سهلة لفعل ذلك
 
-        \n\nAnd for _Intermediates_ :
-        \n- [How to sync Anilist data with MAL](https://anilist.co/forum/thread/2654)
-        \n- [How to sync MAL data with Anilist](https://anilist.co/forum/thread/3393)
+        \n\n طريقتين اصعب قليلا لكن مضمونتين:
+        \n- الطريقة 1 [How to sync MAL data with Anilist](https://anilist.co/forum/thread/3393)
+        \n- الطريقة 2 [How to sync MAL data with Anilist](https://anilist.co/forum/thread/3393)
 
-        \n\n_It is not required to sync both MAL and Anilist accounts._
-    </string>
+        \n\n_ليس من الضروري مزامنة حسابات MAL وAnilist._</string>
     <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
     <string name="use_alarm_manager">Use Alarm Manager</string>
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
