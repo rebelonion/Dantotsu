@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="es-rMX">
-    <string name="slogan">La Nueva mejor aplicación de Anime &amp; manga para Android.</string>
+    <string name="slogan">La  mejor aplicación de Anime &amp; manga para Android.</string>
     <string name="login">Acceso</string>
     <string name="logout">Cerrar sesión</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
