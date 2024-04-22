@@ -849,4 +849,9 @@
     <string name="download_addon_not_found">Δεν βρέθηκε το πρόσθετο λήψης</string>
     <string name="image">Εικόνα</string>
     <string name="failed_ext_install_conflict">Η εγκατάσταση της επέκτασης απέτυχε λόγω διένεξης</string>
+    <string name="reading">READING</string>
+    <string name="watching">WATCHING</string>
+    <string name="avatar">%1$s\ [Avatar]</string>
+    <string name="cover">%1$s\ [Cover]</string>
+    <string name="banner">%1$s\ [Banner]</string>
 </resources>
