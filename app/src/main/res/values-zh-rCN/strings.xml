@@ -11,11 +11,11 @@
     <string name="browse_anime">浏览动画</string>
     <string name="manga">漫画</string>
     <string name="browse_manga">浏览漫画</string>
-    <string name="novels">Novels</string>
+    <string name="novels">小说</string>
     <string name="info">信息</string>
     <string name="watch">观看</string>
     <string name="read">阅读</string>
-    <string name="language">Language</string>
+    <string name="language">语言</string>
     <string name="anime_list">动画列表</string>
     <string name="manga_list">漫画列表</string>
     <string name="sad">X(</string>
@@ -36,9 +36,9 @@
     <string name="popular_manga">流行漫画</string>
     <string name="username">用户名</string>
     <string name="chapters_read">阅读章节 </string>
-    <string name="chapters_read_n">Chapters\nRead</string>
+    <string name="chapters_read_n">已阅读章节</string>
     <string name="episodes_watched">观看集数 </string>
-    <string name="episodes_watched_n">Episodes\nWatched</string>
+    <string name="episodes_watched_n">已观看集数</string>
     <string name="continue_reading">继续阅读</string>
     <string name="continue_watching">继续观看</string>
     <string name="recommended">推荐</string>
@@ -61,8 +61,8 @@
         <item>重新阅读</item>
         <item>全部</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
-    <string name="followers">Followers</string>
+    <string name="no_notifications">无更多通知</string>
+    <string name="followers">关注者</string>
     <string name="status">状态</string>
     <string-array name="status_anime">
         <item>计划中</item>
@@ -94,7 +94,7 @@
     <string name="format">格式</string>
     <string name="status_title">状态</string>
     <string name="total_eps">总集数</string>
-    <string name="episodes"> Episode(s)</string>
+    <string name="episodes"> 章节</string>
     <string name="chapters"> Chapter(s)</string>
     <string name="total_divider"> | %1$s</string>
     <string name="total_chaps">总章节数</string>
