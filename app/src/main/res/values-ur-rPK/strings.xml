@@ -6,7 +6,7 @@
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
-    <string name="home">گھر</string>
+    <string name="home">ہوم</string>
     <string name="anime">انیمے</string>
     <string name="browse_anime">انیمے کو براؤز کریں</string>
     <string name="manga">مانگا</string>
@@ -57,44 +57,44 @@
         <item>چھوڑ دیا گیا</item>
         <item>منصوبہ</item>
         <item>پسندیدہ</item>
-        <item>Rewatching</item>
-        <item>Rereading</item>
-        <item>All</item>
+        <item>پھر سے دیکھنا</item>
+        <item>پھر سے پڑھنا</item>
+        <item>سب</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
+    <string name="no_notifications">مزید کوئی اطلاعات نہیں</string>
     <string name="followers">Followers</string>
-    <string name="status">STATUS</string>
+    <string name="status">اسٹیٹس</string>
     <string-array name="status_anime">
-        <item>PLANNING</item>
-        <item>WATCHING</item>
-        <item>COMPLETED</item>
+        <item>تدبیر</item>
+        <item>دکھ رہا ہوں</item>
+        <item>مکمل</item>
         <item>RE-WATCHING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>روکا ہوا</item>
+        <item>چھوڑ دیا</item>
     </string-array>
     <string-array name="status_manga">
         <item>PLANNING</item>
-        <item>READING</item>
+        <item>مطالعہ</item>
         <item>COMPLETED</item>
-        <item>RE-READING</item>
+        <item>پھر سے پڑھنا</item>
         <item>PAUSED</item>
         <item>DROPPED</item>
     </string-array>
-    <string name="progress">PROGRESS</string>
-    <string name="score">SCORE</string>
-    <string name="score_suffix">" / 10"</string>
+    <string name="progress">ترقی</string>
+    <string name="score">نمبر</string>
+    <string name="score_suffix">"/۱۰"</string>
     <string name="started_at">STARTED AT</string>
     <string name="completed_at">COMPLETED AT</string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
-    <string name="remove">Remove</string>
-    <string name="name">Name</string>
-    <string name="name_romaji">Name Romaji</string>
-    <string name="mean_score">Mean Score</string>
-    <string name="format">Format</string>
-    <string name="status_title">Status</string>
-    <string name="total_eps">Total Episodes</string>
-    <string name="episodes"> Episode(s)</string>
+    <string name="save">محفوظ کریں</string>
+    <string name="delete">مٹا دیں</string>
+    <string name="remove">ہٹائیں</string>
+    <string name="name">نام</string>
+    <string name="name_romaji">نام روماجی</string>
+    <string name="mean_score">وسطی نمبر</string>
+    <string name="format">فارمیٹ</string>
+    <string name="status_title">سٹیٹس</string>
+    <string name="total_eps">کل قسطیں</string>
+    <string name="episodes"> قسطہ (قسطیں)</string>
     <string name="chapters"> Chapter(s)</string>
     <string name="total_divider"> | %1$s</string>
     <string name="total_chaps">Total Chapters</string>
@@ -136,21 +136,21 @@
     <string name="trailer">Trailer</string>
     <string name="opening">Opening</string>
     <string name="ending">Ending</string>
-    <string name="prequel">Prequel</string>
-    <string name="sequel">Sequel</string>
-    <string name="anilist_settings">Anilist Settings</string>
-    <string name="extension_settings">Extensions</string>
-    <string name="downloads">Downloads</string>
-    <string name="offline_mode">Offline Mode</string>
-    <string name="settings">Settings</string>
-    <string name="extensions">Extensions</string>
-    <string name="extension_updates_available">Extension updates available</string>
-    <string name="player_settings">Player Settings</string>
+    <string name="prequel">پہلے حصہ</string>
+    <string name="sequel">آگے کا حصہ</string>
+    <string name="anilist_settings">انی لسٹ کی ترتیبات</string>
+    <string name="extension_settings">ایکسٹینشن</string>
+    <string name="downloads">ڈاؤن لوڈز</string>
+    <string name="offline_mode">آف لائن موڈ</string>
+    <string name="settings">ترتیبات</string>
+    <string name="extensions">ایکسٹینشن</string>
+    <string name="extension_updates_available">ایکسٹینشن اپڈیٹ دستیاب ہیں</string>
+    <string name="player_settings">پلئیر کی ترتیبات</string>
     <string name="recentlyListOnly">Only show my content in \"Recently Updated\"</string>
-    <string name="download_manager_select">Download Manager</string>
+    <string name="download_manager_select">ڈاؤن لوڈ منیجر</string>
     <string name="downloadInSd">Download in SD card</string>
     <string name="noSdFound">No SD card was Found.</string>
-    <string name="reader_settings">Reader Settings</string>
+    <string name="reader_settings">ریدر کی ترتیبات</string>
     <string name="default_source">Default Source</string>
     <string name="show_yt">Youtube Link</string>
     <string name="default_ep_view">Default Episode Layout</string>
