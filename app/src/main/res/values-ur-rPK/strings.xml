@@ -41,22 +41,22 @@
     <string name="episodes_watched_n">Episodes\nWatched</string>
     <string name="continue_reading">پڑھنا جاری کرے</string>
     <string name="continue_watching">پڑھنا جاری کرے</string>
-    <string name="recommended">Recommended</string>
+    <string name="recommended">مناسب تجویز</string>
     <string name="get_recommendations">Watch/Read some Anime or Manga to get Recommendations</string>
-    <string name="empty">All caught up, when New?</string>
+    <string name="empty">سب کچھ مکمل ہو گیا، نئی کب ہوگی؟</string>
     <string name="action_settings">سیٹنگز</string>
-    <string name="add">Add to List</string>
-    <string name="list_editor">List Editor</string>
-    <string name="add_fav">Add to Favourites</string>
-    <string name="notifications">Notifications</string>
+    <string name="add">فہرست میں شامل کریں</string>
+    <string name="list_editor">فہرست ترتیب دہ</string>
+    <string name="add_fav">پسندیدہ میں شامل کریں</string>
+    <string name="notifications">اطلاعات</string>
     <string-array name="keys">
-        <item>Reading</item>
-        <item>Watching</item>
-        <item>Completed</item>
-        <item>Paused</item>
-        <item>Dropped</item>
-        <item>Planning</item>
-        <item>Favourites</item>
+        <item>مطالعہ</item>
+        <item>دیکھنا</item>
+        <item>مکمل</item>
+        <item>وقعہ</item>
+        <item>چھوڑ دیا گیا</item>
+        <item>منصوبہ</item>
+        <item>پسندیدہ</item>
         <item>Rewatching</item>
         <item>Rereading</item>
         <item>All</item>
