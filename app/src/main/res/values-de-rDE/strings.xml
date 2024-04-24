@@ -152,7 +152,7 @@
     <string name="noSdFound">Keine SD-Karte gefunden.</string>
     <string name="reader_settings">Reader-Einstellungen</string>
     <string name="default_source">Standardquelle</string>
-    <string name="show_yt">Youtube Link</string>
+    <string name="show_yt">Youtube-Link anzeigen</string>
     <string name="default_ep_view">Standard-Episodenlayout</string>
     <string name="default_chp_view">Standard-Kapitellayout</string>
     <string name="ui">Benutzeroberfläche</string>
@@ -702,7 +702,7 @@
     <string name="blur">Blur</string>
     <string name="hide_scroll_bar">Bildlaufleiste verstecken</string>
     <string name="view_on_anilist">Auf Anilist ansehen</string>
-    <string name="anilist_notification_filters">Filter Notifications</string>
+    <string name="anilist_notification_filters">Benachrichtigung filtern</string>
     <string name="anilist_notifications_checking_time">Anilist-Benachrichtigungen Aktualisierungs-Frequenz : %1$s</string>
     <string name="comment_notification_checking_time">Kommentar-Benachrichtigungen Aktualisierungs-Frequenz : %1$s</string>
     <string name="activities">Aktivitäten</string>
@@ -804,11 +804,11 @@
     <string name="devs_desc">Dantotsu\'s eigene unbezahlte Arbeit </string>
     <string name="forks_desc">Mehr wie Dantotsu</string>
     <string name="disclaimer_desc">Etwas, das man im Hinterkopf behalten sollte</string>
-    <string name="enable_torrent_desc">This will run a torrent server in the background</string>
-    <string name="player_settings_desc">All the player related settings</string>
-    <string name="purge_anime_downloads_desc">Delete all downloaded Anime</string>
-    <string name="prefer_dub_desc">Select Dub media by default</string>
-    <string name="show_yt_desc">Show YouTube links for supported media</string>
+    <string name="enable_torrent_desc">Dies startet einen Torrent Server im Hintergrund</string>
+    <string name="player_settings_desc">Alle Einstellung zum Video Player</string>
+    <string name="purge_anime_downloads_desc">Alle heruntergeladenen Anime löschen</string>
+    <string name="prefer_dub_desc">Dub als Standardeinstellung nutzen</string>
+    <string name="show_yt_desc">YouTube Link für unterstützte Medien anzeigen</string>
     <string name="include_list_anime_desc">Include list items in Anime explore page</string>
     <string name="ui_settings_desc">All the UI related settings</string>
     <string name="download_manager_select_desc">Default manager to download Anime</string>
