@@ -95,7 +95,7 @@
     <string name="status_title">状态</string>
     <string name="total_eps">总集数</string>
     <string name="episodes"> 章节</string>
-    <string name="chapters"> Chapter(s)</string>
+    <string name="chapters"> 章节</string>
     <string name="total_divider"> | %1$s</string>
     <string name="total_chaps">总章节数</string>
     <string name="ep_duration">平均持续时间</string>
@@ -111,7 +111,7 @@
     <string name="relations">关系</string>
     <string name="staff">工作人员</string>
     <string name="favourites">收藏夹</string>
-    <string name="popularity">Popularity</string>
+    <string name="popularity">热门</string>
     <string name="roles">角色</string>
     <string name="details">详情</string>
     <string name="play_yt">在 Youtube 上播放</string>
@@ -144,7 +144,7 @@
     <string name="offline_mode">离线模式</string>
     <string name="settings">设置</string>
     <string name="extensions">扩展</string>
-    <string name="extension_updates_available">Extension updates available</string>
+    <string name="extension_updates_available">插件可更新</string>
     <string name="player_settings">播放器设置</string>
     <string name="recentlyListOnly">仅在最近更新中显示我的节目</string>
     <string name="download_manager_select">下载管理器</string>
@@ -152,7 +152,7 @@
     <string name="noSdFound">未找到 SD 卡。</string>
     <string name="reader_settings">阅读器设置</string>
     <string name="default_source">默认来源</string>
-    <string name="show_yt">Youtube Link</string>
+    <string name="show_yt">YouTube链接</string>
     <string name="default_ep_view">默认集数布局</string>
     <string name="default_chp_view">默认章节布局</string>
     <string name="ui">用户界面</string>
@@ -212,8 +212,8 @@
     <string name="sub_window_color_select">字幕窗口颜色</string>
     <string name="sub_window_color_info">"字幕窗口是左右两侧的部分。（其中背景不是）"</string>
     <string name="sub_color_info"><b>注意：</b>更改上述设置仅影响软字幕！</string>
-    <string name="sub_alpha">Subtitle Transparency</string>
-    <string name="sub_text_example">Example Sub</string>
+    <string name="sub_alpha">字幕透明度</string>
+    <string name="sub_text_example">副标题示例</string>
     <string name="sub_font_select">字幕字体</string>
     <string name="subtitle_font_size">字幕大小</string>
     <string name="auto">自动</string>
@@ -268,7 +268,7 @@
     <string name="animations">动画</string>
     <string name="banner_animations">横幅动画</string>
     <string name="layout_animations">布局动画</string>
-    <string name="trending_scroller">Trending Scroller</string>
+    <string name="trending_scroller">热门滚轴</string>
     <string name="animation_speed">整体速度</string>
     <string name="empty_fav">看起来你什么都不喜欢，\n尝试喜欢一部节目以保留在此处。</string>
     <string name="fav_anime">喜欢的动画</string>
@@ -328,8 +328,8 @@
     <string name="planned_anime">计划中的动画</string>
     <string name="planned_manga">计划中的漫画</string>
     <string name="image_long_clicking">长按打开图片</string>
-    <string name="always_continue_content">Always continue previous items</string>
-    <string name="search_source_list">Search next available source</string>
+    <string name="always_continue_content">总是继续上一项</string>
+    <string name="search_source_list">搜索下一个可用源插件</string>
     <string name="timestamp_proxy_desc">如果遇到握手失败，这很有用</string>
     <string name="timestamp_proxy">使用代理进行时间戳</string>
     <string name="check_app_updates">始终检查应用程序更新</string>
@@ -337,8 +337,8 @@
     <string name="forks">版本</string>
     <string name="faq">常见问题</string>
     <string name="accounts">帐户</string>
-    <string name="addons">Addons</string>
-    <string name="addons_desc">Addons are extensions that provide additional functionality.</string>
+    <string name="addons">补充内容</string>
+    <string name="addons_desc">附加模块是提供附加功能的扩展。</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">使用Anilist登录！</string>
     <string name="anilist">Anilist</string>
@@ -358,36 +358,36 @@
     
         \n\n_不需要同步MAL和Anilist帐户。_
     </string>
-    <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
+    <string name="notification_for_checking_subscriptions">正在检查订阅通知</string>
     <string name="use_alarm_manager">使用Alarm Manager可靠地发送通知</string>
-    <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
-    <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
-    <string name="use">Use</string>
+    <string name="use_alarm_manager_reliable">使用智能闹钟获得可靠的通知</string>
+    <string name="use_alarm_manager_confirm">使用智能闹钟可以帮助对抗电池优化，但可能会消耗更多电量。它还需要后台白名单权限。</string>
+    <string name="use">使用</string>
     <string name="checking_subscriptions">检查订阅的通知</string>
     <string name="subscriptions_checking_time_s">订阅更新频率：%1$s</string>
     <string name="subscriptions_checking_time">订阅更新频率</string>
     <string name="subscriptions_info">Dantotsu定期检查新的剧集/章节的时间量\n（时间越短，电池消耗越大）</string>
     <string name="do_not_update">不更新</string>
-    <string name="loading_chap_number">Loading Chapter %1$s</string>
+    <string name="loading_chap_number">正在载入章节%1$s</string>
     <string name="sort_by_release_date">按发布日期排序</string>
     <string name="crop_borders">裁剪边框</string>
     <string name="note">注意</string>
-    <string name="manage_extension_repos">Manage Extension Repos</string>
-    <string name="installing_extension">Installing extension</string>
-    <string name="installation_failed">Installation failed: %1$s</string>
-    <string name="installation_complete">Installation complete</string>
-    <string name="extension_has_been_installed">The extension has been successfully installed.</string>
-    <string name="extension_installed">Extension installed</string>
-    <string name="installed">Installed</string>
-    <string name="error_message">Error: %1$s</string>
-    <string name="install_step">Step: %1$s</string>
-    <string name="review">Review</string>
-    <string name="discord_nothing_button">Display only the first button</string>
-    <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
-    <string name="discord_anilist_button">Display your AniList profile instead</string>
-    <string name="discord_rich_presence">Discord Rich Presence</string>
-    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
-    <string name="view_my_anilist">View My AniList</string>
+    <string name="manage_extension_repos">管理扩展仓库</string>
+    <string name="installing_extension">正在下载扩展插件</string>
+    <string name="installation_failed">下载失败%1$s</string>
+    <string name="installation_complete">下载完成</string>
+    <string name="extension_has_been_installed">插件已被下载</string>
+    <string name="extension_installed">插件下载</string>
+    <string name="installed">下载</string>
+    <string name="error_message">出错了%1$s</string>
+    <string name="install_step">步骤%1$s</string>
+    <string name="review">评论</string>
+    <string name="discord_nothing_button">仅显示第一个按钮</string>
+    <string name="discord_dantotsu_button">在第二个按钮中显示dantotsu</string>
+    <string name="discord_anilist_button">改为显示AniList配置文件</string>
+    <string name="discord_rich_presence">Discord在线时间长</string>
+    <string name="stream_on_dantotsu">在Dantotsu上观看流媒体</string>
+    <string name="view_my_anilist">在 AniList 上查看</string>
     <string name="jobless_message">天啊！你真的是无业游民\n你已经到达了末尾</string>
     <string name="file_manager_not_found">找不到任何文件管理器以打开SD卡</string>
     <string name="error_loading_data">加载数据出错 %1$s</string>
@@ -405,11 +405,11 @@
     <string name="auto_skip">自动跳过OP和ED</string>
     <string name="show_skip_time_stamp_button">显示跳过时间戳按钮</string>
     <string name="always_load_time_stamps">始终加载时间戳</string>
-    <string name="auto_hide_time_stamps">Auto Hide Time Stamps</string>
+    <string name="auto_hide_time_stamps">自动隐藏时间戳</string>
     <string name="timestamps">时间戳</string>
     <string name="auto_skip_op_ed">自动跳过OP / ED</string>
     <string name="requires_time_stamps_to_be_enabled">需要启用时间戳</string>
-    <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
+    <string name="hide_skip_button">使跳过时间戳按钮在5秒后消失</string>
     <string name="copied_to_clipboard">已复制到剪贴板</string>
     <string name="first_episode">这是第1集！</string>
     <string name="reset_auto_update">您可以长按列表编辑器按钮以重置自动更新</string>
@@ -458,7 +458,7 @@
     <string name="refreshing_token_failed">刷新令牌失败</string>
     <string name="episode_release_countdown">第 %1$d 集将在以下时间发布</string>
     <string name="chapter_number">章节 %1$d</string>
-    <string name="chapter_release_timeout">%1$s has been available for</string>
+    <string name="chapter_release_timeout">%1$s已可用于</string>
     <string name="time_format">%1$d 天 %2$d 小时 %3$d 分钟 %4$d 秒</string>
     <string-array name="sort_by">
         <item>评分</item>
@@ -467,7 +467,7 @@
         <item>字母升序</item>
         <item>字母降序</item>
         <item>纯粹痛苦</item>
-        <item>Pure pain</item>
+        <item>纯粹的痛苦</item>
     </string-array>
     <string name="main_role">主要</string>
     <string name="supporting_role">配角</string>
@@ -488,7 +488,7 @@
     <string name="watch_on_dantotsu">在Dantotsu上观看</string>
     <string name="view_profile_in_dantotsu">在Dantotsu中查看个人资料</string>
     <string name="continue_episode">继续：剧集 </string>
-    <string name="filler_tag"> - Filler</string>
+    <string name="filler_tag"> - 填充</string>
     <string name="continue_chapter">继续：</string>
     <string name="episode">"剧集 "</string>
     <string name="episode_num">"剧集 %1$s"</string>
@@ -496,7 +496,7 @@
     <string name="chapter_num">"章节 %1$s"</string>
     <string name="just_released">- 刚刚发布了！</string>
     <string name="checking_subscriptions_title">检查订阅</string>
-    <string name="user_list">%1$s\'s %2$s List</string>
+    <string name="user_list">%1$s的%2$s列表</string>
     <string name="speed">速度</string>
     <string name="auto_update">自动更新 %1$s 的进度？</string>
     <string name="continue_from">从 %1$s 继续？</string>
@@ -511,8 +511,8 @@
     <string name="subtitle_font">字幕字体</string>
     <string name="yes">是</string>
     <string name="no">否</string>
-    <string name="ok">OK</string>
-    <string name="reset">Reset</string>
+    <string name="ok">好</string>
+    <string name="reset">重置</string>
     <string name="close">关闭</string>
     <string name="no_chapter">无章节</string>
     <string name="content_18">从你的 Anilist 设置中启用 18+ 内容</string>
@@ -582,10 +582,10 @@
     <string name="episode_singular">剧集</string>
     <string name="chapter_singular">章节</string>
     <string name="chapter_plural">章节</string>
-    <string name="filter_status">"Status : %1$s"</string>
-    <string name="filter_source">"Source : %1$s"</string>
+    <string name="filter_status">"状态：%1$s"</string>
+    <string name="filter_source">"来源：%1$s"</string>
     <string name="filter_format">"格式：%1$s"</string>
-    <string name="filter_country">"Country : %1$s"</string>
+    <string name="filter_country">"国家：%1$s"</string>
     <string name="filter_sort">"排序：%1$s"</string>
     <string name="filter_exclude">"不包括：%1$s"</string>
     <string name="search_by_image">通过图像搜索</string>
@@ -717,19 +717,20 @@
     <string name="delete_comment_confirm">Are you sure you want to delete this comment?</string>
     <string name="comment_deleted">Comment Deleted</string>
     <string name="ban_user">Ban User</string>
-    <string name="ban_user_confirm">Are you sure you want to ban this user?</string>
-    <string name="user_banned">User Banned</string>
-    <string name="report_comment">Report Comment</string>
-    <string name="report_comment_confirm">Only report comments that violate the rules. Are you sure you want to report this comment?</string>
-    <string name="comment_reported">Comment Reported</string>
-    <string name="list">List</string>
+    <string name="ban_user_confirm">您确定要禁止此用户吗？</string>
+    <string name="user_banned">被禁用户</string>
+    <string name="report_comment">报告注释</string>
+    <string name="report_comment_confirm">仅报告违反规则的评论。
+您确定要举报此评论吗？</string>
+    <string name="comment_reported">已举报的评论</string>
+    <string name="list">列表</string>
     <string name="grid">网格</string>
-    <string name="compact">Compact</string>
-    <string name="webview_not_installed">WebView not installed</string>
-    <string name="video_quality">Quality: %1$dp</string>
-    <string name="size_unknown">Unknown Size</string>
+    <string name="compact">紧凑模式</string>
+    <string name="webview_not_installed">未安装WebView</string>
+    <string name="video_quality">分辨率：%1$dp</string>
+    <string name="size_unknown">未知大小</string>
     <string name="mb_size">%1$s MB</string>
-    <string name="button_restore">Restore</string>
+    <string name="button_restore">重试</string>
     <string name="button_backup">Backup</string>
     <string name="no_location_selected">No location selected</string>
     <string name="enjoying_app">Enjoying the App?</string>
