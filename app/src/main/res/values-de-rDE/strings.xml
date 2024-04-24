@@ -62,7 +62,7 @@
         <item>Alle</item>
     </string-array>
     <string name="no_notifications">Keine weiteren Benachrichtigungen</string>
-    <string name="followers">Folgende</string>
+    <string name="followers">Follower</string>
     <string name="status">STATUS</string>
     <string-array name="status_anime">
         <item>GEPLANT</item>
@@ -90,7 +90,7 @@
     <string name="remove">Entfernen</string>
     <string name="name">Name</string>
     <string name="name_romaji">Name Romaji</string>
-    <string name="mean_score">Durchschnittliche Wertung</string>
+    <string name="mean_score">Durchschnittliche Bewertung</string>
     <string name="format">Format</string>
     <string name="status_title">Status</string>
     <string name="total_eps">Gesamte Episoden</string>
@@ -136,8 +136,8 @@
     <string name="trailer">Trailer</string>
     <string name="opening">Opening</string>
     <string name="ending">Ending</string>
-    <string name="prequel">Vorgänger</string>
-    <string name="sequel">Nachfolger</string>
+    <string name="prequel">Vorgeschichte</string>
+    <string name="sequel">Fortsetzung</string>
     <string name="anilist_settings">Anilist Einstellungen</string>
     <string name="extension_settings">Erweiterungen</string>
     <string name="downloads">Downloads</string>
@@ -162,7 +162,7 @@
     <string name="about">Mehr</string>
     <string name="desc">"Dantotsu wurde aus den Trümmern von Saikou geschaffen und basiert auf simplistischer, aber hochmoderner Eleganz. Es ist ein Anilist-Client, der es auch ermöglicht, Anime über Erweiterungen &amp; Manga zu streamen und herunterzuladen.
     Dantotsu bedeutet wörtlich \"das Beste vom Besten\" auf Japanisch. Nun, wir würden sagen, dies ist die beste Open-Source-App für Anime und Manga auf Android, was würden Sie sagen?"</string>
-    <string name="devs">Entwickler</string>
+    <string name="devs">Entwickler/Helfer</string>
     <string name="disclaimer">Haftungsausschluss</string>
     <string name="full_disclaimer">        - Dantotsu bietet nur einen Anime- und Manga-Tracker und bietet keine Streaming- oder Downloadfunktionen für Anime oder Manga an.
         \n\n - Dantotsu oder seine Entwickler und Mitwirkende hosten keine der Inhalte, die in Dantotsu gefunden werden. Alle Bilder und Anime-/Mangainformationen, die in der App gefunden werden, stammen aus verschiedenen öffentlichen APIs (AniList, MyAnimeList, Kitsu).
@@ -175,15 +175,15 @@
     <string-array name="tips">
         <item>Sie können lange auf eine Episode/ein Kapitel klicken, um es als gelesen zu markieren.</item>
         <item>Langes Klicken auf Shows kann den Listeneditor direkt öffnen.</item>
-        <item>Es gibt noch ein paar weitere versteckte Ostereier in der App.</item>
-        <item>Herausforderung: Erreichen Sie das Ende der beliebtesten Anime &amp; Manga.</item>
+        <item>Es gibt noch ein paar weitere versteckte Easter eggs in der App.</item>
+        <item>Challenge: Erreichen Sie das Ende der beliebtesten Anime &amp; Manga</item>
         <item>Versuchen Sie, lange auf den Titel der Show zu klicken.</item>
         <item>Mann, warum verschwenden Sie Ihre Zeit?</item>
         <item>Sie können lange klicken, um diese Nachricht zu kopieren.</item>
-        <item>OMG SCHAU! DU HAST EIN OSTEREI GEFUNDEN!?</item>
+        <item>OMG! DU HAST EIN EASTER EGG GEFUNDEN!?</item>
         <item>Wissen Sie, wer diese Animation sonst noch mag?</item>
         <item>MAL-Unterstützung? bruh.</item>
-        <item>Nolevs? eher wie KEINE Novels.</item>
+        <item>Novels? mehr wie KEINE vels.</item>
         <item>Klicken Sie lange auf das Logo, um nach App-Updates zu suchen</item>
     </string-array>
     <string-array name="themes">
@@ -200,7 +200,7 @@
     <string name="default_quality">Automatische Qualitätsauswahl</string>
     <string name="height">Höhe</string>
     <string name="width">Breite</string>
-    <string name="default_quality_info">Verwendet standardmäßig die nächstgelegene Qualität, die standardmäßig bereitgestellt wird, WIRD NUR FÜR \"Multi-Qualität\"-Server angewendet. Ändert sich automatisch beim Abspielen eines Videos.</string>
+    <string name="default_quality_info">Verwendet standardmäßig die bestmögliche Qualität, die standardmäßig bereitgestellt wird, WIRD NUR FÜR \"Multi-Qualität\"-Server angewendet. Ändert sich automatisch beim Abspielen eines Videos.</string>
     <string name="default_playback_speed">Standard-Wiedergabegeschwindigkeit: %1$s</string>
     <string name="cursed_speeds">WTF Geschwindigkeiten</string>
     <string name="resize_mode_button">Standard-Größenänderungsmodus</string>
@@ -224,32 +224,32 @@
     <string name="auto_skip_fillers_info">Überspringt Filler-Episoden beim Wechsel zur nächsten Episode.</string>
     <string name="update_progress">Fortschritt aktualisieren</string>
     <string name="ask_update_progress_anime">Für jeden Anime \"Individuell\" fragen</string>
-    <string name="ask_update_progress_manga">Für jedes Manga \"Individuell\" fragen</string>
+    <string name="ask_update_progress_manga">Für jeden Manga \"Individuell\" fragen</string>
     <string name="ask_update_progress_info_ep">Bei Deaktivierung wird der Fortschritt immer automatisch aktualisiert, wenn die Episode angesehen wird.</string>
     <string name="ask_update_progress_info_chap">Bei Deaktivierung wird der Fortschritt immer automatisch aktualisiert, wenn das Kapitel gelesen wird.</string>
     <string name="ask_update_progress_chapter_zero">Fortschritt für Kapitel 0 aktualisieren</string>
     <string name="ask_update_progress_info_zero">Bei Aktivierung werden neu gestartete Elemente mit einem Fortschritt von Kapitel 0 zu Anilist hinzugefügt.</string>
     <string name="ask_update_progress_hentai">Fortschritt für Hentai aktualisieren</string>
     <string name="ask_update_progress_doujin">Fortschritt für Doujins aktualisieren</string>
-    <string name="very_bold">sehr mutig von Ihnen :o</string>
+    <string name="very_bold">sehr mutig von dir :o</string>
     <string name="watch_complete_percentage">Gesehen-Prozentsatz</string>
-    <string name="watch_complete_percentage_info">Der Prozentsatz, bei dem Ihr Anilist-Fortschritt nach dem Ansehen einer Episode aktualisiert werden soll. \nDies legt auch den \% fest, wann Links für die nächste Episode vorab geladen werden sollen.</string>
+    <string name="watch_complete_percentage_info">Der Prozentsatz, bei dem Ihr Anilist-Fortschritt nach dem Ansehen einer Episode aktualisiert werden soll. \nDies legt auch den \% fest, wenn Links für die nächste Episode vorab geladen werden sollen.</string>
     <string name="behaviour">Verhalten</string>
     <string name="always_continue">Immer dort fortsetzen, wo Sie aufgehört haben</string>
     <string name="pause_video_focus">Pausieren, wenn nicht im Fokus</string>
     <string name="gestures">Lautstärke- &amp; Helligkeitsgesten</string>
     <string name="double_tap">Doppeltippen zum Suchen</string>
-    <string name="fast_forward">Fast Forward</string>
-    <string name="double_tap_info">Bei Deaktivierung werden Schnellvorlauf- &amp; Rücklauf-Tasten angezeigt</string>
-    <string name="seek_time">Suchzeit</string>
-    <string name="seek_time_info">Zeit in Sekunden für Schnellvorlauf &amp; Rücklauf.</string>
-    <string name="skip_time">Überspringzeit</string>
-    <string name="skip_time_info">Einstellung auf 0 blendet die Überspringen-Schaltfläche aus.</string>
+    <string name="fast_forward">Vorspulen</string>
+    <string name="double_tap_info">Bei Deaktivierung werden Vorspul- &amp; Zurückspul-Tasten angezeigt</string>
+    <string name="seek_time">Vor-/ Zurückspulzeit</string>
+    <string name="seek_time_info">Zeit in Sekunden für Vorspulen &amp; Zurückspulen.</string>
+    <string name="skip_time">Skip Zeit</string>
+    <string name="skip_time_info">Einstellung auf 0 blendet die Skip-Knopf aus.</string>
     <string name="show_cast_button">Cast-Schaltfläche anzeigen</string>
     <string name="show_cast_button_info">Benötigt die App \"Web Video Caster\", um zu casten.</string>
     <string name="picture_in_picture">Bild im Bild</string>
     <string name="always_minimize">Immer minimieren</string>
-    <string name="always_minimize_info">Erfordert, dass PiP aktiviert ist, macht den Player ähnlich wie den Youtube-Player, aber besser.\nBlendet auch die PiP-Schaltfläche aus.</string>
+    <string name="always_minimize_info">Erfordert, dass PiP aktiviert ist, macht den Player ähnlich wie den Youtube-Player, aber besser.\nBlendet auch den PiP-Knopf aus.</string>
     <string name="app">App</string>
     <string name="immersive_mode">Statusleiste ausblenden</string>
     <string name="immersive_modelist">Statusleiste für Liste ausblenden</string>
@@ -359,8 +359,8 @@
 
     \n\n_Es ist nicht erforderlich, sowohl MAL- als auch Anilist-Konten zu synchronisieren._
     </string>
-    <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
-    <string name="use_alarm_manager">Alarm-Manager für zuverlässige Benachrichtigungen verwenden</string>
+    <string name="notification_for_checking_subscriptions">Benachrichtigung für das Checken der Abonnements</string>
+    <string name="use_alarm_manager">Alarm-Manager verwenden</string>
     <string name="use_alarm_manager_reliable">Verwenden Sie Alarm Manager für zuverlässige Benachrichtigungen</string>
     <string name="use_alarm_manager_confirm">Die Verwendung des Alarmmanagers kann bei der Batterieoptimierung helfen, verbraucht aber möglicherweise mehr Batterie. Außerdem ist die Berechtigung \"Alarmmanager\" erforderlich.</string>
     <string name="use">Verwenden Sie</string>
@@ -810,48 +810,48 @@
     <string name="prefer_dub_desc">Dub als Standardeinstellung nutzen</string>
     <string name="show_yt_desc">YouTube Link für unterstützte Medien anzeigen</string>
     <string name="include_list_anime_desc">Include list items in Anime explore page</string>
-    <string name="ui_settings_desc">All the UI related settings</string>
-    <string name="download_manager_select_desc">Default manager to download Anime</string>
-    <string name="backup_restore_desc">Your preferred settings everywhere</string>
-    <string name="change_download_location_desc">Change the location where all the downloaded stuff goes</string>
-    <string name="always_continue_content_desc">Continue where you left off</string>
-    <string name="search_source_list_desc">Auto-select the next server if the previous server doesn\'t have the media</string>
+    <string name="ui_settings_desc">Alle Einstellung zur Benutzeroberfläche</string>
+    <string name="download_manager_select_desc">Bevorzugter Manager um Anime runterzuladen</string>
+    <string name="backup_restore_desc">Deine bevorzugten Einstellungen überall</string>
+    <string name="change_download_location_desc">Ändere den Speicherort aller runtergeladene Sachen</string>
+    <string name="always_continue_content_desc">Weitermachen, wo du aufgehört hast</string>
+    <string name="search_source_list_desc">Den nächsten Server automatisch auswählen, falls es kein Ergebnis beim vorherigen Server gab</string>
     <string name="recentlyListOnly_desc">Show only your list items in the recent tab</string>
-    <string name="adult_only_content_desc">Show only adult content in the explore page</string>
-    <string name="anime_add_repository_desc">Add Anime Extensions from various sources</string>
-    <string name="manga_add_repository_desc">Add Manga Extensions from various sources</string>
-    <string name="user_agent_desc">Change your default user agent</string>
-    <string name="force_legacy_installer_desc">Use the legacy installer to install extensions (For older android phones)</string>
-    <string name="skip_loading_extension_icons_desc">Don\'t load icons of extensions on the extension page</string>
-    <string name="NSFWExtention_desc">Remove 18+ extensions from search (May remove some useful extensions)</string>
-    <string name="reader_settings_desc">All the Reader related settings</string>
-    <string name="purge_manga_downloads_desc">Delete all downloaded Manga</string>
-    <string name="purge_novel_downloads_desc">Delete all downloaded Novels</string>
+    <string name="adult_only_content_desc">Nur 18+ Medien auf der Explore Seite anzeigen</string>
+    <string name="anime_add_repository_desc">Anime Erweiterungen von verschiedenen Quellen hinzufügen</string>
+    <string name="manga_add_repository_desc">Manga Erweiterungen von verschiedenen Quellen hinzufügen</string>
+    <string name="user_agent_desc">Ändere deinen Standard User Agent</string>
+    <string name="force_legacy_installer_desc">Benutze den veralteten Installierer, um Erweiterungen zu installieren (Für ältere Android-Geräte)</string>
+    <string name="skip_loading_extension_icons_desc">Die Bilder von Erweiterungen auf der Erweiterungsseite nicht laden</string>
+    <string name="NSFWExtention_desc">18+ Erweiterungen von der Suche entfernen (Nützliche Erweiterungen könnten entfernt werden)</string>
+    <string name="reader_settings_desc">Alle Einstellung zur Leseoberfläche</string>
+    <string name="purge_manga_downloads_desc">Alle heruntergeladenen Manga löschen</string>
+    <string name="purge_novel_downloads_desc">Alle Heruntergeladenen Novels löschen</string>
     <string name="include_list_desc">Include list items in Manga explore page</string>
-    <string name="anilist_notification_filters_desc">Choose category to Ignore</string>
-    <string name="anilist_notifications_checking_time_desc">Set the frequency you want the app to check for Anilist notifications</string>
-    <string name="comment_notification_checking_time_desc">Set the frequency you want the app to check for Comment notifications</string>
+    <string name="anilist_notification_filters_desc">Kategorie zum Ignorieren auswählen</string>
+    <string name="anilist_notifications_checking_time_desc">Setzte die Frequenz mir der die App Anilist Benachrichtigung checkt</string>
+    <string name="comment_notification_checking_time_desc">Setzte die Frequenz, mit der nach Kommentar Benachrichtigen gecheckt wird</string>
     <string name="notification_for_checking_subscriptions_desc">Show notification for checking Subscriptions</string>
     <string name="use_alarm_manager_reliable_desc">Use to bypass the phone\'s battery optimizer</string>
-    <string name="oled_theme_variant_desc">As dark as it gets</string>
-    <string name="use_material_you_desc">Use the same color as your wallpaper</string>
+    <string name="oled_theme_variant_desc">So dunkel wie es geht</string>
+    <string name="use_material_you_desc">Benutze dieselbe Farbe wie dein Hintergrundbild</string>
     <string name="use_unique_theme_for_each_item_desc">Use color from media\'s banner</string>
-    <string name="use_custom_theme_desc">Use your own color for the theme</string>
-    <string name="color_picker_desc">Choose a color</string>
+    <string name="use_custom_theme_desc">Benutze deine eigene Farbe für das Farbschema</string>
+    <string name="color_picker_desc">Wähle eine Farbe</string>
     <string name="torrent_addon">Torrent Addon</string>
     <string name="enable_torrent">Torrent freischalten</string>
     <string name="anime_downloader_addon">Anime Downloader Addon</string>
-    <string name="install_torrent_addon">Install Torrent Addon</string>
+    <string name="install_torrent_addon">Torrent Erweiterungen installieren</string>
     <string name="loaded_successfully">Erfolgreich geladen</string>
     <string name="not_installed">Nicht installiert</string>
     <string name="torrent_extension_not_supported">Torrent-Erweiterung wird von diesem Gerät nicht unterstützt</string>
     <string name="update_addon">Addon aktualisieren</string>
     <string name="install_addon">Addon installieren</string>
     <string name="download_addon_not_found">Addon nicht gefunden</string>
-    <string name="image">Image</string>
-    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
-    <string name="reading">READING</string>
-    <string name="watching">WATCHING</string>
+    <string name="image">Bild</string>
+    <string name="failed_ext_install_conflict">Fehler bei Installation der Erweiterung durch Konflikt</string>
+    <string name="reading">AM LESEN</string>
+    <string name="watching">AM SCHAUEN</string>
     <string name="avatar">%1$s\ [Avatar]</string>
     <string name="cover">%1$s\ [Cover]</string>
     <string name="banner">%1$s\ [Banner]</string>
