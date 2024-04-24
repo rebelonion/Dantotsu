@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="ar">
-    <string name="slogan">افضل تطبيق جديد للانمي &amp; المانجا للاندرويد.</string>
+    <string name="slogan">افضل تطبيق جديد للأنمي &amp; المانجا للأندرويد.</string>
     <string name="login">تسجيل الدخول</string>
     <string name="logout">تسجيل الخروج</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
@@ -8,29 +8,29 @@
     <string name="discord_link">https://discord.com/users/%1$s/</string>
     <string name="home">الصفحة الرئيسة</string>
     <string name="anime">أنمي</string>
-    <string name="browse_anime">تصفح الانمي</string>
+    <string name="browse_anime">تصفح الأنمي</string>
     <string name="manga">المانجا</string>
     <string name="browse_manga">تصفح المانجا</string>
     <string name="novels">الروايات</string>
     <string name="info">معلومات</string>
-    <string name="watch">مشاهده</string>
+    <string name="watch">مشاهدة</string>
     <string name="read">قراءة</string>
     <string name="language">اللغة</string>
-    <string name="anime_list">قائمة الانمي</string>
+    <string name="anime_list">قائمة الأنمي</string>
     <string name="manga_list">قائمة المانجا</string>
     <string name="sad">X(</string>
     <string name="oh">:o</string>
     <string name="colon">" : "</string>
-    <string name="no_internet">لا يوجد اتصال بالإنترنت</string>
-    <string name="refresh">إعادة التحميل</string>
+    <string name="no_internet">لا يتوفر إتصال بالإنترنت</string>
+    <string name="refresh">تحديث</string>
     <string name="search">البحث</string>
     <string name="search_results">نتائج البحث</string>
-    <string name="sort_by">الترتيب ب</string>
-    <string name="genre">النوع</string>
-    <string name="top_score">اعلي تقييم</string>
-    <string name="updated">تم تحديثه مؤخرا</string>
-    <string name="trending_anime">انمي شائع</string>
-    <string name="popular_anime">انمي مشهور</string>
+    <string name="sort_by">الترتيب حسب</string>
+    <string name="genre">التصنيف</string>
+    <string name="top_score">أعلى تقييم</string>
+    <string name="updated">تم تحديثه مؤخراً</string>
+    <string name="trending_anime">أنمي شائع</string>
+    <string name="popular_anime">أنمي مشهور</string>
     <string name="trending_manga">مانجا شائعة</string>
     <string name="trending_novel">روايات شائعة</string>
     <string name="popular_manga">مانجا مشهورة</string>
@@ -65,7 +65,7 @@
     <string name="followers">المتابعين</string>
     <string name="status">الحالة</string>
     <string-array name="status_anime">
-        <item>اخطط للشاهده</item>
+        <item>أخطط للشاهدة</item>
         <item>جاري المشاهدة</item>
         <item>مكتمل</item>
         <item>إعادة المشاهدة</item>
@@ -73,7 +73,7 @@
         <item>متروك</item>
     </string-array>
     <string-array name="status_manga">
-        <item>اخطط للشاهده</item>
+        <item>أخطط للشاهدة</item>
         <item>جاري القراءة</item>
         <item>مكتمل</item>
         <item>إعادة القراءة</item>
@@ -176,7 +176,7 @@
         <item>الضغط لمدة طويلة يمكنه فتح محرر القائمة مباشرة.</item>
         <item>هناك عدد بعض الأسرار المخفية في التطبيق.</item>
         <item>تحدي: اذهب إلى الجزء السفلي من الأنمي المشهور &amp; المانجا</item>
-        <item>جرب الضغط لفترة طويلة علي عنوان انمي \ مانجا.</item>
+        <item>جرب الضغط لفترة طويلة على عنوان أنمي \ مانجا.</item>
         <item>انت بتعمل ايه؟ كده بضيع وقتك.</item>
         <item>يمكن الضغط لمدة طويلة علي هذه الرسالة.</item>
         <item>دي المفروض أسرار في الابلكيشن فقولت اكتب فيها قلشات لول</item>
@@ -256,7 +256,7 @@
     <string name="home_layout_show">اظهار\اخفاء العناصر في الصفحة الرئيسة</string>
     <string-array name="home_layouts">
         <item>اكمل المشاهدة</item>
-        <item>الانمي المفضل</item>
+        <item>الأنمي المفضل</item>
         <item>الانمي المخطط مشاهدته</item>
         <item>اكمل القراءة</item>
         <item>المانجا المفضلة</item>
@@ -381,23 +381,23 @@
     <string name="error_message">خطأ: %1$s</string>
     <string name="install_step">خطوة: %1$s</string>
     <string name="review">مراجعة</string>
-    <string name="discord_nothing_button">Display only the first button</string>
-    <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
-    <string name="discord_anilist_button">Display your AniList profile instead</string>
+    <string name="discord_nothing_button">عرض الزر الأول فقط</string>
+    <string name="discord_dantotsu_button">عرض دانتوتسو في الزر الثاني</string>
+    <string name="discord_anilist_button">أعرض ملف \"أني ليست\" عوضا عن ذلك</string>
     <string name="discord_rich_presence">Discord Rich Presence</string>
-    <string name="stream_on_dantotsu">Stream on Dantotsu</string>
+    <string name="stream_on_dantotsu">بث على دانتوتسو</string>
     <string name="view_my_anilist">عرض Anilist الخاص</string>
     <string name="jobless_message">سحقًا! أنت حقا عاطل\nلقد وصلت إلى النهاية</string>
-    <string name="file_manager_not_found">Couldn\'t find a File Manager to open SD card</string>
-    <string name="error_loading_data">Error loading data %1$s</string>
-    <string name="long_click_to_check_update">Long click to check for app updates</string>
-    <string name="saved_to_path">Saved to:\n%s</string>
+    <string name="file_manager_not_found">لم يتم أيجاد مدير الملفات لفتح بطاقة التخزين</string>
+    <string name="error_loading_data">خطأ في تحميل البيانات %1$s</string>
+    <string name="long_click_to_check_update">ضغطة مطولة لفحص تحديثات البرنامج</string>
+    <string name="saved_to_path">حفظ إلى:\n%s</string>
     <string name="setting_progress">Setting progress to %1$d</string>
-    <string name="login_anilist_account">Please Login into AniList account!</string>
+    <string name="login_anilist_account">سجل دخول إلى حساب أني ليست رجاءا!</string>
     <string name="congrats_vro">Congrats Vro</string>
-    <string name="please_reload">Please Reload.</string>
+    <string name="please_reload">أعد التحميل رجاءً.</string>
     <string name="copied_text">تم نسخ \"%1$s\"</string>
-    <string name="back_to_exit">Press BACK again to exit</string>
+    <string name="back_to_exit">أضغط رجوع مرة أخرى للخروج</string>
     <string name="no_internet_connection">لا يوجد اتصال بالإنترنت</string>
     <string name="anilist_not_found">Seems like that wasn\'t found on Anilist.</string>
     <string name="disabled_auto_skip">إيقاف تخطي تلقائي OP &amp; ED</string>
@@ -409,11 +409,11 @@
     <string name="auto_skip_op_ed">تخطي تلقائي OP/ED</string>
     <string name="requires_time_stamps_to_be_enabled">Requires Time Stamps to be Enabled</string>
     <string name="hide_skip_button">Make the skip time stamp button disappear after 5 seconds</string>
-    <string name="copied_to_clipboard">Copied to Clipboard</string>
+    <string name="copied_to_clipboard">نسخ إلى الحافظة</string>
     <string name="first_episode">هذه هي الحلقة الأولي!</string>
     <string name="reset_auto_update">Long click \"List Editor\" button to reset Auto Update</string>
     <string name="autoplay_cancelled">Autoplay cancelled, no interaction for more than 1 Hour.</string>
-    <string name="auto_select_server_error">Couldn\'t auto select the server, Please try again!</string>
+    <string name="auto_select_server_error">لم تتم عملية أختيار السيرفر بشكل عشوائي, حاول مرة أخرى!</string>
     <string name="stream_selection_empty">No streams available! Try another source.</string>
     <string name="logging_in_mal">يتم تسجيل دخول ل\"MAL\"</string>
     <string name="getting_user_data">الحصول على بيانات المستخدم</string>
@@ -431,8 +431,8 @@
     <string name="empty_response">Empty response! Does your internet suck, perhaps?</string>
     <string name="error_loading_mal_user_data">Error loading MAL user data</string>
     <string name="error_loading_mal_data">Failed to load data from MAL</string>
-    <string name="error_loading_anilist_user_data">Error loading Anilist user data</string>
-    <string name="episode_not_found">Couldn\'t find episode : %1$s</string>
+    <string name="error_loading_anilist_user_data">حدث خطأ في تحميل بيانات مستخدم أني ليست</string>
+    <string name="episode_not_found">لم تجد الحلقة %1$s</string>
     <string name="list_updated">تم تحديث القائمة</string>
     <string name="deleted_from_list">تم مسح من القائمة</string>
     <string name="no_list_id">لا يوجد قائمة ID…</string>
@@ -444,19 +444,19 @@
     <string name="started_downloading">جاري التحميل\n%1$s</string>
     <string name="install_1dm">رجاء تزيل 1DM</string>
     <string name="install_adm">رجاء تزيل 1DM</string>
-    <string name="error_getting_image_data">Error getting image data</string>
+    <string name="error_getting_image_data">حدث خطأ في جلب ببيانات الصورة</string>
     <string name="loading_image_failed">لم يتم تحميل الصورة</string>
     <string name="copied_device_info">تم نسخ معلومات الجهاز</string>
     <string name="anilist_down">Seems like Anilist is down, maybe try using a VPN or you can wait for it to come back.</string>
     <string name="failed_to_load_data">Failed to load saved data of %1$d</string>
-    <string name="access_not_available">Wasn\'t able to get access</string>
+    <string name="access_not_available">لم أستطع الحصول على الوصول</string>
     <string name="mal_login_uri_not_found">Mal Login : Uri not Found</string>
     <string name="mal_login_code_challenge_not_found">Mal Login : codeChallenge not found</string>
     <string name="mal_login_code_not_present">Mal Login : Code not present in redirected URI</string>
     <string name="refresh_token_load_failed">Refresh Token : Failed to load saved token</string>
     <string name="refreshing_token_failed">Refreshing Token Failed</string>
     <string name="episode_release_countdown">Episode %1$d will be released in</string>
-    <string name="chapter_number">Chapter %1$d</string>
+    <string name="chapter_number">الفصل %1$d</string>
     <string name="chapter_release_timeout">%1$s has been available for</string>
     <string name="time_format">%1$d days %2$d hrs %3$d mins %4$d secs</string>
     <string-array name="sort_by">
@@ -470,7 +470,7 @@
     </string-array>
     <string name="main_role">رئيسي</string>
     <string name="supporting_role">SUPPORTING</string>
-    <string name="status_finished">FINISHED</string>
+    <string name="status_finished">منتهي</string>
     <string name="status_releasing">RELEASING</string>
     <string name="status_not_yet_released">NOT YET RELEASED</string>
     <string name="status_cancelled">CANCELLED</string>
