@@ -846,9 +846,9 @@
     <string name="download_addon_not_found">डाउनलोड एडऑन नहीं मिला</string>
     <string name="image">इमेज</string>
     <string name="failed_ext_install_conflict">टकराव के कारण एक्सटेंशन को स्थापित करने में विफल</string>
-    <string name="reading">READING</string>
-    <string name="watching">WATCHING</string>
-    <string name="avatar">%1$s\ [Avatar]</string>
-    <string name="cover">%1$s\ [Cover]</string>
-    <string name="banner">%1$s\ [Banner]</string>
+    <string name="reading">रीडिंग</string>
+    <string name="watching">देखना</string>
+    <string name="avatar">%1$s\ [अवतर]</string>
+    <string name="cover">%1$s\ [कवर]</string>
+    <string name="banner">%1$s\ [बैनर]</string>
 </resources>
