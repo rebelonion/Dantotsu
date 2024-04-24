@@ -53,9 +53,9 @@
         <item>جاري القراءة</item>
         <item>جاري المشاهدة</item>
         <item>مكتمل</item>
-        <item>متوقف مؤقتًا</item>
+        <item>متوقف مؤقتاً</item>
         <item>متروك</item>
-        <item>اخطط للشاهده</item>
+        <item>اخطط للشاهدة</item>
         <item>المفضلة</item>
         <item>إعادة المشاهدة</item>
         <item>إعادة القراءة</item>
@@ -379,7 +379,7 @@
     <string name="extension_installed">تم تثبيت الإضافة</string>
     <string name="installed">تم التثبيت</string>
     <string name="error_message">خطأ: %1$s</string>
-    <string name="install_step">Step: %1$s</string>
+    <string name="install_step">خطوة: %1$s</string>
     <string name="review">مراجعة</string>
     <string name="discord_nothing_button">Display only the first button</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
@@ -461,14 +461,14 @@
     <string name="time_format">%1$d days %2$d hrs %3$d mins %4$d secs</string>
     <string-array name="sort_by">
         <item>التقيم</item>
-        <item>Popular</item>
-        <item>Trending</item>
+        <item>شعبي</item>
+        <item>شائع</item>
         <item>New Releases</item>
         <item>A-Z</item>
         <item>Z-A</item>
         <item>Pure pain</item>
     </string-array>
-    <string name="main_role">MAIN</string>
+    <string name="main_role">رئيسي</string>
     <string name="supporting_role">SUPPORTING</string>
     <string name="status_finished">FINISHED</string>
     <string name="status_releasing">RELEASING</string>
@@ -501,9 +501,9 @@
     <string name="continue_from">أكمل من %1$s؟</string>
     <string name="title_update_progress">Update progress on AniList?</string>
     <string name="incognito_will_not_update">Incognito mode will still ignore progress.</string>
-    <string name="dont_ask_again">"Don't ask again for %1$s"</string>
+    <string name="dont_ask_again">"لا تسأل مرة أخرى عن%1$s"</string>
     <string name="default_speed">السرعة الأصلية</string>
-    <string name="default_resize_mode">Default Resize Mode</string>
+    <string name="default_resize_mode">وضع تغيير الحجم الإفتراضي</string>
     <string name="primary_sub_color">Primary Sub Color</string>
     <string name="outline_sub_color">Outline Sub Color</string>
     <string name="outline_type">Outline Type</string>
@@ -526,10 +526,10 @@
     <string name="chapters_total_of">"Total of "</string>
     <string name="no_description_available">"No Description Available"</string>
     <string-array name="manga_directions">
-        <item>Top to Bottom</item>
+        <item>من الأعلى للأسفل</item>
         <item>Right to Left</item>
         <item>Bottom to Top</item>
-        <item>Left to Right</item>
+        <item>من اليسار إلى اليمين</item>
     </string-array>
     <string-array name="manga_layouts">
         <item>Paged</item>
@@ -538,14 +538,14 @@
     </string-array>
     <string name="selected">Selected</string>
     <string name="found">Found</string>
-    <string name="age">"__Age:__ "</string>
-    <string name="birthday">\n\"__Birthday:__ \"</string>
-    <string name="gender">\n\"__Gender:__ \"</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
+    <string name="age">"_العمر:_ "</string>
+    <string name="birthday">\n\"_الميلاد_\"</string>
+    <string name="gender">\n\"_الجنس:_\"</string>
+    <string name="male">ذكر</string>
+    <string name="female">أنثى</string>
     <string name="question_1">ما هو Dantotsu؟</string>
     <string name="answer_1">Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream &amp; download Anime / Manga through extensions. \n&gt;Dantotsu (断トツ; Dan-totsu) literally means the best of the best in Japanese. Well, we would like to say this is the best open source app for anime and manga on Android, but hey, Try it out yourself &amp; judge!</string>
-    <string name="question_2">What are some features of Dantotsu?</string>
+    <string name="question_2">ما هي بعض مميزات دانتوتسو؟</string>
     <string name="answer_2">Some mentionable features of Dantotsu are\n\n- Easy and functional way to both, watch anime and read manga and light novels, Ad Free.\n- A completely open source app with a nice UI &amp; Animations\n- 3rd party plugin support \n- Synchronize anime and manga real-time with AniList. Easily categorize anime and manga based on your current status. (Powered by AniList)\n- Find all shows using thoroughly and frequently updated list of all trending, popular and ongoing anime based on scores.\n- View extensive details about anime shows, movies and manga titles. It also features ability to countdown to the next episode of airing anime. (Powered by AniList &amp; MyAnimeList)</string>
     <string name="question_3">ما هو الفرق بين Stable, Beta &amp; Alpha؟</string>
     <string name="answer_3">A Stable release is a version that has been tested as thoroughly as possible and is as reliable as we can make it.\n\nA Beta release is a version which is meant for testing new features or providing hot fixes.\n\nAn Alpha release is like a beta version but has many bugs and you can only find it on our [discord](https://discord.gg/invite/4HPZ5nAWwM) server. It gets frequent updates and has a high chance to break.\n\nIf you want a reliable app then go for the Stable. If you want the latest and greatest features and bugs then go for Alpha.</string>
