@@ -127,7 +127,7 @@
     <string name="server_selector">حدد السيرفر</string>
     <string name="auto_select_server">التحديد التلقائي للخادم</string>
     <string name="make_default">الافتراضي</string>
-    <string name="filler">فلر (filler)</string>
+    <string name="filler">Filler</string>
     <string name="adult">للبالغين</string>
     <string name="list_only">القائمة فقط</string>
     <string name="tag">الخاصية</string>
@@ -219,8 +219,8 @@
     <string name="auto">تلقائي</string>
     <string name="auto_play_next_episode">التشغيل التلقائي للحلقة التالية</string>
     <string name="auto_play_next_episode_info">يتم التعطيل تلقائيًا في حالة عدم التفاعل مع مشغل الفيديو بعد ساعة واحدة.</string>
-    <string name="auto_skip_fillers">تخطي حلقات الفلر</string>
-    <string name="auto_skip_fillers_info">تخطي حلقات الفلر عند الانتقال إلى الحلقة التالية.</string>
+    <string name="auto_skip_fillers">تخطي حلقات ال Filler</string>
+    <string name="auto_skip_fillers_info">تخطي حلقات ال Filler عند الانتقال إلى الحلقة التالية.</string>
     <string name="update_progress">تحديث تقدمك</string>
     <string name="ask_update_progress_anime">اسأل مع كل أنمي \"على حدة\"</string>
     <string name="ask_update_progress_manga">اسأل مع كل مانجا \"على حدة\"</string>
@@ -333,7 +333,7 @@
     <string name="timestamp_proxy_desc">مفيد إذا كنت تواجه فشل المصافحة</string>
     <string name="timestamp_proxy">Use Proxy for Timestamps</string>
     <string name="check_app_updates">تحقق من التحديثات</string>
-    <string name="author">مؤلف</string>
+    <string name="author">المؤلف</string>
     <string name="forks">إصدارات</string>
     <string name="faq">سؤال و أجابة</string>
     <string name="accounts">الحسابات</string>
@@ -727,7 +727,7 @@
     <string name="report_comment">Report Comment</string>
     <string name="report_comment_confirm">Only report comments that violate the rules. Are you sure you want to report this comment?</string>
     <string name="comment_reported">تم الإبلاغ عن التعليق</string>
-    <string name="list">قائمة</string>
+    <string name="list">القائمة</string>
     <string name="grid">شبكة</string>
     <string name="compact">Compact</string>
     <string name="webview_not_installed">WebView not installed</string>
@@ -742,7 +742,7 @@
     <string name="no_moners">no moners :(</string>
     <string name="you_be_rich">لا بأس, ستصبح غني قريبًا :prayge:</string>
     <string name="donate">تبرع :)</string>
-    <string name="do_it">افعلها!</string>
+    <string name="do_it">أفعلها!</string>
     <string name="password">كلمة السر</string>
     <string name="search_title">Search %1$s</string>
     <string name="profile_stats_widget">Track progress directly from your home screen</string>
@@ -775,7 +775,7 @@
     <string name="dir_access_msg">Please choose a directory to save your downloads</string>
     <string name="change_download_location">تغيير موقع التنزيل</string>
     <string name="download_location_msg">Are you sure you want to change the download location?\nOld downloads may no longer be accessible.</string>
-    <string name="report">تقرير</string>
+    <string name="report">إبلاغ</string>
     <string name="ban">حظر</string>
     <string name="voice_actors">مؤدين الأصوات</string>
     <string name="download_permission_required">Permission is required to download</string>
@@ -826,7 +826,7 @@
     <string name="purge_manga_downloads_desc">Delete all downloaded Manga</string>
     <string name="purge_novel_downloads_desc">Delete all downloaded Novels</string>
     <string name="include_list_desc">Include list items in Manga explore page</string>
-    <string name="anilist_notification_filters_desc">Choose category to Ignore</string>
+    <string name="anilist_notification_filters_desc">أختر الفئة لتجاهلها</string>
     <string name="anilist_notifications_checking_time_desc">Set the frequency you want the app to check for Anilist notifications</string>
     <string name="comment_notification_checking_time_desc">Set the frequency you want the app to check for Comment notifications</string>
     <string name="notification_for_checking_subscriptions_desc">Show notification for checking Subscriptions</string>
