@@ -140,6 +140,9 @@
             android:name=".settings.SettingsAboutActivity"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".home.StatusActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".settings.SettingsAccountActivity"
             android:parentActivityName=".MainActivity" />
         <activity

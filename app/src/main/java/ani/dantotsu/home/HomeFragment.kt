@@ -314,10 +314,37 @@ class HomeFragment : Fragment() {
             binding.homeRecommendedEmpty,
             binding.homeRecommended
         )
+        binding.homeUserStatusContainer.visibility = View.VISIBLE
+        binding.homeUserStatusProgressBar.visibility = View.VISIBLE
+        binding.homeUserStatusRecyclerView.visibility = View.GONE
+        binding.homeUserStatus.visibility = View.INVISIBLE
+        model.getUserStatus().observe(viewLifecycleOwner) {
+            binding.homeUserStatusRecyclerView.visibility = View.GONE
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    binding.homeUserStatusRecyclerView.adapter = UserStatus(it)
+                    binding.homeUserStatusRecyclerView.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    binding.homeUserStatusRecyclerView.visibility = View.VISIBLE
+                    binding.homeUserStatusRecyclerView.layoutAnimation =
+                        LayoutAnimationController(setSlideIn(), 0.25f)
+
+                } else {
+                    binding.homeUserStatusContainer.visibility = View.GONE
+                }
+                binding.homeUserStatus.visibility = View.VISIBLE
+                binding.homeUserStatus.startAnimation(setSlideUp())
+                binding.homeUserStatusProgressBar.visibility = View.GONE
+            }
+        }
 
         binding.homeUserAvatarContainer.startAnimation(setSlideUp())
 
-        model.empty.observe(viewLifecycleOwner) {
+        model.empty.observe(viewLifecycleOwner)
+        {
             binding.homeDantotsuContainer.visibility = if (it == true) View.VISIBLE else View.GONE
             (binding.homeDantotsuIcon.drawable as Animatable).start()
             binding.homeDantotsuContainer.startAnimation(setSlideUp())
@@ -348,7 +375,8 @@ class HomeFragment : Fragment() {
         )
 
         val live = Refresh.activity.getOrPut(1) { MutableLiveData(false) }
-        live.observe(viewLifecycleOwner) {
+        live.observe(viewLifecycleOwner)
+        {
             if (it) {
                 scope.launch {
                     withContext(Dispatchers.IO) {
@@ -362,6 +390,7 @@ class HomeFragment : Fragment() {
                         val homeLayoutShow: List<Boolean> =
                             PrefManager.getVal(PrefName.HomeLayoutShow)
                         runBlocking {
+                            model.initUserStatus()
                             model.initHomePage()
                         }
                         (array.indices).forEach { i ->

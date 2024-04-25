@@ -309,7 +309,50 @@
                 </LinearLayout>
 
             </FrameLayout>
+            <LinearLayout
+                android:id="@+id/homeUserStatusContainer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
 
+                <TextView
+                    android:id="@+id/homeUserStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:padding="8dp"
+                    android:text="@string/social"
+                    android:textSize="16sp" />
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="100dp">
+
+                    <ProgressBar
+                        android:id="@+id/homeUserStatusProgressBar"
+                        style="?android:attr/progressBarStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_margin="90dp" />
+
+                    <ani.dantotsu.FadingEdgeRecyclerView
+                        android:id="@+id/homeUserStatusRecyclerView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:paddingStart="20dp"
+                        android:paddingEnd="20dp"
+                        android:requiresFadingEdge="horizontal"
+                        tools:itemCount="4"
+                        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:listitem="@layout/item_user_status"
+                        tools:orientation="horizontal" />
+                </FrameLayout>
+            </LinearLayout>
             <LinearLayout
                 android:id="@+id/homeContinueWatchingContainer"
                 android:layout_width="match_parent"

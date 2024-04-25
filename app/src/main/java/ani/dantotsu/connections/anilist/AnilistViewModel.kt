@@ -11,6 +11,8 @@ import ani.dantotsu.connections.discord.Discord
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.media.Media
 import ani.dantotsu.others.AppUpdater
+import ani.dantotsu.profile.User
+import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -99,6 +101,35 @@ class AnilistHomeViewModel : ViewModel() {
         res["favoriteManga"]?.let { mangaFav.postValue(it) }
         res["plannedManga"]?.let { mangaPlanned.postValue(it) }
         res["recommendations"]?.let { recommendation.postValue(it) }
+    }
+    private val userStatus: MutableLiveData<ArrayList<User>> =
+        MutableLiveData<ArrayList<User>>(null)
+
+    fun getUserStatus(): LiveData<ArrayList<User>> = userStatus
+
+    suspend fun initUserStatus() {
+        Anilist.query.getStatus()?.data?.page?.activities?.let { activities ->
+            val groupedActivities = activities
+                .filterNot { it.userId == Anilist.userid }
+                .sortedByDescending { ActivityItemBuilder.getDateTime(it.createdAt) }
+                .groupBy { it.userId }
+            val userList = groupedActivities.mapNotNull { (_, activities) ->
+                val user = activities.firstOrNull()?.user
+                user?.let {
+                    User(
+                        it.id,
+                        it.name ?: "",
+                        it.avatar?.medium,
+                        it.bannerImage,
+                        activity = activities
+                    )
+                }
+            }.toMutableList()
+            userList.sortByDescending { user ->
+                user.activity.maxByOrNull { it.createdAt }?.createdAt
+            }
+            userStatus.postValue(ArrayList(userList))
+        }
     }
 
     suspend fun loadMain(context: FragmentActivity) {

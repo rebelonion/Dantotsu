@@ -174,7 +174,7 @@ data class Media(
 
     // Notes for site moderators
     @SerialName("modNotes") var modNotes: String?,
-)
+) : java.io.Serializable
 
 @Serializable
 data class MediaTitle(
@@ -189,7 +189,7 @@ data class MediaTitle(
 
     // The currently authenticated users preferred title language. Default romaji for non-authenticated
     @SerialName("userPreferred") var userPreferred: String,
-)
+): java.io.Serializable
 
 @Serializable
 enum class MediaType {
