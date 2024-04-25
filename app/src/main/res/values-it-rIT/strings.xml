@@ -176,89 +176,89 @@
         <item>Facendo un Clic Lungo sulle Schermate è possibile aprire direttamente l\'Editor di Elenchi.</item>
         <item>Ci sono altri easter egg nascosti nell\'App.</item>
         <item>Sfida: Vai in fondo alla classifica degli Anime e dei &amp; Manga più popolari</item>
-        <item>Provare a fare un Click Lungo sul Titolo della Mostra.</item>
+        <item>Prova a fare un Click Lungo sul Titolo della Mostra.</item>
         <item>Dannazione, perché stai sprecando il tuo Tempo?</item>
         <item>È possibile fare un Clic Lungo per copiare questo Messaggio.</item>
         <item>ODDIO GUARDA! HAI TROVATO UN EASTER EGG!?</item>
         <item>Sai a chi altro piace questa Animazione?</item>
-        <item>MAL support? bruh.</item>
-        <item>Novels? more like NO vels.</item>
-        <item>Long Click the logo to check for App Update</item>
+        <item>Supporto MAL? Bruh.</item>
+        <item>Novels? Più simile a NO vels.</item>
+        <item>Fai un Clic Lungo sul logo per verificare l\'Aggiornamento dell\'App</item>
     </string-array>
     <string-array name="themes">
-        <item>Default</item>
-        <item>Theme 1</item>
-        <item>Theme 2</item>
-        <item>Theme 3</item>
-        <item> Theme 4</item>
+        <item>Predefinito</item>
+        <item>Tema 1</item>
+        <item>Tema 2</item>
+        <item>Tema 3</item>
+        <item> Tema 4</item>
     </string-array>
     <string name="video">Video</string>
-    <string name="video_info">Show Video Info</string>
-    <string name="source_info">Show Source Name</string>
-    <string name="video_info_info">Shows what the Resolution of the current video playing, useful for <b>\"Multi Quality\"</b> servers.</string>
-    <string name="default_quality">Auto Quality Selection</string>
-    <string name="height">Height</string>
-    <string name="width">Width</string>
-    <string name="default_quality_info">Automatically uses the closest quality provided by default, ONLY applied for \"Multi Quality\" Servers. Auto changes upon playing a video.</string>
-    <string name="default_playback_speed">Default Playback Speed : %1$s</string>
-    <string name="cursed_speeds">Cursed Speeds</string>
-    <string name="resize_mode_button">Default Resize Mode</string>
-    <string name="subtitles">Subtitles</string>
-    <string name="subtitle_toggle">Subtitles</string>
-    <string name="primary_sub_color_select">Subtitle Color</string>
-    <string name="secondary_sub_color_select">Subtitle Outline Color</string>
-    <string name="secondary_sub_outline_type_select">Subtitle Outline Type</string>
-    <string name="sub_background_color_select">Subtitle Background Color</string>
-    <string name="sub_window_color_select">Subtitle Window Color</string>
-    <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn't)"</string>
-    <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
-    <string name="sub_alpha">Subtitle Transparency</string>
-    <string name="sub_text_example">Example Sub</string>
-    <string name="sub_font_select">Subtitle Font</string>
-    <string name="subtitle_font_size">Subtitle Size</string>
+    <string name="video_info">Mostra Info Video</string>
+    <string name="source_info">Mostra Nome Sorgente</string>
+    <string name="video_info_info">Mostra la Risoluzione del video in corso di riproduzione, utile per i server con<b>\"Qualità Multipla\"</b>.</string>
+    <string name="default_quality">Selezione Qualità Automatica</string>
+    <string name="height">Altezza</string>
+    <string name="width">Larghezza</string>
+    <string name="default_quality_info">Utilizza automaticamente la qualità più vicina fornita per impostazione predefinita, applicata SOLO ai server \"Qualità Multipla\". Cambia automaticamente quando si riproduce un video.</string>
+    <string name="default_playback_speed">Velocità di Riproduzione Predefinita: %1$s</string>
+    <string name="cursed_speeds">Velocità Maledette</string>
+    <string name="resize_mode_button">Modalità Ridimensionamento Predefinita</string>
+    <string name="subtitles">Sottotitoli</string>
+    <string name="subtitle_toggle">Sottotitoli</string>
+    <string name="primary_sub_color_select">Colore Sottotitoli</string>
+    <string name="secondary_sub_color_select">Colore Contorno Sottotitoli</string>
+    <string name="secondary_sub_outline_type_select">Tipo di Contorno del Sottotitolo</string>
+    <string name="sub_background_color_select">Colore di Sfondo dei Sottotitoli</string>
+    <string name="sub_window_color_select">Colore della Finestra dei Sottotitoli</string>
+    <string name="sub_window_color_info">"La finestra dei sottotitoli è la parte a sinistra e a destra di essi. (Dove non c'è lo sfondo)"</string>
+    <string name="sub_color_info"><b>Nota:</b> La modifica delle impostazioni di cui sopra ha effetto solo sui sottotitoli soft!</string>
+    <string name="sub_alpha">Trasparenza dei Sottotitoli</string>
+    <string name="sub_text_example">Esempio di Sub</string>
+    <string name="sub_font_select">Font dei Sottotitoli</string>
+    <string name="subtitle_font_size">Dimensione dei Sottotitoli</string>
     <string name="auto">Auto</string>
-    <string name="auto_play_next_episode">Autoplay Next Episode</string>
-    <string name="auto_play_next_episode_info">Automatically disables if there is no interaction with player after 1 hour.</string>
-    <string name="auto_skip_fillers">Auto Skip Fillers</string>
-    <string name="auto_skip_fillers_info">Skips filler episodes when going to next episode.</string>
-    <string name="update_progress">Update Progress</string>
-    <string name="ask_update_progress_anime">Ask for each Anime \"Individually\"</string>
-    <string name="ask_update_progress_manga">Ask for each Manga \"Individually\"</string>
-    <string name="ask_update_progress_info_ep">Turning off will always automatically update progress when the episode is watched.</string>
-    <string name="ask_update_progress_info_chap">Turning off will always automatically update progress when the chapter is read.</string>
-    <string name="ask_update_progress_chapter_zero">Update Progress for Chapter 0</string>
-    <string name="ask_update_progress_info_zero">Turning on will add newly started items to Anilist with progress set to chapter 0.</string>
-    <string name="ask_update_progress_hentai">Update Progress for Hentai</string>
-    <string name="ask_update_progress_doujin">Update Progress for Doujins</string>
-    <string name="very_bold">very bold of you sar</string>
+    <string name="auto_play_next_episode">Autoplay dell\'Episodio Successivo</string>
+    <string name="auto_play_next_episode_info">Si disattiva automaticamente se non c\'è interazione con il giocatore dopo 1 ora.</string>
+    <string name="auto_skip_fillers">Salto Automatico dei Fillers</string>
+    <string name="auto_skip_fillers_info">Salta gli episodi filler quando si passa all\'episodio successivo.</string>
+    <string name="update_progress">Aggiornamento dei Progressi</string>
+    <string name="ask_update_progress_anime">Chiedi per ogni Anime \"Individualmente\"</string>
+    <string name="ask_update_progress_manga">Chiedi per ogni Manga \"Individualmente\"</string>
+    <string name="ask_update_progress_info_ep">La disattivazione aggiornerà sempre automaticamente i progressi quando l\'episodio viene guardato.</string>
+    <string name="ask_update_progress_info_chap">Se si disattiva, l\'avanzamento verrà sempre aggiornato automaticamente quando il capitolo viene letto.</string>
+    <string name="ask_update_progress_chapter_zero">Stato di Avanzamento degli Aggiornamenti per il Capitolo 0</string>
+    <string name="ask_update_progress_info_zero">L\'attivazione aggiungerà le voci appena avviate ad Anilist con l\'avanzamento impostato al capitolo 0.</string>
+    <string name="ask_update_progress_hentai">Progressi nell\'Aggiornamento per Hentai</string>
+    <string name="ask_update_progress_doujin">Progressi nell\'Aggiornamento per Doujins</string>
+    <string name="very_bold">molto audace da parte tua sar</string>
     <string name="watch_complete_percentage">Watch Update Percentage</string>
-    <string name="watch_complete_percentage_info">The percentage at which your Anilist progress should be updated after watching an episode. \nThis also sets the \% for when to preload links for the next episode.</string>
-    <string name="behaviour">Behaviour</string>
-    <string name="always_continue">Always Continue from where you left off</string>
-    <string name="pause_video_focus">Pause when not in Focus</string>
-    <string name="gestures">Volume &amp; Brightness Gestures</string>
-    <string name="double_tap">Double tap to Seek</string>
-    <string name="fast_forward">Fast Forward</string>
-    <string name="double_tap_info">Turning off will show fast forward &amp; rewind buttons</string>
-    <string name="seek_time">Seek Time</string>
-    <string name="seek_time_info">Amount of time in seconds for fast forward &amp; rewind.</string>
-    <string name="skip_time">Skip Time</string>
-    <string name="skip_time_info">Setting to 0, hides the Skip Button.</string>
-    <string name="show_cast_button">Show Cast Button</string>
-    <string name="show_cast_button_info">Requires \"Web Video Caster\" app to cast.</string>
+    <string name="watch_complete_percentage_info">La percentuale di aggiornamento dei progressi di Anilist dopo la visione di un episodio. \nImposta anche la percentuale di precaricamento \% dei link per l\'episodio successivo.</string>
+    <string name="behaviour">Comportamento</string>
+    <string name="always_continue">Continua Sempre da dove si è lasciato</string>
+    <string name="pause_video_focus">Pausa quando non è a Fuoco</string>
+    <string name="gestures">Volume &amp; Gesti di Luminosità</string>
+    <string name="double_tap">Doppio Tocco per Cercare</string>
+    <string name="fast_forward">Avanzamento Veloce</string>
+    <string name="double_tap_info">Se si spegne, vengono visualizzati i pulsanti di avanzamento rapido &amp; di riavvolgimento</string>
+    <string name="seek_time">Cerca il Tempo</string>
+    <string name="seek_time_info">Quantità di tempo in secondi per l\'avanzamento rapido &amp; riavvolgimento.</string>
+    <string name="skip_time">Salta il Tempo</string>
+    <string name="skip_time_info">Impostando a 0, si nasconde il pulsante Salta.</string>
+    <string name="show_cast_button">Mostra il Pulsante Cast</string>
+    <string name="show_cast_button_info">Richiede l\'applicazione \"Web Video Caster\" per effettuare il casting.</string>
     <string name="picture_in_picture">Picture in Picture</string>
-    <string name="always_minimize">Always Minimize</string>
-    <string name="always_minimize_info">Requires PiP to be enabled, makes the player behave like Youtube Player but better.\nAlso hides the PiP button.</string>
+    <string name="always_minimize">Minimizza Sempre</string>
+    <string name="always_minimize_info">Richiede che il PiP sia abilitato, fa sì che il lettore si comporti come Youtube Player, ma meglio.\nNasconde anche il pulsante PiP.</string>
     <string name="app">App</string>
-    <string name="immersive_mode">Hide Status Bar</string>
-    <string name="immersive_modelist">Hide Status Bar for list</string>
-    <string name="immersive_mode_info">Requires App restart to fully apply.</string>
-    <string name="home_layout_show">Show/Hide Layouts on Home</string>
+    <string name="immersive_mode">Nascondi la Barra di Stato</string>
+    <string name="immersive_modelist">Nascondi la Barra di Stato per l\'Elenco</string>
+    <string name="immersive_mode_info">Richiede il Riavvio dell\'App per essere applicato completamente.</string>
+    <string name="home_layout_show">Mostra/Nascondi i layout nella Home</string>
     <string-array name="home_layouts">
-        <item>Continue Watching</item>
-        <item>Favourite Anime</item>
-        <item>Planned Anime</item>
-        <item>Continue Reading</item>
+        <item>Continua a Guardare</item>
+        <item>Anime Preferito</item>
+        <item>Anime Programmato</item>
+        <item>Continua a Leggere</item>
         <item>Favourite Manga</item>
         <item>Planned Manga</item>
         <item>Recommended</item>
