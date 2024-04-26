@@ -263,6 +263,7 @@
         <item>Lieblingsmanga</item>
         <item>Geplante Manga</item>
         <item>Empfohlen</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">Standard Start-Tab</string>
     <string name="small_view">Kleine Ansicht bei beliebten Shows</string>
