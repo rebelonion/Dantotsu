@@ -262,6 +262,7 @@
         <item>Manga favoris</item>
         <item>Manga prévus</item>
         <item>Recommandations</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">Onglet de démarrage par défaut</string>
     <string name="small_view">Petite vue dans les émissions populaires</string>
