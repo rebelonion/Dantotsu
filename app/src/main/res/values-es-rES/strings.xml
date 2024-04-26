@@ -262,6 +262,7 @@
         <item>Mangas favoritos</item>
         <item>Mangas pendientes</item>
         <item>Recomendados</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">Pestaña de inicio predeterminada</string>
     <string name="small_view">Vista pequeña de los programas en tendencia</string>
