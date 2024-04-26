@@ -383,7 +383,7 @@
     <string name="installed">Installée</string>
     <string name="error_message">Erreur: %1$s</string>
     <string name="install_step">Étape: %1$s</string>
-    <string name="review">Avis</string>
+    <string name="review">Voir</string>
     <string name="discord_nothing_button">Afficher uniquement le premier bouton</string>
     <string name="discord_dantotsu_button">Afficher Dantotsu dans le deuxième bouton</string>
     <string name="discord_anilist_button">Afficher votre profil AniList à la place</string>
