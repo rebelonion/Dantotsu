@@ -262,6 +262,7 @@
         <item>좋아하는 만화</item>
         <item>계획된 만화</item>
         <item>추천</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">기본 시작 탭</string>
     <string name="small_view">인기 있는 쇼에서 작은 보기</string>
