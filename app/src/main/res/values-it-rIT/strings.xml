@@ -262,6 +262,7 @@
         <item>Manga Preferito</item>
         <item>Manga Programmato</item>
         <item>Raccomandato</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">Scheda di Avvio Predefinita</string>
     <string name="small_view">Vista Piccola degli Show di Tendenza</string>
