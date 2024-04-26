@@ -1,5 +1,6 @@
 package ani.dantotsu.home
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -14,6 +15,7 @@ import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.home.status.listener.StoriesCallback
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.User
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.statusBarHeight
 
 class StatusActivity : AppCompatActivity(), StoriesCallback {
@@ -42,6 +44,7 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
         slideInRight = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
 
         binding.stories.setStoriesList(activity[position].activity, this)
+
     }
 
     override fun onPause() {

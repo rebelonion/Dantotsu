@@ -30,6 +30,7 @@ import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.User
 import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.profile.activity.ActivityItemBuilder
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -432,5 +433,8 @@ constructor(
             }
             true
         }
+        val key = "${story.user?.id}_activities"
+        val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
+        PrefManager.setCustomVal(key, set)
     }
 }

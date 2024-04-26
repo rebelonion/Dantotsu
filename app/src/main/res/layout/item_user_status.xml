@@ -7,31 +7,44 @@
     android:orientation="vertical"
     android:padding="8dp">
 
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/profileUserAvatarContainer"
+    <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/transparent"
-        app:strokeColor="@color/transparent"
-        app:cardCornerRadius="124dp">
+        android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/profileUserAvatar"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            tools:ignore="ContentDescription,ImageContrastCheck"
-            tools:tint="@color/transparent" />
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/profileUserAvatarContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/transparent"
+            app:cardCornerRadius="124dp"
+            app:strokeColor="@color/transparent">
 
-    </com.google.android.material.card.MaterialCardView>
+            <ImageView
+                android:id="@+id/profileUserAvatar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                tools:ignore="ContentDescription,ImageContrastCheck"
+                tools:tint="@color/transparent" />
+
+        </com.google.android.material.card.MaterialCardView>
+        <ani.dantotsu.home.status.CircleView
+            android:id="@+id/profileUserStatusIndicator"
+            android:layout_width="78dp"
+            android:layout_height="78dp">
+
+        </ani.dantotsu.home.status.CircleView>
+    </FrameLayout>
 
     <TextView
         android:id="@+id/profileUserName"
-        android:layout_width="wrap_content"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_semi_bold"
         android:layout_gravity="center_horizontal|center_vertical"
         android:ellipsize="end"
+        android:fontFamily="@font/poppins_semi_bold"
+        android:gravity="center"
+        android:singleLine="true"
         android:text="@string/username"
         android:textColor="?attr/colorOnBackground"
         android:textSize="12sp" />
