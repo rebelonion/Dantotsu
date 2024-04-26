@@ -262,6 +262,7 @@
         <item>المانجا المفضلة</item>
         <item>المانجا المخطط قراءتها</item>
         <item>موصى به</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">الصفحة الافتراضية عند التشغيل</string>
     <string name="small_view">عرض صغير في العروض الشائعة</string>
