@@ -262,6 +262,7 @@
         <item>প্রিয় মাঙ্গা</item>
         <item>পরিকল্পিত মাঙ্গা</item>
         <item>প্রস্তাবিত</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">ডিফল্ট শুরু ট্যাব</string>
     <string name="small_view">ট্রেন্ডিং পর্বগুলিতে ছোট দেখান</string>
