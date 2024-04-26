@@ -262,6 +262,7 @@
         <item>お気に入りのマンガ</item>
         <item>予定のマンガ</item>
         <item>おすすめ</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">デフォルトの起動タブ</string>
     <string name="small_view">トレンディング番組の小さなビュー</string>
