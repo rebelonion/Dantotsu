@@ -262,6 +262,7 @@
         <item>Αγαπημένα Manga</item>
         <item>Σχεδιασμένα Manga</item>
         <item>Προτεινόμενα</item>
+        <item>Social Feeds</item>
     </string-array>
     <string name="startUpTab">Προεπιλεγμένη καρτέλα εκκίνησης</string>
     <string name="small_view">Small View σε Trending Shows</string>
