@@ -6,11 +6,13 @@ import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
 import ani.dantotsu.connections.anilist.Anilist.authorRoles
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
+import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.connections.anilist.api.FeedResponse
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.NotificationResponse
 import ani.dantotsu.connections.anilist.api.Page
 import ani.dantotsu.connections.anilist.api.Query
+import ani.dantotsu.connections.anilist.api.Social
 import ani.dantotsu.connections.anilist.api.ToggleLike
 import ani.dantotsu.currContext
 import ani.dantotsu.isOnline
@@ -33,6 +35,7 @@ import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 import java.io.Serializable
+import java.util.Calendar
 import kotlin.system.measureTimeMillis
 
 class AnilistQueries {
@@ -507,7 +510,7 @@ class AnilistQueries {
 
     suspend fun initHomePage(): Map<String, ArrayList<Media>> {
         val toShow: List<Boolean> =
-            PrefManager.getVal(PrefName.HomeLayoutShow) // anime continue, anime fav, anime planned, manga continue, manga fav, manga planned, recommendations
+            PrefManager.getVal(PrefName.HomeLayout) // anime continue, anime fav, anime planned, manga continue, manga fav, manga planned, recommendations
         var query = """{"""
         if (toShow.getOrNull(0) == true) query += """currentAnime: ${
             continueMediaQuery(
@@ -1637,12 +1640,43 @@ Page(page:$page,perPage:50) {
             force = true
         )
     }
+    private fun status(page: Int = 1): String {
+        return """Page(page:$page,perPage:50){activities(isFollowing: true, type:MEDIA_LIST,sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{extraLarge medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount likeCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}"""
+    }
     suspend fun getStatus(
-    ): FeedResponse? {
-        return executeQuery<FeedResponse>(
-            """{Page(page:1,perPage:50){activities(isFollowing: true, type:MEDIA_LIST,sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{extraLarge medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount likeCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}}""",
-            force = true
-        )
+    ):  MutableList<User> {
+        fun query() = """{
+            Page1:${status(1)}
+            Page2:${status(2)}
+        }""".trimIndent()
+        val list = mutableListOf<User>()
+        val threeDaysAgo = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_MONTH, -10)
+        }.timeInMillis
+        executeQuery<Social>(query(), force = true)?.data?.let { data ->
+            val activities = listOf(data.page1.activities, data.page2.activities).flatten()
+                .filterNot { it.userId == Anilist.userid }
+                .sortedByDescending { it.createdAt }
+                .filter { it.createdAt < threeDaysAgo }
+
+            val groupedActivities = activities.groupBy { it.userId }
+
+            groupedActivities.forEach { (_, userActivities) ->
+                val user = userActivities.firstOrNull()?.user
+                if (user != null) {
+                    list.add(
+                        User(
+                            user.id,
+                            user.name ?: "",
+                            user.avatar?.medium,
+                            user.bannerImage,
+                            activity = userActivities.toList()
+                        )
+                    )
+                }
+            }
+        }
+        return list
     }
     suspend fun getUpcomingAnime(id: String): List<Media> {
         val res = executeQuery<Query.MediaListCollection>(

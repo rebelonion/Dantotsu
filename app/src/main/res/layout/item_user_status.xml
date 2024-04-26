@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/bg_white"
+        android:backgroundTint="@color/transparent"
+        app:strokeColor="@color/transparent"
         app:cardCornerRadius="124dp">
 
         <ImageView
@@ -28,10 +29,11 @@
         android:id="@+id/profileUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_semi_bold"
         android:layout_gravity="center_horizontal|center_vertical"
         android:ellipsize="end"
         android:text="@string/username"
         android:textColor="?attr/colorOnBackground"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
 </LinearLayout>

@@ -36,18 +36,18 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         }
 
         binding.uiSettingsHomeLayout.setOnClickListener {
-            val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toMutableList()
+            val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toMutableList()
             val views = resources.getStringArray(R.array.home_layouts)
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.home_layout_show)).apply {
                     setMultiChoiceItems(
                         views,
-                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toBooleanArray()
+                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toBooleanArray()
                     ) { _, i, value ->
                         set[i] = value
                     }
                     setPositiveButton("Done") { _, _ ->
-                        PrefManager.setVal(PrefName.HomeLayoutShow, set)
+                        PrefManager.setVal(PrefName.HomeLayout, set)
                         restartApp()
                     }
                 }.show()

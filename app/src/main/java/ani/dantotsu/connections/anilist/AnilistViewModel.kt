@@ -108,28 +108,7 @@ class AnilistHomeViewModel : ViewModel() {
     fun getUserStatus(): LiveData<ArrayList<User>> = userStatus
 
     suspend fun initUserStatus() {
-        Anilist.query.getStatus()?.data?.page?.activities?.let { activities ->
-            val groupedActivities = activities
-                .filterNot { it.userId == Anilist.userid }
-                .sortedByDescending { ActivityItemBuilder.getDateTime(it.createdAt) }
-                .groupBy { it.userId }
-            val userList = groupedActivities.mapNotNull { (_, activities) ->
-                val user = activities.firstOrNull()?.user
-                user?.let {
-                    User(
-                        it.id,
-                        it.name ?: "",
-                        it.avatar?.medium,
-                        it.bannerImage,
-                        activity = activities
-                    )
-                }
-            }.toMutableList()
-            userList.sortByDescending { user ->
-                user.activity.maxByOrNull { it.createdAt }?.createdAt
-            }
-            userStatus.postValue(ArrayList(userList))
-        }
+        Anilist.query.getStatus().let { userStatus.postValue(ArrayList(it)) }
     }
 
     suspend fun loadMain(context: FragmentActivity) {

@@ -63,11 +63,11 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     ImmersiveMode(Pref(Location.UI, Boolean::class, false)),
     SmallView(Pref(Location.UI, Boolean::class, true)),
     DefaultStartUpTab(Pref(Location.UI, Int::class, 1)),
-    HomeLayoutShow(
+    HomeLayout(
         Pref(
             Location.UI,
             List::class,
-            listOf(true, false, false, true, false, false, true)
+            listOf(true, false, false, true, false, false, true, true)
         )
     ),
     BannerAnimations(Pref(Location.UI, Boolean::class, true)),

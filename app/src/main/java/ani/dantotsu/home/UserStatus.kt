@@ -23,7 +23,8 @@ class UserStatus(private val user: ArrayList<User>) :
                     Intent(
                         itemView.context,
                         StatusActivity::class.java
-                    ).putExtra("activity", user[bindingAdapterPosition].activity as Serializable),
+                    ).putExtra("user", user as Serializable)
+                    .putExtra("position", bindingAdapterPosition),
                     null
                 )
             }

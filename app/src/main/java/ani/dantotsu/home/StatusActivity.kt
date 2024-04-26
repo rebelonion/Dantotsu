@@ -2,51 +2,46 @@ package ani.dantotsu.home
 
 import android.os.Bundle
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
-import ani.dantotsu.connections.anilist.api.Activity
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityStatusBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.themes.ThemeManager
-import ani.dantotsu.home.status.data.StoryItem
 import ani.dantotsu.home.status.listener.StoriesCallback
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.profile.activity.ActivityItemBuilder
+import ani.dantotsu.profile.User
 import ani.dantotsu.statusBarHeight
 
 class StatusActivity : AppCompatActivity(), StoriesCallback {
-    private lateinit var activity: List<Activity>
+    private lateinit var activity: ArrayList<User>
     private lateinit var binding: ActivityStatusBinding
+    private var position: Int = -1
+    private lateinit var slideInLeft: Animation
+    private lateinit var slideOutRight: Animation
+    private lateinit var slideOutLeft: Animation
+    private lateinit var slideInRight: Animation
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
         initActivity(this)
         binding = ActivityStatusBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        activity = intent.getSerialized("activity")!!
+        activity = intent.getSerialized("user")!!
+        position = intent.getIntExtra("position", -1)
         binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
             bottomMargin = navBarHeight
         }
-        val storiesList = activity.map { StoryItem(
-            id = it.userId,
-            activityId = it.id,
-            mediaId = it.media?.id,
-            userName = it.user?.name,
-            userAvatar = it.user?.avatar?.large,
-            time =  ActivityItemBuilder.getDateTime(it.createdAt),
-            info = "${it.user!!.name} ${it.status} ${
-                it.progress
-                    ?: it.media?.title?.userPreferred
-            }",
-            cover = it.media?.coverImage?.extraLarge,
-            banner = it.media?.bannerImage ?: it.media?.coverImage?.extraLarge,
-            likes = it.likeCount ?: 0,
-            likedBy = it.likes,
-            isLiked = it.isLiked == true
-        ) }
-        binding.stories.setStoriesList(storiesList, this)
+        slideInLeft = AnimationUtils.loadAnimation(this, R.anim.slide_in_left)
+        slideOutRight = AnimationUtils.loadAnimation(this, R.anim.slide_out_right)
+        slideOutLeft = AnimationUtils.loadAnimation(this, R.anim.slide_out_left)
+        slideInRight = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
+
+        binding.stories.setStoriesList(activity[position].activity, this)
     }
 
     override fun onPause() {
@@ -67,7 +62,25 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
         }
     }
     override fun onStoriesEnd() {
-        finish()
+        position += 1
+        if (position < activity.size - 1) {
+            binding.stories.startAnimation(slideOutLeft)
+            binding.stories.setStoriesList(activity[position].activity, this)
+            binding.stories.startAnimation(slideInRight)
+        } else {
+            finish()
+        }
+    }
+
+    override fun onStoriesStart() {
+        position -= 1
+        if (position >= 0) {
+            binding.stories.startAnimation(slideOutRight)
+            binding.stories.setStoriesList(activity[position].activity, this)
+            binding.stories.startAnimation(slideInLeft)
+        } else {
+            finish()
+        }
     }
 
 }

@@ -314,10 +314,9 @@ class HomeFragment : Fragment() {
             binding.homeRecommendedEmpty,
             binding.homeRecommended
         )
-        binding.homeUserStatusContainer.visibility = View.VISIBLE
+        binding.homeUserStatusContainer.visibility = if (PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout)[7]) View.VISIBLE else View.GONE
         binding.homeUserStatusProgressBar.visibility = View.VISIBLE
         binding.homeUserStatusRecyclerView.visibility = View.GONE
-        binding.homeUserStatus.visibility = View.INVISIBLE
         model.getUserStatus().observe(viewLifecycleOwner) {
             binding.homeUserStatusRecyclerView.visibility = View.GONE
             if (it != null) {
@@ -335,12 +334,10 @@ class HomeFragment : Fragment() {
                 } else {
                     binding.homeUserStatusContainer.visibility = View.GONE
                 }
-                binding.homeUserStatus.visibility = View.VISIBLE
-                binding.homeUserStatus.startAnimation(setSlideUp())
                 binding.homeUserStatusProgressBar.visibility = View.GONE
             }
-        }
 
+        }
         binding.homeUserAvatarContainer.startAnimation(setSlideUp())
 
         model.empty.observe(viewLifecycleOwner)
@@ -371,7 +368,7 @@ class HomeFragment : Fragment() {
             binding.homeContinueReadingContainer,
             binding.homeFavMangaContainer,
             binding.homePlannedMangaContainer,
-            binding.homeRecommendedContainer
+            binding.homeRecommendedContainer,
         )
 
         val live = Refresh.activity.getOrPut(1) { MutableLiveData(false) }
@@ -388,9 +385,9 @@ class HomeFragment : Fragment() {
                         model.setListImages()
                         var empty = true
                         val homeLayoutShow: List<Boolean> =
-                            PrefManager.getVal(PrefName.HomeLayoutShow)
+                            PrefManager.getVal(PrefName.HomeLayout)
                         runBlocking {
-                            model.initUserStatus()
+                            if (homeLayoutShow.getOrNull(7) == true) model.initUserStatus()
                             model.initHomePage()
                         }
                         (array.indices).forEach { i ->

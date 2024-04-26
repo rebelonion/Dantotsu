@@ -112,10 +112,12 @@
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
             <LinearLayout
+                android:id="@+id/statusUserActions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="12dp"
                 android:orientation="vertical"
+                android:paddingHorizontal="24dp"
                 tools:ignore="UseCompoundDrawables">
 
                 <ImageView

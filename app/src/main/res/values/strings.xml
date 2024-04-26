@@ -305,6 +305,7 @@
         <item>Favourite Manga</item>
         <item>Planned Manga</item>
         <item>Recommended</item>
+        <item>Social Feeds</item>
     </string-array>
 
     <string name="startUpTab">Default Start Up Tab</string>
