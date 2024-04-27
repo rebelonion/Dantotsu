@@ -17,7 +17,7 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
     private var booleanList = listOf<Boolean>()
     private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
-        strokeWidth = 4f
+        strokeWidth = 6f
     }
 
     @SuppressLint("DrawAllocation")
