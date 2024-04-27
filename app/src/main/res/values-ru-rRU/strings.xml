@@ -855,4 +855,5 @@
     <string name="avatar">%1$s\ [Аватар]</string>
     <string name="cover">%1$s\ [Обложка]</string>
     <string name="banner">%1$s\ [Баннер]</string>
+    <string name="your_story">Your Story</string>
 </resources>
