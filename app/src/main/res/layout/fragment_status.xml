@@ -14,6 +14,7 @@
         tools:ignore="ContentDescription"
         tools:src="@tools:sample/backgrounds/scenic" />
 
+
     <ImageView
         android:id="@+id/contentImageView"
         android:layout_width="match_parent"
@@ -27,6 +28,27 @@
         android:src="@drawable/linear_gradient_bg"
         tools:ignore="ContentDescription" />
 
+    <LinearLayout
+        android:id="@+id/textActivityContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/textActivity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:gravity="center"
+            android:paddingHorizontal="12dp"
+            android:text="Play"
+            android:textColor="@color/bg_white"
+            android:textSize="18sp"
+            android:visibility="gone"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
     <FrameLayout
         android:id="@+id/leftTouchPanel"
         android:layout_width="0dp"
@@ -35,6 +57,7 @@
         android:focusable="true"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.5" />
+
 
     <FrameLayout
         android:id="@+id/rightTouchPanel"
@@ -94,12 +117,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:ellipsize="end"
-                android:textColor="@color/bg_opp"
                 android:fontFamily="@font/poppins_bold"
                 android:paddingTop="1dp"
                 android:paddingBottom="0dp"
                 android:singleLine="true"
                 android:text="Username"
+                android:textColor="@color/bg_opp"
                 android:textSize="16sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
@@ -157,8 +180,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="32dp"
         android:orientation="horizontal"
-        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -168,10 +192,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="start"
             android:ellipsize="marquee"
             android:fontFamily="@font/poppins_semi_bold"
-            android:layout_marginStart="12dp"
+            android:gravity="start"
             android:lineSpacingExtra="-8sp"
             android:maxLines="3"
             android:paddingHorizontal="12dp"
@@ -182,20 +205,20 @@
             tools:ignore="SpUsage"
             tools:text="@string/slogan" />
 
+
         <LinearLayout
             android:id="@+id/statusUserActions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center|end"
             android:orientation="horizontal"
-            android:layout_gravity="center"
-            android:paddingHorizontal="24dp"
             tools:ignore="UseCompoundDrawables">
+
             <TextView
                 android:id="@+id/activityLikeCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-
+                android:layout_gravity="center|end"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:textSize="15sp"
                 tools:text="12" />
@@ -204,10 +227,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
+                android:layout_gravity="center|end"
                 android:src="@drawable/ic_round_favorite_24"
                 tools:ignore="ContentDescription" />
-
-
         </LinearLayout>
     </LinearLayout>
 

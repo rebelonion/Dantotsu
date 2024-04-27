@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
+import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.home.status.listener.StoriesCallback
@@ -33,6 +34,7 @@ import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.AniMarkdown
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -56,6 +58,8 @@ constructor(
     private lateinit var imageContentViewKen: ImageView
     private lateinit var loadingView: ProgressBar
     private lateinit var activityLikeCount: TextView
+    private lateinit var textActivity: TextView
+    private lateinit var textActivityContainer: LinearLayout
     private lateinit var activityLike: ImageView
     private lateinit var activityLikeContainer: LinearLayout
     private lateinit var userName: TextView
@@ -89,6 +93,8 @@ constructor(
         imageContentViewKen = findViewById(R.id.contentImageViewKen)
         statusUserContainer = findViewById(R.id.statusUserContainer)
         loadingView = findViewById(R.id.androidStoriesLoadingView)
+        textActivityContainer = findViewById(R.id.textActivityContainer)
+        textActivity = findViewById(R.id.textActivity)
         coverImage = findViewById(R.id.coverImage)
         userName = findViewById(R.id.statusUserName)
         userAvatar = findViewById(R.id.statusUserAvatar)
@@ -377,52 +383,80 @@ constructor(
         val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
         PrefManager.setCustomVal(key, set)
 
-        val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
-        blurImage(if (bannerAnimations)imageContentViewKen else imageContentView, story.media?.bannerImage ?: story.media?.coverImage?.extraLarge)
         userAvatar.loadImage(story.user?.avatar?.large)
-        coverImage.loadImage(story.media?.coverImage?.extraLarge)
         userName.text = story.user?.name
         time.text = ActivityItemBuilder.getDateTime(story.createdAt)
-        val text = "${story.status?.replaceFirstChar {
-            if (it.isLowerCase()) {
-                it.titlecase(Locale.ROOT)
-            }
-            else {
-                it.toString()
-            }
-        }} ${story.progress ?: story.media?.title?.userPreferred} " +
-            if (story.status?.contains("completed") == false) {
-                "of ${story.media?.title?.userPreferred}"
-            }else {
-                ""
-            }
-        infoText.text = text
-
         statusUserContainer.setOnClickListener {
             ContextCompat.startActivity(context, Intent(context, ProfileActivity::class.java)
                 .putExtra("userId", story.userId),
                 null)
         }
 
-        coverImage.setOnClickListener{
-            ContextCompat.startActivity(context, Intent(context, MediaDetailsActivity::class.java)
-                .putExtra("mediaId", story.media?.id),
-                null)
+        fun visible(isList: Boolean){
+            val visible = if (isList) View.VISIBLE else View.GONE
+            val gone = if (isList) View.GONE else View.VISIBLE
+            textActivity.visibility = gone
+            textActivityContainer.visibility = gone
+            infoText.visibility = visible
+            coverImage.visibility = visible
+            infoText.visibility = if (isList) View.VISIBLE else View.INVISIBLE
+            imageContentViewKen.visibility = visible
+            imageContentView.visibility = visible
         }
+        when (story.typename){
+            "ListActivity" -> {
+                visible(true)
+                val text  = "${story.status?.replaceFirstChar {
+                    if (it.isLowerCase()) {
+                        it.titlecase(Locale.ROOT)
+                    }
+                    else {
+                        it.toString()
+                    }
+                }} ${story.progress ?: story.media?.title?.userPreferred} " +
+                    if (story.status?.contains("completed") == false) {
+                        "of ${story.media?.title?.userPreferred}"
+                    }else {
+                        ""
+                    }
+                infoText.text = text
+                val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
+                blurImage(if (bannerAnimations)imageContentViewKen else imageContentView, story.media?.bannerImage ?: story.media?.coverImage?.extraLarge)
+                coverImage.loadImage(story.media?.coverImage?.extraLarge)
+                coverImage.setOnClickListener{
+                    ContextCompat.startActivity(context, Intent(context, MediaDetailsActivity::class.java)
+                        .putExtra("mediaId", story.media?.id),
+                        null)
+                }
 
+            }
 
-
+            "TextActivity" -> {
+                visible(false)
+                if (!(context as android.app.Activity).isDestroyed) {
+                    val markwon = buildMarkwon(context, false)
+                    markwon.setMarkdown(
+                        textActivity,
+                        AniMarkdown.getBasicAniHTML(story.text ?: "")
+                    )
+                }
+            }
+            "MessageActivity" -> {
+                visible(false)
+                if (!(context as android.app.Activity).isDestroyed) {
+                    val markwon = buildMarkwon(context, false)
+                    markwon.setMarkdown(
+                        textActivity,
+                        AniMarkdown.getBasicAniHTML(story.message ?: "")
+                    )
+                }
+            }
+        }
         val userList = arrayListOf<User>()
         story.likes?.forEach { i ->
             userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
         }
-        activityLikeContainer.setOnLongClickListener {
-            UsersDialogFragment().apply {
-                userList(userList)
-                show(activ.supportFragmentManager, "dialog")
-            }
-            true
-        }
+
 
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
@@ -448,6 +482,13 @@ constructor(
                     }
                 }
             }
+        }
+        activityLikeContainer.setOnLongClickListener {
+            UsersDialogFragment().apply {
+                userList(userList)
+                show(activ.supportFragmentManager, "dialog")
+            }
+            true
         }
     }
 }
