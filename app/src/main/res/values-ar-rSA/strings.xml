@@ -489,26 +489,26 @@
     <string name="view_profile_in_dantotsu">View Profile in Dantotsu</string>
     <string name="continue_episode">Continue : Episode %1$s%2$s\n%3$s</string>
     <string name="filler_tag"> - Filler</string>
-    <string name="continue_chapter">Continue : %1$s\n%2$s</string>
+    <string name="continue_chapter">اكمل : %1$s\n%2$s</string>
     <string name="episode">"الحلقة "</string>
     <string name="episode_num">"الحلقة %1$s"</string>
     <string name="chapter">"الفصل "</string>
     <string name="chapter_num">"الفصل %1$s"</string>
-    <string name="just_released">- Newly released!</string>
-    <string name="checking_subscriptions_title">Checking Subscriptions</string>
-    <string name="user_list">%1$s\'s %2$s List</string>
+    <string name="just_released">- صدر مؤخرا!</string>
+    <string name="checking_subscriptions_title">التحقق من الاشتراكات</string>
+    <string name="user_list">قائمة ال %2$s الخاصة ب %1$s</string>
     <string name="speed">السرعة</string>
-    <string name="auto_update">Auto Update progress for %1$s?</string>
+    <string name="auto_update">هل تحديث تقدم %1$s تِلْقائيًا ؟</string>
     <string name="continue_from">أكمل من %1$s؟</string>
-    <string name="title_update_progress">Update progress on AniList?</string>
-    <string name="incognito_will_not_update">Incognito mode will still ignore progress.</string>
+    <string name="title_update_progress">حل تريد تحديث التقدم علي AniList ؟</string>
+    <string name="incognito_will_not_update">سيظل وضع التصفح المتخفي يتجاهل تقدمك.</string>
     <string name="dont_ask_again">"لا تسأل مرة أخرى عن%1$s"</string>
     <string name="default_speed">السرعة الأصلية</string>
     <string name="default_resize_mode">وضع تغيير الحجم الإفتراضي</string>
-    <string name="primary_sub_color">Primary Sub Color</string>
-    <string name="outline_sub_color">Outline Sub Color</string>
-    <string name="outline_type">Outline Type</string>
-    <string name="subtitle_font">Subtitle Font</string>
+    <string name="primary_sub_color">لون التَّرْجَمَة الاساسي</string>
+    <string name="outline_sub_color">لون التخطيط الخارجي للترجمة</string>
+    <string name="outline_type">نوع التخطيط الخارجي</string>
+    <string name="subtitle_font">خط الترجمة</string>
     <string name="yes">نعم</string>
     <string name="no">لا</string>
     <string name="ok">أجل</string>
@@ -518,27 +518,27 @@
     <string name="content_18">تفعيل محتوي 18+ من إعدادات Anilist</string>
     <string name="available">متوفر</string>
     <string name="lets_go">هيا بنا</string>
-    <string name="cope">Cope</string>
+    <string name="cope">تمام</string>
     <string name="watched_num">"تم المشاهدة "</string>
     <string name="read_num">"قراءة "</string>
     <string name="episodes_out_of">" خالي من "</string>
-    <string name="chapters_out_of">" out of "</string>
-    <string name="episodes_total_of">"Total of "</string>
-    <string name="chapters_total_of">"Total of "</string>
-    <string name="no_description_available">"No Description Available"</string>
+    <string name="chapters_out_of">" من "</string>
+    <string name="episodes_total_of">"مجمل "</string>
+    <string name="chapters_total_of">"مجمل "</string>
+    <string name="no_description_available">"لا يوجد وصف متاح"</string>
     <string-array name="manga_directions">
         <item>من الأعلى للأسفل</item>
-        <item>Right to Left</item>
-        <item>Bottom to Top</item>
+        <item>من اليمين الي اليسار</item>
+        <item>من الاسفل الي الاعلي</item>
         <item>من اليسار إلى اليمين</item>
     </string-array>
     <string-array name="manga_layouts">
-        <item>Paged</item>
-        <item>Continuous Paged</item>
-        <item>Continuous</item>
+        <item>صفحات مفرده</item>
+        <item>صفحات متتاليه</item>
+        <item>متتالي</item>
     </string-array>
-    <string name="selected">Selected</string>
-    <string name="found">Found</string>
+    <string name="selected">مُحدد</string>
+    <string name="found">وُجد</string>
     <string name="age">"_العمر:_ "</string>
     <string name="birthday">\n\"_الميلاد_\"</string>
     <string name="gender">\n\"_الجنس:_\"</string>
