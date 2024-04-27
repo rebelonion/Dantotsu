@@ -372,8 +372,12 @@ constructor(
     private fun loadStory(story: Activity) {
         loadingView.visibility = View.GONE
         animation.start()
-        val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
 
+        val key = "${story.user?.id}_activities"
+        val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
+        PrefManager.setCustomVal(key, set)
+
+        val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
         blurImage(if (bannerAnimations)imageContentViewKen else imageContentView, story.media?.bannerImage ?: story.media?.coverImage?.extraLarge)
         userAvatar.loadImage(story.user?.avatar?.large)
         coverImage.loadImage(story.media?.coverImage?.extraLarge)
@@ -387,7 +391,7 @@ constructor(
                 it.toString()
             }
         }} ${story.progress ?: story.media?.title?.userPreferred} " +
-            if (story.status?.contains("Completed") != false) {
+            if (story.status?.contains("completed") == false) {
                 "of ${story.media?.title?.userPreferred}"
             }else {
                 ""
@@ -404,6 +408,20 @@ constructor(
             ContextCompat.startActivity(context, Intent(context, MediaDetailsActivity::class.java)
                 .putExtra("mediaId", story.media?.id),
                 null)
+        }
+
+
+
+        val userList = arrayListOf<User>()
+        story.likes?.forEach { i ->
+            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
+        }
+        activityLikeContainer.setOnLongClickListener {
+            UsersDialogFragment().apply {
+                userList(userList)
+                show(activ.supportFragmentManager, "dialog")
+            }
+            true
         }
 
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
@@ -431,20 +449,5 @@ constructor(
                 }
             }
         }
-
-        val userList = arrayListOf<User>()
-        story.likes?.forEach { i ->
-            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
-        }
-        activityLikeContainer.setOnLongClickListener {
-            UsersDialogFragment().apply {
-                userList(userList)
-                show(activ.supportFragmentManager, "dialog")
-            }
-            true
-        }
-        val key = "${story.user?.id}_activities"
-        val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
-        PrefManager.setCustomVal(key, set)
     }
 }
