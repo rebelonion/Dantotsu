@@ -849,4 +849,5 @@
     <string name="avatar">%1$s\ [头像]</string>
     <string name="cover">%1$s\ [封面]</string>
     <string name="banner">%1$s\ [横幅]</string>
+    <string name="your_story">Your Story</string>
 </resources>
