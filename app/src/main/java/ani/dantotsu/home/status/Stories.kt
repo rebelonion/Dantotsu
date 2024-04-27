@@ -384,7 +384,7 @@ constructor(
         loadingView.visibility = View.GONE
         animation.start()
 
-        val key = "${story.user?.id}_activities"
+        val key = "activities"
         val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
         PrefManager.setCustomVal(key, set)
 

@@ -63,11 +63,11 @@ class UserStatusAdapter(private val user: ArrayList<User>) :
         b.profileUserAvatar.loadImage(user.pfp)
         b.profileUserName.text = if (Anilist.userid == user.id) getAppString(R.string.your_story) else user.name
 
-        val watchedActivity =
-            PrefManager.getCustomVal<Set<Int>>("${user.id}_activities", setOf())
+        val watchedActivity = PrefManager.getCustomVal<Set<Int>>("activities", setOf())
         val booleanList = user.activity.map { watchedActivity.contains(it.id) }
         b.profileUserStatusIndicator.setParts(user.activity.size, booleanList, user.id == Anilist.userid)
-
+        val newList = watchedActivity.sorted().takeLast(100)
+        PrefManager.setCustomVal("activities",newList.toSet())
     }
 
     override fun getItemCount(): Int = user.size
