@@ -6,6 +6,14 @@
     android:layout_height="match_parent"
     tools:ignore="ContentDescription">
 
+    <com.flaviofaria.kenburnsview.KenBurnsView
+        android:id="@+id/contentImageViewKen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        tools:ignore="ContentDescription"
+        tools:src="@tools:sample/backgrounds/scenic" />
+
     <ImageView
         android:id="@+id/contentImageView"
         android:layout_width="match_parent"
@@ -13,6 +21,11 @@
         android:adjustViewBounds="true"
         android:scaleType="centerCrop" />
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/linear_gradient_bg"
+        tools:ignore="ContentDescription" />
 
     <FrameLayout
         android:id="@+id/leftTouchPanel"
@@ -81,6 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:ellipsize="end"
+                android:textColor="@color/bg_opp"
                 android:fontFamily="@font/poppins_bold"
                 android:paddingTop="1dp"
                 android:paddingBottom="0dp"
@@ -111,31 +125,7 @@
                 android:textSize="14sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
-            <LinearLayout
-                android:id="@+id/statusUserActions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="12dp"
-                android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                tools:ignore="UseCompoundDrawables">
 
-                <ImageView
-                    android:id="@+id/activityLike"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_round_favorite_24"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:id="@+id/activityLikeCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:fontFamily="@font/poppins_semi_bold"
-                    android:textSize="15sp"
-                    tools:text="12" />
-            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -143,10 +133,10 @@
         android:id="@+id/itemCompactCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="124dp"
         android:translationZ="8dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="4dp"
-        android:layout_marginBottom="124dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -163,39 +153,63 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
 
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginTop="124dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
-        android:backgroundTint="@color/transparent"
-        app:cardCornerRadius="124dp"
+        android:orientation="horizontal"
+        android:layout_marginBottom="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/itemCompactCard"
-        app:strokeColor="@color/transparent">
+        app:layout_constraintStart_toStartOf="parent">
 
         <TextView
             android:id="@+id/infoText"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="?attr/colorSurfaceVariant"
+            android:layout_weight="1"
+            android:gravity="start"
             android:ellipsize="marquee"
-            android:paddingHorizontal="12dp"
             android:fontFamily="@font/poppins_semi_bold"
+            android:layout_marginStart="12dp"
             android:lineSpacingExtra="-8sp"
             android:maxLines="3"
-            android:textAlignment="center"
+            android:paddingHorizontal="12dp"
+            android:textAlignment="textStart"
             android:textColor="@color/bg_opp"
-            android:textSize="24dp"
+            android:textSize="16dp"
             android:transitionName="mediaTitle"
             tools:ignore="SpUsage"
             tools:text="@string/slogan" />
-    </com.google.android.material.card.MaterialCardView>
 
+        <LinearLayout
+            android:id="@+id/statusUserActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="center"
+            android:paddingHorizontal="24dp"
+            tools:ignore="UseCompoundDrawables">
+            <TextView
+                android:id="@+id/activityLikeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textSize="15sp"
+                tools:text="12" />
+            <ImageView
+                android:id="@+id/activityLike"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_round_favorite_24"
+                tools:ignore="ContentDescription" />
+
+
+        </LinearLayout>
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/androidStoriesLoadingView"

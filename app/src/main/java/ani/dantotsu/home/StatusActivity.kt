@@ -13,6 +13,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.home.status.listener.StoriesCallback
+import ani.dantotsu.media.Media
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.User
 import ani.dantotsu.settings.saving.PrefManager
@@ -32,7 +33,7 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
         initActivity(this)
         binding = ActivityStatusBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        activity = intent.getSerialized("user")!!
+        activity = user
         position = intent.getIntExtra("position", -1)
         binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
@@ -85,5 +86,7 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
             finish()
         }
     }
-
+    companion object {
+        var user: ArrayList<User> = arrayListOf()
+    }
 }

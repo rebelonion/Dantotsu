@@ -11,22 +11,21 @@ import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.User
 import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
-import java.io.Serializable
 
 class UserStatus(private val user: ArrayList<User>) :
-    RecyclerView.Adapter< UserStatus.UsersViewHolder>() {
+    RecyclerView.Adapter<UserStatus.UsersViewHolder>() {
 
     inner class UsersViewHolder(val binding: ItemUserStatusBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
             itemView.setOnClickListener {
-               ContextCompat.startActivity(
+                StatusActivity.user = user
+                ContextCompat.startActivity(
                     itemView.context,
                     Intent(
                         itemView.context,
                         StatusActivity::class.java
-                    ).putExtra("user", user as Serializable)
-                    .putExtra("position", bindingAdapterPosition),
+                    ).putExtra("position", bindingAdapterPosition),
                     null
                 )
             }
@@ -61,7 +60,8 @@ class UserStatus(private val user: ArrayList<User>) :
         b.profileUserAvatar.loadImage(user.pfp)
         b.profileUserName.text = user.name
 
-        val watchedActivityIds = PrefManager.getCustomVal<Set<Int>>("${user.id}_activities", setOf())
+        val watchedActivityIds =
+            PrefManager.getCustomVal<Set<Int>>("${user.id}_activities", setOf())
         val activityIdToStatusList = user.activity.map { watchedActivityIds.contains(it.id) }
         b.profileUserStatusIndicator.setParts(user.activity.size, activityIdToStatusList)
 
