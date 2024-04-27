@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemUserStatusBinding
+import ani.dantotsu.getAppString
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.User
@@ -59,7 +61,7 @@ class UserStatusAdapter(private val user: ArrayList<User>) :
         setAnimation(b.root.context, b.root)
         val user = user[position]
         b.profileUserAvatar.loadImage(user.pfp)
-        b.profileUserName.text = if (Anilist.userid == user.id) "You" else user.name
+        b.profileUserName.text = if (Anilist.userid == user.id) getAppString(R.string.your_story) else user.name
 
         val watchedActivity =
             PrefManager.getCustomVal<Set<Int>>("${user.id}_activities", setOf())

@@ -58,9 +58,8 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
             setColor(0)
         } else {
             val effectiveAngle = totalAngle / parts
-
             for (i in 0 until parts) {
-                val startAngle = i * (effectiveAngle + gapAngle)
+                val startAngle = i * (effectiveAngle + gapAngle) -90f
                 path.reset()
                 path.addArc(
                     centerX - radius,

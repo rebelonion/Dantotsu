@@ -6,7 +6,6 @@ import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
 import ani.dantotsu.connections.anilist.Anilist.authorRoles
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
-import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.connections.anilist.api.FeedResponse
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.NotificationResponse
@@ -1651,14 +1650,12 @@ Page(page:$page,perPage:50) {
         }""".trimIndent()
         val list = mutableListOf<User>()
         val threeDaysAgo = Calendar.getInstance().apply {
-            add(Calendar.DAY_OF_MONTH, -10)
+            add(Calendar.DAY_OF_MONTH, -3)
         }.timeInMillis
         executeQuery<Social>(query(), force = true)?.data?.let { data ->
             val activities = listOf(data.page1.activities, data.page2.activities).flatten()
-
                 .sortedByDescending { it.createdAt }
-                .filter { it.createdAt < threeDaysAgo }
-
+                .filter { it.createdAt * 1000L > threeDaysAgo }
             val anilistActivities = mutableListOf<User>()
             val groupedActivities = activities.groupBy { it.userId }
 

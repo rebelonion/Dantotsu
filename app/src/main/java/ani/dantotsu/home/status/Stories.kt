@@ -106,7 +106,6 @@ constructor(
 
         leftTouchPanel.setOnTouchListener(this)
         rightTouchPanel.setOnTouchListener(this)
-
     }
 
 
@@ -469,25 +468,7 @@ constructor(
         activityLikeCount.text = story.likeCount.toString()
         activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
         activityLikeContainer.setOnClickListener {
-            val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
-            scope.launch {
-                val res = Anilist.query.toggleLike(story.id, "ACTIVITY")
-                withContext(Dispatchers.Main) {
-                    if (res != null) {
-                        if (story.isLiked == true) {
-                            story.likeCount = story.likeCount?.minus(1)
-                        } else {
-                            story.likeCount = story.likeCount?.plus(1)
-                        }
-                        activityLikeCount.text = (story.likeCount ?: 0).toString()
-                        story.isLiked = !story.isLiked!!
-                        activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
-
-                    } else {
-                        snackString("Failed to like activity")
-                    }
-                }
-            }
+            like()
         }
         activityLikeContainer.setOnLongClickListener {
             UsersDialogFragment().apply {
@@ -495,6 +476,30 @@ constructor(
                 show(activ.supportFragmentManager, "dialog")
             }
             true
+        }
+    }
+    fun like(){
+        val story = activityList[storyIndex - 1]
+        val likeColor = ContextCompat.getColor(context, R.color.yt_red)
+        val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
+        val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+        scope.launch {
+            val res = Anilist.query.toggleLike(story.id, "ACTIVITY")
+            withContext(Dispatchers.Main) {
+                if (res != null) {
+                    if (story.isLiked == true) {
+                        story.likeCount = story.likeCount?.minus(1)
+                    } else {
+                        story.likeCount = story.likeCount?.plus(1)
+                    }
+                    activityLikeCount.text = (story.likeCount ?: 0).toString()
+                    story.isLiked = !story.isLiked!!
+                    activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
+
+                } else {
+                    snackString("Failed to like activity")
+                }
+            }
         }
     }
 }
