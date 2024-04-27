@@ -262,7 +262,7 @@
         <item>المانجا المفضلة</item>
         <item>المانجا المخطط قراءتها</item>
         <item>موصى به</item>
-        <item>Social Feeds</item>
+        <item>التواصل الاجتماعي</item>
     </string-array>
     <string name="startUpTab">الصفحة الافتراضية عند التشغيل</string>
     <string name="small_view">عرض صغير في العروض الشائعة</string>
@@ -441,7 +441,7 @@
     <string name="dont_show_again">لا تعرض هذه النسخة مرة أخرى %1$s</string>
     <string name="no_update_found">لا يوجد تحديث</string>
     <string name="downloading_update">جارٍ تنزيل التحديث %1$s</string>
-    <string name="permission_required">Please give permission to access Files &amp; Folders from Settings, &amp; Try again.</string>
+    <string name="permission_required">يرجى منح الإذن للوصول إلى الملفات &amp; المجلدات من الإعدادات، &amp; حاول مجددا.</string>
     <string name="started_downloading">جاري التحميل\n%1$s</string>
     <string name="install_1dm">رجاء تزيل 1DM</string>
     <string name="install_adm">رجاء تزيل 1DM</string>
@@ -453,7 +453,7 @@
     <string name="access_not_available">لم أستطع الحصول على الوصول</string>
     <string name="mal_login_uri_not_found">Mal Login : Uri not Found</string>
     <string name="mal_login_code_challenge_not_found">Mal Login : codeChallenge not found</string>
-    <string name="mal_login_code_not_present">Mal Login : Code not present in redirected URI</string>
+    <string name="mal_login_code_not_present">Mal Login : codeChallenge not found</string>
     <string name="refresh_token_load_failed">Refresh Token : Failed to load saved token</string>
     <string name="refreshing_token_failed">Refreshing Token Failed</string>
     <string name="episode_release_countdown">Episode %1$d will be released in</string>
