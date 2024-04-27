@@ -1,6 +1,5 @@
-package ani.dantotsu.home
+package ani.dantotsu.home.status
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -8,12 +7,11 @@ import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
+import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.ActivityStatusBinding
 import ani.dantotsu.initActivity
-import ani.dantotsu.others.getSerialized
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.home.status.listener.StoriesCallback
-import ani.dantotsu.media.Media
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.User
 import ani.dantotsu.settings.saving.PrefManager
@@ -44,10 +42,21 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
         slideOutLeft = AnimationUtils.loadAnimation(this, R.anim.slide_out_left)
         slideInRight = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
 
-        binding.stories.setStoriesList(activity[position].activity, this)
+        val watchedActivity = PrefManager.getCustomVal<Set<Int>>("${activity[position].id}_activities", setOf())
+        val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
+        val startIndex = if ( startFrom > 0) startFrom else 0
+        binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
+
 
     }
-
+    private fun findFirstNonMatch(watchedActivity: Set<Int>, activity: List<Activity>): Int {
+        for (activityItem in activity) {
+            if (activityItem.id !in watchedActivity) {
+                return activity.indexOf(activityItem)
+            }
+        }
+        return -1
+    }
     override fun onPause() {
         super.onPause()
         binding.stories.pause()
@@ -68,8 +77,11 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
     override fun onStoriesEnd() {
         position += 1
         if (position < activity.size - 1) {
+            val watchedActivity = PrefManager.getCustomVal<Set<Int>>("${activity[position].id}_activities", setOf())
+            val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
+            val startIndex= if ( startFrom > 0) startFrom else 0
             binding.stories.startAnimation(slideOutLeft)
-            binding.stories.setStoriesList(activity[position].activity, this)
+            binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
             binding.stories.startAnimation(slideInRight)
         } else {
             finish()
@@ -79,8 +91,11 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
     override fun onStoriesStart() {
         position -= 1
         if (position >= 0) {
+            val watchedActivity = PrefManager.getCustomVal<Set<Int>>("${activity[position].id}_activities", setOf())
+            val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
+            val startIndex = if ( startFrom > 0) startFrom else 0
             binding.stories.startAnimation(slideOutRight)
-            binding.stories.setStoriesList(activity[position].activity, this)
+            binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
             binding.stories.startAnimation(slideInLeft)
         } else {
             finish()

@@ -30,6 +30,7 @@ import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.connections.anilist.getUserId
 import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentHomeBinding
+import ani.dantotsu.home.status.UserStatusAdapter
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
@@ -321,7 +322,7 @@ class HomeFragment : Fragment() {
             binding.homeUserStatusRecyclerView.visibility = View.GONE
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    binding.homeUserStatusRecyclerView.adapter = UserStatus(it)
+                    binding.homeUserStatusRecyclerView.adapter = UserStatusAdapter(it)
                     binding.homeUserStatusRecyclerView.layoutManager = LinearLayoutManager(
                         requireContext(),
                         LinearLayoutManager.HORIZONTAL,

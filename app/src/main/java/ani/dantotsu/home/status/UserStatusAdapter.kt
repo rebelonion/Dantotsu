@@ -1,10 +1,11 @@
-package ani.dantotsu.home
+package ani.dantotsu.home.status
 
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemUserStatusBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.ProfileActivity
@@ -12,8 +13,8 @@ import ani.dantotsu.profile.User
 import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
 
-class UserStatus(private val user: ArrayList<User>) :
-    RecyclerView.Adapter<UserStatus.UsersViewHolder>() {
+class UserStatusAdapter(private val user: ArrayList<User>) :
+    RecyclerView.Adapter<UserStatusAdapter.UsersViewHolder>() {
 
     inner class UsersViewHolder(val binding: ItemUserStatusBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -58,12 +59,12 @@ class UserStatus(private val user: ArrayList<User>) :
         setAnimation(b.root.context, b.root)
         val user = user[position]
         b.profileUserAvatar.loadImage(user.pfp)
-        b.profileUserName.text = user.name
+        b.profileUserName.text = if (Anilist.userid == user.id) "You" else user.name
 
-        val watchedActivityIds =
+        val watchedActivity =
             PrefManager.getCustomVal<Set<Int>>("${user.id}_activities", setOf())
-        val activityIdToStatusList = user.activity.map { watchedActivityIds.contains(it.id) }
-        b.profileUserStatusIndicator.setParts(user.activity.size, activityIdToStatusList)
+        val booleanList = user.activity.map { watchedActivity.contains(it.id) }
+        b.profileUserStatusIndicator.setParts(user.activity.size, booleanList, user.id == Anilist.userid)
 
     }
 

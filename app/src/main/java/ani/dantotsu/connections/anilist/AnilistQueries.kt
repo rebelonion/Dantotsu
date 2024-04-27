@@ -1655,26 +1655,33 @@ Page(page:$page,perPage:50) {
         }.timeInMillis
         executeQuery<Social>(query(), force = true)?.data?.let { data ->
             val activities = listOf(data.page1.activities, data.page2.activities).flatten()
-                .filterNot { it.userId == Anilist.userid }
+
                 .sortedByDescending { it.createdAt }
                 .filter { it.createdAt < threeDaysAgo }
 
+            val anilistActivities = mutableListOf<User>()
             val groupedActivities = activities.groupBy { it.userId }
 
             groupedActivities.forEach { (_, userActivities) ->
                 val user = userActivities.firstOrNull()?.user
                 if (user != null) {
-                    list.add(
-                        User(
-                            user.id,
-                            user.name ?: "",
-                            user.avatar?.medium,
-                            user.bannerImage,
-                            activity = userActivities.toList()
-                        )
+                    val userToAdd = User(
+                        user.id,
+                        user.name ?: "",
+                        user.avatar?.medium,
+                        user.bannerImage,
+                        activity = userActivities.toList()
                     )
+                    if (user.id == Anilist.userid) {
+                        anilistActivities.add(0, userToAdd)
+                    } else {
+                        list.add(userToAdd)
+                    }
                 }
             }
+
+
+            list.addAll(0, anilistActivities)
         }
         return list
     }

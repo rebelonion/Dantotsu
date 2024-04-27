@@ -67,7 +67,7 @@ constructor(
     private lateinit var time: TextView
     private lateinit var infoText: TextView
     private lateinit var coverImage: ImageView
-    private var storyDuration: String = "4"
+    private var storyDuration: String = "6"
     private lateinit var animation: ObjectAnimator
     private var storyIndex: Int = 1
     private var userClicked: Boolean = false
@@ -110,9 +110,10 @@ constructor(
     }
 
 
-    fun setStoriesList(activityList: List<Activity>, activity: FragmentActivity) {
+    fun setStoriesList(activityList: List<Activity>, activity: FragmentActivity, startIndex : Int = 1) {
         this.activityList = activityList
         this.activ = activity
+        this.storyIndex = startIndex
         addLoadingViews(activityList)
     }
 
@@ -234,6 +235,9 @@ constructor(
     }
 
     private fun showStory() {
+        if (storyIndex > 1) {
+            completeProgressBar(storyIndex - 1)
+        }
         val progressBar = findViewWithTag<ProgressBar>("story${storyIndex}")
         loadingView.visibility = View.VISIBLE
         animation = ObjectAnimator.ofInt(progressBar, "progress", 0, 100)
@@ -292,9 +296,11 @@ constructor(
     }
 
     private fun completeProgressBar(storyIndex: Int) {
-        val lastProgressBar = findViewWithTag<ProgressBar>("story${storyIndex}")
-        lastProgressBar?.let {
-            it.progress = 100
+        for (i in 1 until storyIndex + 1) {
+            val progressBar = findViewWithTag<ProgressBar>("story${i}")
+            progressBar?.let {
+                it.progress = 100
+            }
         }
     }
 

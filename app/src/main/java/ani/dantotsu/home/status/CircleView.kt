@@ -14,6 +14,7 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
     private var parts: Int = 3
     private var gapAngle: Float = 9f
     private val path = Path()
+    private var isUser = false
     private var booleanList = listOf<Boolean>()
     private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
@@ -32,13 +33,14 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         val typedValue = TypedValue()
         context.theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true)
         val primaryColor = typedValue.data
+        val typedValue1 = TypedValue()
+        context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue1, true)
+        val secondColor = typedValue1.data
         fun setColor(int: Int) {
-            if (int < booleanList.size && booleanList[int]) {
-
-                paint.color = Color.GRAY
+            paint.color = if (int < booleanList.size && booleanList[int]) {
+                if (isUser) secondColor else Color.GRAY
             } else {
-
-                paint.color = primaryColor
+                if (isUser) secondColor else primaryColor
             }
             canvas.drawPath(path, paint)
         }
@@ -74,9 +76,10 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
     }
 
-    fun setParts(parts: Int, list : List<Boolean> = mutableListOf())  {
+    fun setParts(parts: Int, list : List<Boolean> = mutableListOf(), isUser: Boolean)  {
         this.parts = parts
         this.booleanList = list
+        this.isUser = isUser
         invalidate()
     }
 }

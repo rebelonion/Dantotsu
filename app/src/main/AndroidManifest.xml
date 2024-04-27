@@ -140,7 +140,7 @@
             android:name=".settings.SettingsAboutActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".home.StatusActivity"
+            android:name=".home.status.StatusActivity"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".settings.SettingsAccountActivity"

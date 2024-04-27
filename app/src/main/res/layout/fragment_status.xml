@@ -195,7 +195,6 @@
             android:ellipsize="marquee"
             android:fontFamily="@font/poppins_semi_bold"
             android:gravity="start"
-            android:lineSpacingExtra="-8sp"
             android:maxLines="3"
             android:paddingHorizontal="12dp"
             android:textAlignment="textStart"
