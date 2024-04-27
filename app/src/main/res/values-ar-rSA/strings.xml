@@ -228,7 +228,7 @@
     <string name="ask_update_progress_info_chap">سيؤدي إيقاف التشغيل إلى تحديث التقدم تلقائيًا عند قراءة فصل.</string>
     <string name="ask_update_progress_chapter_zero">تحديث التقدم للفصل 0</string>
     <string name="ask_update_progress_info_zero">سيؤدي التشغيل إلى إضافة العناصر التي بدأت حديثًا إلى Anilist مع تعيين التقدم على الفصل 0.</string>
-    <string name="ask_update_progress_hentai">تحديث التقدم للهنتاي</string>
+    <string name="ask_update_progress_hentai">تحديث التقدم لل Hentai</string>
     <string name="ask_update_progress_doujin">تحديث التقدم لDoujins</string>
     <string name="very_bold">جريئة جدا منك</string>
     <string name="watch_complete_percentage">نسبة المشاهدة للتحديث</string>
@@ -456,34 +456,34 @@
     <string name="mal_login_code_not_present">Mal Login : codeChallenge not found</string>
     <string name="refresh_token_load_failed">Refresh Token : Failed to load saved token</string>
     <string name="refreshing_token_failed">Refreshing Token Failed</string>
-    <string name="episode_release_countdown">Episode %1$d will be released in</string>
+    <string name="episode_release_countdown">سيتم إصدار الحلقة %1$d في</string>
     <string name="chapter_number">الفصل %1$d</string>
-    <string name="chapter_release_timeout">%1$s has been available for</string>
-    <string name="time_format">%1$d days %2$d hrs %3$d mins %4$d secs</string>
+    <string name="chapter_release_timeout">%1$s متاحة منذ</string>
+    <string name="time_format">%1$d أيام %2$d ساعات %3$d دقائق %4$d ثواني</string>
     <string-array name="sort_by">
         <item>التقيم</item>
         <item>شعبي</item>
         <item>شائع</item>
-        <item>New Releases</item>
+        <item>الإصدارات الجديدة</item>
         <item>A-Z</item>
         <item>Z-A</item>
         <item>Pure pain</item>
     </string-array>
     <string name="main_role">رئيسي</string>
-    <string name="supporting_role">SUPPORTING</string>
+    <string name="supporting_role">دور داعم</string>
     <string name="status_finished">منتهي</string>
-    <string name="status_releasing">RELEASING</string>
-    <string name="status_not_yet_released">NOT YET RELEASED</string>
-    <string name="status_cancelled">CANCELLED</string>
-    <string name="status_hiatus">HIATUS</string>
-    <string name="type_adaptation">ADAPTATION</string>
-    <string name="type_parent">PARENT</string>
+    <string name="status_releasing">جاري</string>
+    <string name="status_not_yet_released">لم يصدر بعد</string>
+    <string name="status_cancelled">أُلْغِيَ</string>
+    <string name="status_hiatus">في فترة توقف</string>
+    <string name="type_adaptation">مقتبس</string>
+    <string name="type_parent">الأساس</string>
     <string name="type_character">شخصية</string>
     <string name="type_summary">ملخص</string>
     <string name="type_alternative">بديل</string>
     <string name="type_other">أخري</string>
     <string name="type_source">مصدر</string>
-    <string name="type_contains">CONTAINS</string>
+    <string name="type_contains">يحتوي علي</string>
     <string name="read_on_dantotsu">اقرأ علي Dantotsu</string>
     <string name="watch_on_dantotsu">شاهد علي Dantotsu</string>
     <string name="view_profile_in_dantotsu">View Profile in Dantotsu</string>
