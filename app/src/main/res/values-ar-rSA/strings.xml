@@ -395,7 +395,7 @@
     <string name="saved_to_path">حفظ إلى:\n%s</string>
     <string name="setting_progress">تحديث التقدم الي %1$d</string>
     <string name="login_anilist_account">سجل دخول إلى حساب أني ليست رجاءا!</string>
-    <string name="congrats_vro">Congrats Vro</string>
+    <string name="congrats_vro">مبروك يخويا</string>
     <string name="please_reload">أعد التحميل رجاءً.</string>
     <string name="copied_text">تم نسخ \"%1$s\"</string>
     <string name="back_to_exit">أضغط رجوع مرة أخرى للخروج</string>
@@ -467,7 +467,7 @@
         <item>الإصدارات الجديدة</item>
         <item>A-Z</item>
         <item>Z-A</item>
-        <item>Pure pain</item>
+        <item>اسوأ ما تتخيله</item>
     </string-array>
     <string name="main_role">رئيسي</string>
     <string name="supporting_role">دور داعم</string>
