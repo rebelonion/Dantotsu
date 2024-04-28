@@ -486,8 +486,8 @@
     <string name="type_contains">يحتوي علي</string>
     <string name="read_on_dantotsu">اقرأ علي Dantotsu</string>
     <string name="watch_on_dantotsu">شاهد علي Dantotsu</string>
-    <string name="view_profile_in_dantotsu">View Profile in Dantotsu</string>
-    <string name="continue_episode">Continue : Episode %1$s%2$s\n%3$s</string>
+    <string name="view_profile_in_dantotsu">افتح ال \"profile\" في \"Dantotsu\"</string>
+    <string name="continue_episode">اكمل : الحلقة %1$s%2$s\n%3$s</string>
     <string name="filler_tag"> - Filler</string>
     <string name="continue_chapter">اكمل : %1$s\n%2$s</string>
     <string name="episode">"الحلقة "</string>
@@ -549,13 +549,13 @@
     <string name="question_2">ما هي بعض مميزات دانتوتسو؟</string>
     <string name="answer_2">بعض الميزات الجديرة بالذكر لـ \"Dantotsu\" هي \n\n- طريقة سهلة وعملية لمشاهدة الانمي وقراءة المانجا والروايات الخفيفة، بدون إعلانات.\n- تطبيق مفتوح المصدر بالكامل مع واجهة مستخدم جميلة\n- دعم الاضافات المساعده لجهة خارجية \n- مزامنة الانمي والمانجا مع \"AniList\". تصنيف الأنمي والمانجا بسهولة بناءً على حالتك الحالية.(باستخدام AniList)\n- البحث عن جميع العروض باستخدام قائمة محدثة بشكل شامل ومتكرر لجميع الانميات الرائجة والشائعة والمستمرة بناءً على التقييمات.\n- عرض تفاصيل شاملة حول عروض الأنمي والأفلام وعناوين المانجا. كما يتميز أيضًا بالقدرة على العد التنازلي للحلقة التالية من الأنمي. (باستخدام Anilist &amp; MyAnimeList)</string>
     <string name="question_3">ما هو الفرق بين Stable, Beta &amp; Alpha؟</string>
-    <string name="answer_3">A Stable release is a version that has been tested as thoroughly as possible and is as reliable as we can make it.\n\nA Beta release is a version which is meant for testing new features or providing hot fixes.\n\nAn Alpha release is like a beta version but has many bugs and you can only find it on our [discord](https://discord.gg/invite/4HPZ5nAWwM) server. It gets frequent updates and has a high chance to break.\n\nIf you want a reliable app then go for the Stable. If you want the latest and greatest features and bugs then go for Alpha.</string>
+    <string name="answer_3">الإصدار الثابت (Stable) هو إصدار تم اختباره بأكبر قدر ممكن من الدقة وهو موثوق بقدر الإمكان.\n\nالإصدار التجريبي (Beta) هو إصدار مخصص لاختبار الميزات الجديدة أو توفير الإصلاحات العاجلة.\n\nإصدار Alpha يشبه الإصدار التجريبي ولكنه يحتوي على العديد من الأخطاء ولا يمكنك العثور عليه إلا على سيرفر [ديسكورد](https://discord.gg/invite/4HPZ5nAWwM). يحصل على تحديثات متكررة ولديه فرصة كبيرة للتعطل.\n\nإذا كنت تريد تطبيقًا موثوقًا به، فانتقل إلى Stable. إذا كنت تريد أحدث وأعظم الميزات والأخطاء، فانتقل إلى Alpha.</string>
     <string name="question_4">هل Dantotsu متوفر في PC؟</string>
-    <string name="answer_4">Currently no (for both Windows and Linux). There isn\'t any estimation when it will be available. But you can download any Android emulator and run Dantotsu on it. For Windows 11 users, they can use the Windows Subsystem for Android (WSA) to run Dantotsu in Windows.</string>
+    <string name="answer_4">لا يوجد حاليًا اصدار للحاسوب (لكل من نظامي التشغيل Windows و Linux). وليس هناك أي تقدير متى سيكون متاحا. ولكن يمكنك تنزيل أي محاكي \"Android\" وتشغيل \"Dantotsu\" عليه. بالنسبة لمستخدمي \"Windows 11\"، يمكنهم استخدام نظام \"Windows\" الفرعي لنظام (WSA) لتشغيل \"Dantotsu\" في \"Windows.\".</string>
     <string name="question_5">هل Dantotsu متوفر في IOS؟</string>
-    <string name="answer_5">No, best we can do is carve Dantotsu on an apple.</string>
-    <string name="question_6">Why are my stats not updating?</string>
-    <string name="answer_6">This is because it updates every 48 hours automatically (by Anilist). If you really need to update your stats, you can force update your stats after going to this [link](https://anilist.co/settings/lists).</string>
+    <string name="answer_5">لا، أفضل ما يمكننا فعله هو نحت دانتوتسو على تفاحة.</string>
+    <string name="question_6">لماذا لا يتم تحديث الإحصائيات الخاصة بي؟</string>
+    <string name="answer_6">وذلك لأنه يتم تحديثه كل 48 ساعة تلقائيًا (بواسطة Anilist). إذا كنت تريد حقًا تحديث إحصائياتك، فيمكنك فرض تحديث إحصائياتك بعد الانتقال إلى هذا [اللينك](https://anilist.co/settings/lists).</string>
     <string name="question_7">كيفية تحميل الأنمي؟</string>
     <string name="answer_7">There are two methods of downloading currently. One is internal and the other is external. If you download internally, then it can be viewed within the app but only the app can open that episode, you cannot move it or share it. The other option is to use external downloading. It requires a download manager to download and a separate video player to watch. External downloads can be shared but you cannot view it within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. Pick the server and the video quality.\n3. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.
         \n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))
