@@ -373,70 +373,11 @@ class AnilistQueries {
         }
         return media
     }
-
-    suspend fun continueMedia(type: String, planned: Boolean = false): ArrayList<Media> {
-        val returnArray = arrayListOf<Media>()
-        val map = mutableMapOf<Int, Media>()
-        val query = if (planned) {
-            """{ planned: ${continueMediaQuery(type, "PLANNING")} }"""
-        } else {
-            """{ 
-                current: ${continueMediaQuery(type, "CURRENT")},
-                repeating: ${continueMediaQuery(type, "REPEATING")}
-            }"""
-        }
-
-        val response = executeQuery<Query.CombinedMediaListResponse>(query)
-        if (planned) {
-            response?.data?.planned?.lists?.forEach { li ->
-                li.entries?.reversed()?.forEach {
-                    val m = Media(it)
-                    m.cameFromContinue = true
-                    map[m.id] = m
-                }
-            }
-        } else {
-            response?.data?.current?.lists?.forEach { li ->
-                li.entries?.reversed()?.forEach {
-                    val m = Media(it)
-                    m.cameFromContinue = true
-                    map[m.id] = m
-                }
-            }
-            response?.data?.repeating?.lists?.forEach { li ->
-                li.entries?.reversed()?.forEach {
-                    val m = Media(it)
-                    m.cameFromContinue = true
-                    map[m.id] = m
-                }
-            }
-        }
-        if (type != "ANIME") {
-            returnArray.addAll(map.values)
-            return returnArray
-        }
-        @Suppress("UNCHECKED_CAST")
-        val list = PrefManager.getNullableCustomVal(
-            "continueAnimeList",
-            listOf<Int>(),
-            List::class.java
-        ) as List<Int>
-        if (list.isNotEmpty()) {
-            list.reversed().forEach {
-                if (map.containsKey(it)) returnArray.add(map[it]!!)
-            }
-            for (i in map) {
-                if (i.value !in returnArray) returnArray.add(i.value)
-            }
-        } else returnArray.addAll(map.values)
-        return returnArray
-    }
-
     private fun continueMediaQuery(type: String, status: String): String {
         return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: $status , sort: UPDATED_TIME ) { lists { entries { progress private score(format:POINT_100) status media { id idMal type isAdult status chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } } """
     }
 
-    suspend fun favMedia(anime: Boolean, id: Int? = Anilist.userid): ArrayList<Media> {
+    private suspend fun favMedia(anime: Boolean, id: Int? = Anilist.userid): ArrayList<Media> {
         var hasNextPage = true
         var page = 0
 
@@ -462,41 +403,6 @@ class AnilistQueries {
 
     private fun favMediaQuery(anime: Boolean, page: Int, id: Int? = Anilist.userid): String {
         return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
-    }
-
-    suspend fun recommendations(): ArrayList<Media> {
-        val response = executeQuery<Query.Page>("""{${recommendationQuery()}}""")
-        val map = mutableMapOf<Int, Media>()
-        response?.data?.page?.apply {
-            recommendations?.onEach {
-                val json = it.mediaRecommendation
-                if (json != null) {
-                    val m = Media(json)
-                    m.relation = json.type?.toString()
-                    map[m.id] = m
-                }
-            }
-        }
-
-        val types = arrayOf("ANIME", "MANGA")
-        suspend fun repeat(type: String) {
-            val res =
-                executeQuery<Query.MediaListCollection>("""{${recommendationPlannedQuery(type)}}""")
-            res?.data?.mediaListCollection?.lists?.forEach { li ->
-                li.entries?.forEach {
-                    val m = Media(it)
-                    if (m.status == "RELEASING" || m.status == "FINISHED") {
-                        m.relation = it.media?.type?.toString()
-                        map[m.id] = m
-                    }
-                }
-            }
-        }
-        types.forEach { repeat(it) }
-
-        val list = ArrayList(map.values.toList())
-        list.sortByDescending { it.meanScore }
-        return list
     }
 
     private fun recommendationQuery(): String {
@@ -1562,7 +1468,7 @@ Page(page:$page,perPage:50) {
         return getUserProfile(id)
     }
 
-    suspend fun getUserId(username: String): Int? {
+    private suspend fun getUserId(username: String): Int? {
         return executeQuery<Query.User>(
             """{User(name:"$username"){id}}""",
             force = true
@@ -1577,8 +1483,8 @@ Page(page:$page,perPage:50) {
         )
     }
 
-    private fun userFavMediaQuery(anime: Boolean, page: Int, id: Int): String {
-        return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:$page){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
+    private fun userFavMediaQuery(anime: Boolean, id: Int): String {
+        return """User(id:${id}){id favourites{${if (anime) "anime" else "manga"}(page:1){pageInfo{hasNextPage}edges{favouriteOrder node{id idMal isAdult mediaListEntry{ progress private score(format:POINT_100) status } chapters isFavourite format episodes nextAiringEpisode{episode}meanScore isFavourite format startDate{year month day} title{english romaji userPreferred}type status(version:2)bannerImage coverImage{large}}}}}}"""
     }
 
     suspend fun userFollowing(id: Int): Query.Following? {
@@ -1598,8 +1504,8 @@ Page(page:$page,perPage:50) {
     suspend fun initProfilePage(id: Int): Query.ProfilePageMedia? {
         return executeQuery<Query.ProfilePageMedia>(
             """{
-            favoriteAnime:${userFavMediaQuery(true, 1, id)}
-            favoriteManga:${userFavMediaQuery(false, 1, id)}
+            favoriteAnime:${userFavMediaQuery(true, id)}
+            favoriteManga:${userFavMediaQuery(false, id)}
             }""".trimIndent(), force = true
         )
     }

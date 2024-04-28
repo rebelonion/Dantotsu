@@ -38,7 +38,7 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         val secondColor = typedValue1.data
         fun setColor(int: Int) {
             paint.color = if (int < booleanList.size && booleanList[int]) {
-                if (isUser) secondColor else Color.GRAY
+                 Color.GRAY
             } else {
                 if (isUser) secondColor else primaryColor
             }

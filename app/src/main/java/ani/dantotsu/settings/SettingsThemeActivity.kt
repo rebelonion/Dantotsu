@@ -27,7 +27,7 @@ import eltos.simpledialogfragment.color.SimpleColorDialog
 
 class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultListener {
     private lateinit var binding: ActivitySettingsThemeBinding
-    private var reload = false
+    private var reload = PrefManager.getCustomVal("reload", true)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
@@ -211,7 +211,6 @@ class SettingsThemeActivity : AppCompatActivity(), SimpleDialog.OnDialogResultLi
     fun reload() {
         PrefManager.setCustomVal("reload", true)
         restartApp()
-        reload = true
     }
 
 }

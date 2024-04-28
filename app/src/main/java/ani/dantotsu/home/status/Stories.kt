@@ -262,7 +262,7 @@ constructor(
     }
 
     private fun resetProgressBar(storyIndex: Int) {
-        for (i in storyIndex until activityList.size) {
+        for (i in storyIndex until activityList.size + 1) {
             val progressBar = findViewWithTag<ProgressBar>("story${i}")
             progressBar?.let {
                 it.progress = 0
@@ -317,7 +317,7 @@ constructor(
         }
         userClicked = true
         animation.end()
-        if (storyIndex < activityList.size)
+        if (storyIndex <= activityList.size)
             storyIndex += 1
         showStory()
     }
@@ -360,7 +360,7 @@ constructor(
 
         val key = "activities"
         val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
-        val newList = set.sorted().takeLast(120).toSet()
+        val newList = set.sorted().takeLast(200).toSet()
         PrefManager.setCustomVal(key, newList)
         binding.statusUserAvatar.loadImage(story.user?.avatar?.large)
         binding.statusUserName.text = story.user?.name
@@ -395,7 +395,7 @@ constructor(
                         it.toString()
                     }
                 }} ${story.progress ?: story.media?.title?.userPreferred} " +
-                    if (story.status?.contains("completed") == false) {
+                    if (story.status?.contains("completed") == false && !story.status.contains("plans") && !story.status.contains("repeating")) {
                         "of ${story.media?.title?.userPreferred}"
                     }else {
                         ""

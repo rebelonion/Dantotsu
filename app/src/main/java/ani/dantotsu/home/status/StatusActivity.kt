@@ -42,7 +42,8 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
         slideOutLeft = AnimationUtils.loadAnimation(this, R.anim.slide_out_left)
         slideInRight = AnimationUtils.loadAnimation(this, R.anim.slide_in_right)
 
-        val watchedActivity = PrefManager.getCustomVal<Set<Int>>("activities", setOf())
+        val key = "activities"
+        val watchedActivity = PrefManager.getCustomVal<Set<Int>>(key, setOf())
         val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
         val startIndex = if ( startFrom > 0) startFrom else 0
         binding.stories.setStoriesList(activity[position].activity, this, startIndex + 1)
@@ -77,7 +78,8 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
     override fun onStoriesEnd() {
         position += 1
         if (position < activity.size) {
-            val watchedActivity = PrefManager.getCustomVal<Set<Int>>("activities", setOf())
+            val key = "activities"
+            val watchedActivity = PrefManager.getCustomVal<Set<Int>>(key, setOf())
             val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
             val startIndex= if ( startFrom > 0) startFrom else 0
             binding.stories.startAnimation(slideOutLeft)

@@ -315,7 +315,7 @@ class HomeFragment : Fragment() {
             binding.homeRecommendedEmpty,
             binding.homeRecommended
         )
-        binding.homeUserStatusContainer.visibility = if (PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout)[7]) View.VISIBLE else View.GONE
+        binding.homeUserStatusContainer.visibility =View.VISIBLE
         binding.homeUserStatusProgressBar.visibility = View.VISIBLE
         binding.homeUserStatusRecyclerView.visibility = View.GONE
         model.getUserStatus().observe(viewLifecycleOwner) {
@@ -364,7 +364,8 @@ class HomeFragment : Fragment() {
             "MangaContinue",
             "MangaFav",
             "MangaPlanned",
-            "Recommendation"
+            "Recommendation",
+            "UserStatus"
         )
 
         val containers = arrayOf(
@@ -375,6 +376,7 @@ class HomeFragment : Fragment() {
             binding.homeFavMangaContainer,
             binding.homePlannedMangaContainer,
             binding.homeRecommendedContainer,
+            binding.homeUserStatusContainer,
         )
 
         val live = Refresh.activity.getOrPut(1) { MutableLiveData(false) }
