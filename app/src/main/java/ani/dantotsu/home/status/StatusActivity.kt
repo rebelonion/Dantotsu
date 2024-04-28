@@ -76,7 +76,7 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
     }
     override fun onStoriesEnd() {
         position += 1
-        if (position < activity.size - 1) {
+        if (position < activity.size) {
             val watchedActivity = PrefManager.getCustomVal<Set<Int>>("activities", setOf())
             val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
             val startIndex= if ( startFrom > 0) startFrom else 0
@@ -91,7 +91,8 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
     override fun onStoriesStart() {
         position -= 1
         if (position >= 0) {
-            val watchedActivity = PrefManager.getCustomVal<Set<Int>>("activities", setOf())
+            val key = "activities"
+            val watchedActivity = PrefManager.getCustomVal<Set<Int>>(key, setOf())
             val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
             val startIndex = if ( startFrom > 0) startFrom else 0
             binding.stories.startAnimation(slideOutRight)

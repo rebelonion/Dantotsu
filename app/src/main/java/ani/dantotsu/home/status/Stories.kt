@@ -5,7 +5,9 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
@@ -24,6 +26,7 @@ import ani.dantotsu.blurImage
 import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Activity
+import ani.dantotsu.databinding.FragmentStatusBinding
 import ani.dantotsu.home.status.listener.StoriesCallback
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsActivity
@@ -48,30 +51,16 @@ class Stories @JvmOverloads
 constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnTouchListener {
-    private lateinit var activityList: List<Activity>
-    private lateinit var activ: FragmentActivity
-    private lateinit var loadingViewLayout: ConstraintLayout
-    private lateinit var leftTouchPanel: FrameLayout
-    private lateinit var rightTouchPanel: FrameLayout
-    private lateinit var statusUserContainer: LinearLayout
-    private lateinit var imageContentView: ImageView
-    private lateinit var imageContentViewKen: ImageView
-    private lateinit var loadingView: ProgressBar
-    private lateinit var activityLikeCount: TextView
-    private lateinit var textActivity: TextView
-    private lateinit var textActivityContainer: LinearLayout
-    private lateinit var activityLike: ImageView
-    private lateinit var activityLikeContainer: LinearLayout
-    private lateinit var userName: TextView
-    private lateinit var userAvatar: ImageView
-    private lateinit var time: TextView
-    private lateinit var infoText: TextView
-    private lateinit var coverImage: ImageView
-    private var storyDuration: String = "6"
+    private lateinit var activity: FragmentActivity
+    private lateinit var binding: FragmentStatusBinding
     private lateinit var animation: ObjectAnimator
-    private var storyIndex: Int = 1
-    private var userClicked: Boolean = false
+    private lateinit var activityList: List<Activity>
     private lateinit var storiesListener: StoriesCallback
+    private var userClicked: Boolean = false
+    private var storyIndex: Int = 1
+    private var primaryColor : Int = 0
+    private var onPrimaryColor : Int = 0
+    private var storyDuration: Int = 6
 
     init {
         initLayout()
@@ -79,39 +68,26 @@ constructor(
     @SuppressLint("ClickableViewAccessibility")
     fun initLayout() {
         val inflater: LayoutInflater = LayoutInflater.from(context)
-        val view = inflater.inflate(R.layout.fragment_status, this, false)
-        addView(view)
+        binding = FragmentStatusBinding.inflate(inflater, this, false)
+        addView(binding.root)
+        val typedValue = TypedValue()
+        val typedValue1 = TypedValue()
+        context.theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true)
+        context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue1, true)
+        primaryColor = typedValue.data
+        onPrimaryColor = typedValue1.data
 
         if (context is StoriesCallback)
             storiesListener = context as StoriesCallback
 
-
-        loadingViewLayout = findViewById(R.id.progressBarContainer)
-        leftTouchPanel = findViewById(R.id.leftTouchPanel)
-        rightTouchPanel = findViewById(R.id.rightTouchPanel)
-        imageContentView = findViewById(R.id.contentImageView)
-        imageContentViewKen = findViewById(R.id.contentImageViewKen)
-        statusUserContainer = findViewById(R.id.statusUserContainer)
-        loadingView = findViewById(R.id.androidStoriesLoadingView)
-        textActivityContainer = findViewById(R.id.textActivityContainer)
-        textActivity = findViewById(R.id.textActivity)
-        coverImage = findViewById(R.id.coverImage)
-        userName = findViewById(R.id.statusUserName)
-        userAvatar = findViewById(R.id.statusUserAvatar)
-        time = findViewById(R.id.statusUserTime)
-        infoText = findViewById(R.id.infoText)
-        activityLikeCount = findViewById(R.id.activityLikeCount)
-        activityLike = findViewById(R.id.activityLike)
-        activityLikeContainer = findViewById(R.id.statusUserActions)
-
-        leftTouchPanel.setOnTouchListener(this)
-        rightTouchPanel.setOnTouchListener(this)
+        binding.leftTouchPanel.setOnTouchListener(this)
+        binding.rightTouchPanel.setOnTouchListener(this)
     }
 
 
     fun setStoriesList(activityList: List<Activity>, activity: FragmentActivity, startIndex : Int = 1) {
         this.activityList = activityList
-        this.activ = activity
+        this.activity = activity
         this.storyIndex = startIndex
         addLoadingViews(activityList)
     }
@@ -119,19 +95,21 @@ constructor(
     private fun addLoadingViews(storiesList: List<Activity>) {
         var idCounter = 1
         for (story in storiesList) {
-            loadingViewLayout.removeView(findViewWithTag<ProgressBar>("story${idCounter}"))
+            binding.progressBarContainer.removeView(findViewWithTag<ProgressBar>("story${idCounter}"))
             val progressBar = ProgressBar(context, null, android.R.attr.progressBarStyleHorizontal)
             progressBar.visibility = View.VISIBLE
             progressBar.id = idCounter
             progressBar.tag = "story${idCounter++}"
+            progressBar.progressBackgroundTintList = ColorStateList.valueOf(primaryColor)
+            progressBar.progressTintList = ColorStateList.valueOf(onPrimaryColor)
             val params = LayoutParams(0, LayoutParams.WRAP_CONTENT)
             params.marginEnd = 5
             params.marginStart = 5
-            loadingViewLayout.addView(progressBar, params)
+            binding.progressBarContainer.addView(progressBar, params)
         }
 
         val constraintSet = ConstraintSet()
-        constraintSet.clone(loadingViewLayout)
+        constraintSet.clone(binding.progressBarContainer)
 
         var counter = storiesList.size
         for (story in storiesList) {
@@ -225,7 +203,7 @@ constructor(
             }
             counter--
         }
-        constraintSet.applyTo(loadingViewLayout)
+        constraintSet.applyTo(binding.progressBarContainer)
         startShowContent()
     }
 
@@ -238,7 +216,7 @@ constructor(
             completeProgressBar(storyIndex - 1)
         }
         val progressBar = findViewWithTag<ProgressBar>("story${storyIndex}")
-        loadingView.visibility = View.VISIBLE
+        binding.androidStoriesLoadingView.visibility = View.VISIBLE
         animation = ObjectAnimator.ofInt(progressBar, "progress", 0, 100)
         animation.duration = secondsToMillis(storyDuration)
         animation.interpolator = LinearInterpolator()
@@ -255,13 +233,13 @@ constructor(
                             showStory()
                         } else {
                             // on stories end
-                            loadingView.visibility = View.GONE
+                            binding.androidStoriesLoadingView.visibility = View.GONE
                             onStoriesCompleted()
                         }
                     }
                 } else {
                     // on stories end
-                    loadingView.visibility = View.GONE
+                    binding.androidStoriesLoadingView.visibility = View.GONE
                     onStoriesCompleted()
                 }
             }
@@ -279,18 +257,16 @@ constructor(
         return findViewWithTag<ProgressBar>(tag).id
     }
 
-    private fun secondsToMillis(seconds: String): Long {
-        return (seconds.toLongOrNull() ?: 3).times(1000)
+    private fun secondsToMillis(seconds: Int): Long {
+        return (seconds.toLong()).times(1000)
     }
 
     private fun resetProgressBar(storyIndex: Int) {
-        val currentProgressBar = findViewWithTag<ProgressBar>("story${storyIndex}")
-        val lastProgressBar = findViewWithTag<ProgressBar>("story${storyIndex - 1}")
-        currentProgressBar?.let {
-            it.progress = 0
-        }
-        lastProgressBar?.let {
-            it.progress = 0
+        for (i in storyIndex until activityList.size) {
+            val progressBar = findViewWithTag<ProgressBar>("story${i}")
+            progressBar?.let {
+                it.progress = 0
+            }
         }
     }
 
@@ -381,17 +357,15 @@ constructor(
         animation.resume()
     }
     private fun loadStory(story: Activity) {
-        loadingView.visibility = View.GONE
-        animation.start()
 
         val key = "activities"
         val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
-        PrefManager.setCustomVal(key, set)
-
-        userAvatar.loadImage(story.user?.avatar?.large)
-        userName.text = story.user?.name
-        time.text = ActivityItemBuilder.getDateTime(story.createdAt)
-        statusUserContainer.setOnClickListener {
+        val newList = set.sorted().takeLast(120).toSet()
+        PrefManager.setCustomVal(key, newList)
+        binding.statusUserAvatar.loadImage(story.user?.avatar?.large)
+        binding.statusUserName.text = story.user?.name
+        binding.statusUserTime.text = ActivityItemBuilder.getDateTime(story.createdAt)
+        binding.statusUserContainer.setOnClickListener {
             ContextCompat.startActivity(context, Intent(context, ProfileActivity::class.java)
                 .putExtra("userId", story.userId),
                 null)
@@ -400,14 +374,16 @@ constructor(
         fun visible(isList: Boolean){
             val visible = if (isList) View.VISIBLE else View.GONE
             val gone = if (isList) View.GONE else View.VISIBLE
-            textActivity.visibility = gone
-            textActivityContainer.visibility = gone
-            infoText.visibility = visible
-            coverImage.visibility = visible
-            infoText.visibility = if (isList) View.VISIBLE else View.INVISIBLE
-            imageContentViewKen.visibility = visible
-            imageContentView.visibility = visible
+            binding.textActivity.visibility = gone
+            binding.textActivityContainer.visibility = gone
+            binding.infoText.visibility = visible
+            binding.coverImage.visibility = visible
+            binding.infoText.visibility = if (isList) View.VISIBLE else View.INVISIBLE
+            binding.infoText.text = ""
+            binding.contentImageViewKen.visibility = visible
+            binding.contentImageView.visibility = visible
         }
+
         when (story.typename){
             "ListActivity" -> {
                 visible(true)
@@ -424,11 +400,11 @@ constructor(
                     }else {
                         ""
                     }
-                infoText.text = text
+                binding.infoText.text = text
                 val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
-                blurImage(if (bannerAnimations)imageContentViewKen else imageContentView, story.media?.bannerImage ?: story.media?.coverImage?.extraLarge)
-                coverImage.loadImage(story.media?.coverImage?.extraLarge)
-                coverImage.setOnClickListener{
+                blurImage(if (bannerAnimations)binding.contentImageViewKen else binding.contentImageView, story.media?.bannerImage ?: story.media?.coverImage?.extraLarge)
+                binding.coverImage.loadImage(story.media?.coverImage?.extraLarge)
+                binding.coverImage.setOnClickListener{
                     ContextCompat.startActivity(context, Intent(context, MediaDetailsActivity::class.java)
                         .putExtra("mediaId", story.media?.id),
                         null)
@@ -441,7 +417,7 @@ constructor(
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(
-                        textActivity,
+                        binding.textActivity,
                         AniMarkdown.getBasicAniHTML(story.text ?: "")
                     )
                 }
@@ -451,7 +427,7 @@ constructor(
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(
-                        textActivity,
+                        binding.textActivity,
                         AniMarkdown.getBasicAniHTML(story.message ?: "")
                     )
                 }
@@ -465,18 +441,22 @@ constructor(
 
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
-        activityLikeCount.text = story.likeCount.toString()
-        activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
-        activityLikeContainer.setOnClickListener {
+        binding.activityLikeCount.text = story.likeCount.toString()
+        binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
+        binding.statusUserActions.setOnClickListener {
             like()
         }
-        activityLikeContainer.setOnLongClickListener {
+
+        binding.statusUserActions.setOnLongClickListener {
+            val context = activity
             UsersDialogFragment().apply {
                 userList(userList)
-                show(activ.supportFragmentManager, "dialog")
+                show(context.supportFragmentManager, "dialog")
             }
             true
         }
+        binding.androidStoriesLoadingView.visibility = View.GONE
+        animation.start()
     }
     fun like(){
         val story = activityList[storyIndex - 1]
@@ -492,9 +472,9 @@ constructor(
                     } else {
                         story.likeCount = story.likeCount?.plus(1)
                     }
-                    activityLikeCount.text = (story.likeCount ?: 0).toString()
+                    binding.activityLikeCount.text = (story.likeCount ?: 0).toString()
                     story.isLiked = !story.isLiked!!
-                    activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
+                    binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
 
                 } else {
                     snackString("Failed to like activity")

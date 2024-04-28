@@ -1667,7 +1667,7 @@ Page(page:$page,perPage:50) {
                         user.name ?: "",
                         user.avatar?.medium,
                         user.bannerImage,
-                        activity = userActivities.toList()
+                        activity = userActivities.sortedBy { it.createdAt }.toList()
                     )
                     if (user.id == Anilist.userid) {
                         anilistActivities.add(0, userToAdd)
