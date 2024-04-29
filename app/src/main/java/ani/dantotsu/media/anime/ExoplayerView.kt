@@ -1586,14 +1586,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                     }
                 }.show()
             dialog.window?.setDimAmount(0.8f)
-        }
-        if (!this::exoPlayer.isInitialized) buildExoplayer()
-
-        val isDisabled = (subtitle == null && hasExtSubtitles)
-        exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
-            .buildUpon()
-            .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
-            .build()
+        } else buildExoplayer()
     }
 
     private fun buildExoplayer() {
@@ -1644,6 +1637,12 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         if (!hasExtSubtitles && !PrefManager.getVal<Boolean>(PrefName.Subtitles)) {
             onSetTrackGroupOverride(dummyTrack, TRACK_TYPE_TEXT)
         }
+
+        val isDisabled = (subtitle == null && hasExtSubtitles)
+        exoPlayer.trackSelectionParameters = exoPlayer.trackSelectionParameters
+            .buildUpon()
+            .setTrackTypeDisabled(TRACK_TYPE_TEXT, isDisabled)
+            .build()
     }
 
     private fun releasePlayer() {
