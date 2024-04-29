@@ -604,8 +604,6 @@
     <string name="error_loading_discord_user_data">डिस्कॉर्ड उपयोगकर्ता डेटा लोड करने में त्रुटि</string>
     <string name="discord_warning"><![CDATA[लॉग इन करके, आपका discord अब दिखाएगा कि आप Dantotsu पर क्या देख रहे हैं और क्या पढ़ रहे हैं। \n\nयदि आप अदृश्य मोड पर हैं, तो लॉगिन करने से आप जब आप Dantotsu खोलेंगे, ऑनलाइन हो जाएंगे। \n\nयह Discord की नियम और शर्तों का उल्लंघन करता है। \nहालांकि Discord ने कभी भी किसी को कस्टम रिच प्रेजेंस का उपयोग करने के लिए प्रतिबंधित नहीं किया है (जिसका उपयोग Dantotsu करता है), फिर भी आपको चेतावनी दी गई है। \n\nDantotsu उस सभी कुछ के लिए जिम्मेदार नहीं है जो आपके खाते के साथ होता है।]]></string>
     <string name="warning">चेतावनी</string>
-    <string name="view_anime">एनिमे देखें</string>
-    <string name="view_manga">मंगा देखें</string>
     <string name="force_legacy_installer">लेगसि इंस्टालर को मजबूर करें</string>
     <string name="extensions_settings">एक्सटेंशन्स</string>
     <string name="NSFWExtention">NSFW एक्सटेंशन्स</string>
@@ -698,7 +696,6 @@
     <string name="blur_banners">बैनर को धुंधला करें</string>
     <string name="blur">धुंधलाना</string>
     <string name="hide_scroll_bar">स्क्रॉल बार छुपाएं</string>
-    <string name="view_on_anilist">एनीलिस्ट पर देखें</string>
     <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">एनीलिस्ट अधिसूचनाएँ अपडेट आवृत्ति : %1$s</string>
     <string name="comment_notification_checking_time">टिप्पणी अधिसूचनाएँ अपडेट आवृत्ति : %1$s</string>
@@ -852,5 +849,5 @@
     <string name="avatar">%1$s\ [अवतर]</string>
     <string name="cover">%1$s\ [कवर]</string>
     <string name="banner">%1$s\ [बैनर]</string>
-    <string name="your_story">Your Story</string>
+    <string name="your_story">आपका स्टोरी</string>
 </resources>
