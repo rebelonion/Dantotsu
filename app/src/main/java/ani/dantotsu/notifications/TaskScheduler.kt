@@ -36,28 +36,6 @@ interface TaskScheduler {
         }
     }
 
-    fun scheduleSingleWork(context: Context) {
-        val workManager = androidx.work.WorkManager.getInstance(context)
-        workManager.enqueueUniqueWork(
-            CommentNotificationWorker.WORK_NAME,
-            androidx.work.ExistingWorkPolicy.REPLACE,
-            androidx.work.OneTimeWorkRequest.Builder(CommentNotificationWorker::class.java)
-                .build()
-        )
-        workManager.enqueueUniqueWork(
-            AnilistNotificationWorker.WORK_NAME,
-            androidx.work.ExistingWorkPolicy.REPLACE,
-            androidx.work.OneTimeWorkRequest.Builder(AnilistNotificationWorker::class.java)
-                .build()
-        )
-        workManager.enqueueUniqueWork(
-            SubscriptionNotificationWorker.WORK_NAME,
-            androidx.work.ExistingWorkPolicy.REPLACE,
-            androidx.work.OneTimeWorkRequest.Builder(SubscriptionNotificationWorker::class.java)
-                .build()
-        )
-    }
-
     companion object {
         fun create(context: Context, useAlarmManager: Boolean): TaskScheduler {
             return if (useAlarmManager) {
@@ -65,6 +43,28 @@ interface TaskScheduler {
             } else {
                 WorkManagerScheduler(context)
             }
+        }
+
+        fun scheduleSingleWork(context: Context) {
+            val workManager = androidx.work.WorkManager.getInstance(context)
+            workManager.enqueueUniqueWork(
+                CommentNotificationWorker.WORK_NAME + "_single",
+                androidx.work.ExistingWorkPolicy.REPLACE,
+                androidx.work.OneTimeWorkRequest.Builder(CommentNotificationWorker::class.java)
+                    .build()
+            )
+            workManager.enqueueUniqueWork(
+                AnilistNotificationWorker.WORK_NAME + "_single",
+                androidx.work.ExistingWorkPolicy.REPLACE,
+                androidx.work.OneTimeWorkRequest.Builder(AnilistNotificationWorker::class.java)
+                    .build()
+            )
+            workManager.enqueueUniqueWork(
+                SubscriptionNotificationWorker.WORK_NAME + "_single",
+                androidx.work.ExistingWorkPolicy.REPLACE,
+                androidx.work.OneTimeWorkRequest.Builder(SubscriptionNotificationWorker::class.java)
+                    .build()
+            )
         }
     }
 

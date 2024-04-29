@@ -135,7 +135,6 @@ class App : MultiDexApplication() {
         val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
         val scheduler = TaskScheduler.create(this, useAlarmManager)
         scheduler.scheduleAllTasks(this)
-        scheduler.scheduleSingleWork(this)
     }
 
     private fun setupNotificationChannels() {

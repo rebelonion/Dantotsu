@@ -48,6 +48,7 @@ import ani.dantotsu.home.LoginFragment
 import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
 import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.others.CustomBottomDialog
@@ -102,12 +103,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        androidx.work.WorkManager.getInstance(this)
-            .enqueue(OneTimeWorkRequest.Companion.from(CommentNotificationWorker::class.java))
-
-        androidx.work.WorkManager.getInstance(this)
-            .enqueue(OneTimeWorkRequest.Companion.from(AnilistNotificationWorker::class.java))
+        TaskScheduler.scheduleSingleWork(this)
 
         val action = intent.action
         val type = intent.type
