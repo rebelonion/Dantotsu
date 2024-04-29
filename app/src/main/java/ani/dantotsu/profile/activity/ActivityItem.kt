@@ -1,6 +1,5 @@
 package ani.dantotsu.profile.activity
 
-import android.annotation.SuppressLint
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -18,13 +17,8 @@ import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.request.RequestOptions
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
-import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -108,11 +102,12 @@ class ActivityItem(
         }
         val context = binding.root.context
         val userList = arrayListOf<User>()
-        activity.likes?.forEach{ i ->
+        activity.likes?.forEach { i ->
             userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
         }
-        binding.activityLike.setOnLongClickListener{
-            UsersDialogFragment().apply { userList(userList)
+        binding.activityLike.setOnLongClickListener {
+            UsersDialogFragment().apply {
+                userList(userList)
                 show(fragActivity.supportFragmentManager, "dialog")
             }
             true
@@ -126,8 +121,10 @@ class ActivityItem(
                 binding.activityContent.visibility = View.GONE
                 binding.activityBannerContainer.visibility = View.VISIBLE
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
-                val activityText = "${activity.user!!.name} ${activity.status} ${activity.progress 
-                    ?: activity.media?.title?.userPreferred}"
+                val activityText = "${activity.user!!.name} ${activity.status} ${
+                    activity.progress
+                        ?: activity.media?.title?.userPreferred
+                }"
                 binding.activityText.text = activityText
                 binding.activityCover.loadImage(cover)
                 blurImage(binding.activityBannerImage, banner ?: cover)

@@ -40,6 +40,7 @@ import ani.dantotsu.databinding.ItemTitleTrailerBinding
 import ani.dantotsu.displayTimer
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.profile.User
 import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
@@ -145,7 +146,8 @@ class MediaInfoFragment : Fragment() {
                     }
                     binding.mediaInfoDurationContainer.visibility = View.VISIBLE
                     binding.mediaInfoSeasonContainer.visibility = View.VISIBLE
-                    val seasonInfo = "${(media.anime.season ?: "??")} ${(media.anime.seasonYear ?: "??")}"
+                    val seasonInfo =
+                        "${(media.anime.season ?: "??")} ${(media.anime.seasonYear ?: "??")}"
                     binding.mediaInfoSeason.text = seasonInfo
 
                     if (media.anime.mainStudio != null) {
@@ -182,9 +184,9 @@ class MediaInfoFragment : Fragment() {
                     }
                     binding.mediaInfoTotalTitle.setText(R.string.total_eps)
                     val infoTotal = if (media.anime.nextAiringEpisode != null)
-                            "${media.anime.nextAiringEpisode} | ${media.anime.totalEpisodes ?: "~"}"
+                        "${media.anime.nextAiringEpisode} | ${media.anime.totalEpisodes ?: "~"}"
                     else
-                            (media.anime.totalEpisodes ?: "~").toString()
+                        (media.anime.totalEpisodes ?: "~").toString()
                     binding.mediaInfoTotal.text = infoTotal
 
                 } else if (media.manga != null) {
@@ -213,7 +215,8 @@ class MediaInfoFragment : Fragment() {
                     (media.description ?: "null").replace("\\n", "<br>").replace("\\\"", "\""),
                     HtmlCompat.FROM_HTML_MODE_LEGACY
                 )
-                val infoDesc = tripleTab + if (desc.toString() != "null") desc else getString(R.string.no_description_available)
+                val infoDesc =
+                    tripleTab + if (desc.toString() != "null") desc else getString(R.string.no_description_available)
                 binding.mediaInfoDescription.text = infoDesc
 
                 binding.mediaInfoDescription.setOnClickListener {
@@ -570,7 +573,23 @@ class MediaInfoFragment : Fragment() {
                         parent.addView(root)
                     }
                 }
-                if(!media.users.isNullOrEmpty() && !offline){
+                val users = media.users!!
+                if (Anilist.token != null && media.userStatus != null) {
+                    users.add(0,
+                        User(
+                            Anilist.userid!!,
+                            Anilist.username!!,
+                            Anilist.avatar,
+                            Anilist.bg,
+                            status = media.userStatus,
+                            score = media.userScore.toFloat(),
+                            progress = media.userProgress,
+                            totalEpisodes = if (type == "ANIME") media.anime?.totalEpisodes else media.manga?.totalChapters,
+                            nextAiringEpisode = media.anime?.nextAiringEpisode
+                        )
+                    )
+                }
+                if (!media.users.isNullOrEmpty() && !offline) {
                     ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,
@@ -578,7 +597,7 @@ class MediaInfoFragment : Fragment() {
                     ).apply {
                         itemTitle.setText(R.string.social)
                         itemRecycler.adapter =
-                            MediaSocialAdapter(media.users!!)
+                            MediaSocialAdapter(users, type, requireActivity())
                         itemRecycler.layoutManager = LinearLayoutManager(
                             requireContext(),
                             LinearLayoutManager.HORIZONTAL,

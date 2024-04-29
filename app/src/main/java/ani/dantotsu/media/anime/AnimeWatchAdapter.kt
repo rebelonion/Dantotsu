@@ -330,6 +330,7 @@ class AnimeWatchAdapter(
                         0
                     )
                 }
+
                 val chipText = "${names[limit * (position)]} - ${names[last - 1]}"
                 chip.text = chipText
                 chip.setTextColor(
@@ -412,10 +413,12 @@ class AnimeWatchAdapter(
                     if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
 
                     binding.animeSourceContinueText.text =
-                        currActivity()!!.getString(R.string.continue_episode, ep.number, if (ep.filler)
-                            currActivity()!!.getString(R.string.filler_tag)
-                        else
-                            "", cleanedTitle)
+                        currActivity()!!.getString(
+                            R.string.continue_episode, ep.number, if (ep.filler)
+                                currActivity()!!.getString(R.string.filler_tag)
+                            else
+                                "", cleanedTitle
+                        )
                     binding.animeSourceContinue.setOnClickListener {
                         fragment.onEpisodeClick(continueEp)
                     }
@@ -441,11 +444,14 @@ class AnimeWatchAdapter(
                 if (!sourceFound && PrefManager.getVal(PrefName.SearchSources) && autoSelect) {
                     if (binding.animeSource.adapter.count > media.selected!!.sourceIndex + 1) {
                         val nextIndex = media.selected!!.sourceIndex + 1
-                        binding.animeSource.setText(binding.animeSource.adapter
-                            .getItem(nextIndex).toString(), false)
+                        binding.animeSource.setText(
+                            binding.animeSource.adapter
+                                .getItem(nextIndex).toString(), false
+                        )
                         fragment.onSourceChange(nextIndex).apply {
                             binding.animeSourceTitle.text = showUserText
-                            showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
+                            showUserTextListener =
+                                { MainScope().launch { binding.animeSourceTitle.text = it } }
                             binding.animeSourceDubbed.isChecked = selectDub
                             binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
                             setLanguageList(0, nextIndex)

@@ -38,7 +38,12 @@ class MangaPlus {
         }
     }
 
-    suspend fun getSeries(seriesId: String): SeriesResponse? {
+    dev
+    
+  suspend fun getSeries(seriesId: String): SeriesResponse? {
+    
+      suspend fun search(title: String, startDate: FuzzyDate?): MangaUpdatesResponse.Results? { 
+      dev
         return tryWithSuspend {
             val res = client.get(
                 "https://mangaplus.shueisha.co.jp/api/series/$seriesId"
@@ -110,6 +115,36 @@ class MangaPlus {
                 val latestChapter: Int,
                 val lastUpdated: Long
             )
+    dev
+
+
+            @Serializable
+            data class MetaData(
+                val series: Series
+            ) {
+                @Serializable
+                data class Series(
+                    @SerialName("series_id")
+                    val seriesId: Long?,
+                    @SerialName("title")
+                    val title: String?,
+                    @SerialName("latest_chapter")
+                    val latestChapter: Int?,
+                    @SerialName("last_updated")
+                    val lastUpdated: LastUpdated?
+                ) {
+                    @Serializable
+                    data class LastUpdated(
+                        @SerialName("timestamp")
+                        val timestamp: Long,
+                        @SerialName("as_rfc3339")
+                        val asRfc3339: String,
+                        @SerialName("as_string")
+                        val asString: String
+                    )
+                }
+            }
+       dev
         }
     }
 

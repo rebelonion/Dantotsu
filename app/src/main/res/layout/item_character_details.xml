@@ -22,9 +22,10 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="32dp"
         android:alpha="0.58"
-        tools:maxLines="10"
         tools:ignore="TextContrastCheck"
+        tools:maxLines="10"
         tools:text="@tools:sample/lorem/random" />
+
     <LinearLayout
         android:id="@+id/voiceActorContainer"
         android:layout_width="match_parent"
@@ -57,6 +58,7 @@
             tools:orientation="horizontal" />
 
     </LinearLayout>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

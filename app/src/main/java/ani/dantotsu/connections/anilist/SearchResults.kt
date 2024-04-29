@@ -11,7 +11,7 @@ data class SearchResults(
     var onList: Boolean? = null,
     var perPage: Int? = null,
     var search: String? = null,
-    var countryOfOrigin :String? = null,
+    var countryOfOrigin: String? = null,
     var sort: String? = null,
     var genres: MutableList<String>? = null,
     var excludedGenres: MutableList<String>? = null,

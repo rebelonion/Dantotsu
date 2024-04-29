@@ -310,6 +310,34 @@
 
             </FrameLayout>
 
+            <FrameLayout
+                android:id="@+id/homeUserStatusContainer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:minHeight="100dp">
+
+                <ProgressBar
+                    android:id="@+id/homeUserStatusProgressBar"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+                <ani.dantotsu.FadingEdgeRecyclerView
+                    android:id="@+id/homeUserStatusRecyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:requiresFadingEdge="horizontal"
+                    tools:itemCount="4"
+                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    tools:listitem="@layout/item_user_status"
+                    tools:orientation="horizontal" />
+            </FrameLayout>
+
             <LinearLayout
                 android:id="@+id/homeContinueWatchingContainer"
                 android:layout_width="match_parent"

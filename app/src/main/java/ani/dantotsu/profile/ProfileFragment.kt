@@ -1,8 +1,6 @@
 package ani.dantotsu.profile
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,19 +20,16 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.ProfileViewModel
 import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.FragmentProfileBinding
-import ani.dantotsu.loadImage
 import ani.dantotsu.media.Author
 import ani.dantotsu.media.AuthorAdapter
 import ani.dantotsu.media.Character
 import ani.dantotsu.media.CharacterAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
-import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.setBaseline
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
 import ani.dantotsu.util.AniMarkdown.Companion.getFullAniHTML
-import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -137,7 +132,7 @@ class ProfileFragment : Fragment() {
         }
 
         user.favourites?.staff?.nodes?.forEach { i ->
-            favStaff.add(Author(i.id, i.name.full, i.image.large , "" ))
+            favStaff.add(Author(i.id, i.name.full, i.image.large, ""))
         }
 
         setFavPeople()
@@ -159,7 +154,8 @@ class ProfileFragment : Fragment() {
             binding.profileFavStaffRecycler.layoutManager = LinearLayoutManager(
                 activity, LinearLayoutManager.HORIZONTAL, false
             )
-            binding.profileFavStaffRecycler.layoutAnimation = LayoutAnimationController(setSlideIn(), 0.25f)
+            binding.profileFavStaffRecycler.layoutAnimation =
+                LayoutAnimationController(setSlideIn(), 0.25f)
         }
 
         if (favCharacter.isEmpty()) {
@@ -169,7 +165,8 @@ class ProfileFragment : Fragment() {
             binding.profileFavCharactersRecycler.layoutManager = LinearLayoutManager(
                 activity, LinearLayoutManager.HORIZONTAL, false
             )
-            binding.profileFavCharactersRecycler.layoutAnimation = LayoutAnimationController(setSlideIn(), 0.25f)
+            binding.profileFavCharactersRecycler.layoutAnimation =
+                LayoutAnimationController(setSlideIn(), 0.25f)
         }
     }
 
@@ -189,7 +186,7 @@ class ProfileFragment : Fragment() {
             recyclerView.visibility = View.GONE
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    recyclerView.adapter = MediaAdaptor(0, it, activity, fav=true)
+                    recyclerView.adapter = MediaAdaptor(0, it, activity, fav = true)
                     recyclerView.layoutManager = LinearLayoutManager(
                         activity,
                         LinearLayoutManager.HORIZONTAL,

@@ -63,11 +63,11 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     ImmersiveMode(Pref(Location.UI, Boolean::class, false)),
     SmallView(Pref(Location.UI, Boolean::class, true)),
     DefaultStartUpTab(Pref(Location.UI, Int::class, 1)),
-    HomeLayoutShow(
+    HomeLayout(
         Pref(
             Location.UI,
             List::class,
-            listOf(true, false, false, true, false, false, true)
+            listOf(true, false, false, true, false, false, true, true)
         )
     ),
     BannerAnimations(Pref(Location.UI, Boolean::class, true)),
@@ -102,7 +102,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     UseProxyForTimeStamps(Pref(Location.Player, Boolean::class, false)),
     ShowTimeStampButton(Pref(Location.Player, Boolean::class, true)),
     AutoSkipOPED(Pref(Location.Player, Boolean::class, false)),
-    AutoSkipRecap(Pref(Location.Player, Boolean::class, false )),
+    AutoSkipRecap(Pref(Location.Player, Boolean::class, false)),
     AutoPlay(Pref(Location.Player, Boolean::class, true)),
     AutoSkipFiller(Pref(Location.Player, Boolean::class, false)),
     AskIndividualPlayer(Pref(Location.Player, Boolean::class, true)),
@@ -120,6 +120,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     UseInternalCast(Pref(Location.Player, Boolean::class, false)),
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
+    TorrentEnabled(Pref(Location.Player, Boolean::class, false)),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),
@@ -186,6 +187,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     CommentNotificationStore(Pref(Location.Irrelevant, List::class, listOf<CommentStore>())),
     UnreadCommentNotifications(Pref(Location.Irrelevant, Int::class, 0)),
     DownloadsDir(Pref(Location.Irrelevant, String::class, "")),
+    RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),

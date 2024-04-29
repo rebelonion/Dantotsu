@@ -89,23 +89,23 @@
                 tools:ignore="ContentDescription" />
 
         </LinearLayout>
-        
-        <LinearLayout
-              	android:layout_width="match_parent"
-              	android:layout_height="wrap_content"
-              	android:orientation="horizontal"
-              	android:padding="8dp"
-              	android:gravity="center">
 
-      	<TextView
-            		android:id="@+id/importSettingsButton"
-            		android:clickable="true"
-            		android:layout_width="wrap_content"
-            		android:layout_height="wrap_content"
-            		android:text="@string/restore_settings_underline"
-            		android:textSize="11sp"
-            		android:textColor="?attr/colorOutline"
-            		android:fontFamily="@font/poppins_bold"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/importSettingsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/restore_settings_underline"
+                android:textColor="?attr/colorOutline"
+                android:textSize="11sp" />
 
         </LinearLayout>
 

@@ -21,11 +21,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:hint="@string/user_agent"
+        android:imeOptions="actionDone"
         app:boxCornerRadiusBottomEnd="8dp"
         app:boxCornerRadiusBottomStart="8dp"
         app:boxCornerRadiusTopEnd="8dp"
         app:boxCornerRadiusTopStart="8dp"
-        android:imeOptions="actionDone"
         app:hintAnimationEnabled="true" />
 
 </LinearLayout>

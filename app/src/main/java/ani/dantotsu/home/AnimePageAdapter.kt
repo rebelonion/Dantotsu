@@ -101,7 +101,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             ContextCompat.startActivity(
                 view.context,
                 Intent(view.context, ProfileActivity::class.java)
-                    .putExtra("userId", Anilist.userid),null
+                    .putExtra("userId", Anilist.userid), null
             )
             false
         }
@@ -110,7 +110,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             trendingBinding.searchBar.performClick()
         }
 
-        trendingBinding.notificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
+        trendingBinding.notificationCount.visibility =
+            if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
         trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
 
         listOf(
@@ -167,7 +168,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         trendingBinding.trendingProgressBar.visibility = View.GONE
         trendingBinding.trendingViewPager.adapter = adaptor
         trendingBinding.trendingViewPager.offscreenPageLimit = 3
-        trendingBinding.trendingViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
+        trendingBinding.trendingViewPager.getChildAt(0).overScrollMode =
+            RecyclerView.OVER_SCROLL_NEVER
         trendingBinding.trendingViewPager.setPageTransformer(MediaPageTransformer())
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
@@ -195,7 +197,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
     }
 
     fun updateRecent(adaptor: MediaAdaptor) {
-        binding.apply{
+        binding.apply {
             init(
                 adaptor,
                 animeUpdatedRecyclerView,
@@ -210,8 +212,9 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         }
 
     }
+
     fun updateMovies(adaptor: MediaAdaptor) {
-        binding.apply{
+        binding.apply {
             init(
                 adaptor,
                 animeMoviesRecyclerView,
@@ -222,7 +225,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
     }
 
     fun updateTopRated(adaptor: MediaAdaptor) {
-        binding.apply{
+        binding.apply {
             init(
                 adaptor,
                 animeTopRatedRecyclerView,
@@ -231,8 +234,9 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             )
         }
     }
+
     fun updateMostFav(adaptor: MediaAdaptor) {
-        binding.apply{
+        binding.apply {
             init(
                 adaptor,
                 animeMostFavRecyclerView,
@@ -241,7 +245,8 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
             )
         }
     }
-    fun init(adaptor: MediaAdaptor,recyclerView: RecyclerView, progress: View, title: View){
+
+    fun init(adaptor: MediaAdaptor, recyclerView: RecyclerView, progress: View, title: View) {
         progress.visibility = View.GONE
         recyclerView.adapter = adaptor
         recyclerView.layoutManager =
@@ -256,6 +261,7 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
         recyclerView.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
     }
+
     fun updateAvatar() {
         if (Anilist.avatar != null && ready.value == true) {
             trendingBinding.userAvatar.loadImage(Anilist.avatar)

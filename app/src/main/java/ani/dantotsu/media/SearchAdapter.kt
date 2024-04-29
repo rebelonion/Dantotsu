@@ -13,7 +13,6 @@ import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.ImageView
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
@@ -60,6 +59,7 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
         }
         binding.filterTextView.setCompoundDrawablesWithIntrinsicBounds(filterDrawable, 0, 0, 0)
     }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchHeaderViewHolder {
         val binding =
             ItemSearchHeaderBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -129,36 +129,42 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
+
                     R.id.sort_by_popular -> {
                         activity.result.sort = Anilist.sortBy[1]
                         activity.updateChips.invoke()
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
+
                     R.id.sort_by_trending -> {
                         activity.result.sort = Anilist.sortBy[2]
                         activity.updateChips.invoke()
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
+
                     R.id.sort_by_recent -> {
                         activity.result.sort = Anilist.sortBy[3]
                         activity.updateChips.invoke()
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
+
                     R.id.sort_by_a_z -> {
                         activity.result.sort = Anilist.sortBy[4]
                         activity.updateChips.invoke()
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
+
                     R.id.sort_by_z_a -> {
                         activity.result.sort = Anilist.sortBy[5]
                         activity.updateChips.invoke()
                         activity.search()
                         updateFilterTextViewDrawable()
                     }
+
                     R.id.sort_by_pure_pain -> {
                         activity.result.sort = Anilist.sortBy[6]
                         activity.updateChips.invoke()
@@ -299,14 +305,12 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
     private fun fadeInAnimation(): Animation {
         return AlphaAnimation(0f, 1f).apply {
             duration = 150
-            fillAfter = true
         }
     }
 
     private fun fadeOutAnimation(): Animation {
         return AlphaAnimation(1f, 0f).apply {
             duration = 150
-            fillAfter = true
         }
     }
 
@@ -325,7 +329,10 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
     }
 
 
-    class SearchChipAdapter(val activity: SearchActivity, private val searchAdapter: SearchAdapter) :
+    class SearchChipAdapter(
+        val activity: SearchActivity,
+        private val searchAdapter: SearchAdapter
+    ) :
         RecyclerView.Adapter<SearchChipAdapter.SearchChipViewHolder>() {
         private var chips = activity.result.toChipList()
 

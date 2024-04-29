@@ -12,7 +12,6 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 class SubtitleDownloader {
 
@@ -56,8 +55,8 @@ class SubtitleDownloader {
                     context,
                     downloadedType.type,
                     false,
-                    downloadedType.title,
-                    downloadedType.chapter
+                    downloadedType.titleName,
+                    downloadedType.chapterName
                 ) ?: throw Exception("Could not create directory")
                 val type = loadSubtitleType(url)
                 directory.findFile("subtitle.${type}")?.delete()

@@ -42,7 +42,8 @@ abstract class BaseImageAdapter(
 
     override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
         images = if (settings.layout == CurrentReaderSettings.Layouts.PAGED
-            && settings.direction == CurrentReaderSettings.Directions.BOTTOM_TO_TOP) {
+            && settings.direction == CurrentReaderSettings.Directions.BOTTOM_TO_TOP
+        ) {
             chapterImages.reversed()
         } else {
             chapterImages

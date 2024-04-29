@@ -1,7 +1,6 @@
 package ani.dantotsu.util
 
 import ani.dantotsu.util.ColorEditor.Companion.toCssColor
-import ani.dantotsu.util.ColorEditor.Companion.toHexColor
 
 class AniMarkdown { //istg anilist has the worst api
     companion object {

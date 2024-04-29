@@ -63,7 +63,7 @@ class DiscordService : Service() {
             PowerManager.PARTIAL_WAKE_LOCK,
             "discordRPC:backgroundPresence"
         )
-        wakeLock.acquire(30*60*1000L /*30 minutes*/)
+        wakeLock.acquire(30 * 60 * 1000L /*30 minutes*/)
         log("WakeLock Acquired")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val serviceChannel = NotificationChannel(
@@ -402,7 +402,8 @@ class DiscordService : Service() {
                 Thread.sleep(heartbeat.toLong())
                 heartbeatSend(webSocket, sequence)
                 log("WebSocket: Heartbeat Sent")
-            } catch (ignored: InterruptedException) { }
+            } catch (ignored: InterruptedException) {
+            }
         }
     }
 

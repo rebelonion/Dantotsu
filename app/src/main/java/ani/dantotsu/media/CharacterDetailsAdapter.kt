@@ -29,10 +29,16 @@ class CharacterDetailsAdapter(private val character: Character, private val acti
                         "${currActivity()!!.getString(R.string.birthday)} ${character.dateOfBirth.toString()}" else "") +
                     (if (character.gender != "null")
                         currActivity()!!.getString(R.string.gender) + " " + when (character.gender) {
-                        currActivity()!!.getString(R.string.male) -> currActivity()!!.getString(R.string.male)
-                        currActivity()!!.getString(R.string.female) -> currActivity()!!.getString(R.string.female)
-                        else -> character.gender
-                    } else "") + "\n" + character.description
+                            currActivity()!!.getString(R.string.male) -> currActivity()!!.getString(
+                                R.string.male
+                            )
+
+                            currActivity()!!.getString(R.string.female) -> currActivity()!!.getString(
+                                R.string.female
+                            )
+
+                            else -> character.gender
+                        } else "") + "\n" + character.description
 
         binding.characterDesc.isTextSelectable
         val markWon = Markwon.builder(activity).usePlugin(SoftBreakAddsNewLinePlugin.create())

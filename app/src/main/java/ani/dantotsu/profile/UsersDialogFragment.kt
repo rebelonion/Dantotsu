@@ -14,9 +14,10 @@ class UsersDialogFragment : BottomSheetDialogFragment() {
     private val binding get() = _binding!!
 
     private var userList = arrayListOf<User>()
-    fun userList(user: ArrayList<User>){
+    fun userList(user: ArrayList<User>) {
         userList = user
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -25,6 +26,7 @@ class UsersDialogFragment : BottomSheetDialogFragment() {
         _binding = BottomSheetUsersBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 

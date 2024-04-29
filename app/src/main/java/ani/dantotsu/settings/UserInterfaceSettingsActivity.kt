@@ -36,19 +36,19 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         }
 
         binding.uiSettingsHomeLayout.setOnClickListener {
-            val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toMutableList()
+            val set = PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toMutableList()
             val views = resources.getStringArray(R.array.home_layouts)
             val dialog = AlertDialog.Builder(this, R.style.MyPopup)
                 .setTitle(getString(R.string.home_layout_show)).apply {
                     setMultiChoiceItems(
                         views,
-                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayoutShow).toBooleanArray()
+                        PrefManager.getVal<List<Boolean>>(PrefName.HomeLayout).toBooleanArray()
                     ) { _, i, value ->
                         set[i] = value
                     }
                     setPositiveButton("Done") { _, _ ->
-                        PrefManager.setVal(PrefName.HomeLayoutShow, set)
-                        restartApp(binding.root)
+                        PrefManager.setVal(PrefName.HomeLayout, set)
+                        restartApp()
                     }
                 }.show()
             dialog.window?.setDimAmount(0.8f)
@@ -57,24 +57,24 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
         binding.uiSettingsSmallView.isChecked = PrefManager.getVal(PrefName.SmallView)
         binding.uiSettingsSmallView.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.SmallView, isChecked)
-            restartApp(binding.root)
+            restartApp()
         }
 
         binding.uiSettingsImmersive.isChecked = PrefManager.getVal(PrefName.ImmersiveMode)
         binding.uiSettingsImmersive.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.ImmersiveMode, isChecked)
-            restartApp(binding.root)
+            restartApp()
         }
         binding.uiSettingsBannerAnimation.isChecked = PrefManager.getVal(PrefName.BannerAnimations)
         binding.uiSettingsBannerAnimation.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.BannerAnimations, isChecked)
-            restartApp(binding.root)
+            restartApp()
         }
 
         binding.uiSettingsLayoutAnimation.isChecked = PrefManager.getVal(PrefName.LayoutAnimations)
         binding.uiSettingsLayoutAnimation.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.LayoutAnimations, isChecked)
-            restartApp(binding.root)
+            restartApp()
         }
 
         binding.uiSettingsTrendingScroller.isChecked = PrefManager.getVal(PrefName.TrendingScroller)
@@ -98,22 +98,22 @@ class UserInterfaceSettingsActivity : AppCompatActivity() {
             mapReverse[PrefManager.getVal(PrefName.AnimationSpeed)] ?: 1f
         binding.uiSettingsAnimationSpeed.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.AnimationSpeed, map[value] ?: 1f)
-            restartApp(binding.root)
+            restartApp()
         }
         binding.uiSettingsBlurBanners.isChecked = PrefManager.getVal(PrefName.BlurBanners)
         binding.uiSettingsBlurBanners.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.BlurBanners, isChecked)
-            restartApp(binding.root)
+            restartApp()
         }
-        binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as  Float)
+        binding.uiSettingsBlurRadius.value = (PrefManager.getVal(PrefName.BlurRadius) as Float)
         binding.uiSettingsBlurRadius.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.BlurRadius, value)
-            restartApp(binding.root)
+            restartApp()
         }
         binding.uiSettingsBlurSampling.value = (PrefManager.getVal(PrefName.BlurSampling) as Float)
         binding.uiSettingsBlurSampling.addOnChangeListener { _, value, _ ->
             PrefManager.setVal(PrefName.BlurSampling, value)
-            restartApp(binding.root)
+            restartApp()
         }
     }
 }

@@ -10,7 +10,7 @@ import ani.dantotsu.databinding.BottomSheetDiscordRpcBinding
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 
-class DiscordDialogFragment: BottomSheetDialogFragment() {
+class DiscordDialogFragment : BottomSheetDialogFragment() {
     private var _binding: BottomSheetDiscordRpcBinding? = null
     private val binding get() = _binding!!
 
@@ -22,11 +22,12 @@ class DiscordDialogFragment: BottomSheetDialogFragment() {
         _binding = BottomSheetDiscordRpcBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         when (PrefManager.getCustomVal("discord_mode", "dantotsu")) {
-            "nothing" -> binding.radioNothing.isChecked= true
+            "nothing" -> binding.radioNothing.isChecked = true
             "dantotsu" -> binding.radioDantotsu.isChecked = true
             "anilist" -> binding.radioAnilist.isChecked = true
             else -> binding.radioAnilist.isChecked = true
@@ -35,7 +36,8 @@ class DiscordDialogFragment: BottomSheetDialogFragment() {
         binding.showIcon.setOnCheckedChangeListener { _, isChecked ->
             PrefManager.setVal(PrefName.ShowAniListIcon, isChecked)
         }
-        binding.anilistLinkPreview.text = getString(R.string.anilist_link, PrefManager.getVal<String>(PrefName.AnilistUserName))
+        binding.anilistLinkPreview.text =
+            getString(R.string.anilist_link, PrefManager.getVal<String>(PrefName.AnilistUserName))
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
             val mode = when (checkedId) {

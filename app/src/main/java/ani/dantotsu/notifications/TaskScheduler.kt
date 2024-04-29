@@ -21,11 +21,16 @@ interface TaskScheduler {
         for (taskType in TaskType.entries) {
             val interval = when (taskType) {
                 TaskType.COMMENT_NOTIFICATION -> CommentNotificationWorker.checkIntervals[PrefManager.getVal(
-                    PrefName.CommentNotificationInterval)]
+                    PrefName.CommentNotificationInterval
+                )]
+
                 TaskType.ANILIST_NOTIFICATION -> AnilistNotificationWorker.checkIntervals[PrefManager.getVal(
-                    PrefName.AnilistNotificationInterval)]
+                    PrefName.AnilistNotificationInterval
+                )]
+
                 TaskType.SUBSCRIPTION_NOTIFICATION -> SubscriptionNotificationWorker.checkIntervals[PrefManager.getVal(
-                    PrefName.SubscriptionNotificationInterval)]
+                    PrefName.SubscriptionNotificationInterval
+                )]
             }
             scheduleRepeatingTask(taskType, interval)
         }
@@ -62,6 +67,7 @@ interface TaskScheduler {
             }
         }
     }
+
     enum class TaskType {
         COMMENT_NOTIFICATION,
         ANILIST_NOTIFICATION,

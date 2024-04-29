@@ -2,14 +2,17 @@ package ani.dantotsu.parsers.novel
 
 import android.content.Context
 import android.graphics.drawable.Drawable
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.InstallStep
+import eu.kanade.tachiyomi.extension.util.ExtensionInstallReceiver
+import eu.kanade.tachiyomi.extension.util.ExtensionInstaller
+import eu.kanade.tachiyomi.extension.util.ExtensionLoader
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import rx.Observable
 import tachiyomi.core.util.lang.withUIContext
-import java.io.File
 
 class NovelExtensionManager(private val context: Context) {
     var isInitialized = false
@@ -24,7 +27,7 @@ class NovelExtensionManager(private val context: Context) {
     /**
      * The installer which installs, updates and uninstalls the Novel extensions.
      */
-    private val installer by lazy { NovelExtensionInstaller(context) }
+    private val installer by lazy { ExtensionInstaller(context) }
 
     private val iconMap = mutableMapOf<String, Drawable>()
 
@@ -49,12 +52,11 @@ class NovelExtensionManager(private val context: Context) {
 
     init {
         initNovelExtensions()
-        val path = context.getExternalFilesDir(null)?.absolutePath + "/extensions/novel/"
-        NovelExtensionFileObserver(NovelInstallationListener(), path).register()
+        ExtensionInstallReceiver().setNovelListener(NovelInstallationListener()).register(context)
     }
 
     private fun initNovelExtensions() {
-        val novelExtensions = NovelExtensionLoader.loadExtensions(context)
+        val novelExtensions = ExtensionLoader.loadNovelExtensions(context)
 
         _installedNovelExtensionsFlow.value = novelExtensions
             .filterIsInstance<NovelLoadResult.Success>()
@@ -117,7 +119,8 @@ class NovelExtensionManager(private val context: Context) {
      * @param extension The anime extension to be installed.
      */
     fun installExtension(extension: NovelExtension.Available): Observable<InstallStep> {
-        return installer.downloadAndInstall(api.getApkUrl(extension), extension)
+        return installer.downloadAndInstall(api.getApkUrl(extension), extension.pkgName,
+            extension.name, MediaType.NOVEL)
     }
 
     /**
@@ -157,7 +160,7 @@ class NovelExtensionManager(private val context: Context) {
      * @param pkgName The package name of the application to uninstall.
      */
     fun uninstallExtension(pkgName: String, context: Context) {
-        installer.uninstallApk(pkgName, context)
+        installer.uninstallApk(pkgName)
     }
 
     /**
@@ -202,27 +205,17 @@ class NovelExtensionManager(private val context: Context) {
     /**
      * Listener which receives events of the novel extensions being installed, updated or removed.
      */
-    private inner class NovelInstallationListener : NovelExtensionFileObserver.Listener {
-
-        override fun onExtensionFileCreated(file: File) {
-            NovelExtensionLoader.loadExtension(context, file).let {
-                if (it is NovelLoadResult.Success) {
-                    registerNewExtension(it.extension.withUpdateCheck())
-                }
-            }
+    private inner class NovelInstallationListener : ExtensionInstallReceiver.NovelListener {
+        override fun onExtensionInstalled(extension: NovelExtension.Installed) {
+            registerNewExtension(extension.withUpdateCheck())
         }
 
-        override fun onExtensionFileDeleted(file: File) {
-            val pkgName = file.nameWithoutExtension
+        override fun onExtensionUpdated(extension: NovelExtension.Installed) {
+            registerUpdatedExtension(extension.withUpdateCheck())
+        }
+
+        override fun onPackageUninstalled(pkgName: String) {
             unregisterNovelExtension(pkgName)
-        }
-
-        override fun onExtensionFileModified(file: File) {
-            NovelExtensionLoader.loadExtension(context, file).let {
-                if (it is NovelLoadResult.Success) {
-                    registerUpdatedExtension(it.extension.withUpdateCheck())
-                }
-            }
         }
     }
 

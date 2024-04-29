@@ -32,7 +32,12 @@ object CommentsAPI {
     var isMod: Boolean = false
     var totalVotes: Int = 0
 
-    suspend fun getCommentsForId(id: Int, page: Int = 1, tag: Int?, sort: String?): CommentResponse? {
+    suspend fun getCommentsForId(
+        id: Int,
+        page: Int = 1,
+        tag: Int?,
+        sort: String?
+    ): CommentResponse? {
         var url = "$ADDRESS/comments/$id/$page"
         val request = requestBuilder()
         tag?.let {
@@ -399,7 +404,7 @@ object CommentsAPI {
             null
         }
         val message = parsed?.message ?: reason ?: error
-        val fullMessage = if(code == 500) message else "$code: $message"
+        val fullMessage = if (code == 500) message else "$code: $message"
 
         toast(fullMessage)
     }

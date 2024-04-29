@@ -50,7 +50,7 @@ class Xpandable @JvmOverloads constructor(
             }
         }
         postDelayed({
-            listeners.forEach{
+            listeners.forEach {
                 it.onRetract()
             }
         }, 300)
@@ -66,7 +66,7 @@ class Xpandable @JvmOverloads constructor(
             }
         }
         postDelayed({
-            listeners.forEach{
+            listeners.forEach {
                 it.onExpand()
             }
         }, 300)

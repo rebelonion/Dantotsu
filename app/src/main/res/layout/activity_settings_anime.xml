@@ -10,15 +10,12 @@
         android:id="@+id/settingsAnimeLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp">
-
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="-16dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             app:cardBackgroundColor="@color/nav_bg_inv"
             app:cardCornerRadius="16dp"
@@ -44,7 +41,7 @@
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="32dp"
+                android:layout_margin="32dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_bold"
                 android:text="@string/anime"
@@ -53,8 +50,8 @@
             <ImageView
                 android:layout_width="96dp"
                 android:layout_height="96dp"
-                android:layout_gravity="center"
-
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="20dp"
                 android:padding="24dp"
                 app:srcCompat="@drawable/ic_round_movie_filter_24"
                 app:tint="?attr/colorOnBackground"
@@ -65,6 +62,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:orientation="horizontal">
@@ -134,105 +132,15 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/settingsPlayer"
+        <ani.dantotsu.FadingEdgeRecyclerView
+            android:id="@+id/settingsRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="-31dp"
-            android:layout_marginEnd="-31dp"
-            android:background="@drawable/ui_bg"
-            android:backgroundTint="?attr/colorSecondary"
-            android:backgroundTintMode="src_atop"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
-            android:text="@string/player_settings"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:icon="@drawable/ic_round_video_settings_24"
-            app:iconPadding="16dp"
-            app:iconSize="24dp"
-            app:iconTint="?attr/colorPrimary" />
-
-        <Button
-            android:id="@+id/purgeAnimeDownloads"
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:layout_marginStart="-31dp"
-            android:layout_marginEnd="-31dp"
-            android:background="@drawable/ui_bg"
-            android:fontFamily="@font/poppins_bold"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:paddingStart="31dp"
-            android:paddingEnd="31dp"
-            android:text="@string/purge_anime_downloads"
-            android:textAlignment="viewStart"
-            android:textAllCaps="false"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:icon="@drawable/ic_round_delete_24"
-            app:iconPadding="16dp"
-            app:iconSize="24dp"
-            app:iconTint="?attr/colorPrimary" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/settingsPreferDub"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:drawableStart="@drawable/ic_round_audiotrack_24"
-            android:drawablePadding="16dp"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/poppins_bold"
-            android:minHeight="64dp"
-            android:text="@string/prefer_dub"
-            android:textAlignment="viewStart"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:drawableTint="?attr/colorPrimary"
-            app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/settingsShowYt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:drawableStart="@drawable/ic_round_play_circle_24"
-            android:drawablePadding="16dp"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/poppins_bold"
-            android:minHeight="64dp"
-            android:text="@string/show_yt"
-            android:textAlignment="viewStart"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:drawableTint="?attr/colorPrimary"
-            app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
-
-        <com.google.android.material.materialswitch.MaterialSwitch
-            android:id="@+id/settingsIncludeAnimeList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:drawableStart="@drawable/view_list_24"
-            android:drawablePadding="16dp"
-            android:elegantTextHeight="true"
-            android:fontFamily="@font/poppins_bold"
-            android:minHeight="64dp"
-            android:text="@string/include_list"
-            android:textAlignment="viewStart"
-            android:textColor="?attr/colorOnBackground"
-            app:cornerRadius="0dp"
-            app:drawableTint="?attr/colorPrimary"
-            app:showText="false"
-            app:thumbTint="@color/button_switch_track" />
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="24dp"
+            android:nestedScrollingEnabled="false"
+            android:requiresFadingEdge="vertical"
+            tools:itemCount="5"
+            tools:listitem="@layout/item_settings" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -199,7 +199,8 @@ class AnimeWatchFragment : Fragment() {
                         ConcatAdapter(headerAdapter, episodeAdapter)
 
                     lifecycleScope.launch(Dispatchers.IO) {
-                        val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
+                        val offline =
+                            !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
                         if (offline) {
                             media.selected!!.sourceIndex = model.watchSources!!.list.lastIndex
                         } else {
@@ -552,8 +553,8 @@ class AnimeWatchFragment : Fragment() {
         episodeAdapter.updateType(style ?: PrefManager.getVal(PrefName.AnimeDefaultView))
         episodeAdapter.notifyItemRangeInserted(0, arr.size)
         for (download in downloadManager.animeDownloadedTypes) {
-            if (media.compareName(download.title)) {
-                episodeAdapter.stopDownload(download.chapter)
+            if (media.compareName(download.titleName)) {
+                episodeAdapter.stopDownload(download.chapterName)
             }
         }
     }

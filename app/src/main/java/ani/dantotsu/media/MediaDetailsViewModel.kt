@@ -56,9 +56,11 @@ class MediaDetailsViewModel : ViewModel() {
                 media.anime != null -> {
                     AnimeSources.list.size - 1
                 }
+
                 media.format == "MANGA" || media.format == "ONE_SHOT" -> {
                     MangaSources.list.size - 1
                 }
+
                 else -> {
                     NovelSources.list.size - 1
                 }

@@ -21,6 +21,7 @@ enum class NotificationType(val value: String) {
     MEDIA_DATA_CHANGE("MEDIA_DATA_CHANGE"),
     MEDIA_MERGE("MEDIA_MERGE"),
     MEDIA_DELETION("MEDIA_DELETION"),
+
     //custom
     COMMENT_REPLY("COMMENT_REPLY"),
 }
@@ -84,9 +85,9 @@ data class Notification(
     @SerialName("createdAt")
     val createdAt: Int,
     @SerialName("media")
-    val media: ani.dantotsu.connections.anilist.api.Media? = null,
+    val media: Media? = null,
     @SerialName("user")
-    val user: ani.dantotsu.connections.anilist.api.User? = null,
+    val user: User? = null,
     @SerialName("message")
     val message: MessageActivity? = null,
     @SerialName("activity")

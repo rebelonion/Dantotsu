@@ -1,9 +1,7 @@
 package ani.dantotsu.profile.activity
 
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.api.Notification
@@ -60,7 +58,8 @@ class NotificationItem(
             }
             binding.notificationBannerImage.layoutParams.height = userHeight
             binding.notificationGradiant.layoutParams.height = userHeight
-            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart = userHeight
+            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart =
+                userHeight
         } else {
             binding.notificationCover.visibility = View.VISIBLE
             binding.notificationCoverUser.visibility = View.VISIBLE
@@ -68,7 +67,8 @@ class NotificationItem(
             binding.notificationCover.loadImage(notification.media?.coverImage?.large)
             binding.notificationBannerImage.layoutParams.height = defaultHeight
             binding.notificationGradiant.layoutParams.height = defaultHeight
-            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart = textMarginStart
+            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart =
+                textMarginStart
         }
     }
 
@@ -308,7 +308,9 @@ class NotificationItem(
                 if (notification.commentId != null && notification.mediaId != null) {
                     binding.notificationBannerImage.setOnClickListener {
                         clickCallback(
-                            notification.mediaId, notification.commentId, NotificationClickType.COMMENT
+                            notification.mediaId,
+                            notification.commentId,
+                            NotificationClickType.COMMENT
                         )
                     }
                 }

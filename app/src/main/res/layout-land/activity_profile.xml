@@ -46,13 +46,14 @@
         android:id="@+id/profileNavBar"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_weight="0"
         android:layout_gravity="center_horizontal|bottom"
+        android:layout_weight="0"
         android:background="?attr/colorSurface"
         android:padding="0dp"
         app:abb_animationInterpolator="@anim/over_shoot"
         app:abb_indicatorAppearance="round"
         app:abb_indicatorLocation="top"
+        app:abb_isVerticalBar="true"
         app:abb_selectedTabType="text"
         app:abb_textAppearance="@style/NavBarText"
         app:itemActiveIndicatorStyle="@style/BottomNavBar"
@@ -60,7 +61,6 @@
         app:itemRippleColor="#00000000"
         app:itemTextAppearanceActive="@style/NavBarText"
         app:itemTextAppearanceInactive="@style/NavBarText"
-        app:itemTextColor="@color/tab_layout_icon"
-        app:abb_isVerticalBar="true"/>
+        app:itemTextColor="@color/tab_layout_icon" />
 
 </LinearLayout>

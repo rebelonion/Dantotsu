@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 
-class FollowActivity : AppCompatActivity(){
+class FollowActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
     val adapter = GroupieAdapter()
     var users: List<User>? = null
@@ -37,7 +37,9 @@ class FollowActivity : AppCompatActivity(){
         initActivity(this)
         binding = ActivityFollowBinding.inflate(layoutInflater)
         binding.listToolbar.updateLayoutParams<MarginLayoutParams> { topMargin = statusBarHeight }
-        binding.listFrameLayout.updateLayoutParams<MarginLayoutParams> { bottomMargin = navBarHeight }
+        binding.listFrameLayout.updateLayoutParams<MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
         setContentView(binding.root)
         val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)
         selected = getSelected(layoutType)
@@ -54,7 +56,7 @@ class FollowActivity : AppCompatActivity(){
         binding.listBack.setOnClickListener { finish() }
 
         val title = intent.getStringExtra("title")
-        val userID= intent.getIntExtra("userId", 0)
+        val userID = intent.getIntExtra("userId", 0)
         binding.listTitle.text = title
 
         lifecycleScope.launch(Dispatchers.IO) {
@@ -93,9 +95,20 @@ class FollowActivity : AppCompatActivity(){
         }
         users?.forEach { user ->
             if (getLayoutType(selected) == 0) {
-                adapter.add(FollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium, user.bannerImage ?: user.avatar?.medium ) { onUserClick(it) })
+                adapter.add(
+                    FollowerItem(
+                        user.id,
+                        user.name ?: "Unknown",
+                        user.avatar?.medium,
+                        user.bannerImage ?: user.avatar?.medium
+                    ) { onUserClick(it) })
             } else {
-                adapter.add(GridFollowerItem(user.id, user.name ?: "Unknown", user.avatar?.medium) { onUserClick(it) })
+                adapter.add(
+                    GridFollowerItem(
+                        user.id,
+                        user.name ?: "Unknown",
+                        user.avatar?.medium
+                    ) { onUserClick(it) })
             }
         }
     }

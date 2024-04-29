@@ -56,9 +56,10 @@ class OutlineTextView : AppCompatTextView {
         setStrokeWidth(strokeWidth)
     }
 
-    private val Float.toPx get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics
-    )
+    private val Float.toPx
+        get() = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP, this, Resources.getSystem().displayMetrics
+        )
 
     private fun setStrokeWidth(width: Float) {
         strokeWidth = width.toPx

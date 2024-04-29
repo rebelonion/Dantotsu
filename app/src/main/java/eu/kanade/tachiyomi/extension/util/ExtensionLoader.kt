@@ -6,6 +6,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import ani.dantotsu.media.MediaType
+import ani.dantotsu.parsers.NovelInterface
+import ani.dantotsu.parsers.novel.NovelExtension
+import ani.dantotsu.parsers.novel.NovelLoadResult
 import ani.dantotsu.util.Logger
 import dalvik.system.PathClassLoader
 import eu.kanade.domain.source.service.SourcePreferences
@@ -24,6 +27,7 @@ import eu.kanade.tachiyomi.util.system.getApplicationIcon
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import uy.kohesive.injekt.injectLazy
+import java.util.Locale
 
 /**
  * Class that handles the loading of the extensions. Supports two kinds of extensions:
@@ -60,9 +64,9 @@ internal object ExtensionLoader {
     const val MANGA_LIB_VERSION_MIN = 1.2
     const val MANGA_LIB_VERSION_MAX = 1.5
 
-    private val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or
+    val PACKAGE_FLAGS = PackageManager.GET_CONFIGURATIONS or
             PackageManager.GET_META_DATA or
-            @Suppress ("DEPRECATION") PackageManager.GET_SIGNATURES or
+            @Suppress("DEPRECATION") PackageManager.GET_SIGNATURES or
             (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
                 PackageManager.GET_SIGNING_CERTIFICATES else 0)
 
@@ -76,6 +80,10 @@ internal object ExtensionLoader {
     // inorichi's key
     private const val officialSignatureManga =
         "7ce04da7773d41b489f4693a366c36bcd0a11fc39b547168553c285bd7348e23"
+
+    //dan's key
+    private const val officialSignature =
+        "a3061edb369278749b8e8de810d440d38e96417bbd67bbdfc5d9d9ed475ce4a5"
 
     /**
      * List of the trusted signatures.
@@ -133,6 +141,28 @@ internal object ExtensionLoader {
         }
     }
 
+    fun loadNovelExtensions(context: Context): List<NovelLoadResult> {
+        val pkgManager = context.packageManager
+
+        val installedPkgs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            pkgManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(PACKAGE_FLAGS.toLong()))
+        } else {
+            pkgManager.getInstalledPackages(PACKAGE_FLAGS)
+        }
+
+        val extPkgs = installedPkgs.filter { isPackageAnExtension(MediaType.NOVEL, it) }
+
+        if (extPkgs.isEmpty()) return emptyList()
+
+        // Load each extension concurrently and wait for completion
+        return runBlocking {
+            val deferred = extPkgs.map {
+                async { loadNovelExtension(context, it.packageName, it) }
+            }
+            deferred.map { it.await() }
+        }
+    }
+
     /**
      * Attempts to load an extension from the given package name. It checks if the extension
      * contains the required feature flag before trying to load it.
@@ -145,7 +175,7 @@ internal object ExtensionLoader {
             Logger.log(error)
             return AnimeLoadResult.Error
         }
-        if (!isPackageAnExtension(MediaType.ANIME,pkgInfo)) {
+        if (!isPackageAnExtension(MediaType.ANIME, pkgInfo)) {
             Logger.log("Tried to load a package that wasn't a extension ($pkgName)")
             return AnimeLoadResult.Error
         }
@@ -165,6 +195,21 @@ internal object ExtensionLoader {
             return MangaLoadResult.Error
         }
         return loadMangaExtension(context, pkgName, pkgInfo)
+    }
+
+    fun loadNovelExtensionFromPkgName(context: Context, pkgName: String): NovelLoadResult {
+        val pkgInfo = try {
+            context.packageManager.getPackageInfo(pkgName, PACKAGE_FLAGS)
+        } catch (error: PackageManager.NameNotFoundException) {
+            // Unlikely, but the package may have been uninstalled at this point
+            Logger.log(error)
+            return NovelLoadResult.Error(error)
+        }
+        if (!isPackageAnExtension(MediaType.NOVEL, pkgInfo)) {
+            Logger.log("Tried to load a package that wasn't a extension ($pkgName)")
+            return NovelLoadResult.Error(Exception("Tried to load a package that wasn't a extension ($pkgName)"))
+        }
+        return loadNovelExtension(context, pkgName, pkgInfo)
     }
 
     /**
@@ -201,8 +246,9 @@ internal object ExtensionLoader {
         // Validate lib version
         val libVersion = versionName.substringBeforeLast('.').toDoubleOrNull()
         if (libVersion == null || libVersion < ANIME_LIB_VERSION_MIN || libVersion > ANIME_LIB_VERSION_MAX) {
-            Logger.log("Lib version is $libVersion, while only versions " +
-                    "$ANIME_LIB_VERSION_MIN to $ANIME_LIB_VERSION_MAX are allowed"
+            Logger.log(
+                "Lib version is $libVersion, while only versions " +
+                        "$ANIME_LIB_VERSION_MIN to $ANIME_LIB_VERSION_MAX are allowed"
             )
             return AnimeLoadResult.Error
         }
@@ -232,7 +278,8 @@ internal object ExtensionLoader {
         }
 
         val hasReadme = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_README", 0) == 1
-        val hasChangelog = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
+        val hasChangelog =
+            appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
 
         val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
 
@@ -248,7 +295,8 @@ internal object ExtensionLoader {
             }
             .flatMap {
                 try {
-                    when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor().newInstance()) {
+                    when (val obj = Class.forName(it, false, classLoader).getDeclaredConstructor()
+                        .newInstance()) {
                         is AnimeSource -> listOf(obj)
                         is AnimeSourceFactory -> obj.createSources()
                         else -> throw Exception("Unknown source class type! ${obj.javaClass}")
@@ -314,8 +362,9 @@ internal object ExtensionLoader {
         // Validate lib version
         val libVersion = versionName.substringBeforeLast('.').toDoubleOrNull()
         if (libVersion == null || libVersion < MANGA_LIB_VERSION_MIN || libVersion > MANGA_LIB_VERSION_MAX) {
-            Logger.log("Lib version is $libVersion, while only versions " +
-                    "$MANGA_LIB_VERSION_MIN to $MANGA_LIB_VERSION_MAX are allowed"
+            Logger.log(
+                "Lib version is $libVersion, while only versions " +
+                        "$MANGA_LIB_VERSION_MIN to $MANGA_LIB_VERSION_MAX are allowed"
             )
             return MangaLoadResult.Error
         }
@@ -340,7 +389,8 @@ internal object ExtensionLoader {
         }
 
         val hasReadme = appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_HAS_README", 0) == 1
-        val hasChangelog = appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
+        val hasChangelog =
+            appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
 
         val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
 
@@ -395,17 +445,77 @@ internal object ExtensionLoader {
         return MangaLoadResult.Success(extension)
     }
 
+    private fun loadNovelExtension(
+        context: Context,
+        pkgName: String,
+        pkgInfo: PackageInfo
+    ): NovelLoadResult {
+        val pkgManager = context.packageManager
+
+        val appInfo = try {
+            pkgManager.getApplicationInfo(pkgName, PackageManager.GET_META_DATA)
+        } catch (error: PackageManager.NameNotFoundException) {
+            // Unlikely, but the package may have been uninstalled at this point
+            Logger.log(error)
+            return NovelLoadResult.Error(error)
+        }
+
+        val extName =
+            pkgManager.getApplicationLabel(appInfo).toString().substringAfter("Tachiyomi: ")
+        val versionName = pkgInfo.versionName
+        val versionCode = PackageInfoCompat.getLongVersionCode(pkgInfo)
+
+        if (versionName.isNullOrEmpty()) {
+            Logger.log("Missing versionName for extension $extName")
+            return NovelLoadResult.Error(Exception("Missing versionName for extension $extName"))
+        }
+
+        val signatureHash = getSignatureHash(pkgInfo)
+
+        val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        val novelInterfaceInstance = try {
+            val className = appInfo.loadLabel(context.packageManager).toString()
+            val extensionClassName =
+                "some.random.novelextensions.${className.lowercase(Locale.getDefault())}.$className"
+            val loadedClass = classLoader.loadClass(extensionClassName)
+            val instance = loadedClass.getDeclaredConstructor().newInstance()
+            instance as? NovelInterface
+        } catch (e: Throwable) {
+            Logger.log("Extension load error: $extName")
+            return NovelLoadResult.Error(e as Exception)
+        }
+
+        val extension = NovelExtension.Installed(
+            name = extName,
+            pkgName = pkgName,
+            versionName = versionName,
+            versionCode = versionCode,
+            sources = listOfNotNull(novelInterfaceInstance),
+            isUnofficial = signatureHash != officialSignatureManga,
+            icon = context.getApplicationIcon(pkgName),
+        )
+        return NovelLoadResult.Success(extension)
+    }
+
+
     /**
      * Returns true if the given package is an extension.
      *
      * @param pkgInfo The package info of the application.
      */
     private fun isPackageAnExtension(type: MediaType, pkgInfo: PackageInfo): Boolean {
-        return pkgInfo.reqFeatures.orEmpty().any { it.name == when (type) {
-            MediaType.ANIME -> ANIME_PACKAGE
-            MediaType.MANGA -> MANGA_PACKAGE
-            else -> ""
-        } }
+
+        return if (type == MediaType.NOVEL) {
+            pkgInfo.packageName.startsWith("some.random")
+        } else {
+            pkgInfo.reqFeatures.orEmpty().any {
+                it.name == when (type) {
+                    MediaType.ANIME -> ANIME_PACKAGE
+                    MediaType.MANGA -> MANGA_PACKAGE
+                    else -> ""
+                }
+            }
+        }
     }
 
     /**
@@ -417,7 +527,7 @@ internal object ExtensionLoader {
         val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P)
             pkgInfo.signingInfo.signingCertificateHistory
         else
-            @Suppress ("DEPRECATION") pkgInfo.signatures
+            @Suppress("DEPRECATION") pkgInfo.signatures
         return if (signatures != null && signatures.isNotEmpty()) {
             Hash.sha256(signatures.first().toByteArray())
         } else {

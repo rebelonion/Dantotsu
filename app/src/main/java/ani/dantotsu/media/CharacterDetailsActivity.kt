@@ -95,7 +95,8 @@ class CharacterDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChang
         }
         lifecycleScope.launch {
             withContext(Dispatchers.IO) {
-                character.isFav = Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)
+                character.isFav =
+                    Anilist.query.isUserFav(AnilistMutations.FavType.CHARACTER, character.id)
             }
             withContext(Dispatchers.Main) {
                 binding.characterFav.setImageResource(

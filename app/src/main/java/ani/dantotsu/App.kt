@@ -6,6 +6,8 @@ import android.content.Context
 import android.os.Bundle
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import ani.dantotsu.addons.download.DownloadAddonManager
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import ani.dantotsu.connections.comments.CommentsAPI
@@ -41,6 +43,9 @@ class App : MultiDexApplication() {
     private lateinit var animeExtensionManager: AnimeExtensionManager
     private lateinit var mangaExtensionManager: MangaExtensionManager
     private lateinit var novelExtensionManager: NovelExtensionManager
+    private lateinit var torrentAddonManager: TorrentAddonManager
+    private lateinit var downloadAddonManager: DownloadAddonManager
+
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -96,6 +101,8 @@ class App : MultiDexApplication() {
         animeExtensionManager = Injekt.get()
         mangaExtensionManager = Injekt.get()
         novelExtensionManager = Injekt.get()
+        torrentAddonManager = Injekt.get()
+        downloadAddonManager = Injekt.get()
 
         val animeScope = CoroutineScope(Dispatchers.Default)
         animeScope.launch {
@@ -114,6 +121,11 @@ class App : MultiDexApplication() {
             novelExtensionManager.findAvailableExtensions()
             Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
+        }
+        val addonScope = CoroutineScope(Dispatchers.Default)
+        addonScope.launch {
+            torrentAddonManager.init()
+            downloadAddonManager.init()
         }
         val commentsScope = CoroutineScope(Dispatchers.Default)
         commentsScope.launch {

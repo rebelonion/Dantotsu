@@ -6,6 +6,8 @@ import android.content.Intent
 import android.content.IntentFilter
 import androidx.core.content.ContextCompat
 import ani.dantotsu.media.MediaType
+import ani.dantotsu.parsers.novel.NovelExtension
+import ani.dantotsu.parsers.novel.NovelLoadResult
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
@@ -28,6 +30,7 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
 
     private var animeListener: AnimeListener? = null
     private var mangaListener: MangaListener? = null
+    private var novelListener: NovelListener? = null
     private var type: MediaType? = null
 
     /**
@@ -37,30 +40,24 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
         ContextCompat.registerReceiver(context, this, filter, ContextCompat.RECEIVER_EXPORTED)
     }
 
-    fun setAnimeListener(listener: AnimeListener) : ExtensionInstallReceiver {
+    fun setAnimeListener(listener: AnimeListener): ExtensionInstallReceiver {
         this.type = MediaType.ANIME
         animeListener = listener
         this.animeListener
         return this
     }
 
-    fun setMangaListener(listener: MangaListener) : ExtensionInstallReceiver {
+    fun setMangaListener(listener: MangaListener): ExtensionInstallReceiver {
         this.type = MediaType.MANGA
         mangaListener = listener
         return this
     }
 
-    /**
-     * Returns the intent filter this receiver should subscribe to.
-     */
-    private val filter
-        get() = IntentFilter().apply {
-            priority = 100
-            addAction(Intent.ACTION_PACKAGE_ADDED)
-            addAction(Intent.ACTION_PACKAGE_REPLACED)
-            addAction(Intent.ACTION_PACKAGE_REMOVED)
-            addDataScheme("package")
-        }
+    fun setNovelListener(listener: NovelListener): ExtensionInstallReceiver {
+        this.type = MediaType.NOVEL
+        novelListener = listener
+        return this
+    }
 
     /**
      * Called when one of the events of the [filter] is received. When the package is an extension,
@@ -78,21 +75,43 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
                     when (type) {
                         MediaType.ANIME -> {
                             when (val result = getAnimeExtensionFromIntent(context, intent)) {
-                                is AnimeLoadResult.Success -> animeListener?.onExtensionInstalled(result.extension)
+                                is AnimeLoadResult.Success -> animeListener?.onExtensionInstalled(
+                                    result.extension
+                                )
 
-                                is AnimeLoadResult.Untrusted -> animeListener?.onExtensionUntrusted(result.extension)
+                                is AnimeLoadResult.Untrusted -> animeListener?.onExtensionUntrusted(
+                                    result.extension
+                                )
+
                                 else -> {}
                             }
                         }
+
                         MediaType.MANGA -> {
                             when (val result = getMangaExtensionFromIntent(context, intent)) {
-                                is MangaLoadResult.Success -> mangaListener?.onExtensionInstalled(result.extension)
+                                is MangaLoadResult.Success -> mangaListener?.onExtensionInstalled(
+                                    result.extension
+                                )
 
-                                is MangaLoadResult.Untrusted -> mangaListener?.onExtensionUntrusted(result.extension)
+                                is MangaLoadResult.Untrusted -> mangaListener?.onExtensionUntrusted(
+                                    result.extension
+                                )
+
                                 else -> {}
                             }
                         }
-                        else -> { }
+
+                        MediaType.NOVEL -> {
+                            when (val result = getNovelExtensionFromIntent(context, intent)) {
+                                is NovelLoadResult.Success -> novelListener?.onExtensionInstalled(
+                                    result.extension
+                                )
+
+                                else -> {}
+                            }
+                        }
+
+                        else -> {}
                     }
                 }
             }
@@ -102,17 +121,35 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
                     when (type) {
                         MediaType.ANIME -> {
                             when (val result = getAnimeExtensionFromIntent(context, intent)) {
-                                is AnimeLoadResult.Success -> animeListener?.onExtensionUpdated(result.extension)
+                                is AnimeLoadResult.Success -> animeListener?.onExtensionUpdated(
+                                    result.extension
+                                )
+
                                 else -> {}
                             }
                         }
+
                         MediaType.MANGA -> {
                             when (val result = getMangaExtensionFromIntent(context, intent)) {
-                                is MangaLoadResult.Success -> mangaListener?.onExtensionUpdated(result.extension)
+                                is MangaLoadResult.Success -> mangaListener?.onExtensionUpdated(
+                                    result.extension
+                                )
+
                                 else -> {}
                             }
                         }
-                        else -> { }
+
+                        MediaType.NOVEL -> {
+                            when (val result = getNovelExtensionFromIntent(context, intent)) {
+                                is NovelLoadResult.Success -> novelListener?.onExtensionUpdated(
+                                    result.extension
+                                )
+
+                                else -> {}
+                            }
+                        }
+
+                        else -> {}
                     }
                 }
             }
@@ -126,23 +163,20 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
                         MediaType.ANIME -> {
                             animeListener?.onPackageUninstalled(pkgName)
                         }
+
                         MediaType.MANGA -> {
                             mangaListener?.onPackageUninstalled(pkgName)
                         }
-                        else -> { }
+
+                        MediaType.NOVEL -> {
+                            novelListener?.onPackageUninstalled(pkgName)
+                        }
+
+                        else -> {}
                     }
                 }
             }
         }
-    }
-
-    /**
-     * Returns true if this package is performing an update.
-     *
-     * @param intent The intent that triggered the event.
-     */
-    private fun isReplacing(intent: Intent): Boolean {
-        return intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)
     }
 
     /**
@@ -151,7 +185,11 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
      * @param context The application context.
      * @param intent The intent containing the package name of the extension.
      */
-    private suspend fun getAnimeExtensionFromIntent(context: Context, intent: Intent?): AnimeLoadResult {
+    @OptIn(DelicateCoroutinesApi::class)
+    private suspend fun getAnimeExtensionFromIntent(
+        context: Context,
+        intent: Intent?
+    ): AnimeLoadResult {
         val pkgName = getPackageNameFromIntent(intent)
         if (pkgName == null) {
             Logger.log("Package name not found")
@@ -166,7 +204,10 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    private suspend fun getMangaExtensionFromIntent(context: Context, intent: Intent?): MangaLoadResult {
+    private suspend fun getMangaExtensionFromIntent(
+        context: Context,
+        intent: Intent?
+    ): MangaLoadResult {
         val pkgName = getPackageNameFromIntent(intent)
         if (pkgName == null) {
             Logger.log("Package name not found")
@@ -180,11 +221,22 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
         }.await()
     }
 
-    /**
-     * Returns the package name of the installed, updated or removed application.
-     */
-    private fun getPackageNameFromIntent(intent: Intent?): String? {
-        return intent?.data?.encodedSchemeSpecificPart ?: return null
+    @OptIn(DelicateCoroutinesApi::class)
+    private suspend fun getNovelExtensionFromIntent(
+        context: Context,
+        intent: Intent?
+    ): NovelLoadResult {
+        val pkgName = getPackageNameFromIntent(intent)
+        if (pkgName == null) {
+            Logger.log("Package name not found")
+            return NovelLoadResult.Error(Exception("Package name not found"))
+        }
+        return GlobalScope.async(Dispatchers.Default, CoroutineStart.DEFAULT) {
+            ExtensionLoader.loadNovelExtensionFromPkgName(
+                context,
+                pkgName,
+            )
+        }.await()
     }
 
     /**
@@ -202,5 +254,43 @@ internal class ExtensionInstallReceiver : BroadcastReceiver() {
         fun onExtensionUpdated(extension: MangaExtension.Installed)
         fun onExtensionUntrusted(extension: MangaExtension.Untrusted)
         fun onPackageUninstalled(pkgName: String)
+    }
+
+    interface NovelListener {
+        fun onExtensionInstalled(extension: NovelExtension.Installed)
+        fun onExtensionUpdated(extension: NovelExtension.Installed)
+        fun onPackageUninstalled(pkgName: String)
+    }
+
+    companion object {
+
+        /**
+         * Returns the intent filter this receiver should subscribe to.
+         */
+        val filter
+            get() = IntentFilter().apply {
+                priority = 100
+                addAction(Intent.ACTION_PACKAGE_ADDED)
+                addAction(Intent.ACTION_PACKAGE_REPLACED)
+                addAction(Intent.ACTION_PACKAGE_REMOVED)
+                addDataScheme("package")
+            }
+
+        /**
+         * Returns true if this package is performing an update.
+         *
+         * @param intent The intent that triggered the event.
+         */
+        fun isReplacing(intent: Intent): Boolean {
+            return intent.getBooleanExtra(Intent.EXTRA_REPLACING, false)
+        }
+
+
+        /**
+         * Returns the package name of the installed, updated or removed application.
+         */
+        fun getPackageNameFromIntent(intent: Intent?): String? {
+            return intent?.data?.encodedSchemeSpecificPart ?: return null
+        }
     }
 }

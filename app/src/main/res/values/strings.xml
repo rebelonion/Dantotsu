@@ -188,7 +188,7 @@
     <string name="noSdFound">No SD card was Found.</string>
     <string name="reader_settings">Reader Settings</string>
     <string name="default_source">Default Source</string>
-    <string name="show_yt">Show Youtube Link</string>
+    <string name="show_yt">Youtube Link</string>
     <string name="default_ep_view">Default Episode Layout</string>
     <string name="default_chp_view">Default Chapter Layout</string>
     <string name="ui">User Interface</string>
@@ -305,6 +305,7 @@
         <item>Favourite Manga</item>
         <item>Planned Manga</item>
         <item>Recommended</item>
+        <item>Social Feeds</item>
     </string-array>
 
     <string name="startUpTab">Default Start Up Tab</string>
@@ -377,11 +378,13 @@
     <string name="search_source_list">Search next available source</string>
     <string name="timestamp_proxy_desc">Useful if you are getting Handshake Fails</string>
     <string name="timestamp_proxy">Use Proxy for Timestamps</string>
-    <string name="check_app_updates">Always check for App Updates</string>
+    <string name="check_app_updates">Check for Updates</string>
     <string name="author">Author</string>
     <string name="forks">Versions</string>
     <string name="faq">FAQ</string>
     <string name="accounts">Accounts</string>
+    <string name="addons">Addons</string>
+    <string name="addons_desc">Addons are extensions that provide additional functionality.</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">Login with Anilist!</string>
     <string name="anilist">Anilist</string>
@@ -402,7 +405,7 @@
 
         \n\n_It is not required to sync both MAL and Anilist accounts._
     </string>
-    <string name="notification_for_checking_subscriptions">Show notification for Checking Subscriptions</string>
+    <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
     <string name="use_alarm_manager">Use Alarm Manager</string>
     <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
     <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
@@ -423,6 +426,7 @@
     <string name="installation_complete">Installation complete</string>
     <string name="extension_has_been_installed">The extension has been successfully installed.</string>
     <string name="extension_installed">Extension installed</string>
+    <string name="installed">Installed</string>
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">Review</string>
@@ -685,8 +689,8 @@
     <string name="error_loading_discord_user_data">Error loading Discord User Data</string>
     <string name="discord_warning"><![CDATA[By logging in, your discord will now show what you are watching & reading on Dantotsu\n\nIf you are on invisible mode, logging in will make you online, when you open Dantotsu.\n\nThis does break the Discord TOS. \nAlthough Discord has never banned anyone for using Custom Rich Presence(what Dantotsu uses), You have still been warned.\n\nDantotsu is not responsible for anything that happens to your account.]]></string>
     <string name="warning">Warning</string>
-    <string name="view_anime">View Anime</string>
-    <string name="view_manga">View Manga</string>
+    <string name="view_anime" translatable="false">View Anime</string>
+    <string name="view_manga" translatable="false">View Manga</string>
     <string name="force_legacy_installer">Force Legacy Installer</string>
     <string name="extensions_settings">Extensions</string>
     <string name="NSFWExtention">NSFW Extensions</string>
@@ -717,7 +721,7 @@
     <string name="purge_manga_downloads">Delete all Manga Downloads</string>
     <string name="purge_novel_downloads">Delete all Novel Downloads</string>
     <string name="requires_android_12">Requires Android 12+</string>
-    <string name="share_username_in_crash_reports">Share username in crash reports</string>
+    <string name="share_username_in_crash_reports">Share username</string>
     <string name="pinned_sources">Pinned Sources</string>
     <string name="backup_restore">Backup and Restore</string>
     <string name="restore_settings">Import Settings</string>
@@ -790,8 +794,8 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="blur_banners">Blur Banners</string>
     <string name="blur">Blur</string>
     <string name="hide_scroll_bar">Hide Scroll Bar</string>
-    <string name="view_on_anilist">View on AniList</string>
-    <string name="anilist_notification_filters">Choose category to ignore</string>
+    <string name="view_on_anilist" translatable="false">View on AniList</string>
+    <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">Anilist notifications update frequency : %1$s</string>
     <string name="comment_notification_checking_time">Comment notifications update frequency : %1$s</string>
     <string name="activities">Activities</string>
@@ -904,4 +908,62 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="anime_desc">Choose how you watch</string>
     <string name="manga_desc">Choose how you read</string>
     <string name="about_desc">Learn more about Dantotsu</string>
+    <string name="faq_desc">General questions about Dantotsu</string>
+    <string name="check_app_updates_desc">Check Github for app updates</string>
+    <string name="share_username_in_crash_reports_desc">Share username in crash reports</string>
+    <string name="devs_desc">Dantotsu\'s very own unpaid labours </string>
+    <string name="forks_desc">More like Dantotsu</string>
+    <string name="disclaimer_desc">Something to keep in mind</string>
+    <string name="enable_torrent_desc">This will run a torrent server in the background</string>
+    <string name="player_settings_desc">All the player related settings</string>
+    <string name="purge_anime_downloads_desc">Delete all downloaded Anime</string>
+    <string name="prefer_dub_desc">Select Dub media by default</string>
+    <string name="show_yt_desc">Show YouTube links for supported media</string>
+    <string name="include_list_anime_desc">Include list items in Anime explore page</string>
+    <string name="ui_settings_desc">All the UI related settings</string>
+    <string name="download_manager_select_desc">Default manager to download Anime</string>
+    <string name="backup_restore_desc">Your preferred settings everywhere</string>
+    <string name="change_download_location_desc">Change the location where all the downloaded stuff goes</string>
+    <string name="always_continue_content_desc">Continue where you left off</string>
+    <string name="search_source_list_desc">Auto-select the next server if the previous server doesn\'t have the media</string>
+    <string name="recentlyListOnly_desc">Show only your list items in the recent tab</string>
+    <string name="adult_only_content_desc">Show only adult content in the explore page</string>
+    <string name="anime_add_repository_desc">Add Anime Extensions from various sources</string>
+    <string name="manga_add_repository_desc">Add Manga Extensions from various sources</string>
+    <string name="user_agent_desc">Change your default user agent</string>
+    <string name="force_legacy_installer_desc">Use the legacy installer to install extensions (For older android phones)</string>
+    <string name="skip_loading_extension_icons_desc">Don\'t load icons of extensions on the extension page</string>
+    <string name="NSFWExtention_desc">Remove 18+ extensions from search (May remove some useful extensions)</string>
+    <string name="reader_settings_desc">All the Reader related settings</string>
+    <string name="purge_manga_downloads_desc">Delete all downloaded Manga</string>
+    <string name="purge_novel_downloads_desc">Delete all downloaded Novels</string>
+    <string name="include_list_desc">Include list items in Manga explore page</string>
+    <string name="anilist_notification_filters_desc">Choose category to Ignore</string>
+    <string name="anilist_notifications_checking_time_desc">Set the frequency you want the app to check for Anilist notifications</string>
+    <string name="comment_notification_checking_time_desc">Set the frequency you want the app to check for Comment notifications</string>
+    <string name="notification_for_checking_subscriptions_desc">Show notification for checking Subscriptions</string>
+    <string name="use_alarm_manager_reliable_desc">Use to bypass the phone\'s battery optimizer</string>
+    <string name="oled_theme_variant_desc">As dark as it gets</string>
+    <string name="use_material_you_desc">Use the same color as your wallpaper</string>
+    <string name="use_unique_theme_for_each_item_desc">Use color from media\'s banner</string>
+    <string name="use_custom_theme_desc">Use your own color for the theme</string>
+    <string name="color_picker_desc">Choose a color</string>
+    <string name="torrent_addon">Torrent Addon</string>
+    <string name="enable_torrent">Enable torrent</string>
+    <string name="anime_downloader_addon">Anime Downloader Addon</string>
+    <string name="install_torrent_addon">Install Torrent Addon</string>
+    <string name="loaded_successfully">Loaded Successfully</string>
+    <string name="not_installed">Not Installed</string>
+    <string name="torrent_extension_not_supported">Torrent extension not supported on this device</string>
+    <string name="update_addon">Update Addon</string>
+    <string name="install_addon">Install Addon</string>
+    <string name="download_addon_not_found">Download addon not found</string>
+    <string name="image">Image</string>
+    <string name="failed_ext_install_conflict">Failed to install extension due to conflict</string>
+    <string name="reading">READING</string>
+    <string name="watching">WATCHING</string>
+    <string name="avatar">%1$s\ [Avatar]</string>
+    <string name="cover">%1$s\ [Cover]</string>
+    <string name="banner">%1$s\ [Banner]</string>
+    <string name="your_story">Your Story</string>
 </resources>

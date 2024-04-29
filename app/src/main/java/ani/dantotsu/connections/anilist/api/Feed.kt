@@ -14,7 +14,17 @@ data class FeedResponse(
         val page: ActivityPage
     ) : java.io.Serializable
 }
-
+@Serializable
+data class Social(
+    @SerialName("data")
+    val data: Data
+) : java.io.Serializable {
+    @Serializable
+    data class Data(
+        @SerialName("Page1") val page1: ActivityPage,
+        @SerialName("Page2") val page2: ActivityPage
+    ) : java.io.Serializable
+}
 @Serializable
 data class ActivityPage(
     @SerialName("activities")

@@ -1,6 +1,5 @@
 package ani.dantotsu.others
 
-import android.app.DownloadManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -8,7 +7,6 @@ import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
@@ -19,9 +17,6 @@ import ani.dantotsu.parsers.Book
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.toast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.io.File
 
 object Download {

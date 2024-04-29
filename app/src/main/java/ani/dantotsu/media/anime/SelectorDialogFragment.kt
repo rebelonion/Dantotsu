@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.R
+import ani.dantotsu.addons.download.DownloadAddonManager
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currActivity
@@ -47,12 +49,16 @@ import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.toast
 import ani.dantotsu.tryWith
 import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.text.DecimalFormat
@@ -230,11 +236,12 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
     }
 
     private val externalPlayerResult = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()) { result: ActivityResult ->
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
         Logger.log(result.data.toString())
     }
 
-    private fun exportMagnetIntent(episode: Episode, video: Video) : Intent {
+    private fun exportMagnetIntent(episode: Episode, video: Video): Intent {
         val amnis = "com.amnis"
         return Intent(Intent.ACTION_VIEW).apply {
             component = ComponentName(amnis, "$amnis.gui.player.PlayerActivity")
@@ -252,32 +259,70 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         }
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("UnsafeOptInUsageError")
     fun startExoplayer(media: Media) {
         prevEpisode = null
-
-        dismiss()
 
         episode?.let { ep ->
             val video = ep.extractors?.find {
                 it.server.name == ep.selectedExtractor
             }?.videos?.getOrNull(ep.selectedVideo)
             video?.file?.url?.let { url ->
-                if (url.startsWith("magnet:")) {
-                    try {
-                        externalPlayerResult.launch(exportMagnetIntent(ep, video))
-                    } catch (e: ActivityNotFoundException) {
-                        val amnis = "com.amnis"
-                        try {
-                            startActivity(Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("market://details?id=$amnis"))
+                if (url.startsWith("magnet:") || url.endsWith(".torrent")) {
+                    val torrentExtension = Injekt.get<TorrentAddonManager>()
+                    if (torrentExtension.isAvailable()) {
+                        val activity = currActivity() ?: requireActivity()
+                        launchIO {
+                            val extension = torrentExtension.extension!!.extension
+                            torrentExtension.torrentHash?.let {
+                                extension.removeTorrent(it)
+                            }
+                            val index = if (url.contains("index=")) {
+                                url.substringAfter("index=").toIntOrNull() ?: 0
+                            } else 0
+                            Logger.log("Sending: ${url}, ${video.quality}, $index")
+                            val currentTorrent = extension.addTorrent(
+                                url, video.quality.toString(), "", "", false
                             )
+                            torrentExtension.torrentHash = currentTorrent.hash
+                            video.file.url = extension.getLink(currentTorrent, index)
+                            Logger.log("Received: ${video.file.url}")
+                            if (launch == true) {
+                                Intent(activity, ExoplayerView::class.java).apply {
+                                    ExoplayerView.media = media
+                                    ExoplayerView.initialized = true
+                                    startActivity(this)
+                                }
+                            } else {
+                                model.setEpisode(
+                                    media.anime!!.episodes!![media.anime.selectedEpisode!!]!!,
+                                    "startExo no launch"
+                                )
+                            }
+                            dismiss()
+                        }
+                    } else {
+                        try {
+                            externalPlayerResult.launch(exportMagnetIntent(ep, video))
                         } catch (e: ActivityNotFoundException) {
-                            startActivity(Intent(
-                                Intent.ACTION_VIEW,
-                                Uri.parse("https://play.google.com/store/apps/details?id=$amnis")
-                            ))
+                            val amnis = "com.amnis"
+                            try {
+                                startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("market://details?id=$amnis")
+                                    )
+                                )
+                                dismiss()
+                            } catch (e: ActivityNotFoundException) {
+                                startActivity(
+                                    Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("https://play.google.com/store/apps/details?id=$amnis")
+                                    )
+                                )
+                            }
                         }
                     }
                     return
@@ -285,6 +330,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             }
         }
 
+        dismiss()
         if (launch!! || model.watchSources!!.isDownloadedSource(media.selected!!.sourceIndex)) {
             stopAddingToList()
             val intent = Intent(activity, ExoplayerView::class.java)
@@ -403,7 +449,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                     SubtitleDownloader.downloadSubtitle(
                                         requireContext(),
                                         subtitleToDownload!!.file.url,
-                                        DownloadedType(media!!.mainName(), media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.number, MediaType.ANIME)
+                                        DownloadedType(
+                                            media!!.mainName(),
+                                            media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!.number,
+                                            MediaType.ANIME
+                                        )
                                     )
                                 }
                             }
@@ -430,12 +480,45 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         media!!.userPreferredName
                     )
                 } else {
+                    val downloadAddonManager: DownloadAddonManager = Injekt.get()
+                    if (!downloadAddonManager.isAvailable()){
+                        toast("Download Extension not available")
+                        return@setSafeOnClickListener
+                    }
                     val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
                     val selectedVideo =
                         if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
                     val subtitleNames = subtitles.map { it.language }
                     var subtitleToDownload: Subtitle? = null
-                    val activity = currActivity()?:requireActivity()
+                    val activity = currActivity() ?: requireActivity()
+                    selectedVideo?.file?.url?.let { url ->
+                        if (url.startsWith("magnet:") || url.endsWith(".torrent")) {
+                            val torrentExtension = Injekt.get<TorrentAddonManager>()
+                            if (!torrentExtension.isAvailable()) {
+                                toast("Torrent Extension not available")
+                                return@setSafeOnClickListener
+                            }
+                            runBlocking {
+                                withContext(Dispatchers.IO) {
+                                    val extension = torrentExtension.extension!!.extension
+                                    torrentExtension.torrentHash?.let {
+                                        extension.removeTorrent(it)
+                                    }
+                                    val index = if (url.contains("index=")) {
+                                        url.substringAfter("index=").toIntOrNull() ?: 0
+                                    } else 0
+                                    Logger.log("Sending: ${url}, ${selectedVideo.quality}, $index")
+                                    val currentTorrent = extension.addTorrent(
+                                        url, selectedVideo.quality.toString(), "", "", false
+                                    )
+                                    torrentExtension.torrentHash = currentTorrent.hash
+                                    selectedVideo.file.url =
+                                        extension.getLink(currentTorrent, index)
+                                    Logger.log("Received: ${selectedVideo.file.url}")
+                                }
+                            }
+                        }
+                    }
                     if (subtitles.isNotEmpty()) {
                         val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
                             .setTitle("Download Subtitle")
@@ -509,9 +592,13 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
             if (video.format == VideoType.CONTAINER) {
                 binding.urlSize.isVisible = video.size != null
                 // if video size is null or 0, show "Unknown Size" else show the size in MB
-                val sizeText = getString(R.string.mb_size, "${if (video.extraNote != null) " : " else ""}${
-                    if (video.size == 0.0) getString(R.string.size_unknown) else DecimalFormat("#.##").format(video.size ?: 0)
-                }")
+                val sizeText = getString(
+                    R.string.mb_size, "${if (video.extraNote != null) " : " else ""}${
+                        if (video.size == 0.0) getString(R.string.size_unknown) else DecimalFormat("#.##").format(
+                            video.size ?: 0
+                        )
+                    }"
+                )
                 binding.urlSize.text = sizeText
             }
             binding.urlNote.visibility = View.VISIBLE

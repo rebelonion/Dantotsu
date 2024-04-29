@@ -48,8 +48,10 @@ class UpcomingWidgetConfigure : AppCompatActivity(),
         binding = UpcomingWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
         val prefs = getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE)
-        val topBackground = prefs.getInt(UpcomingWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
-        (binding.topBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(topBackground)
+        val topBackground =
+            prefs.getInt(UpcomingWidget.PREF_BACKGROUND_COLOR, Color.parseColor("#80000000"))
+        (binding.topBackgroundButton as MaterialButton).iconTint =
+            ColorStateList.valueOf(topBackground)
         binding.topBackgroundButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_BACKGROUND_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
@@ -66,8 +68,10 @@ class UpcomingWidgetConfigure : AppCompatActivity(),
                 .neg()
                 .show(this@UpcomingWidgetConfigure, tag)
         }
-        val bottomBackground = prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
-        (binding.bottomBackgroundButton as MaterialButton).iconTint = ColorStateList.valueOf(bottomBackground)
+        val bottomBackground =
+            prefs.getInt(UpcomingWidget.PREF_BACKGROUND_FADE, Color.parseColor("#00000000"))
+        (binding.bottomBackgroundButton as MaterialButton).iconTint =
+            ColorStateList.valueOf(bottomBackground)
         binding.bottomBackgroundButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_BACKGROUND_FADE
             SimpleColorDialog().title(R.string.custom_theme)
@@ -85,7 +89,8 @@ class UpcomingWidgetConfigure : AppCompatActivity(),
                 .show(this@UpcomingWidgetConfigure, tag)
         }
         val titleTextColor = prefs.getInt(UpcomingWidget.PREF_TITLE_TEXT_COLOR, Color.WHITE)
-        (binding.titleColorButton as MaterialButton).iconTint = ColorStateList.valueOf(titleTextColor)
+        (binding.titleColorButton as MaterialButton).iconTint =
+            ColorStateList.valueOf(titleTextColor)
         binding.titleColorButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_TITLE_TEXT_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
@@ -102,7 +107,8 @@ class UpcomingWidgetConfigure : AppCompatActivity(),
                 .show(this@UpcomingWidgetConfigure, tag)
         }
         val countdownTextColor = prefs.getInt(UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR, Color.WHITE)
-        (binding.countdownColorButton as MaterialButton).iconTint = ColorStateList.valueOf(countdownTextColor)
+        (binding.countdownColorButton as MaterialButton).iconTint =
+            ColorStateList.valueOf(countdownTextColor)
         binding.countdownColorButton.setOnClickListener {
             val tag = UpcomingWidget.PREF_COUNTDOWN_TEXT_COLOR
             SimpleColorDialog().title(R.string.custom_theme)
@@ -152,15 +158,27 @@ class UpcomingWidgetConfigure : AppCompatActivity(),
 
     private fun themeColors() {
         val typedValueSurface = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValueSurface, true)
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorSurface,
+            typedValueSurface,
+            true
+        )
         val backgroundColor = typedValueSurface.data
 
         val typedValuePrimary = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValuePrimary, true)
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorPrimary,
+            typedValuePrimary,
+            true
+        )
         val textColor = typedValuePrimary.data
 
         val typedValueOutline = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValueOutline, true)
+        theme.resolveAttribute(
+            com.google.android.material.R.attr.colorOutline,
+            typedValueOutline,
+            true
+        )
         val subTextColor = typedValueOutline.data
 
         getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {

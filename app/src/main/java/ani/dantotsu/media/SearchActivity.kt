@@ -78,8 +78,10 @@ class SearchActivity : AppCompatActivity() {
                 source = intent.getStringExtra("source"),
                 countryOfOrigin = intent.getStringExtra("country"),
                 season = intent.getStringExtra("season"),
-                seasonYear = if (intent.getStringExtra("type") == "ANIME") intent.getStringExtra("seasonYear")?.toIntOrNull() else null,
-                startYear = if (intent.getStringExtra("type") == "MANGA") intent.getStringExtra("seasonYear")?.toIntOrNull() else null,
+                seasonYear = if (intent.getStringExtra("type") == "ANIME") intent.getStringExtra("seasonYear")
+                    ?.toIntOrNull() else null,
+                startYear = if (intent.getStringExtra("type") == "MANGA") intent.getStringExtra("seasonYear")
+                    ?.toIntOrNull() else null,
                 results = mutableListOf(),
                 hasNextPage = false
             )

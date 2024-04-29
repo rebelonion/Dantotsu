@@ -109,7 +109,9 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         // Ui init
 
         initActivity(this)
-        binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarHeight }
+        binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
         val oldMargin = binding.mediaViewPager.marginBottom
         AndroidBug5497Workaround.assistActivity(this) {
             if (it) {
@@ -125,9 +127,11 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
         }
         val navBarRightMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
+            Configuration.ORIENTATION_LANDSCAPE
+        ) navBarHeight else 0
         val navBarBottomMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
+            Configuration.ORIENTATION_LANDSCAPE
+        ) 0 else navBarHeight
         navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             rightMargin = navBarRightMargin
             bottomMargin = navBarBottomMargin
@@ -168,7 +172,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         binding.mediaCoverImage.loadImage(media.cover)
         binding.mediaCoverImage.setOnLongClickListener {
-            val coverTitle = "${media.userPreferredName}[Cover]"
+            val coverTitle = getString(R.string.cover, media.userPreferredName)
             ImageViewDialog.newInstance(
                 this,
                 coverTitle,
@@ -188,7 +192,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
 
             override fun onLongClick(event: MotionEvent) {
-                val bannerTitle = "${media.userPreferredName}[Banner]"
+                val bannerTitle = getString(R.string.banner, media.userPreferredName)
                 ImageViewDialog.newInstance(
                     this@MediaDetailsActivity,
                     bannerTitle,
@@ -345,7 +349,13 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         adult = media.isAdult
         if (media.anime != null) {
             viewPager.adapter =
-                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME, media, intent.getIntExtra("commentId", -1))
+                ViewPagerAdapter(
+                    supportFragmentManager,
+                    lifecycle,
+                    SupportedMedia.ANIME,
+                    media,
+                    intent.getIntExtra("commentId", -1)
+                )
         } else if (media.manga != null) {
             viewPager.adapter = ViewPagerAdapter(
                 supportFragmentManager,
@@ -368,7 +378,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         } else {
             navBar.createTab(R.drawable.ic_round_import_contacts_24, R.string.read, R.id.read)
         }
-        val commentTab = navBar.createTab(R.drawable.ic_round_comment_24, R.string.comments, R.id.comment)
+        val commentTab =
+            navBar.createTab(R.drawable.ic_round_comment_24, R.string.comments, R.id.comment)
         navBar.addTab(infoTab)
         navBar.addTab(watchTab)
         navBar.addTab(commentTab)
@@ -412,10 +423,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         val rightMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) navBarHeight else 0
+            Configuration.ORIENTATION_LANDSCAPE
+        ) navBarHeight else 0
         val bottomMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
-        val params : ViewGroup.MarginLayoutParams =
+            Configuration.ORIENTATION_LANDSCAPE
+        ) 0 else navBarHeight
+        val params: ViewGroup.MarginLayoutParams =
             navBar.layoutParams as ViewGroup.MarginLayoutParams
         params.updateMargins(right = rightMargin, bottom = bottomMargin)
     }
@@ -448,6 +461,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 SupportedMedia.MANGA -> MangaReadFragment()
                 SupportedMedia.NOVEL -> NovelReadFragment()
             }
+
             2 -> {
                 val fragment = CommentsFragment()
                 val bundle = Bundle()
