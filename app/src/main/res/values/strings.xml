@@ -965,4 +965,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="cover">%1$s\ [Cover]</string>
     <string name="banner">%1$s\ [Banner]</string>
     <string name="your_story">Your Story</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
 </resources>

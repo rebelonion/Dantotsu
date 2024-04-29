@@ -6,7 +6,6 @@ import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.SpannableStringBuilder
-import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
@@ -38,6 +37,7 @@ import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityMediaBinding
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.anime.AnimeWatchFragment
@@ -250,22 +250,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         @SuppressLint("ResourceType")
         fun total() {
             val text = SpannableStringBuilder().apply {
-                val mediaTypedValue = TypedValue()
-                this@MediaDetailsActivity.theme.resolveAttribute(
-                    com.google.android.material.R.attr.colorOnBackground,
-                    mediaTypedValue,
-                    true
-                )
-                val white = mediaTypedValue.data
+
+                val white = this@MediaDetailsActivity.getThemeColor(com.google.android.material.R.attr.colorOnBackground)
                 if (media.userStatus != null) {
                     append(if (media.anime != null) getString(R.string.watched_num) else getString(R.string.read_num))
-                    val typedValue = TypedValue()
-                    theme.resolveAttribute(
-                        com.google.android.material.R.attr.colorSecondary,
-                        typedValue,
-                        true
-                    )
-                    bold { color(typedValue.data) { append("${media.userProgress}") } }
+                    val colorSecondary = getThemeColor(com.google.android.material.R.attr.colorSecondary)
+                    bold { color(colorSecondary) { append("${media.userProgress}") } }
                     append(
                         if (media.anime != null) getString(R.string.episodes_out_of) else getString(
                             R.string.chapters_out_of

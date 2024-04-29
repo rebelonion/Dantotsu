@@ -2,8 +2,13 @@ package ani.dantotsu.settings.extensionprefs
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.DialogPreference
@@ -11,7 +16,10 @@ import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.forEach
 import androidx.preference.getOnBindEditTextListener
+import ani.dantotsu.R
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.snackString
+import ani.dantotsu.themes.ThemeManager
 import eu.kanade.tachiyomi.PreferenceScreen
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.data.preference.SharedPreferencesDataStore
@@ -29,25 +37,19 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
             snackString(e.message ?: "Unknown error")
             preferenceManager.createPreferenceScreen(requireContext())
         }
-        //set background color
-        val color = TypedValue()
-        requireContext().theme.resolveAttribute(
-            com.google.android.material.R.attr.backgroundColor,
-            color,
-            true
-        )
-        view?.setBackgroundColor(color.data)
     }
-
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ThemeManager(requireActivity()).applyTheme()
+    }
     private var onCloseAction: (() -> Unit)? = null
-
 
     override fun onDestroyView() {
         super.onDestroyView()
         onCloseAction?.invoke()
     }
 
-    fun populateAnimePreferenceScreen(): PreferenceScreen {
+    private fun populateAnimePreferenceScreen(): PreferenceScreen {
         val sourceId = requireArguments().getLong(SOURCE_ID)
         val source = Injekt.get<AnimeSourceManager>().get(sourceId) as? ConfigurableAnimeSource
             ?: error("Source with id: $sourceId not found!")
@@ -63,7 +65,6 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
                 pref.dialogTitle = pref.title
             }
 
-            // Apply incognito IME for EditTextPreference
             if (pref is EditTextPreference) {
                 val setListener = pref.getOnBindEditTextListener()
                 pref.setOnBindEditTextListener {
@@ -72,7 +73,6 @@ class AnimeSourcePreferencesFragment : PreferenceFragmentCompat() {
                 }
             }
         }
-
         return sourceScreen
     }
 
@@ -104,13 +104,8 @@ class InitialAnimeSourcePreferencesFragment(
             preferenceManager.createPreferenceScreen(requireContext())
         }
         //set background color
-        val color = TypedValue()
-        requireContext().theme.resolveAttribute(
-            com.google.android.material.R.attr.backgroundColor,
-            color,
-            true
-        )
-        view?.setBackgroundColor(color.data)
+        val color = requireContext().getThemeColor(com.google.android.material.R.attr.backgroundColor,)
+        view?.setBackgroundColor(color)
     }
 
 

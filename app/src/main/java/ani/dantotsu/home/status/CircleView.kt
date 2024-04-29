@@ -7,8 +7,8 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Path
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.View
+import ani.dantotsu.getThemeColor
 
 class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private var parts: Int = 3
@@ -30,12 +30,11 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
 
         val totalGapAngle = gapAngle * (parts)
         val totalAngle = 360f - totalGapAngle
-        val typedValue = TypedValue()
-        context.theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true)
-        val primaryColor = typedValue.data
-        val typedValue1 = TypedValue()
-        context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue1, true)
-        val secondColor = typedValue1.data
+
+
+        val primaryColor = context.getThemeColor(com.google.android.material.R.attr.colorPrimary)
+        val secondColor = context.getThemeColor(com.google.android.material.R.attr.colorOnPrimary)
+
         fun setColor(int: Int) {
             paint.color = if (int < booleanList.size && booleanList[int]) {
                  Color.GRAY
@@ -46,7 +45,6 @@ class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) 
         }
 
         if (parts == 1) {
-            // Draw a single arc covering the entire circle
             path.addArc(
                 centerX - radius,
                 centerY - radius,

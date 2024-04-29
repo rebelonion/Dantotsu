@@ -10,7 +10,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +33,7 @@ import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.video.Helper
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsViewModel
@@ -95,10 +95,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         _binding = BottomSheetSelectorBinding.inflate(inflater, container, false)
         val window = dialog?.window
         window?.statusBarColor = Color.TRANSPARENT
-        val typedValue = TypedValue()
-        val theme = requireContext().theme
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
-        window?.navigationBarColor = typedValue.data
+        window?.navigationBarColor = requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
         return binding.root
     }
 

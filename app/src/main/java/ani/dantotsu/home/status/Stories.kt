@@ -7,16 +7,11 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.animation.LinearInterpolator
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
@@ -27,6 +22,7 @@ import ani.dantotsu.buildMarkwon
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.FragmentStatusBinding
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.home.status.listener.StoriesCallback
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsActivity
@@ -70,12 +66,9 @@ constructor(
         val inflater: LayoutInflater = LayoutInflater.from(context)
         binding = FragmentStatusBinding.inflate(inflater, this, false)
         addView(binding.root)
-        val typedValue = TypedValue()
-        val typedValue1 = TypedValue()
-        context.theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue, true)
-        context.theme.resolveAttribute(com.google.android.material.R.attr.colorOnPrimary, typedValue1, true)
-        primaryColor = typedValue.data
-        onPrimaryColor = typedValue1.data
+    
+        primaryColor = context.getThemeColor(com.google.android.material.R.attr.colorPrimary)
+        onPrimaryColor = context.getThemeColor(com.google.android.material.R.attr.colorOnPrimary)
 
         if (context is StoriesCallback)
             storiesListener = context as StoriesCallback

@@ -67,9 +67,12 @@ import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.core.content.FileProvider
 import androidx.core.math.MathUtils.clamp
@@ -339,14 +342,7 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
                 val behavior = BottomSheetBehavior.from(requireView().parent as View)
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
-            val typedValue = TypedValue()
-            val theme = requireContext().theme
-            theme.resolveAttribute(
-                com.google.android.material.R.attr.colorSurface,
-                typedValue,
-                true
-            )
-            window.navigationBarColor = typedValue.data
+            window.navigationBarColor = requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
         }
     }
 
@@ -1383,7 +1379,11 @@ fun blurImage(imageView: ImageView, banner: String?) {
         imageView.setImageResource(R.drawable.linear_gradient_bg)
     }
 }
-
+fun Context.getThemeColor(@AttrRes attribute: Int): Int {
+    val typedValue = TypedValue()
+    theme.resolveAttribute(attribute, typedValue, true)
+    return typedValue.data
+}
 /**
  * Builds the markwon instance with all the plugins
  * @return the markwon instance

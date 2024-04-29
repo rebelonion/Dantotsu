@@ -577,14 +577,14 @@ class MediaInfoFragment : Fragment() {
                 if (Anilist.token != null && media.userStatus != null) {
                     users.add(0,
                         User(
-                            Anilist.userid!!,
-                            Anilist.username!!,
-                            Anilist.avatar,
-                            Anilist.bg,
+                            id = Anilist.userid!!,
+                            name = getString(R.string.your_progress),
+                            pfp = Anilist.avatar,
+                            banner = "",
                             status = media.userStatus,
                             score = media.userScore.toFloat(),
                             progress = media.userProgress,
-                            totalEpisodes = if (type == "ANIME") media.anime?.totalEpisodes else media.manga?.totalChapters,
+                            totalEpisodes = media.anime?.totalEpisodes ?: media.manga?.totalChapters,
                             nextAiringEpisode = media.anime?.nextAiringEpisode
                         )
                     )

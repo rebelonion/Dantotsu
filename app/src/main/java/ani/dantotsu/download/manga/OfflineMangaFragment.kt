@@ -5,7 +5,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +34,7 @@ import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.compareName
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.findValidName
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
@@ -85,9 +85,7 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
         textInputLayout.boxBackgroundColor = semiTransparentColor
         val materialCardView = view.findViewById<MaterialCardView>(R.id.offlineMangaAvatarContainer)
         materialCardView.setCardBackgroundColor(semiTransparentColor)
-        val typedValue = TypedValue()
-        requireContext().theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
-        val color = typedValue.data
+        val color = requireContext().getThemeColor(android.R.attr.windowBackground)
 
         val animeUserAvatar = view.findViewById<ShapeableImageView>(R.id.offlineMangaUserAvatar)
         animeUserAvatar.setSafeOnClickListener {

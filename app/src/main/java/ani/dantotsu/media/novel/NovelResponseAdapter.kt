@@ -1,6 +1,5 @@
 package ani.dantotsu.media.novel
 
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -8,6 +7,7 @@ import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemNovelResponseBinding
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.loadImage
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.setAnimation
@@ -40,14 +40,7 @@ class NovelResponseAdapter(
         setAnimation(fragment.requireContext(), holder.binding.root)
         binding.itemEpisodeImage.loadImage(novel.coverUrl, 400, 0)
 
-        val typedValue = TypedValue()
-        fragment.requireContext().theme?.resolveAttribute(
-            com.google.android.material.R.attr.colorOnBackground,
-            typedValue,
-            true
-        )
-        val color = typedValue.data
-
+        val color =fragment.requireContext().getThemeColor(com.google.android.material.R.attr.colorOnBackground)
         binding.itemEpisodeTitle.text = novel.name
         binding.itemEpisodeFiller.text =
             if (downloadedCheckCallback.downloadedCheck(novel)) {

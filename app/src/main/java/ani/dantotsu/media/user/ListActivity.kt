@@ -1,7 +1,6 @@
 package ani.dantotsu.media.user
 
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -15,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.hideSystemBarsExtendView
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -37,15 +37,9 @@ class ListActivity : AppCompatActivity() {
         ThemeManager(this).applyTheme()
         binding = ActivityListBinding.inflate(layoutInflater)
 
-        val typedValue = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
-        val primaryColor = typedValue.data
-        val typedValue3 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
-        val primaryTextColor = typedValue3.data
-        val typedValue4 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValue4, true)
-        val secondaryTextColor = typedValue4.data
+        val primaryColor = getThemeColor(com.google.android.material.R.attr.colorSurface)
+        val primaryTextColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)
+        val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)
 
         window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor

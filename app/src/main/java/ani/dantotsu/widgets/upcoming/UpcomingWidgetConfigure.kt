@@ -6,11 +6,11 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import ani.dantotsu.R
 import ani.dantotsu.databinding.UpcomingWidgetConfigureBinding
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.themes.ThemeManager
 import com.google.android.material.button.MaterialButton
 import eltos.simpledialogfragment.SimpleDialog
@@ -157,29 +157,9 @@ class UpcomingWidgetConfigure : AppCompatActivity(),
     }
 
     private fun themeColors() {
-        val typedValueSurface = TypedValue()
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorSurface,
-            typedValueSurface,
-            true
-        )
-        val backgroundColor = typedValueSurface.data
-
-        val typedValuePrimary = TypedValue()
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorPrimary,
-            typedValuePrimary,
-            true
-        )
-        val textColor = typedValuePrimary.data
-
-        val typedValueOutline = TypedValue()
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOutline,
-            typedValueOutline,
-            true
-        )
-        val subTextColor = typedValueOutline.data
+        val backgroundColor = getThemeColor(com.google.android.material.R.attr.colorSurface)
+        val textColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)
+        val subTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)
 
         getSharedPreferences(UpcomingWidget.PREFS_NAME, Context.MODE_PRIVATE).edit().apply {
             putInt(UpcomingWidget.PREF_BACKGROUND_COLOR, backgroundColor)

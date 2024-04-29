@@ -3,7 +3,6 @@ package ani.dantotsu.home
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
@@ -21,9 +20,9 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.MediaPageTransformer
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemMangaPageBinding
 import ani.dantotsu.databinding.LayoutTrendingBinding
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.GenreActivity
 import ani.dantotsu.media.MediaAdaptor
@@ -66,10 +65,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
         val materialCardView =
             holder.itemView.findViewById<MaterialCardView>(R.id.userAvatarContainer)
         materialCardView.setCardBackgroundColor(semiTransparentColor)
-        val typedValue = TypedValue()
-        currContext()?.theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
-        val color = typedValue.data
-
+        val color = binding.root.context.getThemeColor(android.R.attr.windowBackground)
         textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000
         materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000)
 

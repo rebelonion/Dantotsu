@@ -2,9 +2,9 @@ package ani.dantotsu.profile
 
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.util.TypedValue
 import androidx.appcompat.app.AppCompatActivity
 import ani.dantotsu.databinding.ActivitySingleStatBinding
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.initActivity
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
@@ -20,9 +20,7 @@ class SingleStatActivity : AppCompatActivity() {
         setContentView(binding.root)
         val chartOptions = chartOptions
         if (chartOptions != null) {
-            val typedvalue = TypedValue()
-            theme.resolveAttribute(android.R.attr.windowBackground, typedvalue, true)
-            chartOptions.chart?.backgroundColor = typedvalue.data
+            chartOptions.chart?.backgroundColor = getThemeColor(android.R.attr.windowBackground)
             binding.chartView.aa_drawChartWithChartOptions(chartOptions)
             requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         } else {

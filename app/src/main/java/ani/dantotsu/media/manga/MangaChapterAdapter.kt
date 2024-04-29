@@ -1,7 +1,6 @@
 package ani.dantotsu.media.manga
 
 import android.app.AlertDialog
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -145,8 +144,6 @@ class MangaChapterAdapter(
     inner class ChapterListViewHolder(val binding: ItemChapterListBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val activeCoroutines = mutableSetOf<String>()
-        private val typedValue1 = TypedValue()
-        private val typedValue2 = TypedValue()
         fun bind(chapterNumber: String, progress: String?) {
             if (progress != null) {
                 binding.itemChapterTitle.visibility = View.VISIBLE
@@ -201,17 +198,6 @@ class MangaChapterAdapter(
         }
 
         init {
-            val theme = currContext()?.theme
-            theme?.resolveAttribute(
-                com.google.android.material.R.attr.colorError,
-                typedValue1,
-                true
-            )
-            theme?.resolveAttribute(
-                com.google.android.material.R.attr.colorPrimary,
-                typedValue2,
-                true
-            )
             itemView.setOnClickListener {
                 if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size)
                     fragment.onMangaChapterClick(arr[bindingAdapterPosition].number)
