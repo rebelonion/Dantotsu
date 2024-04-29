@@ -35,7 +35,7 @@ class AddonDownloader {
                 val md = r.body ?: ""
                 val version = v.ifEmpty { throw Exception("Weird Version : ${r.tagName}") }
 
-                Logger.log("Git Version : $version")
+                Logger.log("Git Version for $repo: $version")
                 Pair(md, version)
             } catch (e: Exception) {
                 Logger.log("Error checking for update")

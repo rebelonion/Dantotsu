@@ -58,7 +58,7 @@ data class Activity(
     @SerialName("siteUrl")
     val siteUrl: String?,
     @SerialName("isLocked")
-    val isLocked: Boolean,
+    val isLocked: Boolean?,
     @SerialName("isSubscribed")
     val isSubscribed: Boolean,
     @SerialName("likeCount")
