@@ -101,21 +101,27 @@ class App : MultiDexApplication() {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
 
-        GlobalScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             animeExtensionManager = Injekt.get()
-            mangaExtensionManager = Injekt.get()
-            novelExtensionManager = Injekt.get()
-            torrentAddonManager = Injekt.get()
-            downloadAddonManager = Injekt.get()
             animeExtensionManager.findAvailableExtensions()
             Logger.log("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
             AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            mangaExtensionManager = Injekt.get()
             mangaExtensionManager.findAvailableExtensions()
             Logger.log("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
             MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            novelExtensionManager = Injekt.get()
             novelExtensionManager.findAvailableExtensions()
             Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
+        }
+        GlobalScope.launch {
+            torrentAddonManager = Injekt.get()
+            downloadAddonManager = Injekt.get()
             torrentAddonManager.init()
             downloadAddonManager.init()
             CommentsAPI.fetchAuthToken()
