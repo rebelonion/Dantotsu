@@ -607,8 +607,6 @@
     <string name="error_loading_discord_user_data">Σφάλμα κατά τη φόρτωση των δεδομένων χρήστη Discord</string>
     <string name="discord_warning"><![CDATA[Με τη σύνδεση, το discord σας θα δείχνει τώρα τι παρακολουθείτε και διαβάζετε στο Dantotsu\n\nΕάν βρίσκεστε σε αόρατη λειτουργία, η σύνδεση θα σας κάνει να συνδεθείτε όταν ανοίξετε το Dantotsu.\n\nΑυτό σπάει τους Όρους Διαφωνίας. \nΑν και το Discord δεν απαγόρευσε ποτέ κανέναν για χρήση της Προσαρμοσμένης Εμπλουτισμένης Παρουσίας (τι χρησιμοποιεί η Dantotsu), εξακολουθείτε να έχετε προειδοποιηθεί.\n\nΗ Dantotsu δεν είναι υπεύθυνη για οτιδήποτε συμβεί στον λογαριασμό σας.]]></string>
     <string name="warning">Προειδοποίηση</string>
-    <string name="view_anime">Προβολή Anime</string>
-    <string name="view_manga">Προβολή Manga</string>
     <string name="force_legacy_installer">Force Legacy Installer</string>
     <string name="extensions_settings">Επέκτασης</string>
     <string name="NSFWExtention">Επέκτασης NSFW</string>
@@ -701,7 +699,6 @@
     <string name="blur_banners">Θάμπωμα πανό</string>
     <string name="blur">Θάμπωμα</string>
     <string name="hide_scroll_bar">Απόκρυψη Scroll Bar</string>
-    <string name="view_on_anilist">Προβολή στο AniList</string>
     <string name="anilist_notification_filters">Φιλτράρισε της Ειδοποιήσεις</string>
     <string name="anilist_notifications_checking_time">Συχνότητα ενημέρωσης ειδοποιήσεων Anilist : %1$s</string>
     <string name="comment_notification_checking_time">Συχνότητα ενημέρωσης ειδοποιήσεων σχολίων : %1$s</string>
@@ -856,4 +853,6 @@
     <string name="cover">%1$s\ [Κάλυμμα]</string>
     <string name="banner">%1$s\ [Πανό]</string>
     <string name="your_story">Your Story</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
 </resources>
