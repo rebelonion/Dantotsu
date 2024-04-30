@@ -851,4 +851,6 @@
     <string name="cover">%1$s\ [Cover]</string>
     <string name="banner">%1$s\ [Banner]</string>
     <string name="your_story">Tu historia</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
 </resources>
