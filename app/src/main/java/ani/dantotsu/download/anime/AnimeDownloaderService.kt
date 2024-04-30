@@ -227,7 +227,7 @@ class AnimeDownloaderService : Service() {
                 ) ?: throw Exception("Failed to create output directory")
 
                 outputDir.findFile("${task.getTaskName()}.mp4")?.delete()
-                val outputFile = outputDir.createFile("video/mp4", "${task.getTaskName()}.mp4")
+                val outputFile = outputDir.createFile("video/x-matroska", "${task.getTaskName()}.mkv")
                     ?: throw Exception("Failed to create output file")
 
                 var percent = 0
@@ -256,7 +256,10 @@ class AnimeDownloaderService : Service() {
 
                 val headers = headersStringBuilder.toString()
                 var request = "-headers $headers "
-                request += "-i ${task.video.file.url} -c copy -bsf:a aac_adtstoasc -tls_verify 0 $path -v trace"
+                request += "-i ${task.video.file.url} -c copy -map 0:v -map 0:a -map 0:s?" +
+                        " -f matroska -timeout 600 -reconnect 1" +
+                        " -reconnect_streamed 1 -allowed_extensions ALL " +
+                        "-tls_verify 0 $path -v trace"
                 Logger.log("Request: $request")
                 val ffTask =
                     ffExtension.executeFFMpeg(request) {
