@@ -850,4 +850,6 @@
     <string name="cover">%1$s\ [कवर]</string>
     <string name="banner">%1$s\ [बैनर]</string>
     <string name="your_story">आपका स्टोरी</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
 </resources>
