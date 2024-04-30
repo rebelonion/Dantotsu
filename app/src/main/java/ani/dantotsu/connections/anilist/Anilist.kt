@@ -202,7 +202,6 @@ object Anilist {
                 if (!json.text.startsWith("{")) {
                     throw Exception(currContext()?.getString(R.string.anilist_down))
                 }
-                if (show) Logger.log("Anilist Response: ${json.text}")
                 json.parsed()
             } else null
         } catch (e: Exception) {

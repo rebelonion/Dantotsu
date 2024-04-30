@@ -573,7 +573,7 @@ class MediaInfoFragment : Fragment() {
                         parent.addView(root)
                     }
                 }
-                val users = media.users!!
+                val users: ArrayList<User> = media.users ?: arrayListOf()
                 if (Anilist.token != null && media.userStatus != null) {
                     users.add(0,
                         User(
