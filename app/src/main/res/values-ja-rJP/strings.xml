@@ -607,8 +607,6 @@
     <string name="error_loading_discord_user_data">Discordユーザーデータの読み込みエラー</string>
     <string name="discord_warning"><![CDATA[ログインすると、DiscordにDantotsuで視聴しているものが表示されます\n\nオフラインモードの場合、Dantotsuを開くとオンラインになります。\n\nこれはDiscordの利用規約に違反します。\nDantotsuは何があってもアカウントに責任を負いません。]]></string>
     <string name="warning">警告</string>
-    <string name="view_anime">アニメを表示</string>
-    <string name="view_manga">マンガを表示</string>
     <string name="force_legacy_installer">従来のインストーラーを強制</string>
     <string name="extensions_settings">拡張機能</string>
     <string name="NSFWExtention">NSFW拡張機能</string>
@@ -701,7 +699,6 @@
     <string name="blur_banners">バナーをぼかす</string>
     <string name="blur">ぼかし</string>
     <string name="hide_scroll_bar">スクロールバーを非表示にする</string>
-    <string name="view_on_anilist">AniListで表示</string>
     <string name="anilist_notification_filters">通知のフィルター</string>
     <string name="anilist_notifications_checking_time">AniList通知の確認頻度：%1$s</string>
     <string name="comment_notification_checking_time">コメント通知の確認頻度：%1$s</string>
@@ -856,4 +853,6 @@
     <string name="cover">%1$s\ [カバー]</string>
     <string name="banner">%1$s\ [バナー]</string>
     <string name="your_story">Your Story</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
 </resources>
