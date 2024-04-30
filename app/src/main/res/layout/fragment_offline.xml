@@ -64,7 +64,7 @@
 
         <Button
             android:id="@+id/refreshButton"
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="64dp"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_margin="128dp"

@@ -16,6 +16,7 @@ import ani.dantotsu.databinding.ItemEpisodeCompactBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.setAnimation
+import ani.dantotsu.util.customAlertDialog
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -209,16 +210,15 @@ class MangaChapterAdapter(
                         fragment.onMangaChapterStopDownloadClick(chapterNumber)
                         return@setOnClickListener
                     } else if (downloadedChapters.contains(chapterNumber)) {
-                        val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
-                        builder.setTitle("Delete Chapter")
-                        builder.setMessage("Are you sure you want to delete ${chapterNumber}?")
-                        builder.setPositiveButton("Yes") { _, _ ->
-                            fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
+                        it.context.customAlertDialog().apply {
+                            setTitle("Delete Chapter")
+                            setMessage("Are you sure you want to delete ${chapterNumber}?")
+                            setPosButton(R.string.delete) {
+                                fragment.onMangaChapterRemoveDownloadClick(chapterNumber)
+                            }
+                            setNegButton(R.string.cancel)
+                            show()
                         }
-                        builder.setNegativeButton("No") { _, _ ->
-                        }
-                        val dialog = builder.show()
-                        dialog.window?.setDimAmount(0.8f)
                         return@setOnClickListener
                     } else {
                         fragment.onMangaChapterDownloadClick(chapterNumber)
@@ -228,20 +228,20 @@ class MangaChapterAdapter(
             }
             binding.itemDownload.setOnLongClickListener {
                 //Alert dialog asking for the number of chapters to download
-                val alertDialog = AlertDialog.Builder(currContext(), R.style.MyPopup)
-                alertDialog.setTitle("Multi Chapter Downloader")
-                alertDialog.setMessage("Enter the number of chapters to download")
-                val input = NumberPicker(currContext())
-                input.minValue = 1
-                input.maxValue = itemCount - bindingAdapterPosition
-                input.value = 1
-                alertDialog.setView(input)
-                alertDialog.setPositiveButton("OK") { _, _ ->
-                    downloadNChaptersFrom(bindingAdapterPosition, input.value)
+                it.context.customAlertDialog().apply {
+                    setTitle("Multi Chapter Downloader")
+                    setMessage("Enter the number of chapters to download")
+                    val input = NumberPicker(currContext())
+                    input.minValue = 1
+                    input.maxValue = itemCount - bindingAdapterPosition
+                    input.value = 1
+                    setCustomView(input)
+                    setPosButton("OK") {
+                        downloadNChaptersFrom(bindingAdapterPosition, input.value)
+                    }
+                    setNegButton("Cancel")
+                    show()
                 }
-                alertDialog.setNegativeButton("Cancel") { dialog, _ -> dialog.cancel() }
-                val dialog = alertDialog.show()
-                dialog.window?.setDimAmount(0.8f)
                 true
             }
 

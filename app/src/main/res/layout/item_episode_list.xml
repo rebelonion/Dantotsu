@@ -115,7 +115,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
+                android:layout_marginVertical="8dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:minHeight="92dp"
@@ -147,9 +147,8 @@
 
             <ImageButton
                 android:id="@+id/itemDownload"
-                android:layout_width="24dp"
+                android:layout_width="48dp"
                 android:layout_height="48dp"
-                android:layout_marginEnd="5dp"
                 android:background="@android:color/transparent"
                 app:srcCompat="@drawable/ic_download_24"
                 app:tint="?attr/colorOnBackground"

@@ -14,7 +14,9 @@ import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
@@ -363,7 +365,6 @@ constructor(
                 .putExtra("userId", story.userId),
                 null)
         }
-
         fun visible(isList: Boolean){
             val visible = if (isList) View.VISIBLE else View.GONE
             val gone = if (isList) View.GONE else View.VISIBLE
@@ -400,7 +401,13 @@ constructor(
                 binding.coverImage.setOnClickListener{
                     ContextCompat.startActivity(context, Intent(context, MediaDetailsActivity::class.java)
                         .putExtra("mediaId", story.media?.id),
-                        null)
+                        ActivityOptionsCompat.makeSceneTransitionAnimation(
+                            activity,
+                            binding.coverImage,
+                            ViewCompat.getTransitionName(binding.coverImage)!!
+                        ).toBundle()
+                        )
+
                 }
 
             }

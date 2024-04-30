@@ -19,6 +19,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.customAlertDialog
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
@@ -80,23 +81,16 @@ class SettingsMangaActivity : AppCompatActivity() {
                         desc = getString(R.string.purge_manga_downloads_desc),
                         icon = R.drawable.ic_round_delete_24,
                         onClick = {
-                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.purge_manga_downloads)
-                                .setMessage(
-                                    getString(
-                                        R.string.purge_confirm,
-                                        getString(R.string.manga)
-                                    )
-                                )
-                                .setPositiveButton(R.string.yes) { dialog, _ ->
+                            context.customAlertDialog().apply {
+                                setTitle(R.string.purge_manga_downloads)
+                                setMessage(R.string.purge_confirm, getString(R.string.manga))
+                                setPosButton(R.string.yes, onClick = {
                                     val downloadsManager = Injekt.get<DownloadsManager>()
                                     downloadsManager.purgeDownloads(MediaType.MANGA)
-                                    dialog.dismiss()
-                                }.setNegativeButton(R.string.no) { dialog, _ ->
-                                    dialog.dismiss()
-                                }.create()
-                            dialog.window?.setDimAmount(0.8f)
-                            dialog.show()
+                                })
+                                setNegButton(R.string.no)
+                                show()
+                            }
                         }
 
                     ),
@@ -106,23 +100,16 @@ class SettingsMangaActivity : AppCompatActivity() {
                         desc = getString(R.string.purge_novel_downloads_desc),
                         icon = R.drawable.ic_round_delete_24,
                         onClick = {
-                            val dialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.purge_novel_downloads)
-                                .setMessage(
-                                    getString(
-                                        R.string.purge_confirm,
-                                        getString(R.string.novels)
-                                    )
-                                )
-                                .setPositiveButton(R.string.yes) { dialog, _ ->
+                            context.customAlertDialog().apply {
+                                setTitle(R.string.purge_novel_downloads)
+                                setMessage(R.string.purge_confirm, getString(R.string.novels))
+                                setPosButton(R.string.yes) {
                                     val downloadsManager = Injekt.get<DownloadsManager>()
                                     downloadsManager.purgeDownloads(MediaType.NOVEL)
-                                    dialog.dismiss()
-                                }.setNegativeButton(R.string.no) { dialog, _ ->
-                                    dialog.dismiss()
-                                }.create()
-                            dialog.window?.setDimAmount(0.8f)
-                            dialog.show()
+                                }
+                                setNegButton(R.string.no)
+                                show()
+                            }
                         }
                     ),
                     Settings(
