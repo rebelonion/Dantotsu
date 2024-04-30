@@ -613,8 +613,6 @@
     <string name="error_loading_discord_user_data">ডিসকর্ড ব্যবহারকারীর তথ্য লোড করার সময় ত্রুটি</string>
     <string name="discord_warning"><![CDATA[লগইন করার মাধ্যমে, আপনার ডিসকর্ড এখন দেখাবে যে আপনি কি দেখছেন এবং ড্যান্টোটসুতে কি পড়ছেন\n\nআপনি যদি গোপন মোডে থাকেন, তাহলে ড্যান্টোটসু খোলা করার সময় আপনি অনলাইন হয়ে যাবেন।\n\nএটি ডিসকর্ড টস ভঙ্গি করে।\n\nতবে ডিসকর্ড কোনও ব্যক্তিকে কাস্টম রিচ প্রিজেন্স (যেটি ড্যান্টোটসু ব্যবহার করে) ব্যবহার করার জন্য কখনই কারোকে ব্যান করেনি। তবে আপনাকে এখনও সতর্ক করা হয়েছে।\n\nড্যান্টোটসু আপনার অ্যাকাউন্টে কোনও ঘটনা ঘটে না এটি দায়বদ্ধ নয়।]]></string>
     <string name="warning">সতর্কতা</string>
-    <string name="view_anime">অ্যানিমে দেখুন</string>
-    <string name="view_manga">ম্যাঙ্গা দেখুন</string>
     <string name="force_legacy_installer">লেগেসি ইনস্টলার ফোর্স করুন</string>
     <string name="extensions_settings">এক্সটেনশন</string>
     <string name="NSFWExtention">এনএসএফডব্লিউ এক্সটেনশন</string>
@@ -707,7 +705,6 @@
     <string name="blur_banners">ব্লার ব্যানার</string>
     <string name="blur">ব্লার</string>
     <string name="hide_scroll_bar">স্ক্রল বার লুকান</string>
-    <string name="view_on_anilist">অনিলিস্টে দেখুন</string>
     <string name="anilist_notification_filters">Filter Notifications</string>
     <string name="anilist_notifications_checking_time">অনিলিস্ট নোটিফিকেশন আপডেট সময়সূচি: %1$s</string>
     <string name="comment_notification_checking_time">মন্তব্য নোটিফিকেশন আপডেট সময়সূচি: %1$s</string>
@@ -862,4 +859,6 @@
     <string name="cover">%1$s\ [Cover]</string>
     <string name="banner">%1$s\ [Banner]</string>
     <string name="your_story">Your Story</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
 </resources>
