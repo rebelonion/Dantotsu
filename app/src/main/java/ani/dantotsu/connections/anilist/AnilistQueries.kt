@@ -603,10 +603,11 @@ class AnilistQueries {
                 val activities = listOf(
                     response.data.page1.activities,
                     response.data.page2.activities
-                ).flatten()
+                ).asSequence().flatten()
                     .filter { it.typename != "MessageActivity" }
+                    .filter { if (Anilist.adult) true else it.media?.isAdult == false }
+                    .filter { it.createdAt * 1000L > threeDaysAgo }.toList()
                     .sortedByDescending { it.createdAt }
-                    .filter { it.createdAt * 1000L > threeDaysAgo }
                 val anilistActivities = mutableListOf<User>()
                 val groupedActivities = activities.groupBy { it.userId }
 
@@ -1584,7 +1585,7 @@ Page(page:$page,perPage:50) {
         )
     }
     private fun status(page: Int = 1): String {
-        return """Page(page:$page,perPage:50){activities(isFollowing: true,sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{extraLarge medium large}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id type createdAt}}}"""
+        return """Page(page:$page,perPage:50){activities(isFollowing: true,sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id isAdult title{english romaji native userPreferred}bannerImage coverImage{extraLarge medium large}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id type createdAt}}}"""
     }
 
     suspend fun getUpcomingAnime(id: String): List<Media> {

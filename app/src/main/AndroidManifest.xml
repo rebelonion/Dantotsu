@@ -218,6 +218,9 @@
             android:launchMode="singleTask" />
         <activity android:name=".media.GenreActivity" />
         <activity
+            android:name=".media.MediaListViewActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".media.MediaDetailsActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.Dantotsu.NeverCutout"

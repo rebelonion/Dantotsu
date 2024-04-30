@@ -573,23 +573,23 @@ class MediaInfoFragment : Fragment() {
                         parent.addView(root)
                     }
                 }
-                val users: ArrayList<User> = media.users ?: arrayListOf()
-                if (Anilist.token != null && media.userStatus != null) {
-                    users.add(0,
-                        User(
-                            id = Anilist.userid!!,
-                            name = getString(R.string.your_progress),
-                            pfp = Anilist.avatar,
-                            banner = "",
-                            status = media.userStatus,
-                            score = media.userScore.toFloat(),
-                            progress = media.userProgress,
-                            totalEpisodes = media.anime?.totalEpisodes ?: media.manga?.totalChapters,
-                            nextAiringEpisode = media.anime?.nextAiringEpisode
-                        )
-                    )
-                }
                 if (!media.users.isNullOrEmpty() && !offline) {
+                    val users: ArrayList<User> = media.users ?: arrayListOf()
+                    if (Anilist.token != null && media.userStatus != null) {
+                        users.add(0,
+                            User(
+                                id = Anilist.userid!!,
+                                name = getString(R.string.your_progress),
+                                pfp = Anilist.avatar,
+                                banner = "",
+                                status = media.userStatus,
+                                score = media.userScore.toFloat(),
+                                progress = media.userProgress,
+                                totalEpisodes = media.anime?.totalEpisodes ?: media.manga?.totalChapters,
+                                nextAiringEpisode = media.anime?.nextAiringEpisode
+                            )
+                        )
+                    }
                     ItemTitleRecyclerBinding.inflate(
                         LayoutInflater.from(context),
                         parent,

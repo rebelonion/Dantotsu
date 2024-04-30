@@ -396,7 +396,7 @@ constructor(
                     }
                 binding.infoText.text = text
                 val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
-                blurImage(if (bannerAnimations)binding.contentImageViewKen else binding.contentImageView, story.media?.bannerImage ?: story.media?.coverImage?.extraLarge)
+                blurImage(if (bannerAnimations) binding.contentImageViewKen else binding.contentImageView, story.media?.bannerImage ?: story.media?.coverImage?.extraLarge)
                 binding.coverImage.loadImage(story.media?.coverImage?.extraLarge)
                 binding.coverImage.setOnClickListener{
                     ContextCompat.startActivity(context, Intent(context, MediaDetailsActivity::class.java)
@@ -406,7 +406,7 @@ constructor(
                             binding.coverImage,
                             ViewCompat.getTransitionName(binding.coverImage)!!
                         ).toBundle()
-                        )
+                    )
 
                 }
 
