@@ -2,11 +2,15 @@ package ani.dantotsu.media
 
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.GridLayoutManager
 import ani.dantotsu.databinding.ActivityMediaListViewBinding
 import ani.dantotsu.getThemeColor
 import ani.dantotsu.initActivity
+import ani.dantotsu.navBarHeight
+import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import java.util.ArrayList
 
@@ -27,7 +31,10 @@ class MediaListViewActivity: AppCompatActivity() {
         window.navigationBarColor = primaryColor
         binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(primaryTextColor)
-
+        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight
+            bottomMargin = navBarHeight
+        }
         val screenWidth = resources.displayMetrics.run { widthPixels / density }
         binding.listTitle.text = intent.getStringExtra("title")
         binding.mediaRecyclerView.adapter = MediaAdaptor(0, mediaList, this)
