@@ -608,8 +608,6 @@
     <string name="error_loading_discord_user_data">Erreur lors du chargement des données utilisateur Discord</string>
     <string name="discord_warning"><![CDATA[En vous connectant, votre Discord montrera maintenant ce que vous regardez et lisez sur Dantotsu\n\nSi vous êtes en mode invisible, vous serez en ligne lorsque vous ouvrirez Dantotsu.\n\nCela enfreint les conditions d'utilisation de Discord. \nBien que Discord n'ait jamais banni personne pour l'utilisation de la Présence Personnalisée (ce que Dantotsu utilise), vous êtes quand même averti.\n\nDantotsu n'est pas responsable de ce qui arrive à votre compte.]]></string>
     <string name="warning">Avertissement</string>
-    <string name="view_anime">Voir Anime</string>
-    <string name="view_manga">Voir Manga</string>
     <string name="force_legacy_installer">Forcer l\'Installation Héritée</string>
     <string name="extensions_settings">Extensions</string>
     <string name="NSFWExtention">Extensions NSFW</string>
@@ -702,7 +700,6 @@
     <string name="blur_banners">Bannières Floues</string>
     <string name="blur">Flou</string>
     <string name="hide_scroll_bar">Masquer la Barre de Défilement</string>
-    <string name="view_on_anilist">Voir sur AniList</string>
     <string name="anilist_notification_filters">Filtrer les notifications</string>
     <string name="anilist_notifications_checking_time">Fréquence de mise à jour des notifications Anilist : %1$s</string>
     <string name="comment_notification_checking_time">Fréquence de mise à jour des notifications de commentaires : %1$s</string>
@@ -857,4 +854,6 @@
     <string name="cover">%1$s\ [Couverture]</string>
     <string name="banner">%1$s\ [Bannière]</string>
     <string name="your_story">Your Story</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
 </resources>
