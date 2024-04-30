@@ -830,8 +830,9 @@
 
                     <TextView
                         android:id="@+id/homePlannedManga"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:layout_marginStart="24dp"
                         android:fontFamily="@font/poppins_bold"
                         android:padding="8dp"

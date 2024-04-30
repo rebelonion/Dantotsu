@@ -3,13 +3,19 @@ package ani.dantotsu.media
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.GridLayoutManager
+import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityMediaListViewBinding
 import ani.dantotsu.getThemeColor
+import ani.dantotsu.hideSystemBarsExtendView
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import java.util.ArrayList
@@ -31,9 +37,18 @@ class MediaListViewActivity: AppCompatActivity() {
         window.navigationBarColor = primaryColor
         binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(primaryTextColor)
-        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            topMargin = statusBarHeight
-            bottomMargin = navBarHeight
+        if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
+            this.window.statusBarColor =
+                ContextCompat.getColor(this, R.color.nav_bg_inv)
+            binding.root.fitsSystemWindows = true
+
+        } else {
+            binding.root.fitsSystemWindows = false
+            requestWindowFeature(Window.FEATURE_NO_TITLE)
+            hideSystemBarsExtendView()
+            binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin = statusBarHeight
+            }
         }
         val screenWidth = resources.displayMetrics.run { widthPixels / density }
         binding.listTitle.text = intent.getStringExtra("title")

@@ -211,7 +211,8 @@ class HomeFragment : Fragment() {
             progress: View,
             empty: View,
             title: View,
-            more: View
+            more: View,
+            string: String
         ) {
             container.visibility = View.VISIBLE
             progress.visibility = View.VISIBLE
@@ -235,7 +236,7 @@ class HomeFragment : Fragment() {
                             MediaListViewActivity.mediaList = it
                             ContextCompat.startActivity(
                                 requireActivity(), Intent(requireActivity(), MediaListViewActivity::class.java)
-                                    .putExtra("title", getString(R.string.continue_watching)),
+                                    .putExtra("title", string),
                                 null
                             )
                         }
@@ -246,7 +247,7 @@ class HomeFragment : Fragment() {
                     } else {
                         empty.visibility = View.VISIBLE
                     }
-                    more?.visibility = View.VISIBLE
+                    more.visibility = View.VISIBLE
                     title.visibility = View.VISIBLE
                     title.startAnimation(setSlideUp())
                     progress.visibility = View.GONE
@@ -263,7 +264,8 @@ class HomeFragment : Fragment() {
             binding.homeWatchingProgressBar,
             binding.homeWatchingEmpty,
             binding.homeContinueWatch,
-            binding.homeContinueWatchMore
+            binding.homeContinueWatchMore,
+            getString(R.string.continue_watching)
         )
         binding.homeWatchingBrowseButton.setOnClickListener {
             bottomBar.selectTabAt(0)
@@ -276,7 +278,8 @@ class HomeFragment : Fragment() {
             binding.homeFavAnimeProgressBar,
             binding.homeFavAnimeEmpty,
             binding.homeFavAnime,
-            binding.homeFavAnimeMore
+            binding.homeFavAnimeMore,
+            getString(R.string.fav_anime)
 
         )
 
@@ -287,7 +290,8 @@ class HomeFragment : Fragment() {
             binding.homePlannedAnimeProgressBar,
             binding.homePlannedAnimeEmpty,
             binding.homePlannedAnime,
-            binding.homePlannedAnimeMore
+            binding.homePlannedAnimeMore,
+            getString(R.string.planned_anime)
         )
         binding.homePlannedAnimeBrowseButton.setOnClickListener {
             bottomBar.selectTabAt(0)
@@ -300,7 +304,8 @@ class HomeFragment : Fragment() {
             binding.homeReadingProgressBar,
             binding.homeReadingEmpty,
             binding.homeContinueRead,
-            binding.homeContinueReadMore
+            binding.homeContinueReadMore,
+            getString(R.string.continue_reading)
         )
         binding.homeReadingBrowseButton.setOnClickListener {
             bottomBar.selectTabAt(2)
@@ -313,7 +318,8 @@ class HomeFragment : Fragment() {
             binding.homeFavMangaProgressBar,
             binding.homeFavMangaEmpty,
             binding.homeFavManga,
-            binding.homeFavMangaMore
+            binding.homeFavMangaMore,
+            getString(R.string.fav_manga)
         )
 
         initRecyclerView(
@@ -323,7 +329,8 @@ class HomeFragment : Fragment() {
             binding.homePlannedMangaProgressBar,
             binding.homePlannedMangaEmpty,
             binding.homePlannedManga,
-            binding.homePlannedMangaMore
+            binding.homePlannedMangaMore,
+            getString(R.string.planned_manga)
         )
         binding.homePlannedMangaBrowseButton.setOnClickListener {
             bottomBar.selectTabAt(2)
@@ -336,7 +343,8 @@ class HomeFragment : Fragment() {
             binding.homeRecommendedProgressBar,
             binding.homeRecommendedEmpty,
             binding.homeRecommended,
-            binding.homeRecommendedMore
+            binding.homeRecommendedMore,
+            getString(R.string.recommended)
         )
         binding.homeUserStatusContainer.visibility = View.VISIBLE
         binding.homeUserStatusProgressBar.visibility = View.VISIBLE
