@@ -24,7 +24,7 @@ class DownloadAddonManager(
     override var name: String = "Download Addon"
     override var type = AddonType.DOWNLOAD
 
-    private val _isInitialized = MutableLiveData<Boolean>().apply { value = false }
+    private val _isInitialized = MutableLiveData<Boolean>().apply { postValue(false) }
     val isInitialized: LiveData<Boolean> = _isInitialized
 
     private var error: String? = null

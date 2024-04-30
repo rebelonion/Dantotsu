@@ -25,7 +25,6 @@ import ani.dantotsu.profile.User
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
-import ani.dantotsu.util.Logger
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.runBlocking
@@ -413,7 +412,7 @@ class AnilistQueries {
         return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: PLANNING${if (type == "ANIME") ", sort: MEDIA_POPULARITY_DESC" else ""} ) { lists { entries { media { id mediaListEntry { progress private score(format:POINT_100) status } idMal type isAdult popularity status(version: 2) chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } }"""
     }
 
-    suspend fun initHomePage(): Map<String, ArrayList<Media>> {
+    suspend fun initHomePage(): Map<String, ArrayList<*>> {
         val toShow: List<Boolean> =
             PrefManager.getVal(PrefName.HomeLayout) // anime continue, anime fav, anime planned, manga continue, manga fav, manga planned, recommendations
         var query = """{"""
@@ -448,11 +447,11 @@ class AnilistQueries {
                 "ANIME"
             )
         }, recommendationPlannedQueryManga: ${recommendationPlannedQuery("MANGA")}"""
+        if (toShow.getOrNull(7) == true) query += "Page1:${status(1)}Page2:${status(2)}"
         query += """}""".trimEnd(',')
 
         val response = executeQuery<Query.HomePageMedia>(query, show = true)
-        Logger.log(response.toString())
-        val returnMap = mutableMapOf<String, ArrayList<Media>>()
+        val returnMap = mutableMapOf<String, ArrayList<*>>()
         fun current(type: String) {
             val subMap = mutableMapOf<Int, Media>()
             val returnArray = arrayListOf<Media>()
@@ -594,6 +593,45 @@ class AnilistQueries {
             val list = ArrayList(subMap.values.toList())
             list.sortByDescending { it.meanScore }
             returnMap["recommendations"] = list
+        }
+        if (toShow.getOrNull(7) == true) {
+            val list = mutableListOf<User>()
+            val threeDaysAgo = Calendar.getInstance().apply {
+                add(Calendar.DAY_OF_MONTH, -3)
+            }.timeInMillis
+            if (response?.data?.page1 != null && response.data.page2 != null) {
+                val activities = listOf(
+                    response.data.page1.activities,
+                    response.data.page2.activities
+                ).flatten()
+                    .filter { it.typename != "MessageActivity" }
+                    .sortedByDescending { it.createdAt }
+                    .filter { it.createdAt * 1000L > threeDaysAgo }
+                val anilistActivities = mutableListOf<User>()
+                val groupedActivities = activities.groupBy { it.userId }
+
+                groupedActivities.forEach { (_, userActivities) ->
+                    val user = userActivities.firstOrNull()?.user
+                    if (user != null) {
+                        val userToAdd = User(
+                            user.id,
+                            user.name ?: "",
+                            user.avatar?.medium,
+                            user.bannerImage,
+                            activity = userActivities.sortedBy { it.createdAt }.toList()
+                        )
+                        if (user.id == Anilist.userid) {
+                            anilistActivities.add(0, userToAdd)
+                        } else {
+                            list.add(userToAdd)
+                        }
+                    }
+                }
+
+
+                list.addAll(0, anilistActivities)
+                returnMap["status"] = ArrayList(list)
+            }
         }
         return returnMap
     }
@@ -1546,48 +1584,9 @@ Page(page:$page,perPage:50) {
         )
     }
     private fun status(page: Int = 1): String {
-        return """Page(page:$page,perPage:50){activities(isFollowing: true,sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{extraLarge medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id recipientId messengerId type replyCount likeCount message(asHtml:true)isLocked isSubscribed isLiked isPrivate siteUrl createdAt recipient{id name bannerImage avatar{medium large}}messenger{id name bannerImage avatar{medium large}}replies{id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}likes{id name bannerImage avatar{medium large}}}}}"""
+        return """Page(page:$page,perPage:50){activities(isFollowing: true,sort:ID_DESC){__typename ... on TextActivity{id userId type replyCount text(asHtml:true)siteUrl isLocked isSubscribed likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}... on ListActivity{id userId type replyCount status progress siteUrl isLocked isSubscribed likeCount isLiked isPinned createdAt user{id name bannerImage avatar{medium large}}media{id title{english romaji native userPreferred}bannerImage coverImage{extraLarge medium large}}likes{id name bannerImage avatar{medium large}}}... on MessageActivity{id type createdAt}}}"""
     }
-    suspend fun getStatus(
-    ):  MutableList<User> {
-        fun query() = """{
-            Page1:${status(1)}
-            Page2:${status(2)}
-        }""".trimIndent()
-        val list = mutableListOf<User>()
-        val threeDaysAgo = Calendar.getInstance().apply {
-            add(Calendar.DAY_OF_MONTH, -3)
-        }.timeInMillis
-        executeQuery<Social>(query(), force = true)?.data?.let { data ->
-            val activities = listOf(data.page1.activities, data.page2.activities).flatten()
-                .sortedByDescending { it.createdAt }
-                .filter { it.createdAt * 1000L > threeDaysAgo }
-            val anilistActivities = mutableListOf<User>()
-            val groupedActivities = activities.groupBy { it.userId }
 
-            groupedActivities.forEach { (_, userActivities) ->
-                val user = userActivities.firstOrNull()?.user
-                if (user != null) {
-                    val userToAdd = User(
-                        user.id,
-                        user.name ?: "",
-                        user.avatar?.medium,
-                        user.bannerImage,
-                        activity = userActivities.sortedBy { it.createdAt }.toList()
-                    )
-                    if (user.id == Anilist.userid) {
-                        anilistActivities.add(0, userToAdd)
-                    } else {
-                        list.add(userToAdd)
-                    }
-                }
-            }
-
-
-            list.addAll(0, anilistActivities)
-        }
-        return list
-    }
     suspend fun getUpcomingAnime(id: String): List<Media> {
         val res = executeQuery<Query.MediaListCollection>(
             """{MediaListCollection(userId:$id,type:ANIME){lists{name entries{media{id,isFavourite,title{userPreferred,romaji}coverImage{medium}nextAiringEpisode{timeUntilAiring}}}}}}""",

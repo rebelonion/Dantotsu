@@ -282,8 +282,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             val mangaTitles = downloadManager.mangaDownloadedTypes.map { it.titleName.findValidName() }.distinct()
             val newMangaDownloads = mutableListOf<OfflineMangaModel>()
             for (title in mangaTitles) {
-                val tDownloads = downloadManager.mangaDownloadedTypes.filter { it.titleName == title }
-                val download = tDownloads.first()
+                val tDownloads = downloadManager.mangaDownloadedTypes.filter { it.titleName.findValidName() == title }
+                val download = tDownloads.firstOrNull() ?: continue
                 val offlineMangaModel = loadOfflineMangaModel(download)
                 newMangaDownloads += offlineMangaModel
             }
@@ -291,8 +291,8 @@ class OfflineMangaFragment : Fragment(), OfflineMangaSearchListener {
             val novelTitles = downloadManager.novelDownloadedTypes.map { it.titleName }.distinct()
             val newNovelDownloads = mutableListOf<OfflineMangaModel>()
             for (title in novelTitles) {
-                val tDownloads = downloadManager.novelDownloadedTypes.filter { it.titleName == title }
-                val download = tDownloads.first()
+                val tDownloads = downloadManager.novelDownloadedTypes.filter { it.titleName.findValidName() == title }
+                val download = tDownloads.firstOrNull() ?: continue
                 val offlineMangaModel = loadOfflineMangaModel(download)
                 newNovelDownloads += offlineMangaModel
             }

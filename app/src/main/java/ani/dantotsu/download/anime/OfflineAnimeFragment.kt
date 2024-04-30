@@ -291,8 +291,8 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             val animeTitles = downloadManager.animeDownloadedTypes.map { it.titleName.findValidName() }.distinct()
             val newAnimeDownloads = mutableListOf<OfflineAnimeModel>()
             for (title in animeTitles) {
-                val tDownloads = downloadManager.animeDownloadedTypes.filter { it.titleName == title }
-                val download = tDownloads.first()
+                val tDownloads = downloadManager.animeDownloadedTypes.filter { it.titleName.findValidName() == title }
+                val download = tDownloads.firstOrNull() ?: continue
                 val offlineAnimeModel = loadOfflineAnimeModel(download)
                 newAnimeDownloads += offlineAnimeModel
             }

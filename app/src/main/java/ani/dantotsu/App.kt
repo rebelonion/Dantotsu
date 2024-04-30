@@ -28,7 +28,9 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import logcat.AndroidLogcatLogger
@@ -57,6 +59,7 @@ class App : MultiDexApplication() {
 
     val mFTActivityLifecycleCallbacks = FTActivityLifecycleCallbacks()
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
 
@@ -98,43 +101,35 @@ class App : MultiDexApplication() {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
 
-        animeExtensionManager = Injekt.get()
-        mangaExtensionManager = Injekt.get()
-        novelExtensionManager = Injekt.get()
-        torrentAddonManager = Injekt.get()
-        downloadAddonManager = Injekt.get()
-
-        val animeScope = CoroutineScope(Dispatchers.Default)
-        animeScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            animeExtensionManager = Injekt.get()
             animeExtensionManager.findAvailableExtensions()
             Logger.log("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
             AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
         }
-        val mangaScope = CoroutineScope(Dispatchers.Default)
-        mangaScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            mangaExtensionManager = Injekt.get()
             mangaExtensionManager.findAvailableExtensions()
             Logger.log("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
             MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
-        val novelScope = CoroutineScope(Dispatchers.Default)
-        novelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            novelExtensionManager = Injekt.get()
             novelExtensionManager.findAvailableExtensions()
             Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }
-        val addonScope = CoroutineScope(Dispatchers.Default)
-        addonScope.launch {
+        GlobalScope.launch {
+            torrentAddonManager = Injekt.get()
+            downloadAddonManager = Injekt.get()
             torrentAddonManager.init()
             downloadAddonManager.init()
-        }
-        val commentsScope = CoroutineScope(Dispatchers.Default)
-        commentsScope.launch {
             CommentsAPI.fetchAuthToken()
-        }
 
-        val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
-        val scheduler = TaskScheduler.create(this, useAlarmManager)
-        scheduler.scheduleAllTasks(this)
+            val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
+            val scheduler = TaskScheduler.create(this@App, useAlarmManager)
+            scheduler.scheduleAllTasks(this@App)
+        }
     }
 
     private fun setupNotificationChannels() {

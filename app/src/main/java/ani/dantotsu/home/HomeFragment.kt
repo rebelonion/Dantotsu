@@ -46,6 +46,7 @@ import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -75,7 +76,9 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val scope = lifecycleScope
+        Logger.log("HomeFragment")
         fun load() {
+            Logger.log("Loading HomeFragment")
             if (activity != null && _binding != null) lifecycleScope.launch(Dispatchers.Main) {
                 binding.homeUserName.text = Anilist.username
                 binding.homeUserEpisodesWatched.text = Anilist.episodesWatched.toString()
@@ -315,7 +318,7 @@ class HomeFragment : Fragment() {
             binding.homeRecommendedEmpty,
             binding.homeRecommended
         )
-        binding.homeUserStatusContainer.visibility =View.VISIBLE
+        binding.homeUserStatusContainer.visibility = View.VISIBLE
         binding.homeUserStatusProgressBar.visibility = View.VISIBLE
         binding.homeUserStatusRecyclerView.visibility = View.GONE
         model.getUserStatus().observe(viewLifecycleOwner) {
@@ -391,13 +394,12 @@ class HomeFragment : Fragment() {
                         }
                         model.loaded = true
                         model.setListImages()
+                        Logger.log("HomeFragment: Refreshing")
                         var empty = true
                         val homeLayoutShow: List<Boolean> =
                             PrefManager.getVal(PrefName.HomeLayout)
-                        runBlocking {
-                            if (homeLayoutShow.getOrNull(7) == true) model.initUserStatus()
-                            model.initHomePage()
-                        }
+                        model.initHomePage()
+
                         (array.indices).forEach { i ->
                             if (homeLayoutShow.elementAt(i)) {
                                 empty = false

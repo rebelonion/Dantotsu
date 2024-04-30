@@ -25,7 +25,7 @@ class TorrentAddonManager(
     override var type: AddonType = AddonType.TORRENT
     var torrentHash: String? = null
 
-    private val _isInitialized = MutableLiveData<Boolean>().apply { value = false }
+    private val _isInitialized = MutableLiveData<Boolean>().apply { postValue(false) }
     val isInitialized: LiveData<Boolean> = _isInitialized
 
     private var error: String? = null

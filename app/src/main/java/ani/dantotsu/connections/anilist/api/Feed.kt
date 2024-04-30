@@ -46,7 +46,7 @@ data class Activity(
     @SerialName("type")
     val type: String,
     @SerialName("replyCount")
-    val replyCount: Int,
+    val replyCount: Int = 0,
     @SerialName("status")
     val status: String?,
     @SerialName("progress")
@@ -58,9 +58,9 @@ data class Activity(
     @SerialName("siteUrl")
     val siteUrl: String?,
     @SerialName("isLocked")
-    val isLocked: Boolean,
+    val isLocked: Boolean?,
     @SerialName("isSubscribed")
-    val isSubscribed: Boolean,
+    val isSubscribed: Boolean?,
     @SerialName("likeCount")
     var likeCount: Int?,
     @SerialName("isLiked")

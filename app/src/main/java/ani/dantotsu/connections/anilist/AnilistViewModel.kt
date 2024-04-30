@@ -23,16 +23,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 suspend fun getUserId(context: Context, block: () -> Unit) {
-    CoroutineScope(Dispatchers.IO).launch {
-        val token = PrefManager.getVal(PrefName.DiscordToken, null as String?)
-        val userid = PrefManager.getVal(PrefName.DiscordId, null as String?)
-        if (userid == null && token != null) {
-            /*if (!Discord.getUserData())
-                snackString(context.getString(R.string.error_loading_discord_user_data))*/
-            //TODO: Discord.getUserData()
-        }
-    }
-
     val anilist = if (Anilist.userid == null && Anilist.token != null) {
         if (Anilist.query.getUserData()) {
             tryWithSuspend {
@@ -91,25 +81,22 @@ class AnilistHomeViewModel : ViewModel() {
 
     fun getRecommendation(): LiveData<ArrayList<Media>> = recommendation
 
+    @Suppress("UNCHECKED_CAST")
     suspend fun initHomePage() {
         val res = Anilist.query.initHomePage()
-        Logger.log("AnilistHomeViewModel : res=$res")
-        res["currentAnime"]?.let { animeContinue.postValue(it) }
-        res["favoriteAnime"]?.let { animeFav.postValue(it) }
-        res["plannedAnime"]?.let { animePlanned.postValue(it) }
-        res["currentManga"]?.let { mangaContinue.postValue(it) }
-        res["favoriteManga"]?.let { mangaFav.postValue(it) }
-        res["plannedManga"]?.let { mangaPlanned.postValue(it) }
-        res["recommendations"]?.let { recommendation.postValue(it) }
+        res["currentAnime"]?.let { animeContinue.postValue(it as ArrayList<Media>?) }
+        res["favoriteAnime"]?.let { animeFav.postValue(it as ArrayList<Media>?) }
+        res["plannedAnime"]?.let { animePlanned.postValue(it as ArrayList<Media>?) }
+        res["currentManga"]?.let { mangaContinue.postValue(it as ArrayList<Media>?) }
+        res["favoriteManga"]?.let { mangaFav.postValue(it as ArrayList<Media>?) }
+        res["plannedManga"]?.let { mangaPlanned.postValue(it as ArrayList<Media>?) }
+        res["recommendations"]?.let { recommendation.postValue(it as ArrayList<Media>?) }
+        res["status"]?.let { userStatus.postValue(it as ArrayList<User>?) }
     }
     private val userStatus: MutableLiveData<ArrayList<User>> =
         MutableLiveData<ArrayList<User>>(null)
 
     fun getUserStatus(): LiveData<ArrayList<User>> = userStatus
-
-    suspend fun initUserStatus() {
-        Anilist.query.getStatus().let { userStatus.postValue(ArrayList(it)) }
-    }
 
     suspend fun loadMain(context: FragmentActivity) {
         Anilist.getSavedToken()

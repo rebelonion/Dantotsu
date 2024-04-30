@@ -117,6 +117,17 @@ object Logger {
         }
     }
 
+    fun uncaughtException(t: Thread, e: Throwable) {
+        loggerExecutor.execute {
+            if (file == null) e.printStackTrace() else {
+                file?.appendText("---------------------------Uncaught Exception---------------------------\n")
+                file?.appendText("thread: ${t.name}\n")
+                file?.appendText("date/time: ${Date()} |  ${e.message}\n")
+                file?.appendText("trace: ${e.stackTraceToString()}\n")
+            }
+        }
+    }
+
     fun shareLog(context: Context) {
         if (file == null) {
             snackString("No log file found")
@@ -151,7 +162,7 @@ class FinalExceptionHandler : Thread.UncaughtExceptionHandler {
         Thread.getDefaultUncaughtExceptionHandler()
 
     override fun uncaughtException(t: Thread, e: Throwable) {
-        Logger.log(e)
+        Logger.uncaughtException(t, e)
         Injekt.get<CrashlyticsInterface>().logException(e)
         defaultUEH?.uncaughtException(t, e)
     }
