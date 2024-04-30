@@ -850,4 +850,6 @@
     <string name="cover">%1$s\ [কভাৰ]</string>
     <string name="banner">%1$s\ [বেননাৰ]</string>
     <string name="your_story">আপোনাৰ ষ্টোৰী</string>
+    <string name="your_progress">Your Progress</string>
+    <string name="logout_confirm">Are you sure you want to logout?</string>
 </resources>
