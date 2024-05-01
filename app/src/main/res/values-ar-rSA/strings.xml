@@ -563,7 +563,7 @@
     <string name="question_10">كيفية استيراد قوائم MAL/Kitsu الخاصة بي إلى Anilist؟</string>
     <string name="answer_10">إليك كيفية القيام بذلك،\n\nالتصدير:\n\n1. انتقل إلى هذا [الرابط](https://malscraper.azurewebsites.net).\n2. قم بإعطاء اسم مستخدم Kitsu/MAL الخاص بك وقم بتنزيل قائمة الأنمي والمانجا. (ستكون بتنسيق XML)\nملاحظة: يجب عليك كتابة اسم المستخدم للمتعقب الذي حددته\n\nاستيراد:\n\n1. بعد تصدير قائمة الرسوم المتحركة والمانجا الخاصة بك من Kitsu/MAL، انتقل الآن [هنا](https://anilist.co/settings/import) \n2. حدد/أسقط ملف الأنمي XML في المربع أعلاه.\n|→حدد/أسقط ملف المانجا XML في المربع أدناه.</string>
     <string name="question_11">كيفية استيراد قوائم Anilist/Kitsu الخاصة بي إلى MAL؟</string>
-    <string name="answer_11">Here is how you do it,\n\nExport:\n\n1. Go to this [link](https://malscraper.azurewebsites.net/). \n2. Give your Anilist username/Kitsu ID in the \'Username/Kitsu User ID\' box. \n3. Select list type and enable \'update_on_import\'. \n4. Download the file; it will be in .xml format. Be sure to download both Anime and Manga lists.\n\nImport:\n1. To import it in your MAL account, go to this [link](https://myanimelist.net/import.php) and choose \'MyAnimeList Import\' as import type. \n2. Press on \'Choose File\'and select the downloaded anime/manga list XML file. \n3. Press on \'Import Data\'. \nCongratulations, you just imported the selected list to your MAL account.</string>
+    <string name="answer_11">اليك ما عليك فعله،\n\nالاستخراج:\n\n اولا اذهب الي [الرابط](https://malscraper.azurewebsites.net/). \n ثم املأ بياناتك. \n ثم حدد القائمه (list) و اضغط علي \"update_on_import\" لتفعيلها. \n قم بتحميل (xml file)، و تأكد من تحميل كلا من قائمتي الاتمي و المانجا.\n\n الادخال:\n لادخاله إلى حساب MAL الخاص بك، انتقل إلى هذا [الرابط](https://myanimelist.net/import.php) و اختر \"MyAnimeList Import\" من القائمه. \n ثم اضغط على \"choose file\" وحدد ملف XML لقائمة الأنمي/المانجا الذي تم تنزيله مسبقا. \n اضغط \"Import Data\" لتسجيل قوائمك. \nتهانينا، لقد قمت للتو باستيراد القائمة المحددة إلى حساب MAL الخاص بك.</string>
     <string name="question_12">Why can\'t I find a specific anime/manga title?</string>
     <string name="answer_12">Let\'s say you are looking for Castlevania in Dantotsu. But Anilist doesn\'t have it, so Dantotsu doesn\'t either.\nA solution to the above problem is as follows:\n1) Go to any anime that\'s not in your list.\n2) Go to the watch section.\n3) Select any source and press on the \'Wrong Title?\'.\n4) Now search for Castlevania (The anime you were looking for) and select it.\n5) ENJOY!\n\nIf you can\'t find the anime even through these steps, then that\'s bad luck for you, bud. Even that source doesn\'t have it. Try a different source.</string>
     <string name="question_13">How to fix sources selecting a completely wrong title?</string>
@@ -848,4 +848,7 @@
     <string name="your_story">Your Story</string>
     <string name="your_progress">Your Progress</string>
     <string name="logout_confirm">Are you sure you want to logout?</string>
+    <string name="app_died">APP DIED</string>
+    <string name="an_unexpected_error_occurred">An unexpected error occurred.\nPlease send a crash report to the developer :)</string>
+    <string name="copy_report">Copy Report</string>
 </resources>
