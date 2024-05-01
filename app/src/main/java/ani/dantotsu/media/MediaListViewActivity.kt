@@ -27,16 +27,6 @@ class MediaListViewActivity: AppCompatActivity() {
         binding = ActivityMediaListViewBinding.inflate(layoutInflater)
         ThemeManager(this).applyTheme()
         initActivity(this)
-        setContentView(binding.root)
-
-        val primaryColor = getThemeColor(com.google.android.material.R.attr.colorSurface)
-        val primaryTextColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)
-        val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)
-
-        window.statusBarColor = primaryColor
-        window.navigationBarColor = primaryColor
-        binding.listAppBar.setBackgroundColor(primaryColor)
-        binding.listTitle.setTextColor(primaryTextColor)
         if (!PrefManager.getVal<Boolean>(PrefName.ImmersiveMode)) {
             this.window.statusBarColor =
                 ContextCompat.getColor(this, R.color.nav_bg_inv)
@@ -50,6 +40,16 @@ class MediaListViewActivity: AppCompatActivity() {
                 topMargin = statusBarHeight
             }
         }
+        setContentView(binding.root)
+
+        val primaryColor = getThemeColor(com.google.android.material.R.attr.colorSurface)
+        val primaryTextColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)
+        val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)
+
+        window.statusBarColor = primaryColor
+        window.navigationBarColor = primaryColor
+        binding.listAppBar.setBackgroundColor(primaryColor)
+        binding.listTitle.setTextColor(primaryTextColor)
         val screenWidth = resources.displayMetrics.run { widthPixels / density }
         binding.listTitle.text = intent.getStringExtra("title")
         binding.mediaRecyclerView.adapter = MediaAdaptor(0, mediaList, this)

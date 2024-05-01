@@ -38,6 +38,7 @@ import logcat.LogPriority
 import logcat.LogcatLogger
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+import java.lang.IllegalStateException
 
 
 @SuppressLint("StaticFieldLeak")
@@ -124,11 +125,16 @@ class App : MultiDexApplication() {
             downloadAddonManager = Injekt.get()
             torrentAddonManager.init()
             downloadAddonManager.init()
-            CommentsAPI.fetchAuthToken()
+            CommentsAPI.fetchAuthToken(this@App)
 
             val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
             val scheduler = TaskScheduler.create(this@App, useAlarmManager)
-            scheduler.scheduleAllTasks(this@App)
+            try {
+                scheduler.scheduleAllTasks(this@App)
+            } catch (e: IllegalStateException) {
+                Logger.log("Failed to schedule tasks")
+                Logger.log(e)
+            }
         }
     }
 
@@ -159,7 +165,7 @@ class App : MultiDexApplication() {
     }
 
     companion object {
-        private var instance: App? = null
+        var instance: App? = null
 
         /** Reference to the application context.
          *

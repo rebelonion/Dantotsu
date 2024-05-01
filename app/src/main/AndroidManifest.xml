@@ -227,6 +227,11 @@
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".media.CharacterDetailsActivity" />
         <activity android:name=".home.NoInternet" />
+        <activity android:name=".others.CrashActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:process=":error_process"
+            android:launchMode="singleTask" />
         <activity
             android:name=".media.anime.ExoplayerView"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|navigation"

@@ -38,6 +38,7 @@ import ani.dantotsu.databinding.ItemTitleSearchBinding
 import ani.dantotsu.databinding.ItemTitleTextBinding
 import ani.dantotsu.databinding.ItemTitleTrailerBinding
 import ani.dantotsu.displayTimer
+import ani.dantotsu.isOnline
 import ani.dantotsu.loadImage
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.User
@@ -80,7 +81,7 @@ class MediaInfoFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
-        val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode)
+        val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode) || !isOnline(requireContext())
         binding.mediaInfoProgressBar.isGone = loaded
         binding.mediaInfoContainer.isVisible = loaded
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }
