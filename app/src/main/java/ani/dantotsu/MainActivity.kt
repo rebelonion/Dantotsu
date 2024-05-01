@@ -13,7 +13,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
@@ -34,8 +33,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.work.OneTimeWorkRequest
-import ani.dantotsu.addons.torrent.ServerService
+import ani.dantotsu.addons.torrent.TorrentServerService
 import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
@@ -49,8 +47,6 @@ import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.notifications.TaskScheduler
-import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
-import ani.dantotsu.notifications.comment.CommentNotificationWorker
 import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
@@ -456,8 +452,8 @@ class MainActivity : AppCompatActivity() {
         fun startTorrent() {
             if (torrentManager.isAvailable() && PrefManager.getVal(PrefName.TorrentEnabled)) {
                 launchIO {
-                    if (!ServerService.isRunning()) {
-                        ServerService.start()
+                    if (!TorrentServerService.isRunning()) {
+                        TorrentServerService.start()
                     }
                 }
             }

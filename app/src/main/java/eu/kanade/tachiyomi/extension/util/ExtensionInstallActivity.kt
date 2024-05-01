@@ -10,7 +10,6 @@ import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.media.AddonType
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.parsers.novel.NovelExtensionManager
-import ani.dantotsu.themes.ThemeManager
 import eu.kanade.tachiyomi.extension.InstallStep
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
@@ -37,8 +36,6 @@ class ExtensionInstallActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        ThemeManager(this).applyTheme()
 
         if (intent.hasExtra(ExtensionInstaller.EXTRA_EXTENSION_TYPE))
             mediaType =
@@ -86,6 +83,7 @@ class ExtensionInstallActivity : AppCompatActivity() {
         }
     }
 
+    @Suppress("all")
     private fun checkInstallationResult(resultCode: Int) {
         val downloadId = intent.extras!!.getLong(ExtensionInstaller.EXTRA_DOWNLOAD_ID)
         val newStep = when (resultCode) {
@@ -103,11 +101,9 @@ class ExtensionInstallActivity : AppCompatActivity() {
                     Injekt.get<MangaExtensionManager>().updateInstallStep(downloadId, newStep)
                 }
 
-                MediaType.NOVEL -> {
+                else -> {
                     Injekt.get<NovelExtensionManager>().updateInstallStep(downloadId, newStep)
                 }
-
-                null -> {}
             }
         } else {
             when (addonType) {

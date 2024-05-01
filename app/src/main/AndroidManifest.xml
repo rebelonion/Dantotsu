@@ -377,7 +377,7 @@
         <activity
             android:name="eu.kanade.tachiyomi.extension.util.ExtensionInstallActivity"
             android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@style/Theme.AppCompat" />
 
         <receiver
             android:name=".notifications.AlarmPermissionStateReceiver"
@@ -441,7 +441,7 @@
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
         <service
-            android:name=".addons.torrent.ServerService"
+            android:name=".addons.torrent.TorrentServerService"
             android:exported="false"
             android:foregroundServiceType="dataSync"
             android:stopWithTask="true" />

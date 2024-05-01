@@ -62,7 +62,9 @@ class ExtensionInstaller(private val context: Context) {
      * step in the installation process.
      *
      * @param url The url of the apk.
-     * @param extension The extension to install.
+     * @param pkgName The package name of the extension.
+     * @param name The name of the extension.
+     * @param type The type of the extension.
      */
     fun <T : Type> downloadAndInstall(
         url: String,

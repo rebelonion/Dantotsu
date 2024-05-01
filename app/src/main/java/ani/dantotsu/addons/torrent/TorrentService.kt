@@ -22,10 +22,10 @@ import uy.kohesive.injekt.api.get
 import kotlin.coroutines.EmptyCoroutineContext
 
 
-class ServerService : Service() {
+class TorrentServerService : Service() {
     private val serviceScope = CoroutineScope(EmptyCoroutineContext)
     private val applicationContext = Injekt.get<Application>()
-    private val extension = Injekt.get<TorrentAddonManager>().extension!!.extension
+    private lateinit var extension: TorrentAddonApi
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -34,6 +34,7 @@ class ServerService : Service() {
         flags: Int,
         startId: Int,
     ): Int {
+        extension = Injekt.get<TorrentAddonManager>().extension?.extension ?: return START_NOT_STICKY
         intent?.let {
             if (it.action != null) {
                 when (it.action) {
@@ -75,7 +76,7 @@ class ServerService : Service() {
             PendingIntent.getService(
                 applicationContext,
                 0,
-                Intent(applicationContext, ServerService::class.java).apply {
+                Intent(applicationContext, TorrentServerService::class.java).apply {
                     action = ACTION_STOP
                 },
                 PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
@@ -113,7 +114,7 @@ class ServerService : Service() {
             with(Injekt.get<Application>().getSystemService(ACTIVITY_SERVICE) as ActivityManager) {
                 @Suppress("DEPRECATION") // We only need our services
                 getRunningServices(Int.MAX_VALUE).forEach {
-                    if (ServerService::class.java.name.equals(it.service.className)) {
+                    if (TorrentServerService::class.java.name.equals(it.service.className)) {
                         return true
                     }
                 }
@@ -122,9 +123,12 @@ class ServerService : Service() {
         }
 
         fun start() {
+            if (Injekt.get<TorrentAddonManager>().extension?.extension == null) {
+                return
+            }
             try {
                 val intent =
-                    Intent(Injekt.get<Application>(), ServerService::class.java).apply {
+                    Intent(Injekt.get<Application>(), TorrentServerService::class.java).apply {
                         action = ACTION_START
                     }
                 Injekt.get<Application>().startService(intent)
@@ -137,7 +141,7 @@ class ServerService : Service() {
         fun stop() {
             try {
                 val intent =
-                    Intent(Injekt.get<Application>(), ServerService::class.java).apply {
+                    Intent(Injekt.get<Application>(), TorrentServerService::class.java).apply {
                         action = ACTION_STOP
                     }
                 Injekt.get<Application>().startService(intent)
