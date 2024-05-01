@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="24dp"
+    android:gravity="center_vertical"
     android:orientation="horizontal">
 
     <ImageView
@@ -39,7 +40,6 @@
             android:id="@+id/settingsDesc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:alpha="0.66"
             android:fontFamily="@font/poppins_semi_bold"
             android:text="@string/slogan"
