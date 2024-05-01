@@ -160,22 +160,22 @@
     <string name="theme">Tema</string>
     <string name="ui_settings">Kullanıcı Arayüzü Ayarları</string>
     <string name="about">Hakkında</string>
-    <string name="desc">"    Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream-download Anime through extensions &amp; Manga.\nDantotsu literally means the \"best of the best\" in japanese. Well, we would like to say this is the best open source app for anime and manga on Android, what would you say?"</string>
-    <string name="devs">Developers/Helpers</string>
-    <string name="disclaimer">Disclaimer</string>
-    <string name="full_disclaimer">         - Dantotsu by itself only provides an anime and manga tracker and does not provide any anime or manga streaming or downloading capabilities.
-        \n\n - Dantotsu or any of its developer/staff don\'t host any of the content found inside Dantotsu. Any and all images and anime/manga information found in the app are taken from various public APIs (AniList, MyAnimeList, Kitsu).
-        \n\n - Furthermore, all of the anime/manga links found in Dantotsu are taken from various 3rd party plugins and have no affiliation with Dantotsu or its staff.
-        \n\n - Dantotsu or it\'s owners aren\'t liable for any misuse of any of the contents found inside or outside of the app and cannot be held accountable for the distribution of any of the contents found inside the app.
-        \n\n - By using Dantotsu, you comply to the fact that the developer of the app is not responsible for any of the contents found in the app. You also agree to the fact that you may not use Dantotsu to download or stream any copyrighted content.
-        \n\n - If the internet infringement issues are involved, please contact the source website. The developer does not assume any legal responsibility.
+    <string name="desc">"    Dantotsu, Saikou'nun küllerinden yapıldı ve basit ama son teknoloji bir zarafetle temellendirildi. Dantotsu yalnızca Anilist'e bağlı bir istemcidir ve aynı zamanda size eklentiler sayesinde Animeleri &amp; Mangaları indirmenizi/izlemenizi sağlar.\nDantotsu, Japonca'da \"en iyisinin en iyisi\" anlamına gelir. Şey, bizce bu uygulama Anime ve Manga için Android'deki açık ara en iyi açık kaynaklı uygulama, peki sizce?"</string>
+    <string name="devs">Geliştiriciler/Destekçiler</string>
+    <string name="disclaimer">Feragatname</string>
+    <string name="full_disclaimer">         - Dantotsu\'nun kendisi sadece animelerinizi ve mangalarınızı takip etmenizi sağlar ve hiçbir anime veya mangayı stream etme veya indirme özelliği yoktur.
+        \n\n - Dantotsu veya geliştirici kadrosunun hiçbiri Dantotsu\'nun içindeki içeriklerinin sahibi değildir. Uygulamanın içindeki tüm görseller ve anime/manga bilgileri çeşitli halka açık API\'lardan alınmıştır (AniList, MyAnimeList, Kitsu).
+        \n\n - Ayrıca, Dantotsu\'daki tüm anime/manga linkleri çeşitli üçüncü taraf eklentilerinden alınmıştır ve Dantotsu ile veya onun kadrosuyla hiçbir bağlantısı bulunmamaktadır.
+        \n\n - Dantotsu veya sahiplerinin uygulamanın içindeki veya dışındaki içeriklerin kötü niyetle kullanılması hakkında hiçbir sorumluluğu yoktur ve uygulamanın içindeki içeriklerin yayılması veya paylaşılması hakkında sorumlu tutulamazlar.
+        \n\n - Dantotsu\'yu kullanarak geliştiricinin, uygulamanın içinde bulunan hiçbir içerik hakkında sorumlu olmadığını kabul edersiniz. Ayrıca, telif hakkıyla korunan herhangi bir içeriği indirmek veya stream etmek için Dantotsu\'yu kullanamayacağınızı da kabul edersiniz.
+        \n\n - Eğer internet ihlali sorunları söz konusuysa lütfen web sitesi ile iletişime geçin. Geliştirici herhangi bir yasal sorumluluk kabul etmez.
     </string>
-    <string name="version_current">Version %1$s</string>
+    <string name="version_current">Versiyon %1$s</string>
     <string-array name="tips">
-        <item>You can Long Click an episode/chapter to Mark it as Read.</item>
-        <item>Long Clicking Shows can directly open List Editor.</item>
-        <item>There are few more easter eggs hidden in the App.</item>
-        <item>Challenge: Go to the very bottom of the Popular Anime &amp; Manga</item>
+        <item>Bir bölümün üstüne Uzun Süre Basılı Tutup onu Okunmuş olarak İşaretleyebilirsiniz.</item>
+        <item>Şova Uzun Süre Basılı Tutarak List Editörünü açabilirsiniz.</item>
+        <item>Uygulamanın içinde birkaç tane daha sürpriz yumurtalar var.</item>
+        <item>Meydan Okuma: Popüler Anime &amp; Manga\'ların en dibine ulaşın</item>
         <item>Try Long Clicking the Show\'s Title.</item>
         <item>Damn, why are you wasting your Time?</item>
         <item>You can Long Click to copy this Message.</item>
