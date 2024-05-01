@@ -177,6 +177,9 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
             popupMenu.show()
             true
         }
+        if (activity.result.type != "ANIME") {
+            binding.searchByImage.visibility = View.GONE
+        }
         binding.searchByImage.setOnClickListener {
             activity.startActivity(Intent(activity, ImageSearchActivity::class.java))
         }
