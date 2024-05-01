@@ -1,7 +1,5 @@
 package ani.dantotsu.home.status
 
-import android.animation.Animator
-import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
@@ -10,7 +8,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.animation.LinearInterpolator
 import android.widget.ProgressBar
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
@@ -36,6 +33,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown
+import ani.dantotsu.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -45,42 +43,43 @@ import java.util.Calendar
 import java.util.Locale
 
 
-class Stories @JvmOverloads
-constructor(
+class Stories @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : ConstraintLayout(context, attrs, defStyleAttr), View.OnTouchListener {
     private lateinit var activity: FragmentActivity
     private lateinit var binding: FragmentStatusBinding
-    private lateinit var animation: ObjectAnimator
     private lateinit var activityList: List<Activity>
     private lateinit var storiesListener: StoriesCallback
     private var userClicked: Boolean = false
     private var storyIndex: Int = 1
-    private var primaryColor : Int = 0
-    private var onPrimaryColor : Int = 0
+    private var primaryColor: Int = 0
+    private var onPrimaryColor: Int = 0
     private var storyDuration: Int = 6
+    private val timer: StoryTimer = StoryTimer(secondsToMillis(storyDuration))
 
     init {
         initLayout()
     }
+
     @SuppressLint("ClickableViewAccessibility")
     fun initLayout() {
         val inflater: LayoutInflater = LayoutInflater.from(context)
         binding = FragmentStatusBinding.inflate(inflater, this, false)
         addView(binding.root)
-    
+
         primaryColor = context.getThemeColor(com.google.android.material.R.attr.colorPrimary)
         onPrimaryColor = context.getThemeColor(com.google.android.material.R.attr.colorOnPrimary)
 
-        if (context is StoriesCallback)
-            storiesListener = context as StoriesCallback
+        if (context is StoriesCallback) storiesListener = context as StoriesCallback
 
         binding.leftTouchPanel.setOnTouchListener(this)
         binding.rightTouchPanel.setOnTouchListener(this)
     }
 
 
-    fun setStoriesList(activityList: List<Activity>, activity: FragmentActivity, startIndex : Int = 1) {
+    fun setStoriesList(
+        activityList: List<Activity>, activity: FragmentActivity, startIndex: Int = 1
+    ) {
         this.activityList = activityList
         this.activity = activity
         this.storyIndex = startIndex
@@ -212,39 +211,32 @@ constructor(
         }
         val progressBar = findViewWithTag<ProgressBar>("story${storyIndex}")
         binding.androidStoriesLoadingView.visibility = View.VISIBLE
-        animation = ObjectAnimator.ofInt(progressBar, "progress", 0, 100)
-        animation.duration = secondsToMillis(storyDuration)
-        animation.interpolator = LinearInterpolator()
-        animation.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animator: Animator) {}
-
-            override fun onAnimationEnd(animator: Animator) {
-                if (storyIndex - 1 <= activityList.size) {
-                    if (userClicked) {
-                        userClicked = false
-                    } else {
-                        if (storyIndex < activityList.size) {
-                            storyIndex += 1
-                            showStory()
-                        } else {
-                            // on stories end
-                            binding.androidStoriesLoadingView.visibility = View.GONE
-                            onStoriesCompleted()
-                        }
-                    }
+        timer.setOnTimerCompletedListener {
+            Logger.log("onAnimationEnd: $storyIndex")
+            if (storyIndex - 1 <= activityList.size) {
+                if (false) {
+                    Logger.log("userClicked: $storyIndex")
+                    userClicked = false
                 } else {
-                    // on stories end
-                    binding.androidStoriesLoadingView.visibility = View.GONE
-                    onStoriesCompleted()
+                    Logger.log("userNotClicked: $storyIndex")
+                    if (storyIndex < activityList.size) {
+                        storyIndex += 1
+                        showStory()
+                    } else {
+                        // on stories end
+                        binding.androidStoriesLoadingView.visibility = View.GONE
+                        onStoriesCompleted()
+                    }
                 }
+            } else {
+                // on stories end
+                binding.androidStoriesLoadingView.visibility = View.GONE
+                onStoriesCompleted()
             }
-
-            override fun onAnimationCancel(animator: Animator) {
-                progressBar.progress = 100
-            }
-
-            override fun onAnimationRepeat(animator: Animator) {}
-        })
+        }
+        timer.setOnPercentTickListener {
+            progressBar.progress = it
+        }
         loadStory(activityList[storyIndex - 1])
     }
 
@@ -281,7 +273,7 @@ constructor(
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
                 startClickTime = Calendar.getInstance().timeInMillis
-                animation.pause()
+                pause()
             }
 
             MotionEvent.ACTION_UP -> {
@@ -297,7 +289,7 @@ constructor(
                     }
                 } else {
                     //hold click occurred
-                    animation.resume()
+                    resume()
                 }
             }
         }
@@ -305,33 +297,34 @@ constructor(
     }
 
     private fun rightPanelTouch() {
+        Logger.log("rightPanelTouch: $storyIndex")
         if (storyIndex == activityList.size) {
             completeProgressBar(storyIndex)
             onStoriesCompleted()
             return
         }
         userClicked = true
-        animation.end()
-        if (storyIndex <= activityList.size)
-            storyIndex += 1
+        timer.cancel()
+        if (storyIndex <= activityList.size) storyIndex += 1
         showStory()
     }
 
     private fun leftPanelTouch() {
+        Logger.log("leftPanelTouch: $storyIndex")
         if (storyIndex == 1) {
             onStoriesPrevious()
             return
         }
         userClicked = true
-        animation.end()
+        timer.cancel()
         resetProgressBar(storyIndex)
-        if (storyIndex > 1)
-            storyIndex -= 1
+        if (storyIndex > 1) storyIndex -= 1
         showStory()
     }
 
     private fun onStoriesCompleted() {
-        if (::storiesListener.isInitialized){
+        Logger.log("onStoriesCompleted")
+        if (::storiesListener.isInitialized) {
             storyIndex = 1
             storiesListener.onStoriesEnd()
             resetProgressBar(storyIndex)
@@ -345,14 +338,16 @@ constructor(
             resetProgressBar(storyIndex)
         }
     }
-    fun pause() {
-        animation.pause()
-    }
-    fun resume() {
-        animation.resume()
-    }
-    private fun loadStory(story: Activity) {
 
+    fun pause() {
+        timer.pause()
+    }
+
+    fun resume() {
+        timer.resume()
+    }
+
+    private fun loadStory(story: Activity) {
         val key = "activities"
         val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
         val newList = set.sorted().takeLast(200).toSet()
@@ -361,11 +356,13 @@ constructor(
         binding.statusUserName.text = story.user?.name
         binding.statusUserTime.text = ActivityItemBuilder.getDateTime(story.createdAt)
         binding.statusUserContainer.setOnClickListener {
-            ContextCompat.startActivity(context, Intent(context, ProfileActivity::class.java)
-                .putExtra("userId", story.userId),
-                null)
+            ContextCompat.startActivity(
+                context,
+                Intent(context, ProfileActivity::class.java).putExtra("userId", story.userId),
+                null
+            )
         }
-        fun visible(isList: Boolean){
+        fun visible(isList: Boolean) {
             val visible = if (isList) View.VISIBLE else View.GONE
             val gone = if (isList) View.GONE else View.VISIBLE
             binding.textActivity.visibility = gone
@@ -378,29 +375,41 @@ constructor(
             binding.contentImageView.visibility = visible
         }
 
-        when (story.typename){
+        when (story.typename) {
             "ListActivity" -> {
                 visible(true)
-                val text  = "${story.status?.replaceFirstChar {
-                    if (it.isLowerCase()) {
-                        it.titlecase(Locale.ROOT)
+                val text = "${
+                    story.status?.replaceFirstChar {
+                        if (it.isLowerCase()) {
+                            it.titlecase(Locale.ROOT)
+                        } else {
+                            it.toString()
+                        }
                     }
-                    else {
-                        it.toString()
-                    }
-                }} ${story.progress ?: story.media?.title?.userPreferred} " +
-                    if (story.status?.contains("completed") == false && !story.status.contains("plans") && !story.status.contains("repeating")) {
-                        "of ${story.media?.title?.userPreferred}"
-                    }else {
-                        ""
-                    }
+                } ${story.progress ?: story.media?.title?.userPreferred} " + if (story.status?.contains(
+                        "completed"
+                    ) == false && !story.status.contains("plans") && !story.status.contains(
+                        "repeating"
+                    )
+                ) {
+                    "of ${story.media?.title?.userPreferred}"
+                } else {
+                    ""
+                }
                 binding.infoText.text = text
                 val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
-                blurImage(if (bannerAnimations) binding.contentImageViewKen else binding.contentImageView, story.media?.bannerImage ?: story.media?.coverImage?.extraLarge)
+                blurImage(
+                    if (bannerAnimations) binding.contentImageViewKen else binding.contentImageView,
+                    story.media?.bannerImage ?: story.media?.coverImage?.extraLarge
+                )
                 binding.coverImage.loadImage(story.media?.coverImage?.extraLarge)
-                binding.coverImage.setOnClickListener{
-                    ContextCompat.startActivity(context, Intent(context, MediaDetailsActivity::class.java)
-                        .putExtra("mediaId", story.media?.id),
+                binding.coverImage.setOnClickListener {
+                    ContextCompat.startActivity(
+                        context,
+                        Intent(context, MediaDetailsActivity::class.java).putExtra(
+                                "mediaId",
+                                story.media?.id
+                            ),
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                             activity,
                             binding.coverImage,
@@ -417,18 +426,17 @@ constructor(
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(
-                        binding.textActivity,
-                        AniMarkdown.getBasicAniHTML(story.text ?: "")
+                        binding.textActivity, AniMarkdown.getBasicAniHTML(story.text ?: "")
                     )
                 }
             }
+
             "MessageActivity" -> {
                 visible(false)
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(
-                        binding.textActivity,
-                        AniMarkdown.getBasicAniHTML(story.message ?: "")
+                        binding.textActivity, AniMarkdown.getBasicAniHTML(story.message ?: "")
                     )
                 }
             }
@@ -456,9 +464,10 @@ constructor(
             true
         }
         binding.androidStoriesLoadingView.visibility = View.GONE
-        animation.start()
+        timer.start()
     }
-    fun like(){
+
+    fun like() {
         val story = activityList[storyIndex - 1]
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)

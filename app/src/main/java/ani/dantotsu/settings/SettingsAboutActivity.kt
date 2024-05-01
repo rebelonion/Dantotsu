@@ -81,6 +81,7 @@ class SettingsAboutActivity : AppCompatActivity() {
                         isChecked = PrefManager.getVal(PrefName.LogToFile),
                         switch = { isChecked, _ ->
                             PrefManager.setVal(PrefName.LogToFile, isChecked)
+                            Logger.clearLog()
                             restartApp()
                         },
                         attachToSwitch = {
