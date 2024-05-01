@@ -1358,10 +1358,10 @@ fun blurImage(imageView: ImageView, banner: String?) {
     if (banner != null) {
         val radius = PrefManager.getVal<Float>(PrefName.BlurRadius).toInt()
         val sampling = PrefManager.getVal<Float>(PrefName.BlurSampling).toInt()
-        if (PrefManager.getVal(PrefName.BlurBanners)) {
-            val context = imageView.context
-            if (!(context as Activity).isDestroyed) {
-                val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
+        val context = imageView.context
+        if (!(context as Activity).isDestroyed) {
+            val url = PrefManager.getVal<String>(PrefName.ImageUrl).ifEmpty { banner }
+            if (PrefManager.getVal(PrefName.BlurBanners)) {
                 Glide.with(context as Context)
                     .load(
                         if (banner.startsWith("http")) GlideUrl(url) else if (banner.startsWith("content://")) Uri.parse(
@@ -1371,9 +1371,17 @@ fun blurImage(imageView: ImageView, banner: String?) {
                     .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)
                     .apply(RequestOptions.bitmapTransform(BlurTransformation(radius, sampling)))
                     .into(imageView)
+
+            } else {
+                Glide.with(context as Context)
+                    .load(
+                        if (banner.startsWith("http")) GlideUrl(url) else if (banner.startsWith("content://")) Uri.parse(
+                            url
+                        ) else File(url)
+                    )
+                    .diskCacheStrategy(DiskCacheStrategy.RESOURCE).override(400)
+                    .into(imageView)
             }
-        } else {
-            imageView.loadImage(banner)
         }
     } else {
         imageView.setImageResource(R.drawable.linear_gradient_bg)

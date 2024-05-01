@@ -124,17 +124,38 @@
         </com.google.android.material.card.MaterialCardView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <TextView
-        android:id="@+id/mangaTrendingManga"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="8dp"
-        android:text="@string/trending_manga"
-        android:textSize="16sp"
-        android:visibility="invisible" />
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:id="@+id/mangaTrendingManga"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:text="@string/trending_manga"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            tools:visibility="visible"/>
+
+
+        <ImageView
+            android:id="@+id/mangaTrendingMangaMore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:src="@drawable/arrow_mark"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -164,17 +185,37 @@
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/mangaTrendingManhwa"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="8dp"
-        android:text="@string/trending_manhwa"
-        android:textSize="16sp"
-        android:visibility="invisible" />
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
 
+        <TextView
+            android:id="@+id/mangaTrendingManhwa"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:text="@string/trending_manhwa"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/mangaTrendingManhwaMore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:src="@drawable/arrow_mark"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -203,17 +244,37 @@
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/mangaNovel"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="8dp"
-        android:text="@string/trending_novel"
-        android:textSize="16sp"
-        android:visibility="invisible" />
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
 
+        <TextView
+            android:id="@+id/mangaNovel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:text="@string/trending_novel"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/mangaNovelMore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:src="@drawable/arrow_mark"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -242,17 +303,37 @@
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/mangaTopRated"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="8dp"
-        android:text="@string/top_rated"
-        android:textSize="16sp"
-        android:visibility="invisible" />
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
 
+        <TextView
+            android:id="@+id/mangaTopRated"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:text="@string/top_rated"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+
+        <ImageView
+            android:id="@+id/mangaTopRatedMore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:src="@drawable/arrow_mark"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -281,16 +362,36 @@
 
     </FrameLayout>
 
-    <TextView
-        android:id="@+id/mangaMostFav"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="8dp"
-        android:text="@string/most_favourite"
-        android:textSize="16sp"
-        android:visibility="invisible" />
+        android:orientation="horizontal"
+        tools:ignore="UseCompoundDrawables">
+
+        <TextView
+            android:id="@+id/mangaMostFav"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:text="@string/most_favourite"
+            android:textSize="16sp"
+            android:visibility="invisible" />
+        <ImageView
+            android:id="@+id/mangaMostFavMore"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="24dp"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="8dp"
+            android:src="@drawable/arrow_mark"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            tools:ignore="ContentDescription" />
+    </LinearLayout>
+
 
     <FrameLayout
         android:layout_width="match_parent"
