@@ -204,22 +204,22 @@ class AnimeFragment : Fragment() {
             if (i) {
                 model.getUpdated().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        animePageAdapter.updateRecent(MediaAdaptor(0, it, requireActivity()))
+                        animePageAdapter.updateRecent(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getMovies().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        animePageAdapter.updateMovies(MediaAdaptor(0, it, requireActivity()))
+                        animePageAdapter.updateMovies(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getTopRated().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        animePageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()))
+                        animePageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getMostFav().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        animePageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()))
+                        animePageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 if (animePageAdapter.trendingViewPager != null) {

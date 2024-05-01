@@ -1,7 +1,6 @@
 package ani.dantotsu.media
 
 import android.os.Bundle
-import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,7 @@ import ani.dantotsu.databinding.ActivityMediaListViewBinding
 import ani.dantotsu.getThemeColor
 import ani.dantotsu.hideSystemBarsExtendView
 import ani.dantotsu.initActivity
-import ani.dantotsu.navBarHeight
+import ani.dantotsu.others.getSerialized
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -50,15 +49,14 @@ class MediaListViewActivity: AppCompatActivity() {
                 topMargin = statusBarHeight
             }
         }
-        val screenWidth = resources.displayMetrics.run { widthPixels / density }
+        val mediaList = intent.getSerialized("media") as? ArrayList<Media> ?: ArrayList()
         binding.listTitle.text = intent.getStringExtra("title")
+
         binding.mediaRecyclerView.adapter = MediaAdaptor(0, mediaList, this)
+        val screenWidth = resources.displayMetrics.run { widthPixels / density }
         binding.mediaRecyclerView.layoutManager = GridLayoutManager(
             this,
             (screenWidth / 120f).toInt()
         )
-    }
-    companion object{
-        var mediaList: ArrayList<Media> = arrayListOf()
     }
 }

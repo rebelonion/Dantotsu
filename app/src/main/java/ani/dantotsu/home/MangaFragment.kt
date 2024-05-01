@@ -162,12 +162,12 @@ class MangaFragment : Fragment() {
             if (i == true) {
                 model.getPopularNovel().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        mangaPageAdapter.updateNovel(MediaAdaptor(0, it, requireActivity()))
+                        mangaPageAdapter.updateNovel(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getPopularManga().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        mangaPageAdapter.updateTrendingManga(MediaAdaptor(0, it, requireActivity()))
+                        mangaPageAdapter.updateTrendingManga(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getPopularManhwa().observe(viewLifecycleOwner) {
@@ -177,18 +177,18 @@ class MangaFragment : Fragment() {
                                 0,
                                 it,
                                 requireActivity()
-                            )
+                            ), it
                         )
                     }
                 }
                 model.getTopRated().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        mangaPageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()))
+                        mangaPageAdapter.updateTopRated(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 model.getMostFav().observe(viewLifecycleOwner) {
                     if (it != null) {
-                        mangaPageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()))
+                        mangaPageAdapter.updateMostFav(MediaAdaptor(0, it, requireActivity()), it)
                     }
                 }
                 if (mangaPageAdapter.trendingViewPager != null) {

@@ -370,7 +370,6 @@
                         android:fontFamily="@font/poppins_bold"
                         android:padding="8dp"
                         android:src="@drawable/arrow_mark"
-                        android:text="@string/continue_watching"
                         android:textSize="16sp"
                         tools:ignore="ContentDescription" />
                 </LinearLayout>
@@ -466,7 +465,6 @@
                         android:fontFamily="@font/poppins_bold"
                         android:padding="8dp"
                         android:src="@drawable/arrow_mark"
-                        android:text="@string/continue_watching"
                         android:textSize="16sp"
                         tools:ignore="ContentDescription" />
                 </LinearLayout>
@@ -560,7 +558,6 @@
                         android:fontFamily="@font/poppins_bold"
                         android:padding="8dp"
                         android:src="@drawable/arrow_mark"
-                        android:text="@string/continue_watching"
                         android:textSize="16sp"
                         tools:ignore="ContentDescription" />
                 </LinearLayout>
@@ -658,7 +655,6 @@
                         android:fontFamily="@font/poppins_bold"
                         android:padding="8dp"
                         android:src="@drawable/arrow_mark"
-                        android:text="@string/continue_watching"
                         android:textSize="16sp"
                         tools:ignore="ContentDescription" />
                 </LinearLayout>
@@ -754,7 +750,6 @@
                         android:fontFamily="@font/poppins_bold"
                         android:padding="8dp"
                         android:src="@drawable/arrow_mark"
-                        android:text="@string/continue_watching"
                         android:textSize="16sp"
                         tools:ignore="ContentDescription" />
                 </LinearLayout>
@@ -847,7 +842,7 @@
                         android:fontFamily="@font/poppins_bold"
                         android:padding="8dp"
                         android:src="@drawable/arrow_mark"
-                        android:text="@string/continue_watching"
+
                         android:textSize="16sp"
                         tools:ignore="ContentDescription" />
                 </LinearLayout>
@@ -944,7 +939,6 @@
                         android:fontFamily="@font/poppins_bold"
                         android:padding="8dp"
                         android:src="@drawable/arrow_mark"
-                        android:text="@string/continue_watching"
                         android:textSize="16sp"
                         tools:ignore="ContentDescription" />
                 </LinearLayout>

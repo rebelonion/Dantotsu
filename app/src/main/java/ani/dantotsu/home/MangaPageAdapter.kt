@@ -22,10 +22,13 @@ import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ItemMangaPageBinding
 import ani.dantotsu.databinding.LayoutTrendingBinding
+import ani.dantotsu.getAppString
 import ani.dantotsu.getThemeColor
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.GenreActivity
+import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
+import ani.dantotsu.media.MediaListViewActivity
 import ani.dantotsu.media.SearchActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.px
@@ -178,65 +181,80 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
 
     }
 
-    fun updateTrendingManga(adaptor: MediaAdaptor) {
+    fun updateTrendingManga(adaptor: MediaAdaptor, media: MutableList<Media>) {
         binding.apply {
             init(
                 adaptor,
                 mangaTrendingMangaRecyclerView,
                 mangaTrendingMangaProgressBar,
-                mangaTrendingManga
+                mangaTrendingManga,
+                mangaTrendingMangaMore,
+                getAppString(R.string.trending_manga),
+                media
             )
         }
     }
 
-    fun updateTrendingManhwa(adaptor: MediaAdaptor) {
+    fun updateTrendingManhwa(adaptor: MediaAdaptor, media: MutableList<Media>) {
         binding.apply {
             init(
                 adaptor,
                 mangaTrendingManhwaRecyclerView,
                 mangaTrendingManhwaProgressBar,
-                mangaTrendingManhwa
+                mangaTrendingManhwa,
+                mangaTrendingManhwaMore,
+                getAppString(R.string.trending_manhwa),
+                media
             )
         }
     }
 
-    fun updateNovel(adaptor: MediaAdaptor) {
+    fun updateNovel(adaptor: MediaAdaptor, media: MutableList<Media>) {
         binding.apply {
             init(
                 adaptor,
                 mangaNovelRecyclerView,
                 mangaNovelProgressBar,
-                mangaNovel
+                mangaNovel,
+                mangaNovelMore,
+                getAppString(R.string.trending_novel),
+                media
             )
         }
 
     }
 
-    fun updateTopRated(adaptor: MediaAdaptor) {
+    fun updateTopRated(adaptor: MediaAdaptor, media: MutableList<Media>) {
         binding.apply {
             init(
                 adaptor,
                 mangaTopRatedRecyclerView,
                 mangaTopRatedProgressBar,
-                mangaTopRated
+                mangaTopRated,
+                mangaTopRatedMore,
+                getAppString(R.string.top_rated),
+                media
             )
         }
     }
 
-    fun updateMostFav(adaptor: MediaAdaptor) {
+    fun updateMostFav(adaptor: MediaAdaptor, media: MutableList<Media>) {
         binding.apply {
             init(
                 adaptor,
                 mangaMostFavRecyclerView,
                 mangaMostFavProgressBar,
-                mangaMostFav
+                mangaMostFav,
+                mangaMostFavMore,
+                getAppString(R.string.most_favourite),
+                media
             )
             mangaPopular.visibility = View.VISIBLE
             mangaPopular.startAnimation(setSlideUp())
         }
     }
 
-    fun init(adaptor: MediaAdaptor, recyclerView: RecyclerView, progress: View, title: View) {
+    fun init(adaptor: MediaAdaptor, recyclerView: RecyclerView, progress: View, title: View , more: View , string: String,  media : MutableList<Media>) {
         progress.visibility = View.GONE
         recyclerView.adapter = adaptor
         recyclerView.layoutManager =
@@ -245,9 +263,19 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+        more.setOnClickListener {
+            ContextCompat.startActivity(
+                it.context, Intent(it.context, MediaListViewActivity::class.java)
+                    .putExtra("title", string)
+                    .putExtra("media",  media as ArrayList<Media>),
+                null
+            )
+        }
         recyclerView.visibility = View.VISIBLE
         title.visibility = View.VISIBLE
+        more.visibility = View.VISIBLE
         title.startAnimation(setSlideUp())
+        more.startAnimation(setSlideUp())
         recyclerView.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
     }

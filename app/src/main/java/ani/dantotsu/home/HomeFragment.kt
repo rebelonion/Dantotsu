@@ -233,10 +233,10 @@ class HomeFragment : Fragment() {
                             false
                         )
                         more.setOnClickListener { _ ->
-                            MediaListViewActivity.mediaList = it
                             ContextCompat.startActivity(
                                 requireActivity(), Intent(requireActivity(), MediaListViewActivity::class.java)
-                                    .putExtra("title", string),
+                                    .putExtra("title", string)
+                                    .putExtra("media", it),
                                 null
                             )
                         }
@@ -249,6 +249,7 @@ class HomeFragment : Fragment() {
                     }
                     more.visibility = View.VISIBLE
                     title.visibility = View.VISIBLE
+                    more.startAnimation(setSlideUp())
                     title.startAnimation(setSlideUp())
                     progress.visibility = View.GONE
                 }
