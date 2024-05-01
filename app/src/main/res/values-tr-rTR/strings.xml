@@ -52,67 +52,67 @@
     <string-array name="keys">
         <item>Okunuyor</item>
         <item>İzleniyor</item>
-        <item>Bitirilen</item>
-        <item>Ara Verilen</item>
-        <item>Bırakılan</item>
+        <item>Bitirildi</item>
+        <item>Ara Verildi</item>
+        <item>Bırakıldı</item>
         <item>Planlanan</item>
         <item>Favoriler</item>
-        <item>Rewatching</item>
-        <item>Rereading</item>
-        <item>All</item>
+        <item>Tekrar İzleniyor</item>
+        <item>Tekrar Okunuyor</item>
+        <item>Hepsi</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
-    <string name="followers">Followers</string>
-    <string name="status">STATUS</string>
+    <string name="no_notifications">Başka bildirim yok</string>
+    <string name="followers">Takipçiler</string>
+    <string name="status">DURUM</string>
     <string-array name="status_anime">
-        <item>PLANNING</item>
-        <item>WATCHING</item>
-        <item>COMPLETED</item>
-        <item>RE-WATCHING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>PLANLANIYOR</item>
+        <item>İZLENİYOR</item>
+        <item>BİTİRİLDİ</item>
+        <item>TEKRAR İZLENİYOR</item>
+        <item>ARA VERİLDİ</item>
+        <item>BIRAKILDI</item>
     </string-array>
     <string-array name="status_manga">
-        <item>PLANNING</item>
-        <item>READING</item>
-        <item>COMPLETED</item>
-        <item>RE-READING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>PLANLANIYOR</item>
+        <item>OKUNUYOR</item>
+        <item>BİTİRİLDİ</item>
+        <item>TEKRAR OKUNUYOR</item>
+        <item>ARA VERİLDİ</item>
+        <item>BIRAKILDI</item>
     </string-array>
-    <string name="progress">PROGRESS</string>
-    <string name="score">SCORE</string>
+    <string name="progress">İLERLEME</string>
+    <string name="score">PUAN</string>
     <string name="score_suffix">" / 10"</string>
-    <string name="started_at">STARTED AT</string>
-    <string name="completed_at">COMPLETED AT</string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
-    <string name="remove">Remove</string>
-    <string name="name">Name</string>
-    <string name="name_romaji">Name Romaji</string>
-    <string name="mean_score">Mean Score</string>
+    <string name="started_at">BAŞLAMA TARİHİ</string>
+    <string name="completed_at">BİTİRME TARİHİ</string>
+    <string name="save">Kaydet</string>
+    <string name="delete">Sil</string>
+    <string name="remove">Kaldır</string>
+    <string name="name">İsim</string>
+    <string name="name_romaji">Romaji İsmi</string>
+    <string name="mean_score">Ortalama Puan</string>
     <string name="format">Format</string>
-    <string name="status_title">Status</string>
-    <string name="total_eps">Total Episodes</string>
-    <string name="episodes"> Episode(s)</string>
-    <string name="chapters"> Chapter(s)</string>
+    <string name="status_title">Durum</string>
+    <string name="total_eps">Tüm Bölümler</string>
+    <string name="episodes"> Bölüm</string>
+    <string name="chapters"> Bölüm</string>
     <string name="total_divider"> | %1$s</string>
-    <string name="total_chaps">Total Chapters</string>
-    <string name="ep_duration">Average Duration</string>
+    <string name="total_chaps">Toplam Bölümler</string>
+    <string name="ep_duration">Ortalama Süre</string>
     <string name="min">" min"</string>
-    <string name="season">Season</string>
-    <string name="start_date">Start Date</string>
-    <string name="end_date">End Date</string>
-    <string name="source">Source</string>
-    <string name="main_studio">Studio</string>
-    <string name="genres">Genres</string>
-    <string name="description">Synopsis</string>
-    <string name="characters">Characters</string>
-    <string name="relations">Relations</string>
-    <string name="staff">Staff</string>
-    <string name="favourites">Favourites</string>
-    <string name="popularity">Popularity</string>
-    <string name="roles">Roles</string>
+    <string name="season">Sezon</string>
+    <string name="start_date">Başlama tarihi</string>
+    <string name="end_date">Bitiş Tarihi</string>
+    <string name="source">Kaynak</string>
+    <string name="main_studio">Stüdyo</string>
+    <string name="genres">Türler</string>
+    <string name="description">Özet</string>
+    <string name="characters">Karakterler</string>
+    <string name="relations">Bağlantılar</string>
+    <string name="staff">Kadro</string>
+    <string name="favourites">Favoriler</string>
+    <string name="popularity">Popülerlik</string>
+    <string name="roles">Roller</string>
     <string name="details">Detaylar</string>
     <string name="play_yt">Youtube\'da İzle</string>
     <string name="eps">Bölüm</string>
@@ -125,41 +125,41 @@
     </string>
     <string name="not_supported">%1$s desteklenmiyor!</string>
     <string name="server_selector">Sunucu Seç</string>
-    <string name="auto_select_server">Sunucu Otomaatik Seçiliyor</string>
+    <string name="auto_select_server">Sunucu Otomatik Seçiliyor</string>
     <string name="make_default">Varsayılan Yap</string>
     <string name="filler">Filler</string>
     <string name="adult">Yetişkin</string>
     <string name="list_only">Yalnızca Listedekiler</string>
     <string name="tag">Etiket</string>
     <string name="tags">Etiketler</string>
-    <string name="synonyms">Synonyms</string>
+    <string name="synonyms">Diğer isimler</string>
     <string name="trailer">Trailer</string>
-    <string name="opening">Opening</string>
-    <string name="ending">Ending</string>
-    <string name="prequel">Prequel</string>
-    <string name="sequel">Sequel</string>
-    <string name="anilist_settings">Anilist Settings</string>
-    <string name="extension_settings">Extensions</string>
-    <string name="downloads">Downloads</string>
-    <string name="offline_mode">Offline Mode</string>
-    <string name="settings">Settings</string>
-    <string name="extensions">Extensions</string>
-    <string name="extension_updates_available">Extension updates available</string>
-    <string name="player_settings">Player Settings</string>
-    <string name="recentlyListOnly">Only show my content in \"Recently Updated\"</string>
-    <string name="download_manager_select">Download Manager</string>
-    <string name="downloadInSd">Download in SD card</string>
-    <string name="noSdFound">No SD card was Found.</string>
-    <string name="reader_settings">Reader Settings</string>
-    <string name="default_source">Default Source</string>
-    <string name="show_yt">Youtube Link</string>
-    <string name="default_ep_view">Default Episode Layout</string>
-    <string name="default_chp_view">Default Chapter Layout</string>
-    <string name="ui">User Interface</string>
-    <string name="common">Common</string>
-    <string name="theme">Theme</string>
-    <string name="ui_settings">UI Settings</string>
-    <string name="about">About</string>
+    <string name="opening">Açılış</string>
+    <string name="ending">Bitiş</string>
+    <string name="prequel">Önceki</string>
+    <string name="sequel">Sonraki</string>
+    <string name="anilist_settings">Anilist Ayarları</string>
+    <string name="extension_settings">Eklentiler</string>
+    <string name="downloads">İndirmeler</string>
+    <string name="offline_mode">Çevrim Dışı Modu</string>
+    <string name="settings">Ayarlar</string>
+    <string name="extensions">Eklentiler</string>
+    <string name="extension_updates_available">Eklentiler için güncelleme mevcut</string>
+    <string name="player_settings">Oynatıcı Ayarları</string>
+    <string name="recentlyListOnly">Benim içeriğimi sadece \"En Son Güncellenenler\" kısmında göster</string>
+    <string name="download_manager_select">İndirme Yöneticisi</string>
+    <string name="downloadInSd">SD karta indir</string>
+    <string name="noSdFound">SD kart bulunamadı.</string>
+    <string name="reader_settings">Okuyucu Ayarları</string>
+    <string name="default_source">Varsayılan Kaynak</string>
+    <string name="show_yt">Youtube Linki</string>
+    <string name="default_ep_view">Varsayılan Bölüm Düzeni</string>
+    <string name="default_chp_view">Varsayılan Bölüm Düzeni</string>
+    <string name="ui">Kullanıcı Arayüzü</string>
+    <string name="common">Genel</string>
+    <string name="theme">Tema</string>
+    <string name="ui_settings">Kullanıcı Arayüzü Ayarları</string>
+    <string name="about">Hakkında</string>
     <string name="desc">"    Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream-download Anime through extensions &amp; Manga.\nDantotsu literally means the \"best of the best\" in japanese. Well, we would like to say this is the best open source app for anime and manga on Android, what would you say?"</string>
     <string name="devs">Developers/Helpers</string>
     <string name="disclaimer">Disclaimer</string>
