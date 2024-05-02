@@ -271,33 +271,40 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     if (torrentExtension.isAvailable()) {
                         val activity = currActivity() ?: requireActivity()
                         launchIO {
-                            val extension = torrentExtension.extension!!.extension
-                            torrentExtension.torrentHash?.let {
-                                extension.removeTorrent(it)
-                            }
-                            val index = if (url.contains("index=")) {
-                                url.substringAfter("index=").toIntOrNull() ?: 0
-                            } else 0
-                            Logger.log("Sending: ${url}, ${video.quality}, $index")
-                            val currentTorrent = extension.addTorrent(
-                                url, video.quality.toString(), "", "", false
-                            )
-                            torrentExtension.torrentHash = currentTorrent.hash
-                            video.file.url = extension.getLink(currentTorrent, index)
-                            Logger.log("Received: ${video.file.url}")
-                            if (launch == true) {
-                                Intent(activity, ExoplayerView::class.java).apply {
-                                    ExoplayerView.media = media
-                                    ExoplayerView.initialized = true
-                                    startActivity(this)
+                            try {
+                                val extension = torrentExtension.extension!!.extension
+                                torrentExtension.torrentHash?.let {
+                                    extension.removeTorrent(it)
                                 }
-                            } else {
-                                model.setEpisode(
-                                    media.anime!!.episodes!![media.anime.selectedEpisode!!]!!,
-                                    "startExo no launch"
+                                val index = if (url.contains("index=")) {
+                                    url.substringAfter("index=").toIntOrNull() ?: 0
+                                } else 0
+                                Logger.log("Sending: ${url}, ${video.quality}, $index")
+                                val currentTorrent = extension.addTorrent(
+                                    url, video.quality.toString(), "", "", false
                                 )
+                                torrentExtension.torrentHash = currentTorrent.hash
+                                video.file.url = extension.getLink(currentTorrent, index)
+                                Logger.log("Received: ${video.file.url}")
+                                if (launch == true) {
+                                    Intent(activity, ExoplayerView::class.java).apply {
+                                        ExoplayerView.media = media
+                                        ExoplayerView.initialized = true
+                                        startActivity(this)
+                                    }
+                                } else {
+                                    model.setEpisode(
+                                        media.anime!!.episodes!![media.anime.selectedEpisode!!]!!,
+                                        "startExo no launch"
+                                    )
+                                }
+                                dismiss()
+                            } catch (e: Exception) {
+                                Injekt.get<CrashlyticsInterface>().logException(e)
+                                Logger.log(e)
+                                toast("Error starting video")
+                                dismiss()
                             }
-                            dismiss()
                         }
                     } else {
                         try {

@@ -52,6 +52,7 @@
             android:inputType="textMultiLine|none"
             android:textIsSelectable="true"
             android:focusable="false"
+            android:textSize="12sp"
             android:focusableInTouchMode="false"
             android:padding="16dp"
             android:textColor="?attr/colorOnBackground" />

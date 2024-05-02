@@ -139,6 +139,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="marquee"
                     android:fontFamily="@font/poppins_bold"
+                    android:layout_marginStart="2dp"
                     android:maxLines="5"
                     android:text="@string/empty"
                     app:lineHeight="15sp" />

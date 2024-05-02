@@ -12,6 +12,8 @@ import ani.dantotsu.addons.AddonManager
 import ani.dantotsu.addons.LoadResult
 import ani.dantotsu.addons.AddonInstallReceiver
 import ani.dantotsu.media.AddonType
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.InstallStep
 import kotlinx.coroutines.Dispatchers
@@ -70,7 +72,7 @@ class TorrentAddonManager(
     }
 
     override fun isAvailable(): Boolean {
-        return extension?.extension != null
+        return extension?.extension != null && PrefManager.getVal(PrefName.TorrentEnabled)
     }
 
     override fun getVersion(): String? {

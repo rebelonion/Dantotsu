@@ -40,7 +40,12 @@ class MangaUpdates {
                     e.printStackTrace()
                 }
             }
-            val res = client.post(apiUrl, json = query).parsed<MangaUpdatesResponse>()
+            val res = try {
+                client.post(apiUrl, json = query).parsed<MangaUpdatesResponse>()
+            } catch (e: Exception) {
+                Logger.log(e.toString())
+                return@tryWithSuspend null
+            }
             coroutineScope {
                 res.results?.map {
                     async(Dispatchers.IO) {
