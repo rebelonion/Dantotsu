@@ -3,34 +3,45 @@ package ani.dantotsu.others
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
+import ani.dantotsu.databinding.ActivityCrashBinding
+import ani.dantotsu.initActivity
+import ani.dantotsu.navBarHeight
+import ani.dantotsu.statusBarHeight
+import ani.dantotsu.themes.ThemeManager
 import eu.kanade.tachiyomi.util.system.copyToClipboard
 import java.io.File
 
 
 class CrashActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityCrashBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_crash)
+        ThemeManager(this).applyTheme()
+        initActivity(this)
+        binding = ActivityCrashBinding.inflate(layoutInflater)
 
+        setContentView(binding.root)
+        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight
+            bottomMargin = navBarHeight
+        }
         val stackTrace = intent.getStringExtra("stackTrace") ?: "No stack trace available"
-        val reportView = findViewById<EditText>(R.id.crashReportView)
-        reportView.setText(stackTrace)
-        reportView.setOnKeyListener(View.OnKeyListener { _, _, _ ->
+
+        binding.crashReportView.setText(stackTrace)
+        binding.crashReportView.setOnKeyListener(View.OnKeyListener { _, _, _ ->
             true // Blocks input from hardware keyboards.
         })
 
-        val copyButton = findViewById<Button>(R.id.copyButton)
-        copyButton.setOnClickListener {
+        binding.copyButton.setOnClickListener {
             copyToClipboard("Crash log", stackTrace)
         }
 
-        val shareAsTextFileButton = findViewById<Button>(R.id.shareAsTextFileButton)
-        shareAsTextFileButton.setOnClickListener {
+        binding.shareAsTextFileButton.setOnClickListener {
             shareAsTextFile(stackTrace)
         }
     }

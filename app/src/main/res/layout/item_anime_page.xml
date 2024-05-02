@@ -212,7 +212,7 @@
                 android:padding="8dp"
                 android:src="@drawable/arrow_mark"
                 android:textSize="16sp"
-
+                android:visibility="gone"
                 tools:ignore="ContentDescription" />
         </LinearLayout>
 
