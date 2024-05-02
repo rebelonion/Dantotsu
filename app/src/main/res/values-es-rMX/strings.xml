@@ -856,4 +856,5 @@
     <string name="app_died">APP DIED</string>
     <string name="an_unexpected_error_occurred">An unexpected error occurred.\nPlease send a crash report to the developer :)</string>
     <string name="copy_report">Copy Report</string>
+    <string name="share_as_file">Share as file</string>
 </resources>
