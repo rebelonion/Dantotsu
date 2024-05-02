@@ -63,7 +63,7 @@ class DownloadAddonManager(
         }
     }
 
-    override fun isAvailable(): Boolean {
+    override fun isAvailable(andEnabled: Boolean): Boolean {
         return extension?.extension != null
     }
 

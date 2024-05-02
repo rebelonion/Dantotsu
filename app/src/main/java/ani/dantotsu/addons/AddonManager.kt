@@ -19,7 +19,7 @@ abstract class AddonManager<T : Addon.Installed>(
     protected var onListenerAction: ((AddonListener.ListenerAction) -> Unit)? = null
 
     abstract suspend fun init()
-    abstract fun isAvailable(): Boolean
+    abstract fun isAvailable(andEnabled: Boolean = true): Boolean
     abstract fun getVersion(): String?
     abstract fun getPackageName(): String?
     abstract fun hadError(context: Context): String?
