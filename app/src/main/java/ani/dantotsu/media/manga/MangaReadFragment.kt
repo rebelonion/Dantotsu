@@ -321,11 +321,12 @@ open class MangaReadFragment : Fragment(), ScanlatorSelectionListener {
         return model.mangaReadSources?.get(i)!!
     }
 
-    fun onLangChange(i: Int) {
+    fun onLangChange(i: Int, saveName: String) {
         val selected = model.loadSelected(media)
         selected.langIndex = i
         model.saveSelected(media.id, selected)
         media.selected = selected
+        PrefManager.removeCustomVal("${saveName}_${media.id}")
     }
 
     fun onScanlatorChange(list: List<String>) {

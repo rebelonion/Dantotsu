@@ -102,6 +102,9 @@ class MangaReadAdapter(
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
             }
         }
+        media.selected?.scanlators?.let {
+            hiddenScanlators.addAll(it)
+        }
         binding.animeSource.setAdapter(
             ArrayAdapter(
                 fragment.requireContext(),
@@ -127,7 +130,7 @@ class MangaReadAdapter(
             // Check if 'extension' and 'selected' properties exist and are accessible
             (mangaReadSources[source] as? DynamicMangaParser)?.let { ext ->
                 ext.sourceLanguage = i
-                fragment.onLangChange(i)
+                fragment.onLangChange(i, ext.saveName)
                 fragment.onSourceChange(media.selected!!.sourceIndex).apply {
                     binding.animeSourceTitle.text = showUserText
                     showUserTextListener =
