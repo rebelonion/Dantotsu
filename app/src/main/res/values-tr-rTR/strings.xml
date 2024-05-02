@@ -175,57 +175,57 @@
         <item>Bir bölümün üstüne Uzun Süre Basılı Tutup onu Okunmuş olarak İşaretleyebilirsiniz.</item>
         <item>Şova Uzun Süre Basılı Tutarak List Editörünü açabilirsiniz.</item>
         <item>Uygulamanın içinde birkaç tane daha sürpriz yumurtalar var.</item>
-        <item>Meydan Okuma: Popüler Anime &amp; Manga\'ların en dibine ulaşın</item>
-        <item>Try Long Clicking the Show\'s Title.</item>
-        <item>Damn, why are you wasting your Time?</item>
-        <item>You can Long Click to copy this Message.</item>
-        <item>OMG LOOK! YOU FOUND AN EASTER EGG!?</item>
-        <item>You know who else likes this Animation?</item>
-        <item>MAL support? bruh.</item>
-        <item>Novels? more like NO vels.</item>
-        <item>Long Click the logo to check for App Update</item>
+        <item>Meydan Okuma: Popüler Anime &amp; Mangaların en dibine ulaşın</item>
+        <item>Şovun Başlığına Uzun Süre Basılı Tutmayı deneyin.</item>
+        <item>Lanet olsun, neden zamanını boş yere harcıyorsun?</item>
+        <item>Bu mesajı kopyalamak için Uzun Süre Basılı Tutabilirsin.</item>
+        <item>AMAN TANRIM, ŞUNA BAK! BİR SÜRPRİZ YUMURTA BULDUN!?</item>
+        <item>Başka kimin bu Animasyonu sevdiğini biliyor musun?</item>
+        <item>MAL desteği? bruh.</item>
+        <item>Romanlar mı? daha çok YOK anlar.</item>
+        <item>Uygulama Güncellemelerini kontrol etmek için Logoya Uzun Süre Basılı Tut</item>
     </string-array>
     <string-array name="themes">
-        <item>Default</item>
-        <item>Theme 1</item>
-        <item>Theme 2</item>
-        <item>Theme 3</item>
-        <item> Theme 4</item>
+        <item>Varsayılan</item>
+        <item>Tema 1</item>
+        <item>Tema 2</item>
+        <item>Tema 3</item>
+        <item> Tema 4</item>
     </string-array>
     <string name="video">Video</string>
-    <string name="video_info">Show Video Info</string>
-    <string name="source_info">Show Source Name</string>
-    <string name="video_info_info">Shows what the Resolution of the current video playing, useful for <b>\"Multi Quality\"</b> servers.</string>
-    <string name="default_quality">Auto Quality Selection</string>
-    <string name="height">Height</string>
-    <string name="width">Width</string>
-    <string name="default_quality_info">Automatically uses the closest quality provided by default, ONLY applied for \"Multi Quality\" Servers. Auto changes upon playing a video.</string>
-    <string name="default_playback_speed">Default Playback Speed : %1$s</string>
-    <string name="cursed_speeds">Cursed Speeds</string>
-    <string name="resize_mode_button">Default Resize Mode</string>
-    <string name="subtitles">Subtitles</string>
-    <string name="subtitle_toggle">Subtitles</string>
-    <string name="primary_sub_color_select">Subtitle Color</string>
-    <string name="secondary_sub_color_select">Subtitle Outline Color</string>
-    <string name="secondary_sub_outline_type_select">Subtitle Outline Type</string>
-    <string name="sub_background_color_select">Subtitle Background Color</string>
-    <string name="sub_window_color_select">Subtitle Window Color</string>
-    <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn't)"</string>
-    <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
-    <string name="sub_alpha">Subtitle Transparency</string>
-    <string name="sub_text_example">Example Sub</string>
-    <string name="sub_font_select">Subtitle Font</string>
-    <string name="subtitle_font_size">Subtitle Size</string>
-    <string name="auto">Auto</string>
-    <string name="auto_play_next_episode">Autoplay Next Episode</string>
-    <string name="auto_play_next_episode_info">Automatically disables if there is no interaction with player after 1 hour.</string>
-    <string name="auto_skip_fillers">Auto Skip Fillers</string>
-    <string name="auto_skip_fillers_info">Skips filler episodes when going to next episode.</string>
-    <string name="update_progress">Update Progress</string>
-    <string name="ask_update_progress_anime">Ask for each Anime \"Individually\"</string>
-    <string name="ask_update_progress_manga">Ask for each Manga \"Individually\"</string>
-    <string name="ask_update_progress_info_ep">Turning off will always automatically update progress when the episode is watched.</string>
-    <string name="ask_update_progress_info_chap">Turning off will always automatically update progress when the chapter is read.</string>
+    <string name="video_info">Video Bilgisini Göster</string>
+    <string name="source_info">Kaynak Adını Göster</string>
+    <string name="video_info_info">Oynatılan videonun Çözünürlüğünü gösterir, daha çok <b>\"Çoklu Kalite\"</b> sunucularında kullanışlıdır.</string>
+    <string name="default_quality">Otomatik Kalite Seçimi</string>
+    <string name="height">Boy</string>
+    <string name="width">En</string>
+    <string name="default_quality_info">Otomatik olarak varsayılan tarafından sağlanan kaliteye en yakın kaliteyi kullanır, SADECE \"Çoklu kalite\" Sunucuları için geçerlidir. Video oynatıldığında Otomatik Olarak değişir.</string>
+    <string name="default_playback_speed">Varsayılan Oynatma Hızı : %1$s</string>
+    <string name="cursed_speeds">Kahrolası Hızlar</string>
+    <string name="resize_mode_button">Varsayılan Yeniden Boyutlandırma Modu</string>
+    <string name="subtitles">Alt yazılar</string>
+    <string name="subtitle_toggle">Alt yazılar</string>
+    <string name="primary_sub_color_select">Alt yazı Rengi</string>
+    <string name="secondary_sub_color_select">Alt yazı Dış Hat Rengi</string>
+    <string name="secondary_sub_outline_type_select">Alt yazı Dış Hat Türü</string>
+    <string name="sub_background_color_select">Alt yazı Arka Plan Rengi</string>
+    <string name="sub_window_color_select">Alt yazı Pencere Rengi</string>
+    <string name="sub_window_color_info">"Alt yazı penceresi soldan ve sağdaki kısımlardır. (arka planın olmadığı yerde)"</string>
+    <string name="sub_color_info"><b>Not:</b> Üstteki ayarları değiştirmek sadece SoftSub Alt yazılarını etkiler!</string>
+    <string name="sub_alpha">Alt yazı Saydamlığı</string>
+    <string name="sub_text_example">Örnek Alt yazı</string>
+    <string name="sub_font_select">Alt yazı Fontu</string>
+    <string name="subtitle_font_size">Alt yazı Boyutu</string>
+    <string name="auto">Otomatik</string>
+    <string name="auto_play_next_episode">Sonraki Bölümü Otomatik Oynat</string>
+    <string name="auto_play_next_episode_info">Eğer oynatıcıyla 1 saat boyunca etkileşim olmazsa otomatik olarak kapanır.</string>
+    <string name="auto_skip_fillers">Fillerları Otomatik Atla</string>
+    <string name="auto_skip_fillers_info">Sonraki bölüme geçerken fillerları atlar.</string>
+    <string name="update_progress">Güncelleme İlerlemesi</string>
+    <string name="ask_update_progress_anime">Her Anime için \"Ayrı Olarak\" sor</string>
+    <string name="ask_update_progress_manga">Her Manga için \"Ayrı Olarak\" sor</string>
+    <string name="ask_update_progress_info_ep">Bölüm izlendikten sonra kapattığınızda her zaman otomatik olarak ilerlemeyi günceller.</string>
+    <string name="ask_update_progress_info_chap">Bölüm okunduktan sonra kapattığınızda her zaman otomatik olarak ilerlemeyi günceller.</string>
     <string name="ask_update_progress_chapter_zero">Update Progress for Chapter 0</string>
     <string name="ask_update_progress_info_zero">Turning on will add newly started items to Anilist with progress set to chapter 0.</string>
     <string name="ask_update_progress_hentai">Update Progress for Hentai</string>
@@ -278,25 +278,25 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
     <string name="current_page">Current Page</string>
-    <string name="dubbed">Dubbed</string>
-    <string name="subbed">Subbed</string>
-    <string name="prefer_dub">Prefer Dubbed Anime</string>
-    <string name="none">None</string>
-    <string name="selected_dns">Selected DNS</string>
-    <string name="dns_info">Change if your ISP blocks any source</string>
-    <string name="keep_screen_on">Keep Screen On</string>
-    <string name="layout">Layout</string>
-    <string name="spaced_pages">Spaced Pages</string>
-    <string name="direction">Direction</string>
-    <string name="general">General</string>
-    <string name="show_system_bars">Show Status &amp; Navigation Bars</string>
-    <string name="auto_detect_webtoon">Auto Detect Webtoon</string>
-    <string name="auto_detect_webtoon_info">If the Manga is not from Japan, the reader will default to Webtoon Reader Settings</string>
-    <string name="default_settings">Default Settings</string>
-    <string name="horizontal_scroll_bar">Horizontal Scroll Bar</string>
-    <string name="dual_page">Dual Page</string>
-    <string name="dual_page_info">Shows 2 Images in 1 page, will look weird if the images aren\'t the same size</string>
-    <string name="true_colors">True Colors</string>
+    <string name="dubbed">Dublajlı</string>
+    <string name="subbed">Alt yazılı</string>
+    <string name="prefer_dub">Dublajlı Anime Tercih Et</string>
+    <string name="none">Hiçbiri</string>
+    <string name="selected_dns">Seçilmiş DNS</string>
+    <string name="dns_info">Eğer ISP\'niz herhangi bir kaynağı engelliyorsa değiştirin</string>
+    <string name="keep_screen_on">Ekranı Açık Tut</string>
+    <string name="layout">Düzen</string>
+    <string name="spaced_pages">Boşluklu Sayfalar</string>
+    <string name="direction">Yön</string>
+    <string name="general">Genel</string>
+    <string name="show_system_bars">Durumu ve Gezinme Çubuklarını Göster</string>
+    <string name="auto_detect_webtoon">Webtoon\'u Otomatik Tespit Et</string>
+    <string name="auto_detect_webtoon_info">Eğer Manga Japonya\'dan değilse okuyucu varsayılan olarak Webtoon Okuyucu Ayarlarına döner</string>
+    <string name="default_settings">Varsayılan Ayarlar</string>
+    <string name="horizontal_scroll_bar">Yatay Kaydırma Çubuğu</string>
+    <string name="dual_page">Çift Sayfa</string>
+    <string name="dual_page_info">2 Görseli 1 sayfada gösterir, eğer görseller aynı boyutta değilse garip duracaktır</string>
+    <string name="true_colors">Gerçek Renkler</string>
     <string name="true_colors_info">(32-bit color Mode) Reduces Banding on the images, may affect performance.</string>
     <string name="image_rotation">Image Rotation</string>
     <string name="hide_page_numbers">Hide Page Numbers</string>
