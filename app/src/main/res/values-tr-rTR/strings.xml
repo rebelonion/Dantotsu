@@ -549,15 +549,15 @@
     <string name="answer_1">Dantotsu, Saikou\'nun küllerinden yapıldı ve basit ama son teknoloji bir zarafetle temellendirildi. Dantotsu yalnızca Anilist\'e bağlı bir istemcidir ve aynı zamanda size eklentiler sayesinde Animeleri &amp; Mangaları indirmenizi/izlemenizi sağlar.\n&gt;Dantotsu (断トツ; Dan-totsu), Japonca\'da \"en iyisinin en iyisi\" anlamına gelir. Şey, bizce bu uygulama Anime ve Manga için Android\'deki açık ara en iyi açık kaynaklı uygulama, ama hey, Dene ve kendin karar ver!</string>
     <string name="question_2">Dantotsu\'nun bazı özellikleri nelerdir?</string>
     <string name="answer_2">Some mentionable features of Dantotsu are\n\n- Easy and functional way to both, watch anime and read manga and light novels, Ad Free.\n- A completely open source app with a nice UI &amp; Animations\n- 3rd party plugin support \n- Synchronize anime and manga real-time with AniList. Easily categorize anime and manga based on your current status. (Powered by AniList)\n- Find all shows using thoroughly and frequently updated list of all trending, popular and ongoing anime based on scores.\n- View extensive details about anime shows, movies and manga titles. It also features ability to countdown to the next episode of airing anime. (Powered by AniList &amp; MyAnimeList)</string>
-    <string name="question_3">Whats the difference between Stable, Beta &amp; Alpha versions?</string>
+    <string name="question_3">Stabil, Beta ve Alfa versiyonlar arasındaki fark nedir?</string>
     <string name="answer_3">A Stable release is a version that has been tested as thoroughly as possible and is as reliable as we can make it.\n\nA Beta release is a version which is meant for testing new features or providing hot fixes.\n\nAn Alpha release is like a beta version but has many bugs and you can only find it on our [discord](https://discord.gg/invite/4HPZ5nAWwM) server. It gets frequent updates and has a high chance to break.\n\nIf you want a reliable app then go for the Stable. If you want the latest and greatest features and bugs then go for Alpha.</string>
-    <string name="question_4">Is Dantotsu available for PC?</string>
+    <string name="question_4">Dantotsu Bilgisayar için mevcut mu?</string>
     <string name="answer_4">Currently no (for both Windows and Linux). There isn\'t any estimation when it will be available. But you can download any Android emulator and run Dantotsu on it. For Windows 11 users, they can use the Windows Subsystem for Android (WSA) to run Dantotsu in Windows.</string>
-    <string name="question_5">Is Dantotsu available for iOS?</string>
-    <string name="answer_5">No, best we can do is carve Dantotsu on an apple.</string>
-    <string name="question_6">Why are my stats not updating?</string>
+    <string name="question_5">Dantotsu IOS için mevcut mu?</string>
+    <string name="answer_5">Hayır, elimizden gelebilecek en iyi şey bir elmanın üstüne Dantotsu yazmak.</string>
+    <string name="question_6">Neden istatistierim güncellenmiyor?</string>
     <string name="answer_6">This is because it updates every 48 hours automatically (by Anilist). If you really need to update your stats, you can force update your stats after going to this [link](https://anilist.co/settings/lists).</string>
-    <string name="question_7">How to download Anime?</string>
+    <string name="question_7">Nasıl Anime indirebilirim?</string>
     <string name="answer_7">There are two methods of downloading currently. One is internal and the other is external. If you download internally, then it can be viewed within the app but only the app can open that episode, you cannot move it or share it. The other option is to use external downloading. It requires a download manager to download and a separate video player to watch. External downloads can be shared but you cannot view it within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. Pick the server and the video quality.\n3. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.
         \n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))
         \n3. Now go to \`Dantotsu &gt; Settings &gt; Common &gt; Download Managers\` and choose the download manager you just set up.
@@ -565,9 +565,9 @@
 
         \n\nNote: Direct downloads are also possible without a manager but it\'s not recommended.
 \n\nNerd Note: Internally downloaded episodes are stored in \`Android/data/ani.dantotsu.*/files/Anime_Downloads\`\nYou cannot play those files as they are in \`.exo\` format, split into hundreds of pieces and are encrypted.</string>
-    <string name="question_9">How to enable NSFW content?</string>
+    <string name="question_9">18+ içerikleri nasıl etkinleştirebilirim?</string>
     <string name="answer_9">You can enable NSFW content by enabling 18+ contents from this [link](https://anilist.co/settings/media). You also have to enable NSFW extensions in \`Settings &gt; Extensions &gt; NSFW extensions\` </string>
-    <string name="question_10">How to import my MAL/Kitsu lists to Anilist?</string>
+    <string name="question_10">MAL/Kitsu listelerimi nasıl Anilist\'e geçirebilirim?</string>
     <string name="answer_10">Here is how you do it,\n\nExport:\n\n1. Go to this [link](https://malscraper.azurewebsites.net).\n2. Give your Kitsu/MAL username and download both anime and manga list. (They will be in XML format)\nNote: You have to write the username of the tracker you selected\n\nImport:\n\n1. After exporting your anime and manga list from Kitsu/MAL, now go [here](https://anilist.co/settings/import) \n2. Select/drop the anime XML file on the box above.\n|→Select/drop the manga XML file on the box below.</string>
     <string name="question_11">How to import my Anilist/Kitsu lists to MAL?</string>
     <string name="answer_11">Here is how you do it,\n\nExport:\n\n1. Go to this [link](https://malscraper.azurewebsites.net/). \n2. Give your Anilist username/Kitsu ID in the \'Username/Kitsu User ID\' box. \n3. Select list type and enable \'update_on_import\'. \n4. Download the file; it will be in .xml format. Be sure to download both Anime and Manga lists.\n\nImport:\n1. To import it in your MAL account, go to this [link](https://myanimelist.net/import.php) and choose \'MyAnimeList Import\' as import type. \n2. Press on \'Choose File\'and select the downloaded anime/manga list XML file. \n3. Press on \'Import Data\'. \nCongratulations, you just imported the selected list to your MAL account.</string>
