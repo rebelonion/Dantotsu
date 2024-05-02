@@ -181,7 +181,7 @@
         <item>Bu mesajı kopyalamak için Uzun Süre Basılı Tutabilirsin.</item>
         <item>AMAN TANRIM, ŞUNA BAK! BİR SÜRPRİZ YUMURTA BULDUN!?</item>
         <item>Başka kimin bu Animasyonu sevdiğini biliyor musun?</item>
-        <item>MAL desteği? bruh.</item>
+        <item>MAL desteği mi? bruh.</item>
         <item>Romanlar mı? daha çok YOK anlar.</item>
         <item>Uygulama Güncellemelerini kontrol etmek için Logoya Uzun Süre Basılı Tut</item>
     </string-array>
@@ -201,7 +201,7 @@
     <string name="width">En</string>
     <string name="default_quality_info">Otomatik olarak varsayılan tarafından sağlanan kaliteye en yakın kaliteyi kullanır, SADECE \"Çoklu kalite\" Sunucuları için geçerlidir. Video oynatıldığında Otomatik Olarak değişir.</string>
     <string name="default_playback_speed">Varsayılan Oynatma Hızı : %1$s</string>
-    <string name="cursed_speeds">Kahrolası Hızlar</string>
+    <string name="cursed_speeds">Lanetli Hızlar</string>
     <string name="resize_mode_button">Varsayılan Yeniden Boyutlandırma Modu</string>
     <string name="subtitles">Alt yazılar</string>
     <string name="subtitle_toggle">Alt yazılar</string>
@@ -210,7 +210,7 @@
     <string name="secondary_sub_outline_type_select">Alt yazı Dış Hat Türü</string>
     <string name="sub_background_color_select">Alt yazı Arka Plan Rengi</string>
     <string name="sub_window_color_select">Alt yazı Pencere Rengi</string>
-    <string name="sub_window_color_info">"Alt yazı penceresi soldan ve sağdaki kısımlardır. (arka planın olmadığı yerde)"</string>
+    <string name="sub_window_color_info">"Alt yazı penceresi yazıların solundaki ve sağındaki kısımlardır. (arka planın olmadığı yerde)"</string>
     <string name="sub_color_info"><b>Not:</b> Üstteki ayarları değiştirmek sadece SoftSub Alt yazılarını etkiler!</string>
     <string name="sub_alpha">Alt yazı Saydamlığı</string>
     <string name="sub_text_example">Örnek Alt yazı</string>
@@ -227,47 +227,47 @@
     <string name="ask_update_progress_info_ep">Bölüm izlendikten sonra kapattığınızda her zaman otomatik olarak ilerlemeyi günceller.</string>
     <string name="ask_update_progress_info_chap">Bölüm okunduktan sonra kapattığınızda her zaman otomatik olarak ilerlemeyi günceller.</string>
     <string name="ask_update_progress_chapter_zero">İlerlemeyi 0. Bölüme Güncelle</string>
-    <string name="ask_update_progress_info_zero">Turning on will add newly started items to Anilist with progress set to chapter 0.</string>
-    <string name="ask_update_progress_hentai">Update Progress for Hentai</string>
-    <string name="ask_update_progress_doujin">Update Progress for Doujins</string>
-    <string name="very_bold">very bold of you sar</string>
-    <string name="watch_complete_percentage">Watch Update Percentage</string>
-    <string name="watch_complete_percentage_info">The percentage at which your Anilist progress should be updated after watching an episode. \nThis also sets the \% for when to preload links for the next episode.</string>
-    <string name="behaviour">Behaviour</string>
-    <string name="always_continue">Always Continue from where you left off</string>
-    <string name="pause_video_focus">Pause when not in Focus</string>
-    <string name="gestures">Volume &amp; Brightness Gestures</string>
-    <string name="double_tap">Double tap to Seek</string>
-    <string name="fast_forward">Fast Forward</string>
-    <string name="double_tap_info">Turning off will show fast forward &amp; rewind buttons</string>
-    <string name="seek_time">Seek Time</string>
-    <string name="seek_time_info">Amount of time in seconds for fast forward &amp; rewind.</string>
-    <string name="skip_time">Skip Time</string>
-    <string name="skip_time_info">Setting to 0, hides the Skip Button.</string>
-    <string name="show_cast_button">Show Cast Button</string>
-    <string name="show_cast_button_info">Requires \"Web Video Caster\" app to cast.</string>
-    <string name="picture_in_picture">Picture in Picture</string>
-    <string name="always_minimize">Always Minimize</string>
-    <string name="always_minimize_info">Requires PiP to be enabled, makes the player behave like Youtube Player but better.\nAlso hides the PiP button.</string>
-    <string name="app">App</string>
-    <string name="immersive_mode">Hide Status Bar</string>
-    <string name="immersive_modelist">Hide Status Bar for list</string>
-    <string name="immersive_mode_info">Requires App restart to fully apply.</string>
-    <string name="home_layout_show">Show/Hide Layouts on Home</string>
+    <string name="ask_update_progress_info_zero">Açmak, yeni başladığınız içerikleri Anilist\'te ilerlemeyi 0. Bölüme kaydeder.</string>
+    <string name="ask_update_progress_hentai">Hentai için İlerlemeyi Güncelle</string>
+    <string name="ask_update_progress_doujin">Doujinler için İlerlemeyi Güncelle</string>
+    <string name="very_bold">çok ayıp efendim</string>
+    <string name="watch_complete_percentage">Güncelleme Yüzdesini İzle</string>
+    <string name="watch_complete_percentage_info">Bu yüzde, bölümde yüzde kaçtan sonra Anilist\'teki ilerlemenizin güncelleneceğini seçer. \nBu aynı zamanda yüzde kaçtan sonra sonraki bölümdeki bağlantıların ön yükleneceğini ayarlar.</string>
+    <string name="behaviour">Davranış</string>
+    <string name="always_continue">Her zaman kaldığın yerden Devam Et</string>
+    <string name="pause_video_focus">Odaklanmadığında Durdur</string>
+    <string name="gestures">Ses ve Parlaklık Hareketleri</string>
+    <string name="double_tap">İleri/Geri Sarmak için Çift Tıkla</string>
+    <string name="fast_forward">İleri Sar</string>
+    <string name="double_tap_info">Kapatmak, ileri ve geri sarma butonlarını gösterecektir</string>
+    <string name="seek_time">İleri/Geri Sarma</string>
+    <string name="seek_time_info">İleri ve geri sarmanın kaç saniye olacağını seçer.</string>
+    <string name="skip_time">Atlama Süresi</string>
+    <string name="skip_time_info">0\'a ayarlamak Atlama Butonunu gizler.</string>
+    <string name="show_cast_button">Yansıtma Butonunu Göster</string>
+    <string name="show_cast_button_info">Yayınlamak \"Web Video Caster\" uygulaması gerekir.</string>
+    <string name="picture_in_picture">Resim içinde Resim</string>
+    <string name="always_minimize">Her zaman Küçült</string>
+    <string name="always_minimize_info">PİP\'in açık olmasını gerektirir, oynatıcının Youtube Oynatıcısı gibi davranmasını sağlar ama daha iyidir.\nAynı zamanda PİP butonunu gizler.</string>
+    <string name="app">Uygulama</string>
+    <string name="immersive_mode">Durum Çubuğunu Gizle</string>
+    <string name="immersive_modelist">Liste için Durum Çubuğunu Gizle</string>
+    <string name="immersive_mode_info">Uygulanması için Uygulamanın Yeniden Başlatılması Gerekir.</string>
+    <string name="home_layout_show">Ana Sayfadaki Düzeni Göster/Gizle</string>
     <string-array name="home_layouts">
-        <item>Continue Watching</item>
-        <item>Favourite Anime</item>
-        <item>Planned Anime</item>
-        <item>Continue Reading</item>
-        <item>Favourite Manga</item>
-        <item>Planned Manga</item>
-        <item>Recommended</item>
-        <item>Social Feeds</item>
+        <item>İzlemeye Devam Et</item>
+        <item>Favori Animeler</item>
+        <item>Planlanan Animeler</item>
+        <item>Okumaya Devam Et</item>
+        <item>Favori Mangalar</item>
+        <item>Planlanan Mangalar</item>
+        <item>Önerilen</item>
+        <item>Sosyal Medya Akışları</item>
     </string-array>
-    <string name="startUpTab">Default Start Up Tab</string>
-    <string name="small_view">Small View in Trending Shows</string>
-    <string name="animations">Animations</string>
-    <string name="banner_animations">Banner Animations</string>
+    <string name="startUpTab">Varsayılan Başlangıç Sekmesi</string>
+    <string name="small_view">Trend Şovlarda Küçük Gösterge</string>
+    <string name="animations">Animasyonlar</string>
+    <string name="banner_animations">Kapak Animasyonları</string>
     <string name="layout_animations">Layout Animations</string>
     <string name="trending_scroller">Trending Scroller</string>
     <string name="animation_speed">Overall Speed</string>
@@ -282,7 +282,7 @@
     <string name="subbed">Alt yazılı</string>
     <string name="prefer_dub">Dublajlı Anime Tercih Et</string>
     <string name="none">Hiçbiri</string>
-    <string name="selected_dns">Seçilmiş DNS</string>
+    <string name="selected_dns">Seçilen DNS</string>
     <string name="dns_info">Eğer ISP\'niz herhangi bir kaynağı engelliyorsa değiştirin</string>
     <string name="keep_screen_on">Ekranı Açık Tut</string>
     <string name="layout">Düzen</string>
@@ -394,7 +394,7 @@
     <string name="error_loading_data">Error loading data %1$s</string>
     <string name="long_click_to_check_update">Uygulama Güncellemelerini kontrol etmek için Uzun Süre Basılı Tut</string>
     <string name="saved_to_path">Kaydedilen yer:\n%s</string>
-    <string name="setting_progress">İlerleme %1$d. Bölume güncelleniyor</string>
+    <string name="setting_progress">İlerleme %1$d. Bölüme güncelleniyor</string>
     <string name="login_anilist_account">Lütfen AniList Hesabınıza Giriş yapınız!</string>
     <string name="congrats_vro">Congrats Vro</string>
     <string name="please_reload">Please Reload.</string>
