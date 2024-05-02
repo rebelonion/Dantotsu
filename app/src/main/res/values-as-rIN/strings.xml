@@ -338,8 +338,8 @@
     <string name="forks">ভাৰসনসমূহ</string>
     <string name="faq">পূছণী সম্পৰ্কে</string>
     <string name="accounts">একাউণ্টসমূহ</string>
-    <string name="addons">Add-ons</string>
-    <string name="addons_desc">Get more features out of your app</string>
+    <string name="addons">এড্ড-অন</string>
+    <string name="addons_desc">আপোনাৰ এপ্পৰ পৰা অধিক সুবিধা প্ৰাপ্ত কৰক</string>
     <string name="myanimelist">মাই অনুষ্ঠানৰ তালিকা</string>
     <string name="login_with_anilist">অনিলিস্টৰ সৈতে লগিন কৰক!</string>
     <string name="anilist">অনিলিস্ট</string>
@@ -832,10 +832,10 @@
     <string name="use_unique_theme_for_each_item_desc">মিডিয়াৰ বেনাৰৰ পৰা ৰং ব্যৱহাৰ কৰক</string>
     <string name="use_custom_theme_desc">থোৱাৰ বাবে আপোনাৰ নিজৰ ৰং ব্যৱহাৰ কৰক</string>
     <string name="color_picker_desc">এটি ৰং বাছনি কৰক</string>
-    <string name="torrent_addon">Torrent Add-on</string>
-    <string name="enable_torrent">Enable Torrent</string>
-    <string name="anime_downloader_addon">Anime Downloader Add-on</string>
-    <string name="install_torrent_addon">Install Torrent Add-on</string>
+    <string name="torrent_addon">তৰেণ্ট এড্ড-অন</string>
+    <string name="enable_torrent">তৰেণ্ট অণ কৰক</string>
+    <string name="anime_downloader_addon">এনিমে ডাউনলোডাৰ এড্ড-অন</string>
+    <string name="install_torrent_addon">টৰেন্ট এড্ড-অন ইনষ্টল কৰক</string>
     <string name="loaded_successfully">সফলতাত ল\'ড হৈছে</string>
     <string name="not_installed">ইনষ্টল কৰা নাই</string>
     <string name="torrent_extension_not_supported">Torrent Add-on not supported on this device</string>
