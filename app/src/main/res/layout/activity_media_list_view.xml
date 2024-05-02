@@ -2,7 +2,8 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
@@ -18,12 +19,13 @@
                 android:id="@+id/settingsContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/listTitle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="48dp"
+                    android:layout_weight="1"
                     android:layout_marginStart="32dp"
                     android:ellipsize="end"
                     android:fontFamily="@font/poppins_bold"
@@ -33,7 +35,28 @@
                     android:textColor="?attr/colorOnBackground"
                     android:textSize="16sp"
                     tools:text="@string/app_name" />
+                <ImageView
+                    android:id="@+id/mediaList"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:alpha="0.33"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_round_view_list_24"
+                    app:tint="?attr/colorOnBackground"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
 
+                <ImageView
+                    android:id="@+id/mediaGrid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="end"
+                    android:alpha="0.33"
+                    android:padding="8dp"
+                    android:layout_marginEnd="12dp"
+                    app:srcCompat="@drawable/ic_round_grid_view_24"
+                    app:tint="?attr/colorOnBackground"
+                    tools:ignore="ContentDescription,ImageContrastCheck" />
             </LinearLayout>
 
 

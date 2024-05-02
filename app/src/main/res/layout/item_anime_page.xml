@@ -207,12 +207,12 @@
                 android:id="@+id/animeRecentlyMore"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="24dp"
+                android:layout_marginEnd="12dp"
                 android:fontFamily="@font/poppins_bold"
                 android:padding="8dp"
                 android:src="@drawable/arrow_mark"
                 android:textSize="16sp"
-                android:visibility="invisible"
+
                 tools:ignore="ContentDescription" />
         </LinearLayout>
 
@@ -270,7 +270,7 @@
             android:id="@+id/animeMoviesMore"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/poppins_bold"
             android:padding="8dp"
             android:src="@drawable/arrow_mark"
@@ -331,7 +331,7 @@
             android:id="@+id/animeTopRatedMore"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/poppins_bold"
             android:padding="8dp"
             android:src="@drawable/arrow_mark"
@@ -391,7 +391,7 @@
             android:id="@+id/animeMostFavMore"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="12dp"
             android:fontFamily="@font/poppins_bold"
             android:padding="8dp"
             android:src="@drawable/arrow_mark"

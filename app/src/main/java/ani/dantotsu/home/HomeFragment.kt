@@ -232,9 +232,9 @@ class HomeFragment : Fragment() {
                             LinearLayoutManager.HORIZONTAL,
                             false
                         )
-                        more.setOnClickListener { _ ->
+                        more.setOnClickListener { i ->
                             ContextCompat.startActivity(
-                                requireActivity(), Intent(requireActivity(), MediaListViewActivity::class.java)
+                                i.context, Intent(i.context, MediaListViewActivity::class.java)
                                     .putExtra("title", string)
                                     .putExtra("media", it),
                                 null
