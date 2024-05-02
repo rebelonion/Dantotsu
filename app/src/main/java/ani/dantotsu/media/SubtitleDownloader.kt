@@ -5,6 +5,7 @@ import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.parsers.SubtitleType
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.anggrayudi.storage.file.openOutputStream
 import eu.kanade.tachiyomi.network.NetworkHelper
 import kotlinx.coroutines.Dispatchers
@@ -19,28 +20,33 @@ class SubtitleDownloader {
         //doesn't really download the subtitles -\_(o_o)_/-
         suspend fun loadSubtitleType(url: String): SubtitleType =
             withContext(Dispatchers.IO) {
-                // Initialize the NetworkHelper instance. Replace this line based on how you usually initialize it
-                val networkHelper = Injekt.get<NetworkHelper>()
-                val request = Request.Builder()
-                    .url(url)
-                    .build()
+                return@withContext try {
+                    // Initialize the NetworkHelper instance. Replace this line based on how you usually initialize it
+                    val networkHelper = Injekt.get<NetworkHelper>()
+                    val request = Request.Builder()
+                        .url(url)
+                        .build()
 
-                val response = networkHelper.client.newCall(request).execute()
+                    val response = networkHelper.client.newCall(request).execute()
 
-                // Check if response is successful
-                if (response.isSuccessful) {
-                    val responseBody = response.body.string()
+                    // Check if response is successful
+                    if (response.isSuccessful) {
+                        val responseBody = response.body.string()
 
 
-                    val subtitleType = when {
-                        responseBody.contains("[Script Info]") -> SubtitleType.ASS
-                        responseBody.contains("WEBVTT") -> SubtitleType.VTT
-                        else -> SubtitleType.SRT
+                        val subtitleType = when {
+                            responseBody.contains("[Script Info]") -> SubtitleType.ASS
+                            responseBody.contains("WEBVTT") -> SubtitleType.VTT
+                            else -> SubtitleType.SRT
+                        }
+
+                        subtitleType
+                    } else {
+                        SubtitleType.UNKNOWN
                     }
-
-                    return@withContext subtitleType
-                } else {
-                    return@withContext SubtitleType.UNKNOWN
+                } catch (e: Exception) {
+                    Logger.log(e)
+                    SubtitleType.UNKNOWN
                 }
             }
 
