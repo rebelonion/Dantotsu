@@ -463,36 +463,36 @@
     <string name="time_format">%1$d gün %2$d saat %3$d dakika %4$d saniye</string>
     <string-array name="sort_by">
         <item>Puan</item>
-        <item>Popular</item>
-        <item>Trending</item>
-        <item>New Releases</item>
-        <item>A-Z</item>
-        <item>Z-A</item>
-        <item>Pure pain</item>
+        <item>Popüler</item>
+        <item>Trend olan</item>
+        <item>Yeni Yayınlananlar</item>
+        <item>A\'dan Z\'ye</item>
+        <item>Z\'den A\'ya</item>
+        <item>Saf işkence</item>
     </string-array>
-    <string name="main_role">MAIN</string>
-    <string name="supporting_role">SUPPORTING</string>
-    <string name="status_finished">FINISHED</string>
-    <string name="status_releasing">RELEASING</string>
-    <string name="status_not_yet_released">NOT YET RELEASED</string>
-    <string name="status_cancelled">CANCELLED</string>
-    <string name="status_hiatus">HIATUS</string>
-    <string name="type_adaptation">ADAPTATION</string>
-    <string name="type_parent">PARENT</string>
-    <string name="type_character">CHARACTER</string>
-    <string name="type_summary">SUMMARY</string>
-    <string name="type_alternative">ALTERNATIVE</string>
-    <string name="type_other">OTHER</string>
-    <string name="type_source">SOURCE</string>
-    <string name="type_contains">CONTAINS</string>
-    <string name="read_on_dantotsu">Read on Dantotsu</string>
-    <string name="watch_on_dantotsu">Watch on Dantotsu</string>
-    <string name="view_profile_in_dantotsu">View Profile in Dantotsu</string>
-    <string name="continue_episode">Continue : Episode %1$s%2$s\n%3$s</string>
+    <string name="main_role">ANA</string>
+    <string name="supporting_role">YAN</string>
+    <string name="status_finished">BİTİRİLDİ</string>
+    <string name="status_releasing">YAYINLANIYOR</string>
+    <string name="status_not_yet_released">HENÜZ YAYINLANMADI</string>
+    <string name="status_cancelled">İPTAL EDİLDİ</string>
+    <string name="status_hiatus">ARA VERİLDİ</string>
+    <string name="type_adaptation">ADAPTASYON</string>
+    <string name="type_parent">ANA HİKAYE</string>
+    <string name="type_character">KARAKTER</string>
+    <string name="type_summary">ÖZET</string>
+    <string name="type_alternative">ALTERNATİF</string>
+    <string name="type_other">DİĞER</string>
+    <string name="type_source">KAYNAK</string>
+    <string name="type_contains">İÇERİYOR</string>
+    <string name="read_on_dantotsu">Dantotsu\'da oku</string>
+    <string name="watch_on_dantotsu">Dantotsu\'da izle</string>
+    <string name="view_profile_in_dantotsu">Profili Dantotsu\'da Göster</string>
+    <string name="continue_episode">Devam Et : Bölüm %1$s%2$s\n%3$s</string>
     <string name="filler_tag"> - Filler</string>
-    <string name="continue_chapter">Continue : %1$s\n%2$s</string>
-    <string name="episode">"Episode "</string>
-    <string name="episode_num">"Episode %1$s"</string>
+    <string name="continue_chapter">Devam Et : %1$s\n%2$s</string>
+    <string name="episode">"Bölüm "</string>
+    <string name="episode_num">"%1$s. Bölüm"</string>
     <string name="chapter">"Chapter "</string>
     <string name="chapter_num">"Chapter %1$s"</string>
     <string name="just_released">- Newly released!</string>
