@@ -493,61 +493,61 @@
     <string name="continue_chapter">Devam Et : %1$s\n%2$s</string>
     <string name="episode">"Bölüm "</string>
     <string name="episode_num">"%1$s. Bölüm"</string>
-    <string name="chapter">"Chapter "</string>
-    <string name="chapter_num">"Chapter %1$s"</string>
-    <string name="just_released">- Newly released!</string>
-    <string name="checking_subscriptions_title">Checking Subscriptions</string>
-    <string name="user_list">%1$s\'s %2$s List</string>
-    <string name="speed">Speed</string>
-    <string name="auto_update">Auto Update progress for %1$s?</string>
-    <string name="continue_from">Continue from %1$s?</string>
-    <string name="title_update_progress">Update progress on AniList?</string>
-    <string name="incognito_will_not_update">Incognito mode will still ignore progress.</string>
-    <string name="dont_ask_again">"Don't ask again for %1$s"</string>
-    <string name="default_speed">Default Speed</string>
-    <string name="default_resize_mode">Default Resize Mode</string>
-    <string name="primary_sub_color">Primary Sub Color</string>
-    <string name="outline_sub_color">Outline Sub Color</string>
-    <string name="outline_type">Outline Type</string>
-    <string name="subtitle_font">Subtitle Font</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <string name="chapter">"Bölüm "</string>
+    <string name="chapter_num">"%1$s. Bölüm"</string>
+    <string name="just_released">- Yeni yayınlandı!</string>
+    <string name="checking_subscriptions_title">Abonelikler Kontrol Ediliyor</string>
+    <string name="user_list">%1$s\'in %2$s Listesi</string>
+    <string name="speed">Hız</string>
+    <string name="auto_update">%1$s için İlerleme Otomatik Güncellensin mi?</string>
+    <string name="continue_from">%1$s\'dan devam etmek ister misiniz?</string>
+    <string name="title_update_progress">AniList\'teki ilerleme güncellensin mi?</string>
+    <string name="incognito_will_not_update">Gizli Mod yine de ilerlemeyi göz ardı edecektir.</string>
+    <string name="dont_ask_again">"%1$s için tekrar sorma"</string>
+    <string name="default_speed">Varsayılan Hız</string>
+    <string name="default_resize_mode">Varsayılan Yeniden Boyutlandırma Modu</string>
+    <string name="primary_sub_color">Birincil Alt yazı Rengi</string>
+    <string name="outline_sub_color">Dış Hat Alt yazı Rengi</string>
+    <string name="outline_type">Dış Hat Tipi</string>
+    <string name="subtitle_font">Alt yazı Fontu</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
     <string name="ok">OK</string>
     <string name="reset">Reset</string>
-    <string name="close">Close</string>
-    <string name="no_chapter">No Chapter</string>
-    <string name="content_18">Turn on 18+ content from your Anilist settings</string>
-    <string name="available">Available</string>
-    <string name="lets_go">Let\'s Go</string>
-    <string name="cope">Cope</string>
-    <string name="watched_num">"Watched "</string>
-    <string name="read_num">"Read "</string>
-    <string name="episodes_out_of">" out of "</string>
-    <string name="chapters_out_of">" out of "</string>
-    <string name="episodes_total_of">"Total of "</string>
-    <string name="chapters_total_of">"Total of "</string>
-    <string name="no_description_available">"No Description Available"</string>
+    <string name="close">Kapat</string>
+    <string name="no_chapter">Bölüm Yok</string>
+    <string name="content_18">18+ içerikleri Anilist ayarlarından açın</string>
+    <string name="available">Mevcut</string>
+    <string name="lets_go">Hadi Gidelim</string>
+    <string name="cope">Salla</string>
+    <string name="watched_num">"İzlendi "</string>
+    <string name="read_num">"Okundu "</string>
+    <string name="episodes_out_of">" / "</string>
+    <string name="chapters_out_of">" / "</string>
+    <string name="episodes_total_of">"Toplam "</string>
+    <string name="chapters_total_of">"Toplam "</string>
+    <string name="no_description_available">"Açıklama yok"</string>
     <string-array name="manga_directions">
-        <item>Top to Bottom</item>
-        <item>Right to Left</item>
-        <item>Bottom to Top</item>
-        <item>Left to Right</item>
+        <item>Yukarıdan Aşağıya doğru</item>
+        <item>Sağdan Sola doğru</item>
+        <item>Aşağıdan Yukarıya doğru</item>
+        <item>Soldan Sağa doğru</item>
     </string-array>
     <string-array name="manga_layouts">
-        <item>Paged</item>
-        <item>Continuous Paged</item>
-        <item>Continuous</item>
+        <item>Sayfa Sayfa</item>
+        <item>Devamlı Sayfalar</item>
+        <item>Devamlı</item>
     </string-array>
-    <string name="selected">Selected</string>
-    <string name="found">Found</string>
-    <string name="age">"__Age:__ "</string>
-    <string name="birthday">\n\"__Birthday:__ \"</string>
-    <string name="gender">\n\"__Gender:__ \"</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-    <string name="question_1">What is Dantotsu?</string>
-    <string name="answer_1">Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream &amp; download Anime / Manga through extensions. \n&gt;Dantotsu (断トツ; Dan-totsu) literally means the best of the best in Japanese. Well, we would like to say this is the best open source app for anime and manga on Android, but hey, Try it out yourself &amp; judge!</string>
-    <string name="question_2">What are some features of Dantotsu?</string>
+    <string name="selected">Seçildi</string>
+    <string name="found">Bulundu</string>
+    <string name="age">"__Yaş:__ "</string>
+    <string name="birthday">\n\"__Doğum Tarihi:__ \"</string>
+    <string name="gender">\n\"__Cinsiyet:__ \"</string>
+    <string name="male">Erkek</string>
+    <string name="female">Dişi</string>
+    <string name="question_1">Dantotsu Nedir?</string>
+    <string name="answer_1">Dantotsu, Saikou\'nun küllerinden yapıldı ve basit ama son teknoloji bir zarafetle temellendirildi. Dantotsu yalnızca Anilist\'e bağlı bir istemcidir ve aynı zamanda size eklentiler sayesinde Animeleri &amp; Mangaları indirmenizi/izlemenizi sağlar.\n&gt;Dantotsu (断トツ; Dan-totsu), Japonca\'da \"en iyisinin en iyisi\" anlamına gelir. Şey, bizce bu uygulama Anime ve Manga için Android\'deki açık ara en iyi açık kaynaklı uygulama, ama hey, Dene ve kendin karar ver!</string>
+    <string name="question_2">Dantotsu\'nun bazı özellikleri nelerdir?</string>
     <string name="answer_2">Some mentionable features of Dantotsu are\n\n- Easy and functional way to both, watch anime and read manga and light novels, Ad Free.\n- A completely open source app with a nice UI &amp; Animations\n- 3rd party plugin support \n- Synchronize anime and manga real-time with AniList. Easily categorize anime and manga based on your current status. (Powered by AniList)\n- Find all shows using thoroughly and frequently updated list of all trending, popular and ongoing anime based on scores.\n- View extensive details about anime shows, movies and manga titles. It also features ability to countdown to the next episode of airing anime. (Powered by AniList &amp; MyAnimeList)</string>
     <string name="question_3">Whats the difference between Stable, Beta &amp; Alpha versions?</string>
     <string name="answer_3">A Stable release is a version that has been tested as thoroughly as possible and is as reliable as we can make it.\n\nA Beta release is a version which is meant for testing new features or providing hot fixes.\n\nAn Alpha release is like a beta version but has many bugs and you can only find it on our [discord](https://discord.gg/invite/4HPZ5nAWwM) server. It gets frequent updates and has a high chance to break.\n\nIf you want a reliable app then go for the Stable. If you want the latest and greatest features and bugs then go for Alpha.</string>
