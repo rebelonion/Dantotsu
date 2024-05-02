@@ -173,17 +173,17 @@
     <string name="version_current">Versiyon %1$s</string>
     <string-array name="tips">
         <item>Bir bölümün üstüne Uzun Süre Basılı Tutup onu Okunmuş olarak İşaretleyebilirsiniz.</item>
-        <item>Şova Uzun Süre Basılı Tutarak List Editörünü açabilirsiniz.</item>
+        <item>Şova Basılı Tutarak Liste Editörünü açabilirsiniz.</item>
         <item>Uygulamanın içinde birkaç tane daha sürpriz yumurtalar var.</item>
         <item>Meydan Okuma: Popüler Anime &amp; Mangaların en dibine ulaşın</item>
-        <item>Şovun Başlığına Uzun Süre Basılı Tutmayı deneyin.</item>
+        <item>Şovun Başlığını Basılı Tutmayı deneyin.</item>
         <item>Lanet olsun, neden zamanını boş yere harcıyorsun?</item>
-        <item>Bu mesajı kopyalamak için Uzun Süre Basılı Tutabilirsin.</item>
+        <item>Bu mesajı kopyalamak için Basılı Tutabilirsin.</item>
         <item>AMAN TANRIM, ŞUNA BAK! BİR SÜRPRİZ YUMURTA BULDUN!?</item>
         <item>Başka kimin bu Animasyonu sevdiğini biliyor musun?</item>
         <item>MAL desteği mi? bruh.</item>
         <item>Romanlar mı? daha çok YOK anlar.</item>
-        <item>Uygulama Güncellemelerini kontrol etmek için Logoya Uzun Süre Basılı Tut</item>
+        <item>Uygulama Güncellemelerini kontrol etmek için Logoya Basılı Tut</item>
     </string-array>
     <string-array name="themes">
         <item>Varsayılan</item>
@@ -227,7 +227,7 @@
     <string name="ask_update_progress_info_ep">Bölüm izlendikten sonra kapattığınızda her zaman otomatik olarak ilerlemeyi günceller.</string>
     <string name="ask_update_progress_info_chap">Bölüm okunduktan sonra kapattığınızda her zaman otomatik olarak ilerlemeyi günceller.</string>
     <string name="ask_update_progress_chapter_zero">İlerlemeyi 0. Bölüme Güncelle</string>
-    <string name="ask_update_progress_info_zero">Açmak, yeni başladığınız içerikleri Anilist\'te ilerlemeyi 0. Bölüme kaydeder.</string>
+    <string name="ask_update_progress_info_zero">Açmak, yeni başladığınız içeriklerin Anilist\'teki ilerlemesini 0. Bölüme kaydeder.</string>
     <string name="ask_update_progress_hentai">Hentai için İlerlemeyi Güncelle</string>
     <string name="ask_update_progress_doujin">Doujinler için İlerlemeyi Güncelle</string>
     <string name="very_bold">çok ayıp efendim</string>
@@ -268,16 +268,16 @@
     <string name="small_view">Trend Şovlarda Küçük Gösterge</string>
     <string name="animations">Animasyonlar</string>
     <string name="banner_animations">Kapak Animasyonları</string>
-    <string name="layout_animations">Layout Animations</string>
-    <string name="trending_scroller">Trending Scroller</string>
-    <string name="animation_speed">Overall Speed</string>
-    <string name="empty_fav">Looks like you don\'t like anything,\nTry liking a show to keep it here.</string>
-    <string name="fav_anime">Favourite Anime</string>
-    <string name="fav_manga">Favourite Manga</string>
-    <string name="restart_app">Restart the app?</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="current_page">Current Page</string>
+    <string name="layout_animations">Düzen Animasyonları</string>
+    <string name="trending_scroller">Trend olanları Kaydır</string>
+    <string name="animation_speed">Genel Hız</string>
+    <string name="empty_fav">Anlaşılan hiçbir şey sevmiyorsun,\nBurada tutmak için bir şovu beğenmeyi dene.</string>
+    <string name="fav_anime">Favori Animeler</string>
+    <string name="fav_manga">Favori Mangalar</string>
+    <string name="restart_app">Uygulamayı Yeniden Başlatalım mı?</string>
+    <string name="next">Sonraki</string>
+    <string name="previous">Önceki</string>
+    <string name="current_page">Mevcut Sayfa</string>
     <string name="dubbed">Dublajlı</string>
     <string name="subbed">Alt yazılı</string>
     <string name="prefer_dub">Dublajlı Anime Tercih Et</string>
@@ -328,51 +328,51 @@
     <string name="release_calendar">Takvim</string>
     <string name="planned_anime">Planlanan Anime</string>
     <string name="planned_manga">Planlanan Manga</string>
-    <string name="image_long_clicking">Open image by Long Clicking</string>
-    <string name="always_continue_content">Always continue previous items</string>
-    <string name="search_source_list">Search next available source</string>
-    <string name="timestamp_proxy_desc">Useful if you are getting Handshake Fails</string>
-    <string name="timestamp_proxy">Use Proxy for Timestamps</string>
-    <string name="check_app_updates">Check for Updates</string>
-    <string name="author">Author</string>
-    <string name="forks">Versions</string>
-    <string name="faq">FAQ</string>
-    <string name="accounts">Accounts</string>
-    <string name="addons">Add-ons</string>
-    <string name="addons_desc">Get more features out of your app</string>
+    <string name="image_long_clicking">Basılı Tutarak Görselleri Aç</string>
+    <string name="always_continue_content">Önceki ögeleri her zaman devam ettir</string>
+    <string name="search_source_list">Sonraki mevcut kaynağı ara</string>
+    <string name="timestamp_proxy_desc">Handshake Hatası alıyorsanız Yararlıdır</string>
+    <string name="timestamp_proxy">Zaman Bilgisi için Proxy kullan</string>
+    <string name="check_app_updates">Güncellemeleri Kontrol Et</string>
+    <string name="author">Yazar</string>
+    <string name="forks">Versiyonlar</string>
+    <string name="faq">SSS</string>
+    <string name="accounts">Hesaplar</string>
+    <string name="addons">Eklentiler</string>
+    <string name="addons_desc">Uygulamanız için daha fazla özellik edinin</string>
     <string name="myanimelist">MyAnimeList</string>
-    <string name="login_with_anilist">Login with Anilist!</string>
+    <string name="login_with_anilist">Anilist ile Giriş Yap!</string>
     <string name="anilist">Anilist</string>
-    <string name="account_help">How does this work\?</string>
-    <string name="full_account_help">        Dantotsu is an Anilist Based App, so for syncing with your MAL Account, It needs an Anilist account to be logged in.
-        \nOnce logged in with both Anilist and MAL accounts, the app will automatically update your MAL account whenever:
-        \n- Add a new Media
-        \n- Edit a Media
-        \n- Delete a Media
+    <string name="account_help">Bu nasıl çalışıyor\?</string>
+    <string name="full_account_help">        Dantotsu Anilist\'e temelli bir uygulamadır, bundan dolayı MAL Hesabınıza girmek için ilk önce bir Anilist hesabına giriş yapmış olmalısınız.
+        \nAnilist ve MAL Hesabınıza girdikten sonra uygulama otomatik olarak MAL Hesabınızı günceller, eğer:
+        \n- Yeni bir Medya Eklerseniz
+        \n- Bir Medyayı Düzenlerseniz
+        \n- Bir Medyayı Silerseniz
 
-        \n\nNote: The app will not sync old Media\'s from Anilist to MAL, It\'s recommended to sync them.
-        \n- Check __FAQs__ for _Easy Method_
+        \n\nNot: Bu uygulama eski Medyaları Otomatik olarak Anilist\'ten MAL\'a senkronize etmez. Manuel olarak Senkronize etmeniz önerilir.
+        \n- _Kolay Metod_ için __FAQs__ (SSS) kısmını kontrol edin
 
-        \n\nAnd for _Intermediates_ :
-        \n- [How to sync Anilist data with MAL](https://anilist.co/forum/thread/2654)
-        \n- [How to sync MAL data with Anilist](https://anilist.co/forum/thread/3393)
+        \n\n_Yardım_ için :
+        \n- [Anilist verilerini MAL ile nasıl Senkronize Edebilirim](https://anilist.co/forum/thread/2654)
+        \n- [MAL verilerini Anilist ile nasıl Senkronize Edebilirim](https://anilist.co/forum/thread/3393)
 
-        \n\n_It is not required to sync both MAL and Anilist accounts._
+        \n\n_Hem MAL hem de Anilist\'i senkronize etmek zorunlu değildir._
     </string>
-    <string name="notification_for_checking_subscriptions">Checking Subscriptions notification</string>
-    <string name="use_alarm_manager">Use Alarm Manager</string>
-    <string name="use_alarm_manager_reliable">Use Alarm Manager for reliable Notifications</string>
-    <string name="use_alarm_manager_confirm">Using Alarm Manger can help fight against battery optimization, but may consume more battery. It also requires the Alarm Manager permission.</string>
-    <string name="use">Use</string>
-    <string name="checking_subscriptions">Notification for Checking Subscriptions</string>
-    <string name="subscriptions_checking_time_s">Subscriptions Update Frequency : %1$s</string>
-    <string name="subscriptions_checking_time">Subscriptions Update Frequency</string>
-    <string name="subscriptions_info">Amount of time for Dantotsu to periodically check for new Episodes/Chapters\n(Less time will cause more battery consumption)</string>
-    <string name="do_not_update">Don\'t Update</string>
-    <string name="loading_chap_number">Loading Chapter %1$s</string>
-    <string name="sort_by_release_date">Sort by Release Date</string>
-    <string name="crop_borders">Crop Borders</string>
-    <string name="note">NOTE</string>
+    <string name="notification_for_checking_subscriptions">Abonliklerin bildirimleri Kontrol Ediliyor</string>
+    <string name="use_alarm_manager">Alarm Yöneticisini Kullan</string>
+    <string name="use_alarm_manager_reliable">Alarm Yöneticisini güvenilir Bildirimler için kullan</string>
+    <string name="use_alarm_manager_confirm">Alarm Yöneticisinin kullanılması pil optimizasyonuna yardımcı olabilir ancak daha fazla pil tüketebilir. Ayrıca Alarm Yöneticisi iznini de gerektirir.</string>
+    <string name="use">Kullan</string>
+    <string name="checking_subscriptions">Abonelik Kontrolleri Bildirimleri</string>
+    <string name="subscriptions_checking_time_s">Abonelikleri Güncelleme Sıklığı : %1$s</string>
+    <string name="subscriptions_checking_time">Abonelikleri Güncelleme Sıklığı</string>
+    <string name="subscriptions_info">Dantotsu\'nun periyodik olarak yeni Bölümleri kontrol etmesi için kurulan zaman\n(Az zaman daha az pil kullanımı demektir)</string>
+    <string name="do_not_update">Güncelleme</string>
+    <string name="loading_chap_number">%1$s. Bölüm Yükleniyor</string>
+    <string name="sort_by_release_date">Yayınlanma Tarihine göre Sırala</string>
+    <string name="crop_borders">Köşeleri Kırp</string>
+    <string name="note">NOT</string>
     <string name="manage_extension_repos">Manage Extension Repos</string>
     <string name="installing_extension">Installing extension</string>
     <string name="installation_failed">Installation failed: %1$s</string>
@@ -392,7 +392,7 @@
     <string name="jobless_message">DAMN! YOU TRULY ARE JOBLESS\nYOU REACHED THE END</string>
     <string name="file_manager_not_found">Couldn\'t find a File Manager to open SD card</string>
     <string name="error_loading_data">Error loading data %1$s</string>
-    <string name="long_click_to_check_update">Uygulama Güncellemelerini kontrol etmek için Uzun Süre Basılı Tut</string>
+    <string name="long_click_to_check_update">Uygulama Güncellemelerini kontrol etmek için Basılı Tut</string>
     <string name="saved_to_path">Kaydedilen yer:\n%s</string>
     <string name="setting_progress">İlerleme %1$d. Bölüme güncelleniyor</string>
     <string name="login_anilist_account">Lütfen AniList Hesabınıza Giriş yapınız!</string>
