@@ -11,7 +11,6 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.NotificationResponse
 import ani.dantotsu.connections.anilist.api.Page
 import ani.dantotsu.connections.anilist.api.Query
-import ani.dantotsu.connections.anilist.api.Social
 import ani.dantotsu.connections.anilist.api.ToggleLike
 import ani.dantotsu.currContext
 import ani.dantotsu.isOnline
@@ -413,6 +412,7 @@ class AnilistQueries {
     }
 
     suspend fun initHomePage(): Map<String, ArrayList<*>> {
+        val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
         val toShow: List<Boolean> =
             PrefManager.getVal(PrefName.HomeLayout) // anime continue, anime fav, anime planned, manga continue, manga fav, manga planned, recommendations
         var query = """{"""
@@ -462,15 +462,20 @@ class AnilistQueries {
             current?.lists?.forEach { li ->
                 li.entries?.reversed()?.forEach {
                     val m = Media(it)
-                    m.cameFromContinue = true
-                    subMap[m.id] = m
+                    if (m.id !in removeList) {
+                        m.cameFromContinue = true
+                        subMap[m.id] = m
+                    }
                 }
             }
+
             repeating?.lists?.forEach { li ->
                 li.entries?.reversed()?.forEach {
                     val m = Media(it)
-                    m.cameFromContinue = true
-                    subMap[m.id] = m
+                    if (m.id !in removeList) {
+                        m.cameFromContinue = true
+                        subMap[m.id] = m
+                    }
                 }
             }
             if (type != "Anime") {
@@ -504,8 +509,10 @@ class AnilistQueries {
             current?.lists?.forEach { li ->
                 li.entries?.reversed()?.forEach {
                     val m = Media(it)
-                    m.cameFromContinue = true
-                    subMap[m.id] = m
+                    if (m.id !in removeList) {
+                        m.cameFromContinue = true
+                        subMap[m.id] = m
+                    }
                 }
             }
             @Suppress("UNCHECKED_CAST")
@@ -532,7 +539,10 @@ class AnilistQueries {
             val returnArray = arrayListOf<Media>()
             apiMediaList?.edges?.forEach {
                 it.node?.let { i ->
-                    returnArray.add(Media(i).apply { isFav = true })
+                    val m = Media(i).apply { isFav = true }
+                    if (m.id !in removeList) {
+                        returnArray.add(m)
+                    }
                 }
             }
             returnMap["favorite$type"] = returnArray

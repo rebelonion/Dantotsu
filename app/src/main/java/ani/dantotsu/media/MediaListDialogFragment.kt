@@ -20,6 +20,7 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.databinding.BottomSheetMediaListBinding
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWith
 import com.google.android.material.materialswitch.MaterialSwitch
@@ -187,7 +188,15 @@ class MediaListDialogFragment : BottomSheetDialogFragment() {
                 binding.mediaListPrivate.setOnCheckedChangeListener { _, checked ->
                     media?.isListPrivate = checked
                 }
-
+                val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
+                binding.mediaListShow.isChecked = media?.id in removeList
+                binding.mediaListShow.setOnCheckedChangeListener { _, checked ->
+                    if (checked) {
+                        PrefManager.setCustomVal("removeList", removeList.plus(media?.id))
+                    } else {
+                        PrefManager.setCustomVal("removeList", removeList.minus(media?.id))
+                    }
+                }
                 media?.userRepeat?.apply {
                     binding.mediaListRewatch.setText(this.toString())
                 }
