@@ -27,17 +27,18 @@
             android:textSize="64sp" />
 
         <TextView
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins_bold"
             android:text="@string/app_died"
             android:textAlignment="center"
             android:textColor="?attr/colorPrimary"
-            android:textSize="32sp" />
+            android:textSize="24sp" />
 
         <TextView
-            android:layout_width="200dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
             android:fontFamily="@font/poppins"
             android:text="@string/an_unexpected_error_occurred"
             android:textAlignment="center"
@@ -55,7 +56,8 @@
             android:padding="16dp"
             android:textColor="?attr/colorOnBackground"
             android:textIsSelectable="true"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="LabelFor" />
 
     </LinearLayout>
 
@@ -66,7 +68,7 @@
         android:orientation="horizontal"
         android:layout_gravity="bottom|center_horizontal"
         android:gravity="center_horizontal"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
