@@ -172,13 +172,11 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
             media.isListPrivate = checked
         }
         val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
-        binding.mediaListShow.isChecked = media?.id in removeList
+        var remove = false
+        binding.mediaListShow.isChecked = media.id in removeList
         binding.mediaListShow.setOnCheckedChangeListener { _, checked ->
-            if (checked) {
-                PrefManager.setCustomVal("removeList", removeList.plus(media.id))
-            } else {
-                PrefManager.setCustomVal("removeList", removeList.minus(media.id))
-            }
+            remove = checked
+
         }
         binding.mediaListSave.setOnClickListener {
             scope.launch {
@@ -206,6 +204,11 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
                             status
                         )
                     }
+                }
+                if (remove) {
+                    PrefManager.setCustomVal("removeList", removeList.plus(media.id))
+                } else {
+                    PrefManager.setCustomVal("removeList", removeList.minus(media.id))
                 }
                 Refresh.all()
                 snackString(getString(R.string.list_updated))
