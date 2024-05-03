@@ -141,13 +141,18 @@ class DownloadsManager(private val context: Context) {
         newUri: Uri,
         finished: (Boolean, String) -> Unit
     ) {
-        try {
-            if (oldUri == newUri) {
-                finished(false, "Source and destination are the same")
-                return
-            }
-            CoroutineScope(Dispatchers.IO).launch {
-
+        if (oldUri == newUri) {
+            Logger.log("Source and destination are the same")
+            finished(false, "Source and destination are the same")
+            return
+        }
+        if (oldUri == Uri.EMPTY) {
+            Logger.log("Old Uri is empty")
+            finished(true, "Old Uri is empty")
+            return
+        }
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
                 val oldBase =
                     DocumentFile.fromTreeUri(context, oldUri) ?: throw Exception("Old base is null")
                 val newBase =
@@ -199,13 +204,17 @@ class DownloadsManager(private val context: Context) {
                         finished(true, "Successfully moved downloads")
                         super.onCompleted(result)
                     }
-                })
-            }
 
-        } catch (e: Exception) {
-            snackString("Error: ${e.message}")
-            finished(false, "Failed to move downloads: ${e.message}")
-            return
+                })
+
+            } catch (e: Exception) {
+                snackString("Error: ${e.message}")
+                Logger.log("Failed to move downloads: ${e.message}")
+                Logger.log(e)
+                Logger.log("oldUri: $oldUri, newUri: $newUri")
+                finished(false, "Failed to move downloads: ${e.message}")
+                return@launch
+            }
         }
     }
 
@@ -383,7 +392,7 @@ data class DownloadedType(
     private val chapter: String? = null
 ) : Serializable {
     val titleName: String
-        get() = title?:pTitle.findValidName()
+        get() = title ?: pTitle.findValidName()
     val chapterName: String
-        get() = chapter?:pChapter.findValidName()
+        get() = chapter ?: pChapter.findValidName()
 }
