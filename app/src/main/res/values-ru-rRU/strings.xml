@@ -854,9 +854,11 @@
     <string name="banner">%1$s\ [Баннер]</string>
     <string name="your_story">Ваша история</string>
     <string name="your_progress">Ваш прогресс</string>
+    <string name="you">You</string>
     <string name="logout_confirm">Вы уверены, что хотите выйти?</string>
     <string name="app_died">ПРИЛОЖЕНИЕ ОСТАНОВЛЕНО</string>
     <string name="an_unexpected_error_occurred">Произошла непредвиденная ошибка.\nПожалуйста, отправьте отчет о сбое разработчику :)</string>
     <string name="copy_report">Скопировать отчет</string>
     <string name="share_as_file">Поделиться как файл</string>
+    <string name="hide_in_home_screen">Hide in Home Screen</string>
 </resources>
