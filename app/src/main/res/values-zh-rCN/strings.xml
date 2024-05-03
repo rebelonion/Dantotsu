@@ -848,9 +848,11 @@
     <string name="banner">%1$s\ [横幅]</string>
     <string name="your_story">你的故事</string>
     <string name="your_progress">你的进度</string>
+    <string name="you">You</string>
     <string name="logout_confirm">您确定要注销吗？</string>
     <string name="app_died">应用已停止运行</string>
     <string name="an_unexpected_error_occurred">发生了意外错误。\n请向开发人员发送崩溃报告 :)</string>
     <string name="copy_report">复制报告</string>
     <string name="share_as_file">以文件形式分享</string>
+    <string name="hide_in_home_screen">Hide in Home Screen</string>
 </resources>
