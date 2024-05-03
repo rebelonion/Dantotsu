@@ -180,7 +180,7 @@ class SettingsAddonActivity : AppCompatActivity() {
                         icon = R.drawable.ic_round_dns_24,
                         isChecked = PrefManager.getVal(PrefName.TorrentEnabled),
                         switch = { isChecked, it ->
-                            if (isChecked && !torrentAddonManager.isAvailable()) {
+                            if (isChecked && !torrentAddonManager.isAvailable(false)) {
                                 snackString(getString(R.string.install_torrent_addon))
                                 it.settingsButton.isChecked = false
                                 PrefManager.setVal(PrefName.TorrentEnabled, false)
