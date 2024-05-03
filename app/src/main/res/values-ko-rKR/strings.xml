@@ -855,9 +855,11 @@
     <string name="banner">%1$s\ [배너]</string>
     <string name="your_story">당신의 이야기</string>
     <string name="your_progress">당신의 진행 상황</string>
+    <string name="you">You</string>
     <string name="logout_confirm">로그아웃 하시겠습니까?</string>
     <string name="app_died">앱이 종료되었습니다</string>
     <string name="an_unexpected_error_occurred">예기치 않은 오류가 발생했습니다.\n개발자에게 충돌 보고서를 보내주세요 :)</string>
     <string name="copy_report">보고서 복사</string>
     <string name="share_as_file">파일로 공유</string>
+    <string name="hide_in_home_screen">Hide in Home Screen</string>
 </resources>
