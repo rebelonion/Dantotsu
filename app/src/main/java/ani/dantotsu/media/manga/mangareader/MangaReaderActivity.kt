@@ -187,6 +187,10 @@ class MangaReaderActivity : AppCompatActivity() {
         defaultSettings = loadReaderSettings("reader_settings") ?: defaultSettings
 
         onBackPressedDispatcher.addCallback(this) {
+            if (!::media.isInitialized) {
+                finish()
+                return@addCallback
+            }
             val chapter = (MediaNameAdapter.findChapterNumber(media.manga!!.selectedChapter!!)
                 ?.minus(1L) ?: 0).toString()
             if (chapter == "0.0" && PrefManager.getVal(PrefName.ChapterZeroReader)
