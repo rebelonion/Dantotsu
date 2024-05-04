@@ -281,7 +281,6 @@ class HomeFragment : Fragment() {
             binding.homeFavAnime,
             binding.homeFavAnimeMore,
             getString(R.string.fav_anime)
-
         )
 
         initRecyclerView(
@@ -376,6 +375,37 @@ class HomeFragment : Fragment() {
             }
 
         }
+        model.getHidden().observe(viewLifecycleOwner) {
+            if (it != null) {
+                if (it.isNotEmpty()) {
+                    binding.homeHiddenItemsRecyclerView.adapter = MediaAdaptor(0, it, requireActivity())
+                    binding.homeHiddenItemsRecyclerView.layoutManager = LinearLayoutManager(
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
+                    )
+                    binding.homeContinueWatch.setOnLongClickListener {
+                        binding.homeHiddenItemsContainer.visibility = View.VISIBLE
+                        binding.homeHiddenItemsRecyclerView.layoutAnimation =
+                            LayoutAnimationController(setSlideIn(), 0.25f)
+                        true
+                    }
+                    binding.homeHiddenItemsMore.setSafeOnClickListener { _ ->
+                        ContextCompat.startActivity(
+                            requireActivity(), Intent(requireActivity(), MediaListViewActivity::class.java)
+                                .putExtra("title", getString(R.string.hidden))
+                                .putExtra("media", it),
+                            null
+                        )
+                    }
+                    binding.homeHiddenItemsTitle.setOnLongClickListener {
+                        binding.homeHiddenItemsContainer.visibility = View.GONE
+                        true
+                    }
+                }
+            }
+        }
+
         binding.homeUserAvatarContainer.startAnimation(setSlideUp())
 
         model.empty.observe(viewLifecycleOwner)

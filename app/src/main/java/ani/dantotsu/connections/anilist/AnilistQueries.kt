@@ -413,6 +413,7 @@ class AnilistQueries {
 
     suspend fun initHomePage(): Map<String, ArrayList<*>> {
         val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
+        val removedMedia = ArrayList<Media>()
         val toShow: List<Boolean> =
             PrefManager.getVal(PrefName.HomeLayout) // anime continue, anime fav, anime planned, manga continue, manga fav, manga planned, recommendations
         var query = """{"""
@@ -465,6 +466,8 @@ class AnilistQueries {
                     if (m.id !in removeList) {
                         m.cameFromContinue = true
                         subMap[m.id] = m
+                    } else {
+                        removedMedia.add(m)
                     }
                 }
             }
@@ -475,6 +478,8 @@ class AnilistQueries {
                     if (m.id !in removeList) {
                         m.cameFromContinue = true
                         subMap[m.id] = m
+                    } else {
+                        removedMedia.add(m)
                     }
                 }
             }
@@ -512,6 +517,8 @@ class AnilistQueries {
                     if (m.id !in removeList) {
                         m.cameFromContinue = true
                         subMap[m.id] = m
+                    } else {
+                        removedMedia.add(m)
                     }
                 }
             }
@@ -542,6 +549,8 @@ class AnilistQueries {
                     val m = Media(i).apply { isFav = true }
                     if (m.id !in removeList) {
                         returnArray.add(m)
+                    } else {
+                        removedMedia.add(m)
                     }
                 }
             }
@@ -643,6 +652,7 @@ class AnilistQueries {
                 list.addAll(0, anilistActivities)
                 returnMap["status"] = ArrayList(list)
             }
+            returnMap["hidden"] = removedMedia.distinctBy { it.id } as ArrayList<Media>
         }
         return returnMap
     }
