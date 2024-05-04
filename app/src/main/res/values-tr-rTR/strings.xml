@@ -859,5 +859,5 @@
     <string name="share_as_file">Dosya olarak paylaş</string>
     <string name="hide_in_home_screen">Ana Ekranda Gizle</string>
     <string name="hidden">Gizlendi</string>
-    <string name="no_hidden_items">No Hidden Items</string>
+    <string name="no_hidden_items">Gizlenen öge yok</string>
 </resources>
