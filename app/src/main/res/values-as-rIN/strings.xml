@@ -851,11 +851,11 @@
     <string name="banner">%1$s [বেননাৰ]</string>
     <string name="your_story">আপোনাৰ ষ্টোৰী</string>
     <string name="your_progress">আপোনাৰ প্ৰগ্ৰেছ</string>
-    <string name="you">You</string>
+    <string name="you">আপুনি</string>
     <string name="logout_confirm">আপুনি লগ আউট কৰিব বিচাৰিছে?</string>
     <string name="app_died">এপি পুলে গৈছিল</string>
     <string name="an_unexpected_error_occurred">এটা অপ্রত্যাশিত ত্ৰুটি ঘটিছে।\nঅনুগ্ৰহ কৰি তথ্য মচনা বা ডেভেলপাৰক দিখুৱাওক :)</string>
     <string name="copy_report">ৰিপ\'ৰ্ট প্ৰতিলিপি কৰক</string>
     <string name="share_as_file">ফাইলৰ হিচাপে শ্বেয়াৰ কৰক</string>
-    <string name="hide_in_home_screen">Hide in Home Screen</string>
+    <string name="hide_in_home_screen">হোম স্ক্রীনত লুকুৱা</string>
 </resources>
