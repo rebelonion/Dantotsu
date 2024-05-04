@@ -851,11 +851,11 @@
     <string name="banner">%1$s\ [Afiş]</string>
     <string name="your_story">Hikayen</string>
     <string name="your_progress">İlerlemen</string>
-    <string name="you">You</string>
+    <string name="you">Sen</string>
     <string name="logout_confirm">Çıkış yapmak istediğinizden emin misiniz?</string>
     <string name="app_died">UYGULAMA GEBERDİ</string>
     <string name="an_unexpected_error_occurred">Beklenmedik bir hata oluştu.\nLütfen geliştiriciye çökme raporu gönderin :)</string>
     <string name="copy_report">Raporu Kopyala</string>
     <string name="share_as_file">Dosya olarak paylaş</string>
-    <string name="hide_in_home_screen">Hide in Home Screen</string>
+    <string name="hide_in_home_screen">Ana Ekranda Gizle</string>
 </resources>
