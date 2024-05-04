@@ -851,11 +851,11 @@
     <string name="banner">%1$s\ [बैनर]</string>
     <string name="your_story">आपकी कहानी</string>
     <string name="your_progress">आपकी प्रगति</string>
-    <string name="you">You</string>
+    <string name="you">तुम</string>
     <string name="logout_confirm">क्या आप वाकई लॉगआउट करना चाहते हैं?</string>
     <string name="app_died">एप डाउन हो गया</string>
     <string name="an_unexpected_error_occurred">एक अप्रत्याशित त्रुटि हुई।\nकृपया डेवलपर को क्रैश रिपोर्ट भेजें :)</string>
     <string name="copy_report">रिपोर्ट कॉपी करें</string>
     <string name="share_as_file">फ़ाइल के रूप में साझा करें</string>
-    <string name="hide_in_home_screen">Hide in Home Screen</string>
+    <string name="hide_in_home_screen">होम स्क्रीन में छिपाएं</string>
 </resources>
