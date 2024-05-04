@@ -859,4 +859,5 @@
     <string name="share_as_file">फ़ाइल के रूप में साझा करें</string>
     <string name="hide_in_home_screen">होम स्क्रीन में छिपाएं</string>
     <string name="hidden">Hidden</string>
+    <string name="no_hidden_items">No Hidden Items</string>
 </resources>
