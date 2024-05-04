@@ -860,4 +860,5 @@
     <string name="share_as_file">Delen als bestand</string>
     <string name="hide_in_home_screen">Verbergen op startscherm</string>
     <string name="hidden">Hidden</string>
+    <string name="no_hidden_items">No Hidden Items</string>
 </resources>
