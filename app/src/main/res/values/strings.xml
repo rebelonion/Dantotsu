@@ -974,4 +974,5 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="share_as_file">Share as file</string>
     <string name="hide_in_home_screen">Hide in Home Screen</string>
     <string name="hidden">Hidden</string>
+    <string name="no_hidden_items">No Hidden Items</string>
 </resources>
