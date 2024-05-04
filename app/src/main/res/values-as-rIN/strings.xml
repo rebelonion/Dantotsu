@@ -859,4 +859,5 @@
     <string name="share_as_file">ফাইলৰ হিচাপে শ্বেয়াৰ কৰক</string>
     <string name="hide_in_home_screen">হোম স্ক্রীনত লুকুৱা</string>
     <string name="hidden">Hidden</string>
+    <string name="no_hidden_items">No Hidden Items</string>
 </resources>
