@@ -853,13 +853,13 @@
     <string name="avatar">%1$s\ [Avatar]</string>
     <string name="cover">%1$s\ [Couverture]</string>
     <string name="banner">%1$s\ [Bannière]</string>
-    <string name="your_story">Your Story</string>
+    <string name="your_story">Votre histoire</string>
     <string name="your_progress">Votre progression</string>
-    <string name="you">You</string>
+    <string name="you">Vous</string>
     <string name="logout_confirm">Êtes-vous sûr de vouloir vous déconnecter?</string>
-    <string name="app_died">APP DIED</string>
+    <string name="app_died">L’application est morte</string>
     <string name="an_unexpected_error_occurred">Une erreur inattendue s\'est produite.\nVeuillez envoyer un rapport de plantage au développeur :)</string>
     <string name="copy_report">Copier le rapport</string>
     <string name="share_as_file">Partager le fichier</string>
-    <string name="hide_in_home_screen">Hide in Home Screen</string>
+    <string name="hide_in_home_screen">Cacher dans l\'écran d\'accueil</string>
 </resources>
