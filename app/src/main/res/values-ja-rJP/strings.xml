@@ -854,11 +854,11 @@
     <string name="banner">%1$s\ [バナー]</string>
     <string name="your_story">あなたのストーリー</string>
     <string name="your_progress">あなたの進捗</string>
-    <string name="you">You</string>
+    <string name="you">あなたが</string>
     <string name="logout_confirm">本当にログアウトしますか？</string>
     <string name="app_died">アプリが終了しました</string>
     <string name="an_unexpected_error_occurred">予期しないエラーが発生しました。\n開発者にクラッシュレポートを送信してください :)</string>
     <string name="copy_report">レポートをコピー</string>
     <string name="share_as_file">ファイルとして共有</string>
-    <string name="hide_in_home_screen">Hide in Home Screen</string>
+    <string name="hide_in_home_screen">ホーム画面に隠れる</string>
 </resources>
