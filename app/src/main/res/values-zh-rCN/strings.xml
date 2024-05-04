@@ -855,4 +855,5 @@
     <string name="copy_report">复制报告</string>
     <string name="share_as_file">以文件形式分享</string>
     <string name="hide_in_home_screen">隐藏在主屏幕中</string>
+    <string name="hidden">Hidden</string>
 </resources>
