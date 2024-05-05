@@ -691,7 +691,7 @@
     <string name="open_website">Web sitesini Aç</string>
     <string name="log_to_file">Dosyaya Kayıt Tut</string>
     <string name="logging_warning">Dosyaya Kayıt Tutmak uygulamayı yavaşlatacaktır. Yalnızca sorunlarla karşılaşıyorsanız kullanın.</string>
-    <string name="radius">Etki Alanı</string>
+    <string name="radius">Yarıçap</string>
     <string name="sampling">Örnekleme</string>
     <string name="blur_banners">Afişi Sansürle</string>
     <string name="blur">Sansür</string>
