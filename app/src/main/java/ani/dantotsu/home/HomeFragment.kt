@@ -453,10 +453,12 @@ class HomeFragment : Fragment() {
             binding.homeUserStatusContainer,
         )
 
-        val live = Refresh.activity.getOrPut(1) { MutableLiveData(false) }
+        var running = false
+        val live = Refresh.activity.getOrPut(1) { MutableLiveData(true) }
         live.observe(viewLifecycleOwner)
         {
-            if (it) {
+            if (it && !running) {
+                running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
                         //Get userData First
@@ -483,6 +485,7 @@ class HomeFragment : Fragment() {
                     _binding?.homeRefresh?.isRefreshing = false
                 }
                 binding.homeHiddenItemsContainer.visibility = View.GONE
+                running = false
             }
 
         }
