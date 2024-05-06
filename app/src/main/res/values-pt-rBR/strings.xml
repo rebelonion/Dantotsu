@@ -46,7 +46,7 @@
     <string name="empty">Tudo em dia, novidades?</string>
     <string name="action_settings">Configurações</string>
     <string name="add">Adicionar à lista</string>
-    <string name="list_editor">Editar Lista</string>
+    <string name="list_editor">Editor de Lista</string>
     <string name="add_fav">Add to Favourites</string>
     <string name="notifications">Notificações</string>
     <string-array name="keys">
@@ -126,54 +126,54 @@
     <string name="not_supported">%1$s não é suportado!</string>
     <string name="server_selector">Selecionar Servidor</string>
     <string name="auto_select_server">Selecionando Servidor Padrão</string>
-    <string name="make_default">Make Default</string>
+    <string name="make_default">Tornar Padrão</string>
     <string name="filler">Filler</string>
-    <string name="adult">Adult</string>
-    <string name="list_only">List Only</string>
-    <string name="tag">Tag</string>
-    <string name="tags">Tags</string>
-    <string name="synonyms">Synonyms</string>
+    <string name="adult">Adulto</string>
+    <string name="list_only">Na minha lista</string>
+    <string name="tag">Etiqueta</string>
+    <string name="tags">Etiquetas</string>
+    <string name="synonyms">Sinônimos</string>
     <string name="trailer">Trailer</string>
     <string name="opening">Opening</string>
     <string name="ending">Ending</string>
     <string name="prequel">Prequel</string>
     <string name="sequel">Sequel</string>
-    <string name="anilist_settings">Anilist Settings</string>
-    <string name="extension_settings">Extensions</string>
+    <string name="anilist_settings">Configurações AniList</string>
+    <string name="extension_settings">Extensões</string>
     <string name="downloads">Downloads</string>
-    <string name="offline_mode">Offline Mode</string>
-    <string name="settings">Settings</string>
-    <string name="extensions">Extensions</string>
-    <string name="extension_updates_available">Extension updates available</string>
-    <string name="player_settings">Player Settings</string>
-    <string name="recentlyListOnly">Only show my content in \"Recently Updated\"</string>
-    <string name="download_manager_select">Download Manager</string>
-    <string name="downloadInSd">Download in SD card</string>
-    <string name="noSdFound">No SD card was Found.</string>
-    <string name="reader_settings">Reader Settings</string>
-    <string name="default_source">Default Source</string>
-    <string name="show_yt">Youtube Link</string>
-    <string name="default_ep_view">Default Episode Layout</string>
-    <string name="default_chp_view">Default Chapter Layout</string>
-    <string name="ui">User Interface</string>
-    <string name="common">Common</string>
-    <string name="theme">Theme</string>
-    <string name="ui_settings">UI Settings</string>
-    <string name="about">About</string>
-    <string name="desc">"    Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream-download Anime through extensions &amp; Manga.\nDantotsu literally means the \"best of the best\" in japanese. Well, we would like to say this is the best open source app for anime and manga on Android, what would you say?"</string>
-    <string name="devs">Developers/Helpers</string>
-    <string name="disclaimer">Disclaimer</string>
-    <string name="full_disclaimer">         - Dantotsu by itself only provides an anime and manga tracker and does not provide any anime or manga streaming or downloading capabilities.
-        \n\n - Dantotsu or any of its developer/staff don\'t host any of the content found inside Dantotsu. Any and all images and anime/manga information found in the app are taken from various public APIs (AniList, MyAnimeList, Kitsu).
-        \n\n - Furthermore, all of the anime/manga links found in Dantotsu are taken from various 3rd party plugins and have no affiliation with Dantotsu or its staff.
-        \n\n - Dantotsu or it\'s owners aren\'t liable for any misuse of any of the contents found inside or outside of the app and cannot be held accountable for the distribution of any of the contents found inside the app.
-        \n\n - By using Dantotsu, you comply to the fact that the developer of the app is not responsible for any of the contents found in the app. You also agree to the fact that you may not use Dantotsu to download or stream any copyrighted content.
-        \n\n - If the internet infringement issues are involved, please contact the source website. The developer does not assume any legal responsibility.
+    <string name="offline_mode">Modo Offline</string>
+    <string name="settings">Configurações</string>
+    <string name="extensions">Extensões</string>
+    <string name="extension_updates_available">Algumas extensões têm atualizações</string>
+    <string name="player_settings">Configurações do Player</string>
+    <string name="recentlyListOnly">Mostrar apenas minha lista em \"Novos Episódios\"</string>
+    <string name="download_manager_select">Gerenciador de Download</string>
+    <string name="downloadInSd">Baixar no cartão SD</string>
+    <string name="noSdFound">Não foi encontrado um cartão SD.</string>
+    <string name="reader_settings">Configurações do Leitor</string>
+    <string name="default_source">Fonte Padrão</string>
+    <string name="show_yt">Link do YouTube</string>
+    <string name="default_ep_view">Layout de Episódio Padrão</string>
+    <string name="default_chp_view">Layout de Capítulo Padrão</string>
+    <string name="ui">Interface do Usuário</string>
+    <string name="common">Geral</string>
+    <string name="theme">Tema</string>
+    <string name="ui_settings">Configurações da UI</string>
+    <string name="about">Sobre</string>
+    <string name="desc">"    Dantotsu foi criado a partir das cinzas do Saikou e baseado em elegância simplista mas de última geração. É um cliente Anilist, que te permite transmitir-baixar Animes e Mangás através de extensões.\nDantotsu literalmente significa o \"melhor dos melhores\" em japonês. Bom, gostaríamos de dizer que é o melhor aplicativo de código aberto para anime e mangá no Android, mas o que você acha?"</string>
+    <string name="devs">Desenvolvedores/Ajudantes</string>
+    <string name="disclaimer">Aviso</string>
+    <string name="full_disclaimer">         - Dantotsu por si só apenas disponibiliza um meio de catalogar mangás e animes e não provém nenhum recurso de streaming ou download de anime ou mangá.
+        \n\n - Dantotsu ou qualquer um de seus desenvolvedores/equipe não hospeda nenhum conteúdo encontrado dentro do aplicativo. Toda e qualquer imagem e informação de anime/mangá encontradas no aplicativo são obtidas através de várias APIs públicas (AniList, MyAnimeList, Kitsu).
+        \n\n - Além disso, todos os links de anime/mangá encontrados no Dantotsu são retirados de diversos plug-ins de terceiros e não têm afiliação com o Dantotsu ou sua equipe.
+        \n\n - Dantotsu ou seus proprietários não são responsáveis ​​por qualquer uso indevido de qualquer conteúdo encontrado dentro ou fora do aplicativo e não podem ser responsabilizados pela distribuição de qualquer conteúdo encontrado dentro do aplicativo.
+        \n\n - Ao usar o Dantotsu, você concorda que o desenvolvedor do aplicativo não é responsável por nenhum conteúdo encontrado no aplicativo. Você também concorda com o fato de não poder usar o Dantotsu para baixar ou transmitir qualquer conteúdo protegido por direitos autorais.
+        \n\n - Se houver problemas de violação da Internet, entre em contato com o site da origem/fonte. O desenvolvedor não assume nenhuma responsabilidade legal.
     </string>
-    <string name="version_current">Version %1$s</string>
+    <string name="version_current">Versão %1$s</string>
     <string-array name="tips">
-        <item>You can Long Click an episode/chapter to Mark it as Read.</item>
-        <item>Long Clicking Shows can directly open List Editor.</item>
+        <item>Você pode segurar em cima de um episódio/capítulo para marcar como assistido/lido.</item>
+        <item>Segurar em cima de um show pode diretamente abrir o Editor de Lista.</item>
         <item>There are few more easter eggs hidden in the App.</item>
         <item>Challenge: Go to the very bottom of the Popular Anime &amp; Manga</item>
         <item>Try Long Clicking the Show\'s Title.</item>
