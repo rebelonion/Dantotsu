@@ -859,6 +859,6 @@
     <string name="copy_report">Rapport kopiëren</string>
     <string name="share_as_file">Delen als bestand</string>
     <string name="hide_in_home_screen">Verbergen op startscherm</string>
-    <string name="hidden">Hidden</string>
-    <string name="no_hidden_items">No Hidden Items</string>
+    <string name="hidden">Verborgen</string>
+    <string name="no_hidden_items">Geen verborgen items</string>
 </resources>
