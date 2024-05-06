@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt-rBR">
-    <string name="slogan">The NEW Best Anime &amp; Manga app for Android.</string>
-    <string name="login">Login</string>
-    <string name="logout">Logout</string>
+    <string name="slogan">O NOVO Melhor aplicativo de Animes e Mangás para Android.</string>
+    <string name="login">Entrar</string>
+    <string name="logout">Sair</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
-    <string name="home">Home</string>
+    <string name="home">Início</string>
     <string name="anime">Anime</string>
     <string name="browse_anime">Browse Anime</string>
     <string name="manga">Manga</string>
