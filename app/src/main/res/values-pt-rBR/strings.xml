@@ -218,77 +218,77 @@
     <string name="subtitle_font_size">Tamanho das Legendas</string>
     <string name="auto">Auto</string>
     <string name="auto_play_next_episode">Reproduzir o Próximo Episódio Automaticamente</string>
-    <string name="auto_play_next_episode_info">Automatically disables if there is no interaction with player after 1 hour.</string>
-    <string name="auto_skip_fillers">Auto Skip Fillers</string>
-    <string name="auto_skip_fillers_info">Skips filler episodes when going to next episode.</string>
-    <string name="update_progress">Update Progress</string>
-    <string name="ask_update_progress_anime">Ask for each Anime \"Individually\"</string>
-    <string name="ask_update_progress_manga">Ask for each Manga \"Individually\"</string>
-    <string name="ask_update_progress_info_ep">Turning off will always automatically update progress when the episode is watched.</string>
-    <string name="ask_update_progress_info_chap">Turning off will always automatically update progress when the chapter is read.</string>
-    <string name="ask_update_progress_chapter_zero">Update Progress for Chapter 0</string>
-    <string name="ask_update_progress_info_zero">Turning on will add newly started items to Anilist with progress set to chapter 0.</string>
-    <string name="ask_update_progress_hentai">Update Progress for Hentai</string>
-    <string name="ask_update_progress_doujin">Update Progress for Doujins</string>
+    <string name="auto_play_next_episode_info">Desativado automaticamente caso não tenha interação com o player depois de 1 hora.</string>
+    <string name="auto_skip_fillers">Pular Fillers Automaticamente</string>
+    <string name="auto_skip_fillers_info">Pula episódios filler ao passar para o próximo episódio.</string>
+    <string name="update_progress">Atualizar Progresso</string>
+    <string name="ask_update_progress_anime">Pedir para cada Anime \"Individualmente\"</string>
+    <string name="ask_update_progress_manga">Pedir para cada Mangá \"Individualmente\"</string>
+    <string name="ask_update_progress_info_ep">Desativar essa opção sempre irá atualizar o progresso automaticamente quando o episódio for assistido.</string>
+    <string name="ask_update_progress_info_chap">Desativar essa opção sempre irá atualizar o progresso automaticamente quando o capítulo for lido.</string>
+    <string name="ask_update_progress_chapter_zero">Atualizar Progresso para o Capítulo 0</string>
+    <string name="ask_update_progress_info_zero">Ativar essa opção irá adicionar itens recentemente iniciados no Anilist com progresso definido para o capítulo 0.</string>
+    <string name="ask_update_progress_hentai">Atualizar Progresso para Hentai</string>
+    <string name="ask_update_progress_doujin">Atualizar Progresso para Doujins</string>
     <string name="very_bold">very bold of you sar</string>
-    <string name="watch_complete_percentage">Watch Update Percentage</string>
-    <string name="watch_complete_percentage_info">The percentage at which your Anilist progress should be updated after watching an episode. \nThis also sets the \% for when to preload links for the next episode.</string>
-    <string name="behaviour">Behaviour</string>
-    <string name="always_continue">Always Continue from where you left off</string>
-    <string name="pause_video_focus">Pause when not in Focus</string>
-    <string name="gestures">Volume &amp; Brightness Gestures</string>
-    <string name="double_tap">Double tap to Seek</string>
-    <string name="fast_forward">Fast Forward</string>
-    <string name="double_tap_info">Turning off will show fast forward &amp; rewind buttons</string>
-    <string name="seek_time">Seek Time</string>
-    <string name="seek_time_info">Amount of time in seconds for fast forward &amp; rewind.</string>
-    <string name="skip_time">Skip Time</string>
-    <string name="skip_time_info">Setting to 0, hides the Skip Button.</string>
-    <string name="show_cast_button">Show Cast Button</string>
-    <string name="show_cast_button_info">Requires \"Web Video Caster\" app to cast.</string>
+    <string name="watch_complete_percentage">Porcentagem de Visualização para Atualizar</string>
+    <string name="watch_complete_percentage_info">A porcentagem da visualização de um episódio em que seu progresso será atualizado no Anilist. \nIsso também define a % para quando pré-carregar os links do próximo episódio.</string>
+    <string name="behaviour">Comportamento</string>
+    <string name="always_continue">Sempre Continuar de onde você parou</string>
+    <string name="pause_video_focus">Pausar quando fora de Foco</string>
+    <string name="gestures">Gestos de Volume e Brilho</string>
+    <string name="double_tap">Toque duplo para Avançar ou Voltar</string>
+    <string name="fast_forward">Avanço Rápido</string>
+    <string name="double_tap_info">Desativar essa opção irá mostrar botões para Avançar e Retroceder</string>
+    <string name="seek_time">Tempo de Avançar/Retroceder</string>
+    <string name="seek_time_info">Quantidade de tempo em segundos para o avanço e retrocesso.</string>
+    <string name="skip_time">Tempo de Pulo</string>
+    <string name="skip_time_info">Definir como 0 oculta o botão de pulo.</string>
+    <string name="show_cast_button">Mostrar Botão Transmitir</string>
+    <string name="show_cast_button_info">Precisa do app \"Web Video Caster\" para transmitir.</string>
     <string name="picture_in_picture">Picture in Picture</string>
-    <string name="always_minimize">Always Minimize</string>
-    <string name="always_minimize_info">Requires PiP to be enabled, makes the player behave like Youtube Player but better.\nAlso hides the PiP button.</string>
+    <string name="always_minimize">Sempre Minimizar</string>
+    <string name="always_minimize_info">Precisa que PiP esteja ligado, faz o player se comportar como o Player do Youtube porém melhor.\nTambém esconde o botão PiP.</string>
     <string name="app">App</string>
-    <string name="immersive_mode">Hide Status Bar</string>
-    <string name="immersive_modelist">Hide Status Bar for list</string>
-    <string name="immersive_mode_info">Requires App restart to fully apply.</string>
-    <string name="home_layout_show">Show/Hide Layouts on Home</string>
+    <string name="immersive_mode">Esconder Barra de Status</string>
+    <string name="immersive_modelist">Esconder Barra de Status na lsita</string>
+    <string name="immersive_mode_info">Requer reiniciar o app para aplicar completemente.</string>
+    <string name="home_layout_show">Mostrar/Esconder Layouts no Início</string>
     <string-array name="home_layouts">
-        <item>Continue Watching</item>
-        <item>Favourite Anime</item>
-        <item>Planned Anime</item>
-        <item>Continue Reading</item>
-        <item>Favourite Manga</item>
-        <item>Planned Manga</item>
-        <item>Recommended</item>
-        <item>Social Feeds</item>
+        <item>Continuar Assistindo</item>
+        <item>Animes Favoritos</item>
+        <item>Animes Planejados</item>
+        <item>Continuar Lendo</item>
+        <item>Mangás Favoritos</item>
+        <item>Mangás Planejados</item>
+        <item>Recomendações</item>
+        <item>Feeds Sociais</item>
     </string-array>
-    <string name="startUpTab">Default Start Up Tab</string>
-    <string name="small_view">Small View in Trending Shows</string>
-    <string name="animations">Animations</string>
-    <string name="banner_animations">Banner Animations</string>
-    <string name="layout_animations">Layout Animations</string>
+    <string name="startUpTab">Guia Inicial Padrão</string>
+    <string name="small_view">Visualização Compacta em Animes em Alta</string>
+    <string name="animations">Animações</string>
+    <string name="banner_animations">Animações de Banner</string>
+    <string name="layout_animations">Animações de Layout</string>
     <string name="trending_scroller">Trending Scroller</string>
-    <string name="animation_speed">Overall Speed</string>
-    <string name="empty_fav">Looks like you don\'t like anything,\nTry liking a show to keep it here.</string>
-    <string name="fav_anime">Favourite Anime</string>
-    <string name="fav_manga">Favourite Manga</string>
-    <string name="restart_app">Restart the app?</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="current_page">Current Page</string>
-    <string name="dubbed">Dubbed</string>
-    <string name="subbed">Subbed</string>
-    <string name="prefer_dub">Prefer Dubbed Anime</string>
-    <string name="none">None</string>
-    <string name="selected_dns">Selected DNS</string>
-    <string name="dns_info">Change if your ISP blocks any source</string>
-    <string name="keep_screen_on">Keep Screen On</string>
+    <string name="animation_speed">Velocidade Geral</string>
+    <string name="empty_fav">Parece que você não gostou de nada,\nTente favoritar um show para mantê-lo aqui.</string>
+    <string name="fav_anime">Animes Favoritos</string>
+    <string name="fav_manga">Mangás Favoritos</string>
+    <string name="restart_app">Reiniciar o app?</string>
+    <string name="next">Próximo</string>
+    <string name="previous">Anterior</string>
+    <string name="current_page">Página Atual</string>
+    <string name="dubbed">Dublado</string>
+    <string name="subbed">Legendado</string>
+    <string name="prefer_dub">Preferir Animes Dublados</string>
+    <string name="none">Nenhum</string>
+    <string name="selected_dns">DNS Selecionado</string>
+    <string name="dns_info">Altere se o seu provedor de internet bloquear alguma fonte</string>
+    <string name="keep_screen_on">Manter a Tela Ligada</string>
     <string name="layout">Layout</string>
-    <string name="spaced_pages">Spaced Pages</string>
-    <string name="direction">Direction</string>
-    <string name="general">General</string>
+    <string name="spaced_pages">Páginas Espaçadas</string>
+    <string name="direction">Direção</string>
+    <string name="general">Geral</string>
     <string name="show_system_bars">Show Status &amp; Navigation Bars</string>
     <string name="auto_detect_webtoon">Auto Detect Webtoon</string>
     <string name="auto_detect_webtoon_info">If the Manga is not from Japan, the reader will default to Webtoon Reader Settings</string>
