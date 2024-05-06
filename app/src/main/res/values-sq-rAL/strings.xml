@@ -861,6 +861,6 @@
     <string name="copy_report">Kopjo Raportin</string>
     <string name="share_as_file">Ndaj si skedar</string>
     <string name="hide_in_home_screen">Fsheh në ekranin kryesor</string>
-    <string name="hidden">Hidden</string>
-    <string name="no_hidden_items">No Hidden Items</string>
+    <string name="hidden">Fshehur</string>
+    <string name="no_hidden_items">Asnjë element i fshehur</string>
 </resources>
