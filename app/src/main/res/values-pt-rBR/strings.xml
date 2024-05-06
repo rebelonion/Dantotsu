@@ -47,7 +47,7 @@
     <string name="action_settings">Configurações</string>
     <string name="add">Adicionar à lista</string>
     <string name="list_editor">Editor de Lista</string>
-    <string name="add_fav">Add to Favourites</string>
+    <string name="add_fav">Favoritar</string>
     <string name="notifications">Notificações</string>
     <string-array name="keys">
         <item>Lendo</item>
@@ -172,16 +172,16 @@
     </string>
     <string name="version_current">Versão %1$s</string>
     <string-array name="tips">
-        <item>Você pode segurar em cima de um episódio/capítulo para marcar como assistido/lido.</item>
-        <item>Segurar em cima de um show pode diretamente abrir o Editor de Lista.</item>
-        <item>There are few more easter eggs hidden in the App.</item>
-        <item>Challenge: Go to the very bottom of the Popular Anime &amp; Manga</item>
-        <item>Try Long Clicking the Show\'s Title.</item>
-        <item>Damn, why are you wasting your Time?</item>
-        <item>You can Long Click to copy this Message.</item>
-        <item>OMG LOOK! YOU FOUND AN EASTER EGG!?</item>
-        <item>You know who else likes this Animation?</item>
-        <item>MAL support? bruh.</item>
+        <item>Você pode manter pressionado em um episódio/capítulo para marcar como assistido/lido.</item>
+        <item>Manter pressionado em um show pode diretamente abrir o Editor de Lista.</item>
+        <item>Você pode encontrar alguns outros easter eggs escondidos no app.</item>
+        <item>Um desafio: Chegue no final da página de Animes e Mangás Populares</item>
+        <item>Tente manter pressionado o nome de um show.</item>
+        <item>Por que você está perdendo seu tempo com isso?</item>
+        <item>Você pode manter pressionado para copiar essa mensagem.</item>
+        <item>MEU DEUS, OLHA! VOCÊ ACHOU UM EASTER EGG!?</item>
+        <item>Sabe quem mais gosta dessa animação?</item>
+        <item>Suporte para MAL? Sério?</item>
         <item>Novels? more like NO vels.</item>
         <item>Long Click the logo to check for App Update</item>
     </string-array>
