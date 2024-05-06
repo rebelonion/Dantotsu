@@ -8,124 +8,124 @@
     <string name="discord_link">https://discord.com/users/%1$s/</string>
     <string name="home">Início</string>
     <string name="anime">Anime</string>
-    <string name="browse_anime">Browse Anime</string>
-    <string name="manga">Manga</string>
-    <string name="browse_manga">Browse Manga</string>
+    <string name="browse_anime">Explorar Animes</string>
+    <string name="manga">Mangá</string>
+    <string name="browse_manga">Explorar Mangás</string>
     <string name="novels">Novels</string>
     <string name="info">Info</string>
-    <string name="watch">Watch</string>
-    <string name="read">Read</string>
-    <string name="language">Language</string>
-    <string name="anime_list">Anime List</string>
-    <string name="manga_list">Manga List</string>
+    <string name="watch">Assistir</string>
+    <string name="read">Ler</string>
+    <string name="language">Idioma</string>
+    <string name="anime_list">Meus Animes</string>
+    <string name="manga_list">Meus Mangás</string>
     <string name="sad">X(</string>
     <string name="oh">:o</string>
     <string name="colon">" : "</string>
-    <string name="no_internet">No Internet Connection</string>
-    <string name="refresh">Refresh</string>
-    <string name="search">Search</string>
-    <string name="search_results">Search Results</string>
-    <string name="sort_by">Sort By</string>
-    <string name="genre">Genre</string>
+    <string name="no_internet">Sem conexão com a Internet</string>
+    <string name="refresh">Atualizar</string>
+    <string name="search">Buscar</string>
+    <string name="search_results">Resultados da Busca</string>
+    <string name="sort_by">Ordenar por</string>
+    <string name="genre">Gênero</string>
     <string name="top_score">Top Score</string>
-    <string name="updated">Recently Updated</string>
-    <string name="trending_anime">Trending Anime</string>
-    <string name="popular_anime">Popular Anime</string>
-    <string name="trending_manga">Trending Manga</string>
-    <string name="trending_novel">Trending Novel</string>
-    <string name="popular_manga">Popular Manga</string>
-    <string name="username">Username</string>
-    <string name="chapters_read">Chapters Read</string>
-    <string name="chapters_read_n">Chapters\nRead</string>
-    <string name="episodes_watched">Episodes Watched</string>
-    <string name="episodes_watched_n">Episodes\nWatched</string>
-    <string name="continue_reading">Continue Reading</string>
-    <string name="continue_watching">Continue Watching</string>
-    <string name="recommended">Recommended</string>
-    <string name="get_recommendations">Watch/Read some Anime or Manga to get Recommendations</string>
-    <string name="empty">All caught up, when New?</string>
-    <string name="action_settings">Settings</string>
-    <string name="add">Add to List</string>
-    <string name="list_editor">List Editor</string>
+    <string name="updated">Novos Episódios</string>
+    <string name="trending_anime">Animes em Alta</string>
+    <string name="popular_anime">Animes Populares</string>
+    <string name="trending_manga">Mangás em Alta</string>
+    <string name="trending_novel">Novels em Alta</string>
+    <string name="popular_manga">Mangás Populares</string>
+    <string name="username">Nome de Usuário</string>
+    <string name="chapters_read">Capítulos Lidos</string>
+    <string name="chapters_read_n">Capítulos\nLidos</string>
+    <string name="episodes_watched">Episódios Assistidos</string>
+    <string name="episodes_watched_n">Episódios\nAssistidos</string>
+    <string name="continue_reading">Continuar Lendo</string>
+    <string name="continue_watching">Continuar Assistindo</string>
+    <string name="recommended">Recomendações</string>
+    <string name="get_recommendations">Assista/Leia alguns Animes ou Mangás para ter Recomendações</string>
+    <string name="empty">Tudo em dia, novidades?</string>
+    <string name="action_settings">Configurações</string>
+    <string name="add">Adicionar à lista</string>
+    <string name="list_editor">Editar Lista</string>
     <string name="add_fav">Add to Favourites</string>
-    <string name="notifications">Notifications</string>
+    <string name="notifications">Notificações</string>
     <string-array name="keys">
-        <item>Reading</item>
-        <item>Watching</item>
-        <item>Completed</item>
-        <item>Paused</item>
-        <item>Dropped</item>
-        <item>Planning</item>
-        <item>Favourites</item>
-        <item>Rewatching</item>
-        <item>Rereading</item>
-        <item>All</item>
+        <item>Lendo</item>
+        <item>Assistindo</item>
+        <item>Completado</item>
+        <item>Pausado</item>
+        <item>Abandonado</item>
+        <item>Planejado</item>
+        <item>Favoritos</item>
+        <item>Reassistindo</item>
+        <item>Relendo</item>
+        <item>Todos</item>
     </string-array>
-    <string name="no_notifications">No more notifications</string>
-    <string name="followers">Followers</string>
-    <string name="status">STATUS</string>
+    <string name="no_notifications">Sem notificações novas</string>
+    <string name="followers">Seguidores</string>
+    <string name="status">ESTADO</string>
     <string-array name="status_anime">
-        <item>PLANNING</item>
-        <item>WATCHING</item>
-        <item>COMPLETED</item>
-        <item>RE-WATCHING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>PLANEJADO</item>
+        <item>ASSISTINDO</item>
+        <item>COMPLETADO</item>
+        <item>RE-ASSISTINDO</item>
+        <item>PAUSADO</item>
+        <item>ABANDONADO</item>
     </string-array>
     <string-array name="status_manga">
-        <item>PLANNING</item>
-        <item>READING</item>
-        <item>COMPLETED</item>
-        <item>RE-READING</item>
-        <item>PAUSED</item>
-        <item>DROPPED</item>
+        <item>PLANEJADO</item>
+        <item>LENDO</item>
+        <item>COMPLETADO</item>
+        <item>RE-LENDO</item>
+        <item>PAUSADO</item>
+        <item>ABANDONADO</item>
     </string-array>
-    <string name="progress">PROGRESS</string>
-    <string name="score">SCORE</string>
+    <string name="progress">PROGRESSO</string>
+    <string name="score">NOTA</string>
     <string name="score_suffix">" / 10"</string>
-    <string name="started_at">STARTED AT</string>
-    <string name="completed_at">COMPLETED AT</string>
-    <string name="save">Save</string>
-    <string name="delete">Delete</string>
-    <string name="remove">Remove</string>
-    <string name="name">Name</string>
-    <string name="name_romaji">Name Romaji</string>
-    <string name="mean_score">Mean Score</string>
-    <string name="format">Format</string>
-    <string name="status_title">Status</string>
-    <string name="total_eps">Total Episodes</string>
-    <string name="episodes"> Episode(s)</string>
-    <string name="chapters"> Chapter(s)</string>
+    <string name="started_at">COMEÇADO EM</string>
+    <string name="completed_at">COMPLETADO EM</string>
+    <string name="save">Salvar</string>
+    <string name="delete">Deletar</string>
+    <string name="remove">Remover</string>
+    <string name="name">Nome</string>
+    <string name="name_romaji">Nome em Romanji</string>
+    <string name="mean_score">Nota</string>
+    <string name="format">Formato</string>
+    <string name="status_title">Estado</string>
+    <string name="total_eps">Número de Episódios</string>
+    <string name="episodes"> Episódio(s)</string>
+    <string name="chapters"> Capítulo(s)</string>
     <string name="total_divider"> | %1$s</string>
-    <string name="total_chaps">Total Chapters</string>
-    <string name="ep_duration">Average Duration</string>
+    <string name="total_chaps">Número de Capítulos</string>
+    <string name="ep_duration">Duração</string>
     <string name="min">" min"</string>
-    <string name="season">Season</string>
-    <string name="start_date">Start Date</string>
-    <string name="end_date">End Date</string>
-    <string name="source">Source</string>
-    <string name="main_studio">Studio</string>
-    <string name="genres">Genres</string>
-    <string name="description">Synopsis</string>
-    <string name="characters">Characters</string>
-    <string name="relations">Relations</string>
+    <string name="season">Temporada</string>
+    <string name="start_date">Data de Início</string>
+    <string name="end_date">Data de Término</string>
+    <string name="source">Fonte</string>
+    <string name="main_studio">Estúdio</string>
+    <string name="genres">Gêneros</string>
+    <string name="description">Sinopse</string>
+    <string name="characters">Personagens</string>
+    <string name="relations">Relações</string>
     <string name="staff">Staff</string>
-    <string name="favourites">Favourites</string>
-    <string name="popularity">Popularity</string>
-    <string name="roles">Roles</string>
-    <string name="details">Details</string>
-    <string name="play_yt">Play on Youtube</string>
-    <string name="eps">Episodes</string>
-    <string name="ep">Episode</string>
-    <string name="chaps">Chapters</string>
-    <string name="chap">Chapter</string>
-    <string name="wrong"><u>Wrong Title?</u></string>
-    <string name="source_not_found">        Couldn\'t find anything X( \n
-        Try another source.
+    <string name="favourites">Favoritos</string>
+    <string name="popularity">Popularidade</string>
+    <string name="roles">Papéis</string>
+    <string name="details">Detalhes</string>
+    <string name="play_yt">Assistir no YouTube</string>
+    <string name="eps">Episódios</string>
+    <string name="ep">Episódio</string>
+    <string name="chaps">Capítulos</string>
+    <string name="chap">Capítulo</string>
+    <string name="wrong"><u>Título Errado?</u></string>
+    <string name="source_not_found">        Não encontramos nada X(\n
+        Tente outra fonte.
     </string>
-    <string name="not_supported">%1$s is not supported!</string>
-    <string name="server_selector">Select Server</string>
-    <string name="auto_select_server">Auto Selecting Server</string>
+    <string name="not_supported">%1$s não é suportado!</string>
+    <string name="server_selector">Selecionar Servidor</string>
+    <string name="auto_select_server">Selecionando Servidor Padrão</string>
     <string name="make_default">Make Default</string>
     <string name="filler">Filler</string>
     <string name="adult">Adult</string>
