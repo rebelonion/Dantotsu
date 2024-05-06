@@ -33,8 +33,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ani.dantotsu.addons.torrent.TorrentServerService
 import ani.dantotsu.addons.torrent.TorrentAddonManager
+import ani.dantotsu.addons.torrent.TorrentServerService
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
@@ -336,43 +336,35 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, NoInternet::class.java))
             } else {
                 val model: AnilistHomeViewModel by viewModels()
-                model.genres.observe(this) {
-                    if (it != null) {
-                        if (it) {
-                            val navbar = binding.includedNavbar.navbar
-                            bottomBar = navbar
-                            navbar.visibility = View.VISIBLE
-                            binding.mainProgressBar.visibility = View.GONE
-                            val mainViewPager = binding.viewpager
-                            mainViewPager.isUserInputEnabled = false
-                            mainViewPager.adapter =
-                                ViewPagerAdapter(supportFragmentManager, lifecycle)
-                            mainViewPager.setPageTransformer(ZoomOutPageTransformer())
-                            navbar.setOnTabSelectListener(object :
-                                AnimatedBottomBar.OnTabSelectListener {
-                                override fun onTabSelected(
-                                    lastIndex: Int,
-                                    lastTab: AnimatedBottomBar.Tab?,
-                                    newIndex: Int,
-                                    newTab: AnimatedBottomBar.Tab
-                                ) {
-                                    navbar.animate().translationZ(12f).setDuration(200).start()
-                                    selectedOption = newIndex
-                                    mainViewPager.setCurrentItem(newIndex, false)
-                                }
-                            })
-                            if (mainViewPager.currentItem != selectedOption) {
-                                navbar.selectTabAt(selectedOption)
-                                mainViewPager.post {
-                                    mainViewPager.setCurrentItem(
-                                        selectedOption,
-                                        false
-                                    )
-                                }
-                            }
-                        } else {
-                            binding.mainProgressBar.visibility = View.GONE
-                        }
+                val navbar = binding.includedNavbar.navbar
+                bottomBar = navbar
+                navbar.visibility = View.VISIBLE
+                binding.mainProgressBar.visibility = View.GONE
+                val mainViewPager = binding.viewpager
+                mainViewPager.isUserInputEnabled = false
+                mainViewPager.adapter =
+                    ViewPagerAdapter(supportFragmentManager, lifecycle)
+                mainViewPager.setPageTransformer(ZoomOutPageTransformer())
+                navbar.setOnTabSelectListener(object :
+                    AnimatedBottomBar.OnTabSelectListener {
+                    override fun onTabSelected(
+                        lastIndex: Int,
+                        lastTab: AnimatedBottomBar.Tab?,
+                        newIndex: Int,
+                        newTab: AnimatedBottomBar.Tab
+                    ) {
+                        navbar.animate().translationZ(12f).setDuration(200).start()
+                        selectedOption = newIndex
+                        mainViewPager.setCurrentItem(newIndex, false)
+                    }
+                })
+                if (mainViewPager.currentItem != selectedOption) {
+                    navbar.selectTabAt(selectedOption)
+                    mainViewPager.post {
+                        mainViewPager.setCurrentItem(
+                            selectedOption,
+                            false
+                        )
                     }
                 }
                 //Load Data

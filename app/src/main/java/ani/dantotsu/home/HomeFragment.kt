@@ -48,9 +48,9 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.util.Logger
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlin.math.max
 import kotlin.math.min
@@ -379,7 +379,8 @@ class HomeFragment : Fragment() {
         model.getHidden().observe(viewLifecycleOwner) {
             if (it != null) {
                 if (it.isNotEmpty()) {
-                    binding.homeHiddenItemsRecyclerView.adapter = MediaAdaptor(0, it, requireActivity())
+                    binding.homeHiddenItemsRecyclerView.adapter =
+                        MediaAdaptor(0, it, requireActivity())
                     binding.homeHiddenItemsRecyclerView.layoutManager = LinearLayoutManager(
                         requireContext(),
                         LinearLayoutManager.HORIZONTAL,
@@ -393,7 +394,8 @@ class HomeFragment : Fragment() {
                     }
                     binding.homeHiddenItemsMore.setSafeOnClickListener { _ ->
                         ContextCompat.startActivity(
-                            requireActivity(), Intent(requireActivity(), MediaListViewActivity::class.java)
+                            requireActivity(),
+                            Intent(requireActivity(), MediaListViewActivity::class.java)
                                 .putExtra("title", getString(R.string.hidden))
                                 .putExtra("media", it),
                             null
@@ -403,8 +405,7 @@ class HomeFragment : Fragment() {
                         binding.homeHiddenItemsContainer.visibility = View.GONE
                         true
                     }
-                }
-                else {
+                } else {
                     binding.homeContinueWatch.setOnLongClickListener {
                         snackString(getString(R.string.no_hidden_items))
                         true
@@ -457,17 +458,29 @@ class HomeFragment : Fragment() {
         val live = Refresh.activity.getOrPut(1) { MutableLiveData(true) }
         live.observe(viewLifecycleOwner)
         {
-            if (it && !running) {
+            if (!running && it) {
                 running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
                         //Get userData First
-                        getUserId(requireContext()) {
-                            load()
+                        Anilist.userid =
+                            PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
+                                ?.toIntOrNull()
+                        if (Anilist.userid == null) {
+                            getUserId(requireContext()) {
+                                load()
+                            }
+                        } else {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                getUserId(requireContext()) {
+                                    load()
+                                }
+                            }
                         }
                         model.loaded = true
-                        model.setListImages()
-                        Logger.log("HomeFragment: Refreshing")
+                        CoroutineScope(Dispatchers.IO).launch {
+                            model.setListImages()
+                        }
                         var empty = true
                         val homeLayoutShow: List<Boolean> =
                             PrefManager.getVal(PrefName.HomeLayout)
@@ -483,9 +496,9 @@ class HomeFragment : Fragment() {
                     }
                     live.postValue(false)
                     _binding?.homeRefresh?.isRefreshing = false
+                    running = false
                 }
                 binding.homeHiddenItemsContainer.visibility = View.GONE
-                running = false
             }
 
         }

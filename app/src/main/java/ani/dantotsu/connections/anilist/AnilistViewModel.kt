@@ -5,6 +5,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.BuildConfig
 import ani.dantotsu.R
 import ani.dantotsu.connections.discord.Discord
@@ -12,31 +13,26 @@ import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.media.Media
 import ani.dantotsu.others.AppUpdater
 import ani.dantotsu.profile.User
-import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
-import ani.dantotsu.util.Logger
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 suspend fun getUserId(context: Context, block: () -> Unit) {
-    val anilist = if (Anilist.userid == null && Anilist.token != null) {
+    if (!Anilist.initialized) {
         if (Anilist.query.getUserData()) {
             tryWithSuspend {
                 if (MAL.token != null && !MAL.query.getUserData())
                     snackString(context.getString(R.string.error_loading_mal_user_data))
             }
-            true
         } else {
             snackString(context.getString(R.string.error_loading_anilist_user_data))
-            false
         }
-    } else true
-
-    if (anilist) block.invoke()
+    }
+    block.invoke()
 }
 
 class AnilistHomeViewModel : ViewModel() {
@@ -90,6 +86,7 @@ class AnilistHomeViewModel : ViewModel() {
         MutableLiveData<ArrayList<Media>>(null)
 
     fun getHidden(): LiveData<ArrayList<Media>> = hidden
+
     @Suppress("UNCHECKED_CAST")
     suspend fun initHomePage() {
         val res = Anilist.query.initHomePage()
@@ -104,15 +101,20 @@ class AnilistHomeViewModel : ViewModel() {
         res["status"]?.let { userStatus.postValue(it as ArrayList<User>?) }
     }
 
-
     suspend fun loadMain(context: FragmentActivity) {
         Anilist.getSavedToken()
         MAL.getSavedToken()
         Discord.getSavedToken()
         if (!BuildConfig.FLAVOR.contains("fdroid")) {
-            if (PrefManager.getVal(PrefName.CheckUpdate)) AppUpdater.check(context)
+            if (PrefManager.getVal(PrefName.CheckUpdate))
+                context.lifecycleScope.launch(Dispatchers.IO) {
+                    AppUpdater.check(context, true)
+                }
         }
-        genres.postValue(Anilist.query.getGenresAndTags())
+        val ret = Anilist.query.getGenresAndTags()
+        withContext(Dispatchers.Main) {
+            genres.value = ret
+        }
     }
 
     val empty = MutableLiveData<Boolean>(null)

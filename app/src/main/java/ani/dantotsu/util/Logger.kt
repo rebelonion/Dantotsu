@@ -59,6 +59,20 @@ object Logger {
         }
     }
 
+    fun log(level: Int, message: String, tag: String = "Internal Logger") {
+        val trace = Thread.currentThread().stackTrace[3]
+        loggerExecutor.execute {
+            if (file == null) Log.println(level, tag, message)
+            else {
+                val className = trace.className
+                val methodName = trace.methodName
+                val lineNumber = trace.lineNumber
+                file?.appendText("date/time: ${Date()} | $className.$methodName($lineNumber)\n")
+                file?.appendText("message: $message\n-\n")
+            }
+        }
+    }
+
     fun log(e: Exception) {
         loggerExecutor.execute {
             if (file == null) e.printStackTrace() else {

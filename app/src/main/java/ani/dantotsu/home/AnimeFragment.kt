@@ -36,6 +36,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -268,13 +269,25 @@ class AnimeFragment : Fragment() {
             true
         }
 
+        var running = false
         val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(false) }
         live.observe(viewLifecycleOwner) {
-            if (it) {
+            if (it && !running) {
+                running = true
                 scope.launch {
                     withContext(Dispatchers.IO) {
-                        getUserId(requireContext()) {
-                            load()
+                        Anilist.userid = PrefManager.getNullableVal<String>(PrefName.AnilistUserId, null)
+                            ?.toIntOrNull()
+                        if (Anilist.userid == null) {
+                            getUserId(requireContext()) {
+                                load()
+                            }
+                        } else {
+                            CoroutineScope(Dispatchers.IO).launch {
+                                getUserId(requireContext()) {
+                                    load()
+                                }
+                            }
                         }
                         model.loaded = true
                         model.loadTrending(1)
@@ -287,6 +300,7 @@ class AnimeFragment : Fragment() {
                     }
                     live.postValue(false)
                     _binding?.animeRefresh?.isRefreshing = false
+                    running = false
                 }
             }
         }

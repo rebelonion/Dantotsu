@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
 import ani.dantotsu.addons.download.DownloadAddonManager
@@ -93,7 +94,7 @@ class App : MultiDexApplication() {
 
         Logger.init(this)
         Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
-        Logger.log("App: Logging started")
+        Logger.log(Log.WARN, "App: Logging started")
 
         initializeNetwork()
 

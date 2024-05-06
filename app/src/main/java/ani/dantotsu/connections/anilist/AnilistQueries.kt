@@ -57,6 +57,7 @@ class AnilistQueries {
         Anilist.unreadNotificationCount = user.unreadNotificationCount ?: 0
         val unread = PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications)
         Anilist.unreadNotificationCount += unread
+        Anilist.initialized = true
         return true
     }
 

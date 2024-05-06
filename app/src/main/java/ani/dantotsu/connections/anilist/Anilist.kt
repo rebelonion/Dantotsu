@@ -35,6 +35,8 @@ object Anilist {
 
     var rateLimitReset: Long = 0
 
+    var initialized = false
+
     val sortBy = listOf(
         "SCORE_DESC",
         "POPULARITY_DESC",
