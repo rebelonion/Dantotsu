@@ -862,6 +862,6 @@
     <string name="copy_report">보고서 복사</string>
     <string name="share_as_file">파일로 공유</string>
     <string name="hide_in_home_screen">홈 화면에서 숨기기</string>
-    <string name="hidden">Hidden</string>
-    <string name="no_hidden_items">No Hidden Items</string>
+    <string name="hidden">숨겨진</string>
+    <string name="no_hidden_items">숨겨진 항목 없음</string>
 </resources>
