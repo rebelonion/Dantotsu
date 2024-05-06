@@ -861,6 +861,6 @@
     <string name="copy_report">Скопировать отчет</string>
     <string name="share_as_file">Поделиться как файл</string>
     <string name="hide_in_home_screen">Скрыть на главном экране</string>
-    <string name="hidden">Hidden</string>
-    <string name="no_hidden_items">No Hidden Items</string>
+    <string name="hidden">Скрытый</string>
+    <string name="no_hidden_items">Нет скрытых элементов</string>
 </resources>
