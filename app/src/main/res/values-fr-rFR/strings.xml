@@ -862,6 +862,6 @@
     <string name="copy_report">Copier le rapport</string>
     <string name="share_as_file">Partager le fichier</string>
     <string name="hide_in_home_screen">Cacher dans l\'écran d\'accueil</string>
-    <string name="hidden">Hidden</string>
-    <string name="no_hidden_items">No Hidden Items</string>
+    <string name="hidden">Caché</string>
+    <string name="no_hidden_items">Aucun élément caché</string>
 </resources>
