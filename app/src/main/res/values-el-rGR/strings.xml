@@ -861,6 +861,6 @@
     <string name="copy_report">Αντιγραφή Αναφοράς</string>
     <string name="share_as_file">Κοινοποίηση ως αρχείο</string>
     <string name="hide_in_home_screen">Απόκρυψη στην Αρχική Οθόνη</string>
-    <string name="hidden">Hidden</string>
-    <string name="no_hidden_items">No Hidden Items</string>
+    <string name="hidden">Κρυφός</string>
+    <string name="no_hidden_items">Κανένα κρυφό στοιχείο</string>
 </resources>
