@@ -861,6 +861,6 @@
     <string name="copy_report">レポートをコピー</string>
     <string name="share_as_file">ファイルとして共有</string>
     <string name="hide_in_home_screen">ホーム画面に隠れる</string>
-    <string name="hidden">Hidden</string>
-    <string name="no_hidden_items">No Hidden Items</string>
+    <string name="hidden">隠し</string>
+    <string name="no_hidden_items">隠れたアイテムはありません</string>
 </resources>
