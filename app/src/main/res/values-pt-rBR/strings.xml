@@ -27,7 +27,7 @@
     <string name="search_results">Resultados da Busca</string>
     <string name="sort_by">Ordenar por</string>
     <string name="genre">Gênero</string>
-    <string name="top_score">Top Score</string>
+    <string name="top_score">Maiores Notas</string>
     <string name="updated">Novos Episódios</string>
     <string name="trending_anime">Animes em Alta</string>
     <string name="popular_anime">Animes Populares</string>
@@ -183,7 +183,7 @@
         <item>Sabe quem mais gosta dessa animação?</item>
         <item>Suporte para MAL? Sério?</item>
         <item>Novels? more like NO vels.</item>
-        <item>Long Click the logo to check for App Update</item>
+        <item>Mantenha a logo pressionada para procurar por atualizações</item>
     </string-array>
     <string-array name="themes">
         <item>Default</item>
