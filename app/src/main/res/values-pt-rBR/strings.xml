@@ -55,17 +55,17 @@
         <item>Completado</item>
         <item>Pausado</item>
         <item>Abandonado</item>
-        <item>Planejado</item>
+        <item>Planejando</item>
         <item>Favoritos</item>
         <item>Reassistindo</item>
         <item>Relendo</item>
         <item>Todos</item>
     </string-array>
-    <string name="no_notifications">Sem notificações novas</string>
+    <string name="no_notifications">Sem mais notificações</string>
     <string name="followers">Seguidores</string>
-    <string name="status">ESTADO</string>
+    <string name="status">STATUS</string>
     <string-array name="status_anime">
-        <item>PLANEJADO</item>
+        <item>PLANEJANDO</item>
         <item>ASSISTINDO</item>
         <item>COMPLETADO</item>
         <item>RE-ASSISTINDO</item>
@@ -73,7 +73,7 @@
         <item>ABANDONADO</item>
     </string-array>
     <string-array name="status_manga">
-        <item>PLANEJADO</item>
+        <item>PLANEJANDO</item>
         <item>LENDO</item>
         <item>COMPLETADO</item>
         <item>RE-LENDO</item>
@@ -92,7 +92,7 @@
     <string name="name_romaji">Nome em Romanji</string>
     <string name="mean_score">Nota</string>
     <string name="format">Formato</string>
-    <string name="status_title">Estado</string>
+    <string name="status_title">Status</string>
     <string name="total_eps">Número de Episódios</string>
     <string name="episodes"> Episódio(s)</string>
     <string name="chapters"> Capítulo(s)</string>
@@ -129,7 +129,7 @@
     <string name="make_default">Tornar Padrão</string>
     <string name="filler">Filler</string>
     <string name="adult">Adulto</string>
-    <string name="list_only">Na minha lista</string>
+    <string name="list_only">Na Lista</string>
     <string name="tag">Etiqueta</string>
     <string name="tags">Etiquetas</string>
     <string name="synonyms">Sinônimos</string>
@@ -138,13 +138,13 @@
     <string name="ending">Ending</string>
     <string name="prequel">Prequel</string>
     <string name="sequel">Sequel</string>
-    <string name="anilist_settings">Configurações AniList</string>
+    <string name="anilist_settings">Configurações Anilist</string>
     <string name="extension_settings">Extensões</string>
     <string name="downloads">Downloads</string>
     <string name="offline_mode">Modo Offline</string>
     <string name="settings">Configurações</string>
     <string name="extensions">Extensões</string>
-    <string name="extension_updates_available">Algumas extensões têm atualizações</string>
+    <string name="extension_updates_available">Atualizações de extensões disponíveis</string>
     <string name="player_settings">Configurações do Player</string>
     <string name="recentlyListOnly">Mostrar apenas minha lista em \"Novos Episódios\"</string>
     <string name="download_manager_select">Gerenciador de Download</string>
@@ -153,8 +153,8 @@
     <string name="reader_settings">Configurações do Leitor</string>
     <string name="default_source">Fonte Padrão</string>
     <string name="show_yt">Link do YouTube</string>
-    <string name="default_ep_view">Layout de Episódio Padrão</string>
-    <string name="default_chp_view">Layout de Capítulo Padrão</string>
+    <string name="default_ep_view">Layout de Episódios Padrão</string>
+    <string name="default_chp_view">Layout de Capítulos Padrão</string>
     <string name="ui">Interface do Usuário</string>
     <string name="common">Geral</string>
     <string name="theme">Tema</string>
@@ -187,37 +187,37 @@
     </string-array>
     <string-array name="themes">
         <item>Padrão</item>
-        <item>Theme 1</item>
-        <item>Theme 2</item>
-        <item>Theme 3</item>
-        <item> Theme 4</item>
+        <item>Tema 1</item>
+        <item>Tema 2</item>
+        <item>Tema 3</item>
+        <item> Tema 4</item>
     </string-array>
-    <string name="video">Video</string>
-    <string name="video_info">Show Video Info</string>
-    <string name="source_info">Show Source Name</string>
-    <string name="video_info_info">Shows what the Resolution of the current video playing, useful for <b>\"Multi Quality\"</b> servers.</string>
-    <string name="default_quality">Auto Quality Selection</string>
-    <string name="height">Height</string>
-    <string name="width">Width</string>
-    <string name="default_quality_info">Automatically uses the closest quality provided by default, ONLY applied for \"Multi Quality\" Servers. Auto changes upon playing a video.</string>
-    <string name="default_playback_speed">Default Playback Speed : %1$s</string>
-    <string name="cursed_speeds">Cursed Speeds</string>
-    <string name="resize_mode_button">Default Resize Mode</string>
-    <string name="subtitles">Subtitles</string>
-    <string name="subtitle_toggle">Subtitles</string>
-    <string name="primary_sub_color_select">Subtitle Color</string>
-    <string name="secondary_sub_color_select">Subtitle Outline Color</string>
-    <string name="secondary_sub_outline_type_select">Subtitle Outline Type</string>
-    <string name="sub_background_color_select">Subtitle Background Color</string>
-    <string name="sub_window_color_select">Subtitle Window Color</string>
-    <string name="sub_window_color_info">"The subtitle window is the part left and right from them. (where the background isn't)"</string>
-    <string name="sub_color_info"><b>Note:</b> Changing above settings only affects Soft-Subtitles!</string>
-    <string name="sub_alpha">Subtitle Transparency</string>
-    <string name="sub_text_example">Example Sub</string>
-    <string name="sub_font_select">Subtitle Font</string>
-    <string name="subtitle_font_size">Subtitle Size</string>
+    <string name="video">Vídeo</string>
+    <string name="video_info">Mostrar Informações do Vídeo</string>
+    <string name="source_info">Mostrar Nome da Fonte</string>
+    <string name="video_info_info">Mostra qual é a resolução do vídeo atual, útil para servidores <b>\"Multi Qualidade\"</b>.</string>
+    <string name="default_quality">Seleção de Qualidade Automática</string>
+    <string name="height">Altura</string>
+    <string name="width">Largura</string>
+    <string name="default_quality_info">Automaticamente usa a qualidade mais próxima por padrão, APENAS para Servidores \"Multi Qualidade\". Automaticamente muda ao reproduzir um vídeo.</string>
+    <string name="default_playback_speed">Velocidade de Reprodução Padrão: %1$s</string>
+    <string name="cursed_speeds">Velocidades Exóticas</string>
+    <string name="resize_mode_button">Modo de Redimensionamento Padrão</string>
+    <string name="subtitles">Legendas</string>
+    <string name="subtitle_toggle">Legendas</string>
+    <string name="primary_sub_color_select">Cor da Legenda</string>
+    <string name="secondary_sub_color_select">Cor do Contorno das Legendas</string>
+    <string name="secondary_sub_outline_type_select">Tipo do Contorno das Legendas</string>
+    <string name="sub_background_color_select">Cor do Fundo das Legendas</string>
+    <string name="sub_window_color_select">Cor da Janela das Legendas</string>
+    <string name="sub_window_color_info">"A janela das legendas são as áreas nos lados esquerdo e direito delas. (onde não está o fundo)"</string>
+    <string name="sub_color_info"><b>Aviso:</b> As configurações acima só afetam legendas do tipo SoftSub!</string>
+    <string name="sub_alpha">Transparência das Legendas</string>
+    <string name="sub_text_example">Legenda de Exemplo</string>
+    <string name="sub_font_select">Fonte das Legendas</string>
+    <string name="subtitle_font_size">Tamanho das Legendas</string>
     <string name="auto">Auto</string>
-    <string name="auto_play_next_episode">Autoplay Next Episode</string>
+    <string name="auto_play_next_episode">Reproduzir o Próximo Episódio Automaticamente</string>
     <string name="auto_play_next_episode_info">Automatically disables if there is no interaction with player after 1 hour.</string>
     <string name="auto_skip_fillers">Auto Skip Fillers</string>
     <string name="auto_skip_fillers_info">Skips filler episodes when going to next episode.</string>
