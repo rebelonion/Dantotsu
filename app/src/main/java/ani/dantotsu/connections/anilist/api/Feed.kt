@@ -15,17 +15,6 @@ data class FeedResponse(
     ) : java.io.Serializable
 }
 @Serializable
-data class Social(
-    @SerialName("data")
-    val data: Data
-) : java.io.Serializable {
-    @Serializable
-    data class Data(
-        @SerialName("Page1") val page1: ActivityPage,
-        @SerialName("Page2") val page2: ActivityPage
-    ) : java.io.Serializable
-}
-@Serializable
 data class ActivityPage(
     @SerialName("activities")
     val activities: List<Activity>
@@ -94,9 +83,9 @@ data class ActivityReply(
     @SerialName("text")
     val text: String,
     @SerialName("likeCount")
-    val likeCount: Int,
+    var likeCount: Int,
     @SerialName("isLiked")
-    val isLiked: Boolean,
+    var isLiked: Boolean,
     @SerialName("createdAt")
     val createdAt: Int,
     @SerialName("user")

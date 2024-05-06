@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
+    android:layout_marginTop="16dp"
     android:background="?attr/colorSurface"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="horizontal">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/activityAvatarContainer"
-            android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:layout_gravity="start|center_vertical"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_marginStart="12dp"
             android:backgroundTint="@color/transparent"
             app:cardCornerRadius="64dp"
@@ -25,8 +25,8 @@
 
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/activityUserAvatar"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/ic_round_add_circle_24"
                 tools:ignore="ContentDescription,ImageContrastCheck"
@@ -37,18 +37,29 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
 
             <TextView
                 android:id="@+id/activityUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:text="Username"
                 android:textSize="15sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:alpha="0.6"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="•"
+                android:textSize="16sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
             <TextView
@@ -56,16 +67,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="Wed,06 March 2024, 7:00PM"
+                android:text="@string/time"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
-
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/activityLikeContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="end|center"
             android:layout_marginEnd="12dp"
             android:orientation="vertical"
             tools:ignore="UseCompoundDrawables">
@@ -93,21 +103,18 @@
         android:id="@+id/activityContent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="18dp"
+        android:layout_marginStart="64dp"
         android:background="?android:colorBackground"
         android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/lorem_ipsum"
-        android:textAlignment="center"
-        android:textSize="12sp"
-        tools:visibility="gone" />
+        android:textSize="12sp" />
 
     <FrameLayout
         android:id="@+id/activityBannerContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
+        android:layout_marginTop="8dp"
+        android:visibility="gone">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -200,9 +207,8 @@
         android:id="@+id/commentRepliesContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start|center_vertical"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="6dp"
         android:orientation="horizontal">
 
         <View

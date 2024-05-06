@@ -57,7 +57,7 @@ class ActivityItem(
             when (binding.activityReplies.visibility) {
                 View.GONE -> {
                     val replyItems = activity.replies?.map {
-                        ActivityReplyItem(it) { id, type ->
+                        ActivityReplyItem(it,fragActivity) { id, type ->
                             clickCallback(
                                 id,
                                 type
@@ -77,8 +77,19 @@ class ActivityItem(
                 }
             }
         }
+        val userList = arrayListOf<User>()
+        activity.likes?.forEach { i ->
+            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
+        }
+        binding.activityLikeContainer.setOnLongClickListener {
+            UsersDialogFragment().apply {
+                userList(userList)
+                show(fragActivity.supportFragmentManager, "dialog")
+            }
+            true
+        }
         binding.activityLikeCount.text = (activity.likeCount ?: 0).toString()
-        binding.activityLike.setOnClickListener {
+        binding.activityLikeContainer.setOnClickListener {
             val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
             scope.launch {
                 val res = Anilist.query.toggleLike(activity.id, "ACTIVITY")
@@ -101,19 +112,6 @@ class ActivityItem(
             }
         }
         val context = binding.root.context
-        val userList = arrayListOf<User>()
-        activity.likes?.forEach { i ->
-            userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
-        }
-        binding.activityLike.setOnLongClickListener {
-            UsersDialogFragment().apply {
-                userList(userList)
-                show(fragActivity.supportFragmentManager, "dialog")
-            }
-            true
-        }
-
-
         when (activity.typename) {
             "ListActivity" -> {
                 val cover = activity.media?.coverImage?.large

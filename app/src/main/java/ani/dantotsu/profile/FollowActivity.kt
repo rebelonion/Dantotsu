@@ -88,9 +88,10 @@ class FollowActivity : AppCompatActivity() {
 
     private fun fillList() {
         adapter.clear()
+        val screenWidth = resources.displayMetrics.run { widthPixels / density }
         binding.listRecyclerView.layoutManager = when (getLayoutType(selected)) {
             0 -> LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-            1 -> GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false)
+            1 -> GridLayoutManager(this, (screenWidth / 120f).toInt(), GridLayoutManager.VERTICAL, false)
             else -> LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         }
         users?.forEach { user ->

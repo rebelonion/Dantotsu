@@ -445,17 +445,14 @@ class Stories @JvmOverloads constructor(
         story.likes?.forEach { i ->
             userList.add(User(i.id, i.name.toString(), i.avatar?.medium, i.bannerImage))
         }
-
-
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
         binding.activityLikeCount.text = story.likeCount.toString()
         binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
-        binding.statusUserActions.setOnClickListener {
+        binding.activityLikeContainer.setOnClickListener {
             like()
         }
-
-        binding.statusUserActions.setOnLongClickListener {
+        binding.activityLikeContainer.setOnLongClickListener {
             val context = activity
             UsersDialogFragment().apply {
                 userList(userList)
