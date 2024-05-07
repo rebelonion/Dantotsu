@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt-rBR">
     <string name="slogan">O NOVO Melhor aplicativo de Animes e Mangás para Android.</string>
-    <string name="login">Entrar</string>
-    <string name="logout">Sair</string>
+    <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
@@ -108,7 +108,7 @@
     <string name="genres">Gêneros</string>
     <string name="description">Sinopse</string>
     <string name="characters">Personagens</string>
-    <string name="relations">Relações</string>
+    <string name="relations">Relacionado</string>
     <string name="staff">Staff</string>
     <string name="favourites">Favoritos</string>
     <string name="popularity">Popularidade</string>
