@@ -1,5 +1,6 @@
 package ani.dantotsu.media.anime
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +23,7 @@ class TrackGroupDialogFragment(
     private var instance: ExoplayerView,
     private var trackGroups: ArrayList<Tracks.Group>,
     private var type: @TrackType Int,
-    private var overrideTrackNames: List<String>? = null
+    private var overrideTrackNames: List<Pair<String, String>>? = null
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSubtitlesBinding? = null
     private val binding get() = _binding!!
@@ -57,12 +58,16 @@ class TrackGroupDialogFragment(
                 )
             )
 
+        @SuppressLint("SetTextI18n")
         @OptIn(UnstableApi::class)
         override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
             val binding = holder.binding
             trackGroups[position].let { trackGroup ->
-                when (val language = overrideTrackNames?.getOrNull(position)
-                    ?: trackGroup.getTrackFormat(0).language?.lowercase()) {
+                if (overrideTrackNames?.getOrNull(position - (trackGroups.size - (overrideTrackNames?.size?:0))) != null) {
+                    val pair = overrideTrackNames!![position - (trackGroups.size - overrideTrackNames!!.size)]
+                    binding.subtitleTitle.text =
+                        "[${pair.second}] ${pair.first}"
+                } else when (val language = trackGroup.getTrackFormat(0).language?.lowercase()) {
                     null -> {
                         binding.subtitleTitle.text =
                             getString(R.string.unknown_track, "Track $position")

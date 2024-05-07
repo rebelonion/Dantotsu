@@ -227,7 +227,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     private var downloadId: String? = null
     private var hasExtSubtitles = false
-    private var audioLanguages = mutableListOf<String>()
+    private var audioLanguages = mutableListOf<Pair<String,String>>()
 
     companion object {
         var initialized = false
@@ -1548,8 +1548,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val audioMediaItem = mutableListOf<MediaItem>()
         audioLanguages.clear()
         ext.audioTracks.forEach {
-            val code = LanguageMapper.getLanguageCode(it.lang)
-            audioLanguages.add(code)
+            var code = LanguageMapper.getLanguageCode(it.lang)
+            if (code == "all") code = "un"
+            audioLanguages.add(Pair(it.lang, code))
             audioMediaItem.add(
                 MediaItem.Builder()
                     .setUri(it.url)
@@ -1560,7 +1561,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
 
         val audioSources = audioMediaItem.map { mediaItem ->
-            if (mediaItem.localConfiguration?.uri.toString().endsWith(".m3u8")) {
+            if (mediaItem.localConfiguration?.uri.toString().contains(".m3u8")) {
                 HlsMediaSource.Factory(cacheFactory).createMediaSource(mediaItem)
             } else {
                 DefaultMediaSourceFactory(cacheFactory).createMediaSource(mediaItem)
