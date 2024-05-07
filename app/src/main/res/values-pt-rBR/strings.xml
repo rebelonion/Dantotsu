@@ -54,7 +54,7 @@
         <item>Assistindo</item>
         <item>Concluído</item>
         <item>Pausado</item>
-        <item>Abandonado</item>
+        <item>Dropado</item>
         <item>Planejando</item>
         <item>Favoritos</item>
         <item>Reassistindo</item>
@@ -70,7 +70,7 @@
         <item>CONCLUÍDO</item>
         <item>RE-ASSISTINDO</item>
         <item>PAUSADO</item>
-        <item>ABANDONADO</item>
+        <item>DROPADO</item>
     </string-array>
     <string-array name="status_manga">
         <item>PLANEJANDO</item>
@@ -78,7 +78,7 @@
         <item>CONCLUÍDO</item>
         <item>RE-LENDO</item>
         <item>PAUSADO</item>
-        <item>ABANDONADO</item>
+        <item>DROPADO</item>
     </string-array>
     <string name="progress">PROGRESSO</string>
     <string name="score">NOTA</string>
@@ -130,8 +130,8 @@
     <string name="filler">Filler</string>
     <string name="adult">Adulto</string>
     <string name="list_only">Na Lista</string>
-    <string name="tag">Etiqueta</string>
-    <string name="tags">Etiquetas</string>
+    <string name="tag">Tag</string>
+    <string name="tags">Tags</string>
     <string name="synonyms">Sinônimos</string>
     <string name="trailer">Trailer</string>
     <string name="opening">Opening</string>
@@ -238,12 +238,12 @@
     <string name="pause_video_focus">Pausar quando fora de Foco</string>
     <string name="gestures">Gestos de Volume e Brilho</string>
     <string name="double_tap">Toque duplo para Avançar ou Voltar</string>
-    <string name="fast_forward">Avanço Rápido</string>
+    <string name="fast_forward">Segurar para Acelerar o Vídeo</string>
     <string name="double_tap_info">Desativar essa opção irá mostrar botões para Avançar e Retroceder</string>
     <string name="seek_time">Tempo de Avançar/Retroceder</string>
     <string name="seek_time_info">Quantidade de tempo em segundos para o avanço e retrocesso.</string>
-    <string name="skip_time">Tempo de Pulo</string>
-    <string name="skip_time_info">Definir como 0 oculta o botão de pulo.</string>
+    <string name="skip_time">Tempo para Pular</string>
+    <string name="skip_time_info">Definir como 0 oculta o botão de pular.</string>
     <string name="show_cast_button">Mostrar Botão Transmitir</string>
     <string name="show_cast_button_info">Precisa do app \"Web Video Caster\" para transmitir.</string>
     <string name="picture_in_picture">Picture in Picture</string>
@@ -252,7 +252,7 @@
     <string name="app">App</string>
     <string name="immersive_mode">Esconder Barra de Status</string>
     <string name="immersive_modelist">Esconder Barra de Status na lsita</string>
-    <string name="immersive_mode_info">Requer reiniciar o app para aplicar completemente.</string>
+    <string name="immersive_mode_info">Reiniciar o app para é necessário para aplicar completemente.</string>
     <string name="home_layout_show">Mostrar/Esconder Layouts no Início</string>
     <string-array name="home_layouts">
         <item>Continuar Assistindo</item>
@@ -312,7 +312,7 @@
     <string name="share">Compartilhar</string>
     <string name="skip">Pular</string>
     <string name="other">Outro</string>
-    <string name="total_repeats">NÚMERO DE REPETIÇÕES</string>
+    <string name="total_repeats">REPETIÇÕES TOTAIS</string>
     <string name="custom_lists">Listas Personalizadas</string>
     <string name="donate_desc">Quer apoiar o Desenvolvedor do Dantotsu?\nConsidere Doar</string>
     <string name="donate_goal">Sem meta de doações no momento</string>
@@ -737,7 +737,7 @@
     <string name="button_backup">Backup</string>
     <string name="no_location_selected">Nenhuma localização selecionada</string>
     <string name="enjoying_app">Curtindo o App?</string>
-    <string name="consider_donating">Considere doar!</string>
+    <string name="consider_donating">Considere uma doação!</string>
     <string name="no_moners">to pobre :(</string>
     <string name="you_be_rich">That\'s alright, you\'ll be a rich man soon :prayge:</string>
     <string name="donate">doar :)</string>
