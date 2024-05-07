@@ -119,7 +119,7 @@ class LanguageMapper {
             "zu" to "Zulu"
         )
 
-        fun getLanguage(code: String): String {
+        fun getLanguageName(code: String): String {
             return if (code.contains("-")) {
                 try {
                     val parts = code.split("-")
@@ -129,6 +129,9 @@ class LanguageMapper {
                 }
             } else {
                 try {
+                    if (code == "all") {
+                        return codeMap[code] ?: code
+                    }
                     Locale(code).displayName
                 } catch (ignored: Exception) {
                     code
@@ -137,7 +140,8 @@ class LanguageMapper {
         }
 
         fun getLanguageCode(language: String): String {
-            return codeMap.filterValues { it.lowercase() == language.lowercase() }.keys.firstOrNull() ?: "all"
+            return codeMap.filterValues { it.lowercase() == language.lowercase() }.keys.firstOrNull()
+                ?: "all"
         }
 
         enum class Language(val code: String) {

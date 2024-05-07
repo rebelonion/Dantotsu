@@ -203,7 +203,7 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
 
         fun bind(extension: AnimeExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang = LanguageMapper.getLanguageCode(extension.lang)
+            val lang = LanguageMapper.getLanguageName(extension.lang)
             binding.extensionNameTextView.text = extension.name
             val versionText = "$lang ${extension.versionName} $nsfw"
             binding.extensionVersionTextView.text = versionText
