@@ -86,7 +86,7 @@
     <string name="started_at">COMEÇADO EM</string>
     <string name="completed_at">COMPLETADO EM</string>
     <string name="save">Salvar</string>
-    <string name="delete">Deletar</string>
+    <string name="delete">Excluir</string>
     <string name="remove">Remover</string>
     <string name="name">Nome</string>
     <string name="name_romaji">Nome em Romanji</string>
@@ -144,7 +144,7 @@
     <string name="offline_mode">Modo Offline</string>
     <string name="settings">Configurações</string>
     <string name="extensions">Extensões</string>
-    <string name="extension_updates_available">Atualizações de extensões disponíveis</string>
+    <string name="extension_updates_available">Atualizações de extensão disponíveis</string>
     <string name="player_settings">Configurações do Player</string>
     <string name="recentlyListOnly">Mostrar apenas minha lista em \"Novos Episódios\"</string>
     <string name="download_manager_select">Gerenciador de Download</string>
@@ -206,16 +206,16 @@
     <string name="subtitles">Legendas</string>
     <string name="subtitle_toggle">Legendas</string>
     <string name="primary_sub_color_select">Cor da Legenda</string>
-    <string name="secondary_sub_color_select">Cor do Contorno das Legendas</string>
-    <string name="secondary_sub_outline_type_select">Tipo do Contorno das Legendas</string>
-    <string name="sub_background_color_select">Cor do Fundo das Legendas</string>
-    <string name="sub_window_color_select">Cor da Janela das Legendas</string>
-    <string name="sub_window_color_info">"A janela das legendas são as áreas nos lados esquerdo e direito delas. (onde não está o fundo)"</string>
+    <string name="secondary_sub_color_select">Cor do Contorno da Legenda</string>
+    <string name="secondary_sub_outline_type_select">Tipo do Contorno da Legenda</string>
+    <string name="sub_background_color_select">Cor do Fundo da Legenda</string>
+    <string name="sub_window_color_select">Cor da Janela da Legenda</string>
+    <string name="sub_window_color_info">"A janela da legenda é a área nos lados esquerdo e direito delas. (onde não está o fundo)"</string>
     <string name="sub_color_info"><b>Aviso:</b> As configurações acima só afetam legendas do tipo SoftSub!</string>
-    <string name="sub_alpha">Transparência das Legendas</string>
+    <string name="sub_alpha">Transparência da Legenda</string>
     <string name="sub_text_example">Legenda de Exemplo</string>
-    <string name="sub_font_select">Fonte das Legendas</string>
-    <string name="subtitle_font_size">Tamanho das Legendas</string>
+    <string name="sub_font_select">Fonte da Legenda</string>
+    <string name="subtitle_font_size">Tamanho da Legenda</string>
     <string name="auto">Auto</string>
     <string name="auto_play_next_episode">Reproduzir o Próximo Episódio Automaticamente</string>
     <string name="auto_play_next_episode_info">Desativado automaticamente caso não tenha interação com o player depois de 1 hora.</string>
@@ -436,7 +436,7 @@
     <string name="error_loading_anilist_user_data">Erro ao carregar dados de usuário de Anilist</string>
     <string name="episode_not_found">Não foi possível encontrar o episódio: %1$s</string>
     <string name="list_updated">Lista Atualizada</string>
-    <string name="deleted_from_list">Deletado da Lista</string>
+    <string name="deleted_from_list">Excluído da Lista</string>
     <string name="no_list_id">ID não encontrado na Lista…</string>
     <string name="checking_for_update">Procurando por Atualizações</string>
     <string name="dont_show_again">Não mostrar novamente para a versão %1$s</string>
@@ -465,7 +465,7 @@
         <item>Nota</item>
         <item>Popular</item>
         <item>Em Alta</item>
-        <item>Lançamento</item>
+        <item>Lançamentos</item>
         <item>A-Z</item>
         <item>Z-A</item>
         <item>Nada além de dor</item>
@@ -495,48 +495,48 @@
     <string name="episode_num">"Episódio %1$s"</string>
     <string name="chapter">"Capítulo "</string>
     <string name="chapter_num">"Capítulo %1$s"</string>
-    <string name="just_released">- Newly released!</string>
-    <string name="checking_subscriptions_title">Checking Subscriptions</string>
-    <string name="user_list">%1$s\'s %2$s List</string>
-    <string name="speed">Speed</string>
-    <string name="auto_update">Auto Update progress for %1$s?</string>
-    <string name="continue_from">Continue from %1$s?</string>
-    <string name="title_update_progress">Update progress on AniList?</string>
-    <string name="incognito_will_not_update">Incognito mode will still ignore progress.</string>
-    <string name="dont_ask_again">"Don't ask again for %1$s"</string>
-    <string name="default_speed">Default Speed</string>
-    <string name="default_resize_mode">Default Resize Mode</string>
-    <string name="primary_sub_color">Primary Sub Color</string>
-    <string name="outline_sub_color">Outline Sub Color</string>
-    <string name="outline_type">Outline Type</string>
-    <string name="subtitle_font">Subtitle Font</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
+    <string name="just_released">- Acabou de lançar!</string>
+    <string name="checking_subscriptions_title">Conferindo Inscrições</string>
+    <string name="user_list">%2$ss de %1$s</string>
+    <string name="speed">Velocidade</string>
+    <string name="auto_update">Atualizar Progresso Automaticamente para %1$s?</string>
+    <string name="continue_from">Continuar de %1$s?</string>
+    <string name="title_update_progress">Atualizar Progresso no AniList?</string>
+    <string name="incognito_will_not_update">Modo Incógnito ainda irá ignorar progresso.</string>
+    <string name="dont_ask_again">"Não perguntar novamente para %1$s"</string>
+    <string name="default_speed">Velocidade Padrão</string>
+    <string name="default_resize_mode">Modo de Redimensionamento Padrão</string>
+    <string name="primary_sub_color">Cor Primária de Legendas</string>
+    <string name="outline_sub_color">Cor de Contorno de Legendas</string>
+    <string name="outline_type">Tipo de Contorno</string>
+    <string name="subtitle_font">Fonte da Legenda</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
     <string name="ok">OK</string>
-    <string name="reset">Reset</string>
-    <string name="close">Close</string>
-    <string name="no_chapter">No Chapter</string>
-    <string name="content_18">Turn on 18+ content from your Anilist settings</string>
-    <string name="available">Available</string>
-    <string name="lets_go">Let\'s Go</string>
+    <string name="reset">Resetar</string>
+    <string name="close">Fechar</string>
+    <string name="no_chapter">Sem Capítulo</string>
+    <string name="content_18">Ative o Conteúdo +18 em suas configurações Anilist</string>
+    <string name="available">Disponível</string>
+    <string name="lets_go">Vamos lá</string>
     <string name="cope">Cope</string>
-    <string name="watched_num">"Watched "</string>
-    <string name="read_num">"Read "</string>
-    <string name="episodes_out_of">" out of "</string>
-    <string name="chapters_out_of">" out of "</string>
-    <string name="episodes_total_of">"Total of "</string>
-    <string name="chapters_total_of">"Total of "</string>
-    <string name="no_description_available">"No Description Available"</string>
+    <string name="watched_num">"Assistiu "</string>
+    <string name="read_num">"Leu "</string>
+    <string name="episodes_out_of">" de "</string>
+    <string name="chapters_out_of">" de "</string>
+    <string name="episodes_total_of">"Total de "</string>
+    <string name="chapters_total_of">"Total de "</string>
+    <string name="no_description_available">"Descrição Não Disponível"</string>
     <string-array name="manga_directions">
-        <item>Top to Bottom</item>
-        <item>Right to Left</item>
-        <item>Bottom to Top</item>
-        <item>Left to Right</item>
+        <item>De Cima para Baixo</item>
+        <item>Da Direita para a Esquerda</item>
+        <item>De Baixo para Cima</item>
+        <item>Da Esquerda para a Direita</item>
     </string-array>
     <string-array name="manga_layouts">
-        <item>Paged</item>
-        <item>Continuous Paged</item>
-        <item>Continuous</item>
+        <item>Paginado</item>
+        <item>Paginado Contínuo</item>
+        <item>Contínuo</item>
     </string-array>
     <string name="selected">Selecionado</string>
     <string name="found">Encontrado</string>
@@ -545,7 +545,7 @@
     <string name="gender">\n\"__Gênero:__ \"</string>
     <string name="male">Masculino</string>
     <string name="female">Feminino</string>
-    <string name="question_1">O que é Dantotsu?</string>
+    <string name="question_1">O que é o Dantotsu?</string>
     <string name="answer_1">Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream &amp; download Anime / Manga through extensions. \n&gt;Dantotsu (断トツ; Dan-totsu) literally means the best of the best in Japanese. Well, we would like to say this is the best open source app for anime and manga on Android, but hey, Try it out yourself &amp; judge!</string>
     <string name="question_2">What are some features of Dantotsu?</string>
     <string name="answer_2">Some mentionable features of Dantotsu are\n\n- Easy and functional way to both, watch anime and read manga and light novels, Ad Free.\n- A completely open source app with a nice UI &amp; Animations\n- 3rd party plugin support \n- Synchronize anime and manga real-time with AniList. Easily categorize anime and manga based on your current status. (Powered by AniList)\n- Find all shows using thoroughly and frequently updated list of all trending, popular and ongoing anime based on scores.\n- View extensive details about anime shows, movies and manga titles. It also features ability to countdown to the next episode of airing anime. (Powered by AniList &amp; MyAnimeList)</string>
@@ -621,24 +621,24 @@
     <string name="use_unique_theme_for_each_item">Seguir tema do Anime/Mangá </string>
     <string name="oled_theme_variant">Variante OLED do tema</string>
     <string name="installed_anime">Animes Instalados</string>
-    <string name="available_anime">Available Anime</string>
-    <string name="installed_manga">Installed Manga</string>
-    <string name="color_picker">Color Picker</string>
-    <string name="random_selection">Random Selection</string>
-    <string name="incognito_mode">Incognito Mode</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="configure">Configure</string>
-    <string name="add_widget">Add widget</string>
-    <string name="app_widget_description">This is an app widget description</string>
-    <string name="upcoming_anime">Upcoming Anime</string>
-    <string name="airing_image">Airing Image</string>
-    <string name="anime_downloads">animeDownloads</string>
-    <string name="purge_anime_downloads">Delete all Anime downloads</string>
-    <string name="purge_manga_downloads">Delete all Manga Downloads</string>
-    <string name="purge_novel_downloads">Delete all Novel Downloads</string>
-    <string name="requires_android_12">Requires Android 12+</string>
-    <string name="share_username_in_crash_reports">Share username</string>
-    <string name="pinned_sources">Pinned Sources</string>
+    <string name="available_anime">Animes Disponíveis</string>
+    <string name="installed_manga">Mangás Instalados</string>
+    <string name="color_picker">Seletor de Cor</string>
+    <string name="random_selection">Seleção Aleatória</string>
+    <string name="incognito_mode">Modo Incógnito</string>
+    <string name="appwidget_text">EXEMPLO</string>
+    <string name="configure">Configurar</string>
+    <string name="add_widget">Adicionar widget</string>
+    <string name="app_widget_description">Esta é uma descrição do widget</string>
+    <string name="upcoming_anime">Próximos Animes</string>
+    <string name="airing_image">Imagem de Exibição</string>
+    <string name="anime_downloads">Downloads de anime</string>
+    <string name="purge_anime_downloads">Deletar todos os Downloads de Anime</string>
+    <string name="purge_manga_downloads">Deletar todos os Downloads de Mangá</string>
+    <string name="purge_novel_downloads">Deletar todos os Downloads de Novel</string>
+    <string name="requires_android_12">Requer Android 12+</string>
+    <string name="share_username_in_crash_reports">Compartilhar nome de usuário</string>
+    <string name="pinned_sources">Fontes Fixadas</string>
     <string name="backup_restore">Backup e Restaurar</string>
     <string name="restore_settings">Importar Configurações</string>
     <string name="restore_settings_underline"><u>Restaurar Configurações</u></string>
@@ -707,74 +707,74 @@
     <string name="password_cannot_be_empty">A senha não pode estar vazia</string>
     <string name="unknown_file_type">Tipo de arquivo desconhecido</string>
     <string name="error_importing_settings">Erro ao importar configurações</string>
-    <string name="download_manager">Download Manager</string>
-    <string name="enter_password">Enter Password</string>
+    <string name="download_manager">Gerenciador de Download</string>
+    <string name="enter_password">Digite a Senha</string>
     <string name="you_cursed">youwu have been cuwsed :pwayge:</string>
-    <string name="purge_confirm">Are you sure you want to purge all %1$s downloads?</string>
-    <string name="delete_fail_reason">Failed to delete because of… %1$s</string>
-    <string name="hide_replies">Hide replies</string>
-    <string name="view_reply">View reply</string>
-    <string name="view_replies">View replies</string>
-    <string name="view_replies_count">View %1$d replies</string>
-    <string name="replying_to">Replying to %1$s</string>
-    <string name="delete_comment">Delete Comment</string>
-    <string name="delete_comment_confirm">Are you sure you want to delete this comment?</string>
-    <string name="comment_deleted">Comment Deleted</string>
-    <string name="ban_user">Ban User</string>
-    <string name="ban_user_confirm">Are you sure you want to ban this user?</string>
-    <string name="user_banned">User Banned</string>
-    <string name="report_comment">Report Comment</string>
-    <string name="report_comment_confirm">Only report comments that violate the rules. Are you sure you want to report this comment?</string>
-    <string name="comment_reported">Comment Reported</string>
-    <string name="list">List</string>
-    <string name="grid">Grid</string>
-    <string name="compact">Compact</string>
-    <string name="webview_not_installed">WebView not installed</string>
-    <string name="video_quality">Quality: %1$dp</string>
-    <string name="size_unknown">Unknown Size</string>
+    <string name="purge_confirm">Certeza de que quer limpar todos os downloads de %1$s?</string>
+    <string name="delete_fail_reason">Falha ao excluir por… %1$s</string>
+    <string name="hide_replies">Esconder Respostas</string>
+    <string name="view_reply">Ver Resposta</string>
+    <string name="view_replies">Ver Respostas</string>
+    <string name="view_replies_count">Ver %1$d Respostas</string>
+    <string name="replying_to">Respondendo a %1$s</string>
+    <string name="delete_comment">Excluir Comentário</string>
+    <string name="delete_comment_confirm">Certeza de que deseja excluir esse comentário?</string>
+    <string name="comment_deleted">Comentário Excluído</string>
+    <string name="ban_user">Banir Usuário</string>
+    <string name="ban_user_confirm">Certeza de que deseja banir esse usuário?</string>
+    <string name="user_banned">Usuário Banido</string>
+    <string name="report_comment">Reportar Comentário</string>
+    <string name="report_comment_confirm">Apenas reporte comentários que violem as regras. Certeza de que deseja reportar esse comentário?</string>
+    <string name="comment_reported">Comentário Reportado</string>
+    <string name="list">Lista</string>
+    <string name="grid">Grade</string>
+    <string name="compact">Compacto</string>
+    <string name="webview_not_installed">WebView não instalado</string>
+    <string name="video_quality">Qualidade: %1$dp</string>
+    <string name="size_unknown">Tamanho Desconhecido</string>
     <string name="mb_size">%1$s MB</string>
-    <string name="button_restore">Restore</string>
+    <string name="button_restore">Restaurar</string>
     <string name="button_backup">Backup</string>
-    <string name="no_location_selected">No location selected</string>
-    <string name="enjoying_app">Enjoying the App?</string>
-    <string name="consider_donating">Consider donating!</string>
+    <string name="no_location_selected">Nenhuma localização selecionada</string>
+    <string name="enjoying_app">Curtindo o App?</string>
+    <string name="consider_donating">Considere doar!</string>
     <string name="no_moners">no moners :(</string>
     <string name="you_be_rich">That\'s alright, you\'ll be a rich man soon :prayge:</string>
     <string name="donate">donate :)</string>
     <string name="do_it">Do it!</string>
-    <string name="password">Password</string>
-    <string name="search_title">Search %1$s</string>
-    <string name="profile_stats_widget">Track progress directly from your home screen</string>
-    <string name="anime_watched">Anime\nWatched</string>
-    <string name="manga_read">Manga\nRead</string>
-    <string name="loading">Loading…</string>
-    <string name="user_stats">%1$s\'s Stats</string>
-    <string name="please">Please</string>
+    <string name="password">Senha</string>
+    <string name="search_title">Buscar %1$s</string>
+    <string name="profile_stats_widget">Acompanhe seu progresso diretamente da tela inicial</string>
+    <string name="anime_watched">Animes\nAssistidos</string>
+    <string name="manga_read">Mangás\nLidos</string>
+    <string name="loading">Carregando…</string>
+    <string name="user_stats">Estatísticas de %1$s</string>
+    <string name="please">Por favor</string>
     <string name="log_in">log in</string>
     <string name="or_join">or join</string>
-    <string name="top_background_color">Top background color</string>
-    <string name="bottom_background_color">Bottom Background Color</string>
-    <string name="countdown_text_color">Countdown Text Color</string>
-    <string name="title_color">Title Color</string>
-    <string name="stat_text_color">Stats Text Color</string>
+    <string name="top_background_color">Cor de fundo superior</string>
+    <string name="bottom_background_color">Cor de fundo inferior</string>
+    <string name="countdown_text_color">Cor do Texto da Contagem Regressiva</string>
+    <string name="title_color">Cor do Título</string>
+    <string name="stat_text_color">Cor do Texto das Estatísticas</string>
     <string name="placeholder">Placeholder</string>
-    <string name="anime_add_repository">Add Anime Repo</string>
-    <string name="manga_add_repository">Add Manga Repo</string>
-    <string name="edit_repositories">Edit repositories</string>
-    <string name="rem_repository">Remove repository?</string>
-    <string name="trending_movies">Trending Movies</string>
-    <string name="include_list">Include list</string>
-    <string name="top_rated">Top rated</string>
-    <string name="most_favourite">Most Favourite</string>
-    <string name="trending_manhwa">Trending Manhwa</string>
-    <string name="liked_by">Liked By</string>
-    <string name="adult_only_content">Adult only content</string>
-    <string name="dir_error">Your path could not be set</string>
-    <string name="dir_access">Downloads access</string>
-    <string name="dir_access_msg">Please choose a directory to save your downloads</string>
-    <string name="change_download_location">Change Download Location</string>
-    <string name="download_location_msg">Are you sure you want to change the download location?\nOld downloads may no longer be accessible.</string>
-    <string name="report">Report</string>
+    <string name="anime_add_repository">Adicionar Repositório de Animes</string>
+    <string name="manga_add_repository">Adicionar Repisitório de Mangás</string>
+    <string name="edit_repositories">Editar repositórios</string>
+    <string name="rem_repository">Remover repositório?</string>
+    <string name="trending_movies">Filmes Populares</string>
+    <string name="include_list">Incluir Lista</string>
+    <string name="top_rated">Mais bem avaliados</string>
+    <string name="most_favourite">Mais Favoritados</string>
+    <string name="trending_manhwa">Manhwas em Alta</string>
+    <string name="liked_by">Curtido por</string>
+    <string name="adult_only_content">Apenas conteúdo adulto</string>
+    <string name="dir_error">O caminho não pode ser definido</string>
+    <string name="dir_access">Acesso aos downloads</string>
+    <string name="dir_access_msg">Por favor, escolha uma pasta para salvar seus downloads</string>
+    <string name="change_download_location">Mudar Localização dos Downloads</string>
+    <string name="download_location_msg">Certeza de que quer mudar a localização dos downloads?\nDownloads antigos podem se tornar inacessíveis.</string>
+    <string name="report">Reportar</string>
     <string name="ban">Ban</string>
     <string name="voice_actors">Voice Actors</string>
     <string name="download_permission_required">Permission is required to download</string>
