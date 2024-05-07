@@ -709,7 +709,7 @@
     <string name="error_importing_settings">Erro ao importar configurações</string>
     <string name="download_manager">Gerenciador de Download</string>
     <string name="enter_password">Digite a Senha</string>
-    <string name="you_cursed">youwu have been cuwsed :pwayge:</string>
+    <string name="you_cursed">você foi amawdissoado :pwayge:</string>
     <string name="purge_confirm">Certeza de que quer limpar todos os downloads de %1$s?</string>
     <string name="delete_fail_reason">Falha ao excluir por… %1$s</string>
     <string name="hide_replies">Esconder Respostas</string>
@@ -740,7 +740,7 @@
     <string name="consider_donating">Considere doar!</string>
     <string name="no_moners">to pobre :(</string>
     <string name="you_be_rich">That\'s alright, you\'ll be a rich man soon :prayge:</string>
-    <string name="donate">donate :)</string>
+    <string name="donate">doar :)</string>
     <string name="do_it">Do it!</string>
     <string name="password">Senha</string>
     <string name="search_title">Buscar %1$s</string>
@@ -787,7 +787,7 @@
     <string name="disabled_track">Desativado</string>
     <string name="invalid_track">Inválido</string>
     <string name="unknown_track">\[%1$s\] Desconhecido</string>
-    <string name="accounts_desc">Anilist, MAL and Discord.\nWhat more could you need?</string>
+    <string name="accounts_desc">Anilist, MAL e Discord.\nPrecisa de mais?</string>
     <string name="theme_desc">Change the vibe of your app</string>
     <string name="extensions_desc">Manage your reliable repositories</string>
     <string name="common_desc">UI and other mischievous stuff</string>
