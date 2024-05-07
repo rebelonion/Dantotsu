@@ -202,7 +202,7 @@ class NovelExtensionAdapter(private val clickListener: OnNovelInstallClickListen
         val extensionIconImageView: ImageView = binding.extensionIconImageView
         fun bind(extension: NovelExtension.Available) {
             val nsfw = ""
-            val lang = LanguageMapper.mapLanguageCodeToName("all")
+            val lang = LanguageMapper.getLanguageCode("all")
             binding.extensionNameTextView.text = extension.name
             binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
         }

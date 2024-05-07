@@ -82,7 +82,9 @@ import androidx.media3.datasource.cache.CacheDataSource
 import androidx.media3.datasource.okhttp.OkHttpDataSource
 import androidx.media3.exoplayer.DefaultLoadControl
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.hls.HlsMediaSource
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.exoplayer.source.MergingMediaSource
 import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.media3.exoplayer.util.EventLogger
 import androidx.media3.session.MediaSession
@@ -126,6 +128,7 @@ import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.okHttpClient
 import ani.dantotsu.others.AniSkip
 import ani.dantotsu.others.AniSkip.getType
+import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.others.ResettableTimer
 import ani.dantotsu.others.getSerialized
 import ani.dantotsu.parsers.AnimeSources
@@ -190,6 +193,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
     private lateinit var cacheFactory: CacheDataSource.Factory
     private lateinit var playbackParameters: PlaybackParameters
     private lateinit var mediaItem: MediaItem
+    private lateinit var mediaSource: MergingMediaSource
     private var mediaSession: MediaSession? = null
 
     private lateinit var binding: ActivityExoplayerBinding
@@ -223,6 +227,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
 
     private var downloadId: String? = null
     private var hasExtSubtitles = false
+    private var audioLanguages = mutableListOf<String>()
 
     companion object {
         var initialized = false
@@ -1484,9 +1489,9 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             val titleName = ext.server.name.split("/").first()
             val episodeName = ext.server.name.split("/").last()
             downloadId = PrefManager.getAnimeDownloadPreferences()
-                .getString("$titleName - $episodeName", null) ?:
-                    PrefManager.getAnimeDownloadPreferences()
-                        .getString(ext.server.name, null)
+                .getString("$titleName - $episodeName", null)
+                ?: PrefManager.getAnimeDownloadPreferences()
+                    .getString(ext.server.name, null)
             val exoItem = if (downloadId != null) {
                 Helper.downloadManager(this)
                     .downloadIndex.getDownload(downloadId!!)?.request?.toMediaItem()
@@ -1539,6 +1544,32 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
                 downloadedMediaItem
             }
         }
+
+        val audioMediaItem = mutableListOf<MediaItem>()
+        audioLanguages.clear()
+        ext.audioTracks.forEach {
+            val code = LanguageMapper.getLanguageCode(it.lang)
+            audioLanguages.add(code)
+            audioMediaItem.add(
+                MediaItem.Builder()
+                    .setUri(it.url)
+                    .setMimeType(MimeTypes.AUDIO_UNKNOWN)
+                    .setTag(code)
+                    .build()
+            )
+        }
+
+        val audioSources = audioMediaItem.map { mediaItem ->
+            if (mediaItem.localConfiguration?.uri.toString().endsWith(".m3u8")) {
+                HlsMediaSource.Factory(cacheFactory).createMediaSource(mediaItem)
+            } else {
+                DefaultMediaSourceFactory(cacheFactory).createMediaSource(mediaItem)
+            }
+        }.toTypedArray()
+        val videoMediaSource = DefaultMediaSourceFactory(cacheFactory)
+            .createMediaSource(mediaItem)
+        mediaSource = MergingMediaSource(videoMediaSource, *audioSources)
+
 
         //Source
         exoSource.setOnClickListener {
@@ -1615,7 +1646,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
             .build().apply {
                 playWhenReady = true
                 this.playbackParameters = this@ExoplayerView.playbackParameters
-                setMediaItem(mediaItem)
+                setMediaSource(mediaSource)
                 prepare()
                 PrefManager.getCustomVal(
                     "${media.id}_${media.anime!!.selectedEpisode}_max",
@@ -1953,7 +1984,7 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         }
         exoAudioTrack.isVisible = audioTracks.size > 1
         exoAudioTrack.setOnClickListener {
-            TrackGroupDialogFragment(this, audioTracks, TRACK_TYPE_AUDIO)
+            TrackGroupDialogFragment(this, audioTracks, TRACK_TYPE_AUDIO, audioLanguages)
                 .show(supportFragmentManager, "dialog")
         }
         if (!hasExtSubtitles) {

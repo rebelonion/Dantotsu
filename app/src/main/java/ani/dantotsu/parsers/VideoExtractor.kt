@@ -1,6 +1,7 @@
 package ani.dantotsu.parsers
 
 import ani.dantotsu.FileUrl
+import eu.kanade.tachiyomi.animesource.model.Track
 import java.io.Serializable
 
 /**
@@ -12,6 +13,7 @@ abstract class VideoExtractor : Serializable {
     abstract val server: VideoServer
     var videos: List<Video> = listOf()
     var subtitles: List<Subtitle> = listOf()
+    var audioTracks: List<Track> = listOf()
 
     /**
      * Extracts videos & subtitles from the `embed`
@@ -29,6 +31,7 @@ abstract class VideoExtractor : Serializable {
         extract().also {
             videos = it.videos
             subtitles = it.subtitles
+            audioTracks = it.audioTracks
             return this
         }
     }
@@ -80,7 +83,8 @@ data class VideoServer(
  * **/
 data class VideoContainer(
     val videos: List<Video>,
-    val subtitles: List<Subtitle> = listOf()
+    val subtitles: List<Subtitle> = listOf(),
+    val audioTracks: List<Track> = listOf(),
 ) : Serializable
 
 /**

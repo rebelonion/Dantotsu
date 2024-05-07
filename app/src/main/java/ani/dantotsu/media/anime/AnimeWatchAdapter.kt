@@ -489,7 +489,7 @@ class AnimeWatchAdapter(
                 val adapter = ArrayAdapter(
                     fragment.requireContext(),
                     R.layout.item_dropdown,
-                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    parser.extension.sources.map { LanguageMapper.getLanguageCode(it.lang) }
                 )
                 val items = adapter.count
 

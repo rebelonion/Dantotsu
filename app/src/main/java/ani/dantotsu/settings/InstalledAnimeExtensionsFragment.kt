@@ -72,7 +72,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             if (allSettings.isNotEmpty()) {
                 var selectedSetting = allSettings[0]
                 if (allSettings.size > 1) {
-                    val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    val names = allSettings.map { LanguageMapper.getLanguageCode(it.lang) }
                         .toTypedArray()
                     var selectedIndex = 0
                     val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
@@ -295,7 +295,7 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val lang = LanguageMapper.getLanguageCode(extension.lang)
             holder.extensionNameTextView.text = extension.name
             val versionText = "$lang ${extension.versionName} $nsfw"
             holder.extensionVersionTextView.text = versionText

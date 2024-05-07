@@ -511,9 +511,10 @@ class VideoServerPassthrough(private val videoServer: VideoServer) : VideoExtrac
     override suspend fun extract(): VideoContainer {
         val vidList = listOfNotNull(videoServer.video?.let { aniVideoToSaiVideo(it) })
         val subList = videoServer.video?.subtitleTracks?.map { trackToSubtitle(it) } ?: emptyList()
+        val audioList = videoServer.video?.audioTracks ?: emptyList()
 
         return if (vidList.isNotEmpty()) {
-            VideoContainer(vidList, subList)
+            VideoContainer(vidList, subList, audioList)
         } else {
             throw Exception("No videos found")
         }

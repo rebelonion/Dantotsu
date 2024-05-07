@@ -222,7 +222,7 @@ class InstalledNovelExtensionsFragment : Fragment(), SearchQueryHandler {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)  // Use getItem() from ListAdapter
             val nsfw = ""
-            val lang = LanguageMapper.mapLanguageCodeToName("all")
+            val lang = LanguageMapper.getLanguageCode("all")
             holder.extensionNameTextView.text = extension.name
             val versionText = "$lang ${extension.versionName} $nsfw"
             holder.extensionVersionTextView.text = versionText

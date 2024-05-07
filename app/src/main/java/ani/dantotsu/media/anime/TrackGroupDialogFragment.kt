@@ -19,19 +19,13 @@ import java.util.Locale
 
 @OptIn(UnstableApi::class)
 class TrackGroupDialogFragment(
-    instance: ExoplayerView, trackGroups: ArrayList<Tracks.Group>, type: @TrackType Int
+    private var instance: ExoplayerView,
+    private var trackGroups: ArrayList<Tracks.Group>,
+    private var type: @TrackType Int,
+    private var overrideTrackNames: List<String>? = null
 ) : BottomSheetDialogFragment() {
     private var _binding: BottomSheetSubtitlesBinding? = null
     private val binding get() = _binding!!
-    private var instance: ExoplayerView
-    private var trackGroups: ArrayList<Tracks.Group>
-    private var type: @TrackType Int
-
-    init {
-        this.instance = instance
-        this.trackGroups = trackGroups
-        this.type = type
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,7 +61,8 @@ class TrackGroupDialogFragment(
         override fun onBindViewHolder(holder: StreamViewHolder, position: Int) {
             val binding = holder.binding
             trackGroups[position].let { trackGroup ->
-                when (val language = trackGroup.getTrackFormat(0).language?.lowercase()) {
+                when (val language = overrideTrackNames?.getOrNull(position)
+                    ?: trackGroup.getTrackFormat(0).language?.lowercase()) {
                     null -> {
                         binding.subtitleTitle.text =
                             getString(R.string.unknown_track, "Track $position")
@@ -94,7 +89,6 @@ class TrackGroupDialogFragment(
                         }
                         binding.subtitleTitle.text = locale?.let {
                             "[${it.language}] ${it.displayName}"
-
                         } ?: getString(R.string.unknown_track, language)
                     }
                 }
