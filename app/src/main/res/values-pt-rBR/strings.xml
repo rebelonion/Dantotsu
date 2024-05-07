@@ -52,7 +52,7 @@
     <string-array name="keys">
         <item>Lendo</item>
         <item>Assistindo</item>
-        <item>Completado</item>
+        <item>Concluído</item>
         <item>Pausado</item>
         <item>Abandonado</item>
         <item>Planejando</item>
@@ -67,7 +67,7 @@
     <string-array name="status_anime">
         <item>PLANEJANDO</item>
         <item>ASSISTINDO</item>
-        <item>COMPLETADO</item>
+        <item>CONCLUÍDO</item>
         <item>RE-ASSISTINDO</item>
         <item>PAUSADO</item>
         <item>ABANDONADO</item>
@@ -75,7 +75,7 @@
     <string-array name="status_manga">
         <item>PLANEJANDO</item>
         <item>LENDO</item>
-        <item>COMPLETADO</item>
+        <item>CONCLUÍDO</item>
         <item>RE-LENDO</item>
         <item>PAUSADO</item>
         <item>ABANDONADO</item>
@@ -84,7 +84,7 @@
     <string name="score">NOTA</string>
     <string name="score_suffix">" / 10"</string>
     <string name="started_at">COMEÇADO EM</string>
-    <string name="completed_at">COMPLETADO EM</string>
+    <string name="completed_at">CONCLUÍDO EM</string>
     <string name="save">Salvar</string>
     <string name="delete">Excluir</string>
     <string name="remove">Remover</string>
