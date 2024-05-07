@@ -108,7 +108,7 @@ class AnilistHomeViewModel : ViewModel() {
         if (!BuildConfig.FLAVOR.contains("fdroid")) {
             if (PrefManager.getVal(PrefName.CheckUpdate))
                 context.lifecycleScope.launch(Dispatchers.IO) {
-                    AppUpdater.check(context, true)
+                    AppUpdater.check(context, false)
                 }
         }
         val ret = Anilist.query.getGenresAndTags()
