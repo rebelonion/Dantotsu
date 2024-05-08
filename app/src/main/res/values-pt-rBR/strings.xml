@@ -344,20 +344,20 @@
     <string name="login_with_anilist">Faça Login com Anilist!</string>
     <string name="anilist">Anilist</string>
     <string name="account_help">Como isso funciona\?</string>
-    <string name="full_account_help">        Dantotsu is an Anilist Based App, so for syncing with your MAL Account, It needs an Anilist account to be logged in.
-        \nOnce logged in with both Anilist and MAL accounts, the app will automatically update your MAL account whenever:
-        \n- Add a new Media
-        \n- Edit a Media
-        \n- Delete a Media
+    <string name="full_account_help">        Dantotsu é um aplicativo baseado em Anilist, então para sincronizar com sua conta MAL, é necessário fazer login em uma conta Anilist.
+        \nDepois de fazer login com as contas Anilist e MAL, o aplicativo atualizará automaticamente sua conta MAL sempre que:
+        \n- Adicionar uma nova mídia
+        \n- Editar uma mídia
+        \n- Excluir uma mídia
 
-        \n\nNote: The app will not sync old Media\'s from Anilist to MAL, It\'s recommended to sync them.
-        \n- Check __FAQs__ for _Easy Method_
+        \n\nNota: O aplicativo não sincronizará mídias existentes do Anilist para o MAL. É recomendável sincronizá-las.
+        \n- Verifique __FAQs__ para achar o _Método Fácil_
 
-        \n\nAnd for _Intermediates_ :
-        \n- [How to sync Anilist data with MAL](https://anilist.co/forum/thread/2654)
-        \n- [How to sync MAL data with Anilist](https://anilist.co/forum/thread/3393)
+        \n\nE para os _Intermediários_ :
+        \n- [Como sincronizar lista do Anilist com MAL](https://anilist.co/forum/thread/2654)
+        \n- [Como sincronizar lista MAL com Anilist](https://anilist.co/forum/thread/3393)
 
-        \n\n_It is not required to sync both MAL and Anilist accounts._
+        \n\n_A sincronização de contas MAL e Anilist não é necessária._
     </string>
     <string name="notification_for_checking_subscriptions">Notificação para Verificar Inscrições</string>
     <string name="use_alarm_manager">Usar o Alarm Manager</string>
@@ -546,15 +546,15 @@
     <string name="male">Masculino</string>
     <string name="female">Feminino</string>
     <string name="question_1">O que é o Dantotsu?</string>
-    <string name="answer_1">Dantotsu is crafted from the ashes of Saikou and based on simplistic yet state-of-the-art elegance. It is an Anilist only client, which also lets you stream &amp; download Anime / Manga through extensions. \n&gt;Dantotsu (断トツ; Dan-totsu) literally means the best of the best in Japanese. Well, we would like to say this is the best open source app for anime and manga on Android, but hey, Try it out yourself &amp; judge!</string>
-    <string name="question_2">What are some features of Dantotsu?</string>
-    <string name="answer_2">Some mentionable features of Dantotsu are\n\n- Easy and functional way to both, watch anime and read manga and light novels, Ad Free.\n- A completely open source app with a nice UI &amp; Animations\n- 3rd party plugin support \n- Synchronize anime and manga real-time with AniList. Easily categorize anime and manga based on your current status. (Powered by AniList)\n- Find all shows using thoroughly and frequently updated list of all trending, popular and ongoing anime based on scores.\n- View extensive details about anime shows, movies and manga titles. It also features ability to countdown to the next episode of airing anime. (Powered by AniList &amp; MyAnimeList)</string>
-    <string name="question_3">Whats the difference between Stable, Beta &amp; Alpha versions?</string>
-    <string name="answer_3">A Stable release is a version that has been tested as thoroughly as possible and is as reliable as we can make it.\n\nA Beta release is a version which is meant for testing new features or providing hot fixes.\n\nAn Alpha release is like a beta version but has many bugs and you can only find it on our [discord](https://discord.gg/invite/4HPZ5nAWwM) server. It gets frequent updates and has a high chance to break.\n\nIf you want a reliable app then go for the Stable. If you want the latest and greatest features and bugs then go for Alpha.</string>
-    <string name="question_4">Is Dantotsu available for PC?</string>
-    <string name="answer_4">Currently no (for both Windows and Linux). There isn\'t any estimation when it will be available. But you can download any Android emulator and run Dantotsu on it. For Windows 11 users, they can use the Windows Subsystem for Android (WSA) to run Dantotsu in Windows.</string>
-    <string name="question_5">Is Dantotsu available for iOS?</string>
-    <string name="answer_5">No, best we can do is carve Dantotsu on an apple.</string>
+    <string name="answer_1">Dantotsu foi criado a partir das cinzas do Saikou e baseado em elegância simplista mas de última geração. É um cliente Anilist, que também te permite transmitir e baixar Animes / Mangás através de extensões.\n&gt;Dantotsu (断トツ; Dan-totsu) literalmente significa o \"melhor dos melhores\" em japonês. Bom, nós gostaríamos de dizer que é o melhor aplicativo de código aberto para anime e mangá no Android, mas experimente você mesmo e tire suas próprias conclusões!</string>
+    <string name="question_2">Quais são algumas funções do Dantotsu?</string>
+    <string name="answer_2">Alguns recursos notáveis ​​do Dantotsu são:\n\n- Maneira fácil e funcional de assistir animes e ler mangás e light novels, sem anúncios.\n- Um aplicativo de código totalmente aberto com uma bela interface de usuário e Animações\n- Suporte a plugins de terceiros\n- Sincronize anime e mangá em tempo real com AniList. Categorize facilmente animes e mangás com base no seu status de progresso. (Proporcioinado por AniList)\n- Encontre todos os shows usando uma lista completa e frequentemente atualizada de todos os animes em alta, populares e em andamento com base em notas.\n- Veja detalhes abrangentes sobre animes, filmes e títulos de mangá. Ele também possui uma função de contagem regressiva para o próximo episódio do anime. (Possibilitado por AniList e MyAnimeList)</string>
+    <string name="question_3">Qual é a diferença entre versões Estáveis, Beta e Alfa?</string>
+    <string name="answer_3">Uma versão estável é uma versão que foi testada da forma mais completa possível e é tão confiável quanto possível.\n\nUma versão beta é uma versão destinada a testar novos recursos ou fornecer correções de erros.\n\nUma versão alfa é como uma versão beta, mas tem muitos bugs e você só pode encontrá-lo em nosso servidor [discord](https://discord.gg/invite/4HPZ5nAWwM). Ela recebe atualizações frequentes e tem grandes chances de quebrar.\n\nSe você deseja um aplicativo confiável, opte pelo Estável. Se você deseja os melhores e mais recentes recursos e bugs, escolha Alpha.</string>
+    <string name="question_4">Dantotsu está disponível no computador?</string>
+    <string name="answer_4">Atualmente não (para ambos Windows e Linux). Não há estimativa de quando estará disponível. Mas você pode baixar qualquer emulador de Android e executar o Dantotsu nele. Para usuários do Windows 11, eles podem usar o Windows Subsystem for Android (WSA) para executar o Dantotsu no Windows.</string>
+    <string name="question_5">Dantotsu está disponível no iOS?</string>
+    <string name="answer_5">Não, o melhor que podemos fazer é esculpir o Dantotsu em uma maçã.</string>
     <string name="question_6">Why are my stats not updating?</string>
     <string name="answer_6">This is because it updates every 48 hours automatically (by Anilist). If you really need to update your stats, you can force update your stats after going to this [link](https://anilist.co/settings/lists).</string>
     <string name="question_7">How to download Anime?</string>
