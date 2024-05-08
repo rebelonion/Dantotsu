@@ -182,7 +182,7 @@
         <item>MEU DEUS, OLHA! VOCÊ ACHOU UM EASTER EGG!?</item>
         <item>Sabe quem mais gosta dessa animação?</item>
         <item>Suporte para MAL? Sério?</item>
-        <item>Novels? more like NO vels.</item>
+        <item>Novels? ta mais para NO vels.</item>
         <item>Mantenha a logo pressionada para procurar por atualizações</item>
     </string-array>
     <string-array name="themes">
@@ -230,7 +230,7 @@
     <string name="ask_update_progress_info_zero">Ativar essa opção irá adicionar itens recentemente iniciados no Anilist com progresso definido para o capítulo 0.</string>
     <string name="ask_update_progress_hentai">Atualizar Progresso para Hentai</string>
     <string name="ask_update_progress_doujin">Atualizar Progresso para Doujins</string>
-    <string name="very_bold">very bold of you sar</string>
+    <string name="very_bold">bem ousado da sua parte</string>
     <string name="watch_complete_percentage">Porcentagem de Visualização para Atualizar</string>
     <string name="watch_complete_percentage_info">A porcentagem da visualização de um episódio em que seu progresso será atualizado no Anilist. \nIsso também define a % para quando pré-carregar os links do próximo episódio.</string>
     <string name="behaviour">Comportamento</string>
