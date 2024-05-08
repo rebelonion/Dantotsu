@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:locale="pt-rBR">
     <string name="slogan">O NOVO Melhor aplicativo de Animes e Mangás para Android.</string>
     <string name="login">Login</string>
-    <string name="logout">Logout</string>
+    <string name="logout">Sair</string>
     <string name="anilist_link">https://anilist.co/user/%1$s/</string>
     <string name="myanilist_link">https://myanimelist.net/profile/%1$s/</string>
     <string name="discord_link">https://discord.com/users/%1$s/</string>
@@ -314,7 +314,7 @@
     <string name="other">Outro</string>
     <string name="total_repeats">REPETIÇÕES TOTAIS</string>
     <string name="custom_lists">Listas Personalizadas</string>
-    <string name="donate_desc">Quer apoiar o Desenvolvedor do Dantotsu?\nConsidere Doar</string>
+    <string name="donate_desc">Quer apoiar o Desenvolvedor do Dantotsu?\nConsidere uma Doação</string>
     <string name="donate_goal">Sem meta de doações no momento</string>
     <string name="filter">Filtro</string>
     <string name="year">Ano</string>
@@ -341,7 +341,7 @@
     <string name="addons">Add-ons</string>
     <string name="addons_desc">Ganhe algumas funções extras</string>
     <string name="myanimelist">MyAnimeList</string>
-    <string name="login_with_anilist">Entre com Anilist!</string>
+    <string name="login_with_anilist">Faça Login com Anilist!</string>
     <string name="anilist">Anilist</string>
     <string name="account_help">Como isso funciona\?</string>
     <string name="full_account_help">        Dantotsu is an Anilist Based App, so for syncing with your MAL Account, It needs an Anilist account to be logged in.
@@ -395,7 +395,7 @@
     <string name="long_click_to_check_update">Mantenha pressionado para procurar por atualizações do app</string>
     <string name="saved_to_path">Salvo em:\n%s</string>
     <string name="setting_progress">Definindo progresso para %1$d</string>
-    <string name="login_anilist_account">Por favor, entre com sua conta AniList!</string>
+    <string name="login_anilist_account">Por favor, Faça Login em sua conta AniList!</string>
     <string name="congrats_vro">Congrats Vro</string>
     <string name="please_reload">Por favor, recarregue.</string>
     <string name="copied_text">\"%1$s\" Copiado</string>
@@ -421,7 +421,7 @@
     <string name="getting_user_data">Obtendo Dados de Usuário</string>
     <string name="no_next_episode">Próximo episódio não encontrado</string>
     <string name="enable_banner_animations">Tente ativar \"Animações de Banner\" nas configurações</string>
-    <string name="please_login_anilist">Entre com Anilist!</string>
+    <string name="please_login_anilist">Faça Login com Anilist!</string>
     <string name="auto_update_reset">Atualizar Progresso Automaticamente agora foi resetado</string>
     <string name="cant_wait">Can\'t wait, huh? fine X(</string>
     <string name="downloading">Baixando…</string>
@@ -430,7 +430,7 @@
     <string name="adult_stuff">Adult Stuff?&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
     <string name="what_did_you_open">What did you even open?</string>
     <string name="error_getting_data">Erro ao obter dados do Anilist.</string>
-    <string name="empty_response">Empty response! Does your internet suck, perhaps?</string>
+    <string name="empty_response">Erro de conexão! Você esperava encontrar um pedido de desculpas, MAS ERA EU, DIO!</string>
     <string name="error_loading_mal_user_data">Erro ao carregar dados de usuário de MAL</string>
     <string name="error_loading_mal_data">Falha ao carregar dados de MAL</string>
     <string name="error_loading_anilist_user_data">Erro ao carregar dados de usuário de Anilist</string>
@@ -750,8 +750,8 @@
     <string name="loading">Carregando…</string>
     <string name="user_stats">Estatísticas de %1$s</string>
     <string name="please">Por favor</string>
-    <string name="log_in">log in</string>
-    <string name="or_join">or join</string>
+    <string name="log_in">faça login</string>
+    <string name="or_join">ou registre-se</string>
     <string name="top_background_color">Cor de fundo superior</string>
     <string name="bottom_background_color">Cor de fundo inferior</string>
     <string name="countdown_text_color">Cor do Texto da Contagem Regressiva</string>
