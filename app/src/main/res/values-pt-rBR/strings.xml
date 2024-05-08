@@ -427,8 +427,8 @@
     <string name="downloading">Baixando…</string>
     <string name="next_chapter_not_found">Próximo capítulo não encontrado</string>
     <string name="first_chapter">Esse é o primeiro capítulo!</string>
-    <string name="adult_stuff">Adult Stuff?&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
-    <string name="what_did_you_open">What did you even open?</string>
+    <string name="adult_stuff">Coisas Picantes?&#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
+    <string name="what_did_you_open">O que foi que você abriu?</string>
     <string name="error_getting_data">Erro ao obter dados do Anilist.</string>
     <string name="empty_response">Erro de conexão! Você esperava encontrar um pedido de desculpas, MAS ERA EU, DIO!</string>
     <string name="error_loading_mal_user_data">Erro ao carregar dados de usuário de MAL</string>
