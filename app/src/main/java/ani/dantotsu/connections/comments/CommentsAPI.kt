@@ -27,7 +27,7 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 object CommentsAPI {
-    private const val ADDRESS: String = "https://1224665.xyz:443"
+    private const val ADDRESS: String = "https://api.dantotsu.app"
     private var isOnline: Boolean = true
     var authToken: String? = null
     var userId: String? = null
