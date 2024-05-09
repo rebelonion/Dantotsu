@@ -288,6 +288,37 @@ class MainActivity : AppCompatActivity() {
             } else {
                 PrefManager.getVal(PrefName.DefaultStartUpTab)
             }
+            val navbar = binding.includedNavbar.navbar
+            bottomBar = navbar
+            navbar.visibility = View.VISIBLE
+            binding.mainProgressBar.visibility = View.GONE
+            val mainViewPager = binding.viewpager
+            mainViewPager.isUserInputEnabled = false
+            mainViewPager.adapter =
+                ViewPagerAdapter(supportFragmentManager, lifecycle)
+            mainViewPager.setPageTransformer(ZoomOutPageTransformer())
+            navbar.selectTabAt(selectedOption)
+            navbar.setOnTabSelectListener(object :
+                AnimatedBottomBar.OnTabSelectListener {
+                override fun onTabSelected(
+                    lastIndex: Int,
+                    lastTab: AnimatedBottomBar.Tab?,
+                    newIndex: Int,
+                    newTab: AnimatedBottomBar.Tab
+                ) {
+                    navbar.animate().translationZ(12f).setDuration(200).start()
+                    selectedOption = newIndex
+                    mainViewPager.setCurrentItem(newIndex, false)
+                }
+            })
+            if (mainViewPager.currentItem != selectedOption) {
+                mainViewPager.post {
+                    mainViewPager.setCurrentItem(
+                        selectedOption,
+                        false
+                    )
+                }
+            }
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
             }
@@ -336,37 +367,7 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, NoInternet::class.java))
             } else {
                 val model: AnilistHomeViewModel by viewModels()
-                val navbar = binding.includedNavbar.navbar
-                bottomBar = navbar
-                navbar.visibility = View.VISIBLE
-                binding.mainProgressBar.visibility = View.GONE
-                val mainViewPager = binding.viewpager
-                mainViewPager.isUserInputEnabled = false
-                mainViewPager.adapter =
-                    ViewPagerAdapter(supportFragmentManager, lifecycle)
-                mainViewPager.setPageTransformer(ZoomOutPageTransformer())
-                navbar.setOnTabSelectListener(object :
-                    AnimatedBottomBar.OnTabSelectListener {
-                    override fun onTabSelected(
-                        lastIndex: Int,
-                        lastTab: AnimatedBottomBar.Tab?,
-                        newIndex: Int,
-                        newTab: AnimatedBottomBar.Tab
-                    ) {
-                        navbar.animate().translationZ(12f).setDuration(200).start()
-                        selectedOption = newIndex
-                        mainViewPager.setCurrentItem(newIndex, false)
-                    }
-                })
-                if (mainViewPager.currentItem != selectedOption) {
-                    navbar.selectTabAt(selectedOption)
-                    mainViewPager.post {
-                        mainViewPager.setCurrentItem(
-                            selectedOption,
-                            false
-                        )
-                    }
-                }
+
                 //Load Data
                 if (!load && !launched) {
                     scope.launch(Dispatchers.IO) {
