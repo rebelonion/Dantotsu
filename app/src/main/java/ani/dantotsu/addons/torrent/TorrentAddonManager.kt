@@ -27,7 +27,7 @@ class TorrentAddonManager(
     override var type: AddonType = AddonType.TORRENT
     var torrentHash: String? = null
 
-    private val _isInitialized = MutableLiveData<Boolean>().apply { postValue(false) }
+    private val _isInitialized = MutableLiveData(false)
     val isInitialized: LiveData<Boolean> = _isInitialized
 
     private var error: String? = null
@@ -61,11 +61,12 @@ class TorrentAddonManager(
                     hasUpdate = hasUpdate(REPO, it.extension.versionName)
                 }
             }
+            Logger.log("Torrent addon initialized successfully")
             withContext(Dispatchers.Main) {
                 _isInitialized.value = true
             }
         } catch (e: Exception) {
-            Logger.log("Error initializing torrent extension")
+            Logger.log("Error initializing torrent addon")
             Logger.log(e)
             error = e.message
         }
