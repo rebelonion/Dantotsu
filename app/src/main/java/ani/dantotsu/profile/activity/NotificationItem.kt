@@ -315,6 +315,23 @@ class NotificationItem(
                     }
                 }
             }
+
+            NotificationType.COMMENT_WARNING -> {
+                image(user = true, commentNotification = true)
+                if (notification.commentId != null && notification.mediaId != null) {
+                    binding.notificationBannerImage.setOnClickListener {
+                        clickCallback(
+                            notification.mediaId,
+                            notification.commentId,
+                            NotificationClickType.COMMENT
+                        )
+                    }
+                }
+            }
+
+            NotificationType.DANTOTSU_UPDATE -> {
+                image(user = true)
+            }
         }
     }
 

@@ -64,7 +64,7 @@ class CommentNotificationTask : Task {
                     val type: CommentNotificationWorker.NotificationType = when (it.type) {
                         1 -> CommentNotificationWorker.NotificationType.COMMENT_REPLY
                         2 -> CommentNotificationWorker.NotificationType.COMMENT_WARNING
-                        3 -> CommentNotificationWorker.NotificationType.APP_GLOBAL
+                        3 -> CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE
                         420 -> CommentNotificationWorker.NotificationType.NO_NOTIFICATION
                         else -> CommentNotificationWorker.NotificationType.UNKNOWN
                     }
@@ -76,6 +76,7 @@ class CommentNotificationTask : Task {
                             val commentStore = CommentStore(
                                 title,
                                 message,
+                                CommentNotificationWorker.NotificationType.COMMENT_WARNING,
                                 it.mediaId,
                                 it.commentId
                             )
@@ -101,6 +102,7 @@ class CommentNotificationTask : Task {
                             val commentStore = CommentStore(
                                 title,
                                 message,
+                                CommentNotificationWorker.NotificationType.COMMENT_REPLY,
                                 it.mediaId,
                                 it.commentId
                             )
@@ -118,13 +120,14 @@ class CommentNotificationTask : Task {
                             )
                         }
 
-                        CommentNotificationWorker.NotificationType.APP_GLOBAL -> {
+                        CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE -> {
                             val title = "Update from Dantotsu"
                             val message = it.content ?: "New feature available"
 
                             val commentStore = CommentStore(
                                 title,
                                 message,
+                                CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE,
                                 null,
                                 null
                             )
@@ -132,7 +135,7 @@ class CommentNotificationTask : Task {
 
                             createNotification(
                                 context,
-                                CommentNotificationWorker.NotificationType.APP_GLOBAL,
+                                CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE,
                                 message,
                                 title,
                                 0,
@@ -265,7 +268,7 @@ class CommentNotificationTask : Task {
                 builder.build()
             }
 
-            CommentNotificationWorker.NotificationType.APP_GLOBAL -> {
+            CommentNotificationWorker.NotificationType.DANTOTSU_UPDATE -> {
                 val intent = Intent(context, MainActivity::class.java).apply {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }

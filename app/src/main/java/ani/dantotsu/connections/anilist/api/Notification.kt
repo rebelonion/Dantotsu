@@ -2,6 +2,7 @@ package ani.dantotsu.connections.anilist.api
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.Locale
 
 enum class NotificationType(val value: String) {
     ACTIVITY_MESSAGE("ACTIVITY_MESSAGE"),
@@ -24,6 +25,19 @@ enum class NotificationType(val value: String) {
 
     //custom
     COMMENT_REPLY("COMMENT_REPLY"),
+    COMMENT_WARNING("COMMENT_WARNING"),
+    DANTOTSU_UPDATE("DANTOTSU_UPDATE");
+
+    fun toFormattedString(): String {
+        return this.value.replace("_", " ").lowercase(Locale.ROOT)
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+    }
+
+    companion object {
+        fun String.fromFormattedString(): String {
+            return this.replace(" ", "_").uppercase(Locale.ROOT)
+        }
+    }
 }
 
 @Serializable

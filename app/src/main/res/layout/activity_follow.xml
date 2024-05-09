@@ -50,6 +50,16 @@
             android:textSize="18sp"
             tools:text="Follow" />
 
+        <ImageView
+            android:id="@+id/followFilterButton"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_gravity="end|center_vertical"
+            android:contentDescription="@string/menu"
+            android:src="@drawable/ic_round_filter_alt_24"
+            app:tint="?attr/colorOnBackground" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

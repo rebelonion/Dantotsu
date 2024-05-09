@@ -397,6 +397,14 @@ object PrefManager {
             } else {
                 default
             }
+        } catch (e: java.io.InvalidClassException) {
+            try {
+                getPrefLocation(location).edit().remove(key).apply()
+                default
+            } catch (e: Exception) {
+                Logger.log(e)
+                default
+            }
         } catch (e: Exception) {
             Logger.log(e)
             default

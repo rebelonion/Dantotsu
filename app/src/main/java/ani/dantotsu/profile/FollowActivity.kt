@@ -43,6 +43,7 @@ class FollowActivity : AppCompatActivity() {
         setContentView(binding.root)
         val layoutType = PrefManager.getVal<Int>(PrefName.FollowerLayout)
         selected = getSelected(layoutType)
+        binding.followFilterButton.visibility = View.GONE
         binding.followerGrid.alpha = 0.33f
         binding.followerList.alpha = 0.33f
         selected(selected)

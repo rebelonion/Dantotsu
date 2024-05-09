@@ -84,6 +84,14 @@ class ActivityItemBuilder {
                 NotificationType.COMMENT_REPLY -> {
                     notification.context ?: "You should not see this"
                 }
+
+                NotificationType.COMMENT_WARNING -> {
+                    notification.context ?: "You should not see this"
+                }
+
+                NotificationType.DANTOTSU_UPDATE -> {
+                    notification.context ?: "You should not see this"
+                }
             }
         }
 

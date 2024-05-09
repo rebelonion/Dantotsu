@@ -3,8 +3,13 @@ package ani.dantotsu.profile.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -14,6 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Notification
+import ani.dantotsu.connections.anilist.api.NotificationType
+import ani.dantotsu.connections.anilist.api.NotificationType.Companion.fromFormattedString
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaDetailsActivity
@@ -34,6 +42,7 @@ class NotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
     private var adapter: GroupieAdapter = GroupieAdapter()
     private var notificationList: List<Notification> = emptyList()
+    val filters = ArrayList<String>()
     private var currentPage: Int = 1
     private var hasNextPage: Boolean = true
 
@@ -60,6 +69,75 @@ class NotificationActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
+        binding.followFilterButton.setOnClickListener {
+            val dialogView = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+            val checkboxContainer = dialogView.findViewById<LinearLayout>(R.id.checkboxContainer)
+            val tickAllButton = dialogView.findViewById<ImageButton>(R.id.toggleButton)
+            fun getToggleImageResource(container: ViewGroup): Int {
+                var allChecked = true
+                var allUnchecked = true
+
+                for (i in 0 until container.childCount) {
+                    val checkBox = container.getChildAt(i) as CheckBox
+                    if (!checkBox.isChecked) {
+                        allChecked = false
+                    } else {
+                        allUnchecked = false
+                    }
+                }
+                return when {
+                    allChecked -> R.drawable.untick_all_boxes
+                    allUnchecked -> R.drawable.tick_all_boxes
+                    else -> R.drawable.invert_all_boxes
+                }
+            }
+            NotificationType.entries.forEach { notificationType ->
+                val checkBox = CheckBox(currContext())
+                checkBox.text = notificationType.toFormattedString()
+                checkBox.isChecked = !filters.contains(notificationType.value.fromFormattedString())
+                checkBox.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        filters.remove(notificationType.value.fromFormattedString())
+                    } else {
+                        filters.add(notificationType.value.fromFormattedString())
+                    }
+                    tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+                }
+                checkboxContainer.addView(checkBox)
+            }
+            tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+            tickAllButton.setOnClickListener {
+                for (i in 0 until checkboxContainer.childCount) {
+                    val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                    checkBox.isChecked = !checkBox.isChecked
+                }
+
+                tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+            }
+            val alertD = AlertDialog.Builder(this, R.style.MyPopup)
+            alertD.setTitle("Filter")
+            alertD.setView(dialogView)
+            alertD.setPositiveButton("OK") { _, _ ->
+                currentPage = 1
+                hasNextPage = true
+                adapter.clear()
+                adapter.addAll(notificationList.filter { notification ->
+                    !filters.contains(notification.notificationType)
+                }.map {
+                    NotificationItem(
+                        it,
+                        ::onNotificationClick
+                    )
+                })
+                loadPage(-1) {
+                    binding.followRefresh.visibility = ViewGroup.GONE
+                }
+            }
+            alertD.setNegativeButton("Cancel") { _, _ -> }
+            val dialog = alertD.show()
+            dialog.window?.setDimAmount(0.8f)
+        }
+
         val activityId = intent.getIntExtra("activityId", -1)
         lifecycleScope.launch {
             loadPage(activityId) {
@@ -119,10 +197,10 @@ class NotificationActivity : AppCompatActivity() {
                     ) ?: listOf()
                     commentStore.forEach {
                         val notification = Notification(
-                            "COMMENT_REPLY",
+                            it.type.toString(),
                             System.currentTimeMillis().toInt(),
                             commentId = it.commentId,
-                            notificationType = "COMMENT_REPLY",
+                            notificationType = it.type.toString(),
                             mediaId = it.mediaId,
                             context = it.title + "\n" + it.content,
                             createdAt = (it.time / 1000L).toInt(),
@@ -133,7 +211,9 @@ class NotificationActivity : AppCompatActivity() {
                 }
 
                 notificationList += newNotifications
-                adapter.addAll(newNotifications.map {
+                adapter.addAll(newNotifications.filter { notification ->
+                    !filters.contains(notification.notificationType)
+                }.map {
                     NotificationItem(
                         it,
                         ::onNotificationClick
