@@ -181,9 +181,11 @@ class FinalExceptionHandler : Thread.UncaughtExceptionHandler {
 
         if (App.instance?.applicationContext != null) {
             App.instance?.applicationContext?.let {
+                val lastLoadedActivity = App.instance?.mFTActivityLifecycleCallbacks?.lastActivity
                 val report = StringBuilder()
                 report.append(getDeviceAndAppInfo(it))
                 report.append("Thread: ${t.name}\n")
+                report.append("Activity: ${lastLoadedActivity}\n")
                 report.append("Exception: ${e.message}\n")
                 report.append("Stack trace:\n")
                 report.append(stackTraceString)

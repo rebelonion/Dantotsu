@@ -150,7 +150,10 @@ class App : MultiDexApplication() {
 
     inner class FTActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
         var currentActivity: Activity? = null
-        override fun onActivityCreated(p0: Activity, p1: Bundle?) {}
+        var lastActivity: String? = null
+        override fun onActivityCreated(p0: Activity, p1: Bundle?) {
+            lastActivity = p0.javaClass.simpleName
+        }
         override fun onActivityStarted(p0: Activity) {
             currentActivity = p0
         }
