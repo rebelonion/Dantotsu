@@ -339,7 +339,7 @@
     <string name="faq">سؤال و أجابة</string>
     <string name="accounts">الحسابات</string>
     <string name="addons">Add-ons</string>
-    <string name="addons_desc">Get more features out of your app</string>
+    <string name="addons_desc">احصل على المزيد من الميزات من التطبيق</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">تسجيل دخول Anilist!</string>
     <string name="anilist">Anilist</string>
@@ -564,7 +564,7 @@
     <string name="answer_10">إليك كيفية القيام بذلك،\n\nالتصدير:\n\n1. انتقل إلى هذا [الرابط](https://malscraper.azurewebsites.net).\n2. قم بإعطاء اسم مستخدم Kitsu/MAL الخاص بك وقم بتنزيل قائمة الأنمي والمانجا. (ستكون بتنسيق XML)\nملاحظة: يجب عليك كتابة اسم المستخدم للمتعقب الذي حددته\n\nاستيراد:\n\n1. بعد تصدير قائمة الرسوم المتحركة والمانجا الخاصة بك من Kitsu/MAL، انتقل الآن [هنا](https://anilist.co/settings/import) \n2. حدد/أسقط ملف الأنمي XML في المربع أعلاه.\n|→حدد/أسقط ملف المانجا XML في المربع أدناه.</string>
     <string name="question_11">كيفية استيراد قوائم Anilist/Kitsu الخاصة بي إلى MAL؟</string>
     <string name="answer_11">اليك ما عليك فعله،\n\nالاستخراج:\n\n اولا اذهب الي [الرابط](https://malscraper.azurewebsites.net/). \n ثم املأ بياناتك. \n ثم حدد القائمه (list) و اضغط علي \"update_on_import\" لتفعيلها. \n قم بتحميل (xml file)، و تأكد من تحميل كلا من قائمتي الاتمي و المانجا.\n\n الادخال:\n لادخاله إلى حساب MAL الخاص بك، انتقل إلى هذا [الرابط](https://myanimelist.net/import.php) و اختر \"MyAnimeList Import\" من القائمه. \n ثم اضغط على \"choose file\" وحدد ملف XML لقائمة الأنمي/المانجا الذي تم تنزيله مسبقا. \n اضغط \"Import Data\" لتسجيل قوائمك. \nتهانينا، لقد قمت للتو باستيراد القائمة المحددة إلى حساب MAL الخاص بك.</string>
-    <string name="question_12">Why can\'t I find a specific anime/manga title?</string>
+    <string name="question_12">لماذا لا يمكنني العثور على عنوان لأنمي/مانجا معين؟</string>
     <string name="answer_12">Let\'s say you are looking for Castlevania in Dantotsu. But Anilist doesn\'t have it, so Dantotsu doesn\'t either.\nA solution to the above problem is as follows:\n1) Go to any anime that\'s not in your list.\n2) Go to the watch section.\n3) Select any source and press on the \'Wrong Title?\'.\n4) Now search for Castlevania (The anime you were looking for) and select it.\n5) ENJOY!\n\nIf you can\'t find the anime even through these steps, then that\'s bad luck for you, bud. Even that source doesn\'t have it. Try a different source.</string>
     <string name="question_13">How to fix sources selecting a completely wrong title?</string>
     <string name="answer_13">Dantotsu itself doesn\'t host anything but relies on other sources. When showing the episodes, it chooses the 1st result given by the source after searching for the title. Dantotsu has no way of detecting if that\'s legit or not. So, for this, we have the \'Wrong Title?\' just below the source name(above layouts). You can choose the correct result/title by pressing on it and enjoy its episodes.</string>
