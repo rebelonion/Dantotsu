@@ -864,10 +864,10 @@
     <string name="hide_in_home_screen">Cacher dans l\'écran d\'accueil</string>
     <string name="hidden">Caché</string>
     <string name="no_hidden_items">Aucun élément caché</string>
-    <string name="download_addon_not_installed">Download Add-on not installed</string>
-    <string name="would_you_like_to_install">Would you like to install it?</string>
-    <string name="torrent_addon_not_available">Torrent Add-on not available</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_addon_not_installed">Extension de téléchargement non installée</string>
+    <string name="would_you_like_to_install">Souhaitez-vous l\'installer?</string>
+    <string name="torrent_addon_not_available">Extension Torrent non disponible</string>
+    <string name="download_subtitle">Télécharger les sous-titres</string>
+    <string name="no_video_selected">Aucune vidéo sélectionnée</string>
+    <string name="no_subtitles_available">Aucun sous-titre disponible</string>
 </resources>
