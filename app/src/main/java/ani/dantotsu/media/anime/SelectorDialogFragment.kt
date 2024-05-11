@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.activityViewModels
@@ -28,6 +29,7 @@ import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.currActivity
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.BottomSheetSelectorBinding
 import ani.dantotsu.databinding.ItemStreamBinding
 import ani.dantotsu.databinding.ItemUrlBinding
@@ -46,12 +48,14 @@ import ani.dantotsu.parsers.Video
 import ani.dantotsu.parsers.VideoExtractor
 import ani.dantotsu.parsers.VideoType
 import ani.dantotsu.setSafeOnClickListener
+import ani.dantotsu.settings.SettingsAddonActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
 import ani.dantotsu.tryWith
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.customAlertDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -95,7 +99,8 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
         _binding = BottomSheetSelectorBinding.inflate(inflater, container, false)
         val window = dialog?.window
         window?.statusBarColor = Color.TRANSPARENT
-        window?.navigationBarColor = requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
+        window?.navigationBarColor =
+            requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
         return binding.root
     }
 
@@ -440,14 +445,14 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                     val subtitleNames = subtitles.map { it.language }
                     var subtitleToDownload: Subtitle? = null
                     val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                        .setTitle("Download Subtitle")
+                        .setTitle(R.string.download_subtitle)
                         .setSingleChoiceItems(
                             subtitleNames.toTypedArray(),
                             -1
                         ) { _, which ->
                             subtitleToDownload = subtitles[which]
                         }
-                        .setPositiveButton("Download") { dialog, _ ->
+                        .setPositiveButton(R.string.download) { dialog, _ ->
                             scope.launch {
                                 if (subtitleToDownload != null) {
                                     SubtitleDownloader.downloadSubtitle(
@@ -463,13 +468,13 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             }
                             dialog.dismiss()
                         }
-                        .setNegativeButton("Cancel") { dialog, _ ->
+                        .setNegativeButton(R.string.cancel) { dialog, _ ->
                             dialog.dismiss()
                         }
                         .show()
                     alertDialog.window?.setDimAmount(0.8f)
                 } else {
-                    snackString("No Subtitles Available")
+                    snackString(R.string.no_subtitles_available)
                 }
             }
             binding.urlDownload.setSafeOnClickListener {
@@ -486,10 +491,27 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                 } else {
                     val downloadAddonManager: DownloadAddonManager = Injekt.get()
                     if (!downloadAddonManager.isAvailable()){
-                        toast("Download Extension not available")
+                        val context = currContext() ?: requireContext()
+                        context.customAlertDialog().apply {
+                            setTitle(R.string.download_addon_not_installed)
+                            setMessage(R.string.would_you_like_to_install)
+                            setPosButton(R.string.yes) {
+                                ContextCompat.startActivity(
+                                    context,
+                                    Intent(context, SettingsAddonActivity::class.java),
+                                    null
+                                )
+                            }
+                            setNegButton(R.string.no) {
+                                return@setNegButton
+                            }
+                            show()
+                        }
+                        dismiss()
                         return@setSafeOnClickListener
                     }
-                    val episode = media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
+                    val episode =
+                        media!!.anime!!.episodes!![media!!.anime!!.selectedEpisode!!]!!
                     val selectedVideo =
                         if (extractor.videos.size > episode.selectedVideo) extractor.videos[episode.selectedVideo] else null
                     val subtitleNames = subtitles.map { it.language }
@@ -499,40 +521,47 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                         if (url.startsWith("magnet:") || url.endsWith(".torrent")) {
                             val torrentExtension = Injekt.get<TorrentAddonManager>()
                             if (!torrentExtension.isAvailable()) {
-                                toast("Torrent Extension not available")
+                                toast(R.string.torrent_addon_not_available)
                                 return@setSafeOnClickListener
                             }
                             runBlocking {
-                                withContext(Dispatchers.IO) {
-                                    val extension = torrentExtension.extension!!.extension
-                                    torrentExtension.torrentHash?.let {
-                                        extension.removeTorrent(it)
+                                try {
+                                    withContext(Dispatchers.IO) {
+                                        val extension = torrentExtension.extension!!.extension
+                                        torrentExtension.torrentHash?.let {
+                                            extension.removeTorrent(it)
+                                        }
+                                        val index = if (url.contains("index=")) {
+                                            url.substringAfter("index=").toIntOrNull() ?: 0
+                                        } else 0
+                                        Logger.log("Sending: ${url}, ${selectedVideo.quality}, $index")
+                                        val currentTorrent = extension.addTorrent(
+                                            url, selectedVideo.quality.toString(), "", "", false
+                                        )
+                                        torrentExtension.torrentHash = currentTorrent.hash
+                                        selectedVideo.file.url =
+                                            extension.getLink(currentTorrent, index)
+                                        Logger.log("Received: ${selectedVideo.file.url}")
                                     }
-                                    val index = if (url.contains("index=")) {
-                                        url.substringAfter("index=").toIntOrNull() ?: 0
-                                    } else 0
-                                    Logger.log("Sending: ${url}, ${selectedVideo.quality}, $index")
-                                    val currentTorrent = extension.addTorrent(
-                                        url, selectedVideo.quality.toString(), "", "", false
-                                    )
-                                    torrentExtension.torrentHash = currentTorrent.hash
-                                    selectedVideo.file.url =
-                                        extension.getLink(currentTorrent, index)
-                                    Logger.log("Received: ${selectedVideo.file.url}")
+                                } catch (e: Exception) {
+                                    Injekt.get<CrashlyticsInterface>().logException(e)
+                                    Logger.log(e)
+                                    toast("Error starting video: ${e.message}")
+                                    return@runBlocking
                                 }
                             }
                         }
                     }
                     if (subtitles.isNotEmpty()) {
                         val alertDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                            .setTitle("Download Subtitle")
+                            .setTitle(R.string.download_subtitle)
                             .setSingleChoiceItems(
                                 subtitleNames.toTypedArray(),
                                 -1
                             ) { _, which ->
                                 subtitleToDownload = subtitles[which]
                             }
-                            .setPositiveButton("Download") { _, _ ->
+                            .setPositiveButton(R.string.download) { _, _ ->
                                 dialog?.dismiss()
                                 if (selectedVideo != null) {
                                     Helper.startAnimeDownloadService(
@@ -546,10 +575,10 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                     )
                                     broadcastDownloadStarted(episode.number, activity)
                                 } else {
-                                    snackString("No Video Selected")
+                                    snackString(R.string.no_video_selected)
                                 }
                             }
-                            .setNegativeButton("Skip") { dialog, _ ->
+                            .setNegativeButton(R.string.skip) { dialog, _ ->
                                 subtitleToDownload = null
                                 if (selectedVideo != null) {
                                     Helper.startAnimeDownloadService(
@@ -563,11 +592,11 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                                     )
                                     broadcastDownloadStarted(episode.number, activity)
                                 } else {
-                                    snackString("No Video Selected")
+                                    snackString(R.string.no_video_selected)
                                 }
                                 dialog.dismiss()
                             }
-                            .setNeutralButton("Cancel") { dialog, _ ->
+                            .setNeutralButton(R.string.cancel) { dialog, _ ->
                                 subtitleToDownload = null
                                 dialog.dismiss()
                             }
@@ -587,7 +616,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             )
                             broadcastDownloadStarted(episode.number, activity)
                         } else {
-                            snackString("No Video Selected")
+                            snackString(R.string.no_video_selected)
                         }
                     }
                 }
