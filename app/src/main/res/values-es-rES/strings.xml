@@ -861,10 +861,10 @@
     <string name="hide_in_home_screen">Ocultar en la pantalla de inicio</string>
     <string name="hidden">Oculto</string>
     <string name="no_hidden_items">No hay elementos ocultos</string>
-    <string name="download_addon_not_installed">Download Add-on not installed</string>
-    <string name="would_you_like_to_install">Would you like to install it?</string>
-    <string name="torrent_addon_not_available">Torrent Add-on not available</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_addon_not_installed">Complemento de descarga no instalado</string>
+    <string name="would_you_like_to_install">¿Desea instalarlo?</string>
+    <string name="torrent_addon_not_available">Complemento de torrent no disponible</string>
+    <string name="download_subtitle">Descargar subtítulos</string>
+    <string name="no_video_selected">No se ha seleccionado ningún vídeo</string>
+    <string name="no_subtitles_available">No hay subtítulos disponibles</string>
 </resources>
