@@ -863,10 +863,10 @@
     <string name="hide_in_home_screen">Ukryj na ekranie głównym</string>
     <string name="hidden">Ukryty</string>
     <string name="no_hidden_items">Brak ukrytych elementów</string>
-    <string name="download_addon_not_installed">Download Add-on not installed</string>
-    <string name="would_you_like_to_install">Would you like to install it?</string>
-    <string name="torrent_addon_not_available">Torrent Add-on not available</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_addon_not_installed">Dodatkowa funkcja pobierania niezainstalowana</string>
+    <string name="would_you_like_to_install">Czy chcesz ją zainstalować?</string>
+    <string name="torrent_addon_not_available">Dodatkowa funkcja Torrent niedostępna</string>
+    <string name="download_subtitle">Pobierz napisy</string>
+    <string name="no_video_selected">Nie wybrano wideo</string>
+    <string name="no_subtitles_available">Brak dostępnych napisów</string>
 </resources>
