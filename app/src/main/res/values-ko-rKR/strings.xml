@@ -864,10 +864,10 @@
     <string name="hide_in_home_screen">홈 화면에서 숨기기</string>
     <string name="hidden">숨겨진</string>
     <string name="no_hidden_items">숨겨진 항목 없음</string>
-    <string name="download_addon_not_installed">Download Add-on not installed</string>
-    <string name="would_you_like_to_install">Would you like to install it?</string>
-    <string name="torrent_addon_not_available">Torrent Add-on not available</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_addon_not_installed">다운로드 애드온이 설치되지 않았습니다</string>
+    <string name="would_you_like_to_install">설치하시겠습니까?</string>
+    <string name="torrent_addon_not_available">토렌트 애드온을 사용할 수 없습니다</string>
+    <string name="download_subtitle">자막 다운로드</string>
+    <string name="no_video_selected">선택된 비디오가 없습니다</string>
+    <string name="no_subtitles_available">사용 가능한 자막이 없습니다</string>
 </resources>
