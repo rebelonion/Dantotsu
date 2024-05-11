@@ -319,7 +319,10 @@ class SearchAdapter(private val activity: SearchActivity, private val type: Stri
 
 
     fun addHistory() {
-        searchHistoryAdapter.add(binding.searchBarText.text.toString())
+        if (::searchHistoryAdapter.isInitialized &&
+            binding.searchBarText.text.toString().isNotBlank()
+        )
+            searchHistoryAdapter.add(binding.searchBarText.text.toString())
     }
 
     override fun getItemCount(): Int = 1
