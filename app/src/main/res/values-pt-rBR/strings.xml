@@ -837,7 +837,7 @@
     <string name="color_picker_desc">Escolha uma cor</string>
     <string name="torrent_addon">Add-on de Torrent</string>
     <string name="enable_torrent">Ativar Torrent</string>
-    <string name="anime_downloader_addon">Add-on de Downloader de Anime</string>
+    <string name="anime_downloader_addon">Add-on de Downloads de Anime</string>
     <string name="install_torrent_addon">Instalar Add-on de Torrent</string>
     <string name="loaded_successfully">Carregado com Sucesso</string>
     <string name="not_installed">Não Instalado</string>
@@ -863,10 +863,10 @@
     <string name="hide_in_home_screen">Ocultar na Página Inicial</string>
     <string name="hidden">Ocultar</string>
     <string name="no_hidden_items">Sem Itens Ocultos</string>
-    <string name="download_addon_not_installed">Download Add-on not installed</string>
-    <string name="would_you_like_to_install">Would you like to install it?</string>
-    <string name="torrent_addon_not_available">Torrent Add-on not available</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_addon_not_installed">Addon de Downloads não instalado</string>
+    <string name="would_you_like_to_install">Gostaria de instalá-lo?</string>
+    <string name="torrent_addon_not_available">Add-on de Torrent indisponível</string>
+    <string name="download_subtitle">Baixar Legendas</string>
+    <string name="no_video_selected">Nenhum vídeo selecionado</string>
+    <string name="no_subtitles_available">Sem legendas disponíveis</string>
 </resources>
