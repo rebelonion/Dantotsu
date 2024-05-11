@@ -857,10 +857,10 @@
     <string name="hide_in_home_screen">隐藏在主屏幕中</string>
     <string name="hidden">隐藏</string>
     <string name="no_hidden_items">没有隐藏的项目</string>
-    <string name="download_addon_not_installed">Download Add-on not installed</string>
-    <string name="would_you_like_to_install">Would you like to install it?</string>
-    <string name="torrent_addon_not_available">Torrent Add-on not available</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_addon_not_installed">下载附加组件未安装</string>
+    <string name="would_you_like_to_install">您想要安装它吗?</string>
+    <string name="torrent_addon_not_available">种子附加组件不可用</string>
+    <string name="download_subtitle">下载字幕</string>
+    <string name="no_video_selected">未选择视频</string>
+    <string name="no_subtitles_available">无可用字幕</string>
 </resources>
