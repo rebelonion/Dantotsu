@@ -860,10 +860,10 @@
     <string name="hide_in_home_screen">होम स्क्रीन में छिपाएं</string>
     <string name="hidden">छिपा हुआ</string>
     <string name="no_hidden_items">कोई छिपा हुआ सामान नहीं हे</string>
-    <string name="download_addon_not_installed">Download Add-on not installed</string>
-    <string name="would_you_like_to_install">Would you like to install it?</string>
-    <string name="torrent_addon_not_available">Torrent Add-on not available</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_addon_not_installed">डाउनलोड एड-ऑन स्थापित नहीं है</string>
+    <string name="would_you_like_to_install">क्या आप इसे स्थापित करना चाहेंगे?</string>
+    <string name="torrent_addon_not_available">टॉरेंट एड-ऑन उपलब्ध नहीं है</string>
+    <string name="download_subtitle">उपशीर्षक डाउनलोड करें</string>
+    <string name="no_video_selected">कोई वीडियो चयनित नहीं है</string>
+    <string name="no_subtitles_available">कोई उपशीर्षक उपलब्ध नहीं हैं</string>
 </resources>
