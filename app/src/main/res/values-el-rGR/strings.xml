@@ -863,10 +863,10 @@
     <string name="hide_in_home_screen">Απόκρυψη στην Αρχική Οθόνη</string>
     <string name="hidden">Κρυφός</string>
     <string name="no_hidden_items">Κανένα κρυφό στοιχείο</string>
-    <string name="download_addon_not_installed">Download Add-on not installed</string>
-    <string name="would_you_like_to_install">Would you like to install it?</string>
-    <string name="torrent_addon_not_available">Torrent Add-on not available</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_addon_not_installed">Το πρόσθετο λήψης δεν είναι εγκατεστημένο</string>
+    <string name="would_you_like_to_install">Θέλετε να το εγκαταστήσετε;</string>
+    <string name="torrent_addon_not_available">Το πρόσθετο torrent δεν είναι διαθέσιμο</string>
+    <string name="download_subtitle">Λήψη υπότιτλων</string>
+    <string name="no_video_selected">Δεν έχει επιλεγεί βίντεο</string>
+    <string name="no_subtitles_available">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
 </resources>
