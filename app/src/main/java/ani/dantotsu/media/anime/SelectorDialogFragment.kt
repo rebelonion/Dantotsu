@@ -302,7 +302,7 @@ class SelectorDialogFragment : BottomSheetDialogFragment() {
                             } catch (e: Exception) {
                                 Injekt.get<CrashlyticsInterface>().logException(e)
                                 Logger.log(e)
-                                toast("Error starting video")
+                                toast("Error starting video: ${e.message}")
                                 dismiss()
                             }
                         }

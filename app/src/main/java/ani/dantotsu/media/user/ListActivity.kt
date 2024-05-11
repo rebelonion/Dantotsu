@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
@@ -25,6 +28,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+
 
 class ListActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListBinding
@@ -176,6 +180,29 @@ class ListActivity : AppCompatActivity() {
             val currentFragment =
                 supportFragmentManager.findFragmentByTag("f" + currentTab?.position.toString()) as? ListFragment
             currentFragment?.randomOptionClick()
+        }
+
+        binding.search.setOnClickListener {
+            toggleSearchView(binding.searchView.isVisible)
+            if (!binding.searchView.isVisible) {
+                model.unfilterLists()
+            }
+        }
+
+        binding.searchViewText.addTextChangedListener {
+            model.searchLists(binding.searchViewText.text.toString())
+        }
+    }
+
+    private fun toggleSearchView(isVisible: Boolean) {
+        if (isVisible) {
+            binding.searchView.visibility = View.GONE
+            binding.searchViewText.text.clear()
+        } else {
+            binding.searchView.visibility = View.VISIBLE
+            binding.searchViewText.requestFocus()
+            val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.showSoftInput(binding.searchViewText, InputMethodManager.SHOW_IMPLICIT)
         }
     }
 }

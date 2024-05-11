@@ -38,4 +38,30 @@ class ListViewModel : ViewModel() {
         lists.postValue(filteredLists)
     }
 
+    fun searchLists(search: String) {
+        if (search.isEmpty()) {
+            lists.postValue(unfilteredLists.value)
+            return
+        }
+        val currentLists = unfilteredLists.value ?: return
+        val filteredLists = currentLists.mapValues { entry ->
+            entry.value.filter { media ->
+                media.name?.contains(
+                    search,
+                    ignoreCase = true
+                ) == true || media.synonyms.any { it.contains(search, ignoreCase = true) } ||
+                media.nameRomaji.contains(
+                    search,
+                    ignoreCase = true
+                )
+            } as ArrayList<Media>
+        }.toMutableMap()
+
+        lists.postValue(filteredLists)
+    }
+
+    fun unfilterLists() {
+        lists.postValue(unfilteredLists.value)
+    }
+
 }
