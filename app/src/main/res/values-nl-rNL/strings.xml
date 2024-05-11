@@ -864,7 +864,7 @@
     <string name="download_addon_not_installed">Download Add-on niet geïnstalleerd</string>
     <string name="would_you_like_to_install">Wilt u het installeren?</string>
     <string name="torrent_addon_not_available">Torrent Add-on niet beschikbaar</string>
-    <string name="download_subtitle">Download Subtitle</string>
-    <string name="no_video_selected">No video selected</string>
-    <string name="no_subtitles_available">No subtitles available</string>
+    <string name="download_subtitle">Ondertitel downloaden</string>
+    <string name="no_video_selected">Geen video geselecteerd</string>
+    <string name="no_subtitles_available">Geen ondertitels beschikbaar</string>
 </resources>
