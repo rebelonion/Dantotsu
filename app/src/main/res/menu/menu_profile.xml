@@ -7,4 +7,9 @@
         android:title="@string/view_on_anilist"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_create_new_activity"
+        android:title="@string/create_new_activity"
+        app:showAsAction="never" />
+
 </menu>

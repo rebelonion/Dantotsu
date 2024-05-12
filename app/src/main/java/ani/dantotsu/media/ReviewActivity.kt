@@ -8,6 +8,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
@@ -21,6 +22,7 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.FollowerItem
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.MarkdownCreatorActivity
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,6 +56,15 @@ class ReviewActivity : AppCompatActivity() {
         }
         binding.followerGrid.visibility = View.GONE
         binding.followerList.visibility = View.GONE
+        binding.followFilterButton.setImageResource(R.drawable.ic_add)
+        binding.followFilterButton.setOnClickListener {
+            ContextCompat.startActivity(
+                this,
+                Intent(this, MarkdownCreatorActivity::class.java)
+                    .putExtra("type", "review"),
+                null
+            )
+        }
         binding.followFilterButton.visibility = View.GONE
         binding.listTitle.text = getString(R.string.reviews)
         binding.listRecyclerView.adapter = adapter

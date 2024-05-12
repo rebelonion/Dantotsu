@@ -3,6 +3,9 @@ package ani.dantotsu.connections.anilist
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Query
+import ani.dantotsu.currContext
+import com.google.gson.Gson
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 
 class AnilistMutations {
@@ -75,5 +78,24 @@ class AnilistMutations {
     suspend fun rateReview(reviewId: Int, rating: String): Query.RateReviewResponse? {
         val query = "mutation{RateReview(reviewId:$reviewId,rating:$rating){id mediaId mediaType summary body(asHtml:true)rating ratingAmount userRating score private siteUrl createdAt updatedAt user{id name bannerImage avatar{medium large}}}}"
         return executeQuery<Query.RateReviewResponse>(query)
+    }
+
+    suspend fun postActivity(text:String): String {
+        val encodedText = Gson().toJson(text)
+        val query = "mutation{SaveTextActivity(text:$encodedText){siteUrl}}"
+        val result = executeQuery<JsonObject>(query)
+        val errors = result?.get("errors")
+        return errors?.toString()
+            ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+    }
+
+    suspend fun postReview(summary: String, body: String, mediaId: Int, score: Int): String {
+        val encodedSummary = Gson().toJson(summary)
+        val encodedBody = Gson().toJson(body)
+        val query = "mutation{SaveReview(mediaId:$mediaId,summary:$encodedSummary,body:$encodedBody,score:$score){siteUrl}}"
+        val result = executeQuery<JsonObject>(query)
+        val errors = result?.get("errors")
+        return errors?.toString()
+            ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
     }
 }

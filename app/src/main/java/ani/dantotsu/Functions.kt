@@ -1399,7 +1399,8 @@ fun Context.getThemeColor(@AttrRes attribute: Int): Int {
 fun buildMarkwon(
     activity: Context,
     userInputContent: Boolean = true,
-    fragment: Fragment? = null
+    fragment: Fragment? = null,
+    anilist: Boolean = false
 ): Markwon {
     val glideContext = fragment?.let { Glide.with(it) } ?: Glide.with(activity)
     val markwon = Markwon.builder(activity)
@@ -1415,7 +1416,7 @@ fun buildMarkwon(
         .usePlugin(StrikethroughPlugin.create())
         .usePlugin(TablePlugin.create(activity))
         .usePlugin(TaskListPlugin.create(activity))
-        .usePlugin(SpoilerPlugin())
+        .usePlugin(SpoilerPlugin(anilist))
         .usePlugin(HtmlPlugin.create { plugin ->
             if (userInputContent) {
                 plugin.addHandler(

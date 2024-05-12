@@ -199,6 +199,8 @@
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".util.MarkdownCreatorActivity"/>
+        <activity
             android:name=".media.ReviewActivity"
             android:parentActivityName=".media.MediaDetailsActivity" />
         <activity

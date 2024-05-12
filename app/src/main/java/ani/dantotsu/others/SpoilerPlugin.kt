@@ -12,9 +12,13 @@ import io.noties.markwon.AbstractMarkwonPlugin
 import io.noties.markwon.utils.ColorUtils
 import java.util.regex.Pattern
 
-class SpoilerPlugin : AbstractMarkwonPlugin() {
+class SpoilerPlugin(private val anilist: Boolean = false) : AbstractMarkwonPlugin() {
     override fun beforeSetText(textView: TextView, markdown: Spanned) {
-        applySpoilerSpans(markdown as Spannable)
+        if (anilist) {
+            applySpoilerSpans(markdown as Spannable, ARE)
+        } else {
+            applySpoilerSpans(markdown as Spannable)
+        }
     }
 
     private class RedditSpoilerSpan : CharacterStyle() {
@@ -45,9 +49,10 @@ class SpoilerPlugin : AbstractMarkwonPlugin() {
 
     companion object {
         private val RE = Pattern.compile("\\|\\|.+?\\|\\|")
-        private fun applySpoilerSpans(spannable: Spannable) {
+        private val ARE = Pattern.compile("~!.+?!~")
+        private fun applySpoilerSpans(spannable: Spannable, regex: Pattern = RE) {
             val text = spannable.toString()
-            val matcher = RE.matcher(text)
+            val matcher = regex.matcher(text)
             while (matcher.find()) {
                 val spoilerSpan = RedditSpoilerSpan()
                 val clickableSpan: ClickableSpan = object : ClickableSpan() {
