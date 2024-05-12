@@ -430,7 +430,7 @@
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">Review</string>
-
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">Display only the first button</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile instead</string>
@@ -850,8 +850,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="do_it">Do it!</string>
     <string name="password">Password</string>
 
-    <string name="search_title">Search %1$s</string>
-
     <string name="profile_stats_widget">Track progress directly from your home screen</string>
     <string name="anime_watched">Anime\nWatched</string>
     <string name="manga_read">Manga\nRead</string>
@@ -981,4 +979,5 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="download_subtitle">Download Subtitle</string>
     <string name="no_video_selected">No video selected</string>
     <string name="no_subtitles_available">No subtitles available</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>

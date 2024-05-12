@@ -2,6 +2,7 @@ package ani.dantotsu.profile
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
 import android.view.View
 import android.view.ViewGroup.MarginLayoutParams
 import android.widget.ImageButton
@@ -54,7 +55,7 @@ class FollowActivity : AppCompatActivity() {
         )
         binding.listRecyclerView.adapter = adapter
         binding.listProgressBar.visibility = View.VISIBLE
-        binding.listBack.setOnClickListener { finish() }
+        binding.listBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         val title = intent.getStringExtra("title")
         val userID = intent.getIntExtra("userId", 0)
@@ -97,10 +98,11 @@ class FollowActivity : AppCompatActivity() {
         }
         users?.forEach { user ->
             if (getLayoutType(selected) == 0) {
+                val username = SpannableString(user.name ?: "Unknown")
                 adapter.add(
                     FollowerItem(
                         user.id,
-                        user.name ?: "Unknown",
+                        username,
                         user.avatar?.medium,
                         user.bannerImage ?: user.avatar?.medium
                     ) { onUserClick(it) })

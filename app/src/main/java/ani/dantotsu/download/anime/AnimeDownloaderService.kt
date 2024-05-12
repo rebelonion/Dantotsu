@@ -226,7 +226,7 @@ class AnimeDownloaderService : Service() {
                     task.episode
                 ) ?: throw Exception("Failed to create output directory")
 
-                outputDir.findFile("${task.getTaskName()}.mp4")?.delete()
+                outputDir.findFile("${task.getTaskName()}.mkv")?.delete()
                 val outputFile = outputDir.createFile("video/x-matroska", "${task.getTaskName()}.mkv")
                     ?: throw Exception("Failed to create output file")
 
@@ -245,7 +245,7 @@ class AnimeDownloaderService : Service() {
                         .append(defaultHeaders["User-Agent"]).append("\"\'\r\n\'")
                 }
                 val probeRequest =
-                    "-headers $headersStringBuilder -i ${task.video.file.url} -show_entries format=duration -v quiet -of csv=\"p=0\""
+                    "-headers $headersStringBuilder -i \"${task.video.file.url}\" -show_entries format=duration -v quiet -of csv=\"p=0\""
                 ffExtension.executeFFProbe(
                     probeRequest
                 ) {
@@ -256,7 +256,7 @@ class AnimeDownloaderService : Service() {
 
                 val headers = headersStringBuilder.toString()
                 var request = "-headers $headers "
-                request += "-i ${task.video.file.url} -c copy -map 0:v -map 0:a -map 0:s?" +
+                request += "-i \"${task.video.file.url}\" -c copy -map 0:v -map 0:a -map 0:s?" +
                         " -f matroska -timeout 600 -reconnect 1" +
                         " -reconnect_streamed 1 -allowed_extensions ALL " +
                         "-tls_verify 0 $path -v trace"

@@ -2,6 +2,7 @@ package ani.dantotsu.connections.anilist
 
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.FuzzyDate
+import ani.dantotsu.connections.anilist.api.Query
 import kotlinx.serialization.json.JsonObject
 
 class AnilistMutations {
@@ -68,5 +69,11 @@ class AnilistMutations {
         val query = "mutation(${"$"}id:Int){DeleteMediaListEntry(id:${"$"}id){deleted}}"
         val variables = """{"id":"$listId"}"""
         executeQuery<JsonObject>(query, variables)
+    }
+
+
+    suspend fun rateReview(reviewId: Int, rating: String): Query.RateReviewResponse? {
+        val query = "mutation{RateReview(reviewId:$reviewId,rating:$rating){id mediaId mediaType summary body(asHtml:true)rating ratingAmount userRating score private siteUrl createdAt updatedAt user{id name bannerImage avatar{medium large}}}}"
+        return executeQuery<Query.RateReviewResponse>(query)
     }
 }

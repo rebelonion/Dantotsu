@@ -199,6 +199,12 @@
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity
+            android:name=".media.ReviewActivity"
+            android:parentActivityName=".media.MediaDetailsActivity" />
+        <activity
+            android:name=".media.ReviewViewActivity"
+            android:parentActivityName=".media.ReviewActivity" />
+        <activity
             android:name=".media.SearchActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".media.StudioActivity" />

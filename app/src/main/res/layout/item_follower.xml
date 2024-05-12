@@ -52,14 +52,34 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <TextView
-            android:id="@+id/profileUserName"
+        <LinearLayout
+            android:id="@+id/profileUserInfoContainer"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="120dp"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:text="@string/username"
-            android:textSize="18sp" />
+            android:layout_marginStart="100dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/profileUserName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/username"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/altText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:maxLines="2"
+                android:text="@string/lorem_ipsum"
+                android:textSize="14sp"
+                android:visibility="gone" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </FrameLayout>

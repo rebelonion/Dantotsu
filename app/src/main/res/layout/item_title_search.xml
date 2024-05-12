@@ -50,7 +50,7 @@
                 android:gravity="center"
                 android:maxLines="2"
                 android:padding="4dp"
-                android:text="@string/search"
+                android:text="@string/reviews"
                 android:textAllCaps="true"
                 android:textColor="@color/bg_white"
                 android:textSize="14sp" />

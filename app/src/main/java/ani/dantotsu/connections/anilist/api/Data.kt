@@ -300,6 +300,70 @@ class Query {
     ) : java.io.Serializable
 
     @Serializable
+    data class ReviewsResponse(
+        @SerialName("data")
+        val data: Data
+    ) : java.io.Serializable {
+        @Serializable
+        data class Data(
+            @SerialName("Page")
+            val page: ReviewPage?
+        ) : java.io.Serializable
+    }
+
+    @Serializable
+    data class ReviewPage(
+        @SerialName("pageInfo")
+        val pageInfo: PageInfo,
+        @SerialName("reviews")
+        val reviews: List<Review>?
+    ) : java.io.Serializable
+
+    @Serializable
+    data class RateReviewResponse(
+        @SerialName("data")
+        val data: Data
+    ) : java.io.Serializable {
+        @Serializable
+        data class Data(
+            @SerialName("RateReview")
+            val rateReview: Review
+        ) : java.io.Serializable
+    }
+
+    @Serializable
+    data class Review(
+        @SerialName("id")
+        val id: Int,
+        @SerialName("mediaId")
+        val mediaId: Int,
+        @SerialName("mediaType")
+        val mediaType: String,
+        @SerialName("summary")
+        val summary: String,
+        @SerialName("body")
+        val body: String,
+        @SerialName("rating")
+        var rating: Int,
+        @SerialName("ratingAmount")
+        var ratingAmount: Int,
+        @SerialName("userRating")
+        var userRating: String,
+        @SerialName("score")
+        val score: Int,
+        @SerialName("private")
+        val private: Boolean,
+        @SerialName("siteUrl")
+        val siteUrl: String,
+        @SerialName("createdAt")
+        val createdAt: Int,
+        @SerialName("updatedAt")
+        val updatedAt: Int?,
+        @SerialName("user")
+        val user: ani.dantotsu.connections.anilist.api.User?,
+    ) : java.io.Serializable
+
+    @Serializable
     data class UserProfile(
         @SerialName("id")
         val id: Int,

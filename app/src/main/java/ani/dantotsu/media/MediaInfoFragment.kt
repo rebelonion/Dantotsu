@@ -517,26 +517,24 @@ class MediaInfoFragment : Fragment() {
                             }
                             parent.addView(root)
                         }
+                    }
 
-                        ItemTitleSearchBinding.inflate(
-                            LayoutInflater.from(context),
-                            parent,
-                            false
-                        ).apply {
+                    ItemTitleSearchBinding.inflate(
+                        LayoutInflater.from(context),
+                        parent,
+                        false
+                    ).apply {
 
-                            titleSearchImage.loadImage(media.banner ?: media.cover)
-                            titleSearchText.text =
-                                getString(R.string.search_title, media.mainName())
-                            titleSearchCard.setSafeOnClickListener {
-                                val query = Intent(requireContext(), SearchActivity::class.java)
-                                    .putExtra("type", "ANIME")
-                                    .putExtra("query", media.mainName())
-                                    .putExtra("search", true)
-                                ContextCompat.startActivity(requireContext(), query, null)
-                            }
-
-                            parent.addView(root)
+                        titleSearchImage.loadImage(media.banner ?: media.cover)
+                        titleSearchText.text =
+                            getString(R.string.reviews)
+                        titleSearchCard.setSafeOnClickListener {
+                            val query = Intent(requireContext(), ReviewActivity::class.java)
+                                .putExtra("mediaId", media.id)
+                            ContextCompat.startActivity(requireContext(), query, null)
                         }
+
+                        parent.addView(root)
                     }
 
                     ItemTitleRecyclerBinding.inflate(
