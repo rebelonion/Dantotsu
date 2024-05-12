@@ -383,6 +383,7 @@
     <string name="error_message">ভুল %1$s</string>
     <string name="install_step">পদক্ষেপ %1$s</string>
     <string name="review">সমীক্ষা</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">কেৱল প্ৰথম বুটামটো প্ৰদৰ্শন কৰক</string>
     <string name="discord_dantotsu_button">দ্বিতীয় বুটামত ডান্টোটচু প্ৰদৰ্শন কৰক</string>
     <string name="discord_anilist_button">তাৰ পৰিৱৰ্তে আপোনাৰ এনিলিষ্ট প্ৰ\'ফাইল প্ৰদৰ্শন কৰক</string>
@@ -740,7 +741,6 @@
     <string name="donate">দান কৰক :)</string>
     <string name="do_it">এইটো কৰা!</string>
     <string name="password">পাছৱাৰ্ড</string>
-    <string name="search_title">অনুসন্ধান %1$s</string>
     <string name="profile_stats_widget">আপোনাৰ হোম স্ক্ৰীনৰ পৰা প্ৰগতি ট্ৰেক কৰক</string>
     <string name="anime_watched">অনিমে\nচাইছিল</string>
     <string name="manga_read">মাংগা\nপঢ়িছিল</string>
@@ -866,4 +866,5 @@
     <string name="download_subtitle">সাবটাইটেল ডাউনলোড কৰক</string>
     <string name="no_video_selected">কোনো ভিডিও নিৰ্বাচন কৰা হোৱা নাই</string>
     <string name="no_subtitles_available">কোনো সাবটাইটেল উপলব্ধ নাই</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
