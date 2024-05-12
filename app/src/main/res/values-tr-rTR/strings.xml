@@ -383,6 +383,7 @@
     <string name="error_message">Hata: %1$s</string>
     <string name="install_step">Adım: %1$s</string>
     <string name="review">İnceleme</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">Sadece ilk butonu göster</string>
     <string name="discord_dantotsu_button">Dantotsu\'yu ikinci butonda göster</string>
     <string name="discord_anilist_button">Bunun yerine AniList profilini göster</string>
@@ -740,7 +741,6 @@
     <string name="donate">bağış yap :)</string>
     <string name="do_it">Yap!</string>
     <string name="password">Şifre</string>
-    <string name="search_title">Ara \"%1$s\"</string>
     <string name="profile_stats_widget">İlerlemeyi direkt olarak Ana Ekrandan yap</string>
     <string name="anime_watched">İzlenilen\nAnimeler</string>
     <string name="manga_read">Okunan\nMangalar</string>
@@ -866,4 +866,5 @@
     <string name="download_subtitle">Alt yazı İndir</string>
     <string name="no_video_selected">Herhangi bir video seçilmedi</string>
     <string name="no_subtitles_available">Alt yazı mevcut değil</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
