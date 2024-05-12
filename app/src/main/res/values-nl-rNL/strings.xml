@@ -381,6 +381,7 @@
     <string name="error_message">Fout: %1$s</string>
     <string name="install_step">Stap: %1$s</string>
     <string name="review">Beoordelen</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">Alleen de eerste knop weergeven</string>
     <string name="discord_dantotsu_button">Toon Dantotsu in de tweede knop</string>
     <string name="discord_anilist_button">Toon je AniList-profiel in plaats daarvan</string>
@@ -741,7 +742,6 @@
     <string name="donate">doneren :)</string>
     <string name="do_it">Doe het!</string>
     <string name="password">Wachtwoord</string>
-    <string name="search_title">Zoeken naar %1$s</string>
     <string name="profile_stats_widget">Volg de voortgang rechtstreeks vanaf je startscherm</string>
     <string name="anime_watched">Anime\nGekeken</string>
     <string name="manga_read">Manga\nGelezen</string>
@@ -867,4 +867,5 @@
     <string name="download_subtitle">Ondertitel downloaden</string>
     <string name="no_video_selected">Geen video geselecteerd</string>
     <string name="no_subtitles_available">Geen ondertitels beschikbaar</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
