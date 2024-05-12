@@ -229,6 +229,28 @@
             android:text="View replies"
             android:textSize="12sp"
             tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/dot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:alpha="0.8"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="•"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/commentReply"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:alpha="0.8"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:text="@string/reply"
+            android:textSize="12sp"
+            tools:ignore="HardcodedText" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

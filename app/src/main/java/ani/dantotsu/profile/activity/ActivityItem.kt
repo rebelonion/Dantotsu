@@ -1,5 +1,6 @@
 package ani.dantotsu.profile.activity
 
+import android.content.Intent
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -17,6 +18,7 @@ import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
+import ani.dantotsu.util.MarkdownCreatorActivity
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 import kotlinx.coroutines.CoroutineScope
@@ -67,6 +69,21 @@ class ActivityItem(
                     repliesAdapter.addAll(replyItems)
                     binding.activityReplies.visibility = View.VISIBLE
                     binding.commentTotalReplies.setText(R.string.hide_replies)
+                    if (activity.isLocked != true) {
+                        binding.commentReply.setOnClickListener {
+                            val context = binding.root.context
+                            ContextCompat.startActivity(
+                                context,
+                                Intent(context, MarkdownCreatorActivity::class.java)
+                                    .putExtra("type", "replyActivity")
+                                    .putExtra("parentId", activity.id),
+                                null
+                            )
+                        }
+                    } else {
+                        binding.commentReply.visibility = View.GONE
+                        binding.dot.visibility = View.GONE
+                    }
                 }
 
                 else -> {

@@ -18,12 +18,12 @@ import io.noties.markwon.editor.MarkwonEditor
 import io.noties.markwon.editor.MarkwonEditorTextWatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import tachiyomi.core.util.lang.launchIO
-import java.util.Locale
 
 class MarkdownCreatorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMarkdownCreatorBinding
     private lateinit var type: String
     private var text: String = ""
+    private var parentId: Int = 0
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +40,22 @@ class MarkdownCreatorActivity : AppCompatActivity() {
         if (intent.hasExtra("type")) {
             type = intent.getStringExtra("type")!!
         } else {
+            toast("Error: No type")
             finish()
+            return
         }
         binding.markdownCreatorTitle.text = when (type) {
             "activity" -> getString(R.string.create_new_activity)
             "review" -> getString(R.string.create_new_review)
+            "replyActivity" -> {
+                parentId = intent.getIntExtra("parentId", -1)
+                if (parentId == -1) {
+                    toast("Error: No parent ID")
+                    finish()
+                    return
+                }
+                getString(R.string.create_new_reply)
+            }
             else -> ""
         }
         binding.editText.setText(text)
@@ -73,6 +84,7 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 val success = when (type) {
                     "activity" -> Anilist.mutation.postActivity(text)
                     //"review" -> Anilist.mutation.postReview(text)
+                    "replyActivity" -> Anilist.mutation.postReply(parentId, text)
                     else -> "Error: Unknown type"
                 }
                 toast(success)

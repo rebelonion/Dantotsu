@@ -98,4 +98,13 @@ class AnilistMutations {
         return errors?.toString()
             ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
     }
+
+    suspend fun postReply(activityId: Int, text: String): String {
+        val encodedText = Gson().toJson(text)
+        val query = "mutation{SaveActivityReply(activityId:$activityId,text:$encodedText){id}}"
+        val result = executeQuery<JsonObject>(query)
+        val errors = result?.get("errors")
+        return errors?.toString()
+            ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+    }
 }
