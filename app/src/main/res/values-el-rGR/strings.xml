@@ -383,7 +383,7 @@
     <string name="error_message">Σφάλμα: %1$s</string>
     <string name="install_step">Βήμα: %1$s</string>
     <string name="review">Ανασκόπηση</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Ανασκοπήσεις</string>
     <string name="discord_nothing_button">Εμφάνισε μόνο το πρώτο κουμπί</string>
     <string name="discord_dantotsu_button">Εμφανίστε το dantotsu στο δεύτερο κουμπί</string>
     <string name="discord_anilist_button">Εμφανίστε το προφίλ σας στο AniList</string>
@@ -869,5 +869,5 @@
     <string name="download_subtitle">Λήψη υπότιτλων</string>
     <string name="no_video_selected">Δεν έχει επιλεγεί βίντεο</string>
     <string name="no_subtitles_available">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
-    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
+    <string name="vote_out_of_total">(%1$s από %2$s τούς άρεσε αυτή η ανασκόπηση)</string>
 </resources>
