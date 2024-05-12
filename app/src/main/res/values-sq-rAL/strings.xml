@@ -383,6 +383,7 @@
     <string name="error_message">Gabim: %1$s</string>
     <string name="install_step">Hapi: %1$s</string>
     <string name="review">Rishikim</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">Shfaq vetëm butonin e parë</string>
     <string name="discord_dantotsu_button">Shfaq Dantotsu-n në butonin e dytë</string>
     <string name="discord_anilist_button">Shfaq profilin tuaj AniList në vend të tij</string>
@@ -743,7 +744,6 @@
     <string name="donate">donacion :)</string>
     <string name="do_it">Bëj këtë!</string>
     <string name="password">Fjalëkalimi</string>
-    <string name="search_title">Kërko %1$s</string>
     <string name="profile_stats_widget">Gjurmimi i përparimit drejtpërdrejtë nga ekranin tuaj kryesor</string>
     <string name="anime_watched">Anime të shikuar</string>
     <string name="manga_read">Manga e lexuar</string>
@@ -869,4 +869,5 @@
     <string name="download_subtitle">Download Subtitle</string>
     <string name="no_video_selected">No video selected</string>
     <string name="no_subtitles_available">No subtitles available</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
