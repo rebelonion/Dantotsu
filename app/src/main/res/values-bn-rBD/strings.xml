@@ -384,6 +384,7 @@
     <string name="error_message">ভূল %1$s</string>
     <string name="install_step">ধাপ %1$s</string>
     <string name="review">পুনরায় দেখুন</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">শুধুমাত্র প্রথম বাটনটি দেখাবেন</string>
     <string name="discord_dantotsu_button">দান্ততসু কে দ্বিতিয় বাটন এ দেখাও</string>
     <string name="discord_anilist_button">আমার আনিলিস্ত প্রফাইল টি এর বিপরিতে দেখাও</string>
@@ -749,7 +750,6 @@
     <string name="donate">donate :)</string>
     <string name="do_it">Do it!</string>
     <string name="password">Password</string>
-    <string name="search_title">Search %1$s</string>
     <string name="profile_stats_widget">Track progress directly from your home screen</string>
     <string name="anime_watched">Anime\nWatched</string>
     <string name="manga_read">Manga\nRead</string>
@@ -875,4 +875,5 @@
     <string name="download_subtitle">Download Subtitle</string>
     <string name="no_video_selected">No video selected</string>
     <string name="no_subtitles_available">No subtitles available</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
