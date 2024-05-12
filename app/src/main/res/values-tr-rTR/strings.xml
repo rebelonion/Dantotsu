@@ -383,7 +383,7 @@
     <string name="error_message">Hata: %1$s</string>
     <string name="install_step">Adım: %1$s</string>
     <string name="review">İnceleme</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">İncelemeler</string>
     <string name="discord_nothing_button">Sadece ilk butonu göster</string>
     <string name="discord_dantotsu_button">Dantotsu\'yu ikinci butonda göster</string>
     <string name="discord_anilist_button">Bunun yerine AniList profilini göster</string>
@@ -866,12 +866,12 @@
     <string name="download_subtitle">Alt yazı İndir</string>
     <string name="no_video_selected">Herhangi bir video seçilmedi</string>
     <string name="no_subtitles_available">Alt yazı mevcut değil</string>
-    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
-    <string name="create_new_activity">Create New Activity</string>
-    <string name="create_new_review">Create New Review</string>
-    <string name="create_new_reply">Create New Reply</string>
-    <string name="create">Create</string>
-    <string name="preview">Preview</string>
-    <string name="cannot_be_empty">Text cannot be empty</string>
-    <string name="reply">Reply</string>
+    <string name="vote_out_of_total">(%2$s kişiden %1$s kadarı bu incelemeyi beğendi)</string>
+    <string name="create_new_activity">Yeni aktivite oluştur</string>
+    <string name="create_new_review">Yeni inceleme oluştur</string>
+    <string name="create_new_reply">Yeni yenıt oluştur</string>
+    <string name="create">Oluştur</string>
+    <string name="preview">Ön izleme</string>
+    <string name="cannot_be_empty">Metin boş olamaz</string>
+    <string name="reply">Yanıt ver</string>
 </resources>
