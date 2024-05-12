@@ -65,6 +65,10 @@ class MarkdownCreatorActivity : AppCompatActivity() {
         }
 
         binding.createButton.setOnClickListener {
+            if (text.isBlank()) {
+                toast(getString(R.string.cannot_be_empty))
+                return@setOnClickListener
+            }
             launchIO {
                 val success = when (type) {
                     "activity" -> Anilist.mutation.postActivity(text)

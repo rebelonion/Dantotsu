@@ -984,4 +984,5 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="create_new_review">Create New Review</string>
     <string name="create">Create</string>
     <string name="preview">Preview</string>
+    <string name="cannot_be_empty">Text cannot be empty</string>
 </resources>
