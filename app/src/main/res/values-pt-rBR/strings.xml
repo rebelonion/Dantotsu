@@ -383,6 +383,7 @@
     <string name="error_message">Erro: %1$s</string>
     <string name="install_step">Passo: %1$s</string>
     <string name="review">Análise</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">Exibir apenas o primeiro botão</string>
     <string name="discord_dantotsu_button">Exibir Dantotsu no segundo botão</string>
     <string name="discord_anilist_button">Exibir seu perfil AniList</string>
@@ -743,7 +744,6 @@
     <string name="donate">doar :)</string>
     <string name="do_it">Vamos lá!</string>
     <string name="password">Senha</string>
-    <string name="search_title">Buscar %1$s</string>
     <string name="profile_stats_widget">Acompanhe seu progresso diretamente da tela inicial</string>
     <string name="anime_watched">Animes\nAssistidos</string>
     <string name="manga_read">Mangás\nLidos</string>
@@ -869,4 +869,5 @@
     <string name="download_subtitle">Baixar Legendas</string>
     <string name="no_video_selected">Nenhum vídeo selecionado</string>
     <string name="no_subtitles_available">Sem legendas disponíveis</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
