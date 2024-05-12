@@ -384,6 +384,7 @@
     <string name="error_message">Fehler: %1$s</string>
     <string name="install_step">Schritt: %1$s</string>
     <string name="review">Überprüfung</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">Nur die erste Schaltfläche anzeigen</string>
     <string name="discord_dantotsu_button">Display dantotsu in der zweiten Taste</string>
     <string name="discord_anilist_button">Zeigen Sie stattdessen Ihr AniList Profil an</string>
@@ -744,7 +745,6 @@
     <string name="donate">spenden :)</string>
     <string name="do_it">Tun Sie es!</string>
     <string name="password">Passwort</string>
-    <string name="search_title">Suche %1$s</string>
     <string name="profile_stats_widget">Verfolgen Sie den Fortschritt direkt von Ihrem Startbildschirm aus</string>
     <string name="anime_watched">Anime\nGeschaut</string>
     <string name="manga_read">Manga\nLesen</string>
@@ -870,4 +870,5 @@
     <string name="download_subtitle">Untertitel herunterladen</string>
     <string name="no_video_selected">Kein Video ausgewählt</string>
     <string name="no_subtitles_available">Keine Untertitel verfügbar</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
