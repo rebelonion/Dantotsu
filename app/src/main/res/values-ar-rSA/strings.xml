@@ -382,6 +382,7 @@
     <string name="error_message">خطأ: %1$s</string>
     <string name="install_step">خطوة: %1$s</string>
     <string name="review">مراجعة</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">عرض الزر الأول فقط</string>
     <string name="discord_dantotsu_button">عرض دانتوتسو في الزر الثاني</string>
     <string name="discord_anilist_button">أعرض ملف \"أني ليست\" عوضا عن ذلك</string>
@@ -736,7 +737,6 @@
     <string name="donate">تبرع :)</string>
     <string name="do_it">أفعلها!</string>
     <string name="password">كلمة السر</string>
-    <string name="search_title">ابحث عن %1$s</string>
     <string name="profile_stats_widget">تتبع التقدم مباشرة من شاشتك الرئيسية</string>
     <string name="anime_watched">انمي\nتم مشاهدته</string>
     <string name="manga_read">مانجا\nتم قراءتها</string>
@@ -862,4 +862,5 @@
     <string name="download_subtitle">Download Subtitle</string>
     <string name="no_video_selected">No video selected</string>
     <string name="no_subtitles_available">No subtitles available</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
