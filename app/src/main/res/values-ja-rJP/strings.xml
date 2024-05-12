@@ -383,6 +383,7 @@
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">Review</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">Display only the first button</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile instead</string>
@@ -743,7 +744,6 @@
     <string name="donate">寄付する :)</string>
     <string name="do_it">やってみる！</string>
     <string name="password">パスワード</string>
-    <string name="search_title">%1$sを検索</string>
     <string name="profile_stats_widget">ホーム画面から進捗状況を追跡します</string>
     <string name="anime_watched">見たアニメ</string>
     <string name="manga_read">読んだマンガ</string>
@@ -869,4 +869,5 @@
     <string name="download_subtitle">字幕をダウンロード</string>
     <string name="no_video_selected">ビデオが選択されていません</string>
     <string name="no_subtitles_available">利用可能な字幕はありません</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
