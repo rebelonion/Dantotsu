@@ -383,6 +383,7 @@
     <string name="error_message">出错了%1$s</string>
     <string name="install_step">步骤%1$s</string>
     <string name="review">评论</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">仅显示第一个按钮</string>
     <string name="discord_dantotsu_button">在第二个按钮中显示dantotsu</string>
     <string name="discord_anilist_button">改为显示AniList配置文件</string>
@@ -737,7 +738,6 @@
     <string name="donate">捐赠 :)</string>
     <string name="do_it">去做吧！</string>
     <string name="password">密码</string>
-    <string name="search_title">搜索 %1$s</string>
     <string name="profile_stats_widget">直接从您的主屏幕跟踪进度</string>
     <string name="anime_watched">已观看的动画</string>
     <string name="manga_read">已阅读的漫画</string>
@@ -863,4 +863,5 @@
     <string name="download_subtitle">下载字幕</string>
     <string name="no_video_selected">未选择视频</string>
     <string name="no_subtitles_available">无可用字幕</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
