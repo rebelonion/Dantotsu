@@ -870,4 +870,8 @@
     <string name="no_video_selected">ビデオが選択されていません</string>
     <string name="no_subtitles_available">利用可能な字幕はありません</string>
     <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
+    <string name="create_new_activity">Create New Activity</string>
+    <string name="create_new_review">Create New Review</string>
+    <string name="create">Create</string>
+    <string name="preview">Preview</string>
 </resources>
