@@ -383,6 +383,7 @@
     <string name="error_message">Error: %1$s</string>
     <string name="install_step">Step: %1$s</string>
     <string name="review">Review</string>
+    <string name="reviews">Reviews</string>
     <string name="discord_nothing_button">Display only the first button</string>
     <string name="discord_dantotsu_button">Display dantotsu in the second button</string>
     <string name="discord_anilist_button">Display your AniList profile instead</string>
@@ -744,7 +745,6 @@
     <string name="donate">기부하기 :)</string>
     <string name="do_it">해보세요!</string>
     <string name="password">비밀번호</string>
-    <string name="search_title">%1$s 검색</string>
     <string name="profile_stats_widget">홈 화면에서 진행 상황을 직접 추적하세요</string>
     <string name="anime_watched">애니메이션 시청</string>
     <string name="manga_read">만화 읽기</string>
@@ -870,4 +870,5 @@
     <string name="download_subtitle">자막 다운로드</string>
     <string name="no_video_selected">선택된 비디오가 없습니다</string>
     <string name="no_subtitles_available">사용 가능한 자막이 없습니다</string>
+    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
 </resources>
