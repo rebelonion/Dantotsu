@@ -176,8 +176,18 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
 
+    <ImageView
+        android:id="@+id/activityReplies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/ic_round_comment_24"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
@@ -204,7 +214,6 @@
             tools:ignore="SpUsage"
             tools:text="@string/slogan" />
 
-
         <LinearLayout
             android:id="@+id/activityLikeContainer"
             android:layout_width="wrap_content"
@@ -221,12 +230,13 @@
                 android:fontFamily="@font/poppins_semi_bold"
                 android:textSize="15sp"
                 tools:text="12" />
+
             <ImageView
                 android:id="@+id/activityLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:layout_gravity="center|end"
+                android:layout_marginStart="12dp"
                 android:src="@drawable/ic_round_favorite_24"
                 tools:ignore="ContentDescription" />
         </LinearLayout>

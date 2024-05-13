@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
@@ -214,19 +215,14 @@ class Stories @JvmOverloads constructor(
         timer.setOnTimerCompletedListener {
             Logger.log("onAnimationEnd: $storyIndex")
             if (storyIndex - 1 <= activityList.size) {
-                if (false) {
-                    Logger.log("userClicked: $storyIndex")
-                    userClicked = false
+                Logger.log("userNotClicked: $storyIndex")
+                if (storyIndex < activityList.size) {
+                    storyIndex += 1
+                    showStory()
                 } else {
-                    Logger.log("userNotClicked: $storyIndex")
-                    if (storyIndex < activityList.size) {
-                        storyIndex += 1
-                        showStory()
-                    } else {
-                        // on stories end
-                        binding.androidStoriesLoadingView.visibility = View.GONE
-                        onStoriesCompleted()
-                    }
+                    // on stories end
+                    binding.androidStoriesLoadingView.visibility = View.GONE
+                    onStoriesCompleted()
                 }
             } else {
                 // on stories end
@@ -447,6 +443,9 @@ class Stories @JvmOverloads constructor(
         }
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
+        binding.activityReplies.setOnClickListener {
+            RepliesBottomDialog.newInstance(story.id).show(activity.supportFragmentManager, "replies")
+        }
         binding.activityLikeCount.text = story.likeCount.toString()
         binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
         binding.activityLikeContainer.setOnClickListener {

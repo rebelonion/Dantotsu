@@ -987,4 +987,5 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="preview">Preview</string>
     <string name="cannot_be_empty">Text cannot be empty</string>
     <string name="reply">Reply</string>
+    <string name="replies">Replies</string>
 </resources>
