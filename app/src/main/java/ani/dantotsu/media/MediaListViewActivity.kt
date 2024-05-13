@@ -77,8 +77,8 @@ class MediaListViewActivity: AppCompatActivity() {
         binding.mediaGrid.setOnClickListener {
             changeView(0, binding.mediaGrid)
         }
-
-        binding.listTitle.text = intent.getStringExtra("title")
+        val text = "${intent.getStringExtra("title")} (${mediaList.count()})"
+        binding.listTitle.text = text
         binding.mediaRecyclerView.adapter = MediaAdaptor(view, mediaList, this)
         binding.mediaRecyclerView.layoutManager = GridLayoutManager(
             this,

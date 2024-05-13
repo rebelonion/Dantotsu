@@ -13,6 +13,7 @@ import ani.dantotsu.BottomSheetDialogFragment
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.ActivityReply
 import ani.dantotsu.databinding.BottomSheetRecyclerBinding
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.ActivityReplyItem
 import ani.dantotsu.snackString
 import ani.dantotsu.util.MarkdownCreatorActivity
@@ -40,12 +41,12 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.repliesRecyclerView.adapter = adapter
         binding.repliesRecyclerView.layoutManager = LinearLayoutManager(
-            requireContext(),
+            context,
             LinearLayoutManager.VERTICAL,
             false
         )
+        val context = requireContext()
         binding.replyButton.setOnClickListener {
-            val context = requireContext()
             ContextCompat.startActivity(
                 context,
                 Intent(context, MarkdownCreatorActivity::class.java)
@@ -63,13 +64,31 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
                 if (response != null) {
                     replies.clear()
                     replies.addAll(response.data.page.activityReplies)
-                    adapter.update(replies.map { ActivityReplyItem(it, requireActivity()) { _, _ -> } })
+                    adapter.update(
+                        replies.map {
+                            ActivityReplyItem(
+                                it,
+                                requireActivity(),
+                                clickCallback = { int, _ ->
+                                    onClick(int)
+                                }
+                            )
+                        }
+                    )
                 } else {
                     snackString("Failed to load replies")
                 }
             }
         }
 
+    }
+
+    private fun onClick(int: Int) {
+        ContextCompat.startActivity(
+            requireContext(),
+            Intent(requireContext(), ProfileActivity::class.java).putExtra("userId", int),
+            null
+        )
     }
 
     private fun loading(load: Boolean) {

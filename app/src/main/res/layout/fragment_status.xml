@@ -176,39 +176,6 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
 
-    <FrameLayout
-        android:id="@+id/activityRepliesContainer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="-8dp"
-        android:layout_marginBottom="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout">
-
-        <ImageView
-            android:id="@+id/activityReplies"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="8dp"
-            android:src="@drawable/ic_round_comment_24"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/replyCount"
-            android:layout_width="18dp"
-            android:layout_height="18dp"
-            android:layout_gravity="end|bottom"
-            android:background="@drawable/notification_circle"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:gravity="center"
-            android:textColor="#F3F3F3"
-            android:textSize="12sp"
-            android:visibility="gone"
-            tools:ignore="SmallSp"
-            tools:text="1"
-            tools:visibility="visible" />
-
-    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -238,31 +205,59 @@
             tools:ignore="SpUsage"
             tools:text="@string/slogan" />
 
+
+        <LinearLayout
+            android:id="@+id/activityRepliesContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:orientation="vertical"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/activityReplies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_round_comment_24"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/replyCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textSize="15sp"
+                tools:text="12" />
+
+
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/activityLikeContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center|end"
-            android:orientation="horizontal"
+            android:layout_marginStart="12dp"
+            android:orientation="vertical"
             tools:ignore="UseCompoundDrawables">
-
-            <TextView
-                android:id="@+id/activityLikeCount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:fontFamily="@font/poppins_semi_bold"
-                android:textSize="15sp"
-                tools:text="12" />
 
             <ImageView
                 android:id="@+id/activityLike"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|end"
-                android:layout_marginStart="12dp"
                 android:src="@drawable/ic_round_favorite_24"
                 tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/activityLikeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:textSize="15sp"
+                tools:text="12" />
         </LinearLayout>
     </LinearLayout>
 

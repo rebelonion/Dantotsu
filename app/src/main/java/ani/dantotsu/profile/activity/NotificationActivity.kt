@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -73,6 +74,8 @@ class NotificationActivity : AppCompatActivity() {
             val dialogView = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
             val checkboxContainer = dialogView.findViewById<LinearLayout>(R.id.checkboxContainer)
             val tickAllButton = dialogView.findViewById<ImageButton>(R.id.toggleButton)
+            val title = dialogView.findViewById<TextView>(R.id.scantitle)
+            title.visibility = ViewGroup.GONE
             fun getToggleImageResource(container: ViewGroup): Int {
                 var allChecked = true
                 var allUnchecked = true

@@ -6,7 +6,6 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginTop="16dp"
-    android:background="?attr/colorSurface"
     android:orientation="vertical">
 
     <LinearLayout
@@ -105,7 +104,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="64dp"
-        android:background="?android:colorBackground"
         android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/lorem_ipsum"
         android:textSize="12sp" />

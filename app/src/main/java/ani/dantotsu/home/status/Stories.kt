@@ -382,12 +382,13 @@ class Stories @JvmOverloads constructor(
                             it.toString()
                         }
                     }
-                } ${story.progress ?: story.media?.title?.userPreferred} " + if (story.status?.contains(
-                        "completed"
-                    ) == false && !story.status.contains("plans") && !story.status.contains(
-                        "repeating"
+                } ${story.progress ?: story.media?.title?.userPreferred} " +
+                if (
+                    story.status?.contains("completed") == false &&
+                    !story.status.contains("plans") &&
+                    !story.status.contains("repeating")
                     )
-                ) {
+                {
                     "of ${story.media?.title?.userPreferred}"
                 } else {
                     ""
@@ -446,12 +447,7 @@ class Stories @JvmOverloads constructor(
         binding.activityRepliesContainer.setOnClickListener {
             RepliesBottomDialog.newInstance(story.id).show(activity.supportFragmentManager, "replies")
         }
-        if (story.replyCount > 0) {
-            binding.replyCount.text = story.replyCount.toString()
-            binding.replyCount.visibility = View.VISIBLE
-        } else {
-            binding.replyCount.visibility = View.GONE
-        }
+        binding.replyCount.text = story.replyCount.toString()
         binding.activityLikeCount.text = story.likeCount.toString()
         binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
         binding.activityLikeContainer.setOnClickListener {

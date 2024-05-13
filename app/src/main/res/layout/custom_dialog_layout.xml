@@ -8,6 +8,7 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@+id/scantitle"
         android:layout_width="265dp"
         android:layout_height="48dp"
         android:ellipsize="end"
