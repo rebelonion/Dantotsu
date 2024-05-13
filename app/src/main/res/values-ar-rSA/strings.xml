@@ -382,7 +382,7 @@
     <string name="error_message">خطأ: %1$s</string>
     <string name="install_step">خطوة: %1$s</string>
     <string name="review">مراجعة</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">مراجعة</string>
     <string name="discord_nothing_button">عرض الزر الأول فقط</string>
     <string name="discord_dantotsu_button">عرض دانتوتسو في الزر الثاني</string>
     <string name="discord_anilist_button">أعرض ملف \"أني ليست\" عوضا عن ذلك</string>
@@ -668,7 +668,7 @@
     <string name="error_msg">خطأ: %1$s</string>
     <string name="please_wait">رجاء الأنتظار</string>
     <string name="upcoming">القادم</string>
-    <string name="no_shows_to_display">No shows to display</string>
+    <string name="no_shows_to_display">لا يوجد مسلسلات للعرض</string>
     <string name="extension_name">اسم الإضافة</string>
     <string name="extension_version">النسخة</string>
     <string name="enter_password_to_decrypt_file">أدخل كلمة المرور الخاصة بك لفك تشفير الملف</string>
