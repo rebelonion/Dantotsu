@@ -32,8 +32,8 @@
         android:id="@+id/textActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textActivity"
@@ -176,15 +176,39 @@
             tools:srcCompat="@tools:sample/backgrounds/scenic" />
     </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/activityReplies"
+    <FrameLayout
+        android:id="@+id/activityRepliesContainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="-8dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/ic_round_comment_24"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        tools:ignore="ContentDescription" />
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout">
+
+        <ImageView
+            android:id="@+id/activityReplies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:src="@drawable/ic_round_comment_24"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/replyCount"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_gravity="end|bottom"
+            android:background="@drawable/notification_circle"
+            android:fontFamily="@font/poppins_semi_bold"
+            android:gravity="center"
+            android:textColor="#F3F3F3"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:ignore="SmallSp"
+            tools:text="1"
+            tools:visibility="visible" />
+
+    </FrameLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout"

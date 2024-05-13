@@ -443,8 +443,14 @@ class Stories @JvmOverloads constructor(
         }
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
-        binding.activityReplies.setOnClickListener {
+        binding.activityRepliesContainer.setOnClickListener {
             RepliesBottomDialog.newInstance(story.id).show(activity.supportFragmentManager, "replies")
+        }
+        if (story.replyCount > 0) {
+            binding.replyCount.text = story.replyCount.toString()
+            binding.replyCount.visibility = View.VISIBLE
+        } else {
+            binding.replyCount.visibility = View.GONE
         }
         binding.activityLikeCount.text = story.likeCount.toString()
         binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
