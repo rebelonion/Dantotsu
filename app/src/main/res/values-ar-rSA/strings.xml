@@ -775,7 +775,7 @@
     <string name="users">المستخدمين</string>
     <string name="social">تواصل اجتماعي</string>
     <string name="auto_skip_recap">Auto Skip Recap</string>
-    <string name="use_anilist_icon">Use AniList Icon</string>
+    <string name="use_anilist_icon">استخدم أيقونة \"Anilist\"</string>
     <string name="audio_tracks">مقاطع أصوات</string>
     <string name="disabled_track">Disabled</string>
     <string name="invalid_track">Invalid</string>
