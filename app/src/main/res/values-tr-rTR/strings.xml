@@ -874,4 +874,5 @@
     <string name="preview">Ön izleme</string>
     <string name="cannot_be_empty">Metin boş olamaz</string>
     <string name="reply">Yanıt ver</string>
+    <string name="replies">Replies</string>
 </resources>
