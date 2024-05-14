@@ -867,13 +867,13 @@
     <string name="download_subtitle">Ondertitel downloaden</string>
     <string name="no_video_selected">Geen video geselecteerd</string>
     <string name="no_subtitles_available">Geen ondertitels beschikbaar</string>
-    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
-    <string name="create_new_activity">Create New Activity</string>
-    <string name="create_new_review">Create New Review</string>
-    <string name="create_new_reply">Create New Reply</string>
-    <string name="create">Create</string>
-    <string name="preview">Preview</string>
-    <string name="cannot_be_empty">Text cannot be empty</string>
-    <string name="reply">Reply</string>
-    <string name="replies">Replies</string>
+    <string name="vote_out_of_total">(%1$s van de %2$s vond deze recensie leuk)</string>
+    <string name="create_new_activity">Nieuwe activiteit maken</string>
+    <string name="create_new_review">Nieuwe recensie maken</string>
+    <string name="create_new_reply">Nieuwe reactie maken</string>
+    <string name="create">Maken</string>
+    <string name="preview">Voorbeeld</string>
+    <string name="cannot_be_empty">Tekst mag niet leeg zijn</string>
+    <string name="reply">Antwoorden</string>
+    <string name="replies">Reacties</string>
 </resources>
