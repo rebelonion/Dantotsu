@@ -863,13 +863,13 @@
     <string name="download_subtitle">下载字幕</string>
     <string name="no_video_selected">未选择视频</string>
     <string name="no_subtitles_available">无可用字幕</string>
-    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
-    <string name="create_new_activity">Create New Activity</string>
-    <string name="create_new_review">Create New Review</string>
-    <string name="create_new_reply">Create New Reply</string>
-    <string name="create">Create</string>
-    <string name="preview">Preview</string>
-    <string name="cannot_be_empty">Text cannot be empty</string>
-    <string name="reply">Reply</string>
-    <string name="replies">Replies</string>
+    <string name="vote_out_of_total">（%1$s中有%2$s喜欢此评论）</string>
+    <string name="create_new_activity">创建新活动</string>
+    <string name="create_new_review">创建新评论</string>
+    <string name="create_new_reply">创建新回复</string>
+    <string name="create">创建</string>
+    <string name="preview">预览</string>
+    <string name="cannot_be_empty">文本不能为空</string>
+    <string name="reply">回复</string>
+    <string name="replies">回复</string>
 </resources>
