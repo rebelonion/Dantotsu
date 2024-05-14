@@ -774,12 +774,12 @@
     <string name="media">وسائط</string>
     <string name="users">المستخدمين</string>
     <string name="social">تواصل اجتماعي</string>
-    <string name="auto_skip_recap">Auto Skip Recap</string>
+    <string name="auto_skip_recap">تخطي الملخص تِلْقائيًا</string>
     <string name="use_anilist_icon">استخدم أيقونة \"Anilist\"</string>
     <string name="audio_tracks">مقاطع أصوات</string>
-    <string name="disabled_track">Disabled</string>
-    <string name="invalid_track">Invalid</string>
-    <string name="unknown_track">\[%1$s\] Unknown</string>
+    <string name="disabled_track">معطل</string>
+    <string name="invalid_track">غير صالح</string>
+    <string name="unknown_track">\[%1$s\] مجهول</string>
     <string name="accounts_desc">Anilist و MAL و Discord معانا.\nعايز ايه تاني؟</string>
     <string name="theme_desc">Change the vibe of your app</string>
     <string name="extensions_desc">Manage your reliable repositories</string>
