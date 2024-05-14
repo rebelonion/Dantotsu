@@ -870,13 +870,13 @@
     <string name="download_subtitle">자막 다운로드</string>
     <string name="no_video_selected">선택된 비디오가 없습니다</string>
     <string name="no_subtitles_available">사용 가능한 자막이 없습니다</string>
-    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
-    <string name="create_new_activity">Create New Activity</string>
-    <string name="create_new_review">Create New Review</string>
-    <string name="create_new_reply">Create New Reply</string>
-    <string name="create">Create</string>
-    <string name="preview">Preview</string>
-    <string name="cannot_be_empty">Text cannot be empty</string>
-    <string name="reply">Reply</string>
-    <string name="replies">Replies</string>
+    <string name="vote_out_of_total">(%2$s 중 %1$s이(가) 이 리뷰를 좋아합니다)</string>
+    <string name="create_new_activity">새로운 활동 생성</string>
+    <string name="create_new_review">새로운 리뷰 생성</string>
+    <string name="create_new_reply">새로운 답글 생성</string>
+    <string name="create">생성</string>
+    <string name="preview">미리보기</string>
+    <string name="cannot_be_empty">텍스트를 비워둘 수 없습니다</string>
+    <string name="reply">답글</string>
+    <string name="replies">답글</string>
 </resources>
