@@ -373,7 +373,7 @@
     <string name="sort_by_release_date">Yayınlanma Tarihine göre Sırala</string>
     <string name="crop_borders">Köşeleri Kırp</string>
     <string name="note">NOT</string>
-    <string name="manage_extension_repos">Eklenti Depolarını Yönet</string>
+    <string name="manage_extension_repos">Eklenti Repolarını Yönet</string>
     <string name="installing_extension">Eklenti İndiriliyor</string>
     <string name="installation_failed">Kurulum başarısız oldu: %1$s</string>
     <string name="installation_complete">Kurulum başarılı</string>
