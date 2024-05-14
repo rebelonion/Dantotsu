@@ -866,13 +866,13 @@
     <string name="download_subtitle">उपशीर्षक डाउनलोड करें</string>
     <string name="no_video_selected">कोई वीडियो चयनित नहीं है</string>
     <string name="no_subtitles_available">कोई उपशीर्षक उपलब्ध नहीं हैं</string>
-    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
-    <string name="create_new_activity">Create New Activity</string>
-    <string name="create_new_review">Create New Review</string>
-    <string name="create_new_reply">Create New Reply</string>
-    <string name="create">Create</string>
-    <string name="preview">Preview</string>
-    <string name="cannot_be_empty">Text cannot be empty</string>
-    <string name="reply">Reply</string>
-    <string name="replies">Replies</string>
+    <string name="vote_out_of_total">(%1$s की %2$s ने इस समीक्षा को पसंद किया)</string>
+    <string name="create_new_activity">नई गतिविधि बनाएं</string>
+    <string name="create_new_review">नई समीक्षा बनाएं</string>
+    <string name="create_new_reply">नई जवाब बनाएं</string>
+    <string name="create">बनाएं</string>
+    <string name="preview">पूर्वावलोकन</string>
+    <string name="cannot_be_empty">पाठ खाली नहीं हो सकता</string>
+    <string name="reply">जवाब दें</string>
+    <string name="replies">उत्तर</string>
 </resources>
