@@ -757,7 +757,7 @@
     <string name="placeholder">Rezerv</string>
     <string name="anime_add_repository">Anime Reposu Ekle</string>
     <string name="manga_add_repository">Manga Reposu Ekle</string>
-    <string name="edit_repositories">Depoları Düzenle</string>
+    <string name="edit_repositories">Repoları Düzenle</string>
     <string name="rem_repository">Depoyu Kaldırmak istiyor musunuz?</string>
     <string name="trending_movies">Trend olan Filmler</string>
     <string name="include_list">Listeyi Dahil Et</string>
