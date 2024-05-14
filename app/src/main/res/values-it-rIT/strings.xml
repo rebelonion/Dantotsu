@@ -869,13 +869,13 @@
     <string name="download_subtitle">Scarica i Sottotitoli</string>
     <string name="no_video_selected">Nessun video selezionato</string>
     <string name="no_subtitles_available">Non sono disponibili sottotitoli</string>
-    <string name="vote_out_of_total">(%1$s out of %2$s liked this review)</string>
-    <string name="create_new_activity">Create New Activity</string>
-    <string name="create_new_review">Create New Review</string>
-    <string name="create_new_reply">Create New Reply</string>
-    <string name="create">Create</string>
-    <string name="preview">Preview</string>
-    <string name="cannot_be_empty">Text cannot be empty</string>
-    <string name="reply">Reply</string>
-    <string name="replies">Replies</string>
+    <string name="vote_out_of_total">(%1$s su %2$s hanno apprezzato questa recensione)</string>
+    <string name="create_new_activity">Crea nuova attività</string>
+    <string name="create_new_review">Crea nuova recensione</string>
+    <string name="create_new_reply">Crea nuova risposta</string>
+    <string name="create">Crea</string>
+    <string name="preview">Anteprima</string>
+    <string name="cannot_be_empty">Il testo non può essere vuoto</string>
+    <string name="reply">Rispondi</string>
+    <string name="replies">Risposte</string>
 </resources>
