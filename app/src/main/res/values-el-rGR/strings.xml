@@ -870,12 +870,12 @@
     <string name="no_video_selected">Δεν έχει επιλεγεί βίντεο</string>
     <string name="no_subtitles_available">Δεν υπάρχουν διαθέσιμοι υπότιτλοι</string>
     <string name="vote_out_of_total">(%1$s από %2$s τούς άρεσε αυτή η ανασκόπηση)</string>
-    <string name="create_new_activity">Create New Activity</string>
-    <string name="create_new_review">Create New Review</string>
-    <string name="create_new_reply">Create New Reply</string>
-    <string name="create">Create</string>
-    <string name="preview">Preview</string>
-    <string name="cannot_be_empty">Text cannot be empty</string>
-    <string name="reply">Reply</string>
-    <string name="replies">Replies</string>
+    <string name="create_new_activity">Δημιουργία νέας δραστηριότητας</string>
+    <string name="create_new_review">Δημιουργία νέας κριτικής</string>
+    <string name="create_new_reply">Δημιουργία νέας απάντησης</string>
+    <string name="create">Δημιουργία</string>
+    <string name="preview">Προεπισκόπηση</string>
+    <string name="cannot_be_empty">Το κείμενο δεν μπορεί να είναι κενό</string>
+    <string name="reply">Απάντηση</string>
+    <string name="replies">Απαντήσεις</string>
 </resources>
