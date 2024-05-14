@@ -383,7 +383,7 @@
     <string name="error_message">Erro: %1$s</string>
     <string name="install_step">Passo: %1$s</string>
     <string name="review">Análise</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Opiniões</string>
     <string name="discord_nothing_button">Exibir apenas o primeiro botão</string>
     <string name="discord_dantotsu_button">Exibir Dantotsu no segundo botão</string>
     <string name="discord_anilist_button">Exibir seu perfil AniList</string>
@@ -557,8 +557,8 @@
     <string name="question_5">Dantotsu está disponível no iOS?</string>
     <string name="answer_5">Não, o melhor que podemos fazer é esculpir o Dantotsu em uma maçã.</string>
     <string name="question_6">Why are my stats not updating?</string>
-    <string name="answer_6">This is because it updates every 48 hours automatically (by Anilist). If you really need to update your stats, you can force update your stats after going to this [link](https://anilist.co/settings/lists).</string>
-    <string name="question_7">How to download Anime?</string>
+    <string name="answer_6">Isso porque ele é atualizado a cada 48 horas automaticamente (pelo Anilist). Se você realmente precisa atualizar suas estatísticas, você pode forçar a atualização de suas estatísticas após ir para este [link](https://anilist.co/settings/lists).</string>
+    <string name="question_7">Como baixar os Animes?</string>
     <string name="answer_7">There are two methods of downloading currently. One is internal and the other is external. If you download internally, then it can be viewed within the app but only the app can open that episode, you cannot move it or share it. The other option is to use external downloading. It requires a download manager to download and a separate video player to watch. External downloads can be shared but you cannot view it within the Dantotsu app.\n\n•To download internally:\n\n1. Tap the download button.\n2. Pick the server and the video quality.\n3. Profit.\n\n•To download externally:\n\n 1. Download 1DM or ADM from Google Play Store.
         \n2. Enter the app, give storage access and set your preferences (downloading speed, downloading path etc(optional))
         \n3. Now go to \`Dantotsu &gt; Settings &gt; Common &gt; Download Managers\` and choose the download manager you just set up.
