@@ -332,7 +332,7 @@
     <string name="always_continue_content">Sempre continuar itens anteriores</string>
     <string name="search_source_list">Procurar pela próxima fonte disponível</string>
     <string name="timestamp_proxy_desc">Útil se você encontrar falhas de Handshake</string>
-    <string name="timestamp_proxy">Usar Proxy para Timestamps</string>
+    <string name="timestamp_proxy">Usar Proxy para Seções Temporais</string>
     <string name="check_app_updates">Procurar por Atualizações</string>
     <string name="author">Autor</string>
     <string name="forks">Versões</string>
@@ -405,13 +405,13 @@
     <string name="anilist_not_found">Parece que isso não foi encontrado no Anilist.</string>
     <string name="disabled_auto_skip">Desativado Pulo Automático de OP e ED</string>
     <string name="auto_skip">Pulo Automático de OP e ED</string>
-    <string name="show_skip_time_stamp_button">Exibir Botão de Pular Timestamps</string>
-    <string name="always_load_time_stamps">Sempre Carregar Timestamps</string>
-    <string name="auto_hide_time_stamps">Esconder Timestamps Automaticamente</string>
-    <string name="timestamps">Timestamps</string>
+    <string name="show_skip_time_stamp_button">Exibir Botão de Pular Seções Temporais</string>
+    <string name="always_load_time_stamps">Sempre Carregar Seções Temporais</string>
+    <string name="auto_hide_time_stamps">Esconder Seções Temporais Automaticamente</string>
+    <string name="timestamps">Seções Temporais</string>
     <string name="auto_skip_op_ed">Pular OP / ED Automaticamente</string>
-    <string name="requires_time_stamps_to_be_enabled">Requer que Timestamps estejam ativadas</string>
-    <string name="hide_skip_button">Fazer o botão de pular Timestamps desaparecer depois de 5 segundos</string>
+    <string name="requires_time_stamps_to_be_enabled">Requer que Seções Temporais estejam ativados</string>
+    <string name="hide_skip_button">Fazer o botão de pular Seções Temporais desaparecer depois de 5 segundos</string>
     <string name="copied_to_clipboard">Copiado para a Área de Transferência</string>
     <string name="first_episode">Esse é o primeiro episódio!</string>
     <string name="reset_auto_update">Mantenha o botão \"Editor de lista\" pressionado para resetar a Atualização Automática</string>
@@ -557,30 +557,30 @@
     <string name="question_5">Dantotsu está disponível no iOS?</string>
     <string name="answer_5">Não, o melhor que podemos fazer é esculpir o Dantotsu em uma maçã.</string>
     <string name="question_6">Por que minhas estatísticas não estão sendo atualizadas?</string>
-    <string name="answer_6">Isso porque ele é atualizado a cada 48 horas automaticamente (pelo Anilist). Se você realmente precisa atualizar suas estatísticas, você pode forçar a atualização de suas estatísticas após ir para este [link](https://anilist.co/settings/lists).</string>
-    <string name="question_7">Como baixar os Animes?</string>
-    <string name="answer_7">Existem dois métodos de download atualmente. Um é interno e o outro é externo. Se você baixar internamente, ele pode ser visualizado dentro do aplicativo, mas apenas o aplicativo pode abrir esse episódio, você não pode movê-lo ou compartilhá-lo. A outra opção é usar o download externo. Ele requer um gerenciador de download para baixar e um player de vídeo separado para assistir. Os downloads externos podem ser compartilhados, mas você não pode visualizá-los no aplicativo Dantotsu.\n\n•Para baixar internamente:\n\n1. Toque no botão de download.\n2. Escolha o servidor e a qualidade do vídeo.\n3. Lucro.\n\n•Para baixar externamente:\n\n 1. Baixe 1DM ou ADM na Google Play Store.
+    <string name="answer_6">Isso é porque elas são atualizadas a cada 48 horas automaticamente (pelo Anilist). Se você realmente precisa atualizar suas estatísticas, você pode forçar a atualização delas neste [link](https://anilist.co/settings/lists).</string>
+    <string name="question_7">Como baixar Animes?</string>
+    <string name="answer_7">Existem dois métodos de download atualmente. Um é interno e o outro é externo. Se você baixar internamente, ele pode ser visualizado dentro do aplicativo, mas apenas o aplicativo pode abrir esse episódio, você não pode movê-lo ou compartilhá-lo. A outra opção é usar o download externo. Ele requer um gerenciador de download para baixar e um player de vídeo separado para assistir. Os downloads externos podem ser compartilhados, mas você não pode visualizá-los no aplicativo Dantotsu.\n\n•Para baixar internamente:\n\n1. Toque no botão de download.\n2. Escolha o servidor e a qualidade do vídeo.\n3. Lucre.\n\n•Para baixar externamente:\n\n 1. Baixe 1DM ou ADM na Google Play Store.
         \n2. Entre no aplicativo, dê acesso ao armazenamento e defina suas preferências (velocidade de download, caminho de download, etc (opcional))
-        \n3. Agora vá para \'Dantotsu &gt; Configurações &gt; Common &gt; Download Managers\' e escolha o gerenciador de download que você acabou de configurar.
+        \n3. Agora vá para \`Dantotsu &gt; Configurações &gt; Geral &gt; Gerenciador de Download\` e escolha o gerenciador de download que você acabou de configurar.
         \n4. Vá para o episódio desejado e pressione o ícone de download de qualquer servidor. Pode haver um pop-up para definir suas preferências novamente, basta pressionar em \"Download\" e ele será salvo no caminho direcionado.
 
-\n\nNota: Downloads diretos também são possíveis sem um gerente, mas não é recomendado.
-\n\nNota do Nerd: Os episódios baixados internamente são armazenados em \'Android/data/ani.dantotsu.*/files/Anime_Downloads\'\nVocê não pode reproduzir esses arquivos como eles estão no formato \'.exo\', divididos em centenas de partes e são criptografados.</string>
+        \n\nNota: Downloads diretos também são possíveis sem um gerenciador, mas não é recomendado.
+\n\nNota para Nerds: Os episódios baixados internamente são armazenados em \`Android/data/ani.dantotsu.*/files/Anime_Downloads\`\nVocê não pode reproduzir esses arquivos como eles estão no formato \`.exo\`, divididos em centenas de partes e são criptografados.</string>
     <string name="question_9">Como ativo o conteúdo NSFW?</string>
     <string name="answer_9">Você pode ativar o conteúdo NSFW habilitando o conteúdo 18+ deste [link](https://anilist.co/settings/media). Você também precisa habilitar extensões NSFW em \'Configurações &gt; extensões &gt; extensões NSFW\' </string>
     <string name="question_10">Como importar minhas listas do MAL/Kitsu para o Anilist?</string>
-    <string name="answer_10">Veja como você faz isso,\n\nExportar:\n\n1. Vá para este [link](https://malscraper.azurewebsites.net).\n2. Dê seu nome de usuário Kitsu/MAL e baixe a lista de animes e mangás. (Eles estarão no formato XML)\nNota: Você precisa escrever o nome de usuário do rastreador selecionado\n\nImportar:\n\n1. Depois de exportar sua lista de animes e mangás de Kitsu/MAL, agora vá [aqui](https://anilist.co/settings/import) \n2. Selecione/solte o arquivo XML de anime na caixa acima.\n|→Selecione/solte o arquivo XML de mangá na caixa abaixo.</string>
-    <string name="question_11">Como importar minhas listas do Anilist / Kitsu para MAL? </string>
-    <string name="answer_11">Veja como você faz isso,\n\nExportar:\n\n1. Vá para este [link](https://malscraper.azurewebsites.net/). \n2. Forneça seu nome de usuário Anilist/ID Kitsu na caixa \'Nome de usuário/ID de usuário Kitsu\'. \n3. Selecione o tipo de lista e habilite \'update_on_import\'. \n4. Faça o download do arquivo; será em formato .xml. Certifique-se de baixar as listas de anime e mangá.\n\nImportar:\n1. Para importá-lo em sua conta MAL, vá para este [link](https://myanimelist.net/import.php) e escolha \'MyAnimeList Import\' como tipo de importação. \n2. Pressione em \'Escolher arquivo\' e selecione o arquivo XML da lista de anime/mangá baixado. \n3. Pressione em \'Importar dados\'. \nParabéns, você acabou de importar a lista selecionada para sua conta MAL.</string>
+    <string name="answer_10">Veja como se faz,\n\nExportar:\n\n1. Vá para este [link](https://malscraper.azurewebsites.net).\n2. Informe seu nome de usuário Kitsu/MAL e baixe a lista de animes e mangás. (Eles estarão no formato XML)\nNota: Você precisa escrever o nome de usuário do site selecionado\n\nImportar:\n\n1. Depois de exportar sua lista de animes e mangás de Kitsu/MAL, agora vá [aqui](https://anilist.co/settings/import) \n2. Selecione/solte o arquivo XML de anime na caixa acima.\n|→Selecione/solte o arquivo XML de mangá na caixa abaixo.</string>
+    <string name="question_11">Como importar minhas listas do Anilist/Kitsu para MAL?</string>
+    <string name="answer_11">Veja como se faz,\n\nExportar:\n\n1. Vá para este [link](https://malscraper.azurewebsites.net/). \n2. Forneça seu nome de usuário Anilist/ID Kitsu na caixa \'Nome de usuário/ID de usuário Kitsu\'. \n3. Selecione o tipo de lista e habilite \'update_on_import\'. \n4. Faça o download do arquivo; será em formato .xml. Certifique-se de baixar as listas de anime e mangá.\n\nImportar:\n1. Para importá-lo em sua conta MAL, vá para este [link](https://myanimelist.net/import.php) e escolha \'MyAnimeList Import\' como tipo de importação. \n2. Pressione em \'Escolher arquivo\' e selecione o arquivo XML da lista de anime/mangá baixado. \n3. Pressione em \'Importar dados\'. \nParabéns, você acabou de importar a lista selecionada para sua conta MAL.</string>
     <string name="question_12">Por que não consigo encontrar um título específico de anime/mangá?</string>
     <string name="answer_12">Digamos que você esteja procurando por Castlevania em Dantotsu. Mas o Anilist não tem, então Dantotsu também não.\nUma solução para o problema acima é a seguinte:\n1) Vá para qualquer anime que não esteja na sua lista.\n2) Vá para a seção de assistir.\n3) Selecione qualquer fonte e pressione o botão \'Título errado?\'. \n4) Agora procure por Castlevania (O anime que você estava procurando) e selecione-o.\n5) APROVEITE!\n\nSe você não conseguir encontrar o anime mesmo através desses passos, más notícias, amigo. Nem mesmo essa fonte tem. Tente uma fonte diferente.</string>
     <string name="question_13">Como corrigir fontes selecionando um título completamente errado?</string>
-    <string name="answer_13">O próprio Dantotsu não hospeda nada, mas depende de outras fontes. Ao exibir os episódios, ele escolhe o 1º resultado dado pela fonte após pesquisar pelo título. O Dantotsu não tem como detectar se está correto ou não. Então, para isso, temos o \'Título Errado?\' logo abaixo do nome da fonte (acima dos layouts). Você pode escolher o resultado/título correto, selecionando-o e aproveitar seus episódios.</string>
+    <string name="answer_13">O Dantotsu por si só não hospeda nada, mas sim depende de outras fontes. Ao exibir os episódios, ele escolhe o 1º resultado dado pela fonte após pesquisar pelo título. O Dantotsu não tem como detectar se está correto ou não. Então, para isso, temos o \'Título Errado?\' logo abaixo do nome da fonte (acima dos layouts). Você pode escolher o resultado/título correto, selecionando-o e aproveitar seus episódios.</string>
     <string name="question_14">Como ler mangás coloridos?</string>
     <string name="answer_14">Você está em busca de mangás coloridos? Lamento informar, mas uma quantidade extremamente pequena de mangás tem uma versão colorida. Aqueles que tem uma versão colorida também estão disponíveis em Dantotsu. Digamos que você queira ler a versão colorida de chainsaw man. Então, siga os passos abaixo ↓\n\n1) Vá para Chainsaw Man\n2) Pressione em \'Ler\'\n3) Selecione qualquer fonte que funcione\n4) Pressione em \'Título Errado\'\n5) Selecione a versão colorida de chainsaw man\n6) Seja feliz\n\nNota: Muitas fontes não têm a versão colorida disponível, mesmo que esteja disponível em algum lugar na internet. Então tente uma fonte diferente. Se nenhuma das fontes têm, então uma versão colorida do mangá desejado simplesmente não existe.</string>
-    <string name="question_15">Handshake fails? Why are no timestamps loading?</string>
-    <string name="answer_15">You can fix this issue by enabling \'Proxy\' from \n\`Settings &gt; Anime &gt; Player Settings &gt; Timestamps &gt; Proxy\`.\nIf the timestamps are still not loading but the handshake failed popup is fixed, then the episode you are watching just doesn\'t have timestamps yet for it.</string>
-    <string name="question_16">Can\'t find anything in a source?</string>
+    <string name="question_15">Falhas de Handshake? Por que as seções temporais não carregam?</string>
+    <string name="answer_15">Você pode arrumar esse problema ativando \'Proxy\' em \n\`Configurações &gt; Anime &gt; Configurações do Player &gt; Seções Temporais &gt; Proxy\`.\nSe as seções temporais ainda não carregarem mas o pop-up de handshake foi arrumado, então o episódio que você está assistindo aind não tem seções temporais.</string>
+    <string name="question_16">Não encontrou nada em uma fonte?</string>
     <string name="answer_16">Some basic fixes would be : \n\n• Update your extensions if there are any. \n• Open Web View and wait for it to load. After loading has completed, go back. (If Web View shows error 404 or something similar, chances are that your source is down)\n• Use a different DNS from your settings, preferably, Libre. \n• Try a trustworthy VPN. (You\'ll have to repeat step 1 after this) \n\nIf none of the steps above work then use a different source or join our [discord](https://discord.gg/invite/4HPZ5nAWwM) for help.</string>
     <string name="question_17">Some useful tips and tricks</string>
     <string name="answer_17">The following presents some tips and tricks you may or may not know about - \n \n \n - By hold pressing the Dantotsu logo in settings, you can check if there are any new updates manually. \n \n - Hold pressing an error message/tag/synonym or title will copy it. \n \n - You can open an episode with other apps by hold pressing any server for that episode. This helps in streaming the episode using other video players or download the episode using download managers. \n \n - You can set up custom lists using this [link](https://anilist.co/settings/lists). (you need to be signed in) \n \n - If your episode/chapter is not being progressed automatically after you finish watching/reading it, then hold press the status bar(planning/repeating/watching button) of that anime/manga. The next time you start a chapter/finish an episode, you will stumble upon a popup. Press yes there. </string>
