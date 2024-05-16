@@ -867,6 +867,7 @@
     <string name="would_you_like_to_install">インストールしますか？</string>
     <string name="torrent_addon_not_available">トレントアドオンは利用できません</string>
     <string name="download_subtitle">字幕をダウンロード</string>
+    <string name="download_audio_tracks">Download Audio Tracks</string>
     <string name="no_video_selected">ビデオが選択されていません</string>
     <string name="no_subtitles_available">利用可能な字幕はありません</string>
     <string name="vote_out_of_total">（%2$sのうち%1$sがこのレビューを好きになりました）</string>
@@ -878,4 +879,6 @@
     <string name="cannot_be_empty">テキストは空にできません</string>
     <string name="reply">返信</string>
     <string name="replies">返信</string>
+    <string name="open_rules">Open Rules</string>
+    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
 </resources>
