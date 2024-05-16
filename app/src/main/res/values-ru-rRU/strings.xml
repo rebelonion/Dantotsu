@@ -867,6 +867,7 @@
     <string name="would_you_like_to_install">Хотите установить его?</string>
     <string name="torrent_addon_not_available">Дополнение для торрента недоступно</string>
     <string name="download_subtitle">Скачать субтитры</string>
+    <string name="download_audio_tracks">Download Audio Tracks</string>
     <string name="no_video_selected">Видео не выбрано</string>
     <string name="no_subtitles_available">Субтитры недоступны</string>
     <string name="vote_out_of_total">(%1$s из %2$s понравился этот обзор)</string>
@@ -878,4 +879,6 @@
     <string name="cannot_be_empty">Текст не может быть пустым</string>
     <string name="reply">Ответить</string>
     <string name="replies">Ответы</string>
+    <string name="open_rules">Open Rules</string>
+    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
 </resources>
