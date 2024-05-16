@@ -84,7 +84,7 @@ class MarkdownCreatorActivity : AppCompatActivity() {
             AlertDialogBuilder(this).apply {
                 setTitle(R.string.warning)
                 setMessage(R.string.post_to_anilist_warning)
-                setPosButton(R.string.i_understand) {
+                setPosButton(R.string.ok) {
                     launchIO {
                         val success = when (type) {
                             "activity" -> Anilist.mutation.postActivity(text)
