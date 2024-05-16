@@ -864,6 +864,7 @@
     <string name="would_you_like_to_install">আপুনি ইনষ্টল কৰিব বিচাৰে?</string>
     <string name="torrent_addon_not_available">টৰেণ্ট অ্যাড-অন উপলব্ধ নাই</string>
     <string name="download_subtitle">সাবটাইটেল ডাউনলোড কৰক</string>
+    <string name="download_audio_tracks">Download Audio Tracks</string>
     <string name="no_video_selected">কোনো ভিডিও নিৰ্বাচন কৰা হোৱা নাই</string>
     <string name="no_subtitles_available">কোনো সাবটাইটেল উপলব্ধ নাই</string>
     <string name="vote_out_of_total">(%1$s তলত %2$s এই পৰামৰ্শ ভাল পায়)</string>
@@ -875,4 +876,6 @@
     <string name="cannot_be_empty">পাঠ খালী হোৱা নোৱাৰিব</string>
     <string name="reply">উত্তৰ</string>
     <string name="replies">উত্তৰসমূহ</string>
+    <string name="open_rules">Open Rules</string>
+    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
 </resources>
