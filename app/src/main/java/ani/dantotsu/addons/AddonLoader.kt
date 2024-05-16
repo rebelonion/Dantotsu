@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import ani.dantotsu.addons.download.DownloadAddon
-import ani.dantotsu.addons.download.DownloadAddonApi
+import ani.dantotsu.addons.download.DownloadAddonApiV2
 import ani.dantotsu.addons.download.DownloadAddonManager
 import ani.dantotsu.addons.download.DownloadLoadResult
 import ani.dantotsu.addons.torrent.TorrentAddon
@@ -101,8 +101,8 @@ class AddonLoader {
                 }
 
                 AddonType.DOWNLOAD -> {
-                    val extension = instance as? DownloadAddonApi
-                        ?: throw IllegalStateException("Extension is not a DownloadAddonApi")
+                    val extension = instance as? DownloadAddonApiV2
+                        ?: throw IllegalStateException("Extension is not a DownloadAddonApiV2")
                     DownloadLoadResult.Success(
                         DownloadAddon.Installed(
                             name = extName,

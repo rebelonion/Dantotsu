@@ -51,6 +51,7 @@ class SubtitleDownloader {
             }
 
         //actually downloads lol
+        @Deprecated("handled externally")
         suspend fun downloadSubtitle(
             context: Context,
             url: String,
