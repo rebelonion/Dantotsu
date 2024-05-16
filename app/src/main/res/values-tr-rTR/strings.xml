@@ -780,7 +780,7 @@
     <string name="social">Sosyal</string>
     <string name="auto_skip_recap">Özeti Otomatik Atla</string>
     <string name="use_anilist_icon">AniList İkonunu Kullan</string>
-    <string name="audio_tracks">Müzik Parçası</string>
+    <string name="audio_tracks">Ses Parçası</string>
     <string name="disabled_track">Devre Dışı</string>
     <string name="invalid_track">Geçersiz</string>
     <string name="unknown_track">\[%1$s\] Bilinmiyor</string>
@@ -864,7 +864,7 @@
     <string name="would_you_like_to_install">İndirmek ister misiniz?</string>
     <string name="torrent_addon_not_available">Torrent eklentisi mevcut değil</string>
     <string name="download_subtitle">Alt yazı İndir</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks">Ses Parçasını İndir</string>
     <string name="no_video_selected">Herhangi bir video seçilmedi</string>
     <string name="no_subtitles_available">Alt yazı mevcut değil</string>
     <string name="vote_out_of_total">(%2$s kişiden %1$s kadarı bu incelemeyi beğendi)</string>
@@ -876,6 +876,6 @@
     <string name="cannot_be_empty">Metin boş olamaz</string>
     <string name="reply">Yanıt ver</string>
     <string name="replies">Yanıtlar</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
+    <string name="open_rules">Kuralları Aç</string>
+    <string name="post_to_anilist_warning">Anilist\'te post göndererek Anilist\'in kurallarını ve yönergelerini kabul etmiş olursunuz</string>
 </resources>
