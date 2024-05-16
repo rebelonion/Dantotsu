@@ -864,6 +864,7 @@
     <string name="would_you_like_to_install">क्या आप इसे स्थापित करना चाहेंगे?</string>
     <string name="torrent_addon_not_available">टॉरेंट एड-ऑन उपलब्ध नहीं है</string>
     <string name="download_subtitle">उपशीर्षक डाउनलोड करें</string>
+    <string name="download_audio_tracks">Download Audio Tracks</string>
     <string name="no_video_selected">कोई वीडियो चयनित नहीं है</string>
     <string name="no_subtitles_available">कोई उपशीर्षक उपलब्ध नहीं हैं</string>
     <string name="vote_out_of_total">(%1$s की %2$s ने इस समीक्षा को पसंद किया)</string>
@@ -875,4 +876,6 @@
     <string name="cannot_be_empty">पाठ खाली नहीं हो सकता</string>
     <string name="reply">जवाब दें</string>
     <string name="replies">उत्तर</string>
+    <string name="open_rules">Open Rules</string>
+    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
 </resources>
