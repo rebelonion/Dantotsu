@@ -867,6 +867,7 @@
     <string name="would_you_like_to_install">Gostaria de instalá-lo?</string>
     <string name="torrent_addon_not_available">Add-on de Torrent indisponível</string>
     <string name="download_subtitle">Baixar Legendas</string>
+    <string name="download_audio_tracks">Download Audio Tracks</string>
     <string name="no_video_selected">Nenhum vídeo selecionado</string>
     <string name="no_subtitles_available">Sem legendas disponíveis</string>
     <string name="vote_out_of_total">(%1$s de %2$s gostaram dessa análise)</string>
@@ -878,4 +879,6 @@
     <string name="cannot_be_empty">O texto não pode estar vazio</string>
     <string name="reply">Responder</string>
     <string name="replies">Respostas</string>
+    <string name="open_rules">Open Rules</string>
+    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
 </resources>
