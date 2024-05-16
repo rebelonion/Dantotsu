@@ -868,7 +868,7 @@
     <string name="would_you_like_to_install">Möchten Sie es installieren?</string>
     <string name="torrent_addon_not_available">Torrent-Add-On nicht verfügbar</string>
     <string name="download_subtitle">Untertitel herunterladen</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks">Audiospuren Herunterladen</string>
     <string name="no_video_selected">Kein Video ausgewählt</string>
     <string name="no_subtitles_available">Keine Untertitel verfügbar</string>
     <string name="vote_out_of_total">(%1$s von %2$s mochten diese Bewertung)</string>
@@ -880,6 +880,6 @@
     <string name="cannot_be_empty">Text darf nicht leer sein</string>
     <string name="reply">Antworten</string>
     <string name="replies">Antworten</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
+    <string name="open_rules">Regeln Öffnen</string>
+    <string name="post_to_anilist_warning">Indem Sie auf AniList posten, erklären Sie sich mit den Regeln und Richtlinien von AniList einverstanden</string>
 </resources>
