@@ -865,6 +865,7 @@
     <string name="would_you_like_to_install">¿Desea instalarlo?</string>
     <string name="torrent_addon_not_available">Complemento de torrent no disponible</string>
     <string name="download_subtitle">Descargar subtítulos</string>
+    <string name="download_audio_tracks">Download Audio Tracks</string>
     <string name="no_video_selected">No se ha seleccionado ningún vídeo</string>
     <string name="no_subtitles_available">No hay subtítulos disponibles</string>
     <string name="vote_out_of_total">(%1$s de %2$s les gustó esta reseña)</string>
@@ -876,4 +877,6 @@
     <string name="cannot_be_empty">El texto no puede estar vacío</string>
     <string name="reply">Responder</string>
     <string name="replies">Respuestas</string>
+    <string name="open_rules">Open Rules</string>
+    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
 </resources>
