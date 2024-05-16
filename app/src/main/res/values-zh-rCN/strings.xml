@@ -861,6 +861,7 @@
     <string name="would_you_like_to_install">您想要安装它吗?</string>
     <string name="torrent_addon_not_available">种子附加组件不可用</string>
     <string name="download_subtitle">下载字幕</string>
+    <string name="download_audio_tracks">Download Audio Tracks</string>
     <string name="no_video_selected">未选择视频</string>
     <string name="no_subtitles_available">无可用字幕</string>
     <string name="vote_out_of_total">（%1$s中有%2$s喜欢此评论）</string>
@@ -872,4 +873,6 @@
     <string name="cannot_be_empty">文本不能为空</string>
     <string name="reply">回复</string>
     <string name="replies">回复</string>
+    <string name="open_rules">Open Rules</string>
+    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
 </resources>
