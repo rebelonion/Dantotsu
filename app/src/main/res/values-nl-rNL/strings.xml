@@ -865,6 +865,7 @@
     <string name="would_you_like_to_install">Wilt u het installeren?</string>
     <string name="torrent_addon_not_available">Torrent Add-on niet beschikbaar</string>
     <string name="download_subtitle">Ondertitel downloaden</string>
+    <string name="download_audio_tracks">Download Audio Tracks</string>
     <string name="no_video_selected">Geen video geselecteerd</string>
     <string name="no_subtitles_available">Geen ondertitels beschikbaar</string>
     <string name="vote_out_of_total">(%1$s van de %2$s vond deze recensie leuk)</string>
@@ -876,4 +877,6 @@
     <string name="cannot_be_empty">Tekst mag niet leeg zijn</string>
     <string name="reply">Antwoorden</string>
     <string name="replies">Reacties</string>
+    <string name="open_rules">Open Rules</string>
+    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
 </resources>
