@@ -116,6 +116,7 @@ import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.video.Helper
 import ani.dantotsu.dp
 import ani.dantotsu.getCurrentBrightnessValue
+import ani.dantotsu.getLanguageCode
 import ani.dantotsu.hideSystemBars
 import ani.dantotsu.hideSystemBarsExtendView
 import ani.dantotsu.isOnline
@@ -1382,13 +1383,57 @@ class ExoplayerView : AppCompatActivity(), Player.Listener, SessionAvailabilityL
         val ext = episode.extractors?.find { it.server.name == episode.selectedExtractor } ?: return
         extractor = ext
         video = ext.videos.getOrNull(episode.selectedVideo) ?: return
+        val subLanguages = arrayOf(
+            "Albanian",
+            "Arabic",
+            "Bosnian",
+            "Bulgarian",
+            "Chinese",
+            "Croatian",
+            "Czech",
+            "Danish",
+            "Dutch",
+            "English",
+            "Estonian",
+            "Finnish",
+            "French",
+            "Georgian",
+            "German",
+            "Greek",
+            "Hebrew",
+            "Hindi",
+            "Indonesian",
+            "Irish",
+            "Italian",
+            "Japanese",
+            "Korean",
+            "Lithuanian",
+            "Luxembourgish",
+            "Macedonian",
+            "Mongolian",
+            "Norwegian",
+            "Polish",
+            "Portuguese",
+            "Punjabi",
+            "Romanian",
+            "Russian",
+            "Serbian",
+            "Slovak",
+            "Slovenian",
+            "Spanish",
+            "Turkish",
+            "Ukrainian",
+            "Urdu",
+            "Vietnamese",
+        )
+        val lang = subLanguages[PrefManager.getVal(PrefName.SubLanguage)]
         subtitle = intent.getSerialized("subtitle")
             ?: when (val subLang: String? =
                 PrefManager.getNullableCustomVal("subLang_${media.id}", null, String::class.java)) {
                 null -> {
                     when (episode.selectedSubtitle) {
                         null -> null
-                        -1 -> ext.subtitles.find { it.language.trim() == "English" || it.language == "en-US" }
+                        -1 -> ext.subtitles.find { it.language.contains( lang, ignoreCase = true ) || it.language.contains( getLanguageCode(lang), ignoreCase = true ) }
                         else -> ext.subtitles.getOrNull(episode.selectedSubtitle!!)
                     }
                 }
