@@ -882,4 +882,8 @@
     <string name="replies">Antworten</string>
     <string name="open_rules">Regeln Öffnen</string>
     <string name="post_to_anilist_warning">Indem Sie auf AniList posten, erklären Sie sich mit den Regeln und Richtlinien von AniList einverstanden</string>
+    <string name="view_subscriptions">View Subscriptions</string>
+    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="subscription_deleted">Subscription Deleted</string>
 </resources>
