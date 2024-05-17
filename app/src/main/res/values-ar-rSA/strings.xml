@@ -874,7 +874,7 @@
     <string name="replies">الردود</string>
     <string name="open_rules">افتح القواعد</string>
     <string name="post_to_anilist_warning">من خلال النشر على \"AniList\"، فإنك توافق على قواعد وإرشادات \"AniList\"</string>
-    <string name="view_subscriptions">View Subscriptions</string>
+    <string name="view_subscriptions"></string>
     <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="subscription_deleted">Subscription Deleted</string>
