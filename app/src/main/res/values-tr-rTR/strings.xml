@@ -878,4 +878,8 @@
     <string name="replies">Yanıtlar</string>
     <string name="open_rules">Kuralları Aç</string>
     <string name="post_to_anilist_warning">Anilist\'te post göndererek Anilist\'in kurallarını ve yönergelerini kabul etmiş olursunuz</string>
+    <string name="view_subscriptions">View Subscriptions</string>
+    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
+    <string name="subscriptions">Subscriptions</string>
+    <string name="subscription_deleted">Subscription Deleted</string>
 </resources>
