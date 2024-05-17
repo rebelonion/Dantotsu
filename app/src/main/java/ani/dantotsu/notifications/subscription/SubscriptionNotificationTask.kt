@@ -118,6 +118,15 @@ class SubscriptionNotificationTask : Task {
                             if (ep != null) ep.number + " " + context.getString(R.string.just_released) to null
                             else null
                         } ?: return@map
+                        addSubscriptionToStore(
+                            SubscriptionStore(
+                                media.name,
+                                text.first,
+                                media.id
+                            )
+                        )
+                        PrefManager.setVal(PrefName.UnreadCommentNotifications,
+                            PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + 1)
                         val notification = createNotification(
                             context.applicationContext,
                             media,
@@ -218,5 +227,18 @@ class SubscriptionNotificationTask : Task {
                 PendingIntent.FLAG_ONE_SHOT
             }
         )
+    }
+
+    private fun addSubscriptionToStore(notification: SubscriptionStore) {
+        val notificationStore = PrefManager.getNullableVal<List<SubscriptionStore>>(
+            PrefName.SubscriptionNotificationStore,
+            null
+        ) ?: listOf()
+        val newStore = notificationStore.toMutableList()
+        if (newStore.size >= 100) {
+            newStore.remove(newStore.minByOrNull { it.time })
+        }
+        newStore.add(notification)
+        PrefManager.setVal(PrefName.SubscriptionNotificationStore, newStore)
     }
 }

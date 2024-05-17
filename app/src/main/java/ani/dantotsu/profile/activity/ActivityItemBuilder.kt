@@ -92,6 +92,10 @@ class ActivityItemBuilder {
                 NotificationType.DANTOTSU_UPDATE -> {
                     notification.context ?: "You should not see this"
                 }
+
+                NotificationType.SUBSCRIPTION -> {
+                    notification.context ?: "You should not see this"
+                }
             }
         }
 
