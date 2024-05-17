@@ -84,5 +84,7 @@ interface SManga : Serializable {
         fun create(): SManga {
             return SMangaImpl()
         }
+
+        private const val serialVersionUID = 1L
     }
 }

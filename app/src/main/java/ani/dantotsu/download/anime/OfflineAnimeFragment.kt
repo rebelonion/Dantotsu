@@ -294,6 +294,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 val tDownloads = downloadManager.animeDownloadedTypes.filter { it.titleName.findValidName() == title }
                 val download = tDownloads.firstOrNull() ?: continue
                 val offlineAnimeModel = loadOfflineAnimeModel(download)
+                if (offlineAnimeModel.title == "unknown") offlineAnimeModel.title = title
                 newAnimeDownloads += offlineAnimeModel
             }
             downloads = newAnimeDownloads

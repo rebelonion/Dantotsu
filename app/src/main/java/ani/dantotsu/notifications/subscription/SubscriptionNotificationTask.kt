@@ -98,7 +98,7 @@ class SubscriptionNotificationTask : Task {
                             val ep: Episode? =
                                 SubscriptionHelper.getEpisode(
                                     parser,
-                                    media.id
+                                    media
                                 )
                             if (ep != null) context.getString(R.string.episode) + "${ep.number}${
                                 if (ep.title != null) " : ${ep.title}" else ""
@@ -113,7 +113,7 @@ class SubscriptionNotificationTask : Task {
                             val ep: MangaChapter? =
                                 SubscriptionHelper.getChapter(
                                     parser,
-                                    media.id
+                                    media
                                 )
                             if (ep != null) ep.number + " " + context.getString(R.string.just_released) to null
                             else null

@@ -143,6 +143,8 @@ data class FileUrl(
         operator fun get(url: String?, headers: Map<String, String> = mapOf()): FileUrl? {
             return FileUrl(url ?: return null, headers)
         }
+
+        private const val serialVersionUID = 1L
     }
 }
 
