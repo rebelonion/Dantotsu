@@ -867,7 +867,7 @@
     <string name="would_you_like_to_install">A dëshironi ta instaloni atë?</string>
     <string name="torrent_addon_not_available">Torrent Add-on nuk është i disponueshëm</string>
     <string name="download_subtitle">Shkarko titra</string>
-    <string name="download_audio_tracks">Download Audio Tracks</string>
+    <string name="download_audio_tracks"></string>
     <string name="no_video_selected">Nuk është zgjedhur asnjë video</string>
     <string name="no_subtitles_available">Nuk ka titra në dispozicion</string>
     <string name="vote_out_of_total">(%1$s nga %2$s e pëlqyen këtë recension)</string>
