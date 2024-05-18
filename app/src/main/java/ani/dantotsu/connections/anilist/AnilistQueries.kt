@@ -1505,7 +1505,7 @@ Page(page:$page,perPage:50) {
         return author
     }
 
-    suspend fun getReviews(mediaId: Int, page: Int = 1, sort: String = "UPDATED_AT_DESC"): Query.ReviewsResponse? {
+    suspend fun getReviews(mediaId: Int, page: Int = 1, sort: String = "CREATED_AT_DESC"): Query.ReviewsResponse? {
         return executeQuery<Query.ReviewsResponse>(
             """{Page(page:$page,perPage:10){pageInfo{currentPage,hasNextPage,total}reviews(mediaId:$mediaId,sort:$sort){id,mediaId,mediaType,summary,body(asHtml:true)rating,ratingAmount,userRating,score,private,siteUrl,createdAt,updatedAt,user{id,name,bannerImage avatar{medium,large}}}}}""",
             force = true
