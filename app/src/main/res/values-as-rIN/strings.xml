@@ -876,11 +876,11 @@
     <string name="cannot_be_empty">পাঠ খালী হোৱা নোৱাৰিব</string>
     <string name="reply">উত্তৰ</string>
     <string name="replies">উত্তৰসমূহ</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
-    <string name="view_subscriptions">View Subscriptions</string>
-    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
-    <string name="subscriptions">Subscriptions</string>
-    <string name="subscription_deleted">Subscription Deleted</string>
-    <string name="foreground_service_not_allowed">Cannot install when app is in background</string>
+    <string name="open_rules">নিয়মবোৰ খুলক</string>
+    <string name="post_to_anilist_warning">AniList ত পোষ্ট কৰাৰ দ্বাৰা, আপুনি AniList ৰ নিয়ম আৰু নিৰ্দেশনাসকলত সন্মত হৈছে</string>
+    <string name="view_subscriptions">সাবস্ক্ৰিপশ্যনবোৰ চাওক</string>
+    <string name="view_subscriptions_desc">আপোনাৰ সকলো সাবস্ক্ৰিপশ্যন চাওক আৰু সম্পাদনা কৰক</string>
+    <string name="subscriptions">সাবস্ক্ৰিপশ্যন</string>
+    <string name="subscription_deleted">সাবস্ক্ৰিপশ্যন বাতিল কৰা হ’ল</string>
+    <string name="foreground_service_not_allowed">এপ্প্‌টো বেকগ্ৰাউণ্ডত থাকোতে ইনষ্টল কৰিব নোৱাৰি</string>
 </resources>
