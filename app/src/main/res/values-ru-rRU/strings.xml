@@ -879,11 +879,11 @@
     <string name="cannot_be_empty">Текст не может быть пустым</string>
     <string name="reply">Ответить</string>
     <string name="replies">Ответы</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
-    <string name="view_subscriptions">View Subscriptions</string>
-    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
-    <string name="subscriptions">Subscriptions</string>
-    <string name="subscription_deleted">Subscription Deleted</string>
-    <string name="foreground_service_not_allowed">Cannot install when app is in background</string>
+    <string name="open_rules">Открыть Правила</string>
+    <string name="post_to_anilist_warning">Размещая на AniList, вы соглашаетесь с правилами и руководствами AniList</string>
+    <string name="view_subscriptions">Просмотр Подписок</string>
+    <string name="view_subscriptions_desc">Просмотр и редактирование всех ваших подписок</string>
+    <string name="subscriptions">Подписки</string>
+    <string name="subscription_deleted">Подписка Удалена</string>
+    <string name="foreground_service_not_allowed">Невозможно установить, когда приложение работает в фоновом режиме</string>
 </resources>
