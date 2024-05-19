@@ -879,11 +879,11 @@
     <string name="cannot_be_empty">Το κείμενο δεν μπορεί να είναι κενό</string>
     <string name="reply">Απάντηση</string>
     <string name="replies">Απαντήσεις</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
-    <string name="view_subscriptions">View Subscriptions</string>
-    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
-    <string name="subscriptions">Subscriptions</string>
-    <string name="subscription_deleted">Subscription Deleted</string>
-    <string name="foreground_service_not_allowed">Cannot install when app is in background</string>
+    <string name="open_rules">Άνοιγμα Κανόνων</string>
+    <string name="post_to_anilist_warning">Δημοσιεύοντας στο AniList, συμφωνείτε με τους κανόνες και τις οδηγίες του AniList</string>
+    <string name="view_subscriptions">Προβολή Συνδρομών</string>
+    <string name="view_subscriptions_desc">Δείτε και επεξεργαστείτε όλες τις συνδρομές σας</string>
+    <string name="subscriptions">Συνδρομές</string>
+    <string name="subscription_deleted">Η Συνδρομή Διαγράφηκε</string>
+    <string name="foreground_service_not_allowed">Δεν μπορεί να εγκατασταθεί όταν η εφαρμογή είναι στο παρασκήνιο</string>
 </resources>
