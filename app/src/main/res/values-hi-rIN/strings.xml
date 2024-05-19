@@ -876,11 +876,11 @@
     <string name="cannot_be_empty">पाठ खाली नहीं हो सकता</string>
     <string name="reply">जवाब दें</string>
     <string name="replies">उत्तर</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
-    <string name="view_subscriptions">View Subscriptions</string>
-    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
-    <string name="subscriptions">Subscriptions</string>
-    <string name="subscription_deleted">Subscription Deleted</string>
-    <string name="foreground_service_not_allowed">Cannot install when app is in background</string>
+    <string name="open_rules">नियम खोलें</string>
+    <string name="post_to_anilist_warning">AniList पर पोस्ट करके, आप AniList के नियमों और दिशानिर्देशों से सहमत होते हैं</string>
+    <string name="view_subscriptions">सदस्यताएँ देखें</string>
+    <string name="view_subscriptions_desc">अपनी सभी सदस्यताएँ देखें और संपादित करें</string>
+    <string name="subscriptions">सदस्यताएँ</string>
+    <string name="subscription_deleted">सदस्यता हटाई गई</string>
+    <string name="foreground_service_not_allowed">जब ऐप बैकग्राउंड में हो तो इंस्टॉल नहीं कर सकते</string>
 </resources>
