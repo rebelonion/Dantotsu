@@ -879,11 +879,11 @@
     <string name="cannot_be_empty">Teksti nuk mund të jetë i zbrazët</string>
     <string name="reply">Përgjigju</string>
     <string name="replies">Përgjigje</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
-    <string name="view_subscriptions">View Subscriptions</string>
-    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
-    <string name="subscriptions">Subscriptions</string>
-    <string name="subscription_deleted">Subscription Deleted</string>
-    <string name="foreground_service_not_allowed">Cannot install when app is in background</string>
+    <string name="open_rules">Hap Rregullat</string>
+    <string name="post_to_anilist_warning">Duke postuar në AniList, ju pranoni rregullat dhe udhëzimet e AniList</string>
+    <string name="view_subscriptions">Shiko Abonimet</string>
+    <string name="view_subscriptions_desc">Shiko dhe redakto të gjitha abonimet tuaja</string>
+    <string name="subscriptions">Abonimet</string>
+    <string name="subscription_deleted">Abonimi u Fshi</string>
+    <string name="foreground_service_not_allowed">Nuk mund të instalohet kur aplikacioni është në sfond</string>
 </resources>
