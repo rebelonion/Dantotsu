@@ -462,7 +462,7 @@ class Stories @JvmOverloads constructor(
         binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
         binding.replyCount.text = story.replyCount.toString()
         binding.activityLikeCount.text = story.likeCount.toString()
-        binding.activityLike.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
+        binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityLikeContainer.setOnClickListener {
             like()
         }
