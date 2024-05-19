@@ -879,11 +879,11 @@
     <string name="cannot_be_empty">Tekst nie może być pusty</string>
     <string name="reply">Odpowiedź</string>
     <string name="replies">Odpowiedzi</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
-    <string name="view_subscriptions">View Subscriptions</string>
-    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
-    <string name="subscriptions">Subscriptions</string>
-    <string name="subscription_deleted">Subscription Deleted</string>
-    <string name="foreground_service_not_allowed">Cannot install when app is in background</string>
+    <string name="open_rules">Otwórz Zasady</string>
+    <string name="post_to_anilist_warning">Publikując na AniList, zgadzasz się na zasady i wytyczne AniList</string>
+    <string name="view_subscriptions">Zobacz Subskrypcje</string>
+    <string name="view_subscriptions_desc">Zobacz i edytuj wszystkie swoje subskrypcje</string>
+    <string name="subscriptions">Subskrypcje</string>
+    <string name="subscription_deleted">Subskrypcja Usunięta</string>
+    <string name="foreground_service_not_allowed">Nie można zainstalować, gdy aplikacja jest w tle</string>
 </resources>
