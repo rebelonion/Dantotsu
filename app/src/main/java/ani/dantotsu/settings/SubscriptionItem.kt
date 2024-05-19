@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ItemSubscriptionBinding
+import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
 import com.xwray.groupie.GroupieAdapter
@@ -25,7 +26,7 @@ class SubscriptionItem(
         else
             SubscriptionHelper.getMangaParser(media.id).name
         val mediaName = media.name
-        val showName = "$mediaName - $parserName"
+        val showName = "$mediaName ($parserName)"
         binding.subscriptionName.text = showName
         binding.root.setOnClickListener {
             ContextCompat.startActivity(
@@ -36,6 +37,7 @@ class SubscriptionItem(
                 null
             )
         }
+        binding.subscriptionCover.loadImage(media.image)
         binding.deleteSubscription.setOnClickListener {
             SubscriptionHelper.deleteSubscription(id, true)
             adapter.remove(this)

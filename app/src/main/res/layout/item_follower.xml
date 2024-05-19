@@ -74,11 +74,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start|center_vertical"
-                android:ellipsize="end"
                 android:fontFamily="@font/poppins_semi_bold"
+                android:ellipsize="end"
+                android:alpha="0.75"
                 android:maxLines="2"
                 android:text="@string/lorem_ipsum"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:visibility="gone" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
