@@ -880,11 +880,11 @@
     <string name="cannot_be_empty">텍스트를 비워둘 수 없습니다</string>
     <string name="reply">답글</string>
     <string name="replies">답글</string>
-    <string name="open_rules">Open Rules</string>
-    <string name="post_to_anilist_warning">By posting to AniList, you agree to the rules and guidelines of AniList</string>
-    <string name="view_subscriptions">View Subscriptions</string>
-    <string name="view_subscriptions_desc">View and edit all your subscriptions</string>
-    <string name="subscriptions">Subscriptions</string>
-    <string name="subscription_deleted">Subscription Deleted</string>
-    <string name="foreground_service_not_allowed">Cannot install when app is in background</string>
+    <string name="open_rules">규칙 열기</string>
+    <string name="post_to_anilist_warning">AniList에 게시함으로써, AniList의 규칙 및 지침에 동의하게 됩니다</string>
+    <string name="view_subscriptions">구독 보기</string>
+    <string name="view_subscriptions_desc">모든 구독을 보고 편집합니다</string>
+    <string name="subscriptions">구독</string>
+    <string name="subscription_deleted">구독이 삭제되었습니다</string>
+    <string name="foreground_service_not_allowed">앱이 백그라운드에 있을 때 설치할 수 없습니다</string>
 </resources>
