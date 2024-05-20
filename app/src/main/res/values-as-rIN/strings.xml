@@ -710,6 +710,7 @@
     <string name="you_cursed">আপুনি শীঘ্ৰত শাপিত হৈ গৈছে :pwayge:</string>
     <string name="purge_confirm">%1$s সকলো ডাউনল’ড পুৰিয়া ফেলিব বিচাৰে?</string>
     <string name="delete_fail_reason">মুছিবলৈ বিফল হৈছে কাৰণ… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">উত্তৰসমূহ লুকাওক</string>
     <string name="view_reply">উত্তৰ চাওক</string>
     <string name="view_replies">উত্তৰসমূহ চাওক</string>
@@ -904,4 +905,6 @@
     <string name="video_search_test">ভিডিঅ\' অনুসন্ধান পৰীক্ষা: %1$s</string>
     <string name="image_search_test">ছবি অনুসন্ধান পৰীক্ষা: %1$s</string>
     <string name="book_search_test">বহী অনুসন্ধান পৰীক্ষা: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
