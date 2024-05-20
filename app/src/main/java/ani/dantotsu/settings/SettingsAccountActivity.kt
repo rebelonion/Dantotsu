@@ -168,13 +168,13 @@ class SettingsAccountActivity : AppCompatActivity() {
                             }
 
                             R.drawable.discord_status_dnd -> {
-                                status = "online"
-                                R.drawable.discord_status_online
-                            }
-
-                            R.drawable.discord_status_dnd -> {
                                 status = "invisible"
                                 R.drawable.discord_status_invisible
+                            }
+
+                            R.drawable.discord_status_invisible -> {
+                                status = "online"
+                                R.drawable.discord_status_online
                             }
 
                             else -> R.drawable.discord_status_online
