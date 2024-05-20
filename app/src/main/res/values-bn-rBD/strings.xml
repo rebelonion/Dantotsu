@@ -719,6 +719,7 @@
     <string name="you_cursed">আপনী অবিষপ্ত ওয়েছেন :pwayge:</string>
     <string name="purge_confirm">আপনি কি সব ডাউনলোড %1$s মুছতে চান?</string>
     <string name="delete_fail_reason">মুছে ব্যর্থ কারণ %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">রিপ্লাই লুকান</string>
     <string name="view_reply">রিপ্লাই দেখুন</string>
     <string name="view_replies">রিপ্লাই দেখুন</string>
@@ -913,4 +914,6 @@
     <string name="video_search_test">Video Search Test: %1$s</string>
     <string name="image_search_test">Image Search Test: %1$s</string>
     <string name="book_search_test">Book Search Test: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
