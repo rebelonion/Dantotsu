@@ -714,7 +714,7 @@
     <string name="you_cursed">du wurdest verarscht :pwayge:</string>
     <string name="purge_confirm">Sind Sie sicher, dass Sie alle %1$s Downloads löschen wollen?</string>
     <string name="delete_fail_reason">Löschen fehlgeschlagen aufgrund von... %1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">Löschen Fehlgeschlagen</string>
     <string name="hide_replies">Antworten ausblenden</string>
     <string name="view_reply">Antwort anzeigen</string>
     <string name="view_replies">Antworten ansehen</string>
@@ -909,7 +909,7 @@
     <string name="video_search_test">Videosuchtest: %1$s</string>
     <string name="image_search_test">Bildsuchtest: %1$s</string>
     <string name="book_search_test">Buchsuchtest: %1$s</string>
-    <string name="failed_to_fix">Failed to fix</string>
-    <string name="running_fixes">Running Fixes…</string>
-    <string name="test_search">Test Search</string>
+    <string name="failed_to_fix">Fehlerbehebung Fehlgeschlagen</string>
+    <string name="running_fixes">Fehlerbehebung Läuft…</string>
+    <string name="test_search">Test Suche</string>
 </resources>
