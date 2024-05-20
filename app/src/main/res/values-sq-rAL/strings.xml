@@ -713,6 +713,7 @@
     <string name="you_cursed">ju jeni mallkuar :pwayge:</string>
     <string name="purge_confirm">Jeni të sigurtë që dëshironi të fshini të gjitha shkarkimet e %1$s?</string>
     <string name="delete_fail_reason">Dështoi për të fshirë për shkak të… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">Fshih përgjigjet</string>
     <string name="view_reply">Shiko përgjigjen</string>
     <string name="view_replies">Shiko përgjigjet</string>
@@ -907,4 +908,6 @@
     <string name="video_search_test">Testi i Kërkimit të Videos: %1$s</string>
     <string name="image_search_test">Testi i Kërkimit të Imazhit: %1$s</string>
     <string name="book_search_test">Testi i Kërkimit të Librit: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
