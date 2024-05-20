@@ -161,11 +161,7 @@ class ExtensionTestItem(
             serverResult()
         }
 
-        withContext(Dispatchers.Main) {
-            if (::binding.isInitialized )
-                binding.extensionLoading.isVisible = false
-            isRunning = false
-        }
+        done()
     }
 
     private suspend fun runNovelTest(extension: NovelParser) {
@@ -192,11 +188,7 @@ class ExtensionTestItem(
             serverResult()
         }
 
-        withContext(Dispatchers.Main) {
-            if (::binding.isInitialized )
-                binding.extensionLoading.isVisible = false
-            isRunning = false
-        }
+        done()
     }
 
     private fun done() {

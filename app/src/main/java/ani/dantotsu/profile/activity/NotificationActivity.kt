@@ -233,7 +233,7 @@ class NotificationActivity : AppCompatActivity() {
                                 commentId = it.mediaId,
                                 mediaId = it.mediaId,
                                 notificationType = it.type,
-                                context = it.content,
+                                context = it.title + ": " + it.content,
                                 createdAt = (it.time / 1000L).toInt(),
                             )
                             newNotifications += notification
