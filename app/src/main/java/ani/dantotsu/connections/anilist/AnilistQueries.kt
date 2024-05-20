@@ -1091,11 +1091,11 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
                         } else null
                     else null
                 }
-            } as ArrayList<Media>
+            }?.toCollection(ArrayList()) ?: arrayListOf()
 
-            list["trendingMovies"] = trendingMovies?.media?.map { Media(it) } as ArrayList<Media>
-            list["topRated"] = topRated?.media?.map { Media(it) } as ArrayList<Media>
-            list["mostFav"] = mostFav?.media?.map { Media(it) } as ArrayList<Media>
+            list["trendingMovies"] = trendingMovies?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["topRated"] =  topRated?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["mostFav"] = mostFav?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
 
             list["recentUpdates"]?.addAll(recentUpdates2?.airingSchedules?.mapNotNull { i ->
                 i.media?.let {
@@ -1112,10 +1112,10 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
                         } else null
                     else null
                 }
-            } as ArrayList<Media>)
-            list["trendingMovies"]?.addAll(trendingMovies2?.media?.map { Media(it) } as ArrayList<Media>)
-            list["topRated"]?.addAll(topRated2?.media?.map { Media(it) } as ArrayList<Media>)
-            list["mostFav"]?.addAll(mostFav2?.media?.map { Media(it) } as ArrayList<Media>)
+            }?.toCollection(ArrayList()) ?: arrayListOf())
+            list["trendingMovies"]?.addAll(trendingMovies2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf())
+            list["topRated"]?.addAll(topRated2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf())
+            list["mostFav"]?.addAll(mostFav2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf())
         }
         return list
     }
@@ -1164,18 +1164,19 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
         }
 
         executeQuery<Query.MangaList>(query(), force = true)?.data?.apply {
-            list["trendingManga"] = trendingManga?.media?.map { Media(it) } as ArrayList<Media>
-            list["trendingManhwa"] = trendingManhwa?.media?.map { Media(it) } as ArrayList<Media>
-            list["trendingNovel"] = trendingNovel?.media?.map { Media(it) } as ArrayList<Media>
-            list["topRated"] = topRated?.media?.map { Media(it) } as ArrayList<Media>
-            list["mostFav"] = mostFav?.media?.map { Media(it) } as ArrayList<Media>
-            list["trendingManga"]?.addAll(trendingManga2?.media?.map { Media(it) } as ArrayList<Media>)
-            list["trendingManhwa"]?.addAll(trendingManhwa2?.media?.map { Media(it) } as ArrayList<Media>)
-            list["trendingNovel"]?.addAll(trendingNovel2?.media?.map { Media(it) } as ArrayList<Media>)
-            list["topRated"]?.addAll(topRated2?.media?.map { Media(it) } as ArrayList<Media>)
-            list["mostFav"]?.addAll(mostFav2?.media?.map { Media(it) } as ArrayList<Media>)
+            list["trendingManga"] = trendingManga?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["trendingManhwa"] = trendingManhwa?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["trendingNovel"] = trendingNovel?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["topRated"] = topRated?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["mostFav"] = mostFav?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
 
+            list["trendingManga"]?.addAll(trendingManga2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
+            list["trendingManhwa"]?.addAll(trendingManhwa2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
+            list["trendingNovel"]?.addAll(trendingNovel2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
+            list["topRated"]?.addAll(topRated2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
+            list["mostFav"]?.addAll(mostFav2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
         }
+
 
         return list
     }
