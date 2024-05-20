@@ -713,6 +713,7 @@
     <string name="you_cursed">sei stato maledetto :pwayge:</string>
     <string name="purge_confirm">Sei sicuro di voler eliminare tutti i download di %1$s?</string>
     <string name="delete_fail_reason">Eliminazione non riuscita a causa di… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">Nascondi risposte</string>
     <string name="view_reply">Visualizza risposta</string>
     <string name="view_replies">Visualizza risposte</string>
@@ -907,4 +908,6 @@
     <string name="video_search_test">Test di ricerca per video: %1$s</string>
     <string name="image_search_test">Test di ricerca per immagine: %1$s</string>
     <string name="book_search_test">Test di ricerca per libro: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
