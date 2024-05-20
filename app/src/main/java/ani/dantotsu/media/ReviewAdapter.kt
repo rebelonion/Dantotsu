@@ -1,30 +1,24 @@
 package ani.dantotsu.media
 
 
-import android.content.Context
-import android.text.SpannableString
 import android.view.View
-import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
-import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Query
-import ani.dantotsu.databinding.ItemFollowerBinding
 import ani.dantotsu.databinding.ItemReviewsBinding
-import ani.dantotsu.getThemeColor
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.toast
 import com.xwray.groupie.viewbinding.BindableItem
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class ReviewAdapter(
     private var review: Query.Review,
-    val context: ReviewActivity,
     val clickCallback: (Int) -> Unit
-
 ) : BindableItem<ItemReviewsBinding>() {
     private lateinit var binding: ItemReviewsBinding
 
@@ -34,7 +28,8 @@ class ReviewAdapter(
         binding.reviewUserAvatar.loadImage(review.user?.avatar?.medium)
         binding.reviewText.text = review.summary
         binding.reviewPostTime.text = ActivityItemBuilder.getDateTime(review.createdAt)
-        binding.reviewTag.text = "[${review.score}]"
+        val text = "[${review.score/ 10.0f}]"
+        binding.reviewTag.text = text
         binding.root.setOnClickListener { clickCallback(review.id) }
         userVote(review.userRating)
         enableVote()
@@ -75,7 +70,8 @@ class ReviewAdapter(
 
     private fun rateReview(rating: String) {
         disableVote()
-        context.lifecycleScope.launch {
+        val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
+        scope.launch {
             val result = Anilist.mutation.rateReview(review.id, rating)
             if (result != null) {
                 withContext(Dispatchers.Main) {
@@ -91,7 +87,7 @@ class ReviewAdapter(
             } else {
                 withContext(Dispatchers.Main) {
                     toast(
-                        context.getString(R.string.error_message, "response is null")
+                        binding.root.context.getString(R.string.error_message, "response is null")
                     )
                     enableVote()
                 }

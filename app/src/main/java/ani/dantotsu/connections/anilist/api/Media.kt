@@ -152,7 +152,7 @@ data class Media(
     @SerialName("mediaListEntry") var mediaListEntry: MediaList?,
 
     // User reviews of the media
-    // @SerialName("reviews") var reviews: ReviewConnection?,
+    @SerialName("reviews") var reviews: ReviewConnection?,
 
     // User recommendations for similar media
     @SerialName("recommendations") var recommendations: RecommendationConnection?,
@@ -538,3 +538,8 @@ data class MediaListGroup(
 
     @SerialName("status") var status: MediaListStatus?,
 ) : java.io.Serializable
+
+@Serializable
+data class ReviewConnection(
+    @SerialName("nodes") var nodes: List<Query.Review>?,
+)

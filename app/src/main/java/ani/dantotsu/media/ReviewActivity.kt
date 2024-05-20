@@ -125,7 +125,6 @@ class ReviewActivity : AppCompatActivity() {
             adapter.add(
                 ReviewAdapter(
                     it,
-                    this,
                     this::onUserClick
                 )
             )

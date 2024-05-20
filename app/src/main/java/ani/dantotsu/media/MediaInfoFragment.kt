@@ -34,7 +34,6 @@ import ani.dantotsu.databinding.ItemChipBinding
 import ani.dantotsu.databinding.ItemQuelsBinding
 import ani.dantotsu.databinding.ItemTitleChipgroupBinding
 import ani.dantotsu.databinding.ItemTitleRecyclerBinding
-import ani.dantotsu.databinding.ItemTitleSearchBinding
 import ani.dantotsu.databinding.ItemTitleTextBinding
 import ani.dantotsu.databinding.ItemTitleTrailerBinding
 import ani.dantotsu.displayTimer
@@ -46,6 +45,7 @@ import ani.dantotsu.px
 import ani.dantotsu.setSafeOnClickListener
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import com.xwray.groupie.GroupieAdapter
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
 import kotlinx.coroutines.Dispatchers
@@ -81,7 +81,8 @@ class MediaInfoFragment : Fragment() {
     @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val model: MediaDetailsViewModel by activityViewModels()
-        val offline: Boolean = PrefManager.getVal(PrefName.OfflineMode) || !isOnline(requireContext())
+        val offline: Boolean =
+            PrefManager.getVal(PrefName.OfflineMode) || !isOnline(requireContext())
         binding.mediaInfoProgressBar.isGone = loaded
         binding.mediaInfoContainer.isVisible = loaded
         binding.mediaInfoContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += 128f.px + navBarHeight }
@@ -254,7 +255,8 @@ class MediaInfoFragment : Fragment() {
                 if (!media.users.isNullOrEmpty() && !offline) {
                     val users: ArrayList<User> = media.users ?: arrayListOf()
                     if (Anilist.token != null && media.userStatus != null) {
-                        users.add(0,
+                        users.add(
+                            0,
                             User(
                                 id = Anilist.userid!!,
                                 name = getString(R.string.you),
@@ -263,7 +265,8 @@ class MediaInfoFragment : Fragment() {
                                 status = media.userStatus,
                                 score = media.userScore.toFloat(),
                                 progress = media.userProgress,
-                                totalEpisodes = media.anime?.totalEpisodes ?: media.manga?.totalChapters,
+                                totalEpisodes = media.anime?.totalEpisodes
+                                    ?: media.manga?.totalChapters,
                                 nextAiringEpisode = media.anime?.nextAiringEpisode
                             )
                         )
@@ -519,22 +522,41 @@ class MediaInfoFragment : Fragment() {
                         }
                     }
 
-                    ItemTitleSearchBinding.inflate(
-                        LayoutInflater.from(context),
-                        parent,
-                        false
-                    ).apply {
-
-                        titleSearchImage.loadImage(media.banner ?: media.cover)
-                        titleSearchText.text =
-                            getString(R.string.reviews)
-                        titleSearchCard.setSafeOnClickListener {
-                            val query = Intent(requireContext(), ReviewActivity::class.java)
-                                .putExtra("mediaId", media.id)
-                            ContextCompat.startActivity(requireContext(), query, null)
+                    if (!media.review.isNullOrEmpty()) {
+                        ItemTitleRecyclerBinding.inflate(
+                            LayoutInflater.from(context),
+                            parent,
+                            false
+                        ).apply {
+                            fun onUserClick(userId: Int) {
+                                val review = media.review!!.find { i -> i.id == userId }
+                                if (review != null) {
+                                    startActivity(
+                                        Intent(requireContext(), ReviewViewActivity::class.java)
+                                            .putExtra("review", review)
+                                    )
+                                }
+                            }
+                            val adapter = GroupieAdapter()
+                            media.review!!.forEach {
+                                adapter.add(ReviewAdapter(it, ::onUserClick))
+                            }
+                            itemTitle.setText(R.string.reviews)
+                            itemRecycler.adapter = adapter
+                            itemRecycler.layoutManager = LinearLayoutManager(
+                                requireContext(),
+                                LinearLayoutManager.VERTICAL,
+                                false
+                            )
+                            itemMore.visibility = View.VISIBLE
+                            itemMore.setSafeOnClickListener {
+                                startActivity(
+                                    Intent(requireContext(), ReviewActivity::class.java)
+                                        .putExtra("mediaId", media.id)
+                                )
+                            }
+                            parent.addView(root)
                         }
-
-                        parent.addView(root)
                     }
 
                     ItemTitleRecyclerBinding.inflate(
