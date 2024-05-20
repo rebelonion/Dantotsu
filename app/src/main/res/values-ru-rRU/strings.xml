@@ -713,6 +713,7 @@
     <string name="you_cursed">Вы были прокляты :pwayge:</string>
     <string name="purge_confirm">Вы уверены, что хотите удалить все загрузки (%1$s)?</string>
     <string name="delete_fail_reason">Не удалось удалить из-за… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">Скрыть ответы</string>
     <string name="view_reply">Посмотреть ответ</string>
     <string name="view_replies">Посмотреть ответы</string>
@@ -907,4 +908,6 @@
     <string name="video_search_test">Тест поиска видео: %1$s</string>
     <string name="image_search_test">Тест поиска изображений: %1$s</string>
     <string name="book_search_test">Тест поиска книги: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
