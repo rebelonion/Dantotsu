@@ -713,6 +713,7 @@
     <string name="you_cursed">você foi amawdissoado :pwayge:</string>
     <string name="purge_confirm">Certeza de que quer limpar todos os downloads de %1$s?</string>
     <string name="delete_fail_reason">Falha ao excluir por… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">Esconder Respostas</string>
     <string name="view_reply">Ver Resposta</string>
     <string name="view_replies">Ver Respostas</string>
@@ -907,4 +908,6 @@
     <string name="video_search_test">Video Search Test: %1$s</string>
     <string name="image_search_test">Image Search Test: %1$s</string>
     <string name="book_search_test">Book Search Test: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
