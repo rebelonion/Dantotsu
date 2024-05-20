@@ -66,7 +66,8 @@ class ParserTestActivity : AppCompatActivity() {
                                 ExtensionTestItem(
                                     "anime",
                                     ExtensionTestSettingsBottomDialog.testType,
-                                    it
+                                    it,
+                                    ExtensionTestSettingsBottomDialog.searchQuery
                                 )
                             )
                         }
@@ -81,7 +82,8 @@ class ParserTestActivity : AppCompatActivity() {
                                 ExtensionTestItem(
                                     "manga",
                                     ExtensionTestSettingsBottomDialog.testType,
-                                    it
+                                    it,
+                                    ExtensionTestSettingsBottomDialog.searchQuery
                                 )
                             )
                         }
@@ -96,7 +98,8 @@ class ParserTestActivity : AppCompatActivity() {
                                 ExtensionTestItem(
                                     "novel",
                                     ExtensionTestSettingsBottomDialog.testType,
-                                    it
+                                    it,
+                                    ExtensionTestSettingsBottomDialog.searchQuery
                                 )
                             )
                         }

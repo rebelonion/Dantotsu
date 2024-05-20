@@ -1019,4 +1019,5 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="book_search_test">Book Search Test: %1$s</string>
     <string name="failed_to_fix">Failed to fix</string>
     <string name="running_fixes">Running Fixes…</string>
+    <string name="test_search">Test Search</string>
 </resources>
