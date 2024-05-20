@@ -42,6 +42,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Locale
+import kotlin.math.abs
 
 
 class Stories @JvmOverloads constructor(
@@ -264,28 +265,43 @@ class Stories @JvmOverloads constructor(
 
 
     private var startClickTime = 0L
+    private var startX = 0f
+    private var startY = 0f
+    private var isLongPress = false
+    private val swipeThreshold = 100
     override fun onTouch(view: View?, event: MotionEvent?): Boolean {
         val maxClickDuration = 200
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
+                startX = event.x
+                startY = event.y
                 startClickTime = Calendar.getInstance().timeInMillis
                 pause()
+                isLongPress = false
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val deltaX = event.x - startX
+                val deltaY = event.y - startY
+                if (!isLongPress && (abs(deltaX) > swipeThreshold || abs(deltaY) > swipeThreshold)) {
+                    isLongPress = true
+                }
             }
 
             MotionEvent.ACTION_UP -> {
                 val clickDuration = Calendar.getInstance().timeInMillis - startClickTime
-                if (clickDuration < maxClickDuration) {
-                    //click occurred
-                    view?.let {
-                        if (it.id == R.id.leftTouchPanel) {
-                            leftPanelTouch()
-                        } else if (it.id == R.id.rightTouchPanel) {
-                            rightPanelTouch()
-                        }
+                if (clickDuration < maxClickDuration && !isLongPress) {
+                    when (view?.id) {
+                        R.id.leftTouchPanel -> leftPanelTouch()
+                        R.id.rightTouchPanel -> rightPanelTouch()
                     }
                 } else {
-                    //hold click occurred
                     resume()
+                }
+                val deltaX = event.x - startX
+                if (abs(deltaX) > swipeThreshold) {
+                    if (deltaX > 0) onStoriesPrevious()
+                    else onStoriesCompleted()
                 }
             }
         }
@@ -359,16 +375,14 @@ class Stories @JvmOverloads constructor(
             )
         }
         fun visible(isList: Boolean) {
-            val visible = if (isList) View.VISIBLE else View.GONE
-            val gone = if (isList) View.GONE else View.VISIBLE
-            binding.textActivity.visibility = gone
-            binding.textActivityContainer.visibility = gone
-            binding.infoText.visibility = visible
-            binding.coverImage.visibility = visible
+            binding.textActivity.isVisible = !isList
+            binding.textActivityContainer.isVisible = !isList
+            binding.infoText.isVisible = isList
+            binding.coverImage.isVisible = isList
             binding.infoText.visibility = if (isList) View.VISIBLE else View.INVISIBLE
             binding.infoText.text = ""
-            binding.contentImageViewKen.visibility = visible
-            binding.contentImageView.visibility = visible
+            binding.contentImageViewKen.isVisible = isList
+            binding.contentImageView.isVisible = isList
         }
 
         when (story.typename) {
@@ -383,16 +397,15 @@ class Stories @JvmOverloads constructor(
                         }
                     }
                 } ${story.progress ?: story.media?.title?.userPreferred} " +
-                if (
-                    story.status?.contains("completed") == false &&
-                    !story.status.contains("plans") &&
-                    !story.status.contains("repeating")
-                    )
-                {
-                    "of ${story.media?.title?.userPreferred}"
-                } else {
-                    ""
-                }
+                    if (
+                        story.status?.contains("completed") == false &&
+                        !story.status.contains("plans") &&
+                        !story.status.contains("repeating")
+                    ) {
+                        "of ${story.media?.title?.userPreferred}"
+                    } else {
+                        ""
+                    }
                 binding.infoText.text = text
                 val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
                 blurImage(
@@ -404,18 +417,16 @@ class Stories @JvmOverloads constructor(
                     ContextCompat.startActivity(
                         context,
                         Intent(context, MediaDetailsActivity::class.java).putExtra(
-                                "mediaId",
-                                story.media?.id
-                            ),
+                            "mediaId",
+                            story.media?.id
+                        ),
                         ActivityOptionsCompat.makeSceneTransitionAnimation(
                             activity,
                             binding.coverImage,
                             ViewCompat.getTransitionName(binding.coverImage)!!
                         ).toBundle()
                     )
-
                 }
-
             }
 
             "TextActivity" -> {
@@ -445,11 +456,13 @@ class Stories @JvmOverloads constructor(
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
         binding.activityRepliesContainer.setOnClickListener {
-            RepliesBottomDialog.newInstance(story.id).show(activity.supportFragmentManager, "replies")
+            RepliesBottomDialog.newInstance(story.id)
+                .show(activity.supportFragmentManager, "replies")
         }
+        binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
         binding.replyCount.text = story.replyCount.toString()
         binding.activityLikeCount.text = story.likeCount.toString()
-        binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
+        binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityLikeContainer.setOnClickListener {
             like()
         }

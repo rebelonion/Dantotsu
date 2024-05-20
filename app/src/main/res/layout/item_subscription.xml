@@ -8,14 +8,35 @@
     android:layout_marginHorizontal="8dp"
     android:orientation="horizontal"
     tools:ignore="UseCompoundDrawables">
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/subscriptionCoverContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|center_vertical"
+        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:backgroundTint="@color/bg_white"
+        app:cardCornerRadius="16dp"
+        app:strokeColor="@color/transparent">
 
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/subscriptionCover"
+            android:layout_width="108dp"
+            android:layout_height="160dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription,ImageContrastCheck"
+            tools:srcCompat="@tools:sample/backgrounds/scenic"
+            tools:tint="@color/transparent" />
+
+    </com.google.android.material.card.MaterialCardView>
     <TextView
         android:id="@+id/subscriptionName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
-        android:fontFamily="@font/poppins_bold"
+        android:fontFamily="@font/poppins_semi_bold"
         android:text="@string/placeholder"
         android:textSize="16sp" />
 
@@ -26,7 +47,7 @@
         android:layout_gravity="center_vertical"
         android:layout_marginEnd="8dp"
         android:contentDescription="@string/delete"
-        android:src="@drawable/ic_circle_cancel"
+        android:src="@drawable/ic_round_close_24"
         app:tint="?attr/colorOnBackground" />
 
 </LinearLayout>

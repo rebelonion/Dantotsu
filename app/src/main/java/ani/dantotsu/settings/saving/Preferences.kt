@@ -4,6 +4,7 @@ import android.graphics.Color
 import ani.dantotsu.connections.comments.AuthResponse
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.notifications.comment.CommentStore
+import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.Pref
 
@@ -186,6 +187,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     LogToFile(Pref(Location.Irrelevant, Boolean::class, false)),
     RecentGlobalNotification(Pref(Location.Irrelevant, Int::class, 0)),
     CommentNotificationStore(Pref(Location.Irrelevant, List::class, listOf<CommentStore>())),
+    SubscriptionNotificationStore(Pref(Location.Irrelevant, List::class, listOf<SubscriptionStore>())),
     UnreadCommentNotifications(Pref(Location.Irrelevant, Int::class, 0)),
     DownloadsDir(Pref(Location.Irrelevant, String::class, "")),
     RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),

@@ -200,6 +200,7 @@
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".util.MarkdownCreatorActivity"/>
+        <activity android:name=".parsers.ParserTestActivity" />
         <activity
             android:name=".media.ReviewActivity"
             android:parentActivityName=".media.MediaDetailsActivity" />

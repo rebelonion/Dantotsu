@@ -12,13 +12,14 @@ import ani.dantotsu.getThemeColor
 
 class CircleView(context: Context, attrs: AttributeSet?) : View(context, attrs) {
     private var parts: Int = 3
-    private var gapAngle: Float = 9f
+    private var gapAngle: Float = 12f
     private val path = Path()
     private var isUser = false
     private var booleanList = listOf<Boolean>()
     private val paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.STROKE
         strokeWidth = 6f
+        strokeCap = Paint.Cap.ROUND
     }
 
     @SuppressLint("DrawAllocation")

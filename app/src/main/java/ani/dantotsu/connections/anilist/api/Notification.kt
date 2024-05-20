@@ -26,7 +26,8 @@ enum class NotificationType(val value: String) {
     //custom
     COMMENT_REPLY("COMMENT_REPLY"),
     COMMENT_WARNING("COMMENT_WARNING"),
-    DANTOTSU_UPDATE("DANTOTSU_UPDATE");
+    DANTOTSU_UPDATE("DANTOTSU_UPDATE"),
+    SUBSCRIPTION("SUBSCRIPTION");
 
     fun toFormattedString(): String {
         return this.value.replace("_", " ").lowercase(Locale.ROOT)

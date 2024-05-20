@@ -332,6 +332,20 @@ class NotificationItem(
             NotificationType.DANTOTSU_UPDATE -> {
                 image(user = true)
             }
+
+            NotificationType.SUBSCRIPTION -> {
+                image(user = true, commentNotification = true)
+                binding.notificationCoverUser.setOnClickListener {
+                    clickCallback(
+                        notification.mediaId ?: 0, null, NotificationClickType.MEDIA
+                    )
+                }
+                binding.notificationBannerImage.setOnClickListener {
+                    clickCallback(
+                        notification.mediaId ?: 0, null, NotificationClickType.MEDIA
+                    )
+                }
+            }
         }
     }
 

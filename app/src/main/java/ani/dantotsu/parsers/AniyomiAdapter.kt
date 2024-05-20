@@ -53,8 +53,11 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
 
     override val name = extension.name
     override val saveName = extension.name
-    override val hostUrl = extension.sources.first().name
+    override val hostUrl =
+        (extension.sources.first() as? AnimeHttpSource)?.baseUrl ?: extension.sources.first().name
     override val isNSFW = extension.isNsfw
+    override val icon = extension.icon
+
     override var selectDub: Boolean
         get() = getDub()
         set(value) {
@@ -324,8 +327,10 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
     override val name = extension.name
     override val saveName = extension.name
-    override val hostUrl = extension.sources.first().name
+    override val hostUrl =
+        (extension.sources.first() as? HttpSource)?.baseUrl ?: extension.sources.first().name
     override val isNSFW = extension.isNsfw
+    override val icon = extension.icon
 
     override suspend fun loadChapters(
         mangaLink: String,

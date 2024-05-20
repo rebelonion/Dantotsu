@@ -1,0 +1,109 @@
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".settings.SettingsNotificationActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/backButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_round_arrow_back_ios_new_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="44dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center|start"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="18sp"
+                android:text="@string/extension_test" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/optionsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center"
+                android:layout_marginVertical="16dp"
+                android:layout_marginEnd="24dp"
+                app:srcCompat="@drawable/ic_round_filter_24"
+                app:tint="?attr/colorPrimary"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins_bold"
+                android:text="@string/view_options"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginVertical="16dp"
+                android:rotation="180"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_round_arrow_back_ios_new_24"
+                app:tint="?attr/colorPrimary"
+                tools:ignore="ContentDescription"
+                tools:visibility="visible" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginVertical="16dp"
+            android:backgroundTint="?attr/colorPrimaryContainer"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/start_test"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            app:cornerRadius="12dp"
+            app:iconTint="?attr/colorOnPrimaryContainer" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/extensionResultsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:nestedScrollingEnabled="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

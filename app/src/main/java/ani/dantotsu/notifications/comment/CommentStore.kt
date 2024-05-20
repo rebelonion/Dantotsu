@@ -13,8 +13,6 @@ data class CommentStore(
     val time: Long = System.currentTimeMillis(),
 ) : java.io.Serializable {
     companion object {
-
-        @Suppress("INAPPROPRIATE_CONST_NAME")
         private const val serialVersionUID = 2L
     }
 }
