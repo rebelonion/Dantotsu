@@ -30,11 +30,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
+import ani.dantotsu.addons.download.DownloadAddonManager
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.compareName
+import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.anime.AnimeDownloaderService
+import ani.dantotsu.download.findValidName
 import ani.dantotsu.dp
 import ani.dantotsu.isOnline
 import ani.dantotsu.media.Media
@@ -54,15 +57,20 @@ import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.toast
+import ani.dantotsu.util.Logger
 import ani.dantotsu.util.StoragePermissions.Companion.accessAlertDialog
 import ani.dantotsu.util.StoragePermissions.Companion.hasDirAccess
+import com.anggrayudi.storage.file.extension
 import com.google.android.material.appbar.AppBarLayout
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import kotlin.math.ceil
@@ -489,6 +497,88 @@ class AnimeWatchFragment : Fragment() {
             val taskName = AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
             PrefManager.getAnimeDownloadPreferences().edit().remove(taskName).apply()
             episodeAdapter.deleteDownload(i)
+        }
+    }
+
+    @kotlin.OptIn(DelicateCoroutinesApi::class)
+    fun fixDownload(i: String) {
+        toast(R.string.running_fixes)
+        launchIO {
+            try {
+                val context = context ?: throw Exception("Context is null")
+                val directory =
+                    getSubDirectory(context, MediaType.ANIME, false, media.mainName(), i)
+                        ?: throw Exception("Directory is null")
+                val files = directory.listFiles()
+                val videoFiles = files.filter { it.extension == "mp4" || it.extension == "mkv" }
+                if (videoFiles.size != 1) {
+                    val biggest =
+                        videoFiles.filter { it.length() > 1000 }.maxByOrNull { it.length() }
+                            ?: throw Exception("No video files found")
+                    val newName =
+                        AnimeDownloaderService.AnimeDownloadTask.getTaskName(media.mainName(), i)
+                            .findValidName() + "." + biggest.extension
+                    videoFiles.forEach {
+                        if (it != biggest) {
+                            it.delete()
+                        }
+                    }
+                    if (newName != biggest.name) {
+                        biggest.renameTo(newName)
+                    }
+                    toast(context.getString(R.string.success) + " (1)")
+                } else {
+                    val tempFile =
+                        directory.createFile("video/x-matroska", "temp.mkv")
+                            ?: throw Exception("Temp file is null")
+                    val ffExtension = Injekt.get<DownloadAddonManager>().extension?.extension!!
+                    val tempPath = ffExtension.setDownloadPath(
+                        context,
+                        tempFile.uri
+                    )
+                    val videoPath = ffExtension.getReadPath(
+                        context,
+                        videoFiles[0].uri
+                    )
+
+                    val id = ffExtension.customFFMpeg(
+                        "1", listOf(videoPath, tempPath)
+                    ) { log ->
+                        Logger.log(log)
+                    }
+                    val timeOut = System.currentTimeMillis() + 1000 * 60 * 10
+                    while (ffExtension.getState(id) != "COMPLETED") {
+                        if (ffExtension.getState(id) == "FAILED") {
+                            Logger.log("Failed to fix download")
+                            ffExtension.getStackTrace(id)?.let {
+                                Logger.log(it)
+                            }
+                            toast(R.string.failed_to_fix)
+                            return@launchIO
+                        }
+                        if (System.currentTimeMillis() > timeOut) {
+                            Logger.log("Failed to fix download: Timeout")
+                            toast(R.string.failed_to_fix)
+                            return@launchIO
+                        }
+                    }
+                    if (ffExtension.hadError(id)) {
+                        Logger.log("Failed to fix download: ${ffExtension.getStackTrace(id)}")
+                        toast(R.string.failed_to_fix)
+                        return@launchIO
+                    }
+                    val name = videoFiles[0].name
+                    if (videoFiles[0].delete().not()) {
+                        toast(R.string.delete_fail)
+                        return@launchIO
+                    }
+                    tempFile.renameTo(name!!)
+                    toast(context.getString(R.string.success) + " (2)")
+                }
+            } catch (e: Exception) {
+                toast(getString(R.string.error_msg, e.message))
+                Logger.log(e)
+            }
         }
     }
 

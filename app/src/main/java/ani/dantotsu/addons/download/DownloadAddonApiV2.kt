@@ -9,6 +9,8 @@ interface DownloadAddonApiV2 {
 
     fun setDownloadPath(context: Context, uri: Uri): String
 
+    fun getReadPath(context: Context, uri: Uri): String
+
     suspend fun executeFFProbe(
         videoUrl: String,
         headers: Map<String, String> = emptyMap(),
@@ -23,6 +25,10 @@ interface DownloadAddonApiV2 {
         audioUrls: List<Pair<String, String>> = emptyList(),
         statCallback: (Double) -> Unit
     ): Long
+
+    suspend fun customFFMpeg(command: String, videoUrls: List<String>, logCallback: (String) -> Unit): Long
+
+    suspend fun customFFProbe(command: String, videoUrls: List<String>, logCallback: (String) -> Unit)
 
     fun getState(sessionId: Long): String
 

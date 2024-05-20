@@ -334,6 +334,16 @@ class EpisodeAdapter(
                     }
                 }
             }
+            binding.itemDownload.setOnLongClickListener {
+                if (0 <= bindingAdapterPosition && bindingAdapterPosition < arr.size) {
+                    val episodeNumber = arr[bindingAdapterPosition].number
+                    if (downloadedEpisodes.contains(episodeNumber)) {
+                        fragment.fixDownload(episodeNumber)
+                    }
+                }
+
+                true
+            }
             binding.itemEpisodeDesc.setOnClickListener {
                 if (binding.itemEpisodeDesc.maxLines == 3)
                     binding.itemEpisodeDesc.maxLines = 100

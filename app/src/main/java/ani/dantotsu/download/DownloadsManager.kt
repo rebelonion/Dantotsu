@@ -379,7 +379,7 @@ class DownloadsManager(private val context: Context) {
 
 private const val RESERVED_CHARS = "|\\?*<\":>+[]/'"
 fun String?.findValidName(): String {
-    return this?.filterNot { RESERVED_CHARS.contains(it) } ?: ""
+    return this?.replace("/","_")?.filterNot { RESERVED_CHARS.contains(it) } ?: ""
 }
 
 data class DownloadedType(

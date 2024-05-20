@@ -26,6 +26,7 @@ import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.anime.AnimeDownloaderService.AnimeDownloadTask.Companion.getTaskName
+import ani.dantotsu.download.findValidName
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.anime.AnimeWatchFragment
@@ -224,7 +225,7 @@ class AnimeDownloaderService : Service() {
                     task.episode
                 ) ?: throw Exception("Failed to create output directory")
 
-                outputDir.findFile("${task.getTaskName()}.mkv")?.delete()
+                outputDir.findFile("${task.getTaskName().findValidName()}.mkv")?.delete()
                 val outputFile =
                     outputDir.createFile("video/x-matroska", "${task.getTaskName()}.mkv")
                         ?: throw Exception("Failed to create output file")
