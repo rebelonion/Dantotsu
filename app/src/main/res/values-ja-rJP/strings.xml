@@ -713,6 +713,7 @@
     <string name="you_cursed">呪われたようだ:pwayge:</string>
     <string name="purge_confirm">%1$sのすべてのダウンロードを削除してもよろしいですか？</string>
     <string name="delete_fail_reason">...のために削除に失敗しました。%1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">返信を非表示にする</string>
     <string name="view_reply">返信を表示する</string>
     <string name="view_replies">返信を表示する</string>
@@ -907,4 +908,6 @@
     <string name="video_search_test">ビデオ検索テスト: %1$s</string>
     <string name="image_search_test">画像検索テスト: %1$s</string>
     <string name="book_search_test">書籍検索テスト: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
