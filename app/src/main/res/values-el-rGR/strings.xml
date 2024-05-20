@@ -713,6 +713,7 @@
     <string name="you_cursed">youwu have been cuwsed :pwayge:</string>
     <string name="purge_confirm">Είστε βέβαιοι ότι θέλετε να διαγράψετε όλες τις λήψεις %1$s;</string>
     <string name="delete_fail_reason">Η διαγραφή απέτυχε λόγω… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">Απόκρυψη απαντήσεων</string>
     <string name="view_reply">Προβολή απάντησης</string>
     <string name="view_replies">Προβολή απαντήσεων</string>
@@ -907,4 +908,6 @@
     <string name="video_search_test">Δοκιμή αναζήτησης βίντεο: %1$s</string>
     <string name="image_search_test">Δοκιμή αναζήτησης εικόνας: %1$s</string>
     <string name="book_search_test">Δοκιμή αναζήτησης βιβλίου: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
