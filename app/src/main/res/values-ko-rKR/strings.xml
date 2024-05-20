@@ -714,6 +714,7 @@
     <string name="you_cursed">너는 저주받았어요 :pwayge:</string>
     <string name="purge_confirm">%1$s 다운로드를 모두 삭제하시겠습니까?</string>
     <string name="delete_fail_reason">삭제에 실패했습니다… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">답글 숨기기</string>
     <string name="view_reply">답글 보기</string>
     <string name="view_replies">답글 보기</string>
@@ -908,4 +909,6 @@
     <string name="video_search_test">비디오 검색 테스트: %1$s</string>
     <string name="image_search_test">이미지 검색 테스트: %1$s</string>
     <string name="book_search_test">도서 검색 테스트: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
