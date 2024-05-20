@@ -908,4 +908,5 @@
     <string name="book_search_test">Prueba de búsqueda de libros: %1$s</string>
     <string name="failed_to_fix">Failed to fix</string>
     <string name="running_fixes">Running Fixes…</string>
+    <string name="test_search">Test Search</string>
 </resources>
