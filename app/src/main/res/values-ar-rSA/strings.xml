@@ -706,6 +706,7 @@
     <string name="you_cursed">انت اتلعنت يا عبيط :pwayge:</string>
     <string name="purge_confirm">هل أنت متأكد أنك تريد مسح كل تنزيلات %1$s؟</string>
     <string name="delete_fail_reason">فشل الحذف بسبب… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">إخفاء الردود</string>
     <string name="view_reply">عرض الرد</string>
     <string name="view_replies">عرض الردود</string>
@@ -900,4 +901,6 @@
     <string name="video_search_test">Video Search Test: %1$s</string>
     <string name="image_search_test">Image Search Test: %1$s</string>
     <string name="book_search_test">Book Search Test: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
