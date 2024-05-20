@@ -191,10 +191,12 @@ class ExtensionTestItem(
         done()
     }
 
-    private fun done() {
+    private suspend fun done() {
         if (::binding.isInitialized.not()) return
-        binding.extensionLoading.isVisible = false
-        isRunning = false
+        withContext(Dispatchers.Main) {
+            binding.extensionLoading.isVisible = false
+            isRunning = false
+        }
     }
 
     private fun pingResult() {
