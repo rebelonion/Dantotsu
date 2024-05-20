@@ -79,8 +79,8 @@ class AlertDialogBuilder(private val context: Context) {
     }
 
     fun setNeutralButton(title: String?, onClick: (() -> Unit)? = null): AlertDialogBuilder {
-        this.negButtonTitle = title
-        this.onNegativeButtonClick = onClick
+        this.neutralButtonTitle = title
+        this.onNeutralButtonClick = onClick
         return this
     }
 
@@ -89,8 +89,8 @@ class AlertDialogBuilder(private val context: Context) {
         formatArgs: Int? = null,
         onClick: (() -> Unit)? = null
     ): AlertDialogBuilder {
-        this.negButtonTitle = context.getString(int, formatArgs)
-        this.onNegativeButtonClick = onClick
+        this.neutralButtonTitle = context.getString(int, formatArgs)
+        this.onNeutralButtonClick = onClick
         return this
     }
 

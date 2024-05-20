@@ -6,7 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
 import ani.dantotsu.addons.download.DownloadAddon
-import ani.dantotsu.addons.download.DownloadAddonApi
+import ani.dantotsu.addons.download.DownloadAddonApiV2
 import ani.dantotsu.addons.download.DownloadAddonManager
 import ani.dantotsu.addons.download.DownloadLoadResult
 import ani.dantotsu.addons.torrent.TorrentAddon
@@ -21,6 +21,20 @@ import eu.kanade.tachiyomi.util.system.getApplicationIcon
 
 class AddonLoader {
     companion object {
+
+        /**
+         * Load an extension from a package name with a specific class name
+         * @param context the context
+         * @param packageName the package name of the extension
+         * @param type the type of extension
+         * @return the loaded extension
+         * @throws IllegalStateException if the extension is not of the correct type
+         * @throws ClassNotFoundException if the extension class is not found
+         * @throws NoClassDefFoundError if the extension class is not found
+         * @throws Exception if any other error occurs
+         * @throws PackageManager.NameNotFoundException if the package is not found
+         * @throws IllegalStateException if the extension is not found
+         */
         fun loadExtension(
             context: Context,
             packageName: String,
@@ -70,11 +84,11 @@ class AddonLoader {
             val loadedClass = try {
                 Class.forName(className, false, classLoader)
             } catch (e: ClassNotFoundException) {
-                Logger.log("Extension load error: $extName ($className)")
+                Logger.log("ClassNotFoundException load error: $extName ($className)")
                 Logger.log(e)
                 throw e
             } catch (e: NoClassDefFoundError) {
-                Logger.log("Extension load error: $extName ($className)")
+                Logger.log("NoClassDefFoundError load error: $extName ($className)")
                 Logger.log(e)
                 throw e
             } catch (e: Exception) {
@@ -101,8 +115,8 @@ class AddonLoader {
                 }
 
                 AddonType.DOWNLOAD -> {
-                    val extension = instance as? DownloadAddonApi
-                        ?: throw IllegalStateException("Extension is not a DownloadAddonApi")
+                    val extension = instance as? DownloadAddonApiV2
+                        ?: throw IllegalStateException("Extension is not a DownloadAddonApiV2")
                     DownloadLoadResult.Success(
                         DownloadAddon.Installed(
                             name = extName,
@@ -117,24 +131,43 @@ class AddonLoader {
             }
         }
 
+        /**
+         * Load an extension from a package name (class is determined by type)
+         * @param context the context
+         * @param packageName the package name of the extension
+         * @param type the type of extension
+         * @return the loaded extension
+         */
         fun loadFromPkgName(context: Context, packageName: String, type: AddonType): LoadResult? {
-            return when (type) {
-                AddonType.TORRENT -> loadExtension(
-                    context,
-                    packageName,
-                    TorrentAddonManager.TORRENT_CLASS,
-                    type
-                )
+            return try {
+                when (type) {
+                    AddonType.TORRENT -> loadExtension(
+                        context,
+                        packageName,
+                        TorrentAddonManager.TORRENT_CLASS,
+                        type
+                    )
 
-                AddonType.DOWNLOAD -> loadExtension(
-                    context,
-                    packageName,
-                    DownloadAddonManager.DOWNLOAD_CLASS,
-                    type
-                )
+                    AddonType.DOWNLOAD -> loadExtension(
+                        context,
+                        packageName,
+                        DownloadAddonManager.DOWNLOAD_CLASS,
+                        type
+                    )
+                }
+            } catch (e: Exception) {
+                Logger.log("Error loading extension from package name: $packageName")
+                Logger.log(e)
+                null
             }
         }
 
+        /**
+         * Check if a package is an extension by comparing the package name
+         * @param type the type of extension
+         * @param pkgInfo the package info
+         * @return true if the package is an extension
+         */
         private fun isPackageAnExtension(type: String, pkgInfo: PackageInfo): Boolean {
             return pkgInfo.packageName.equals(type)
         }

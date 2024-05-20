@@ -1,17 +1,21 @@
 package ani.dantotsu.parsers
 
+import android.graphics.drawable.Drawable
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.currContext
 import ani.dantotsu.media.Media
+import ani.dantotsu.okHttpClient
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.model.SAnime
 import eu.kanade.tachiyomi.source.model.SManga
 import me.xdrop.fuzzywuzzy.FuzzySearch
+import okhttp3.Request
 import java.io.Serializable
 import java.net.URLDecoder
 import java.net.URLEncoder
+import kotlin.system.measureTimeMillis
 
 
 abstract class BaseParser {
@@ -40,6 +44,11 @@ abstract class BaseParser {
      * mostly redundant for official app, But override if you want to add different languages
      * **/
     open val language = "English"
+
+    /**
+     * Icon of the site, can be null
+     */
+    open val icon: Drawable? = null
 
     /**
      *  Search for Anime/Manga/Novel, returns a List of Responses
@@ -133,10 +142,39 @@ abstract class BaseParser {
         return response
     }
 
+    /**
+     * ping the site to check if it's working or not.
+     * @return Triple<Int, Int?, String> : First Int is the status code, Second Int is the response time in milliseconds, Third String is the response message.
+     */
+    fun ping(): Triple<Int, Int?, String> {
+        val client = okHttpClient
+        var statusCode = 0
+        var responseTime: Int? = null
+        var responseMessage = ""
+        try {
+            val request = Request.Builder()
+                .url(hostUrl)
+                .build()
+            responseTime = measureTimeMillis {
+                client.newCall(request).execute().use { response ->
+                    statusCode = response.code
+                    responseMessage = response.message
+                }
+            }.toInt()
+        } catch (e: Exception) {
+            Logger.log("Failed to ping $name")
+            statusCode = -1
+            responseMessage = if (e.message.isNullOrEmpty()) "None" else e.message!!
+            Logger.log(e)
+        }
+        return Triple(statusCode, responseTime, responseMessage)
+    }
 
     /**
      * Used to get an existing Search Response which was selected by the user.
-     * **/
+     * @param mediaId : The mediaId of the Media object.
+     * @return ShowResponse? : The ShowResponse object if found, else null.
+     */
     open suspend fun loadSavedShowResponse(mediaId: Int): ShowResponse? {
         checkIfVariablesAreEmpty()
         return PrefManager.getNullableCustomVal(
@@ -148,7 +186,10 @@ abstract class BaseParser {
 
     /**
      * Used to save Shows Response using `saveName`.
-     * **/
+     * @param mediaId : The mediaId of the Media object.
+     * @param response : The ShowResponse object to save.
+     * @param selected : Boolean : If the ShowResponse was selected by the user or not.
+     */
     open fun saveShowResponse(mediaId: Int, response: ShowResponse?, selected: Boolean = false) {
         if (response != null) {
             checkIfVariablesAreEmpty()

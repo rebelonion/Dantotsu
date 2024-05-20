@@ -176,7 +176,7 @@ object Anilist {
                 "variables" to variables
             )
             val headers = mutableMapOf(
-                "Content-Type" to "application/json",
+                "Content-Type" to "application/json; charset=utf-8",
                 "Accept" to "application/json"
             )
 

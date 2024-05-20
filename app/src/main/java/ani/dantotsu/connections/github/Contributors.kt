@@ -84,15 +84,15 @@ class Contributors {
                         "https://anilist.co/user/6244220"
                     ),
                     Developer(
-                        "Zaidsenior",
+                        "Ziadsenior",
                         "https://s4.anilist.co/file/anilistcdn/user/avatar/large/b6049773-8cjYeUOFUguv.jpg",
-                        "Comment Moderator",
+                        "Comment Moderator and Arabic Translator",
                         "https://anilist.co/user/6049773"
                     ),
                     Developer(
                         "hastsu",
                         "https://cdn.discordapp.com/avatars/602422545077108749/20b4a6efa4314550e4ed51cdbe4fef3d.webp?size=160",
-                        "Comment Moderator",
+                        "Comment Moderator and Arabic Translator",
                         "https://anilist.co/user/6183359"
                     ),
                 )

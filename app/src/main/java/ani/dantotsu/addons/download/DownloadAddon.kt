@@ -10,7 +10,7 @@ sealed class DownloadAddon : Addon() {
         override val pkgName: String,
         override val versionName: String,
         override val versionCode: Long,
-        val extension: DownloadAddonApi,
+        val extension: DownloadAddonApiV2,
         val icon: Drawable?,
         val hasUpdate: Boolean = false,
     ) : Addon.Installed(name, pkgName, versionName, versionCode)

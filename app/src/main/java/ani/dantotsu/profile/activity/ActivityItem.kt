@@ -54,8 +54,9 @@ class ActivityItem(
         val likeColor = ContextCompat.getColor(binding.root.context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(binding.root.context, R.color.bg_opp)
         binding.activityLike.setColorFilter(if (activity.isLiked == true) likeColor else notLikeColor)
-        binding.commentRepliesContainer.isVisible = activity.replyCount > 0
-        binding.commentRepliesContainer.setOnClickListener {
+        binding.commentTotalReplies.isVisible = activity.replyCount > 0
+        binding.dot.isVisible = activity.replyCount > 0
+        binding.commentTotalReplies.setOnClickListener {
             when (binding.activityReplies.visibility) {
                 View.GONE -> {
                     val replyItems = activity.replies?.map {
@@ -69,21 +70,6 @@ class ActivityItem(
                     repliesAdapter.addAll(replyItems)
                     binding.activityReplies.visibility = View.VISIBLE
                     binding.commentTotalReplies.setText(R.string.hide_replies)
-                    if (activity.isLocked != true) {
-                        binding.commentReply.setOnClickListener {
-                            val context = binding.root.context
-                            ContextCompat.startActivity(
-                                context,
-                                Intent(context, MarkdownCreatorActivity::class.java)
-                                    .putExtra("type", "replyActivity")
-                                    .putExtra("parentId", activity.id),
-                                null
-                            )
-                        }
-                    } else {
-                        binding.commentReply.visibility = View.GONE
-                        binding.dot.visibility = View.GONE
-                    }
                 }
 
                 else -> {
@@ -93,6 +79,21 @@ class ActivityItem(
 
                 }
             }
+        }
+        if (activity.isLocked != true) {
+            binding.commentReply.setOnClickListener {
+                val context = binding.root.context
+                ContextCompat.startActivity(
+                    context,
+                    Intent(context, MarkdownCreatorActivity::class.java)
+                        .putExtra("type", "replyActivity")
+                        .putExtra("parentId", activity.id),
+                    null
+                )
+            }
+        } else {
+            binding.commentReply.visibility = View.GONE
+            binding.dot.visibility = View.GONE
         }
         val userList = arrayListOf<User>()
         activity.likes?.forEach { i ->

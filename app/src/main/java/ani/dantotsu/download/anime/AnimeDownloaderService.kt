@@ -28,9 +28,7 @@ import ani.dantotsu.download.DownloadsManager.Companion.getSubDirectory
 import ani.dantotsu.download.anime.AnimeDownloaderService.AnimeDownloadTask.Companion.getTaskName
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaType
-import ani.dantotsu.media.SubtitleDownloader
 import ani.dantotsu.media.anime.AnimeWatchFragment
-import ani.dantotsu.parsers.Subtitle
 import ani.dantotsu.parsers.Video
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
@@ -227,8 +225,9 @@ class AnimeDownloaderService : Service() {
                 ) ?: throw Exception("Failed to create output directory")
 
                 outputDir.findFile("${task.getTaskName()}.mkv")?.delete()
-                val outputFile = outputDir.createFile("video/x-matroska", "${task.getTaskName()}.mkv")
-                    ?: throw Exception("Failed to create output file")
+                val outputFile =
+                    outputDir.createFile("video/x-matroska", "${task.getTaskName()}.mkv")
+                        ?: throw Exception("Failed to create output file")
 
                 var percent = 0
                 var totalLength = 0.0
@@ -236,33 +235,30 @@ class AnimeDownloaderService : Service() {
                     this@AnimeDownloaderService,
                     outputFile.uri
                 )
-                val headersStringBuilder = StringBuilder()
-                task.video.file.headers.forEach {
-                    headersStringBuilder.append("\"${it.key}: ${it.value}\"\'\r\n\'")
+                if (!task.video.file.headers.containsKey("User-Agent")
+                    && !task.video.file.headers.containsKey("user-agent")
+                ) {
+                    val newHeaders = task.video.file.headers.toMutableMap()
+                    newHeaders["User-Agent"] = defaultHeaders["User-Agent"]!!
+                    task.video.file.headers = newHeaders
                 }
-                if (!task.video.file.headers.containsKey("User-Agent")) { //headers should never be empty now
-                    headersStringBuilder.append("\"").append("User-Agent: ")
-                        .append(defaultHeaders["User-Agent"]).append("\"\'\r\n\'")
-                }
-                val probeRequest =
-                    "-headers $headersStringBuilder -i \"${task.video.file.url}\" -show_entries format=duration -v quiet -of csv=\"p=0\""
+
                 ffExtension.executeFFProbe(
-                    probeRequest
+                    task.video.file.url,
+                    task.video.file.headers
                 ) {
                     if (it.toDoubleOrNull() != null) {
                         totalLength = it.toDouble()
                     }
                 }
-
-                val headers = headersStringBuilder.toString()
-                var request = "-headers $headers "
-                request += "-i \"${task.video.file.url}\" -c copy -map 0:v -map 0:a -map 0:s?" +
-                        " -f matroska -timeout 600 -reconnect 1" +
-                        " -reconnect_streamed 1 -allowed_extensions ALL " +
-                        "-tls_verify 0 $path -v trace"
-                Logger.log("Request: $request")
                 val ffTask =
-                    ffExtension.executeFFMpeg(request) {
+                    ffExtension.executeFFMpeg(
+                        task.video.file.url,
+                        path,
+                        task.video.file.headers,
+                        task.subtitle,
+                        task.audio,
+                    ) {
                         // CALLED WHEN SESSION GENERATES STATISTICS
                         val timeInMilliseconds = it
                         if (timeInMilliseconds > 0 && totalLength > 0) {
@@ -275,17 +271,6 @@ class AnimeDownloaderService : Service() {
                     ffTask
 
                 saveMediaInfo(task)
-                task.subtitle?.let {
-                    SubtitleDownloader.downloadSubtitle(
-                        this@AnimeDownloaderService,
-                        it.file.url,
-                        DownloadedType(
-                            task.title,
-                            task.episode,
-                            MediaType.ANIME,
-                        )
-                    )
-                }
 
                 // periodically check if the download is complete
                 while (ffExtension.getState(ffTask) != "COMPLETED") {
@@ -559,7 +544,8 @@ class AnimeDownloaderService : Service() {
         val title: String,
         val episode: String,
         val video: Video,
-        val subtitle: Subtitle? = null,
+        val subtitle: List<Pair<String, String>> = emptyList(),
+        val audio: List<Pair<String, String>> = emptyList(),
         val sourceMedia: Media? = null,
         val episodeImage: String? = null,
         val retries: Int = 2,

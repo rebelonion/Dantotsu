@@ -1,6 +1,7 @@
 package ani.dantotsu.settings
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -13,6 +14,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -28,6 +30,7 @@ import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.AndroidBug5497Workaround
 import ani.dantotsu.others.LanguageMapper
+import ani.dantotsu.parsers.ParserTestActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -68,6 +71,14 @@ class ExtensionsActivity : AppCompatActivity() {
 
         binding.searchView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = statusBarHeight + navBarHeight
+        }
+
+        binding.testButton.setOnClickListener {
+            ContextCompat.startActivity(
+                this,
+                Intent(this, ParserTestActivity::class.java),
+                null
+            )
         }
 
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)

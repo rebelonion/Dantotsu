@@ -77,7 +77,7 @@ class ReviewActivity : AppCompatActivity() {
         binding.listBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
         lifecycleScope.launch(Dispatchers.IO) {
-            val response = Anilist.query.getReviews(mediaId)
+            val response = Anilist.query.getReviews(mediaId)?.data?.page
             withContext(Dispatchers.Main) {
                 binding.listProgressBar.visibility = View.GONE
                 binding.listRecyclerView.setOnTouchListener { _, event ->
@@ -94,9 +94,9 @@ class ReviewActivity : AppCompatActivity() {
                     }
                     false
                 }
-                currentPage = response?.data?.page?.pageInfo?.currentPage ?: 1
-                hasNextPage = response?.data?.page?.pageInfo?.hasNextPage ?: false
-                response?.data?.page?.reviews?.let {
+                currentPage = response?.pageInfo?.currentPage ?: 1
+                hasNextPage = response?.pageInfo?.hasNextPage ?: false
+                response?.reviews?.let {
                     reviews.addAll(it)
                     fillList()
                 }
@@ -122,29 +122,10 @@ class ReviewActivity : AppCompatActivity() {
     private fun fillList() {
         adapter.clear()
         reviews.forEach {
-            val username = it.user?.name ?: "Unknown"
-            val name = SpannableString(username + " - " + it.score)
-            //change the size of the score
-            name.setSpan(
-                android.text.style.RelativeSizeSpan(0.9f),
-                0,
-                name.length,
-                android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            //give the text an underline
-            name.setSpan(
-                android.text.style.UnderlineSpan(),
-                username.length + 3,
-                name.length,
-                android.text.Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
             adapter.add(
-                FollowerItem(
-                    it.id,
-                    name,
-                    it.user?.avatar?.medium,
-                    it.user?.bannerImage,
-                    it.summary,
+                ReviewAdapter(
+                    it,
+                    this,
                     this::onUserClick
                 )
             )

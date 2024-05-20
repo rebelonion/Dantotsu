@@ -11,6 +11,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.databinding.ActivityMarkdownCreatorBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.toast
@@ -80,16 +81,26 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 toast(getString(R.string.cannot_be_empty))
                 return@setOnClickListener
             }
-            launchIO {
-                val success = when (type) {
-                    "activity" -> Anilist.mutation.postActivity(text)
-                    //"review" -> Anilist.mutation.postReview(text)
-                    "replyActivity" -> Anilist.mutation.postReply(parentId, text)
-                    else -> "Error: Unknown type"
+            AlertDialogBuilder(this).apply {
+                setTitle(R.string.warning)
+                setMessage(R.string.post_to_anilist_warning)
+                setPosButton(R.string.ok) {
+                    launchIO {
+                        val success = when (type) {
+                            "activity" -> Anilist.mutation.postActivity(text)
+                            //"review" -> Anilist.mutation.postReview(text)
+                            "replyActivity" -> Anilist.mutation.postReply(parentId, text)
+                            else -> "Error: Unknown type"
+                        }
+                        toast(success)
+                    }
+                    onBackPressedDispatcher.onBackPressed()
                 }
-                toast(success)
-            }
-            onBackPressedDispatcher.onBackPressed()
+                setNeutralButton(R.string.open_rules) {
+                    openLinkInBrowser("https://anilist.co/forum/thread/14")
+                }
+                setNegButton(R.string.cancel)
+            }.show()
         }
 
         binding.editText.requestFocus()

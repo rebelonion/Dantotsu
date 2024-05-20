@@ -57,7 +57,7 @@ class SettingsActivity : AppCompatActivity() {
             settingsVersion.apply {
                 text = getString(R.string.version_current, BuildConfig.VERSION_NAME)
 
-                settingsVersion.setOnLongClickListener {
+                setOnLongClickListener {
                     copyToClipboard(getDeviceInfo(), false)
                     toast(getString(R.string.copied_device_info))
                     return@setOnLongClickListener true

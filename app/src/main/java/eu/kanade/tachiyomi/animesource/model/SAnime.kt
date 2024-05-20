@@ -85,5 +85,7 @@ interface SAnime : Serializable {
         fun create(): SAnime {
             return SAnimeImpl()
         }
+
+        private const val serialVersionUID = 1L
     }
 }

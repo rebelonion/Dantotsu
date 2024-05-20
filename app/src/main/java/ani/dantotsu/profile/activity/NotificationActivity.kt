@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -27,6 +28,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.comment.CommentStore
+import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -40,6 +42,8 @@ import kotlinx.coroutines.withContext
 
 class NotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
+    private lateinit var commentStore: List<CommentStore>
+    private lateinit var subscriptionStore: List<SubscriptionStore>
     private var adapter: GroupieAdapter = GroupieAdapter()
     private var notificationList: List<Notification> = emptyList()
     val filters = ArrayList<String>()
@@ -69,10 +73,21 @@ class NotificationActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
+        commentStore = PrefManager.getNullableVal<List<CommentStore>>(
+            PrefName.CommentNotificationStore,
+            null
+        ) ?: listOf()
+        subscriptionStore = PrefManager.getNullableVal<List<SubscriptionStore>>(
+            PrefName.SubscriptionNotificationStore,
+            null
+        ) ?: listOf()
+
         binding.followFilterButton.setOnClickListener {
             val dialogView = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
             val checkboxContainer = dialogView.findViewById<LinearLayout>(R.id.checkboxContainer)
             val tickAllButton = dialogView.findViewById<ImageButton>(R.id.toggleButton)
+            val title = dialogView.findViewById<TextView>(R.id.scantitle)
+            title.visibility = ViewGroup.GONE
             fun getToggleImageResource(container: ViewGroup): Int {
                 var allChecked = true
                 var allUnchecked = true
@@ -190,22 +205,39 @@ class NotificationActivity : AppCompatActivity() {
                         notifications
                     }.toMutableList()
                 }
-                if (activityId == -1 && currentPage == 1) {
-                    val commentStore = PrefManager.getNullableVal<List<CommentStore>>(
-                        PrefName.CommentNotificationStore,
-                        null
-                    ) ?: listOf()
+                if (activityId == -1) {
+                    val furthestTime = newNotifications.minOfOrNull { it.createdAt } ?: 0
                     commentStore.forEach {
-                        val notification = Notification(
-                            it.type.toString(),
-                            System.currentTimeMillis().toInt(),
-                            commentId = it.commentId,
-                            notificationType = it.type.toString(),
-                            mediaId = it.mediaId,
-                            context = it.title + "\n" + it.content,
-                            createdAt = (it.time / 1000L).toInt(),
-                        )
-                        newNotifications += notification
+                        if ((it.time > furthestTime * 1000L || !hasNextPage) && notificationList.none { notification ->
+                                notification.commentId == it.commentId && notification.createdAt == (it.time / 1000L).toInt()
+                            }) {
+                            val notification = Notification(
+                                it.type.toString(),
+                                System.currentTimeMillis().toInt(),
+                                commentId = it.commentId,
+                                notificationType = it.type.toString(),
+                                mediaId = it.mediaId,
+                                context = it.title + "\n" + it.content,
+                                createdAt = (it.time / 1000L).toInt(),
+                            )
+                            newNotifications += notification
+                        }
+                    }
+                    subscriptionStore.forEach {
+                        if ((it.time > furthestTime * 1000L || !hasNextPage) && notificationList.none { notification ->
+                                notification.mediaId == it.mediaId && notification.createdAt == (it.time / 1000L).toInt()
+                            }) {
+                            val notification = Notification(
+                                it.type,
+                                System.currentTimeMillis().toInt(),
+                                commentId = it.mediaId,
+                                mediaId = it.mediaId,
+                                notificationType = it.type,
+                                context = it.content,
+                                createdAt = (it.time / 1000L).toInt(),
+                            )
+                            newNotifications += notification
+                        }
                     }
                     newNotifications.sortByDescending { it.createdAt }
                 }

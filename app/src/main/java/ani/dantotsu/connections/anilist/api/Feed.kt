@@ -75,6 +75,24 @@ data class Activity(
 ) : java.io.Serializable
 
 @Serializable
+data class ReplyResponse(
+    @SerialName("data")
+    val data: Data
+) : java.io.Serializable {
+    @Serializable
+    data class Data(
+        @SerialName("Page")
+        val page: ReplyPage
+    ) : java.io.Serializable
+}
+
+@Serializable
+data class ReplyPage(
+    @SerialName("activityReplies")
+    val activityReplies: List<ActivityReply>
+) : java.io.Serializable
+
+@Serializable
 data class ActivityReply(
     @SerialName("id")
     val id: Int,
