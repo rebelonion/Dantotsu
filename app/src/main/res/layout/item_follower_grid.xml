@@ -12,14 +12,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:backgroundTint="@color/bg_white"
+        android:backgroundTint="@color/transparent"
+        app:strokeColor="@color/transparent"
         app:cardCornerRadius="124dp">
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/profileUserAvatar"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            tools:ignore="ContentDescription,ImageContrastCheck"
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            app:srcCompat="@drawable/ic_round_add_circle_24"
+            tools:ignore="ContentDescription"
             tools:tint="@color/transparent" />
 
         <LinearLayout
