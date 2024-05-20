@@ -707,6 +707,7 @@
     <string name="you_cursed">你被诅咒了 :pwayge:</string>
     <string name="purge_confirm">您确定要清除所有 %1$s 的下载吗？</string>
     <string name="delete_fail_reason">删除失败，原因是：%1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">隐藏回复</string>
     <string name="view_reply">查看回复</string>
     <string name="view_replies">查看回复</string>
@@ -901,4 +902,6 @@
     <string name="video_search_test">视频搜索测试：%1$s</string>
     <string name="image_search_test">图片搜索测试：%1$s</string>
     <string name="book_search_test">书籍搜索测试：%1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
