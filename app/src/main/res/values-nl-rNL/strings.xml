@@ -711,6 +711,7 @@
     <string name="you_cursed">youwu zijn vervloekt :pwayge:</string>
     <string name="purge_confirm">Weet u zeker dat u alle %1$s downloads wilt verwijderen?</string>
     <string name="delete_fail_reason">Verwijderen is mislukt vanwege… %1$s</string>
+    <string name="delete_fail">Failed to delete</string>
     <string name="hide_replies">Reacties verbergen</string>
     <string name="view_reply">Reactie bekijken</string>
     <string name="view_replies">Reacties bekijken</string>
@@ -905,4 +906,6 @@
     <string name="video_search_test">Videozoektest: %1$s</string>
     <string name="image_search_test">Afbeeldingzoektest: %1$s</string>
     <string name="book_search_test">Boekzoektest: %1$s</string>
+    <string name="failed_to_fix">Failed to fix</string>
+    <string name="running_fixes">Running Fixes…</string>
 </resources>
