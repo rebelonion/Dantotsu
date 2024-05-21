@@ -906,7 +906,7 @@
     <string name="video_search_test">Videozoektest: %1$s</string>
     <string name="image_search_test">Afbeeldingzoektest: %1$s</string>
     <string name="book_search_test">Boekzoektest: %1$s</string>
-    <string name="failed_to_fix">Failed to fix</string>
-    <string name="running_fixes">Running Fixes…</string>
-    <string name="test_search">Test Search</string>
+    <string name="failed_to_fix">Mislukt om te repareren</string>
+    <string name="running_fixes">Bezig met reparaties...</string>
+    <string name="test_search">Test Zoeken</string>
 </resources>
