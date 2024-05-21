@@ -909,7 +909,7 @@
     <string name="video_search_test">비디오 검색 테스트: %1$s</string>
     <string name="image_search_test">이미지 검색 테스트: %1$s</string>
     <string name="book_search_test">도서 검색 테스트: %1$s</string>
-    <string name="failed_to_fix">Failed to fix</string>
-    <string name="running_fixes">Running Fixes…</string>
-    <string name="test_search">Test Search</string>
+    <string name="failed_to_fix">수정 실패</string>
+    <string name="running_fixes">수정 실행 중...</string>
+    <string name="test_search">테스트 검색</string>
 </resources>
