@@ -28,6 +28,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.user.ListActivity
 import ani.dantotsu.navBarHeight
+import ani.dantotsu.openImage
 import ani.dantotsu.openLinkInBrowser
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.activity.FeedFragment
@@ -171,13 +172,10 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     }
 
                     profileUserAvatar.loadImage(user.avatar?.medium)
-                    profileUserAvatar.setOnLongClickListener {
-                        ImageViewDialog.newInstance(
-                            context,
-                            getString(R.string.avatar, user.name),
-                            user.avatar?.medium
-                        )
-                    }
+                    profileUserAvatar.openImage(
+                        context.getString(R.string.avatar, user.name),
+                        user.avatar?.medium ?: ""
+                    )
                     profileUserName.text = user.name
                     val bannerAnimations: ImageView= if (PrefManager.getVal(PrefName.BannerAnimations)) profileBannerImage else profileBannerImageNoKen
 
@@ -192,13 +190,10 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                     profileMenuButton.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
                     profileButtonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
 
-                    profileBannerImage.setOnLongClickListener {
-                        ImageViewDialog.newInstance(
-                            context,
-                            getString(R.string.banner, user.name),
-                            user.bannerImage
-                        )
-                    }
+                    profileBannerImage.openImage(
+                        context.getString(R.string.banner, user.name),
+                        user.bannerImage ?: user.avatar?.medium ?: ""
+                    )
 
                     mMaxScrollSize = profileAppBar.totalScrollRange
                     profileAppBar.addOnOffsetChangedListener(context)

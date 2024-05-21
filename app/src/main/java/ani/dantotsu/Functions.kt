@@ -84,6 +84,7 @@ import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -96,6 +97,7 @@ import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
 import ani.dantotsu.notifications.IncognitoNotificationClickReceiver
+import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
 import ani.dantotsu.settings.saving.PrefManager
@@ -1391,6 +1393,13 @@ fun Context.getThemeColor(@AttrRes attribute: Int): Int {
     val typedValue = TypedValue()
     theme.resolveAttribute(attribute, typedValue, true)
     return typedValue.data
+}
+fun ImageView.openImage(title: String, image: String) {
+    setOnLongClickListener{
+        ImageViewDialog.newInstance(
+            context as FragmentActivity, title, image
+        )
+    }
 }
 /**
  * Builds the markwon instance with all the plugins

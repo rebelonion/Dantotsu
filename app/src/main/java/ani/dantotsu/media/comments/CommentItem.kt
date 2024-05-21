@@ -14,6 +14,7 @@ import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ItemCommentsBinding
 import ani.dantotsu.getAppString
 import ani.dantotsu.loadImage
+import ani.dantotsu.openImage
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.setAnimation
@@ -251,13 +252,10 @@ class CommentItem(
                 }
             }
             commentTotalVotes.text = (comment.upvotes - comment.downvotes).toString()
-            commentUserAvatar.setOnLongClickListener {
-                ImageViewDialog.newInstance(
-                    commentsFragment.activity,
-                    commentsFragment.activity.getString(R.string.avatar, comment.username),
-                    comment.profilePictureUrl
-                )
-            }
+            commentUserAvatar.openImage(
+                commentsFragment.activity.getString(R.string.avatar, comment.username),
+                comment.profilePictureUrl ?: ""
+            )
             comment.profilePictureUrl?.let { commentUserAvatar.loadImage(it) }
             commentUserName.text = comment.username
             val userColor = "[${levelColor.second}]"

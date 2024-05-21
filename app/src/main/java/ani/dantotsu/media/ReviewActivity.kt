@@ -122,19 +122,7 @@ class ReviewActivity : AppCompatActivity() {
     private fun fillList() {
         adapter.clear()
         reviews.forEach {
-            adapter.add(
-                ReviewAdapter(
-                    it,
-                    this::onUserClick
-                )
-            )
-        }
-    }
-
-    private fun onUserClick(userId: Int) {
-        val review = reviews.find { it.id == userId }
-        if (review != null) {
-            startActivity(Intent(this, ReviewViewActivity::class.java).putExtra("review", review))
+            adapter.add(ReviewAdapter(it))
         }
     }
 }
