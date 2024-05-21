@@ -908,7 +908,7 @@
     <string name="video_search_test">ビデオ検索テスト: %1$s</string>
     <string name="image_search_test">画像検索テスト: %1$s</string>
     <string name="book_search_test">書籍検索テスト: %1$s</string>
-    <string name="failed_to_fix">Failed to fix</string>
-    <string name="running_fixes">Running Fixes…</string>
-    <string name="test_search">Test Search</string>
+    <string name="failed_to_fix">修正に失敗しました</string>
+    <string name="running_fixes">修正を実行中...</string>
+    <string name="test_search">テスト検索</string>
 </resources>
