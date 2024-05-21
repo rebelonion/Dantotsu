@@ -235,6 +235,8 @@ class NotificationActivity : AppCompatActivity() {
                                 notificationType = it.type,
                                 context = it.title + ": " + it.content,
                                 createdAt = (it.time / 1000L).toInt(),
+                                image = it.image,
+                                banner = it.banner
                             )
                             newNotifications += notification
                         }

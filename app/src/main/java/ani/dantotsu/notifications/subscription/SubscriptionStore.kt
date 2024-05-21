@@ -9,6 +9,8 @@ data class SubscriptionStore(
     val mediaId: Int,
     val type: String = "SUBSCRIPTION",
     val time: Long = System.currentTimeMillis(),
+    val image: String? = "",
+    val banner: String? = "",
 ) : java.io.Serializable {
     companion object {
         private const val serialVersionUID = 1L

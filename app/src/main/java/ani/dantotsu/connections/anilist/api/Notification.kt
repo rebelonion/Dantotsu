@@ -111,6 +111,8 @@ data class Notification(
     val thread: Thread? = null,
     @SerialName("comment")
     val comment: ThreadComment? = null,
+    val image: String? = null,
+    val banner: String? = null,
 ) : java.io.Serializable
 
 @Serializable
