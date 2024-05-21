@@ -908,7 +908,7 @@
     <string name="video_search_test">Test di ricerca per video: %1$s</string>
     <string name="image_search_test">Test di ricerca per immagine: %1$s</string>
     <string name="book_search_test">Test di ricerca per libro: %1$s</string>
-    <string name="failed_to_fix">Failed to fix</string>
-    <string name="running_fixes">Running Fixes…</string>
-    <string name="test_search">Test Search</string>
+    <string name="failed_to_fix">Impossibile riparare</string>
+    <string name="running_fixes">Esecuzione delle riparazioni...</string>
+    <string name="test_search">Ricerca di test</string>
 </resources>
