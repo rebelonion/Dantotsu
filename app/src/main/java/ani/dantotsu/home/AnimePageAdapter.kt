@@ -268,11 +268,11 @@ class AnimePageAdapter : RecyclerView.Adapter<AnimePageAdapter.AnimePageViewHold
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
+        MediaListViewActivity.passedMedia = media.toCollection(ArrayList())
         more.setOnClickListener {
             ContextCompat.startActivity(
                 it.context, Intent(it.context, MediaListViewActivity::class.java)
-                    .putExtra("title", string)
-                    .putExtra("media",  media as ArrayList<Media>),
+                    .putExtra("title", string),
                 null
             )
         }

@@ -52,7 +52,8 @@ class MediaListViewActivity: AppCompatActivity() {
         binding.listAppBar.setBackgroundColor(primaryColor)
         binding.listTitle.setTextColor(primaryTextColor)
         val screenWidth = resources.displayMetrics.run { widthPixels / density }
-        val mediaList = intent.getSerialized("media") as? ArrayList<Media> ?: ArrayList()
+        val mediaList = passedMedia ?: intent.getSerialized("media") as? ArrayList<Media> ?: ArrayList()
+        if (passedMedia != null) passedMedia = null
         val view = PrefManager.getCustomVal("mediaView", 0)
         var mediaView: View = when (view) {
             1 -> binding.mediaList
@@ -84,5 +85,9 @@ class MediaListViewActivity: AppCompatActivity() {
             this,
             if (view == 1) 1 else (screenWidth / 120f).toInt()
         )
+    }
+
+    companion object {
+        var passedMedia: ArrayList<Media>? = null
     }
 }

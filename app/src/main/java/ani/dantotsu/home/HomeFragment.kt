@@ -233,10 +233,10 @@ class HomeFragment : Fragment() {
                             false
                         )
                         more.setOnClickListener { i ->
+                            MediaListViewActivity.passedMedia = it
                             ContextCompat.startActivity(
                                 i.context, Intent(i.context, MediaListViewActivity::class.java)
-                                    .putExtra("title", string)
-                                    .putExtra("media", it),
+                                    .putExtra("title", string),
                                 null
                             )
                         }
@@ -393,11 +393,11 @@ class HomeFragment : Fragment() {
                         true
                     }
                     binding.homeHiddenItemsMore.setSafeOnClickListener { _ ->
+                        MediaListViewActivity.passedMedia = it
                         ContextCompat.startActivity(
                             requireActivity(),
                             Intent(requireActivity(), MediaListViewActivity::class.java)
-                                .putExtra("title", getString(R.string.hidden))
-                                .putExtra("media", it),
+                                .putExtra("title", getString(R.string.hidden)),
                             null
                         )
                     }

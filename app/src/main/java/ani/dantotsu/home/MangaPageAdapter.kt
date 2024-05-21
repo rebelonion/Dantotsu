@@ -271,10 +271,10 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
                 false
             )
         more.setOnClickListener {
+            MediaListViewActivity.passedMedia = media.toCollection(ArrayList())
             ContextCompat.startActivity(
                 it.context, Intent(it.context, MediaListViewActivity::class.java)
-                    .putExtra("title", string)
-                    .putExtra("media",  media as ArrayList<Media>),
+                    .putExtra("title", string),
                 null
             )
         }

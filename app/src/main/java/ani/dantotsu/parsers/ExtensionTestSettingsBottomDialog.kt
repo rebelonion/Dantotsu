@@ -132,7 +132,7 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
         }
 
         var extensionType = "anime"
-        var testType = "ping"
+        var testType = "basic"
         var searchQuery = "Chainsaw Man"
         var extensionsToTest: MutableList<String> = mutableListOf()
     }
