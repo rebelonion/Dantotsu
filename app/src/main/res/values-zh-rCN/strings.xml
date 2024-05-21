@@ -902,7 +902,7 @@
     <string name="video_search_test">视频搜索测试：%1$s</string>
     <string name="image_search_test">图片搜索测试：%1$s</string>
     <string name="book_search_test">书籍搜索测试：%1$s</string>
-    <string name="failed_to_fix">Failed to fix</string>
-    <string name="running_fixes">Running Fixes…</string>
-    <string name="test_search">Test Search</string>
+    <string name="failed_to_fix">修复失败</string>
+    <string name="running_fixes">正在运行修复...</string>
+    <string name="test_search">测试搜索</string>
 </resources>
