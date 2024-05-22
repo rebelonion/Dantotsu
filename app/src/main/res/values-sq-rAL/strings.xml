@@ -911,4 +911,8 @@
     <string name="failed_to_fix">Dështoi të rregullohet</string>
     <string name="running_fixes">Duke ekzekutuar rregullimet...</string>
     <string name="test_search">Kërkimi i provës</string>
+    <string name="app_lock">App Lock</string>
+    <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="password_mismatch">Passwords do not match or are empty!</string>
 </resources>
