@@ -176,7 +176,7 @@ class SettingsCommonActivity : AppCompatActivity() {
                         icon = R.drawable.ic_round_lock_open_24,
                         onClick = {
                             val passwordDialog = AlertDialog.Builder(context, R.style.MyPopup)
-                                .setTitle(R.string.download_manager)
+                                .setTitle(R.string.app_lock)
                                 .setView(R.layout.dialog_set_password)
                                 .setPositiveButton(R.string.ok) { dialog, _ ->
                                     val passwordInput =

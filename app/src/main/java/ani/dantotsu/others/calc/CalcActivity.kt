@@ -8,6 +8,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.doOnAttach
 import androidx.core.view.updateLayoutParams
 import ani.dantotsu.MainActivity
 import ani.dantotsu.R
@@ -27,13 +28,17 @@ class CalcActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
-        initActivity(this)
         binding = ActivityCalcBinding.inflate(layoutInflater)
-        binding.mainContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            topMargin += statusBarHeight
-            bottomMargin = navBarHeight
-        }
         setContentView(binding.root)
+        binding.root.doOnAttach {
+            initActivity(this)
+            binding.displayContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                topMargin += statusBarHeight
+            }
+            binding.buttonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin += navBarHeight
+            }
+        }
         code = intent.getStringExtra("code") ?: "0"
 
         binding.apply {

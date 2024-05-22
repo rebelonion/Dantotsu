@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/extensionTypeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
@@ -49,6 +50,7 @@
     </RadioGroup>
 
     <TextView
+        android:id="@+id/testTypeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
@@ -91,6 +93,7 @@
     </RadioGroup>
 
     <TextView
+        android:id="@+id/searchTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|center_horizontal"
@@ -98,6 +101,7 @@
         android:fontFamily="@font/poppins_bold"
         android:text="@string/test_search"
         android:textAlignment="center"
+        android:visibility="gone"
         android:textSize="16sp" />
 
     <com.google.android.material.textfield.TextInputLayout
@@ -116,6 +120,7 @@
         app:boxCornerRadiusTopEnd="28dp"
         app:boxCornerRadiusTopStart="28dp"
         app:endIconDrawable="@drawable/ic_round_search_24"
+        android:visibility="gone"
         app:hintAnimationEnabled="true">
 
         <AutoCompleteTextView

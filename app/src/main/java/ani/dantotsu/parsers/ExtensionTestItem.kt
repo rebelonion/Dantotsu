@@ -95,11 +95,11 @@ class ExtensionTestItem(
     }
 
     private suspend fun runAnimeTest(extension: AnimeParser) {
-        pingResult = extension.ping()
-        withContext(Dispatchers.Main) {
-            pingResult()
-        }
         if (testType == "ping") {
+            pingResult = extension.ping()
+            withContext(Dispatchers.Main) {
+                pingResult()
+            }
             done()
             return
         }
@@ -137,11 +137,11 @@ class ExtensionTestItem(
     }
 
     private suspend fun runMangaTest(extension: MangaParser) {
-        pingResult = extension.ping()
-        withContext(Dispatchers.Main) {
-            pingResult()
-        }
         if (testType == "ping") {
+            pingResult = extension.ping()
+            withContext(Dispatchers.Main) {
+                pingResult()
+            }
             done()
             return
         }
@@ -179,10 +179,10 @@ class ExtensionTestItem(
     }
 
     private suspend fun runNovelTest(extension: NovelParser) {
-        withContext(Dispatchers.Main) {
-            pingResult()
-        }
         if (testType == "ping") {
+            withContext(Dispatchers.Main) {
+                pingResult()
+            }
             done()
             return
         }
@@ -219,7 +219,7 @@ class ExtensionTestItem(
 
     private fun pingResult() {
         if (::binding.isInitialized.not()) return
-        if (extensionType == "novel") {
+        if (extensionType == "novel" && testType != "basic") {
             binding.pingResultText.isVisible = true
             binding.pingResultText.text = context.getString(R.string.test_not_supported)
             binding.pingResultText.setCompoundDrawablesWithIntrinsicBounds(

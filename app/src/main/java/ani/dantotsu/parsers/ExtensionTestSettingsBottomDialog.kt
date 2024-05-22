@@ -96,6 +96,11 @@ class ExtensionTestSettingsBottomDialog : BottomSheetDialogFragment() {
                 testType = "full"
             }
         }
+        binding.extensionTypeTextView.setOnLongClickListener {
+            binding.searchTextView.visibility = View.VISIBLE
+            binding.searchView.visibility = View.VISIBLE
+            true
+        }
         setupAdapter()
     }
 

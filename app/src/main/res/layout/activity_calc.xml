@@ -10,13 +10,14 @@
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="64dp"
         android:layout_gravity="bottom|center_horizontal"
         android:background="@color/bg"
         android:orientation="vertical"
         tools:context=".MainActivity">
 
         <LinearLayout
+            android:id="@+id/displayContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="8dp"
@@ -72,8 +73,10 @@
             android:layout_weight="1" />
 
         <LinearLayout
+            android:id="@+id/buttonContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
             android:layout_gravity="center_horizontal|bottom"
             android:orientation="vertical">
 
