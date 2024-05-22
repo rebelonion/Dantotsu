@@ -48,6 +48,7 @@ import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.others.calc.CalcActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.profile.activity.NotificationActivity
@@ -100,6 +101,20 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         TaskScheduler.scheduleSingleWork(this)
+        if (!CalcActivity.hasPermission) {
+            val pin: String = PrefManager.getVal(PrefName.AppPassword)
+            if (pin.isNotEmpty()) {
+                ContextCompat.startActivity(
+                    this@MainActivity,
+                    Intent(this@MainActivity, CalcActivity::class.java)
+                        .putExtra("code", pin)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK),
+                    null
+                )
+                finish()
+                return
+            }
+        }
 
         val action = intent.action
         val type = intent.type

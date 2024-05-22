@@ -4,12 +4,11 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
-import android.widget.TextView
+import android.widget.EditText
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
@@ -40,6 +39,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
+
 
 class SettingsCommonActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsCommonBinding
@@ -168,6 +168,51 @@ class SettingsCommonActivity : AppCompatActivity() {
                             }.show()
                             dialog.window?.setDimAmount(0.8f)
                         }
+                    ),
+                    Settings(
+                        type = 1,
+                        name = getString(R.string.app_lock),
+                        desc = getString(R.string.app_lock_desc),
+                        icon = R.drawable.ic_round_lock_open_24,
+                        onClick = {
+                            val passwordDialog = AlertDialog.Builder(context, R.style.MyPopup)
+                                .setTitle(R.string.download_manager)
+                                .setView(R.layout.dialog_set_password)
+                                .setPositiveButton(R.string.ok) { dialog, _ ->
+                                    val passwordInput =
+                                        (dialog as AlertDialog).findViewById<EditText>(R.id.passwordInput)
+                                    val confirmPasswordInput =
+                                        dialog.findViewById<EditText>(R.id.confirmPasswordInput)
+
+                                    val password = passwordInput?.text.toString()
+                                    val confirmPassword = confirmPasswordInput?.text.toString()
+
+                                    if (password == confirmPassword && password.isNotEmpty()) {
+                                        PrefManager.setVal(PrefName.AppPassword, password)
+                                        toast(R.string.success)
+                                        dialog.dismiss()
+                                    } else {
+                                        toast(R.string.password_mismatch)
+                                    }
+                                }
+                                .setNegativeButton(R.string.cancel) { dialog, _ ->
+                                    dialog.dismiss()
+                                }
+                                .setNeutralButton(R.string.remove) { dialog, _ ->
+                                    PrefManager.setVal(PrefName.AppPassword, "")
+                                    toast(R.string.success)
+                                    dialog.dismiss()
+                                }
+                                .create()
+
+                            passwordDialog.window?.setDimAmount(0.8f)
+                            passwordDialog.setOnShowListener {
+                                passwordDialog.findViewById<EditText>(R.id.passwordInput)
+                                    ?.requestFocus()
+                            }
+                            passwordDialog.show()
+                        }
+
                     ),
                     Settings(
                         type = 1,

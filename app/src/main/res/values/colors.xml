@@ -557,7 +557,7 @@
     <!-- theme 9 -->
     <color name="seed_9">#c9000b</color>
     <color name="md_theme_light_9_primary">#FF9800</color>
-    <color name="md_theme_light_9_onPrimary">#FFFFFF</color>
+    <color name="md_theme_light_9_onPrimary">#201A19</color>
     <color name="md_theme_light_9_primaryContainer">#FFCF87</color>
     <color name="md_theme_light_9_onPrimaryContainer">#410001</color>
     <color name="md_theme_light_9_secondary">#FF5722</color>
@@ -587,7 +587,7 @@
     <color name="md_theme_light_9_outlineVariant">#D8C2BE</color>
     <color name="md_theme_light_9_scrim">#000000</color>
     <color name="md_theme_dark_9_primary">#FFB343</color>
-    <color name="md_theme_dark_9_onPrimary">#FAE965</color>
+    <color name="md_theme_dark_9_onPrimary">#322E0A</color>
     <color name="md_theme_dark_9_primaryContainer">#FF6600</color>
     <color name="md_theme_dark_9_onPrimaryContainer">#FFDAD5</color>
     <color name="md_theme_dark_9_secondary">#FF7700</color>

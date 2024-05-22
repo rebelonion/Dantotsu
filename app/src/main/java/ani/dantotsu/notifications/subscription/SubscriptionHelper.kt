@@ -148,7 +148,11 @@ class SubscriptionHelper {
             val name: String,
             val image: String?,
             val banner: String? = null
-        ) : java.io.Serializable
+        ) : java.io.Serializable {
+            companion object {
+                private const val serialVersionUID = 1L
+            }
+        }
 
         private const val SUBSCRIPTIONS = "subscriptions"
 

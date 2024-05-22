@@ -201,4 +201,5 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AnilistUserId(Pref(Location.Protected, String::class, "")),
     MALCodeChallenge(Pref(Location.Protected, String::class, "")),
     MALToken(Pref(Location.Protected, MAL.ResponseToken::class, "")),
+    AppPassword(Pref(Location.Protected, String::class, "")),
 }
