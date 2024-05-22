@@ -5,6 +5,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.pm.PackageInfoCompat
+import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.media.MediaType
 import ani.dantotsu.parsers.NovelInterface
 import ani.dantotsu.parsers.novel.NovelExtension
@@ -26,6 +27,8 @@ import eu.kanade.tachiyomi.util.lang.Hash
 import eu.kanade.tachiyomi.util.system.getApplicationIcon
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.get
 import uy.kohesive.injekt.injectLazy
 import java.util.Locale
 
@@ -255,22 +258,6 @@ internal object ExtensionLoader {
 
         val signatureHash = getSignatureHash(pkgInfo)
 
-        if (signatureHash == null) {
-            Logger.log("Package $pkgName isn't signed")
-            return AnimeLoadResult.Error
-        } else if (signatureHash !in trustedSignaturesAnime) {
-            val extension = AnimeExtension.Untrusted(
-                extName,
-                pkgName,
-                versionName,
-                versionCode,
-                libVersion,
-                signatureHash
-            )
-            Logger.log("Extension $pkgName isn't trusted")
-            return AnimeLoadResult.Untrusted(extension)
-        }
-
         val isNsfw = appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_NSFW") == 1
         if (!loadNsfwSource && isNsfw) {
             Logger.log("NSFW extension $pkgName not allowed")
@@ -281,7 +268,13 @@ internal object ExtensionLoader {
         val hasChangelog =
             appInfo.metaData.getInt("$ANIME_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
 
-        val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        val classLoader = try{
+            PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        } catch (e: Throwable) {
+            Logger.log("Extension load error: $extName")
+            Injekt.get<CrashlyticsInterface>().logException(e)
+            return AnimeLoadResult.Error
+        }
 
         val sources = appInfo.metaData.getString("$ANIME_PACKAGE$XX_METADATA_SOURCE_CLASS")!!
             .split(";")
@@ -371,17 +364,6 @@ internal object ExtensionLoader {
 
         val signatureHash = getSignatureHash(pkgInfo)
 
-        /*  temporarily disabling signature check TODO: remove?
-        if (signatureHash == null) {
-            Logger.log("Package $pkgName isn't signed")
-            return MangaLoadResult.Error
-        } else if (signatureHash !in trustedSignatures) {
-            val extension = MangaExtension.Untrusted(extName, pkgName, versionName, versionCode, libVersion, signatureHash)
-            Logger.log("Extension $pkgName isn't trusted")
-            return MangaLoadResult.Untrusted(extension)
-        }
-        */
-
         val isNsfw = appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_NSFW") == 1
         if (!loadNsfwSource && isNsfw) {
             Logger.log("NSFW extension $pkgName not allowed")
@@ -392,7 +374,13 @@ internal object ExtensionLoader {
         val hasChangelog =
             appInfo.metaData.getInt("$MANGA_PACKAGE$XX_METADATA_HAS_CHANGELOG", 0) == 1
 
-        val classLoader = PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        val classLoader = try{
+            PathClassLoader(appInfo.sourceDir, null, context.classLoader)
+        } catch (e: Throwable) {
+            Logger.log("Extension load error: $extName")
+            Injekt.get<CrashlyticsInterface>().logException(e)
+            return MangaLoadResult.Error
+        }
 
         val sources = appInfo.metaData.getString("$MANGA_PACKAGE$XX_METADATA_SOURCE_CLASS")!!
             .split(";")

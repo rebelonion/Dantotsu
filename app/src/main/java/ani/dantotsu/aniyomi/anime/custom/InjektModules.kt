@@ -60,10 +60,6 @@ class AppModule(val app: Application) : InjektModule {
 
         addSingletonFactory { StandaloneDatabaseProvider(app) }
 
-        addSingletonFactory<CrashlyticsInterface> {
-            ani.dantotsu.connections.crashlytics.CrashlyticsFactory.createCrashlytics()
-        }
-
         addSingletonFactory { MangaCache() }
 
         ContextCompat.getMainExecutor(app).execute {

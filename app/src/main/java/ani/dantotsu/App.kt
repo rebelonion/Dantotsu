@@ -38,8 +38,8 @@ import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
 import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
-import java.lang.IllegalStateException
 
 
 @SuppressLint("StaticFieldLeak")
@@ -64,13 +64,19 @@ class App : MultiDexApplication() {
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
-
         PrefManager.init(this)
+
+        val crashlytics =
+            ani.dantotsu.connections.crashlytics.CrashlyticsFactory.createCrashlytics()
+        Injekt.addSingletonFactory<CrashlyticsInterface> { crashlytics }
+        crashlytics.initialize(this)
+        Logger.init(this)
+        Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
+        Logger.log(Log.WARN, "App: Logging started")
+
         Injekt.importModule(AppModule(this))
         Injekt.importModule(PreferenceModule(this))
 
-        val crashlytics = Injekt.get<CrashlyticsInterface>()
-        crashlytics.initialize(this)
 
         val useMaterialYou: Boolean = PrefManager.getVal(PrefName.UseMaterialYou)
         if (useMaterialYou) {
@@ -91,10 +97,6 @@ class App : MultiDexApplication() {
             }
         }
         crashlytics.setCustomKey("device Info", SettingsActivity.getDeviceInfo())
-
-        Logger.init(this)
-        Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
-        Logger.log(Log.WARN, "App: Logging started")
 
         initializeNetwork()
 
@@ -154,6 +156,7 @@ class App : MultiDexApplication() {
         override fun onActivityCreated(p0: Activity, p1: Bundle?) {
             lastActivity = p0.javaClass.simpleName
         }
+
         override fun onActivityStarted(p0: Activity) {
             currentActivity = p0
         }
