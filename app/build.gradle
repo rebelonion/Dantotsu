@@ -129,7 +129,7 @@ dependencies {
     implementation 'com.davemorrissey.labs:subsampling-scale-image-view-androidx:3.10.0'
     implementation 'com.alexvasilkov:gesture-views:2.8.3'
     implementation 'com.github.VipulOG:ebook-reader:0.1.6'
-    implementation 'androidx.paging:paging-runtime-ktx:3.2.1'
+    implementation 'androidx.paging:paging-runtime-ktx:3.3.0'
     implementation 'com.github.eltos:simpledialogfragments:v3.7'
     implementation 'com.github.AAChartModel:AAChartCore-Kotlin:7.2.1'
 
