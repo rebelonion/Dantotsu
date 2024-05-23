@@ -96,10 +96,12 @@ import ani.dantotsu.connections.bakaupdates.MangaUpdates
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.databinding.ItemCountDownBinding
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.notifications.IncognitoNotificationClickReceiver
 import ani.dantotsu.others.ImageViewDialog
 import ani.dantotsu.others.SpoilerPlugin
 import ani.dantotsu.parsers.ShowResponse
+import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.settings.saving.internal.PreferenceKeystore
@@ -118,6 +120,7 @@ import com.bumptech.glide.load.resource.gif.GifDrawable
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
+import com.bumptech.glide.request.target.ViewTarget
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -344,7 +347,8 @@ open class BottomSheetDialogFragment : BottomSheetDialogFragment() {
                 val behavior = BottomSheetBehavior.from(requireView().parent as View)
                 behavior.state = BottomSheetBehavior.STATE_EXPANDED
             }
-            window.navigationBarColor = requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
+            window.navigationBarColor =
+                requireContext().getThemeColor(com.google.android.material.R.attr.colorSurface)
         }
     }
 
@@ -643,7 +647,8 @@ fun ImageView.loadImage(file: FileUrl?, width: Int = 0, height: Int = 0) {
                     .override(width, height).into(this)
             } else {
                 val glideUrl = GlideUrl(file.url) { file.headers }
-                Glide.with(this.context).load(glideUrl).transition(withCrossFade()).override(width, height)
+                Glide.with(this.context).load(glideUrl).transition(withCrossFade())
+                    .override(width, height)
                     .into(this)
             }
         }
@@ -1389,18 +1394,21 @@ fun blurImage(imageView: ImageView, banner: String?) {
         imageView.setImageResource(R.drawable.linear_gradient_bg)
     }
 }
+
 fun Context.getThemeColor(@AttrRes attribute: Int): Int {
     val typedValue = TypedValue()
     theme.resolveAttribute(attribute, typedValue, true)
     return typedValue.data
 }
+
 fun ImageView.openImage(title: String, image: String) {
-    setOnLongClickListener{
+    setOnLongClickListener {
         ImageViewDialog.newInstance(
             context as FragmentActivity, title, image
         )
     }
 }
+
 /**
  * Builds the markwon instance with all the plugins
  * @return the markwon instance
@@ -1416,7 +1424,36 @@ fun buildMarkwon(
         .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                 builder.linkResolver { _, link ->
-                    copyToClipboard(link, true)
+                    if (link.startsWith("https://anilist.co/anime/") || link.startsWith("https://anilist.co/manga/")) {
+                        val mangaAnime = link.substringAfter("https://anilist.co/").substringBefore("/")
+                        val id =
+                            link.substringAfter("https://anilist.co/$mangaAnime/").substringBefore("/")
+                                .toIntOrNull()
+                        if (id != null && currContext() != null) {
+                            ContextCompat.startActivity(
+                                currContext()!!,
+                                Intent(currContext()!!, MediaDetailsActivity::class.java)
+                                    .putExtra("mediaId", id),
+                                null
+                            )
+                        } else {
+                            copyToClipboard(link, true)
+                        }
+                    } else if (link.startsWith("https://anilist.co/user/")) {
+                        val username = link.substringAfter("https://anilist.co/user/").substringBefore("/")
+                        if (currContext() != null) {
+                            ContextCompat.startActivity(
+                                currContext()!!,
+                                Intent(currContext()!!, ProfileActivity::class.java)
+                                    .putExtra("username", username),
+                                null
+                            )
+                        } else {
+                            copyToClipboard(link, true)
+                        }
+                    } else {
+                        copyToClipboard(link, true)
+                    }
                 }
             }
         })

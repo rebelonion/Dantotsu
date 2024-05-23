@@ -225,14 +225,16 @@ class AnimeDownloaderService : Service() {
                     task.episode
                 ) ?: throw Exception("Failed to create output directory")
 
-                outputDir.findFile("${task.getTaskName().findValidName()}.mkv")?.delete()
+                val extension = ffExtension!!.getFileExtension()
+                outputDir.findFile("${task.getTaskName().findValidName()}.${extension.first}")?.delete()
+
                 val outputFile =
-                    outputDir.createFile("video/x-matroska", "${task.getTaskName()}.mkv")
+                    outputDir.createFile(extension.second, "${task.getTaskName()}.${extension.first}")
                         ?: throw Exception("Failed to create output file")
 
                 var percent = 0
                 var totalLength = 0.0
-                val path = ffExtension!!.setDownloadPath(
+                val path = ffExtension.setDownloadPath(
                     this@AnimeDownloaderService,
                     outputFile.uri
                 )
@@ -339,8 +341,9 @@ class AnimeDownloaderService : Service() {
                             DownloadedType(
                                 task.title,
                                 task.episode,
-                                MediaType.ANIME,
-                            )
+                                MediaType.ANIME
+                            ),
+                            false
                         ) {}
                         Injekt.get<CrashlyticsInterface>().logException(
                             Exception(

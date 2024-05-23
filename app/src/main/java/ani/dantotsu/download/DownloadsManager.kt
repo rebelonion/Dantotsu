@@ -60,7 +60,7 @@ class DownloadsManager(private val context: Context) {
         toast: Boolean = true,
         onFinished: () -> Unit
     ) {
-        removeDownloadCompat(context, downloadedType)
+        removeDownloadCompat(context, downloadedType, toast)
         downloadsList.remove(downloadedType)
         CoroutineScope(Dispatchers.IO).launch {
             removeDirectory(downloadedType, toast)

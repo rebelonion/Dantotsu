@@ -528,10 +528,11 @@ class AnimeWatchFragment : Fragment() {
                     }
                     toast(context.getString(R.string.success) + " (1)")
                 } else {
-                    val tempFile =
-                        directory.createFile("video/x-matroska", "temp.mkv")
-                            ?: throw Exception("Temp file is null")
                     val ffExtension = Injekt.get<DownloadAddonManager>().extension?.extension!!
+                    val extension = ffExtension.getFileExtension()
+                    val tempFile =
+                        directory.createFile(extension.second, "temp.${extension.first}")
+                            ?: throw Exception("Temp file is null")
                     val tempPath = ffExtension.setDownloadPath(
                         context,
                         tempFile.uri
