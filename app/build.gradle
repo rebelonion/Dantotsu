@@ -18,8 +18,8 @@ android {
         minSdk 21
         targetSdk 34
         versionCode((System.currentTimeMillis() / 60000).toInteger())
-        versionName "3.0.0"
-        versionCode 300000000
+        versionName "3.1.0"
+        versionCode 300100000
         signingConfig signingConfigs.debug
 
     }
@@ -51,7 +51,7 @@ android {
         }
         debug {
             applicationIdSuffix ".beta"
-            versionNameSuffix "-beta04"
+            versionNameSuffix "-beta01"
             manifestPlaceholders.icon_placeholder = "@mipmap/ic_launcher_beta"
             manifestPlaceholders.icon_placeholder_round = "@mipmap/ic_launcher_beta_round"
             debuggable false

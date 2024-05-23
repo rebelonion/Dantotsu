@@ -35,6 +35,6 @@ interface DownloadAddonApiV2 {
     fun getStackTrace(sessionId: Long): String?
 
     fun hadError(sessionId: Long): Boolean
-    
+
     fun getFileExtension(): Pair<String, String> = Pair("mkv", "video/x-matroska")
 }

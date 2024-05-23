@@ -26,6 +26,7 @@ import ani.dantotsu.media.Character
 import ani.dantotsu.media.CharacterAdapter
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
+import ani.dantotsu.openOrCopyAnilistLink
 import ani.dantotsu.setBaseline
 import ani.dantotsu.setSlideIn
 import ani.dantotsu.setSlideUp
@@ -97,6 +98,7 @@ class ProfileFragment : Fragment() {
                 view: WebView?,
                 request: WebResourceRequest?
             ): Boolean {
+                openOrCopyAnilistLink(request?.url.toString())
                 return true
             }
         }

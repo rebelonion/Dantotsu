@@ -1410,6 +1410,49 @@ fun ImageView.openImage(title: String, image: String) {
 }
 
 /**
+ * Attempts to open the link in the app, otherwise copies it to the clipboard
+ * @param link the link to open
+ */
+fun openOrCopyAnilistLink(link: String) {
+    if (link.startsWith("https://anilist.co/anime/") || link.startsWith("https://anilist.co/manga/")) {
+        val mangaAnime = link.substringAfter("https://anilist.co/").substringBefore("/")
+        val id =
+            link.substringAfter("https://anilist.co/$mangaAnime/").substringBefore("/")
+                .toIntOrNull()
+        if (id != null && currContext() != null) {
+            ContextCompat.startActivity(
+                currContext()!!,
+                Intent(currContext()!!, MediaDetailsActivity::class.java)
+                    .putExtra("mediaId", id),
+                null
+            )
+        } else {
+            copyToClipboard(link, true)
+        }
+    } else if (link.startsWith("https://anilist.co/user/")) {
+        val username = link.substringAfter("https://anilist.co/user/").substringBefore("/")
+        val id = username.toIntOrNull()
+        if (currContext() != null) {
+            val intent = Intent(currContext()!!, ProfileActivity::class.java)
+            if (id != null) {
+                intent.putExtra("userId", id)
+            } else {
+                intent.putExtra("username", username)
+            }
+            ContextCompat.startActivity(
+                currContext()!!,
+                intent,
+                null
+            )
+        } else {
+            copyToClipboard(link, true)
+        }
+    } else {
+        copyToClipboard(link, true)
+    }
+}
+
+/**
  * Builds the markwon instance with all the plugins
  * @return the markwon instance
  */
@@ -1424,36 +1467,7 @@ fun buildMarkwon(
         .usePlugin(object : AbstractMarkwonPlugin() {
             override fun configureConfiguration(builder: MarkwonConfiguration.Builder) {
                 builder.linkResolver { _, link ->
-                    if (link.startsWith("https://anilist.co/anime/") || link.startsWith("https://anilist.co/manga/")) {
-                        val mangaAnime = link.substringAfter("https://anilist.co/").substringBefore("/")
-                        val id =
-                            link.substringAfter("https://anilist.co/$mangaAnime/").substringBefore("/")
-                                .toIntOrNull()
-                        if (id != null && currContext() != null) {
-                            ContextCompat.startActivity(
-                                currContext()!!,
-                                Intent(currContext()!!, MediaDetailsActivity::class.java)
-                                    .putExtra("mediaId", id),
-                                null
-                            )
-                        } else {
-                            copyToClipboard(link, true)
-                        }
-                    } else if (link.startsWith("https://anilist.co/user/")) {
-                        val username = link.substringAfter("https://anilist.co/user/").substringBefore("/")
-                        if (currContext() != null) {
-                            ContextCompat.startActivity(
-                                currContext()!!,
-                                Intent(currContext()!!, ProfileActivity::class.java)
-                                    .putExtra("username", username),
-                                null
-                            )
-                        } else {
-                            copyToClipboard(link, true)
-                        }
-                    } else {
-                        copyToClipboard(link, true)
-                    }
+                    openOrCopyAnilistLink(link)
                 }
             }
         })
