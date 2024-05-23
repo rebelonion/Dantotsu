@@ -98,7 +98,7 @@ class SubscriptionNotificationTask : Task {
                             val ep: Episode? =
                                 SubscriptionHelper.getEpisode(
                                     parser,
-                                    media.id
+                                    media
                                 )
                             if (ep != null) context.getString(R.string.episode) + "${ep.number}${
                                 if (ep.title != null) " : ${ep.title}" else ""
@@ -113,11 +113,22 @@ class SubscriptionNotificationTask : Task {
                             val ep: MangaChapter? =
                                 SubscriptionHelper.getChapter(
                                     parser,
-                                    media.id
+                                    media
                                 )
                             if (ep != null) ep.number + " " + context.getString(R.string.just_released) to null
                             else null
                         } ?: return@map
+                        addSubscriptionToStore(
+                            SubscriptionStore(
+                                media.name,
+                                text.first,
+                                media.id,
+                                image = media.image,
+                                banner = media.banner
+                            )
+                        )
+                        PrefManager.setVal(PrefName.UnreadCommentNotifications,
+                            PrefManager.getVal<Int>(PrefName.UnreadCommentNotifications) + 1)
                         val notification = createNotification(
                             context.applicationContext,
                             media,
@@ -185,7 +196,7 @@ class SubscriptionNotificationTask : Task {
         size: Int
     ): NotificationCompat.Builder {
         return NotificationCompat.Builder(context, CHANNEL_SUBSCRIPTION_CHECK_PROGRESS)
-            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setSmallIcon(R.drawable.notification_icon)
             .setContentTitle(context.getString(R.string.checking_subscriptions_title))
             .setProgress(size, 0, false)
@@ -218,5 +229,22 @@ class SubscriptionNotificationTask : Task {
                 PendingIntent.FLAG_ONE_SHOT
             }
         )
+    }
+
+    private fun addSubscriptionToStore(notification: SubscriptionStore) {
+        val notificationStore = PrefManager.getNullableVal<List<SubscriptionStore>>(
+            PrefName.SubscriptionNotificationStore,
+            null
+        ) ?: listOf()
+        val newStore = notificationStore.toMutableList()
+        if (newStore.size >= 100) {
+            newStore.remove(newStore.minByOrNull { it.time })
+        }
+        if (newStore.any { it.title == notification.title && it.content == notification.content}) {
+            return
+        }
+
+        newStore.add(notification)
+        PrefManager.setVal(PrefName.SubscriptionNotificationStore, newStore)
     }
 }

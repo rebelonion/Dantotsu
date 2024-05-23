@@ -1,6 +1,5 @@
 package ani.dantotsu
 
-import android.content.Context
 import android.os.Build
 import androidx.fragment.app.FragmentActivity
 import ani.dantotsu.others.webview.CloudFlare
@@ -10,6 +9,7 @@ import com.lagradost.nicehttp.Requests
 import com.lagradost.nicehttp.ResponseParser
 import com.lagradost.nicehttp.addGenericDns
 import eu.kanade.tachiyomi.network.NetworkHelper
+import eu.kanade.tachiyomi.network.NetworkHelper.Companion.defaultUserAgentProvider
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
@@ -35,13 +35,13 @@ lateinit var defaultHeaders: Map<String, String>
 lateinit var okHttpClient: OkHttpClient
 lateinit var client: Requests
 
-fun initializeNetwork(context: Context) {
+fun initializeNetwork() {
 
     val networkHelper = Injekt.get<NetworkHelper>()
 
     defaultHeaders = mapOf(
         "User-Agent" to
-                Injekt.get<NetworkHelper>().defaultUserAgentProvider()
+                defaultUserAgentProvider()
                     .format(Build.VERSION.RELEASE, Build.MODEL)
     )
 
@@ -137,12 +137,14 @@ suspend fun <T> tryWithSuspend(
  * **/
 data class FileUrl(
     var url: String,
-    val headers: Map<String, String> = mapOf()
+    var headers: Map<String, String> = mapOf()
 ) : Serializable {
     companion object {
         operator fun get(url: String?, headers: Map<String, String> = mapOf()): FileUrl? {
             return FileUrl(url ?: return null, headers)
         }
+
+        private const val serialVersionUID = 1L
     }
 }
 

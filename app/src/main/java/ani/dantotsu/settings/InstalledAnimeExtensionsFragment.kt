@@ -1,11 +1,9 @@
 package ani.dantotsu.settings
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +12,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DiffUtil
@@ -24,14 +24,14 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
-import ani.dantotsu.databinding.FragmentAnimeExtensionsBinding
-import ani.dantotsu.util.Logger
+import ani.dantotsu.databinding.FragmentExtensionsBinding
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.settings.extensionprefs.AnimeSourcePreferencesFragment
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.TextInputLayout
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
@@ -49,7 +49,7 @@ import java.util.Locale
 class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
 
 
-    private var _binding: FragmentAnimeExtensionsBinding? = null
+    private var _binding: FragmentExtensionsBinding? = null
     private val binding get() = _binding!!
     private lateinit var extensionsRecyclerView: RecyclerView
     private val skipIcons: Boolean = PrefManager.getVal(PrefName.SkipExtensionIcons)
@@ -59,22 +59,20 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             val name = pkg.name
             val changeUIVisibility: (Boolean) -> Unit = { show ->
                 val activity = requireActivity() as ExtensionsActivity
-                val visibility = if (show) View.VISIBLE else View.GONE
-                activity.findViewById<ViewPager2>(R.id.viewPager).visibility = visibility
-                activity.findViewById<TabLayout>(R.id.tabLayout).visibility = visibility
-                activity.findViewById<TextInputLayout>(R.id.searchView).visibility = visibility
-                activity.findViewById<ImageView>(R.id.languageselect).visibility = visibility
+                activity.findViewById<ViewPager2>(R.id.viewPager).isVisible = show
+                activity.findViewById<TabLayout>(R.id.tabLayout).isVisible = show
+                activity.findViewById<TextInputLayout>(R.id.searchView).isVisible = show
+                activity.findViewById<ImageView>(R.id.languageselect).isVisible = show
                 activity.findViewById<TextView>(R.id.extensions).text =
                     if (show) getString(R.string.extensions) else name
-                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).visibility =
-                    if (show) View.GONE else View.VISIBLE
+                activity.findViewById<FrameLayout>(R.id.fragmentExtensionsContainer).isGone = show
             }
             var itemSelected = false
             val allSettings = pkg.sources.filterIsInstance<ConfigurableAnimeSource>()
             if (allSettings.isNotEmpty()) {
                 var selectedSetting = allSettings[0]
                 if (allSettings.size > 1) {
-                    val names = allSettings.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    val names = allSettings.map { LanguageMapper.getLanguageName(it.lang) }
                         .toTypedArray()
                     var selectedIndex = 0
                     val dialog = AlertDialog.Builder(requireContext(), R.style.MyPopup)
@@ -185,9 +183,9 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAnimeExtensionsBinding.inflate(inflater, container, false)
+        _binding = FragmentExtensionsBinding.inflate(inflater, container, false)
 
-        extensionsRecyclerView = binding.allAnimeExtensionsRecyclerView
+        extensionsRecyclerView = binding.allExtensionsRecyclerView
         extensionsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         extensionsRecyclerView.adapter = extensionsAdapter
 
@@ -294,13 +292,13 @@ class InstalledAnimeExtensionsFragment : Fragment(), SearchQueryHandler {
             return ViewHolder(view)
         }
 
-        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val extension = getItem(position)
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val lang = LanguageMapper.getLanguageName(extension.lang)
             holder.extensionNameTextView.text = extension.name
-            holder.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
+            val versionText = "$lang ${extension.versionName} $nsfw"
+            holder.extensionVersionTextView.text = versionText
             if (!skipIcons) {
                 holder.extensionIconImageView.setImageDrawable(extension.icon)
             }

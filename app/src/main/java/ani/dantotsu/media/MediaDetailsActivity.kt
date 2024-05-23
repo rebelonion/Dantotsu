@@ -2,28 +2,27 @@ package ani.dantotsu.media
 
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Rect
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.SpannableStringBuilder
-import android.util.TypedValue
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.view.animation.AccelerateDecelerateInterpolator
-import android.widget.FrameLayout
 import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.text.bold
 import androidx.core.text.color
+import androidx.core.view.isVisible
 import androidx.core.view.marginBottom
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updateMargins
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
@@ -38,6 +37,7 @@ import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ActivityMediaBinding
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.initActivity
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.anime.AnimeWatchFragment
@@ -54,6 +54,7 @@ import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.util.LauncherWrapper
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.coroutines.CoroutineScope
@@ -62,20 +63,21 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import nl.joery.animatedbottombar.AnimatedBottomBar
 import kotlin.math.abs
 
 
 class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListener {
-
+    lateinit var launcher: LauncherWrapper
     lateinit var binding: ActivityMediaBinding
     private val scope = lifecycleScope
     private val model: MediaDetailsViewModel by viewModels()
-    lateinit var tabLayout: TripleNavAdapter
     var selected = 0
+    lateinit var navBar: AnimatedBottomBar
     var anime = true
     private var adult = false
 
-    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         var media: Media = intent.getSerialized("media") ?: mediaSingleton ?: emptyMedia()
@@ -83,8 +85,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         if (id != -1) {
             runBlocking {
                 withContext(Dispatchers.IO) {
-                    media =
-                        Anilist.query.getMedia(id, false) ?: emptyMedia()
+                    media = Anilist.query.getMedia(id, false) ?: emptyMedia()
                 }
             }
         }
@@ -93,6 +94,9 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             onBackPressedDispatcher.onBackPressed()
             return
         }
+        val contract = ActivityResultContracts.OpenDocumentTree()
+        launcher = LauncherWrapper(this, contract)
+
         mediaSingleton = null
         ThemeManager(this).applyTheme(MediaSingleton.bitmap)
         MediaSingleton.bitmap = null
@@ -100,25 +104,37 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         binding = ActivityMediaBinding.inflate(layoutInflater)
         setContentView(binding.root)
         screenWidth = resources.displayMetrics.widthPixels.toFloat()
+        navBar = binding.mediaBottomBar
 
-        val isVertical = resources.configuration.orientation
-        //Ui init
+        // Ui init
 
         initActivity(this)
-        binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
+        binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
         val oldMargin = binding.mediaViewPager.marginBottom
         AndroidBug5497Workaround.assistActivity(this) {
             if (it) {
                 binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = 0
                 }
-                binding.mediaTabContainer.visibility = View.GONE
+                navBar.visibility = View.GONE
             } else {
                 binding.mediaViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                     bottomMargin = oldMargin
                 }
-                binding.mediaTabContainer.visibility = View.VISIBLE
+                navBar.visibility = View.VISIBLE
             }
+        }
+        val navBarRightMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE
+        ) navBarHeight else 0
+        val navBarBottomMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE
+        ) 0 else navBarHeight
+        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            rightMargin = navBarRightMargin
+            bottomMargin = navBarBottomMargin
         }
         binding.mediaBanner.updateLayoutParams { height += statusBarHeight }
         binding.mediaBannerNoKen.updateLayoutParams { height += statusBarHeight }
@@ -147,7 +163,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         val banner =
             if (bannerAnimations) binding.mediaBanner else binding.mediaBannerNoKen
         val viewPager = binding.mediaViewPager
-        //tabLayout = binding.mediaTab as AnimatedBottomBar
         viewPager.isUserInputEnabled = false
         viewPager.setPageTransformer(ZoomOutPageTransformer())
 
@@ -157,9 +172,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
 
         binding.mediaCoverImage.loadImage(media.cover)
         binding.mediaCoverImage.setOnLongClickListener {
+            val coverTitle = getString(R.string.cover, media.userPreferredName)
             ImageViewDialog.newInstance(
                 this,
-                media.userPreferredName + "[Cover]",
+                coverTitle,
                 media.cover
             )
         }
@@ -176,9 +192,10 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             }
 
             override fun onLongClick(event: MotionEvent) {
+                val bannerTitle = getString(R.string.banner, media.userPreferredName)
                 ImageViewDialog.newInstance(
                     this@MediaDetailsActivity,
-                    media.userPreferredName + "[Banner]",
+                    bannerTitle,
                     media.banner ?: media.cover
                 )
                 banner.performClick()
@@ -186,7 +203,8 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         })
         banner.setOnTouchListener { _, motionEvent -> gestureDetector.onTouchEvent(motionEvent);true }
         if (PrefManager.getVal(PrefName.Incognito)) {
-            binding.mediaTitle.text = "    ${media.userPreferredName}"
+            val mediaTitle = "    ${media.userPreferredName}"
+            binding.mediaTitle.text = mediaTitle
             binding.incognito.visibility = View.VISIBLE
         } else {
             binding.mediaTitle.text = media.userPreferredName
@@ -210,20 +228,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                     R.drawable.ic_round_favorite_24
                 )
             )
-            val typedValue = TypedValue()
-            this.theme.resolveAttribute(
-                com.google.android.material.R.attr.colorSecondary,
-                typedValue,
-                true
-            )
-            val color = typedValue.data
-            val typedValue2 = TypedValue()
-            this.theme.resolveAttribute(
-                com.google.android.material.R.attr.colorSecondary,
-                typedValue2,
-                true
-            )
-            val color2 = typedValue.data
 
             PopImageButton(
                 scope,
@@ -231,7 +235,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 R.drawable.ic_round_favorite_24,
                 R.drawable.ic_round_favorite_border_24,
                 R.color.bg_opp,
-                R.color.violet_400,//TODO: Change to colorSecondary
+                R.color.violet_400,
                 media.isFav
             ) {
                 media.isFav = it
@@ -246,22 +250,12 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         @SuppressLint("ResourceType")
         fun total() {
             val text = SpannableStringBuilder().apply {
-                val typedValue = TypedValue()
-                this@MediaDetailsActivity.theme.resolveAttribute(
-                    com.google.android.material.R.attr.colorOnBackground,
-                    typedValue,
-                    true
-                )
-                val white = typedValue.data
+
+                val white = this@MediaDetailsActivity.getThemeColor(com.google.android.material.R.attr.colorOnBackground)
                 if (media.userStatus != null) {
                     append(if (media.anime != null) getString(R.string.watched_num) else getString(R.string.read_num))
-                    val typedValue = TypedValue()
-                    theme.resolveAttribute(
-                        com.google.android.material.R.attr.colorSecondary,
-                        typedValue,
-                        true
-                    )
-                    bold { color(typedValue.data) { append("${media.userProgress}") } }
+                    val colorSecondary = getThemeColor(com.google.android.material.R.attr.colorSecondary)
+                    bold { color(colorSecondary) { append("${media.userProgress}") } }
                     append(
                         if (media.anime != null) getString(R.string.episodes_out_of) else getString(
                             R.string.chapters_out_of
@@ -342,18 +336,16 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 progress()
             }
         }
-        tabLayout = TripleNavAdapter(
-            binding.mediaTab1,
-            binding.mediaTab2,
-            binding.mediaTab3,
-            media.anime != null,
-            media.format ?: "",
-            isVertical == 1
-        )
         adult = media.isAdult
         if (media.anime != null) {
             viewPager.adapter =
-                ViewPagerAdapter(supportFragmentManager, lifecycle, SupportedMedia.ANIME, media, intent.getIntExtra("commentId", -1))
+                ViewPagerAdapter(
+                    supportFragmentManager,
+                    lifecycle,
+                    SupportedMedia.ANIME,
+                    media,
+                    intent.getIntExtra("commentId", -1)
+                )
         } else if (media.manga != null) {
             viewPager.adapter = ViewPagerAdapter(
                 supportFragmentManager,
@@ -365,31 +357,47 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
             anime = false
         }
 
-
         selected = media.selected!!.window
         binding.mediaTitle.translationX = -screenWidth
 
-        tabLayout.selectionListener = { selected, newId ->
-            binding.commentInputLayout.visibility = if (selected == 2) View.VISIBLE else View.GONE
-            this.selected = selected
-            selectFromID(newId)
-            viewPager.setCurrentItem(selected, false)
-            val sel = model.loadSelected(media, isDownload)
-            sel.window = selected
-            model.saveSelected(media.id, sel)
+        val infoTab = navBar.createTab(R.drawable.ic_round_info_24, R.string.info, R.id.info)
+        val watchTab = if (anime) {
+            navBar.createTab(R.drawable.ic_round_movie_filter_24, R.string.watch, R.id.watch)
+        } else if (media.format == "NOVEL") {
+            navBar.createTab(R.drawable.ic_round_book_24, R.string.read, R.id.read)
+        } else {
+            navBar.createTab(R.drawable.ic_round_import_contacts_24, R.string.read, R.id.read)
         }
-        tabLayout.selectTab(selected)
-        selectFromID(tabLayout.selected)
-        viewPager.setCurrentItem(selected, false)
-
+        val commentTab =
+            navBar.createTab(R.drawable.ic_round_comment_24, R.string.comments, R.id.comment)
+        navBar.addTab(infoTab)
+        navBar.addTab(watchTab)
+        navBar.addTab(commentTab)
         if (model.continueMedia == null && media.cameFromContinue) {
             model.continueMedia = PrefManager.getVal(PrefName.ContinueMedia)
             selected = 1
         }
-        val frag = intent.getStringExtra("FRAGMENT_TO_LOAD")
-        if (frag != null) {
-            selected = 2
+        if (intent.getStringExtra("FRAGMENT_TO_LOAD") != null) selected = 2
+        if (viewPager.currentItem != selected) viewPager.post {
+            viewPager.setCurrentItem(selected, false)
         }
+        binding.commentInputLayout.isVisible = selected == 2
+        navBar.selectTabAt(selected)
+        navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
+            override fun onTabSelected(
+                lastIndex: Int,
+                lastTab: AnimatedBottomBar.Tab?,
+                newIndex: Int,
+                newTab: AnimatedBottomBar.Tab
+            ) {
+                selected = newIndex
+                binding.commentInputLayout.isVisible = selected == 2
+                viewPager.setCurrentItem(selected, true)
+                val sel = model.loadSelected(media, isDownload)
+                sel.window = selected
+                model.saveSelected(media.id, sel)
+            }
+        })
 
         val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }
         live.observe(this) {
@@ -402,40 +410,21 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         }
     }
 
-    private fun selectFromID(id: Int) {
-        when (id) {
-            R.id.info -> {
-                selected = 0
-            }
-
-            R.id.watch, R.id.read -> {
-                selected = 1
-            }
-
-            R.id.comment -> {
-                selected = 2
-            }
-        }
-    }
-
-    private fun idFromSelect(): Int {
-        if (anime) when (selected) {
-            0 -> return R.id.info
-            1 -> return R.id.watch
-            2 -> return R.id.comment
-        }
-        else when (selected) {
-            0 -> return R.id.info
-            1 -> return R.id.read
-            2 -> return R.id.comment
-        }
-        return R.id.info
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        val rightMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE
+        ) navBarHeight else 0
+        val bottomMargin = if (resources.configuration.orientation ==
+            Configuration.ORIENTATION_LANDSCAPE
+        ) 0 else navBarHeight
+        val params: ViewGroup.MarginLayoutParams =
+            navBar.layoutParams as ViewGroup.MarginLayoutParams
+        params.updateMargins(right = rightMargin, bottom = bottomMargin)
     }
 
     override fun onResume() {
-        if (this::tabLayout.isInitialized) {
-            tabLayout.selectTab(selected)
-        }
+        navBar.selectTabAt(selected)
         super.onResume()
     }
 
@@ -443,7 +432,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         ANIME, MANGA, NOVEL
     }
 
-    //ViewPager
+    // ViewPager
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
@@ -462,6 +451,7 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
                 SupportedMedia.MANGA -> MangaReadFragment()
                 SupportedMedia.NOVEL -> NovelReadFragment()
             }
+
             2 -> {
                 val fragment = CommentsFragment()
                 val bundle = Bundle()
@@ -489,13 +479,6 @@ class MediaDetailsActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedLi
         binding.mediaCover.visibility =
             if (binding.mediaCover.scaleX == 0f) View.GONE else View.VISIBLE
         val duration = (200 * (PrefManager.getVal(PrefName.AnimationSpeed) as Float)).toLong()
-        val typedValue = TypedValue()
-        this@MediaDetailsActivity.theme.resolveAttribute(
-            com.google.android.material.R.attr.colorSecondary,
-            typedValue,
-            true
-        )
-        val color = typedValue.data
         if (percentage >= percent && !isCollapsed) {
             isCollapsed = true
             ObjectAnimator.ofFloat(binding.mediaTitle, "translationX", 0f).setDuration(duration)

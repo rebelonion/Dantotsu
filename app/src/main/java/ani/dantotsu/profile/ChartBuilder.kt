@@ -2,7 +2,7 @@ package ani.dantotsu.profile
 
 import android.content.Context
 import android.graphics.Color
-import android.util.TypedValue
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.util.ColorEditor
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartModel
 import com.github.aachartmodel.aainfographics.aachartcreator.AAChartStackingType
@@ -53,13 +53,7 @@ class ChartBuilder {
             scrollPos: Float? = null,
             normalize: Boolean = false
         ): AAOptions {
-            val typedValue = TypedValue()
-            context.theme.resolveAttribute(
-                com.google.android.material.R.attr.colorPrimary,
-                typedValue,
-                true
-            )
-            val primaryColor = typedValue.data
+            val primaryColor = context.getThemeColor(com.google.android.material.R.attr.colorPrimary)
             var chartType = passedChartType
             var aaChartType = passedAaChartType
             var categories = passedCategories
@@ -235,7 +229,7 @@ class ChartBuilder {
             aaYaxis.tickInterval(tickInterval)
             aaOptions.yAxis(aaYaxis)
 
-            setColors(aaOptions, context, primaryColor)
+            setColors(aaOptions, context)
 
             return aaOptions
         }
@@ -308,32 +302,22 @@ class ChartBuilder {
             return data.map { (it.toDouble() / max) * 100 }
         }
 
-        private fun setColors(aaOptions: AAOptions, context: Context, primaryColor: Int) {
-            val backgroundColor = TypedValue()
-            context.theme.resolveAttribute(
-                com.google.android.material.R.attr.colorSurfaceVariant,
-                backgroundColor,
-                true
-            )
+        private fun setColors(aaOptions: AAOptions, context: Context) {
+            val backgroundColor = context.getThemeColor(com.google.android.material.R.attr.colorSurfaceVariant)
             val backgroundStyle = AAStyle().color(
                 AAColor.rgbaColor(
-                    Color.red(backgroundColor.data),
-                    Color.green(backgroundColor.data),
-                    Color.blue(backgroundColor.data),
+                    Color.red(backgroundColor),
+                    Color.green(backgroundColor),
+                    Color.blue(backgroundColor),
                     1f
                 )
             )
-            val colorOnBackground = TypedValue()
-            context.theme.resolveAttribute(
-                com.google.android.material.R.attr.colorOnSurface,
-                colorOnBackground,
-                true
-            )
+            val colorOnBackground = context.getThemeColor(com.google.android.material.R.attr.colorOnSurface)
             val onBackgroundStyle = AAStyle().color(
                 AAColor.rgbaColor(
-                    Color.red(colorOnBackground.data),
-                    Color.green(colorOnBackground.data),
-                    Color.blue(colorOnBackground.data),
+                    Color.red(colorOnBackground),
+                    Color.green(colorOnBackground),
+                    Color.blue(colorOnBackground),
                     1.0f
                 )
             )
@@ -342,9 +326,9 @@ class ChartBuilder {
             aaOptions.chart?.backgroundColor(backgroundStyle.color)
             aaOptions.tooltip?.backgroundColor(
                 AAColor.rgbaColor(
-                    Color.red(backgroundColor.data),
-                    Color.green(backgroundColor.data),
-                    Color.blue(backgroundColor.data),
+                    Color.red(backgroundColor),
+                    Color.green(backgroundColor),
+                    Color.blue(backgroundColor),
                     1.0f
                 )
             )

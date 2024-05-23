@@ -85,13 +85,18 @@ object AppUpdater {
                     setPositiveButton(currContext()!!.getString(R.string.lets_go)) {
                         MainScope().launch(Dispatchers.IO) {
                             try {
-                                client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
-                                    .parsed<GithubResponse>().assets?.find {
-                                        it.browserDownloadURL.endsWith("apk")
-                                    }?.browserDownloadURL.apply {
-                                        if (this != null) activity.downloadUpdate(version, this)
-                                        else openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
-                                    }
+                                val apks =
+                                    client.get("https://api.github.com/repos/$repo/releases/tags/v$version")
+                                        .parsed<GithubResponse>().assets?.filter {
+                                            it.browserDownloadURL.endsWith(
+                                                ".apk"
+                                            )
+                                        }
+                                val apkToDownload = apks?.first()
+                                apkToDownload?.browserDownloadURL.apply {
+                                    if (this != null) activity.downloadUpdate(version, this)
+                                    else openLinkInBrowser("https://github.com/repos/$repo/releases/tag/v$version")
+                                }
                             } catch (e: Exception) {
                                 logError(e)
                             }
@@ -111,24 +116,25 @@ object AppUpdater {
     }
 
     private fun compareVersion(version: String): Boolean {
+        return when (BuildConfig.BUILD_TYPE) {
+            "debug" -> BuildConfig.VERSION_NAME != version
+            "alpha" -> false
+            else -> {
+                fun toDouble(list: List<String>): Double {
+                    return list.mapIndexed { i: Int, s: String ->
+                        when (i) {
+                            0 -> s.toDouble() * 100
+                            1 -> s.toDouble() * 10
+                            2 -> s.toDouble()
+                            else -> s.toDoubleOrNull() ?: 0.0
+                        }
+                    }.sum()
+                }
 
-        if (BuildConfig.DEBUG) {
-            return BuildConfig.VERSION_NAME != version
-        } else {
-            fun toDouble(list: List<String>): Double {
-                return list.mapIndexed { i: Int, s: String ->
-                    when (i) {
-                        0 -> s.toDouble() * 100
-                        1 -> s.toDouble() * 10
-                        2 -> s.toDouble()
-                        else -> s.toDoubleOrNull() ?: 0.0
-                    }
-                }.sum()
+                val new = toDouble(version.split("."))
+                val curr = toDouble(BuildConfig.VERSION_NAME.split("."))
+                new > curr
             }
-
-            val new = toDouble(version.split("."))
-            val curr = toDouble(BuildConfig.VERSION_NAME.split("."))
-            return new > curr
         }
     }
 

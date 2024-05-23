@@ -5,40 +5,43 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Looper
 import android.os.Parcelable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.LinearLayoutManager
+import ani.dantotsu.R
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
 import ani.dantotsu.download.novel.NovelDownloaderService
 import ani.dantotsu.download.novel.NovelServiceDataSingleton
 import ani.dantotsu.media.Media
+import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.media.MediaDetailsViewModel
+import ani.dantotsu.media.MediaType
 import ani.dantotsu.media.novel.novelreader.NovelReaderActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.parsers.ShowResponse
+import ani.dantotsu.snackString
 import ani.dantotsu.util.Logger
+import ani.dantotsu.util.StoragePermissions
+import ani.dantotsu.util.StoragePermissions.Companion.accessAlertDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
 
 class NovelReadFragment : Fragment(),
     DownloadTriggerCallback,
@@ -61,26 +64,40 @@ class NovelReadFragment : Fragment(),
 
     override fun downloadTrigger(novelDownloadPackage: NovelDownloadPackage) {
         Logger.log("novel link: ${novelDownloadPackage.link}")
-        val downloadTask = NovelDownloaderService.DownloadTask(
-            title = media.mainName(),
-            chapter = novelDownloadPackage.novelName,
-            downloadLink = novelDownloadPackage.link,
-            originalLink = novelDownloadPackage.originalLink,
-            sourceMedia = media,
-            coverUrl = novelDownloadPackage.coverUrl,
-            retries = 2,
-        )
-        NovelServiceDataSingleton.downloadQueue.offer(downloadTask)
-        CoroutineScope(Dispatchers.IO).launch {
+        activity?.let {
+            fun continueDownload() {
+                val downloadTask = NovelDownloaderService.DownloadTask(
+                    title = media.mainName(),
+                    chapter = novelDownloadPackage.novelName,
+                    downloadLink = novelDownloadPackage.link,
+                    originalLink = novelDownloadPackage.originalLink,
+                    sourceMedia = media,
+                    coverUrl = novelDownloadPackage.coverUrl,
+                    retries = 2,
+                )
+                NovelServiceDataSingleton.downloadQueue.offer(downloadTask)
+                CoroutineScope(Dispatchers.IO).launch {
 
-            if (!NovelServiceDataSingleton.isServiceRunning) {
-                val intent = Intent(context, NovelDownloaderService::class.java)
-                withContext(Dispatchers.Main) {
-                    ContextCompat.startForegroundService(requireContext(), intent)
+                    if (!NovelServiceDataSingleton.isServiceRunning) {
+                        val intent = Intent(context, NovelDownloaderService::class.java)
+                        withContext(Dispatchers.Main) {
+                            ContextCompat.startForegroundService(requireContext(), intent)
+                        }
+                        NovelServiceDataSingleton.isServiceRunning = true
+                    }
                 }
-                NovelServiceDataSingleton.isServiceRunning = true
             }
-
+            if (!StoragePermissions.hasDirAccess(it)) {
+                (it as MediaDetailsActivity).accessAlertDialog(it.launcher) { success ->
+                    if (success) {
+                        continueDownload()
+                    } else {
+                        snackString(getString(R.string.download_permission_required))
+                    }
+                }
+            } else {
+                continueDownload()
+            }
         }
     }
 
@@ -90,27 +107,33 @@ class NovelReadFragment : Fragment(),
                 DownloadedType(
                     media.mainName(),
                     novel.name,
-                    DownloadedType.Type.NOVEL
+                    MediaType.NOVEL
                 )
             )
         ) {
-            val file = File(
-                context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
-                "${DownloadsManager.novelLocation}/${media.mainName()}/${novel.name}/0.epub"
-            )
-            if (!file.exists()) return false
-            val fileUri = FileProvider.getUriForFile(
-                requireContext(),
-                "${requireContext().packageName}.provider",
-                file
-            )
-            val intent = Intent(context, NovelReaderActivity::class.java).apply {
-                action = Intent.ACTION_VIEW
-                setDataAndType(fileUri, "application/epub+zip")
-                flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            try {
+                val directory =
+                    DownloadsManager.getSubDirectory(
+                        context ?: currContext()!!,
+                        MediaType.NOVEL,
+                        false,
+                        media.mainName(),
+                        novel.name
+                    )
+                val file = directory?.findFile("0.epub")
+                if (file?.exists() == false) return false
+                val fileUri = file?.uri ?: return false
+                val intent = Intent(context, NovelReaderActivity::class.java).apply {
+                    action = Intent.ACTION_VIEW
+                    setDataAndType(fileUri, "application/epub+zip")
+                    flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                }
+                startActivity(intent)
+                return true
+            } catch (e: Exception) {
+                Logger.log(e)
+                return false
             }
-            startActivity(intent)
-            return true
         } else {
             return false
         }
@@ -122,7 +145,7 @@ class NovelReadFragment : Fragment(),
             DownloadedType(
                 media.mainName(),
                 novel.name,
-                DownloadedType.Type.NOVEL
+                MediaType.NOVEL
             )
         )
     }
@@ -133,9 +156,9 @@ class NovelReadFragment : Fragment(),
             DownloadedType(
                 media.mainName(),
                 novel.name,
-                DownloadedType.Type.NOVEL
+                MediaType.NOVEL
             )
-        )
+        ) {}
     }
 
     private val downloadStatusReceiver = object : BroadcastReceiver() {

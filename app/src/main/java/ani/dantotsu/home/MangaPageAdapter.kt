@@ -3,13 +3,14 @@ package ani.dantotsu.home
 import android.content.Intent
 import android.os.Handler
 import android.os.Looper
-import android.util.TypedValue
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LayoutAnimationController
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.core.view.updatePadding
 import androidx.lifecycle.MutableLiveData
@@ -19,11 +20,15 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.MediaPageTransformer
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
-import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ItemMangaPageBinding
+import ani.dantotsu.databinding.LayoutTrendingBinding
+import ani.dantotsu.getAppString
+import ani.dantotsu.getThemeColor
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.GenreActivity
+import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaAdaptor
+import ani.dantotsu.media.MediaListViewActivity
 import ani.dantotsu.media.SearchActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.px
@@ -40,6 +45,7 @@ import com.google.android.material.textfield.TextInputLayout
 class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHolder>() {
     val ready = MutableLiveData(false)
     lateinit var binding: ItemMangaPageBinding
+    private lateinit var trendingBinding: LayoutTrendingBinding
     private var trendHandler: Handler? = null
     private lateinit var trendRun: Runnable
     var trendingViewPager: ViewPager2? = null
@@ -52,33 +58,31 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
 
     override fun onBindViewHolder(holder: MangaPageViewHolder, position: Int) {
         binding = holder.binding
-        trendingViewPager = binding.mangaTrendingViewPager
+        trendingBinding = LayoutTrendingBinding.bind(binding.root)
+        trendingViewPager = trendingBinding.trendingViewPager
 
-        val textInputLayout = holder.itemView.findViewById<TextInputLayout>(R.id.mangaSearchBar)
+        val textInputLayout = holder.itemView.findViewById<TextInputLayout>(R.id.searchBar)
         val currentColor = textInputLayout.boxBackgroundColor
         val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xA8000000.toInt()
         textInputLayout.boxBackgroundColor = semiTransparentColor
         val materialCardView =
-            holder.itemView.findViewById<MaterialCardView>(R.id.mangaUserAvatarContainer)
+            holder.itemView.findViewById<MaterialCardView>(R.id.userAvatarContainer)
         materialCardView.setCardBackgroundColor(semiTransparentColor)
-        val typedValue = TypedValue()
-        currContext()?.theme?.resolveAttribute(android.R.attr.windowBackground, typedValue, true)
-        val color = typedValue.data
+        val color = binding.root.context.getThemeColor(android.R.attr.windowBackground)
+        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000
+        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000)
 
-        textInputLayout.boxBackgroundColor = (color and 0x00FFFFFF) or 0x28000000.toInt()
-        materialCardView.setCardBackgroundColor((color and 0x00FFFFFF) or 0x28000000.toInt())
+        trendingBinding.titleContainer.updatePadding(top = statusBarHeight)
 
-        binding.mangaTitleContainer.updatePadding(top = statusBarHeight)
-
-        if (PrefManager.getVal(PrefName.SmallView)) binding.mangaTrendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        if (PrefManager.getVal(PrefName.SmallView)) trendingBinding.trendingContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = (-108f).px
         }
 
         updateAvatar()
-        binding.mangaNotificationCount.visibility = if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
-        binding.mangaNotificationCount.text = Anilist.unreadNotificationCount.toString()
-        binding.mangaSearchBar.hint = "MANGA"
-        binding.mangaSearchBarText.setOnClickListener {
+        trendingBinding.notificationCount.isVisible = Anilist.unreadNotificationCount > 0
+        trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
+        trendingBinding.searchBar.hint = "MANGA"
+        trendingBinding.searchBarText.setOnClickListener {
             ContextCompat.startActivity(
                 it.context,
                 Intent(it.context, SearchActivity::class.java).putExtra("type", "MANGA"),
@@ -86,22 +90,23 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             )
         }
 
-        binding.mangaUserAvatar.setSafeOnClickListener {
+        trendingBinding.userAvatar.setSafeOnClickListener {
             val dialogFragment =
                 SettingsDialogFragment.newInstance(SettingsDialogFragment.Companion.PageType.MANGA)
             dialogFragment.show((it.context as AppCompatActivity).supportFragmentManager, "dialog")
         }
-        binding.mangaUserAvatar.setOnLongClickListener { view ->
+        trendingBinding.userAvatar.setOnLongClickListener { view ->
+            view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
             ContextCompat.startActivity(
                 view.context,
                 Intent(view.context, ProfileActivity::class.java)
-                    .putExtra("userId", Anilist.userid),null
+                    .putExtra("userId", Anilist.userid), null
             )
             false
         }
 
-        binding.mangaSearchBar.setEndIconOnClickListener {
-            binding.mangaSearchBarText.performClick()
+        trendingBinding.searchBar.setEndIconOnClickListener {
+            trendingBinding.searchBarText.performClick()
         }
 
         binding.mangaGenreImage.loadImage("https://s4.anilist.co/file/anilistcdn/media/manga/banner/105778-wk5qQ7zAaTGl.jpg")
@@ -125,8 +130,7 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
             )
         }
 
-        binding.mangaIncludeList.visibility =
-            if (Anilist.userid != null) View.VISIBLE else View.GONE
+        binding.mangaIncludeList.isVisible = Anilist.userid != null
 
         binding.mangaIncludeList.isChecked = PrefManager.getVal(PrefName.PopularMangaList)
 
@@ -148,63 +152,153 @@ class MangaPageAdapter : RecyclerView.Adapter<MangaPageAdapter.MangaPageViewHold
     }
 
     fun updateTrending(adaptor: MediaAdaptor) {
-        binding.mangaTrendingProgressBar.visibility = View.GONE
-        binding.mangaTrendingViewPager.adapter = adaptor
-        binding.mangaTrendingViewPager.offscreenPageLimit = 3
-        binding.mangaTrendingViewPager.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
-        binding.mangaTrendingViewPager.setPageTransformer(MediaPageTransformer())
+        trendingBinding.trendingProgressBar.visibility = View.GONE
+        trendingBinding.trendingViewPager.adapter = adaptor
+        trendingBinding.trendingViewPager.offscreenPageLimit = 3
+        trendingBinding.trendingViewPager.getChildAt(0).overScrollMode =
+            RecyclerView.OVER_SCROLL_NEVER
+        trendingBinding.trendingViewPager.setPageTransformer(MediaPageTransformer())
         trendHandler = Handler(Looper.getMainLooper())
         trendRun = Runnable {
-            binding.mangaTrendingViewPager.currentItem += 1
+            trendingBinding.trendingViewPager.currentItem += 1
         }
-        binding.mangaTrendingViewPager.registerOnPageChangeCallback(
+        trendingBinding.trendingViewPager.registerOnPageChangeCallback(
             object : ViewPager2.OnPageChangeCallback() {
                 override fun onPageSelected(position: Int) {
                     super.onPageSelected(position)
-                    trendHandler!!.removeCallbacks(trendRun)
-                    trendHandler!!.postDelayed(trendRun, 4000)
+                    trendHandler?.removeCallbacks(trendRun)
+                    if (PrefManager.getVal(PrefName.TrendingScroller))
+                        trendHandler!!.postDelayed(trendRun, 4000)
                 }
             }
         )
 
-        binding.mangaTrendingViewPager.layoutAnimation =
+        trendingBinding.trendingViewPager.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
-        binding.mangaTitleContainer.startAnimation(setSlideUp())
+        trendingBinding.titleContainer.startAnimation(setSlideUp())
         binding.mangaListContainer.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
+
     }
 
-    fun updateNovel(adaptor: MediaAdaptor) {
-        binding.mangaNovelProgressBar.visibility = View.GONE
-        binding.mangaNovelRecyclerView.adapter = adaptor
-        binding.mangaNovelRecyclerView.layoutManager =
+    fun updateTrendingManga(adaptor: MediaAdaptor, media: MutableList<Media>) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaTrendingMangaRecyclerView,
+                mangaTrendingMangaProgressBar,
+                mangaTrendingManga,
+                mangaTrendingMangaMore,
+                getAppString(R.string.trending_manga),
+                media
+            )
+        }
+    }
+
+    fun updateTrendingManhwa(adaptor: MediaAdaptor, media: MutableList<Media>) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaTrendingManhwaRecyclerView,
+                mangaTrendingManhwaProgressBar,
+                mangaTrendingManhwa,
+                mangaTrendingManhwaMore,
+                getAppString(R.string.trending_manhwa),
+                media
+            )
+        }
+    }
+
+    fun updateNovel(adaptor: MediaAdaptor, media: MutableList<Media>) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaNovelRecyclerView,
+                mangaNovelProgressBar,
+                mangaNovel,
+                mangaNovelMore,
+                getAppString(R.string.trending_novel),
+                media
+            )
+        }
+    }
+
+    fun updateTopRated(adaptor: MediaAdaptor, media: MutableList<Media>) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaTopRatedRecyclerView,
+                mangaTopRatedProgressBar,
+                mangaTopRated,
+                mangaTopRatedMore,
+                getAppString(R.string.top_rated),
+                media
+            )
+        }
+    }
+
+    fun updateMostFav(adaptor: MediaAdaptor, media: MutableList<Media>) {
+        binding.apply {
+            init(
+                adaptor,
+                mangaMostFavRecyclerView,
+                mangaMostFavProgressBar,
+                mangaMostFav,
+                mangaMostFavMore,
+                getAppString(R.string.most_favourite),
+                media
+            )
+            mangaPopular.visibility = View.VISIBLE
+            mangaPopular.startAnimation(setSlideUp())
+        }
+    }
+
+    fun init(
+        adaptor: MediaAdaptor,
+        recyclerView: RecyclerView,
+        progress: View,
+        title: View ,
+        more: View ,
+        string: String,
+        media : MutableList<Media>
+    ) {
+        progress.visibility = View.GONE
+        recyclerView.adapter = adaptor
+        recyclerView.layoutManager =
             LinearLayoutManager(
-                binding.mangaNovelRecyclerView.context,
+                recyclerView.context,
                 LinearLayoutManager.HORIZONTAL,
                 false
             )
-        binding.mangaNovelRecyclerView.visibility = View.VISIBLE
-
-        binding.mangaNovel.visibility = View.VISIBLE
-        binding.mangaNovel.startAnimation(setSlideUp())
-        binding.mangaNovelRecyclerView.layoutAnimation =
+        more.setOnClickListener {
+            MediaListViewActivity.passedMedia = media.toCollection(ArrayList())
+            ContextCompat.startActivity(
+                it.context, Intent(it.context, MediaListViewActivity::class.java)
+                    .putExtra("title", string),
+                null
+            )
+        }
+        recyclerView.visibility = View.VISIBLE
+        title.visibility = View.VISIBLE
+        more.visibility = View.VISIBLE
+        title.startAnimation(setSlideUp())
+        more.startAnimation(setSlideUp())
+        recyclerView.layoutAnimation =
             LayoutAnimationController(setSlideIn(), 0.25f)
-        binding.mangaPopular.visibility = View.VISIBLE
-        binding.mangaPopular.startAnimation(setSlideUp())
     }
 
     fun updateAvatar() {
         if (Anilist.avatar != null && ready.value == true) {
-            binding.mangaUserAvatar.loadImage(Anilist.avatar)
-            binding.mangaUserAvatar.imageTintList = null
+            trendingBinding.userAvatar.loadImage(Anilist.avatar)
+            trendingBinding.userAvatar.imageTintList = null
         }
     }
 
     fun updateNotificationCount() {
         if (this::binding.isInitialized) {
-            binding.mangaNotificationCount.visibility =
+            trendingBinding.notificationCount.visibility =
                 if (Anilist.unreadNotificationCount > 0) View.VISIBLE else View.GONE
-            binding.mangaNotificationCount.text = Anilist.unreadNotificationCount.toString()
+            trendingBinding.notificationCount.text = Anilist.unreadNotificationCount.toString()
         }
     }
 

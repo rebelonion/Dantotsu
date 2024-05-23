@@ -134,6 +134,17 @@
                         android:backgroundTint="#00FFFFFF"
                         android:scaleX="-1"
                         android:src="@drawable/ic_round_subtitles_24"
+                        android:visibility="gone"
+                        app:tint="#fff"
+                        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+                    <ImageButton
+                        android:id="@+id/exo_audio"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:backgroundTint="#00FFFFFF"
+                        android:src="@drawable/ic_round_audiotrack_24"
+                        android:visibility="gone"
                         app:tint="#fff"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
@@ -157,9 +168,9 @@
                         android:layout_height="48dp"
                         android:backgroundTint="#00FFFFFF"
                         android:visibility="gone"
-                        app:mediaRouteButtonTint="#fff"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:mediaRouteButtonTint="#fff"
                         tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
 
                     <ImageButton

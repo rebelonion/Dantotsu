@@ -35,7 +35,7 @@
             app:icon="@drawable/ic_round_play_circle_24"
             app:iconTint="@color/bg_white"
             tools:ignore="TextContrastCheck"
-            tools:visibility="visible"/>
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/animeSourceTitle"
@@ -103,7 +103,8 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:baselineAligned="false">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/animeSourceLanguageContainer"
@@ -111,7 +112,7 @@
                 android:layout_width="0dp"
                 android:layout_height="56dp"
                 android:layout_weight="1"
-                android:hint="Language"
+                android:hint="@string/language"
                 android:visibility="gone"
                 app:boxCornerRadiusBottomEnd="8dp"
                 app:boxCornerRadiusBottomStart="8dp"
@@ -130,7 +131,7 @@
                     android:freezesText="false"
                     android:inputType="none"
                     android:padding="8dp"
-                    android:text="LANG"
+                    android:text="@string/language_code"
                     android:textAllCaps="true"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="14sp"
@@ -154,12 +155,14 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/animeSourceDubbed"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
                     android:padding="12dp"
+                    android:scaleX="0.80"
+                    android:scaleY="0.80"
                     app:cornerRadius="0dp"
                     app:showText="false"
                     app:useMaterialThemeColors="true" />
@@ -174,9 +177,10 @@
                     android:ellipsize="marquee"
                     android:fontFamily="@font/poppins_bold"
                     android:marqueeRepeatLimit="marquee_forever"
-                    android:paddingLeft="7dp"
+                    android:paddingStart="5dp"
                     android:singleLine="true"
                     android:textSize="14sp"
+                    tools:ignore="RtlSymmetry"
                     tools:text="Dubbed" />
 
             </LinearLayout>
@@ -339,37 +343,38 @@
         android:layout_marginBottom="8dp"
         tools:visibility="gone" />
 
-       <LinearLayout
-      	android:layout_width="match_parent"
-      	android:layout_height="match_parent"
-      	android:orientation="vertical"
-      	android:gravity="center">
-
-      <TextView
-        android:id="@+id/animeSourceNotFound"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
-        android:padding="32dp"
-        android:text="@string/source_not_found"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        android:visibility="gone"/>  
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
 
-       <Button
-        android:id="@+id/faqbutton"
-        android:layout_width="120dp"
-        android:layout_height="50dp"
-        android:layout_marginBottom="16dp"
-        android:backgroundTint="?attr/colorPrimaryContainer"
-        android:visibility="gone"
-        android:text="@string/faq"
-        android:textColor="?attr/colorOnPrimaryContainer"
-        android:fontFamily="@font/poppins_bold"
-        app:cornerRadius="12dp"
-        app:icon="@drawable/ic_round_help_outline"
-        app:iconTint="?attr/colorOnPrimaryContainer" />
+        <TextView
+            android:id="@+id/animeSourceNotFound"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:padding="32dp"
+            android:text="@string/source_not_found"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:visibility="gone" />
+
+        <Button
+            android:id="@+id/faqbutton"
+            android:layout_width="120dp"
+            android:layout_height="50dp"
+            android:layout_marginBottom="16dp"
+            android:backgroundTint="?attr/colorPrimaryContainer"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/faq"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            android:visibility="gone"
+            app:cornerRadius="12dp"
+            app:icon="@drawable/ic_round_help_outline"
+            app:iconTint="?attr/colorOnPrimaryContainer" />
 
     </LinearLayout>
 
 </LinearLayout>
+

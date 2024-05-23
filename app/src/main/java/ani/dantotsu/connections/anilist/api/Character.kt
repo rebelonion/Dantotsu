@@ -55,7 +55,7 @@ data class CharacterConnection(
     @SerialName("nodes") var nodes: List<Character>?,
 
     // The pagination information
-    // @SerialName("pageInfo") var pageInfo: PageInfo?,
+    @SerialName("pageInfo") var pageInfo: PageInfo?,
 ) : java.io.Serializable
 
 @Serializable
@@ -72,7 +72,7 @@ data class CharacterEdge(
     @SerialName("name") var name: String?,
 
     // The voice actors of the character
-    // @SerialName("voiceActors") var voiceActors: List<Staff>?,
+    @SerialName("voiceActors") var voiceActors: List<Staff>?,
 
     // The voice actors of the character with role date
     // @SerialName("voiceActorRoles") var voiceActorRoles: List<StaffRoleType>?,

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="top|center_horizontal"
+        android:orientation="vertical"
+        android:paddingTop="48dp"
+        app:layout_constraintBottom_toTopOf="@+id/buttonContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_thin"
+            android:text="@string/sad"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="64sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_bold"
+            android:text="@string/app_died"
+            android:textAlignment="center"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="24sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:fontFamily="@font/poppins"
+            android:text="@string/an_unexpected_error_occurred"
+            android:textAlignment="center"
+            android:textColor="?attr/colorOnBackground" />
+
+        <EditText
+            android:id="@+id/crashReportView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:fontFamily="@font/poppins"
+            android:inputType="textMultiLine|none"
+            android:padding="16dp"
+            android:textColor="?attr/colorOnBackground"
+            android:textIsSelectable="true"
+            android:textSize="12sp"
+            tools:ignore="LabelFor" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/buttonContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="24dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/copyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/poppins_bold"
+            android:maxLines="1"
+            android:text="@string/copy_report"
+            app:cornerRadius="16dp"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/shareAsTextFileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="64dp"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/poppins_bold"
+            android:maxLines="1"
+            android:text="@string/share_as_file"
+            app:cornerRadius="16dp"
+            tools:ignore="ButtonStyle"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

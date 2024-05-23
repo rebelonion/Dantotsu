@@ -1,6 +1,5 @@
 package eu.kanade.tachiyomi.util.system
 
-import android.content.Context
 import androidx.core.os.LocaleListCompat
 import java.util.Locale
 
@@ -17,7 +16,7 @@ object LocaleHelper {
     /**
      * Returns display name of a string language code.
      */
-    fun getSourceDisplayName(lang: String?, context: Context): String {
+    fun getSourceDisplayName(lang: String?): String {
         return when (lang) {
             LAST_USED_KEY -> "Last used"
             PINNED_KEY -> "Pinned"

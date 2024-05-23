@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ConcatAdapter
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.EmptyAdapter
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
@@ -32,7 +33,6 @@ class AuthorActivity : AppCompatActivity() {
     private val model: OtherDetailsViewModel by viewModels()
     private var author: Author? = null
     private var loaded = false
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,14 +55,15 @@ class AuthorActivity : AppCompatActivity() {
         binding.studioClose.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
         model.getAuthor().observe(this) {
             if (it != null) {
                 author = it
                 loaded = true
                 binding.studioProgressBar.visibility = View.GONE
                 binding.studioRecycler.visibility = View.VISIBLE
-
+                if (author!!.yearMedia.isNullOrEmpty()) {
+                    binding.studioRecycler.visibility = View.GONE
+                }
                 val titlePosition = arrayListOf<Int>()
                 val concatAdapter = ConcatAdapter()
                 val map = author!!.yearMedia ?: return@observe
@@ -89,9 +90,19 @@ class AuthorActivity : AppCompatActivity() {
                     concatAdapter.addAdapter(MediaAdaptor(0, medias, this, true))
                     concatAdapter.addAdapter(EmptyAdapter(empty))
                 }
-
                 binding.studioRecycler.adapter = concatAdapter
                 binding.studioRecycler.layoutManager = gridLayoutManager
+
+                binding.charactersRecycler.visibility = View.VISIBLE
+                binding.charactersText.visibility = View.VISIBLE
+                binding.charactersRecycler.adapter =
+                    CharacterAdapter(author!!.character ?: arrayListOf())
+                binding.charactersRecycler.layoutManager =
+                    LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+                if (author!!.character.isNullOrEmpty()) {
+                    binding.charactersRecycler.visibility = View.GONE
+                    binding.charactersText.visibility = View.GONE
+                }
             }
         }
         val live = Refresh.activity.getOrPut(this.hashCode()) { MutableLiveData(true) }

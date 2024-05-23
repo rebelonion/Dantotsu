@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottom_sheet_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="32dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="14dp"
+            app:cardBackgroundColor="?attr/colorPrimary"
+            app:cardCornerRadius="2dp"
+            app:cardElevation="0dp" />
+
+        <TextView
+            android:id="@+id/bottomSheetCustomTitle"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:fontFamily="@font/poppins"
+            android:gravity="bottom|center_horizontal"
+            android:text="@string/discord_rich_presence"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/showIcon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:drawableStart="@drawable/ic_anilist"
+            android:drawablePadding="16dp"
+            android:elegantTextHeight="true"
+            android:fontFamily="@font/poppins_bold"
+            android:minHeight="64dp"
+            android:padding="16dp"
+            android:text="@string/use_anilist_icon"
+            android:textAlignment="viewStart"
+            android:textColor="?attr/colorOnBackground"
+            app:cornerRadius="0dp"
+            app:drawableTint="?attr/colorPrimary"
+            app:showText="false"
+            app:thumbTint="@color/button_switch_track" />
+
+        <RadioGroup
+            android:id="@+id/radio_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <RadioButton
+                android:id="@+id/radio_nothing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/discord_nothing_button" />
+
+            <RadioButton
+                android:id="@+id/radio_dantotsu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/discord_dantotsu_button" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/dantotsuCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                    app:cardBackgroundColor="@color/nav_bg"
+                    app:cardCornerRadius="16dp"
+                    app:contentPadding="4dp"
+                    app:contentPaddingLeft="8dp"
+                    app:contentPaddingRight="8dp"
+                    tools:ignore="ContentDescription,TextContrastCheck">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawablePadding="4dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/stream_on_dantotsu"
+                        android:textColor="?attr/colorPrimary"
+                        app:drawableTint="?attr/colorPrimary" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/dantotsu"
+                    android:textColor="?attr/colorPrimary"
+                    app:drawableTint="?attr/colorPrimary" />
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/radio_anilist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/discord_anilist_button" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/anilistCard"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_gravity="center"
+                    android:padding="8dp"
+                    app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                    app:cardBackgroundColor="@color/nav_bg"
+                    app:cardCornerRadius="16dp"
+                    app:contentPadding="4dp"
+                    app:contentPaddingLeft="8dp"
+                    app:contentPaddingRight="8dp"
+                    tools:ignore="ContentDescription,TextContrastCheck">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:drawablePadding="4dp"
+                        android:fontFamily="@font/poppins_bold"
+                        android:text="@string/view_my_anilist"
+                        android:textColor="?attr/colorPrimary"
+                        app:drawableTint="?attr/colorPrimary" />
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:id="@+id/anilistLinkPreview"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="10dp"
+                    android:fontFamily="@font/poppins_bold"
+                    android:text="@string/anilist_link"
+                    android:textColor="?attr/colorPrimary"
+                    app:drawableTint="?attr/colorPrimary" />
+            </LinearLayout>
+        </RadioGroup>
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

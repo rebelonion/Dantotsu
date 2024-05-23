@@ -2,6 +2,7 @@ package ani.dantotsu.connections.anilist.api
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import java.util.Locale
 
 enum class NotificationType(val value: String) {
     ACTIVITY_MESSAGE("ACTIVITY_MESSAGE"),
@@ -21,8 +22,23 @@ enum class NotificationType(val value: String) {
     MEDIA_DATA_CHANGE("MEDIA_DATA_CHANGE"),
     MEDIA_MERGE("MEDIA_MERGE"),
     MEDIA_DELETION("MEDIA_DELETION"),
+
     //custom
     COMMENT_REPLY("COMMENT_REPLY"),
+    COMMENT_WARNING("COMMENT_WARNING"),
+    DANTOTSU_UPDATE("DANTOTSU_UPDATE"),
+    SUBSCRIPTION("SUBSCRIPTION");
+
+    fun toFormattedString(): String {
+        return this.value.replace("_", " ").lowercase(Locale.ROOT)
+            .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+    }
+
+    companion object {
+        fun String.fromFormattedString(): String {
+            return this.replace(" ", "_").uppercase(Locale.ROOT)
+        }
+    }
 }
 
 @Serializable
@@ -84,9 +100,9 @@ data class Notification(
     @SerialName("createdAt")
     val createdAt: Int,
     @SerialName("media")
-    val media: ani.dantotsu.connections.anilist.api.Media? = null,
+    val media: Media? = null,
     @SerialName("user")
-    val user: ani.dantotsu.connections.anilist.api.User? = null,
+    val user: User? = null,
     @SerialName("message")
     val message: MessageActivity? = null,
     @SerialName("activity")
@@ -95,6 +111,8 @@ data class Notification(
     val thread: Thread? = null,
     @SerialName("comment")
     val comment: ThreadComment? = null,
+    val image: String? = null,
+    val banner: String? = null,
 ) : java.io.Serializable
 
 @Serializable

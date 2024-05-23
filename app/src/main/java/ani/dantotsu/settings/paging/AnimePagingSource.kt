@@ -1,6 +1,5 @@
 package ani.dantotsu.settings.paging
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
@@ -38,7 +37,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-
+@Suppress("UNCHECKED_CAST")
 class AnimeExtensionsViewModelFactory(
     private val animeExtensionManager: AnimeExtensionManager
 ) : ViewModelProvider.Factory {
@@ -49,7 +48,7 @@ class AnimeExtensionsViewModelFactory(
 
 
 class AnimeExtensionsViewModel(
-    private val animeExtensionManager: AnimeExtensionManager
+    animeExtensionManager: AnimeExtensionManager
 ) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
     private var currentPagingSource: AnimeExtensionPagingSource? = null
@@ -202,12 +201,12 @@ class AnimeExtensionAdapter(private val clickListener: OnAnimeInstallClickListen
 
         val extensionIconImageView: ImageView = binding.extensionIconImageView
 
-        @SuppressLint("SetTextI18n")
         fun bind(extension: AnimeExtension.Available) {
             val nsfw = if (extension.isNsfw) "(18+)" else ""
-            val lang = LanguageMapper.mapLanguageCodeToName(extension.lang)
+            val lang = LanguageMapper.getLanguageName(extension.lang)
             binding.extensionNameTextView.text = extension.name
-            binding.extensionVersionTextView.text = "$lang ${extension.versionName} $nsfw"
+            val versionText = "$lang ${extension.versionName} $nsfw"
+            binding.extensionVersionTextView.text = versionText
         }
 
         fun clear() {

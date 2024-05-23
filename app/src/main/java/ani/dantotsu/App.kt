@@ -4,8 +4,11 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
+import ani.dantotsu.addons.download.DownloadAddonManager
+import ani.dantotsu.addons.torrent.TorrentAddonManager
 import ani.dantotsu.aniyomi.anime.custom.AppModule
 import ani.dantotsu.aniyomi.anime.custom.PreferenceModule
 import ani.dantotsu.connections.comments.CommentsAPI
@@ -26,13 +29,16 @@ import eu.kanade.tachiyomi.data.notification.Notifications
 import eu.kanade.tachiyomi.extension.anime.AnimeExtensionManager
 import eu.kanade.tachiyomi.extension.manga.MangaExtensionManager
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import logcat.AndroidLogcatLogger
 import logcat.LogPriority
 import logcat.LogcatLogger
 import uy.kohesive.injekt.Injekt
+import uy.kohesive.injekt.api.addSingletonFactory
 import uy.kohesive.injekt.api.get
 
 
@@ -41,6 +47,9 @@ class App : MultiDexApplication() {
     private lateinit var animeExtensionManager: AnimeExtensionManager
     private lateinit var mangaExtensionManager: MangaExtensionManager
     private lateinit var novelExtensionManager: NovelExtensionManager
+    private lateinit var torrentAddonManager: TorrentAddonManager
+    private lateinit var downloadAddonManager: DownloadAddonManager
+
     override fun attachBaseContext(base: Context?) {
         super.attachBaseContext(base)
         MultiDex.install(this)
@@ -52,15 +61,22 @@ class App : MultiDexApplication() {
 
     val mFTActivityLifecycleCallbacks = FTActivityLifecycleCallbacks()
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate() {
         super.onCreate()
-
         PrefManager.init(this)
+
+        val crashlytics =
+            ani.dantotsu.connections.crashlytics.CrashlyticsFactory.createCrashlytics()
+        Injekt.addSingletonFactory<CrashlyticsInterface> { crashlytics }
+        crashlytics.initialize(this)
+        Logger.init(this)
+        Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
+        Logger.log(Log.WARN, "App: Logging started")
+
         Injekt.importModule(AppModule(this))
         Injekt.importModule(PreferenceModule(this))
 
-        val crashlytics = Injekt.get<CrashlyticsInterface>()
-        crashlytics.initialize(this)
 
         val useMaterialYou: Boolean = PrefManager.getVal(PrefName.UseMaterialYou)
         if (useMaterialYou) {
@@ -82,46 +98,47 @@ class App : MultiDexApplication() {
         }
         crashlytics.setCustomKey("device Info", SettingsActivity.getDeviceInfo())
 
-        Logger.init(this)
-        Thread.setDefaultUncaughtExceptionHandler(FinalExceptionHandler())
-        Logger.log("App: Logging started")
-
-        initializeNetwork(baseContext)
+        initializeNetwork()
 
         setupNotificationChannels()
         if (!LogcatLogger.isInstalled) {
             LogcatLogger.install(AndroidLogcatLogger(LogPriority.VERBOSE))
         }
 
-        animeExtensionManager = Injekt.get()
-        mangaExtensionManager = Injekt.get()
-        novelExtensionManager = Injekt.get()
-
-        val animeScope = CoroutineScope(Dispatchers.Default)
-        animeScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            animeExtensionManager = Injekt.get()
             animeExtensionManager.findAvailableExtensions()
             Logger.log("Anime Extensions: ${animeExtensionManager.installedExtensionsFlow.first()}")
             AnimeSources.init(animeExtensionManager.installedExtensionsFlow)
         }
-        val mangaScope = CoroutineScope(Dispatchers.Default)
-        mangaScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            mangaExtensionManager = Injekt.get()
             mangaExtensionManager.findAvailableExtensions()
             Logger.log("Manga Extensions: ${mangaExtensionManager.installedExtensionsFlow.first()}")
             MangaSources.init(mangaExtensionManager.installedExtensionsFlow)
         }
-        val novelScope = CoroutineScope(Dispatchers.Default)
-        novelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
+            novelExtensionManager = Injekt.get()
             novelExtensionManager.findAvailableExtensions()
             Logger.log("Novel Extensions: ${novelExtensionManager.installedExtensionsFlow.first()}")
             NovelSources.init(novelExtensionManager.installedExtensionsFlow)
         }
-        val commentsScope = CoroutineScope(Dispatchers.Default)
-        commentsScope.launch {
-            CommentsAPI.fetchAuthToken()
-        }
+        GlobalScope.launch {
+            torrentAddonManager = Injekt.get()
+            downloadAddonManager = Injekt.get()
+            torrentAddonManager.init()
+            downloadAddonManager.init()
+            CommentsAPI.fetchAuthToken(this@App)
 
-        val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
-        TaskScheduler.create(this, useAlarmManager).scheduleAllTasks(this)
+            val useAlarmManager = PrefManager.getVal<Boolean>(PrefName.UseAlarmManager)
+            val scheduler = TaskScheduler.create(this@App, useAlarmManager)
+            try {
+                scheduler.scheduleAllTasks(this@App)
+            } catch (e: IllegalStateException) {
+                Logger.log("Failed to schedule tasks")
+                Logger.log(e)
+            }
+        }
     }
 
     private fun setupNotificationChannels() {
@@ -135,7 +152,11 @@ class App : MultiDexApplication() {
 
     inner class FTActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
         var currentActivity: Activity? = null
-        override fun onActivityCreated(p0: Activity, p1: Bundle?) {}
+        var lastActivity: String? = null
+        override fun onActivityCreated(p0: Activity, p1: Bundle?) {
+            lastActivity = p0.javaClass.simpleName
+        }
+
         override fun onActivityStarted(p0: Activity) {
             currentActivity = p0
         }
@@ -151,7 +172,11 @@ class App : MultiDexApplication() {
     }
 
     companion object {
-        private var instance: App? = null
+        var instance: App? = null
+
+        /** Reference to the application context.
+         *
+         * USE WITH EXTREME CAUTION!**/
         var context: Context? = null
         fun currentContext(): Context? {
             return instance?.mFTActivityLifecycleCallbacks?.currentActivity ?: context

@@ -4,6 +4,7 @@ import android.graphics.Color
 import ani.dantotsu.connections.comments.AuthResponse
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.notifications.comment.CommentStore
+import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.settings.saving.internal.Location
 import ani.dantotsu.settings.saving.internal.Pref
 
@@ -13,8 +14,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     OfflineView(Pref(Location.General, Int::class, 0)),
     DownloadManager(Pref(Location.General, Int::class, 0)),
     NSFWExtension(Pref(Location.General, Boolean::class, true)),
-    SdDl(Pref(Location.General, Boolean::class, false)),
     ContinueMedia(Pref(Location.General, Boolean::class, true)),
+    SearchSources(Pref(Location.General, Boolean::class, false)),
     RecentlyListOnly(Pref(Location.General, Boolean::class, false)),
     SettingsPreferDub(Pref(Location.General, Boolean::class, false)),
     SubscriptionCheckingNotifications(Pref(Location.General, Boolean::class, true)),
@@ -28,6 +29,8 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
             "Mozilla/5.0 (Linux; Android 13; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Mobile Safari/537.36"
         )
     ),
+    AnimeExtensionRepos(Pref(Location.General, Set::class, setOf<String>())),
+    MangaExtensionRepos(Pref(Location.General, Set::class, setOf<String>())),
     AnimeSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
     AnimeSearchHistory(Pref(Location.General, Set::class, setOf<String>())),
     MangaSourcesOrder(Pref(Location.General, List::class, listOf<String>())),
@@ -39,6 +42,9 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     LastAnilistNotificationId(Pref(Location.General, Int::class, 0)),
     AnilistFilteredTypes(Pref(Location.General, Set::class, setOf<String>())),
     UseAlarmManager(Pref(Location.General, Boolean::class, false)),
+    IncludeAnimeList(Pref(Location.General, Boolean::class, true)),
+    IncludeMangaList(Pref(Location.General, Boolean::class, true)),
+    AdultOnly(Pref(Location.General, Boolean::class, false)),
 
     //User Interface
     UseOLED(Pref(Location.UI, Boolean::class, false)),
@@ -58,15 +64,16 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     ImmersiveMode(Pref(Location.UI, Boolean::class, false)),
     SmallView(Pref(Location.UI, Boolean::class, true)),
     DefaultStartUpTab(Pref(Location.UI, Int::class, 1)),
-    HomeLayoutShow(
+    HomeLayout(
         Pref(
             Location.UI,
             List::class,
-            listOf(true, false, false, true, false, false, true)
+            listOf(true, false, false, true, false, false, true, true)
         )
     ),
     BannerAnimations(Pref(Location.UI, Boolean::class, true)),
     LayoutAnimations(Pref(Location.UI, Boolean::class, true)),
+    TrendingScroller(Pref(Location.UI, Boolean::class, true)),
     AnimationSpeed(Pref(Location.UI, Float::class, 1f)),
     ListGrid(Pref(Location.UI, Boolean::class, true)),
     PopularMangaList(Pref(Location.UI, Boolean::class, true)),
@@ -75,6 +82,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     MangaListSortOrder(Pref(Location.UI, String::class, "score")),
     CommentSortOrder(Pref(Location.UI, String::class, "newest")),
     FollowerLayout(Pref(Location.UI, Int::class, 0)),
+
 
     //Player
     DefaultSpeed(Pref(Location.Player, Int::class, 5)),
@@ -86,6 +94,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Outline(Pref(Location.Player, Int::class, 0)),
     SubBackground(Pref(Location.Player, Int::class, 0)),
     SubWindow(Pref(Location.Player, Int::class, 0)),
+    SubAlpha(Pref(Location.Player, Float::class, 1f)),
     Font(Pref(Location.Player, Int::class, 0)),
     FontSize(Pref(Location.Player, Int::class, 20)),
     Locale(Pref(Location.Player, Int::class, 2)),
@@ -94,6 +103,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     UseProxyForTimeStamps(Pref(Location.Player, Boolean::class, false)),
     ShowTimeStampButton(Pref(Location.Player, Boolean::class, true)),
     AutoSkipOPED(Pref(Location.Player, Boolean::class, false)),
+    AutoSkipRecap(Pref(Location.Player, Boolean::class, false)),
     AutoPlay(Pref(Location.Player, Boolean::class, true)),
     AutoSkipFiller(Pref(Location.Player, Boolean::class, false)),
     AskIndividualPlayer(Pref(Location.Player, Boolean::class, true)),
@@ -111,6 +121,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     UseInternalCast(Pref(Location.Player, Boolean::class, false)),
     Pip(Pref(Location.Player, Boolean::class, true)),
     RotationPlayer(Pref(Location.Player, Boolean::class, true)),
+    TorrentEnabled(Pref(Location.Player, Boolean::class, false)),
 
     //Reader
     ShowSource(Pref(Location.Reader, Boolean::class, true)),
@@ -157,6 +168,7 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     Incognito(Pref(Location.Irrelevant, Boolean::class, false)),
     OfflineMode(Pref(Location.Irrelevant, Boolean::class, false)),
     DiscordStatus(Pref(Location.Irrelevant, String::class, "online")),
+    ShowAniListIcon(Pref(Location.Irrelevant, Boolean::class, false)),
     DownloadsKeys(Pref(Location.Irrelevant, String::class, "")),
     NovelLastExtCheck(Pref(Location.Irrelevant, Long::class, 0L)),
     ImageUrl(Pref(Location.Irrelevant, String::class, "")),
@@ -174,7 +186,10 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     LogToFile(Pref(Location.Irrelevant, Boolean::class, false)),
     RecentGlobalNotification(Pref(Location.Irrelevant, Int::class, 0)),
     CommentNotificationStore(Pref(Location.Irrelevant, List::class, listOf<CommentStore>())),
+    SubscriptionNotificationStore(Pref(Location.Irrelevant, List::class, listOf<SubscriptionStore>())),
     UnreadCommentNotifications(Pref(Location.Irrelevant, Int::class, 0)),
+    DownloadsDir(Pref(Location.Irrelevant, String::class, "")),
+    RefreshStatus(Pref(Location.Irrelevant, Boolean::class, false)),
 
     //Protected
     DiscordToken(Pref(Location.Protected, String::class, "")),
@@ -186,4 +201,5 @@ enum class PrefName(val data: Pref) {  //TODO: Split this into multiple files
     AnilistUserId(Pref(Location.Protected, String::class, "")),
     MALCodeChallenge(Pref(Location.Protected, String::class, "")),
     MALToken(Pref(Location.Protected, MAL.ResponseToken::class, "")),
+    AppPassword(Pref(Location.Protected, String::class, "")),
 }

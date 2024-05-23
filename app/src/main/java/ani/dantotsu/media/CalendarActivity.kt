@@ -1,12 +1,9 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.view.WindowManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -16,8 +13,9 @@ import androidx.lifecycle.lifecycleScope
 import ani.dantotsu.R
 import ani.dantotsu.Refresh
 import ani.dantotsu.databinding.ActivityListBinding
+import ani.dantotsu.getThemeColor
+import ani.dantotsu.hideSystemBarsExtendView
 import ani.dantotsu.media.user.ListViewPagerAdapter
-import ani.dantotsu.navBarHeight
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
@@ -34,7 +32,6 @@ class CalendarActivity : AppCompatActivity() {
     private var selectedTabIdx = 1
     private val model: OtherDetailsViewModel by viewModels()
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -42,22 +39,10 @@ class CalendarActivity : AppCompatActivity() {
         binding = ActivityListBinding.inflate(layoutInflater)
 
 
-        val typedValue = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorSurface, typedValue, true)
-        val primaryColor = typedValue.data
-        val typedValue2 = TypedValue()
-        theme.resolveAttribute(
-            com.google.android.material.R.attr.colorOnBackground,
-            typedValue2,
-            true
-        )
-        val titleTextColor = typedValue2.data
-        val typedValue3 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorPrimary, typedValue3, true)
-        val primaryTextColor = typedValue3.data
-        val typedValue4 = TypedValue()
-        theme.resolveAttribute(com.google.android.material.R.attr.colorOutline, typedValue4, true)
-        val secondaryTextColor = typedValue4.data
+
+        val primaryColor = getThemeColor(com.google.android.material.R.attr.colorSurface)
+        val primaryTextColor = getThemeColor(com.google.android.material.R.attr.colorPrimary)
+        val secondaryTextColor = getThemeColor(com.google.android.material.R.attr.colorOutline)
 
         window.statusBarColor = primaryColor
         window.navigationBarColor = primaryColor
@@ -74,10 +59,7 @@ class CalendarActivity : AppCompatActivity() {
         } else {
             binding.root.fitsSystemWindows = false
             requestWindowFeature(Window.FEATURE_NO_TITLE)
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-            )
+            hideSystemBarsExtendView()
             binding.settingsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 topMargin = statusBarHeight
             }
@@ -87,6 +69,7 @@ class CalendarActivity : AppCompatActivity() {
         binding.listTitle.setText(R.string.release_calendar)
         binding.listSort.visibility = View.GONE
         binding.random.visibility = View.GONE
+        binding.search.visibility = View.GONE
         binding.listTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 this@CalendarActivity.selectedTabIdx = tab?.position ?: 1

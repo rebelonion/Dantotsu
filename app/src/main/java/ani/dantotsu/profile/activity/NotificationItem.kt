@@ -1,9 +1,7 @@
 package ani.dantotsu.profile.activity
 
-import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.updateLayoutParams
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.connections.anilist.api.Notification
@@ -12,6 +10,7 @@ import ani.dantotsu.databinding.ItemNotificationBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.profile.activity.NotificationActivity.Companion.NotificationClickType
 import ani.dantotsu.setAnimation
+import ani.dantotsu.toPx
 import com.xwray.groupie.viewbinding.BindableItem
 
 class NotificationItem(
@@ -33,30 +32,18 @@ class NotificationItem(
         return ItemNotificationBinding.bind(view)
     }
 
-    private fun image(user: Boolean = false, commentNotification: Boolean = false) {
+    private fun image(user: Boolean = false, commentNotification: Boolean = false, newRelease: Boolean = false) {
 
         val cover = if (user) notification.user?.bannerImage
             ?: notification.user?.avatar?.medium else notification.media?.bannerImage
             ?: notification.media?.coverImage?.large
-        blurImage(binding.notificationBannerImage, cover)
+        blurImage(binding.notificationBannerImage, if (newRelease) notification.banner else cover)
 
-        val defaultHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            153f,
-            binding.root.context.resources.displayMetrics
-        ).toInt()
+        val defaultHeight = 153.toPx
 
-        val userHeight = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            90f,
-            binding.root.context.resources.displayMetrics
-        ).toInt()
+        val userHeight = 90.toPx
 
-        val textMarginStart = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            125f,
-            binding.root.context.resources.displayMetrics
-        ).toInt()
+        val textMarginStart = 125.toPx
 
         if (user) {
             binding.notificationCover.visibility = View.GONE
@@ -71,15 +58,17 @@ class NotificationItem(
             }
             binding.notificationBannerImage.layoutParams.height = userHeight
             binding.notificationGradiant.layoutParams.height = userHeight
-            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart = userHeight
+            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart =
+                userHeight
         } else {
             binding.notificationCover.visibility = View.VISIBLE
             binding.notificationCoverUser.visibility = View.VISIBLE
             binding.notificationCoverUserContainer.visibility = View.GONE
-            binding.notificationCover.loadImage(notification.media?.coverImage?.large)
+            binding.notificationCover.loadImage(if (newRelease) notification.image else notification.media?.coverImage?.large)
             binding.notificationBannerImage.layoutParams.height = defaultHeight
             binding.notificationGradiant.layoutParams.height = defaultHeight
-            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart = textMarginStart
+            (binding.notificationTextContainer.layoutParams as ViewGroup.MarginLayoutParams).marginStart =
+                textMarginStart
         }
     }
 
@@ -319,9 +308,42 @@ class NotificationItem(
                 if (notification.commentId != null && notification.mediaId != null) {
                     binding.notificationBannerImage.setOnClickListener {
                         clickCallback(
-                            notification.mediaId, notification.commentId, NotificationClickType.COMMENT
+                            notification.mediaId,
+                            notification.commentId,
+                            NotificationClickType.COMMENT
                         )
                     }
+                }
+            }
+
+            NotificationType.COMMENT_WARNING -> {
+                image(user = true, commentNotification = true)
+                if (notification.commentId != null && notification.mediaId != null) {
+                    binding.notificationBannerImage.setOnClickListener {
+                        clickCallback(
+                            notification.mediaId,
+                            notification.commentId,
+                            NotificationClickType.COMMENT
+                        )
+                    }
+                }
+            }
+
+            NotificationType.DANTOTSU_UPDATE -> {
+                image(user = true)
+            }
+
+            NotificationType.SUBSCRIPTION -> {
+                image(newRelease = true)
+                binding.notificationCoverUser.setOnClickListener {
+                    clickCallback(
+                        notification.mediaId ?: 0, null, NotificationClickType.MEDIA
+                    )
+                }
+                binding.notificationBannerImage.setOnClickListener {
+                    clickCallback(
+                        notification.mediaId ?: 0, null, NotificationClickType.MEDIA
+                    )
                 }
             }
         }

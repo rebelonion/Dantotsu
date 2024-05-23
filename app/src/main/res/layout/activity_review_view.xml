@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:scrollbars="none"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/reviewContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/userContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/userAvatarContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="12dp"
+                android:backgroundTint="@color/transparent"
+                app:cardCornerRadius="64dp"
+                app:strokeColor="@color/transparent">
+
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/userAvatar"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    app:srcCompat="@drawable/ic_round_add_circle_24"
+                    tools:ignore="ContentDescription,ImageContrastCheck"
+                    tools:tint="@color/bg_black_50" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/userName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="4dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_bold"
+                android:paddingTop="1dp"
+                android:paddingBottom="0dp"
+                android:singleLine="true"
+                android:text="Username"
+                android:textColor="@color/bg_opp"
+                android:textSize="18sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="4dp"
+                android:alpha="0.6"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="•"
+                android:textSize="18sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+
+            <TextView
+                android:id="@+id/userTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:layout_marginEnd="6dp"
+                android:layout_weight="1"
+                android:alpha="0.6"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="Time"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText,RtlSymmetry" />
+        </LinearLayout>
+
+        <WebView
+            android:id="@+id/profileUserBio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:ellipsize="end"
+            android:nestedScrollingEnabled="true"
+            android:padding="16dp"
+            android:textAlignment="textStart"
+            tools:text="@string/slogan" />
+
+        <LinearLayout
+            android:id="@+id/reviewContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/surface_rounded_bg"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/downvote"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    android:scaleX="-1"
+                    android:scaleY="-1"
+                    android:src="@drawable/ic_thumbs"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/voteCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginEnd="4dp"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:text="0"
+                    android:textSize="18sp"
+                    tools:ignore="HardcodedText" />
+
+                <ImageView
+                    android:id="@+id/upvote"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginStart="8dp"
+                    android:src="@drawable/ic_thumbs"
+                    tools:ignore="ContentDescription" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/voteText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="8dp"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:text="@string/vote_out_of_total"
+                android:textSize="14sp"
+                tools:ignore="HardcodedText" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

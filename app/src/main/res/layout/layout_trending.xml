@@ -1,0 +1,106 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:id="@+id/trendingContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/trendingViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="464dp" />
+
+        <LinearLayout
+            android:id="@+id/titleContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:baselineAligned="false"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/searchBar"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:textColorHint="@color/bg_opp"
+                android:transitionName="@string/search"
+                app:boxBackgroundColor="?attr/colorPrimaryContainer"
+                app:boxCornerRadiusBottomEnd="28dp"
+                app:boxCornerRadiusBottomStart="28dp"
+                app:boxCornerRadiusTopEnd="28dp"
+                app:boxCornerRadiusTopStart="28dp"
+                app:boxStrokeColor="@color/text_input_layout_stroke_color"
+                app:endIconDrawable="@drawable/ic_round_search_24"
+                app:endIconTint="@color/bg_opp"
+                app:hintAnimationEnabled="true">
+
+                <AutoCompleteTextView
+                    android:id="@+id/searchBarText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:fontFamily="@font/poppins_bold"
+                    android:inputType="none"
+                    android:padding="8dp"
+                    android:textColor="?android:attr/textColorSecondary"
+                    android:textSize="14sp"
+                    tools:ignore="LabelFor,TextContrastCheck" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/userAvatarContainer"
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:layout_marginTop="4dp"
+                    android:backgroundTint="@color/nav_bg_inv"
+                    app:cardCornerRadius="26dp">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/userAvatar"
+                        android:layout_width="52dp"
+                        android:layout_height="52dp"
+                        android:scaleType="center"
+                        app:srcCompat="@drawable/ic_round_settings_24"
+                        tools:ignore="ContentDescription,ImageContrastCheck" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:id="@+id/notificationCount"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_gravity="end|bottom"
+                    android:background="@drawable/notification_circle"
+                    android:fontFamily="@font/poppins_semi_bold"
+                    android:gravity="center"
+                    android:textColor="#F3F3F3"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    tools:ignore="SmallSp"
+                    tools:text="1"
+                    tools:visibility="visible" />
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/trendingProgressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="64dp" />
+
+    </FrameLayout>
+</merge>

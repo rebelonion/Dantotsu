@@ -10,7 +10,7 @@ import ani.dantotsu.notifications.subscription.SubscriptionNotificationWorker
 
 class WorkManagerScheduler(private val context: Context) : TaskScheduler {
     override fun scheduleRepeatingTask(taskType: TaskType, interval: Long) {
-        if (interval < PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS) {
+        if (interval * 1000 < PeriodicWorkRequest.MIN_PERIODIC_INTERVAL_MILLIS) {
             cancelTask(taskType)
             return
         }

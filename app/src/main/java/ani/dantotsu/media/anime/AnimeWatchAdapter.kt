@@ -1,11 +1,9 @@
 package ani.dantotsu.media.anime
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
-import ani.dantotsu.settings.FAQActivity
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
@@ -13,22 +11,34 @@ import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
-import ani.dantotsu.*
+import ani.dantotsu.FileUrl
+import ani.dantotsu.R
+import ani.dantotsu.currActivity
 import ani.dantotsu.databinding.DialogLayoutBinding
 import ani.dantotsu.databinding.ItemAnimeWatchBinding
 import ani.dantotsu.databinding.ItemChipBinding
+import ani.dantotsu.displayTimer
+import ani.dantotsu.isOnline
+import ani.dantotsu.loadImage
 import ani.dantotsu.media.Media
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.SourceSearchDialogFragment
+import ani.dantotsu.openSettings
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.others.webview.CookieCatcher
 import ani.dantotsu.parsers.AnimeSources
 import ani.dantotsu.parsers.DynamicAnimeParser
 import ani.dantotsu.parsers.WatchSources
+import ani.dantotsu.px
+import ani.dantotsu.settings.FAQActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.toast
 import com.google.android.material.chip.Chip
 import eu.kanade.tachiyomi.animesource.online.AnimeHttpSource
 import eu.kanade.tachiyomi.data.notification.Notifications.CHANNEL_SUBSCRIPTION_CHECK
@@ -42,7 +52,7 @@ class AnimeWatchAdapter(
     private val fragment: AnimeWatchFragment,
     private val watchSources: WatchSources
 ) : RecyclerView.Adapter<AnimeWatchAdapter.ViewHolder>() {
-
+    private var autoSelect = true
     var subscribe: MediaDetailsActivity.PopImageButton? = null
     private var _binding: ItemAnimeWatchBinding? = null
 
@@ -54,7 +64,6 @@ class AnimeWatchAdapter(
     private var nestedDialog: AlertDialog? = null
 
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val binding = holder.binding
         _binding = binding
@@ -97,15 +106,12 @@ class AnimeWatchAdapter(
                 null
             )
         }
-        val offline = if (!isOnline(binding.root.context) || PrefManager.getVal(
-                PrefName.OfflineMode
-            )
-        ) View.GONE else View.VISIBLE
+        val offline = !isOnline(binding.root.context) || PrefManager.getVal(PrefName.OfflineMode)
 
-        binding.animeSourceNameContainer.visibility = offline
-        binding.animeSourceSettings.visibility = offline
-        binding.animeSourceSearch.visibility = offline
-        binding.animeSourceTitle.visibility = offline
+        binding.animeSourceNameContainer.isGone = offline
+        binding.animeSourceSettings.isGone = offline
+        binding.animeSourceSearch.isGone = offline
+        binding.animeSourceTitle.isGone = offline
 
         //Source Selection
         var source =
@@ -117,8 +123,7 @@ class AnimeWatchAdapter(
                 this.selectDub = media.selected!!.preferDub
                 binding.animeSourceTitle.text = showUserText
                 showUserTextListener = { MainScope().launch { binding.animeSourceTitle.text = it } }
-                binding.animeSourceDubbedCont.visibility =
-                    if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
+                binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
             }
         }
 
@@ -137,8 +142,7 @@ class AnimeWatchAdapter(
                 changing = true
                 binding.animeSourceDubbed.isChecked = selectDub
                 changing = false
-                binding.animeSourceDubbedCont.visibility =
-                    if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
+                binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
                 source = i
                 setLanguageList(0, i)
             }
@@ -158,14 +162,12 @@ class AnimeWatchAdapter(
                     changing = true
                     binding.animeSourceDubbed.isChecked = selectDub
                     changing = false
-                    binding.animeSourceDubbedCont.visibility =
-                        if (isDubAvailableSeparately()) View.VISIBLE else View.GONE
+                    binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
                     setLanguageList(i, source)
                 }
                 subscribeButton(false)
                 fragment.loadEpisodes(media.selected!!.sourceIndex, true)
-            } ?: run {
-            }
+            } ?: run { }
         }
 
         //settings
@@ -223,9 +225,9 @@ class AnimeWatchAdapter(
                 else -> dialogBinding.animeSourceList
             }
             when (style) {
-                0 -> dialogBinding.layoutText.text = "List"
-                1 -> dialogBinding.layoutText.text = "Grid"
-                2 -> dialogBinding.layoutText.text = "Compact"
+                0 -> dialogBinding.layoutText.setText(R.string.list)
+                1 -> dialogBinding.layoutText.setText(R.string.grid)
+                2 -> dialogBinding.layoutText.setText(R.string.compact)
                 else -> dialogBinding.animeSourceList
             }
             selected.alpha = 1f
@@ -237,24 +239,24 @@ class AnimeWatchAdapter(
             dialogBinding.animeSourceList.setOnClickListener {
                 selected(it as ImageButton)
                 style = 0
-                dialogBinding.layoutText.text = "List"
+                dialogBinding.layoutText.setText(R.string.list)
                 run = true
             }
             dialogBinding.animeSourceGrid.setOnClickListener {
                 selected(it as ImageButton)
                 style = 1
-                dialogBinding.layoutText.text = "Grid"
+                dialogBinding.layoutText.setText(R.string.grid)
                 run = true
             }
             dialogBinding.animeSourceCompact.setOnClickListener {
                 selected(it as ImageButton)
                 style = 2
-                dialogBinding.layoutText.text = "Compact"
+                dialogBinding.layoutText.setText(R.string.compact)
                 run = true
             }
             dialogBinding.animeWebviewContainer.setOnClickListener {
                 if (!WebViewUtil.supportsWebView(fragment.requireContext())) {
-                    toast("WebView not installed")
+                    toast(R.string.webview_not_installed)
                 }
                 //start CookieCatcher activity
                 if (watchSources.names.isNotEmpty() && source in 0 until watchSources.names.size) {
@@ -307,7 +309,6 @@ class AnimeWatchAdapter(
     }
 
     //Chips
-    @SuppressLint("SetTextI18n")
     fun updateChips(limit: Int, names: Array<String>, arr: Array<Int>, selected: Int = 0) {
         val binding = _binding
         if (binding != null) {
@@ -329,7 +330,9 @@ class AnimeWatchAdapter(
                         0
                     )
                 }
-                chip.text = "${names[limit * (position)]} - ${names[last - 1]}"
+
+                val chipText = "${names[limit * (position)]} - ${names[last - 1]}"
+                chip.text = chipText
                 chip.setTextColor(
                     ContextCompat.getColorStateList(
                         fragment.requireContext(),
@@ -363,7 +366,6 @@ class AnimeWatchAdapter(
         _binding?.animeSourceChipGroup?.removeAllViews()
     }
 
-    @SuppressLint("SetTextI18n")
     fun handleEpisodes() {
         val binding = _binding
         if (binding != null) {
@@ -371,9 +373,9 @@ class AnimeWatchAdapter(
                 val episodes = media.anime.episodes!!.keys.toTypedArray()
 
                 val anilistEp = (media.userProgress ?: 0).plus(1)
-                val appEp =
-                    PrefManager.getCustomVal<String?>("${media.id}_current_ep", "")?.toIntOrNull()
-                        ?: 1
+                val appEp = PrefManager.getCustomVal<String?>(
+                    "${media.id}_current_ep", ""
+                )?.toIntOrNull() ?: 1
 
                 var continueEp = (if (anilistEp > appEp) anilistEp else appEp).toString()
                 if (episodes.contains(continueEp)) {
@@ -403,21 +405,27 @@ class AnimeWatchAdapter(
                     }
                     val ep = media.anime.episodes!![continueEp]!!
 
-                    val cleanedTitle = ep.title?.let { AnimeNameAdapter.removeEpisodeNumber(it) }
+                    val cleanedTitle = ep.title?.let { MediaNameAdapter.removeEpisodeNumber(it) }
 
                     binding.itemEpisodeImage.loadImage(
                         ep.thumb ?: FileUrl[media.banner ?: media.cover], 0
                     )
                     if (ep.filler) binding.itemEpisodeFillerView.visibility = View.VISIBLE
+
                     binding.animeSourceContinueText.text =
-                        currActivity()!!.getString(R.string.continue_episode) + "${ep.number}${if (ep.filler) " - Filler" else ""}${"\n$cleanedTitle"}"
+                        currActivity()!!.getString(
+                            R.string.continue_episode, ep.number, if (ep.filler)
+                                currActivity()!!.getString(R.string.filler_tag)
+                            else
+                                "", cleanedTitle
+                        )
                     binding.animeSourceContinue.setOnClickListener {
                         fragment.onEpisodeClick(continueEp)
                     }
                     if (fragment.continueEp) {
-                        if ((binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams).weight < PrefManager.getVal<Float>(
-                                PrefName.WatchPercentage
-                            )
+                        if (
+                            (binding.itemEpisodeProgress.layoutParams as LinearLayout.LayoutParams)
+                                .weight < PrefManager.getVal<Float>(PrefName.WatchPercentage)
                         ) {
                             binding.animeSourceContinue.performClick()
                             fragment.continueEp = false
@@ -428,13 +436,31 @@ class AnimeWatchAdapter(
                 }
 
                 binding.animeSourceProgressBar.visibility = View.GONE
-                if (media.anime.episodes!!.isNotEmpty()) {
-                    binding.animeSourceNotFound.visibility = View.GONE
-                    binding.faqbutton.visibility = View.GONE}
-                else {
-                    binding.animeSourceNotFound.visibility = View.VISIBLE
-                    binding.faqbutton.visibility = View.VISIBLE
+
+                val sourceFound = media.anime.episodes!!.isNotEmpty()
+                binding.animeSourceNotFound.isGone = sourceFound
+                binding.faqbutton.isGone = sourceFound
+
+                if (!sourceFound && PrefManager.getVal(PrefName.SearchSources) && autoSelect) {
+                    if (binding.animeSource.adapter.count > media.selected!!.sourceIndex + 1) {
+                        val nextIndex = media.selected!!.sourceIndex + 1
+                        binding.animeSource.setText(
+                            binding.animeSource.adapter
+                                .getItem(nextIndex).toString(), false
+                        )
+                        fragment.onSourceChange(nextIndex).apply {
+                            binding.animeSourceTitle.text = showUserText
+                            showUserTextListener =
+                                { MainScope().launch { binding.animeSourceTitle.text = it } }
+                            binding.animeSourceDubbed.isChecked = selectDub
+                            binding.animeSourceDubbedCont.isVisible = isDubAvailableSeparately()
+                            setLanguageList(0, nextIndex)
+                        }
+                        subscribeButton(false)
+                        fragment.loadEpisodes(nextIndex, false)
                     }
+                }
+                binding.animeSource.setOnClickListener { autoSelect = false }
             } else {
                 binding.animeSourceContinue.visibility = View.GONE
                 binding.animeSourceNotFound.visibility = View.GONE
@@ -463,7 +489,7 @@ class AnimeWatchAdapter(
                 val adapter = ArrayAdapter(
                     fragment.requireContext(),
                     R.layout.item_dropdown,
-                    parser.extension.sources.map { LanguageMapper.mapLanguageCodeToName(it.lang) }
+                    parser.extension.sources.map { LanguageMapper.getLanguageName(it.lang) }
                 )
                 val items = adapter.count
 
@@ -480,8 +506,7 @@ class AnimeWatchAdapter(
     inner class ViewHolder(val binding: ItemAnimeWatchBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            //Timer
-            countDown(media, binding.animeSourceContainer)
+            displayTimer(media, binding.animeSourceContainer)
         }
     }
 }

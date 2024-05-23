@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.currContext
-import ani.dantotsu.util.Logger
 import ani.dantotsu.media.anime.Episode
 import ani.dantotsu.media.anime.SelectorDialogFragment
 import ani.dantotsu.media.manga.MangaChapter
@@ -29,6 +28,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.tryWithSuspend
+import ani.dantotsu.util.Logger
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -52,24 +52,21 @@ class MediaDetailsViewModel : ViewModel() {
                     it
                 }
         if (isDownload) {
-            data.sourceIndex = if (media.anime != null) {
-                AnimeSources.list.size - 1
-            } else if (media.format == "MANGA" || media.format == "ONE_SHOT") {
-                MangaSources.list.size - 1
-            } else {
-                NovelSources.list.size - 1
+            data.sourceIndex = when {
+                media.anime != null -> {
+                    AnimeSources.list.size - 1
+                }
+
+                media.format == "MANGA" || media.format == "ONE_SHOT" -> {
+                    MangaSources.list.size - 1
+                }
+
+                else -> {
+                    NovelSources.list.size - 1
+                }
             }
         }
         return data
-    }
-
-    fun loadSelectedStringLocation(sourceName: String): Int {
-        //find the location of the source in the list
-        var location = watchSources?.list?.indexOfFirst { it.name == sourceName } ?: 0
-        if (location == -1) {
-            location = 0
-        }
-        return location
     }
 
     var continueMedia: Boolean? = null
@@ -152,10 +149,10 @@ class MediaDetailsViewModel : ViewModel() {
             watchSources?.get(i)?.apply {
                 if (!post && !allowsPreloading) return@apply
                 ep.sEpisode?.let {
-                    loadByVideoServers(link, ep.extra, it) {
-                        if (it.videos.isNotEmpty()) {
-                            list.add(it)
-                            ep.extractorCallback?.invoke(it)
+                    loadByVideoServers(link, ep.extra, it) { extractor ->
+                        if (extractor.videos.isNotEmpty()) {
+                            list.add(extractor)
+                            ep.extractorCallback?.invoke(extractor)
                         }
                     }
                 }
@@ -291,7 +288,6 @@ class MediaDetailsViewModel : ViewModel() {
     suspend fun loadMangaChapterImages(
         chapter: MangaChapter,
         selected: Selected,
-        series: String,
         post: Boolean = true
     ): Boolean {
 

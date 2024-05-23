@@ -1,6 +1,5 @@
 package ani.dantotsu.media
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputFilter.LengthFilter
 import android.view.Gravity
@@ -10,11 +9,17 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
-import ani.dantotsu.*
+import ani.dantotsu.BottomSheetDialogFragment
+import ani.dantotsu.InputFilterMinMax
+import ani.dantotsu.R
+import ani.dantotsu.Refresh
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.mal.MAL
 import ani.dantotsu.databinding.BottomSheetMediaListSmallBinding
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.others.getSerialized
+import ani.dantotsu.settings.saving.PrefManager
+import ani.dantotsu.snackString
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,7 +59,6 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
     }
 
 
-    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.mediaListContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin += navBarHeight }
         val scope = viewLifecycleOwner.lifecycleScope
@@ -68,7 +72,7 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
                             MAL.query.deleteList(media.anime != null, media.idMAL)
                         } catch (e: Exception) {
                             withContext(Dispatchers.Main) {
-                                snackString("Failed to delete because of... ${e.message}")
+                                snackString(getString(R.string.delete_fail_reason, e.message))
                             }
                             return@withContext
                         }
@@ -154,7 +158,10 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
             val init =
                 if (binding.mediaListProgress.text.toString() != "") binding.mediaListProgress.text.toString()
                     .toInt() else 0
-            if (init < (total ?: 5000)) binding.mediaListProgress.setText((init + 1).toString())
+            if (init < (total ?: 5000)) {
+                val progressText = "${init + 1}"
+                binding.mediaListProgress.setText(progressText)
+            }
             if (init + 1 == (total ?: 5000)) {
                 binding.mediaListStatus.setText(statusStrings[2], false)
             }
@@ -164,7 +171,12 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
         binding.mediaListPrivate.setOnCheckedChangeListener { _, checked ->
             media.isListPrivate = checked
         }
-
+        val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
+        var remove: Boolean? = null
+        binding.mediaListShow.isChecked = media.id in removeList
+        binding.mediaListShow.setOnCheckedChangeListener { _, checked ->
+            remove = checked
+        }
         binding.mediaListSave.setOnClickListener {
             scope.launch {
                 withContext(Dispatchers.IO) {
@@ -191,6 +203,11 @@ class MediaListDialogSmallFragment : BottomSheetDialogFragment() {
                             status
                         )
                     }
+                }
+                if (remove == true) {
+                    PrefManager.setCustomVal("removeList", removeList.plus(media.id))
+                } else if (remove == false) {
+                    PrefManager.setCustomVal("removeList", removeList.minus(media.id))
                 }
                 Refresh.all()
                 snackString(getString(R.string.list_updated))

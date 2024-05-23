@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:configure="ani.dantotsu.widgets.statistics.ProfileStatsConfigure"
+    android:description="@string/profile_stats_widget"
+    android:initialKeyguardLayout="@layout/statistics_widget"
+    android:initialLayout="@layout/statistics_widget"
+    android:minResizeWidth="130dp"
+    android:minResizeHeight="220dp"
+    android:previewImage="@drawable/statistics_widget_preview"
+    android:previewLayout="@layout/statistics_widget"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="86400000"
+    android:widgetCategory="home_screen" />

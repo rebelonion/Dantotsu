@@ -1,21 +1,13 @@
 package ani.dantotsu.parsers
 
-import android.content.ContentResolver
-import android.content.ContentValues
 import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
-import android.os.Build
-import android.os.Environment
-import android.provider.MediaStore
 import ani.dantotsu.FileUrl
 import ani.dantotsu.currContext
-import ani.dantotsu.util.Logger
-import ani.dantotsu.media.anime.AnimeNameAdapter
+import ani.dantotsu.media.MediaNameAdapter
 import ani.dantotsu.media.manga.ImageData
 import ani.dantotsu.media.manga.MangaCache
 import ani.dantotsu.snackString
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.animesource.AnimeCatalogueSource
 import eu.kanade.tachiyomi.animesource.ConfigurableAnimeSource
 import eu.kanade.tachiyomi.animesource.model.AnimesPage
@@ -35,12 +27,10 @@ import eu.kanade.tachiyomi.source.model.SChapter
 import eu.kanade.tachiyomi.source.model.SManga
 import eu.kanade.tachiyomi.source.online.HttpSource
 import eu.kanade.tachiyomi.util.lang.awaitSingle
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
@@ -48,20 +38,10 @@ import kotlinx.coroutines.withContext
 import okhttp3.Request
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
-import java.io.File
-import java.io.FileOutputStream
 import java.io.UnsupportedEncodingException
+import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLDecoder
-import java.util.regex.Pattern
-
-class AniyomiAdapter {
-    fun aniyomiToAnimeParser(extension: AnimeExtension.Installed): DynamicAnimeParser {
-        return DynamicAnimeParser(extension)
-    }
-
-
-}
 
 class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
     val extension: AnimeExtension.Installed
@@ -73,8 +53,11 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
 
     override val name = extension.name
     override val saveName = extension.name
-    override val hostUrl = extension.sources.first().name
+    override val hostUrl =
+        (extension.sources.first() as? AnimeHttpSource)?.baseUrl ?: extension.sources.first().name
     override val isNSFW = extension.isNsfw
+    override val icon = extension.icon
+
     override var selectDub: Boolean
         get() = getDub()
         set(value) {
@@ -93,27 +76,27 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     configurableSource.getPreferenceKey(),
                     Context.MODE_PRIVATE
                 )
-            sharedPreferences.all.filterValues { AnimeNameAdapter.getSubDub(it.toString()) != AnimeNameAdapter.Companion.SubDubType.NULL }
+            sharedPreferences.all.filterValues { MediaNameAdapter.getSubDub(it.toString()) != MediaNameAdapter.SubDubType.NULL }
                 .forEach { value ->
-                    return when (AnimeNameAdapter.getSubDub(value.value.toString())) {
-                        AnimeNameAdapter.Companion.SubDubType.SUB -> false
-                        AnimeNameAdapter.Companion.SubDubType.DUB -> true
-                        AnimeNameAdapter.Companion.SubDubType.NULL -> false
+                    return when (MediaNameAdapter.getSubDub(value.value.toString())) {
+                        MediaNameAdapter.SubDubType.SUB -> false
+                        MediaNameAdapter.SubDubType.DUB -> true
+                        MediaNameAdapter.SubDubType.NULL -> false
                     }
                 }
         }
         return false
     }
 
-    fun setDub(setDub: Boolean) {
+    private fun setDub(setDub: Boolean) {
         if (sourceLanguage >= extension.sources.size) {
             sourceLanguage = extension.sources.size - 1
         }
         val configurableSource = extension.sources[sourceLanguage] as? ConfigurableAnimeSource
             ?: return
         val type = when (setDub) {
-            true -> AnimeNameAdapter.Companion.SubDubType.DUB
-            false -> AnimeNameAdapter.Companion.SubDubType.SUB
+            true -> MediaNameAdapter.SubDubType.DUB
+            false -> MediaNameAdapter.SubDubType.SUB
         }
         currContext()?.let { context ->
             val sharedPreferences =
@@ -121,9 +104,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     configurableSource.getPreferenceKey(),
                     Context.MODE_PRIVATE
                 )
-            sharedPreferences.all.filterValues { AnimeNameAdapter.getSubDub(it.toString()) != AnimeNameAdapter.Companion.SubDubType.NULL }
+            sharedPreferences.all.filterValues { MediaNameAdapter.getSubDub(it.toString()) != MediaNameAdapter.SubDubType.NULL }
                 .forEach { value ->
-                    val setValue = AnimeNameAdapter.setSubDub(value.value.toString(), type)
+                    val setValue = MediaNameAdapter.setSubDub(value.value.toString(), type)
                     if (setValue != null) {
                         sharedPreferences.edit().putString(value.key, setValue).apply()
                     }
@@ -142,9 +125,9 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                     Context.MODE_PRIVATE
                 )
             sharedPreferences.all.filterValues {
-                AnimeNameAdapter.setSubDub(
+                MediaNameAdapter.setSubDub(
                     it.toString(),
-                    AnimeNameAdapter.Companion.SubDubType.NULL
+                    MediaNameAdapter.SubDubType.NULL
                 ) != null
             }
                 .forEach { _ -> return true }
@@ -170,7 +153,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             val sortedEpisodes = if (res[0].episode_number == -1f) {
                 // Find the number in the string and sort by that number
                 val sortedByStringNumber = res.sortedBy {
-                    val matchResult = AnimeNameAdapter.findEpisodeNumber(it.name)
+                    val matchResult = MediaNameAdapter.findEpisodeNumber(it.name)
                     val number = matchResult ?: Float.MAX_VALUE
                     it.episode_number = number  // Store the found number in episode_number
                     number
@@ -191,13 +174,13 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                 var episodeCounter = 1f
                 // Group by season, sort within each season, and then renumber while keeping episode number 0 as is
                 val seasonGroups =
-                    res.groupBy { AnimeNameAdapter.findSeasonNumber(it.name) ?: 0 }
-                seasonGroups.keys.sortedBy { it.toInt() }
+                    res.groupBy { MediaNameAdapter.findSeasonNumber(it.name) ?: 0 }
+                seasonGroups.keys.sortedBy { it }
                     .flatMap { season ->
                         seasonGroups[season]?.sortedBy { it.episode_number }?.map { episode ->
                             if (episode.episode_number != 0f) { // Skip renumbering for episode number 0
                                 val potentialNumber =
-                                    AnimeNameAdapter.findEpisodeNumber(episode.name)
+                                    MediaNameAdapter.findEpisodeNumber(episode.name)
                                 if (potentialNumber != null) {
                                     episode.episode_number = potentialNumber
                                 } else {
@@ -209,7 +192,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
                         } ?: emptyList()
                     }
             }
-            return sortedEpisodes.map { SEpisodeToEpisode(it) }
+            return sortedEpisodes.map { sEpisodeToEpisode(it) }
         } catch (e: Exception) {
             Logger.log("Exception: $e")
         }
@@ -244,7 +227,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
 
         return try {
             val videos = source.getVideoList(sEpisode)
-            videos.map { VideoToVideoServer(it) }
+            videos.map { videoToVideoServer(it) }
         } catch (e: Exception) {
             Logger.log("Exception occurred: ${e.message}")
             emptyList()
@@ -265,17 +248,19 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         } as? AnimeHttpSource ?: (extension.sources[sourceLanguage] as? AnimeCatalogueSource
             ?: return emptyList())
         return try {
-            val res = source.fetchSearchAnime(1, query, source.getFilterList()).awaitSingle()
+            val res = source.getSearchAnime(1, query, source.getFilterList())
             Logger.log("query: $query")
             convertAnimesPageToShowResponse(res)
         } catch (e: CloudflareBypassException) {
             Logger.log("Exception in search: $e")
+            Logger.log(e)
             withContext(Dispatchers.Main) {
                 snackString("Failed to bypass Cloudflare")
             }
             emptyList()
         } catch (e: Exception) {
             Logger.log("General exception in search: $e")
+            Logger.log(e)
             emptyList()
         }
     }
@@ -287,16 +272,13 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
             val name = sAnime.title
             val link = sAnime.url
             val coverUrl = sAnime.thumbnail_url ?: ""
-            val otherNames = emptyList<String>() // Populate as needed
-            val total = 1
-            val extra: Map<String, String>? = null // Populate as needed
 
             // Create a new ShowResponse
             ShowResponse(name, link, coverUrl, sAnime)
         }
     }
 
-    private fun SEpisodeToEpisode(sEpisode: SEpisode): Episode {
+    private fun sEpisodeToEpisode(sEpisode: SEpisode): Episode {
         //if the float episode number is a whole number, convert it to an int
         val episodeNumberInt =
             if (sEpisode.episode_number % 1 == 0f) {
@@ -324,7 +306,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
         )
     }
 
-    private fun VideoToVideoServer(video: Video): VideoServer {
+    private fun videoToVideoServer(video: Video): VideoServer {
         return VideoServer(
             video.quality,
             video.url,
@@ -335,7 +317,7 @@ class DynamicAnimeParser(extension: AnimeExtension.Installed) : AnimeParser() {
 }
 
 class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
-    val mangaCache = Injekt.get<MangaCache>()
+    private val mangaCache = Injekt.get<MangaCache>()
     val extension: MangaExtension.Installed
     var sourceLanguage = 0
 
@@ -345,8 +327,10 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
     override val name = extension.name
     override val saveName = extension.name
-    override val hostUrl = extension.sources.first().name
+    override val hostUrl =
+        (extension.sources.first() as? HttpSource)?.baseUrl ?: extension.sources.first().name
     override val isNSFW = extension.isNsfw
+    override val icon = extension.icon
 
     override suspend fun loadChapters(
         mangaLink: String,
@@ -363,7 +347,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         return try {
             val res = source.getChapterList(sManga)
             val reversedRes = res.reversed()
-            val chapterList = reversedRes.map { SChapterToMangaChapter(it) }
+            val chapterList = reversedRes.map { sChapterToMangaChapter(it) }
             Logger.log("chapterList size: ${chapterList.size}")
             Logger.log("chapterList: ${chapterList[1].title}")
             Logger.log("chapterList: ${chapterList[1].description}")
@@ -382,7 +366,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             sourceLanguage = 0
             extension.sources[sourceLanguage]
         } as? HttpSource ?: return emptyList()
-        var imageDataList: List<ImageData> = listOf()
+        val imageDataList: MutableList<ImageData> = mutableListOf()
         val ret = coroutineScope {
             try {
                 Logger.log("source.name " + source.name)
@@ -410,7 +394,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         return ret
     }
 
-    suspend fun imageList(chapterLink: String, sChapter: SChapter): List<ImageData> {
+    suspend fun imageList(sChapter: SChapter): List<ImageData> {
         val source = try {
             extension.sources[sourceLanguage]
         } catch (e: Exception) {
@@ -443,121 +427,6 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
         }
     }
 
-    suspend fun fetchAndProcessImage(
-        page: Page,
-        httpSource: HttpSource,
-        context: Context
-    ): Bitmap? {
-        return withContext(Dispatchers.IO) {
-            try {
-                // Fetch the image
-                val response = httpSource.getImage(page)
-                Logger.log("Response: ${response.code}")
-                Logger.log("Response: ${response.message}")
-
-                // Convert the Response to an InputStream
-                val inputStream = response.body.byteStream()
-
-                // Convert InputStream to Bitmap
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-
-                inputStream.close()
-                ani.dantotsu.media.manga.saveImage(
-                    bitmap,
-                    context.contentResolver,
-                    page.imageUrl!!,
-                    Bitmap.CompressFormat.JPEG,
-                    100
-                )
-
-                return@withContext bitmap
-            } catch (e: Exception) {
-                // Handle any exceptions
-                Logger.log("An error occurred: ${e.message}")
-                return@withContext null
-            }
-        }
-    }
-
-
-    fun fetchAndSaveImage(page: Page, httpSource: HttpSource, contentResolver: ContentResolver) {
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                // Fetch the image
-                val response = httpSource.getImage(page)
-
-                // Convert the Response to an InputStream
-                val inputStream = response.body.byteStream()
-
-                // Convert InputStream to Bitmap
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-
-                withContext(Dispatchers.IO) {
-                    // Save the Bitmap using MediaStore API
-                    saveImage(
-                        bitmap,
-                        contentResolver,
-                        "image_${System.currentTimeMillis()}.jpg",
-                        Bitmap.CompressFormat.JPEG,
-                        100
-                    )
-                }
-
-                inputStream.close()
-            } catch (e: Exception) {
-                // Handle any exceptions
-                Logger.log("An error occurred: ${e.message}")
-            }
-        }
-    }
-
-    fun saveImage(
-        bitmap: Bitmap,
-        contentResolver: ContentResolver,
-        filename: String,
-        format: Bitmap.CompressFormat,
-        quality: Int
-    ) {
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                val contentValues = ContentValues().apply {
-                    put(MediaStore.MediaColumns.DISPLAY_NAME, filename)
-                    put(MediaStore.MediaColumns.MIME_TYPE, "image/${format.name.lowercase()}")
-                    put(
-                        MediaStore.MediaColumns.RELATIVE_PATH,
-                        "${Environment.DIRECTORY_DOWNLOADS}/Dantotsu/Anime"
-                    )
-                }
-
-                val uri: Uri? = contentResolver.insert(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    contentValues
-                )
-
-                uri?.let {
-                    contentResolver.openOutputStream(it)?.use { os ->
-                        bitmap.compress(format, quality, os)
-                    }
-                }
-            } else {
-                val directory =
-                    File("${Environment.getExternalStorageDirectory()}${File.separator}Dantotsu${File.separator}Anime")
-                if (!directory.exists()) {
-                    directory.mkdirs()
-                }
-
-                val file = File(directory, filename)
-                FileOutputStream(file).use { outputStream ->
-                    bitmap.compress(format, quality, outputStream)
-                }
-            }
-        } catch (e: Exception) {
-            // Handle exception here
-            Logger.log("Exception while saving image: ${e.message}")
-        }
-    }
-
-
     override suspend fun search(query: String): List<ShowResponse> {
         val source = try {
             extension.sources[sourceLanguage]
@@ -589,9 +458,6 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             val name = sManga.title
             val link = sManga.url
             val coverUrl = sManga.thumbnail_url ?: ""
-            val otherNames = emptyList<String>() // Populate as needed
-            val total = 1
-            val extra: Map<String, String>? = null // Populate as needed
 
             // Create a new ShowResponse
             ShowResponse(name, link, coverUrl, sManga)
@@ -600,12 +466,10 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
 
     private fun pageToMangaImage(page: Page): MangaImage {
         var headersMap = mapOf<String, String>()
-        var urlWithoutHeaders = ""
         var url = ""
 
         page.imageUrl?.let {
             val splitUrl = it.split("&")
-            urlWithoutHeaders = splitUrl.getOrNull(0) ?: ""
             url = it
 
             headersMap = splitUrl.mapNotNull { part ->
@@ -632,7 +496,7 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
     }
 
 
-    private fun SChapterToMangaChapter(sChapter: SChapter): MangaChapter {
+    private fun sChapterToMangaChapter(sChapter: SChapter): MangaChapter {
         return MangaChapter(
             sChapter.name,
             sChapter.url,
@@ -643,85 +507,69 @@ class DynamicMangaParser(extension: MangaExtension.Installed) : MangaParser() {
             sChapter.date_upload
         )
     }
-
-    fun parseChapterTitle(title: String): Triple<String?, String?, String> {
-        val volumePattern =
-            Pattern.compile("(?:vol\\.?|v|volume\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
-        val chapterPattern =
-            Pattern.compile("(?:ch\\.?|chapter\\s?)(\\d+)", Pattern.CASE_INSENSITIVE)
-
-        val volumeMatcher = volumePattern.matcher(title)
-        val chapterMatcher = chapterPattern.matcher(title)
-
-        val volumeNumber = if (volumeMatcher.find()) volumeMatcher.group(1) else null
-        val chapterNumber = if (chapterMatcher.find()) chapterMatcher.group(1) else null
-
-        var remainingTitle = title
-        if (volumeNumber != null) {
-            remainingTitle =
-                volumeMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
-        }
-        if (chapterNumber != null) {
-            remainingTitle =
-                chapterMatcher.group(0)?.let { remainingTitle.replace(it, "") }.toString()
-        }
-
-        return Triple(volumeNumber, chapterNumber, remainingTitle.trim())
-    }
-
 }
 
-class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
+class VideoServerPassthrough(private val videoServer: VideoServer) : VideoExtractor() {
     override val server: VideoServer
         get() = videoServer
 
     override suspend fun extract(): VideoContainer {
-        val vidList = listOfNotNull(videoServer.video?.let { AniVideoToSaiVideo(it) })
-        val subList = videoServer.video?.subtitleTracks?.map { TrackToSubtitle(it) } ?: emptyList()
+        val vidList = listOfNotNull(videoServer.video?.let { aniVideoToSaiVideo(it) })
+        val subList = videoServer.video?.subtitleTracks?.map { trackToSubtitle(it) } ?: emptyList()
+        val audioList = videoServer.video?.audioTracks ?: emptyList()
 
         return if (vidList.isNotEmpty()) {
-            VideoContainer(vidList, subList)
+            VideoContainer(vidList, subList, audioList)
         } else {
             throw Exception("No videos found")
         }
     }
 
-    private fun AniVideoToSaiVideo(aniVideo: Video): ani.dantotsu.parsers.Video {
+    private fun aniVideoToSaiVideo(aniVideo: Video): ani.dantotsu.parsers.Video {
         // Find the number value from the .quality string
         val number = Regex("""\d+""").find(aniVideo.quality)?.value?.toInt() ?: 0
 
         // Check for null video URL
         val videoUrl = aniVideo.videoUrl ?: throw Exception("Video URL is null")
 
-        val urlObj = URL(videoUrl)
-        val path = urlObj.path
-        val query = urlObj.query
+        var format: VideoType?
 
-        var format = getVideoType(path)
+        try {
+            val urlObj = URL(videoUrl)
+            val path = urlObj.path
+            val query = urlObj.query
 
-        if (format == null && query != null) {
-            val queryPairs: List<Pair<String, String>> = query.split("&").map {
-                val idx = it.indexOf("=")
-                val key = URLDecoder.decode(it.substring(0, idx), "UTF-8")
-                val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")
-                Pair(key, value)
+            format = getVideoType(path)
+
+            if (format == null && query != null) {
+                val queryPairs: List<Pair<String, String>> = query.split("&").map {
+                    val idx = it.indexOf("=")
+                    val key = URLDecoder.decode(it.substring(0, idx), "UTF-8")
+                    val value = URLDecoder.decode(it.substring(idx + 1), "UTF-8")
+                    Pair(key, value)
+                }
+
+                // Assume the file is named under the "file" query parameter
+                val fileName = queryPairs.find { it.first == "file" }?.second ?: ""
+
+                format = getVideoType(fileName)
+                // this solves a problem no one has, so I'm commenting it out for now
+                //if (format == null) {
+                //    val networkHelper = Injekt.get<NetworkHelper>()
+                //    format = headRequest(videoUrl, networkHelper)
+                //}
             }
 
-            // Assume the file is named under the "file" query parameter
-            val fileName = queryPairs.find { it.first == "file" }?.second ?: ""
-
-            format = getVideoType(fileName)
-            // this solves a problem no one has, so I'm commenting it out for now
-            //if (format == null) {
-            //    val networkHelper = Injekt.get<NetworkHelper>()
-            //    format = headRequest(videoUrl, networkHelper)
-            //}
-        }
-
-        // If the format is still undetermined, log an error
-        if (format == null) {
-            Logger.log("Unknown video format: $videoUrl")
-            format = VideoType.CONTAINER
+            // If the format is still undetermined, log an error
+            if (format == null) {
+                Logger.log("Unknown video format: $videoUrl")
+                format = VideoType.CONTAINER
+            }
+        } catch (malformed: MalformedURLException) {
+            if (videoUrl.startsWith("magnet:") || videoUrl.endsWith(".torrent"))
+                format = VideoType.CONTAINER
+            else
+                throw malformed
         }
         val headersMap: Map<String, String> =
             aniVideo.headers?.toMultimap()?.mapValues { it.value.joinToString() } ?: mapOf()
@@ -729,7 +577,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
         return Video(
             number,
-            format,
+            format!!,
             FileUrl(videoUrl, headersMap),
             if (aniVideo.totalContentLength == 0L) null else aniVideo.bytesDownloaded.toDouble()
         )
@@ -750,6 +598,7 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
         return type
     }
 
+    @Suppress("unused")
     private fun headRequest(fileName: String, networkHelper: NetworkHelper): VideoType? {
         return try {
             Logger.log("attempting head request for $fileName")
@@ -789,9 +638,9 @@ class VideoServerPassthrough(val videoServer: VideoServer) : VideoExtractor() {
 
     }
 
-    private fun TrackToSubtitle(track: Track): Subtitle {
+    private fun trackToSubtitle(track: Track): Subtitle {
         //use Dispatchers.IO to make a HTTP request to determine the subtitle type
-        var type: SubtitleType? = null
+        var type: SubtitleType?
         runBlocking {
             type = findSubtitleType(track.url)
         }

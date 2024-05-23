@@ -3,18 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_view_following"
-        android:title="@string/view_following"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/action_view_followers"
-        android:title="@string/view_followers"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_view_on_anilist"
         android:title="@string/view_on_anilist"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_create_new_activity"
+        android:title="@string/create_new_activity"
         app:showAsAction="never" />
 
 </menu>

@@ -1,6 +1,5 @@
 package ani.dantotsu.download.manga
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -37,7 +36,6 @@ class OfflineMangaAdapter(
         return position.toLong()
     }
 
-    @SuppressLint("SetTextI18n")
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 
         val view: View = convertView ?: when (style) {
@@ -50,7 +48,6 @@ class OfflineMangaAdapter(
         val imageView = view.findViewById<ImageView>(R.id.itemCompactImage)
         val titleTextView = view.findViewById<TextView>(R.id.itemCompactTitle)
         val itemScore = view.findViewById<TextView>(R.id.itemCompactScore)
-        val itemScoreBG = view.findViewById<View>(R.id.itemCompactScoreBG)
         val ongoing = view.findViewById<CardView>(R.id.itemCompactOngoing)
         val totalChapter = view.findViewById<TextView>(R.id.itemCompactTotal)
         val typeImage = view.findViewById<ImageView>(R.id.itemCompactTypeImage)
@@ -60,14 +57,15 @@ class OfflineMangaAdapter(
         if (style == 0) {
             val bannerView = view.findViewById<ImageView>(R.id.itemCompactBanner) // for large view
             val chapters = view.findViewById<TextView>(R.id.itemTotal)
-            chapters.text = " Chapters"
-            bannerView.setImageURI(item.banner)
+            val text = " ${context.getString(R.string.chapters)}"
+            chapters.text = text
+            bannerView.setImageURI(item.banner ?: item.image)
             totalChapter.text = item.totalChapter
         } else if (style == 1) {
             val readChapter =
                 view.findViewById<TextView>(R.id.itemCompactUserProgress) // for compact view
             readChapter.text = item.readChapter
-            totalChapter.text = " | " + item.totalChapter
+            totalChapter.text = context.getString(R.string.total_divider, item.totalChapter)
         }
 
         // Bind item data to the views

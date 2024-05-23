@@ -5,9 +5,9 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import ani.dantotsu.notifications.TaskScheduler.TaskType
 import ani.dantotsu.notifications.anilist.AnilistNotificationReceiver
 import ani.dantotsu.notifications.comment.CommentNotificationReceiver
-import ani.dantotsu.notifications.TaskScheduler.TaskType
 import ani.dantotsu.notifications.subscription.SubscriptionNotificationReceiver
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 
 class AlarmManagerScheduler(private val context: Context) : TaskScheduler {
     override fun scheduleRepeatingTask(taskType: TaskType, interval: Long) {
-        if (interval < TimeUnit.MINUTES.toMillis(15)) {
+        if (interval * 1000 < TimeUnit.MINUTES.toMillis(15)) {
             cancelTask(taskType)
             return
         }

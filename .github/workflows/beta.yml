@@ -48,9 +48,11 @@ jobs:
         echo "COMMIT_LOG=${COMMIT_LOGS}" >> $GITHUB_ENV
         # Debugging: Print the variable to check its content
         echo "$COMMIT_LOGS"
+        echo "$COMMIT_LOGS" > commit_log.txt
       shell: /usr/bin/bash -e {0}
       env:
         CI: true
+      continue-on-error: true
 
     - name: Save Current SHA for Next Run
       run: echo ${{ github.sha }} > last_sha.txt
@@ -82,13 +84,13 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew assembleGoogleAlpha -Pandroid.injected.signing.store.file=$GITHUB_WORKSPACE/key.keystore -Pandroid.injected.signing.store.password=${{ secrets.KEYSTORE_PASSWORD }} -Pandroid.injected.signing.key.alias=${{ secrets.KEY_ALIAS }} -Pandroid.injected.signing.key.password=${{ secrets.KEY_PASSWORD }}
 
-    - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v4.3.1
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v4
       with:
-          name: APKs
-          path: |
-            app/build/outputs/apk/google/alpha/*/*.apk
-            app/build/outputs/apk/google/alpha/*/*/*.apk
+          name: Dantotsu
+          retention-days: 5
+          compression-level: 9
+          path: "app/build/outputs/apk/google/alpha/app-google-alpha.apk"
             
     - name: Upload APK to Discord and Telegram
       if: ${{ github.repository == 'rebelonion/Dantotsu' }}
@@ -102,7 +104,7 @@ jobs:
           commit_messages="${commit_messages:0:$max_length}... (truncated)"
         fi
         contentbody=$( jq -nc --arg msg "Alpha-Build: <@&1225347048321191996> **$VERSION**:" --arg commits "$commit_messages" '{"content": ($msg + "\n" + $commits)}' )
-        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
+        curl -F "payload_json=${contentbody}" -F "dantotsu_debug=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" ${{ secrets.DISCORD_WEBHOOK }}
         
         #Telegram
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
@@ -115,18 +117,13 @@ jobs:
         VERSION: ${{ env.VERSION }}
 
     - name: Upload Current SHA as Artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: last-sha
         path: last_sha.txt
 
-
-    - name: Delete Old Pre-Releases
-      id: delete-pre-releases
-      uses: sgpublic/delete-release-action@master
+    - name: Upload Commit log as Artifact
+      uses: actions/upload-artifact@v4
       with:
-        pre-release-drop: true
-        pre-release-keep-count: 3
-        pre-release-drop-tag: true
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        name: commit-log
+        path: commit_log.txt

@@ -28,6 +28,7 @@ import ani.dantotsu.connections.comments.CommentsAPI
 import ani.dantotsu.databinding.FragmentCommentsBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.setBaseline
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
@@ -73,6 +74,12 @@ class CommentsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity = requireActivity() as MediaDetailsActivity
+
+        binding.commentsListContainer.setBaseline(
+            activity.navBar,
+            activity.binding.commentInputLayout
+        )
+
         //get the media id from the intent
         val mediaId = arguments?.getInt("mediaId") ?: -1
         mediaName = arguments?.getString("mediaName") ?: "unknown"
@@ -114,7 +121,6 @@ class CommentsFragment : Fragment() {
                 }
             }
         } else {
-            toast("Not logged in")
             activity.binding.commentMessageContainer.visibility = View.GONE
         }
 
@@ -297,7 +303,7 @@ class CommentsFragment : Fragment() {
 
             activity.binding.commentLabel.setOnClickListener {
                 //alert dialog to enter a number, with a cancel and ok button
-                val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+                val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
                     .setTitle("Enter a chapter/episode number tag")
                     .setView(R.layout.dialog_edittext)
                     .setPositiveButton("OK") { dialog, _ ->
@@ -523,11 +529,10 @@ class CommentsFragment : Fragment() {
 
     }
 
-    @SuppressLint("SetTextI18n")
     fun replyTo(comment: CommentItem, username: String) {
         if (comment.isReplying) {
             activity.binding.commentReplyToContainer.visibility = View.VISIBLE
-            activity.binding.commentReplyTo.text = "Replying to $username"
+            activity.binding.commentReplyTo.text = getString(R.string.replying_to, username)
             activity.binding.commentReplyToCancel.setOnClickListener {
                 comment.replying(false)
                 replyCallback(comment)
@@ -574,7 +579,7 @@ class CommentsFragment : Fragment() {
      * Called when the user tries to comment for the first time
      */
     private fun showCommentRulesDialog() {
-        val alertDialog = android.app.AlertDialog.Builder(activity, R.style.MyPopup)
+        val alertDialog = AlertDialog.Builder(activity, R.style.MyPopup)
             .setTitle("Commenting Rules")
             .setMessage(
                 "I WILL BAN YOU WITHOUT HESITATION\n" +

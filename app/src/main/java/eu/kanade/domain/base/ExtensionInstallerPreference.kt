@@ -20,7 +20,7 @@ class ExtensionInstallerPreference(
 
 
     val entries
-        get() = ExtensionInstaller.values().run {
+        get() = ExtensionInstaller.entries.toTypedArray().run {
             if (context.hasMiuiPackageInstaller) {
                 filter { it != ExtensionInstaller.PACKAGEINSTALLER }
             } else {

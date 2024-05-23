@@ -3,25 +3,35 @@ package ani.dantotsu.profile.activity
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Notification
+import ani.dantotsu.connections.anilist.api.NotificationType
+import ani.dantotsu.connections.anilist.api.NotificationType.Companion.fromFormattedString
+import ani.dantotsu.currContext
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.comment.CommentStore
+import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
-import ani.dantotsu.snackString
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.Logger
@@ -32,19 +42,22 @@ import kotlinx.coroutines.withContext
 
 class NotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFollowBinding
+    private lateinit var commentStore: List<CommentStore>
+    private lateinit var subscriptionStore: List<SubscriptionStore>
     private var adapter: GroupieAdapter = GroupieAdapter()
     private var notificationList: List<Notification> = emptyList()
+    val filters = ArrayList<String>()
     private var currentPage: Int = 1
     private var hasNextPage: Boolean = true
 
-    @SuppressLint("SetTextI18n", "ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
         initActivity(this)
         binding = ActivityFollowBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.listTitle.text = "Notifications"
+        binding.listTitle.text = getString(R.string.notifications)
         binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
         }
@@ -57,9 +70,89 @@ class NotificationActivity : AppCompatActivity() {
         binding.followerGrid.visibility = ViewGroup.GONE
         binding.followerList.visibility = ViewGroup.GONE
         binding.listBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
         binding.listProgressBar.visibility = ViewGroup.VISIBLE
+        commentStore = PrefManager.getNullableVal<List<CommentStore>>(
+            PrefName.CommentNotificationStore,
+            null
+        ) ?: listOf()
+        subscriptionStore = PrefManager.getNullableVal<List<SubscriptionStore>>(
+            PrefName.SubscriptionNotificationStore,
+            null
+        ) ?: listOf()
+
+        binding.followFilterButton.setOnClickListener {
+            val dialogView = LayoutInflater.from(currContext()).inflate(R.layout.custom_dialog_layout, null)
+            val checkboxContainer = dialogView.findViewById<LinearLayout>(R.id.checkboxContainer)
+            val tickAllButton = dialogView.findViewById<ImageButton>(R.id.toggleButton)
+            val title = dialogView.findViewById<TextView>(R.id.scantitle)
+            title.visibility = ViewGroup.GONE
+            fun getToggleImageResource(container: ViewGroup): Int {
+                var allChecked = true
+                var allUnchecked = true
+
+                for (i in 0 until container.childCount) {
+                    val checkBox = container.getChildAt(i) as CheckBox
+                    if (!checkBox.isChecked) {
+                        allChecked = false
+                    } else {
+                        allUnchecked = false
+                    }
+                }
+                return when {
+                    allChecked -> R.drawable.untick_all_boxes
+                    allUnchecked -> R.drawable.tick_all_boxes
+                    else -> R.drawable.invert_all_boxes
+                }
+            }
+            NotificationType.entries.forEach { notificationType ->
+                val checkBox = CheckBox(currContext())
+                checkBox.text = notificationType.toFormattedString()
+                checkBox.isChecked = !filters.contains(notificationType.value.fromFormattedString())
+                checkBox.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        filters.remove(notificationType.value.fromFormattedString())
+                    } else {
+                        filters.add(notificationType.value.fromFormattedString())
+                    }
+                    tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+                }
+                checkboxContainer.addView(checkBox)
+            }
+            tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+            tickAllButton.setOnClickListener {
+                for (i in 0 until checkboxContainer.childCount) {
+                    val checkBox = checkboxContainer.getChildAt(i) as CheckBox
+                    checkBox.isChecked = !checkBox.isChecked
+                }
+
+                tickAllButton.setImageResource(getToggleImageResource(checkboxContainer))
+            }
+            val alertD = AlertDialog.Builder(this, R.style.MyPopup)
+            alertD.setTitle("Filter")
+            alertD.setView(dialogView)
+            alertD.setPositiveButton("OK") { _, _ ->
+                currentPage = 1
+                hasNextPage = true
+                adapter.clear()
+                adapter.addAll(notificationList.filter { notification ->
+                    !filters.contains(notification.notificationType)
+                }.map {
+                    NotificationItem(
+                        it,
+                        ::onNotificationClick
+                    )
+                })
+                loadPage(-1) {
+                    binding.followRefresh.visibility = ViewGroup.GONE
+                }
+            }
+            alertD.setNegativeButton("Cancel") { _, _ -> }
+            val dialog = alertD.show()
+            dialog.window?.setDimAmount(0.8f)
+        }
+
         val activityId = intent.getIntExtra("activityId", -1)
         lifecycleScope.launch {
             loadPage(activityId) {
@@ -112,28 +205,49 @@ class NotificationActivity : AppCompatActivity() {
                         notifications
                     }.toMutableList()
                 }
-                if (activityId == -1 && currentPage == 1) {
-                    val commentStore = PrefManager.getNullableVal<List<CommentStore>>(
-                        PrefName.CommentNotificationStore,
-                        null
-                    ) ?: listOf()
+                if (activityId == -1) {
+                    val furthestTime = newNotifications.minOfOrNull { it.createdAt } ?: 0
                     commentStore.forEach {
-                        val notification = Notification(
-                            "COMMENT_REPLY",
-                            System.currentTimeMillis().toInt(),
-                            commentId = it.commentId,
-                            notificationType = "COMMENT_REPLY",
-                            mediaId = it.mediaId,
-                            context = it.title + "\n" + it.content,
-                            createdAt = (it.time / 1000L).toInt(),
-                        )
-                        newNotifications += notification
+                        if ((it.time > furthestTime * 1000L || !hasNextPage) && notificationList.none { notification ->
+                                notification.commentId == it.commentId && notification.createdAt == (it.time / 1000L).toInt()
+                            }) {
+                            val notification = Notification(
+                                it.type.toString(),
+                                System.currentTimeMillis().toInt(),
+                                commentId = it.commentId,
+                                notificationType = it.type.toString(),
+                                mediaId = it.mediaId,
+                                context = it.title + "\n" + it.content,
+                                createdAt = (it.time / 1000L).toInt(),
+                            )
+                            newNotifications += notification
+                        }
+                    }
+                    subscriptionStore.forEach {
+                        if ((it.time > furthestTime * 1000L || !hasNextPage) && notificationList.none { notification ->
+                                notification.mediaId == it.mediaId && notification.createdAt == (it.time / 1000L).toInt()
+                            }) {
+                            val notification = Notification(
+                                it.type,
+                                System.currentTimeMillis().toInt(),
+                                commentId = it.mediaId,
+                                mediaId = it.mediaId,
+                                notificationType = it.type,
+                                context = it.title + ": " + it.content,
+                                createdAt = (it.time / 1000L).toInt(),
+                                image = it.image,
+                                banner = it.banner ?: it.image
+                            )
+                            newNotifications += notification
+                        }
                     }
                     newNotifications.sortByDescending { it.createdAt }
                 }
 
                 notificationList += newNotifications
-                adapter.addAll(newNotifications.map {
+                adapter.addAll(newNotifications.filter { notification ->
+                    !filters.contains(notification.notificationType)
+                }.map {
                     NotificationItem(
                         it,
                         ::onNotificationClick

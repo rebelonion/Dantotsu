@@ -80,7 +80,7 @@ class AndroidMangaSourceManager(
 
     }
 
-    private suspend fun createStubSource(id: Long): StubMangaSource {
+    private fun createStubSource(id: Long): StubMangaSource {
         return StubMangaSource(MangaSourceData(id, "", ""))
     }
 }

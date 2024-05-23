@@ -1,6 +1,5 @@
 package ani.dantotsu.parsers
 
-import android.util.Log
 import ani.dantotsu.Lazier
 import ani.dantotsu.parsers.novel.DynamicNovelParser
 import ani.dantotsu.parsers.novel.NovelExtension

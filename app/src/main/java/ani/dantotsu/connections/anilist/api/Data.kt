@@ -24,7 +24,9 @@ class Query {
         @Serializable
         data class Data(
             @SerialName("Media")
-            val media: ani.dantotsu.connections.anilist.api.Media?
+            val media: ani.dantotsu.connections.anilist.api.Media?,
+            @SerialName("Page")
+            val page: ani.dantotsu.connections.anilist.api.Page?
         )
     }
 
@@ -136,6 +138,8 @@ class Query {
             @SerialName("recommendationQuery") val recommendationQuery: ani.dantotsu.connections.anilist.api.Page?,
             @SerialName("recommendationPlannedQueryAnime") val recommendationPlannedQueryAnime: ani.dantotsu.connections.anilist.api.MediaListCollection?,
             @SerialName("recommendationPlannedQueryManga") val recommendationPlannedQueryManga: ani.dantotsu.connections.anilist.api.MediaListCollection?,
+            @SerialName("Page1") val page1: ActivityPage?,
+            @SerialName("Page2") val page2: ActivityPage?
         )
     }
 
@@ -147,9 +151,45 @@ class Query {
         @Serializable
         data class Data(
             @SerialName("favoriteAnime") val favoriteAnime: ani.dantotsu.connections.anilist.api.User?,
-            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?,
-            @SerialName("animeMediaList") val animeMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?,
-            @SerialName("mangaMediaList") val mangaMediaList: ani.dantotsu.connections.anilist.api.MediaListCollection?
+            @SerialName("favoriteManga") val favoriteManga: ani.dantotsu.connections.anilist.api.User?
+        )
+    }
+
+    @Serializable
+    data class AnimeList(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("recentUpdates") val recentUpdates: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("recentUpdates2") val recentUpdates2: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingMovies") val trendingMovies: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingMovies2") val trendingMovies2: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated2") val topRated2: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav2") val mostFav2: ani.dantotsu.connections.anilist.api.Page?,
+        )
+    }
+
+    @Serializable
+    data class MangaList(
+        @SerialName("data")
+        val data: Data?
+    ) {
+        @Serializable
+        data class Data(
+            @SerialName("trendingManga") val trendingManga: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingManga2") val trendingManga2: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingManhwa") val trendingManhwa: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingManhwa2") val trendingManhwa2: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingNovel") val trendingNovel: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("trendingNovel2") val trendingNovel2: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated") val topRated: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("topRated2") val topRated2: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav") val mostFav: ani.dantotsu.connections.anilist.api.Page?,
+            @SerialName("mostFav2") val mostFav2: ani.dantotsu.connections.anilist.api.Page?,
         )
     }
 
@@ -260,6 +300,70 @@ class Query {
     ) : java.io.Serializable
 
     @Serializable
+    data class ReviewsResponse(
+        @SerialName("data")
+        val data: Data
+    ) : java.io.Serializable {
+        @Serializable
+        data class Data(
+            @SerialName("Page")
+            val page: ReviewPage?
+        ) : java.io.Serializable
+    }
+
+    @Serializable
+    data class ReviewPage(
+        @SerialName("pageInfo")
+        val pageInfo: PageInfo,
+        @SerialName("reviews")
+        val reviews: List<Review>?
+    ) : java.io.Serializable
+
+    @Serializable
+    data class RateReviewResponse(
+        @SerialName("data")
+        val data: Data
+    ) : java.io.Serializable {
+        @Serializable
+        data class Data(
+            @SerialName("RateReview")
+            val rateReview: Review
+        ) : java.io.Serializable
+    }
+
+    @Serializable
+    data class Review(
+        @SerialName("id")
+        val id: Int,
+        @SerialName("mediaId")
+        val mediaId: Int,
+        @SerialName("mediaType")
+        val mediaType: String,
+        @SerialName("summary")
+        val summary: String,
+        @SerialName("body")
+        val body: String,
+        @SerialName("rating")
+        var rating: Int,
+        @SerialName("ratingAmount")
+        var ratingAmount: Int,
+        @SerialName("userRating")
+        var userRating: String,
+        @SerialName("score")
+        val score: Int,
+        @SerialName("private")
+        val private: Boolean,
+        @SerialName("siteUrl")
+        val siteUrl: String,
+        @SerialName("createdAt")
+        val createdAt: Int,
+        @SerialName("updatedAt")
+        val updatedAt: Int?,
+        @SerialName("user")
+        val user: ani.dantotsu.connections.anilist.api.User?,
+    ) : java.io.Serializable
+
+    @Serializable
     data class UserProfile(
         @SerialName("id")
         val id: Int,
@@ -283,13 +387,13 @@ class Query {
         val statistics: NNUserStatisticTypes,
         @SerialName("siteUrl")
         val siteUrl: String,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class NNUserStatisticTypes(
         @SerialName("anime") var anime: NNUserStatistics,
         @SerialName("manga") var manga: NNUserStatistics
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class NNUserStatistics(
@@ -300,9 +404,9 @@ class Query {
         @SerialName("episodesWatched") var episodesWatched: Int,
         @SerialName("chaptersRead") var chaptersRead: Int,
         @SerialName("volumesRead") var volumesRead: Int,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
-        @Serializable
+    @Serializable
     data class UserFavourites(
         @SerialName("anime")
         val anime: UserMediaFavouritesCollection,
@@ -314,13 +418,13 @@ class Query {
         val staff: UserStaffFavouritesCollection,
         @SerialName("studios")
         val studios: UserStudioFavouritesCollection,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserMediaFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserMediaImageFavorite>,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserMediaImageFavorite(
@@ -328,13 +432,13 @@ class Query {
         val id: Int,
         @SerialName("coverImage")
         val coverImage: MediaCoverImage
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserCharacterFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserCharacterImageFavorite(
@@ -346,19 +450,19 @@ class Query {
         val image: CharacterImage,
         @SerialName("isFavourite")
         val isFavourite: Boolean
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserStaffFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserCharacterImageFavorite>, //downstream it's the same as character
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserStudioFavouritesCollection(
         @SerialName("nodes")
         val nodes: List<UserStudioFavorite>,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     @Serializable
     data class UserStudioFavorite(
@@ -366,7 +470,7 @@ class Query {
         val id: Int,
         @SerialName("name")
         val name: String,
-    ): java.io.Serializable
+    ) : java.io.Serializable
 
     //----------------------------------------
     // Statistics
@@ -375,12 +479,12 @@ class Query {
     data class StatisticsResponse(
         @SerialName("data")
         val data: Data
-    ): java.io.Serializable {
+    ) : java.io.Serializable {
         @Serializable
         data class Data(
             @SerialName("User")
             val user: StatisticsUser?
-        ): java.io.Serializable
+        ) : java.io.Serializable
     }
 
     @Serializable

@@ -2,12 +2,13 @@ package ani.dantotsu.parsers.novel
 
 
 import android.content.Context
-import ani.dantotsu.util.Logger
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
+import ani.dantotsu.util.Logger
 import eu.kanade.tachiyomi.extension.ExtensionUpdateNotifier
 import eu.kanade.tachiyomi.extension.anime.model.AnimeExtension
 import eu.kanade.tachiyomi.extension.anime.model.AnimeLoadResult
+import eu.kanade.tachiyomi.extension.util.ExtensionLoader
 import eu.kanade.tachiyomi.network.GET
 import eu.kanade.tachiyomi.network.NetworkHelper
 import eu.kanade.tachiyomi.network.awaitSuccess
@@ -87,7 +88,7 @@ class NovelExtensionGithubApi {
             }
         }
 
-        val installedExtensions = NovelExtensionLoader.loadExtensions(context)
+        val installedExtensions = ExtensionLoader.loadNovelExtensions(context)
             .filterIsInstance<AnimeLoadResult.Success>()
             .map { it.extension }
 

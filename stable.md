@@ -1,50 +1,51 @@
-# 3.0.0
+# 3.1.0
 
--  **Many New Features:**
-  - ### Comment section
-    - Hosted by Dantotsu
-    - Tied to your Anilist account
-    - Features Reddit-style voting
-    - Tags for episodes/chapters
-    - Accepts markdown/discord formatting
-
-  -  Profile pages
-    - Bio
-    - User favorites
-    - User activities
-    - User Lists
-    - Followers/Following
-    - Detailed user statistics
-    - Ability to compare stats to your account
-
-  -  Anilist Feeds
-     - Followed users feed
-     - Global feed
-     - Like/see who liked Activity
-     - Replying not implemented yet 
- 
-  -  Anilist Notifications
-     - Ability to filter by types in settings
-     - Past notification page
-   
-  - Staff info page
-  - New theme
+- **New Features:**
+  - Addons
+    - Torrent support addon
+    - Anime downloading addon (mkv files pog)
+    - Available in app settings
+  - Anilist reviews in app
+  - Media subscriptions added to notification tab
+  - Notification filtering
+  - Ability to post activitys
+  - Ability to reply to activities
+  - Extension tester
+  - Media subscription Viewer
+  - Instagram-style stories
+  - More audio options for some extensions
+  - Ability to hide items on the home screen
+  - Ability to set a downloads directory
+  - 2 functioning widgets
+  - App lock ( ͡° ͜ʖ ͡°)
+  - More manga and anime feeds on the home page
+  - Settings page redesign
+  - New app crash notifier
+  - Voice actors
+  - Additional repo support
   - Various UI uplifts
-  - Filter User's lists by genre
-  - New Notification manager option for more reliable checking
-  - Can open a settings file outside of the app
-  - Can open profile links
 
 - **Bugfixes:**
-  - Some source fixes
-  - Genre/tag sorting is now alphabetic
-  - Fix the auto play not working for some people
+  - Scanlator/language not saving after leaving app
+  - notification red dot not hiding on home pages
+  - comment/activity scrolling not working on some parts of the screen
+  - comment notifications falling to the bottom of the list
+  - Fixed some sources without audio
+  - Initial app loading time reduced
+  - activity text more visible
+  - novel extensions not installing
+  - Many sources not working
+  - Subscription notifications not using the correct source
+  - Notification red dot showing with no new notifications
   - Various bug/crash fixes
   - General theme tweaks
-  - Subscriptions not working
-  - Many other bug fixes (It's been so long I forgor 💀)
-  
- -  A Special Thanks to all those who contributed <3
+  - Fixed some network-related crashes
+  - Subscription notifications not working for some people
+  - Fix for file permissions on older Android versions
+  - Search list view not working
+  - Media page opening twice on notification click
+
+ - A Special Thanks to all those who contributed :heart:
 
 - **Like what you see?**
   - Consider supporting me on [Github](https://github.com/sponsors/rebelonion) or [Buy Me a Coffee](https://www.buymeacoffee.com/rebelonion)!

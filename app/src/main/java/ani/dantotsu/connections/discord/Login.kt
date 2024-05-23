@@ -75,7 +75,7 @@ class Login : AppCompatActivity() {
         }
         Toast.makeText(this, "Logged in successfully", Toast.LENGTH_SHORT).show()
         finish()
-        saveToken(this, token)
+        saveToken(token)
         startMainActivity(this@Login)
     }
 

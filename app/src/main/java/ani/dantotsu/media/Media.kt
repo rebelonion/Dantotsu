@@ -5,8 +5,10 @@ import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.MediaEdge
 import ani.dantotsu.connections.anilist.api.MediaList
 import ani.dantotsu.connections.anilist.api.MediaType
+import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.media.anime.Anime
 import ani.dantotsu.media.manga.Manga
+import ani.dantotsu.profile.User
 import java.io.Serializable
 import ani.dantotsu.connections.anilist.api.Media as ApiMedia
 
@@ -25,7 +27,7 @@ data class Media(
     var cover: String? = null,
     var banner: String? = null,
     var relation: String? = null,
-    var popularity: Int? = null,
+    var favourites: Int? = null,
 
     var isAdult: Boolean,
     var isFav: Boolean = false,
@@ -56,14 +58,18 @@ data class Media(
     var trailer: String? = null,
     var startDate: FuzzyDate? = null,
     var endDate: FuzzyDate? = null,
+    var popularity: Int? = null,
+
+    var timeUntilAiring: Long? = null,
 
     var characters: ArrayList<Character>? = null,
+    var review: ArrayList<Query.Review>? = null,
     var staff: ArrayList<Author>? = null,
     var prequel: Media? = null,
     var sequel: Media? = null,
     var relations: ArrayList<Media>? = null,
     var recommendations: ArrayList<Media>? = null,
-
+    var users: ArrayList<User>? = null,
     var vrvId: String? = null,
     var crunchySlug: String? = null,
 
@@ -83,7 +89,7 @@ data class Media(
         name = apiMedia.title!!.english,
         nameRomaji = apiMedia.title!!.romaji,
         userPreferredName = apiMedia.title!!.userPreferred,
-        cover = apiMedia.coverImage?.large,
+        cover = apiMedia.coverImage?.large ?: apiMedia.coverImage?.medium,
         banner = apiMedia.bannerImage,
         status = apiMedia.status.toString(),
         isFav = apiMedia.isFavourite!!,
@@ -95,6 +101,8 @@ data class Media(
         meanScore = apiMedia.meanScore,
         startDate = apiMedia.startDate,
         endDate = apiMedia.endDate,
+        favourites = apiMedia.favourites,
+        timeUntilAiring = apiMedia.nextAiringEpisode?.timeUntilAiring?.let { it.toLong() * 1000 },
         anime = if (apiMedia.type == MediaType.ANIME) Anime(
             totalEpisodes = apiMedia.episodes,
             nextAiringEpisode = apiMedia.nextAiringEpisode?.episode?.minus(1)
@@ -109,7 +117,8 @@ data class Media(
         this.userScore = mediaList.score?.toInt() ?: 0
         this.userStatus = mediaList.status?.toString()
         this.userUpdatedAt = mediaList.updatedAt?.toLong()
-        this.genres = mediaList.media?.genres?.toMutableList() as? ArrayList<String>? ?: arrayListOf()
+        this.genres =
+            mediaList.media?.genres?.toMutableList() as? ArrayList<String>? ?: arrayListOf()
     }
 
     constructor(mediaEdge: MediaEdge) : this(mediaEdge.node!!) {

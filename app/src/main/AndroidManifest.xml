@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-sdk tools:overrideLibrary="go.server.gojni" />
+
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />
@@ -19,7 +21,7 @@
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="32" />
+        android:maxSdkVersion="29" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" /> <!-- For background jobs -->
@@ -38,6 +40,17 @@
         android:name="android.permission.READ_APP_SPECIFIC_LOCALES"
         tools:ignore="ProtectedPermissions" />
 
+    <!-- ExoPlayer: Bluetooth Headsets -->
+    <uses-feature
+        android:name="android.hardware.bluetooth"
+        android:required="false" />
+
+    <uses-permission
+        android:name="android.permission.BLUETOOTH"
+        android:maxSdkVersion="30" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- ExoPlayer: Bluetooth Headsets -->
+
     <queries>
         <package android:name="idm.internet.download.manager.plus" />
         <package android:name="idm.internet.download.manager" />
@@ -49,6 +62,7 @@
         android:name=".App"
         android:allowBackup="true"
         android:banner="@mipmap/ic_banner_foreground"
+        android:enableOnBackInvokedCallback="true"
         android:icon="${icon_placeholder}"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -57,9 +71,30 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Dantotsu"
         android:usesCleartextTraffic="true"
-        tools:ignore="AllowBackup">
+        tools:ignore="AllowBackup"
+        tools:targetApi="tiramisu">
+
         <receiver
-            android:name=".widgets.CurrentlyAiringWidget"
+            android:name=".widgets.upcoming.UpcomingWidget"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/upcoming_widget_info" />
+        </receiver>
+        <activity
+            android:name=".widgets.upcoming.UpcomingWidgetConfigure"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".widgets.statistics.ProfileStatsWidget"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -67,10 +102,9 @@
 
             <meta-data
                 android:name="android.appwidget.provider"
-                android:resource="@xml/currently_airing_widget_info" />
+                android:resource="@xml/statistics_widget_info" />
         </receiver>
         <receiver android:name=".notifications.IncognitoNotificationClickReceiver" />
-
 
         <activity
             android:name=".media.novel.novelreader.NovelReaderActivity"
@@ -95,6 +129,8 @@
                 <data android:scheme="file" />
             </intent-filter>
         </activity>
+        <activity android:name=".others.calc.CalcActivity"
+            android:parentActivityName=".MainActivity" />
         <activity android:name=".settings.FAQActivity" />
         <activity android:name=".settings.ReaderSettingsActivity" />
         <activity android:name=".settings.UserInterfaceSettingsActivity" />
@@ -103,30 +139,76 @@
             android:name=".settings.SettingsActivity"
             android:parentActivityName=".MainActivity" />
         <activity
-            android:name=".settings.ExtensionsActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:name=".settings.SettingsAboutActivity"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".home.status.StatusActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.SettingsAccountActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.SettingsAnimeActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.SettingsCommonActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.SettingsExtensionsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.SettingsAddonActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.SettingsMangaActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.SettingsNotificationActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.SettingsThemeActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".settings.ExtensionsActivity"
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
+        <activity
+            android:name=".widgets.statistics.ProfileStatsConfigure"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".profile.ProfileActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".profile.FollowActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:parentActivityName=".MainActivity" />
+            android:parentActivityName=".MainActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".profile.activity.FeedActivity"
+            android:configChanges="orientation|screenSize|screenLayout"
             android:label="Inbox Activity"
-            android:parentActivityName=".MainActivity" >
-        </activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".profile.activity.NotificationActivity"
             android:label="Inbox Activity"
-            android:parentActivityName=".MainActivity" >
-        </activity>
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".others.imagesearch.ImageSearchActivity"
             android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".util.MarkdownCreatorActivity"/>
+        <activity android:name=".parsers.ParserTestActivity" />
+        <activity
+            android:name=".media.ReviewActivity"
+            android:parentActivityName=".media.MediaDetailsActivity" />
+        <activity
+            android:name=".media.ReviewViewActivity"
+            android:parentActivityName=".media.ReviewActivity" />
         <activity
             android:name=".media.SearchActivity"
             android:parentActivityName=".MainActivity" />
@@ -136,8 +218,9 @@
             android:name=".media.CalendarActivity"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".media.user.ListActivity" />
-        <activity android:name=".profile.SingleStatActivity"
-            android:parentActivityName=".profile.ProfileActivity"/>
+        <activity
+            android:name=".profile.SingleStatActivity"
+            android:parentActivityName=".profile.ProfileActivity" />
         <activity
             android:name=".media.manga.mangareader.MangaReaderActivity"
             android:excludeFromRecents="true"
@@ -146,12 +229,20 @@
             android:launchMode="singleTask" />
         <activity android:name=".media.GenreActivity" />
         <activity
+            android:name=".media.MediaListViewActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".media.MediaDetailsActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/Theme.Dantotsu.NeverCutout"
-            android:windowSoftInputMode="adjustResize|stateHidden"/>
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity android:name=".media.CharacterDetailsActivity" />
         <activity android:name=".home.NoInternet" />
+        <activity android:name=".others.CrashActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:process=":error_process"
+            android:launchMode="singleTask" />
         <activity
             android:name=".media.anime.ExoplayerView"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboard|keyboardHidden|navigation"
@@ -231,7 +322,6 @@
                 <data android:host="discord.dantotsu.com" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".connections.anilist.UrlMedia"
             android:configChanges="orientation|screenSize|layoutDirection"
@@ -290,7 +380,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="content" />
                 <data android:mimeType="*/*" />
                 <data android:pathPattern=".*\\.ani" />
@@ -299,30 +391,27 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallActivity"
+            android:name="eu.kanade.tachiyomi.extension.util.ExtensionInstallActivity"
             android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-        <activity
-            android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallActivity"
-            android:exported="false"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+            android:theme="@style/Theme.AppCompat" />
 
-        <receiver android:name=".notifications.AlarmPermissionStateReceiver"
+        <receiver
+            android:name=".notifications.AlarmPermissionStateReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
             </intent-filter>
         </receiver>
-
-        <receiver android:name=".notifications.BootCompletedReceiver"
+        <receiver
+            android:name=".notifications.BootCompletedReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".notifications.anilist.AnilistNotificationReceiver"/>
-        <receiver android:name=".notifications.comment.CommentNotificationReceiver"/>
-        <receiver android:name=".notifications.subscription.SubscriptionNotificationReceiver"/>
+        <receiver android:name=".notifications.anilist.AnilistNotificationReceiver" />
+        <receiver android:name=".notifications.comment.CommentNotificationReceiver" />
+        <receiver android:name=".notifications.subscription.SubscriptionNotificationReceiver" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -340,25 +429,11 @@
         </provider>
 
         <service
-            android:name=".widgets.CurrentlyAiringRemoteViewsService"
+            android:name=".widgets.upcoming.UpcomingRemoteViewsService"
             android:exported="true"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
         <service
-            android:name=".download.video.ExoplayerDownloadService"
-            android:exported="false"
-            android:foregroundServiceType="dataSync">
-            <intent-filter>
-                <action android:name="androidx.media3.exoplayer.downloadService.action.RESTART" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </service>
-        <service
-            android:name="eu.kanade.tachiyomi.extension.manga.util.MangaExtensionInstallService"
-            android:exported="false"
-            android:foregroundServiceType="dataSync" />
-        <service
-            android:name="eu.kanade.tachiyomi.extension.anime.util.AnimeExtensionInstallService"
+            android:name="eu.kanade.tachiyomi.extension.util.ExtensionInstallService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
         <service
@@ -381,6 +456,11 @@
             android:name="androidx.media3.exoplayer.scheduler.PlatformScheduler$PlatformSchedulerService"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+        <service
+            android:name=".addons.torrent.TorrentServerService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync"
+            android:stopWithTask="true" />
 
         <meta-data
             android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"

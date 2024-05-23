@@ -26,7 +26,11 @@ class ImageSearchViewModel : ViewModel() {
             )
             .build()
 
-        val res = client.post(url, requestBody = requestBody).parsed<SearchResult>()
+        val res = try {
+            client.post(url, requestBody = requestBody).parsed<SearchResult>()
+        } catch (e: Exception) {
+            SearchResult(error = e.message)
+        }
         searchResultLiveData.postValue(res)
     }
 

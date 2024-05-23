@@ -20,14 +20,14 @@ object Discord {
     var avatar: String? = null
 
 
-    fun getSavedToken(context: Context): Boolean {
+    fun getSavedToken(): Boolean {
         token = PrefManager.getVal(
             PrefName.DiscordToken, null as String?
         )
         return token != null
     }
 
-    fun saveToken(context: Context, token: String) {
+    fun saveToken(token: String) {
         PrefManager.setVal(PrefName.DiscordToken, token)
     }
 
@@ -71,4 +71,6 @@ object Discord {
     const val application_Id = "1163925779692912771"
     const val small_Image: String =
         "mp:external/GJEe4hKzr8w56IW6ZKQz43HFVEo8pOtA_C-dJiWwxKo/https/cdn.discordapp.com/app-icons/1163925779692912771/f6b42d41dfdf0b56fcc79d4a12d2ac66.png"
+    const val small_Image_AniList: String =
+        "mp:external/rHOIjjChluqQtGyL_UHk6Z4oAqiVYlo_B7HSGPLSoUg/%3Fsize%3D128/https/cdn.discordapp.com/icons/210521487378087947/a_f54f910e2add364a3da3bb2f2fce0c72.webp"
 }

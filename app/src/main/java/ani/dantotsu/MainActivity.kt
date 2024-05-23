@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.drawable.Animatable
 import android.graphics.drawable.GradientDrawable
 import android.net.Uri
@@ -14,13 +13,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
-import android.util.TypedValue
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnticipateInterpolator
 import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
@@ -36,26 +32,27 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.offline.Download
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.work.OneTimeWorkRequest
+import ani.dantotsu.addons.torrent.TorrentAddonManager
+import ani.dantotsu.addons.torrent.TorrentServerService
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.AnilistHomeViewModel
 import ani.dantotsu.databinding.ActivityMainBinding
+import ani.dantotsu.databinding.DialogUserAgentBinding
 import ani.dantotsu.databinding.SplashScreenBinding
-import ani.dantotsu.download.video.Helper
 import ani.dantotsu.home.AnimeFragment
 import ani.dantotsu.home.HomeFragment
 import ani.dantotsu.home.LoginFragment
 import ani.dantotsu.home.MangaFragment
 import ani.dantotsu.home.NoInternet
 import ani.dantotsu.media.MediaDetailsActivity
-import ani.dantotsu.notifications.anilist.AnilistNotificationWorker
-import ani.dantotsu.notifications.comment.CommentNotificationWorker
+import ani.dantotsu.notifications.TaskScheduler
 import ani.dantotsu.others.CustomBottomDialog
+import ani.dantotsu.others.calc.CalcActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
 import ani.dantotsu.profile.activity.NotificationActivity
+import ani.dantotsu.settings.ExtensionsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveBool
 import ani.dantotsu.settings.saving.PrefName
@@ -70,11 +67,13 @@ import com.google.android.material.textfield.TextInputEditText
 import eu.kanade.domain.source.service.SourcePreferences
 import io.noties.markwon.Markwon
 import io.noties.markwon.SoftBreakAddsNewLinePlugin
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import nl.joery.animatedbottombar.AnimatedBottomBar
+import tachiyomi.core.util.lang.launchIO
 import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 import java.io.Serializable
@@ -87,6 +86,7 @@ class MainActivity : AppCompatActivity() {
     private var load = false
 
 
+    @kotlin.OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("InternalInsetResource", "DiscouragedApi")
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -100,12 +100,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
-        androidx.work.WorkManager.getInstance(this)
-            .enqueue(OneTimeWorkRequest.Companion.from(CommentNotificationWorker::class.java))
-
-        androidx.work.WorkManager.getInstance(this)
-            .enqueue(OneTimeWorkRequest.Companion.from(AnilistNotificationWorker::class.java))
+        TaskScheduler.scheduleSingleWork(this)
+        if (!CalcActivity.hasPermission) {
+            val pin: String = PrefManager.getVal(PrefName.AppPassword)
+            if (pin.isNotEmpty()) {
+                ContextCompat.startActivity(
+                    this@MainActivity,
+                    Intent(this@MainActivity, CalcActivity::class.java)
+                        .putExtra("code", pin)
+                        .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK),
+                    null
+                )
+                finish()
+                return
+            }
+        }
 
         val action = intent.action
         val type = intent.type
@@ -161,16 +170,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val _bottomBar = findViewById<AnimatedBottomBar>(R.id.navbar)
+        val bottomNavBar = findViewById<AnimatedBottomBar>(R.id.navbar)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-            val backgroundDrawable = _bottomBar.background as GradientDrawable
+            val backgroundDrawable = bottomNavBar.background as GradientDrawable
             val currentColor = backgroundDrawable.color?.defaultColor ?: 0
             val semiTransparentColor = (currentColor and 0x00FFFFFF) or 0xF9000000.toInt()
             backgroundDrawable.setColor(semiTransparentColor)
-            _bottomBar.background = backgroundDrawable
+            bottomNavBar.background = backgroundDrawable
         }
-        _bottomBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
+        bottomNavBar.background = ContextCompat.getDrawable(this, R.drawable.bottom_nav_gray)
 
         val offset = try {
             val statusBarHeightId = resources.getIdentifier("status_bar_height", "dimen", "android")
@@ -230,17 +239,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        val preferences: SourcePreferences = Injekt.get()
-        if (preferences.animeExtensionUpdatesCount()
-                .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
-        ) {
-            Toast.makeText(
-                this,
-                "You have extension updates available!",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-
         binding.root.isMotionEventSplittingEnabled = false
 
         lifecycleScope.launch {
@@ -284,6 +282,16 @@ class MainActivity : AppCompatActivity() {
 
         binding.root.doOnAttach {
             initActivity(this)
+            val preferences: SourcePreferences = Injekt.get()
+            if (preferences.animeExtensionUpdatesCount()
+                    .get() > 0 || preferences.mangaExtensionUpdatesCount().get() > 0
+            ) {
+                snackString(R.string.extension_updates_available)
+                    ?.setDuration(Snackbar.LENGTH_LONG)
+                    ?.setAction(R.string.review) {
+                        startActivity(Intent(this, ExtensionsActivity::class.java))
+                    }
+            }
             window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
             selectedOption = if (fragment != null) {
                 when (fragment) {
@@ -295,11 +303,43 @@ class MainActivity : AppCompatActivity() {
             } else {
                 PrefManager.getVal(PrefName.DefaultStartUpTab)
             }
+            val navbar = binding.includedNavbar.navbar
+            bottomBar = navbar
+            navbar.visibility = View.VISIBLE
+            binding.mainProgressBar.visibility = View.GONE
+            val mainViewPager = binding.viewpager
+            mainViewPager.isUserInputEnabled = false
+            mainViewPager.adapter =
+                ViewPagerAdapter(supportFragmentManager, lifecycle)
+            mainViewPager.setPageTransformer(ZoomOutPageTransformer())
+            navbar.selectTabAt(selectedOption)
+            navbar.setOnTabSelectListener(object :
+                AnimatedBottomBar.OnTabSelectListener {
+                override fun onTabSelected(
+                    lastIndex: Int,
+                    lastTab: AnimatedBottomBar.Tab?,
+                    newIndex: Int,
+                    newTab: AnimatedBottomBar.Tab
+                ) {
+                    navbar.animate().translationZ(12f).setDuration(200).start()
+                    selectedOption = newIndex
+                    mainViewPager.setCurrentItem(newIndex, false)
+                }
+            })
+            if (mainViewPager.currentItem != selectedOption) {
+                mainViewPager.post {
+                    mainViewPager.setCurrentItem(
+                        selectedOption,
+                        false
+                    )
+                }
+            }
             binding.includedNavbar.navbarContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = navBarHeight
             }
         }
 
+        var launched = false
         intent.extras?.let { extras ->
             val fragmentToLoad = extras.getString("FRAGMENT_TO_LOAD")
             val mediaId = extras.getInt("mediaId", -1)
@@ -312,6 +352,7 @@ class MainActivity : AppCompatActivity() {
                     putExtra("mediaId", mediaId)
                     putExtra("commentId", commentId)
                 }
+                launched = true
                 startActivity(detailIntent)
             } else if (fragmentToLoad == "FEED" && activityId != -1) {
                 val feedIntent = Intent(this, FeedActivity::class.java).apply {
@@ -319,6 +360,7 @@ class MainActivity : AppCompatActivity() {
                     putExtra("activityId", activityId)
 
                 }
+                launched = true
                 startActivity(feedIntent)
             } else if (fragmentToLoad == "NOTIFICATIONS" && activityId != -1) {
                 Logger.log("MainActivity, onCreate: $activityId")
@@ -326,6 +368,7 @@ class MainActivity : AppCompatActivity() {
                     putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
                     putExtra("activityId", activityId)
                 }
+                launched = true
                 startActivity(notificationIntent)
             }
         }
@@ -339,47 +382,9 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this, NoInternet::class.java))
             } else {
                 val model: AnilistHomeViewModel by viewModels()
-                model.genres.observe(this) { it ->
-                    if (it != null) {
-                        if (it) {
-                            val navbar = binding.includedNavbar.navbar
-                            bottomBar = navbar
-                            navbar.visibility = View.VISIBLE
-                            binding.mainProgressBar.visibility = View.GONE
-                            val mainViewPager = binding.viewpager
-                            mainViewPager.isUserInputEnabled = false
-                            mainViewPager.adapter =
-                                ViewPagerAdapter(supportFragmentManager, lifecycle)
-                            mainViewPager.setPageTransformer(ZoomOutPageTransformer())
-                            navbar.setOnTabSelectListener(object :
-                                AnimatedBottomBar.OnTabSelectListener {
-                                override fun onTabSelected(
-                                    lastIndex: Int,
-                                    lastTab: AnimatedBottomBar.Tab?,
-                                    newIndex: Int,
-                                    newTab: AnimatedBottomBar.Tab
-                                ) {
-                                    navbar.animate().translationZ(12f).setDuration(200).start()
-                                    selectedOption = newIndex
-                                    mainViewPager.setCurrentItem(newIndex, false)
-                                }
-                            })
-                            if (mainViewPager.getCurrentItem() != selectedOption) {
-                                navbar.selectTabAt(selectedOption)
-                                mainViewPager.post {
-                                    mainViewPager.setCurrentItem(
-                                        selectedOption,
-                                        false
-                                    )
-                                }
-                            }
-                        } else {
-                            binding.mainProgressBar.visibility = View.GONE
-                        }
-                    }
-                }
+
                 //Load Data
-                if (!load) {
+                if (!load && !launched) {
                     scope.launch(Dispatchers.IO) {
                         model.loadMain(this@MainActivity)
                         val id = intent.extras?.getInt("mediaId", 0)
@@ -450,15 +455,25 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        lifecycleScope.launch(Dispatchers.IO) {  //simple cleanup
-            val index = Helper.downloadManager(this@MainActivity).downloadIndex
-            val downloadCursor = index.getDownloads()
-            while (downloadCursor.moveToNext()) {
-                val download = downloadCursor.download
-                if (download.state == Download.STATE_FAILED) {
-                    Helper.downloadManager(this@MainActivity).removeDownload(download.request.id)
+
+        val torrentManager = Injekt.get<TorrentAddonManager>()
+        fun startTorrent() {
+            if (torrentManager.isAvailable() && PrefManager.getVal(PrefName.TorrentEnabled)) {
+                launchIO {
+                    if (!TorrentServerService.isRunning()) {
+                        TorrentServerService.start()
+                    }
                 }
             }
+        }
+        if (torrentManager.isInitialized.value == false) {
+            torrentManager.isInitialized.observe(this) {
+                if (it) {
+                    startTorrent()
+                }
+            }
+        } else {
+            startTorrent()
         }
     }
 
@@ -467,34 +482,26 @@ class MainActivity : AppCompatActivity() {
         window.navigationBarColor = ContextCompat.getColor(this, android.R.color.transparent)
     }
 
-    private val Int.toPx get() = TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP, this.toFloat(), Resources.getSystem().displayMetrics
-    ).toInt()
-
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
-        val params : ViewGroup.MarginLayoutParams =
+        val margin = if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 8 else 32
+        val params: ViewGroup.MarginLayoutParams =
             binding.includedNavbar.navbar.layoutParams as ViewGroup.MarginLayoutParams
-        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE)
-            params.updateMargins(bottom = 8.toPx)
-        else
-            params.updateMargins(bottom = 32.toPx)
+        params.updateMargins(bottom = margin.toPx)
     }
 
     private fun passwordAlertDialog(callback: (CharArray?) -> Unit) {
         val password = CharArray(16).apply { fill('0') }
 
         // Inflate the dialog layout
-        val dialogView =
-            LayoutInflater.from(this).inflate(R.layout.dialog_user_agent, null)
-        dialogView.findViewById<TextInputEditText>(R.id.userAgentTextBox)?.hint = "Password"
-        val subtitleTextView = dialogView.findViewById<TextView>(R.id.subtitle)
-        subtitleTextView?.visibility = View.VISIBLE
-        subtitleTextView?.text = "Enter your password to decrypt the file"
+        val dialogView = DialogUserAgentBinding.inflate(layoutInflater)
+        dialogView.userAgentTextBox.hint = "Password"
+        dialogView.subtitle.visibility = View.VISIBLE
+        dialogView.subtitle.text = getString(R.string.enter_password_to_decrypt_file)
 
         val dialog = AlertDialog.Builder(this, R.style.MyPopup)
             .setTitle("Enter Password")
-            .setView(dialogView)
+            .setView(dialogView.root)
             .setPositiveButton("OK", null)
             .setNegativeButton("Cancel") { dialog, _ ->
                 password.fill('0')

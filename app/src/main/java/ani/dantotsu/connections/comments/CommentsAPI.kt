@@ -1,10 +1,13 @@
 package ani.dantotsu.connections.comments
 
+import android.content.Context
 import ani.dantotsu.connections.anilist.Anilist
+import ani.dantotsu.isOnline
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.snackString
 import ani.dantotsu.toast
+import ani.dantotsu.util.Logger
 import com.lagradost.nicehttp.NiceResponse
 import com.lagradost.nicehttp.Requests
 import eu.kanade.tachiyomi.network.NetworkHelper
@@ -24,7 +27,8 @@ import uy.kohesive.injekt.Injekt
 import uy.kohesive.injekt.api.get
 
 object CommentsAPI {
-    val address: String = "https://1224665.xyz:443"
+    private const val ADDRESS: String = "https://api.dantotsu.app"
+    private var isOnline: Boolean = true
     var authToken: String? = null
     var userId: String? = null
     var isBanned: Boolean = false
@@ -32,8 +36,13 @@ object CommentsAPI {
     var isMod: Boolean = false
     var totalVotes: Int = 0
 
-    suspend fun getCommentsForId(id: Int, page: Int = 1, tag: Int?, sort: String?): CommentResponse? {
-        var url = "$address/comments/$id/$page"
+    suspend fun getCommentsForId(
+        id: Int,
+        page: Int = 1,
+        tag: Int?,
+        sort: String?
+    ): CommentResponse? {
+        var url = "$ADDRESS/comments/$id/$page"
         val request = requestBuilder()
         tag?.let {
             url += "?tag=$it"
@@ -44,7 +53,8 @@ object CommentsAPI {
         val json = try {
             request.get(url)
         } catch (e: IOException) {
-            snackString("Failed to fetch comments")
+            Logger.log(e)
+            errorMessage("Failed to fetch comments")
             return null
         }
         if (!json.text.startsWith("{")) return null
@@ -61,12 +71,13 @@ object CommentsAPI {
     }
 
     suspend fun getRepliesFromId(id: Int, page: Int = 1): CommentResponse? {
-        val url = "$address/comments/parent/$id/$page"
+        val url = "$ADDRESS/comments/parent/$id/$page"
         val request = requestBuilder()
         val json = try {
             request.get(url)
         } catch (e: IOException) {
-            snackString("Failed to fetch comments")
+            Logger.log(e)
+            errorMessage("Failed to fetch comments")
             return null
         }
         if (!json.text.startsWith("{")) return null
@@ -83,12 +94,13 @@ object CommentsAPI {
     }
 
     suspend fun getSingleComment(id: Int): Comment? {
-        val url = "$address/comments/$id"
+        val url = "$ADDRESS/comments/$id"
         val request = requestBuilder()
         val json = try {
             request.get(url)
         } catch (e: IOException) {
-            snackString("Failed to fetch comment")
+            Logger.log(e)
+            errorMessage("Failed to fetch comment")
             return null
         }
         if (!json.text.startsWith("{")) return null
@@ -105,12 +117,13 @@ object CommentsAPI {
     }
 
     suspend fun vote(commentId: Int, voteType: Int): Boolean {
-        val url = "$address/comments/vote/$commentId/$voteType"
+        val url = "$ADDRESS/comments/vote/$commentId/$voteType"
         val request = requestBuilder()
         val json = try {
             request.post(url)
         } catch (e: IOException) {
-            snackString("Failed to vote")
+            Logger.log(e)
+            errorMessage("Failed to vote")
             return false
         }
         val res = json.code == 200
@@ -121,7 +134,7 @@ object CommentsAPI {
     }
 
     suspend fun comment(mediaId: Int, parentCommentId: Int?, content: String, tag: Int?): Comment? {
-        val url = "$address/comments"
+        val url = "$ADDRESS/comments"
         val body = FormBody.Builder()
             .add("user_id", userId ?: return null)
             .add("media_id", mediaId.toString())
@@ -136,7 +149,8 @@ object CommentsAPI {
         val json = try {
             request.post(url, requestBody = body.build())
         } catch (e: IOException) {
-            snackString("Failed to comment")
+            Logger.log(e)
+            errorMessage("Failed to comment")
             return null
         }
         val res = json.code == 200
@@ -147,7 +161,8 @@ object CommentsAPI {
         val parsed = try {
             Json.decodeFromString<ReturnedComment>(json.text)
         } catch (e: Exception) {
-            snackString("Failed to parse comment")
+            Logger.log(e)
+            errorMessage("Failed to parse comment")
             return null
         }
         return Comment(
@@ -169,12 +184,13 @@ object CommentsAPI {
     }
 
     suspend fun deleteComment(commentId: Int): Boolean {
-        val url = "$address/comments/$commentId"
+        val url = "$ADDRESS/comments/$commentId"
         val request = requestBuilder()
         val json = try {
             request.delete(url)
         } catch (e: IOException) {
-            snackString("Failed to delete comment")
+            Logger.log(e)
+            errorMessage("Failed to delete comment")
             return false
         }
         val res = json.code == 200
@@ -185,7 +201,7 @@ object CommentsAPI {
     }
 
     suspend fun editComment(commentId: Int, content: String): Boolean {
-        val url = "$address/comments/$commentId"
+        val url = "$ADDRESS/comments/$commentId"
         val body = FormBody.Builder()
             .add("content", content)
             .build()
@@ -193,7 +209,8 @@ object CommentsAPI {
         val json = try {
             request.put(url, requestBody = body)
         } catch (e: IOException) {
-            snackString("Failed to edit comment")
+            Logger.log(e)
+            errorMessage("Failed to edit comment")
             return false
         }
         val res = json.code == 200
@@ -204,12 +221,13 @@ object CommentsAPI {
     }
 
     suspend fun banUser(userId: String): Boolean {
-        val url = "$address/ban/$userId"
+        val url = "$ADDRESS/ban/$userId"
         val request = requestBuilder()
         val json = try {
             request.post(url)
         } catch (e: IOException) {
-            snackString("Failed to ban user")
+            Logger.log(e)
+            errorMessage("Failed to ban user")
             return false
         }
         val res = json.code == 200
@@ -225,7 +243,7 @@ object CommentsAPI {
         mediaTitle: String,
         reportedId: String
     ): Boolean {
-        val url = "$address/report/$commentId"
+        val url = "$ADDRESS/report/$commentId"
         val body = FormBody.Builder()
             .add("username", username)
             .add("mediaName", mediaTitle)
@@ -236,7 +254,8 @@ object CommentsAPI {
         val json = try {
             request.post(url, requestBody = body)
         } catch (e: IOException) {
-            snackString("Failed to report comment")
+            Logger.log(e)
+            errorMessage("Failed to report comment")
             return false
         }
         val res = json.code == 200
@@ -247,7 +266,7 @@ object CommentsAPI {
     }
 
     suspend fun getNotifications(client: OkHttpClient): NotificationResponse? {
-        val url = "$address/notification/reply"
+        val url = "$ADDRESS/notification/reply"
         val request = requestBuilder(client)
         val json = try {
             request.get(url)
@@ -268,7 +287,7 @@ object CommentsAPI {
     }
 
     private suspend fun getUserDetails(client: OkHttpClient? = null): User? {
-        val url = "$address/user"
+        val url = "$ADDRESS/user"
         val request = if (client != null) requestBuilder(client) else requestBuilder()
         val json = try {
             request.get(url)
@@ -291,7 +310,8 @@ object CommentsAPI {
         return null
     }
 
-    suspend fun fetchAuthToken(client: OkHttpClient? = null) {
+    suspend fun fetchAuthToken(context: Context, client: OkHttpClient? = null) {
+        isOnline = isOnline(context)
         if (authToken != null) return
         val MAX_RETRIES = 5
         val tokenLifetime: Long = 1000 * 60 * 60 * 24 * 6 // 6 days
@@ -310,7 +330,7 @@ object CommentsAPI {
             }
 
         }
-        val url = "$address/authenticate"
+        val url = "$ADDRESS/authenticate"
         val token = PrefManager.getVal(PrefName.AnilistToken, null as String?) ?: return
         repeat(MAX_RETRIES) {
             try {
@@ -320,7 +340,8 @@ object CommentsAPI {
                     val parsed = try {
                         Json.decodeFromString<AuthResponse>(json.text)
                     } catch (e: Exception) {
-                        snackString("Failed to login to comments API: ${e.printStackTrace()}")
+                        Logger.log(e)
+                        errorMessage("Failed to login to comments API: ${e.printStackTrace()}")
                         return
                     }
                     PrefManager.setVal(PrefName.CommentAuthResponse, parsed)
@@ -340,12 +361,29 @@ object CommentsAPI {
                     return
                 }
             } catch (e: IOException) {
-                snackString("Failed to login to comments API")
+                Logger.log(e)
+                errorMessage("Failed to login to comments API")
                 return
             }
             kotlinx.coroutines.delay(60000)
         }
-        snackString("Failed to login after multiple attempts")
+        errorMessage("Failed to login after multiple attempts")
+    }
+
+    private fun errorMessage(reason: String) {
+        Logger.log(reason)
+        if (isOnline) snackString(reason)
+    }
+
+    fun logout() {
+        PrefManager.removeVal(PrefName.CommentAuthResponse)
+        PrefManager.removeVal(PrefName.CommentTokenExpiry)
+        authToken = null
+        userId = null
+        isBanned = false
+        isAdmin = false
+        isMod = false
+        totalVotes = 0
     }
 
     private suspend fun authRequest(
@@ -388,7 +426,7 @@ object CommentsAPI {
             null
         }
         val message = parsed?.message ?: reason ?: error
-        val fullMessage = if(code == 500) message else "$code: $message"
+        val fullMessage = if (code == 500) message else "$code: $message"
 
         toast(fullMessage)
     }

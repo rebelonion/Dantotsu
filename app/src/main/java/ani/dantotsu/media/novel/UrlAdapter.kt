@@ -1,6 +1,5 @@
 package ani.dantotsu.media.novel
 
-import android.annotation.SuppressLint
 import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
@@ -31,7 +30,6 @@ class UrlAdapter(
         )
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: UrlViewHolder, position: Int) {
         val binding = holder.binding
         val url = urls[position]
