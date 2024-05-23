@@ -38,4 +38,4 @@ You can come hang out with our awesome community, request new features, and repo
 
 ## LICENSE 📜
 
-Dantotsu is licensed under the [GNU General Public License v3.0](LICENSE.md)
+Dantotsu is licensed under the Unabandon Public License (UPL). More info can be found [here.](LICENSE.md)
