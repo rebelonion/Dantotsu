@@ -19,7 +19,6 @@ import ani.dantotsu.connections.anilist.api.Query
 import ani.dantotsu.databinding.ActivityFollowBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
-import ani.dantotsu.profile.FollowerItem
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.util.MarkdownCreatorActivity
