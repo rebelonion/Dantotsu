@@ -108,7 +108,7 @@ jobs:
         
         #Telegram
         curl -F "chat_id=${{ secrets.TELEGRAM_CHANNEL_ID }}" \
-          -F "document=@app/build/outputs/apk/google/alpha/app-google-alpha.apk" \
+          -F "document=@app/build/outputs/apk/google/alpha/app-google-universal-alpha.apk" \
           -F "caption=Alpha-Build: ${VERSION}: ${commit_messages}" \
          https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendDocument
 
