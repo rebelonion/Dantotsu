@@ -201,8 +201,8 @@ class AnimeDownloaderService : Service() {
 
     @androidx.annotation.OptIn(UnstableApi::class)
     suspend fun download(task: AnimeDownloadTask) {
-        try {
-            withContext(Dispatchers.Main) {
+        withContext(Dispatchers.Main) {
+            try {
                 val notifi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     ContextCompat.checkSelfPermission(
                         this@AnimeDownloaderService,
@@ -226,10 +226,14 @@ class AnimeDownloaderService : Service() {
                 ) ?: throw Exception("Failed to create output directory")
 
                 val extension = ffExtension!!.getFileExtension()
-                outputDir.findFile("${task.getTaskName().findValidName()}.${extension.first}")?.delete()
+                outputDir.findFile("${task.getTaskName().findValidName()}.${extension.first}")
+                    ?.delete()
 
                 val outputFile =
-                    outputDir.createFile(extension.second, "${task.getTaskName()}.${extension.first}")
+                    outputDir.createFile(
+                        extension.second,
+                        "${task.getTaskName()}.${extension.first}"
+                    )
                         ?: throw Exception("Failed to create output file")
 
                 var percent = 0
@@ -385,15 +389,15 @@ class AnimeDownloaderService : Service() {
                     broadcastDownloadFinished(task.episode)
                 } else throw Exception("Download failed")
 
+            } catch (e: Exception) {
+                if (e.message?.contains("Coroutine was cancelled") == false) {  //wut
+                    Logger.log("Exception while downloading file: ${e.message}")
+                    snackString("Exception while downloading file: ${e.message}")
+                    e.printStackTrace()
+                    Injekt.get<CrashlyticsInterface>().logException(e)
+                }
+                broadcastDownloadFailed(task.episode)
             }
-        } catch (e: Exception) {
-            if (e.message?.contains("Coroutine was cancelled") == false) {  //wut
-                Logger.log("Exception while downloading file: ${e.message}")
-                snackString("Exception while downloading file: ${e.message}")
-                e.printStackTrace()
-                Injekt.get<CrashlyticsInterface>().logException(e)
-            }
-            broadcastDownloadFailed(task.episode)
         }
     }
 
