@@ -25,6 +25,7 @@ import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import java.util.Locale
 
 class SettingsNotificationActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsNotificationsBinding
@@ -130,7 +131,10 @@ class SettingsNotificationActivity : AppCompatActivity() {
                             val dialog = AlertDialog.Builder(context, R.style.MyPopup)
                                 .setTitle(R.string.anilist_notification_filters)
                                 .setMultiChoiceItems(
-                                    types.toTypedArray(),
+                                    types.map { name ->
+                                        name.replace("_", " ").lowercase().replaceFirstChar {
+                                        if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString()
+                                    } }.toTypedArray(),
                                     selected
                                 ) { _, which, isChecked ->
                                     val type = types[which]
