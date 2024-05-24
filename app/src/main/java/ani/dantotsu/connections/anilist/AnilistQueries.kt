@@ -211,7 +211,7 @@ class AnilistQueries {
                                 }
                             }
                         }
-                        if (fetchedMedia.reviews?.nodes != null){
+                        if (fetchedMedia.reviews?.nodes != null) {
                             media.review = fetchedMedia.reviews!!.nodes as ArrayList<Query.Review>
                         }
                         if (user?.mediaList?.isNotEmpty() == true) {
@@ -376,6 +376,7 @@ class AnilistQueries {
         }
         return media
     }
+
     private fun continueMediaQuery(type: String, status: String): String {
         return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: $status , sort: UPDATED_TIME ) { lists { entries { progress private score(format:POINT_100) status media { id idMal type isAdult status chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } } """
     }
@@ -416,6 +417,54 @@ class AnilistQueries {
         return """ MediaListCollection(userId: ${Anilist.userid}, type: $type, status: PLANNING${if (type == "ANIME") ", sort: MEDIA_POPULARITY_DESC" else ""} ) { lists { entries { media { id mediaListEntry { progress private score(format:POINT_100) status } idMal type isAdult popularity status(version: 2) chapters episodes nextAiringEpisode {episode} meanScore isFavourite format bannerImage coverImage{large} title { english romaji userPreferred } } } } }"""
     }
 
+    suspend fun getUserStatus(): ArrayList<User>? {
+        val toShow: List<Boolean> =
+            PrefManager.getVal(PrefName.HomeLayout)
+        if (toShow.getOrNull(7) != true) return null
+        var query = """{"""
+        query += "Page1:${status(1)}Page2:${status(2)}"
+        query += """}""".trimEnd(',')
+        val response = executeQuery<Query.HomePageMedia>(query, show = true)
+        val list = mutableListOf<User>()
+        val threeDaysAgo = Calendar.getInstance().apply {
+            add(Calendar.DAY_OF_MONTH, -3)
+        }.timeInMillis
+        if (response?.data?.page1 != null && response.data.page2 != null) {
+            val activities = listOf(
+                response.data.page1.activities,
+                response.data.page2.activities
+            ).asSequence().flatten()
+                .filter { it.typename != "MessageActivity" }
+                .filter { if (Anilist.adult) true else it.media?.isAdult == false }
+                .filter { it.createdAt * 1000L > threeDaysAgo }.toList()
+                .sortedByDescending { it.createdAt }
+            val anilistActivities = mutableListOf<User>()
+            val groupedActivities = activities.groupBy { it.userId }
+
+            groupedActivities.forEach { (_, userActivities) ->
+                val user = userActivities.firstOrNull()?.user
+                if (user != null) {
+                    val userToAdd = User(
+                        user.id,
+                        user.name ?: "",
+                        user.avatar?.medium,
+                        user.bannerImage,
+                        activity = userActivities.sortedBy { it.createdAt }.toList()
+                    )
+                    if (user.id == Anilist.userid) {
+                        anilistActivities.add(0, userToAdd)
+                    } else {
+                        list.add(userToAdd)
+                    }
+                }
+            }
+
+
+            list.addAll(0, anilistActivities)
+            return list.toCollection(ArrayList())
+        } else return null
+    }
+
     suspend fun initHomePage(): Map<String, ArrayList<*>> {
         val removeList = PrefManager.getCustomVal("removeList", setOf<Int>())
         val removedMedia = ArrayList<Media>()
@@ -453,7 +502,6 @@ class AnilistQueries {
                 "ANIME"
             )
         }, recommendationPlannedQueryManga: ${recommendationPlannedQuery("MANGA")}"""
-        if (toShow.getOrNull(7) == true) query += "Page1:${status(1)}Page2:${status(2)}"
         query += """}""".trimEnd(',')
 
         val response = executeQuery<Query.HomePageMedia>(query, show = true)
@@ -618,47 +666,8 @@ class AnilistQueries {
             list.sortByDescending { it.meanScore }
             returnMap["recommendations"] = list
         }
-        if (toShow.getOrNull(7) == true) {
-            val list = mutableListOf<User>()
-            val threeDaysAgo = Calendar.getInstance().apply {
-                add(Calendar.DAY_OF_MONTH, -3)
-            }.timeInMillis
-            if (response?.data?.page1 != null && response.data.page2 != null) {
-                val activities = listOf(
-                    response.data.page1.activities,
-                    response.data.page2.activities
-                ).asSequence().flatten()
-                    .filter { it.typename != "MessageActivity" }
-                    .filter { if (Anilist.adult) true else it.media?.isAdult == false }
-                    .filter { it.createdAt * 1000L > threeDaysAgo }.toList()
-                    .sortedByDescending { it.createdAt }
-                val anilistActivities = mutableListOf<User>()
-                val groupedActivities = activities.groupBy { it.userId }
 
-                groupedActivities.forEach { (_, userActivities) ->
-                    val user = userActivities.firstOrNull()?.user
-                    if (user != null) {
-                        val userToAdd = User(
-                            user.id,
-                            user.name ?: "",
-                            user.avatar?.medium,
-                            user.bannerImage,
-                            activity = userActivities.sortedBy { it.createdAt }.toList()
-                        )
-                        if (user.id == Anilist.userid) {
-                            anilistActivities.add(0, userToAdd)
-                        } else {
-                            list.add(userToAdd)
-                        }
-                    }
-                }
-
-
-                list.addAll(0, anilistActivities)
-                returnMap["status"] = ArrayList(list)
-            }
-            returnMap["hidden"] = removedMedia.distinctBy { it.id } as ArrayList<Media>
-        }
+        returnMap["hidden"] = removedMedia.distinctBy { it.id }.toCollection(arrayListOf())
         return returnMap
     }
 
@@ -1093,9 +1102,12 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
                 }
             }?.toCollection(ArrayList()) ?: arrayListOf()
 
-            list["trendingMovies"] = trendingMovies?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["topRated"] =  topRated?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["mostFav"] = mostFav?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["trendingMovies"] =
+                trendingMovies?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["topRated"] =
+                topRated?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["mostFav"] =
+                mostFav?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
 
             list["recentUpdates"]?.addAll(recentUpdates2?.airingSchedules?.mapNotNull { i ->
                 i.media?.let {
@@ -1113,9 +1125,14 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
                     else null
                 }
             }?.toCollection(ArrayList()) ?: arrayListOf())
-            list["trendingMovies"]?.addAll(trendingMovies2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf())
-            list["topRated"]?.addAll(topRated2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf())
-            list["mostFav"]?.addAll(mostFav2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf())
+            list["trendingMovies"]?.addAll(trendingMovies2?.media?.map { Media(it) }
+                ?.toCollection(ArrayList()) ?: arrayListOf())
+            list["topRated"]?.addAll(
+                topRated2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            )
+            list["mostFav"]?.addAll(
+                mostFav2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            )
         }
         return list
     }
@@ -1164,15 +1181,26 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
         }
 
         executeQuery<Query.MangaList>(query(), force = true)?.data?.apply {
-            list["trendingManga"] = trendingManga?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["trendingManhwa"] = trendingManhwa?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["trendingNovel"] = trendingNovel?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["topRated"] = topRated?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["mostFav"] = mostFav?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["trendingManga"] =
+                trendingManga?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["trendingManhwa"] =
+                trendingManhwa?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["trendingNovel"] =
+                trendingNovel?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["topRated"] =
+                topRated?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
+            list["mostFav"] =
+                mostFav?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
 
-            list["trendingManga"]?.addAll(trendingManga2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
-            list["trendingManhwa"]?.addAll(trendingManhwa2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
-            list["trendingNovel"]?.addAll(trendingNovel2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
+            list["trendingManga"]?.addAll(
+                trendingManga2?.media?.map { Media(it) }?.toList() ?: arrayListOf()
+            )
+            list["trendingManhwa"]?.addAll(
+                trendingManhwa2?.media?.map { Media(it) }?.toList() ?: arrayListOf()
+            )
+            list["trendingNovel"]?.addAll(
+                trendingNovel2?.media?.map { Media(it) }?.toList() ?: arrayListOf()
+            )
             list["topRated"]?.addAll(topRated2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
             list["mostFav"]?.addAll(mostFav2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
         }
@@ -1509,7 +1537,11 @@ Page(page:$page,perPage:50) {
         return author
     }
 
-    suspend fun getReviews(mediaId: Int, page: Int = 1, sort: String = "SCORE_DESC"): Query.ReviewsResponse? {
+    suspend fun getReviews(
+        mediaId: Int,
+        page: Int = 1,
+        sort: String = "SCORE_DESC"
+    ): Query.ReviewsResponse? {
         return executeQuery<Query.ReviewsResponse>(
             """{Page(page:$page,perPage:10){pageInfo{currentPage,hasNextPage,total}reviews(mediaId:$mediaId,sort:$sort){id,mediaId,mediaType,summary,body(asHtml:true)rating,ratingAmount,userRating,score,private,siteUrl,createdAt,updatedAt,user{id,name,bannerImage avatar{medium,large}}}}}""",
             force = true
@@ -1621,8 +1653,9 @@ Page(page:$page,perPage:50) {
     suspend fun getReplies(
         activityId: Int,
         page: Int = 1
-    ) : ReplyResponse? {
-        val query = """{Page(page:$page,perPage:50){activityReplies(activityId:$activityId){id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}}}"""
+    ): ReplyResponse? {
+        val query =
+            """{Page(page:$page,perPage:50){activityReplies(activityId:$activityId){id userId activityId text(asHtml:true)likeCount isLiked createdAt user{id name bannerImage avatar{medium large}}likes{id name bannerImage avatar{medium large}}}}}"""
         return executeQuery(query, force = true)
     }
 

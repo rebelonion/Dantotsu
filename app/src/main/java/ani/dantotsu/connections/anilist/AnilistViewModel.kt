@@ -81,6 +81,10 @@ class AnilistHomeViewModel : ViewModel() {
         MutableLiveData<ArrayList<User>>(null)
 
     fun getUserStatus(): LiveData<ArrayList<User>> = userStatus
+    suspend fun initUserStatus() {
+        val res = Anilist.query.getUserStatus()
+        res?.let { userStatus.postValue(it) }
+    }
 
     private val hidden: MutableLiveData<ArrayList<Media>> =
         MutableLiveData<ArrayList<Media>>(null)
@@ -98,7 +102,6 @@ class AnilistHomeViewModel : ViewModel() {
         res["plannedManga"]?.let { mangaPlanned.postValue(it as ArrayList<Media>?) }
         res["recommendations"]?.let { recommendation.postValue(it as ArrayList<Media>?) }
         res["hidden"]?.let { hidden.postValue(it as ArrayList<Media>?) }
-        res["status"]?.let { userStatus.postValue(it as ArrayList<User>?) }
     }
 
     suspend fun loadMain(context: FragmentActivity) {
