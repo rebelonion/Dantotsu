@@ -909,10 +909,10 @@
     <string name="image_search_test">Teste de Busca de Imagem: %1$s</string>
     <string name="book_search_test">Teste de Busca de Livros: %1$s</string>
     <string name="failed_to_fix">Falha ao corrigir</string>
-    <string name="running_fixes">Running Fixes…</string>
-    <string name="test_search">Test Search</string>
-    <string name="app_lock">App Lock</string>
-    <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="password_mismatch">Passwords do not match or are empty!</string>
+    <string name="running_fixes">Executando Correções…</string>
+    <string name="test_search">Pesquisa do Teste</string>
+    <string name="app_lock">Bloqueio do App</string>
+    <string name="app_lock_desc">Bloquear o app com uma senha\n( ͡° ͜ʖ ͡°)</string>
+    <string name="confirm_password">Confirmar Senha</string>
+    <string name="password_mismatch">Senhas não coincidem ou estão vazias!</string>
 </resources>
