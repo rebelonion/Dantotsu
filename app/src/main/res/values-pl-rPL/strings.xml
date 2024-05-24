@@ -913,6 +913,6 @@
     <string name="test_search">Test wyszukiwania</string>
     <string name="app_lock">App Lock</string>
     <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="password_mismatch">Passwords do not match or are empty!</string>
+    <string name="confirm_password">Potwierdź Hasło</string>
+    <string name="password_mismatch">Hasła nie pasują lub pole jest puste!</string>
 </resources>
