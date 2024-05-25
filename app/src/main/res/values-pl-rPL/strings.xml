@@ -127,18 +127,18 @@
     <string name="server_selector">Wybierz serwer</string>
     <string name="auto_select_server">Automatyczny wybór serwera</string>
     <string name="make_default">Ustaw jako domyślny</string>
-    <string name="filler">Wypełniacz</string>
+    <string name="filler">Filler</string>
     <string name="adult">Dla dorosłych</string>
     <string name="list_only">Tylko lista</string>
     <string name="tag">Tag</string>
     <string name="tags">Tagi</string>
     <string name="synonyms">Synonimy</string>
     <string name="trailer">Zwiastun</string>
-    <string name="opening">Otwarcie</string>
+    <string name="opening">Opening</string>
     <string name="ending">Zakończenie</string>
     <string name="prequel">Prequel</string>
     <string name="sequel">Sequel</string>
-    <string name="anilist_settings">Ustawienia Anilist</string>
+    <string name="anilist_settings">Ustawienia AniList</string>
     <string name="extension_settings">Rozszerzenia</string>
     <string name="downloads">Pobieranie</string>
     <string name="offline_mode">Tryb offline</string>
@@ -153,33 +153,33 @@
     <string name="reader_settings">Ustawienia czytnika</string>
     <string name="default_source">Domyślne źródło</string>
     <string name="show_yt">Link do YouTube</string>
-    <string name="default_ep_view">Domyślne rozmieszczenie odcinków</string>
-    <string name="default_chp_view">Domyślne rozmieszczenie rozdziałów</string>
+    <string name="default_ep_view">Domyślny widok odcinków</string>
+    <string name="default_chp_view">Domyślny widok rozdziałów</string>
     <string name="ui">Interfejs użytkownika</string>
-    <string name="common">Wspólne</string>
+    <string name="common">Główne</string>
     <string name="theme">Motyw</string>
-    <string name="ui_settings">Ustawienia interfejsu użytkownika</string>
+    <string name="ui_settings">Ustawienia Interfejsu</string>
     <string name="about">O aplikacji</string>
-    <string name="desc">"    Dantotsu jest stworzone z popiołów Saikou i oparte na prostocie, ale najnowocześniejszej elegancji. To klient tylko dla Anilist, który pozwala także na streamowanie i pobieranie Anime za pośrednictwem rozszerzeń &amp; Manga.\nDantotsu dosłownie oznacza \"najlepsze z najlepszych\" po japońsku. Cóż, chcielibyśmy powiedzieć, że jest to najlepsza otwarta aplikacja na anime i mangę na Androida, co powiedziałbyś?"</string>
+    <string name="desc">"    Dantotsu zostało stworzone z popiołów projektu Saikou i oparte na prostocie, ale zmodernizowanej elegancji. Klient rozwijany jako aplikacja dedykowana użytkownikom AniList, pozwalająca także na streamowanie i pobieranie Anime oraz Mang za pośrednictwem rozszerzeń aplikacji.\nDantotsu po japońsku dosłownie oznacza \"najlepsze z najlepszych\". Cóż, chcielibyśmy po prostu powiedzieć, że jest to najlepsza open-source aplikacja poświęcona anime i mangą dla Androida."</string>
     <string name="devs">Deweloperzy/Pomocnicy</string>
     <string name="disclaimer">Oświadczenie</string>
-    <string name="full_disclaimer">         - Dantotsu sam w sobie zapewnia tylko śledzenie anime i mangi i nie zapewnia żadnych możliwości strumieniowego odtwarzania ani pobierania anime ani mangi.
+    <string name="full_disclaimer">         - Dantotsu sam w sobie zapewnia tylko i wyłącznie funkcje śledzenia anime i mangi i nie zapewnia żadnych wbudowanych możliwości strumieniowego odtwarzania ani pobierania anime ani mangi.
         \n\n - Dantotsu ani żaden z jego deweloperów/osób obsługujących nie hostuje żadnych treści znajdujących się wewnątrz Dantotsu. Wszystkie obrazy i informacje o anime/mangach znalezione w aplikacji pochodzą z różnych publicznych interfejsów API (AniList, MyAnimeList, Kitsu).
-        \n\n - Ponadto wszystkie linki do anime/mangi znalezione w Dantotsu pochodzą z różnych wtyczek firm trzecich i nie mają żadnego związku z Dantotsu ani jego pracownikami.
-        \n\n - Dantotsu ani jego właściciele nie ponoszą odpowiedzialności za żadne nieprawidłowe wykorzystanie żadnych treści znajdujących się wewnątrz ani na zewnątrz aplikacji i nie mogą być pociągani do odpowiedzialności za dystrybucję żadnych treści znajdujących się wewnątrz aplikacji.
-        \n\n - Korzystając z Dantotsu, zgadzasz się z faktem, że deweloper aplikacji nie ponosi odpowiedzialności za żadne treści znajdujące się w aplikacji. Zgadzasz się również z faktem, że nie możesz używać Dantotsu do pobierania ani strumieniowego odtwarzania żadnych treści chronionych prawem autorskim.
+        \n\n - Ponadto wszystkie linki do anime/mangi znalezione w Dantotsu pochodzą z różnych wtyczek stron trzecich i nie mają żadnego związku z Dantotsu ani jego pracownikami.
+        \n\n - Dantotsu ani żadni jego właściciele nie ponoszą odpowiedzialności za żadne nieprawidłowe wykorzystanie żadnych treści znajdujących się wewnątrz ani na zewnątrz aplikacji i nie mogą być pociągani do odpowiedzialności za dystrybucję żadnych treści znajdujących się wewnątrz aplikacji.
+        \n\n - Korzystając z Dantotsu, zgadzasz się z faktem, iż deweloper aplikacji nie ponosi odpowiedzialności za żadne treści znajdujące się w aplikacji. Zgadzasz się również z faktem, że nie możesz używać Dantotsu do pobierania ani strumieniowego odtwarzania żadnych treści chronionych prawem autorskim.
         \n\n - Jeśli chodzi o problemy z naruszeniem praw autorskich w Internecie, prosimy o kontakt z witryną źródłową. Deweloper nie ponosi żadnej odpowiedzialności prawnej.
     </string>
     <string name="version_current">Wersja %1$s</string>
     <string-array name="tips">
-        <item>Masz możliwość Długiego Kliknięcia odcinka/rozdziału, aby oznaczyć go jako przeczytany.</item>
-        <item>Długie Kliknięcie na Show może otworzyć bezpośrednio Edytor Listy.</item>
-        <item>W aplikacji są ukryte jeszcze kilka pisanek.</item>
-        <item>Wyzwanie: Przejdź na sam dół Popularnego Anime &amp; Mangi</item>
-        <item>Spróbuj Długiego Kliknięcia tytułu Showu.</item>
-        <item>Kurczę, dlaczego marnujesz swój czas?</item>
-        <item>Masz możliwość Długiego Kliknięcia, aby skopiować tę wiadomość.</item>
-        <item>OMG PATRZ! ZNALAZŁEŚ JAJKO WIELKANOCNE!?</item>
+        <item>Przytrzymaj odcinek/rozdział, aby oznaczyć go jako przeczytanym.</item>
+        <item>Długie kliknięcie okładki Show pozwala bezpośrednio otworzyć Edytor Listy.</item>
+        <item>W aplikacji ukryto jeszcze więcej easter eggów.</item>
+        <item>Wyzwanie: Zjedź na sam dół Popularnego Anime &amp; Mangi</item>
+        <item>Spróbuj przytrzymać tytuł Show.</item>
+        <item>Kurczę, warto tak marnować swój czas?</item>
+        <item>Przytrzymaj, aby skopiować tę wiadomość.</item>
+        <item>OMG! ZNALAZŁEŚ EASTER EGGA!?</item>
         <item>Wiesz, kto jeszcze lubi tę animację?</item>
         <item>Wsparcie MAL? bruh.</item>
         <item>Nowele? raczej NO vels.</item>
