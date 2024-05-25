@@ -909,4 +909,8 @@
     <string name="app_lock_desc">用密码锁定应用\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">确认密码</string>
     <string name="password_mismatch">密码不匹配或为空！</string>
+    <string name="enable_biometric">Enable Biometric</string>
+    <string name="bio_prompt_info_title">Biometric Authentication</string>
+    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
+    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
 </resources>
