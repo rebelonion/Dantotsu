@@ -909,8 +909,8 @@
     <string name="failed_to_fix">Mislukt om te repareren</string>
     <string name="running_fixes">Bezig met reparaties...</string>
     <string name="test_search">Test Zoeken</string>
-    <string name="app_lock">App Lock</string>
-    <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="password_mismatch">Passwords do not match or are empty!</string>
+    <string name="app_lock">App-vergrendeling</string>
+    <string name="app_lock_desc">Vergrendel de app met een wachtwoord\n( ͡° ͜ʖ ͡°)</string>
+    <string name="confirm_password">Bevestig Wachtwoord</string>
+    <string name="password_mismatch">Wachtwoorden komen niet overeen of zijn leeg!</string>
 </resources>
