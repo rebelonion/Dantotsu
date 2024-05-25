@@ -28,7 +28,7 @@
         android:src="@drawable/linear_gradient_bg"
         tools:ignore="ContentDescription" />
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/textActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,7 +47,7 @@
             android:textSize="18sp"
             android:visibility="gone"
             tools:ignore="HardcodedText" />
-    </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <FrameLayout
         android:id="@+id/leftTouchPanel"

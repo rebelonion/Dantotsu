@@ -9,30 +9,30 @@
     <LinearLayout
         android:id="@+id/mainContainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="64dp"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:background="@color/bg"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/displayContainer"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_gravity="top"
+            android:layout_marginTop="16dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/display"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:background="@drawable/rounded_top_corners"
                 android:gravity="end"
-                android:maxLines="1"
+                android:maxLines="2"
                 app:autoSizeMaxTextSize="48sp"
                 app:autoSizeMinTextSize="10sp"
                 app:autoSizeStepGranularity="2sp"
@@ -45,9 +45,9 @@
                 android:id="@+id/displayBinary"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginEnd="32dp"
                 android:background="?attr/colorSurfaceVariant"
                 android:gravity="end"
                 android:maxLines="2"
@@ -63,9 +63,9 @@
                 android:id="@+id/displayHex"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="2dp"
-                android:layout_marginEnd="32dp"
                 android:background="@drawable/rounded_bottom_corners"
                 android:gravity="end"
                 android:maxLines="2"
@@ -78,18 +78,10 @@
                 tools:ignore="ButtonStyle,HardcodedText" />
         </LinearLayout>
 
-        <FrameLayout
-            android:id="@+id/fillerLayout"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-
         <LinearLayout
             android:id="@+id/buttonContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
-            android:layout_gravity="center_horizontal|bottom"
             android:orientation="vertical">
 
             <LinearLayout
