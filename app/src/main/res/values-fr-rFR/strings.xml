@@ -912,8 +912,8 @@
     <string name="failed_to_fix">Échec de la réparation</string>
     <string name="running_fixes">Exécution de corrections…</string>
     <string name="test_search">Recherche de test</string>
-    <string name="app_lock">App Lock</string>
-    <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="password_mismatch">Passwords do not match or are empty!</string>
+    <string name="app_lock">Verrouillage de l\'application</string>
+    <string name="app_lock_desc">Verrouillez l\'application avec un mot de passe\n( ͡° ͜ʖ ͡°)</string>
+    <string name="confirm_password">Confirmer le Mot de Passe</string>
+    <string name="password_mismatch">Les mots de passe ne correspondent pas ou sont vides!</string>
 </resources>
