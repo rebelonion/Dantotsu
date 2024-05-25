@@ -909,7 +909,7 @@
     <string name="image_search_test">Test wyszukiwania obrazu: %1$s</string>
     <string name="book_search_test">Test wyszukiwania książki: %1$s</string>
     <string name="failed_to_fix">Nie udało się naprawić</string>
-    <string name="running_fixes">Uruchamianie poprawek...</string>
+    <string name="running_fixes">Wykonywanie poprawek...</string>
     <string name="test_search">Test wyszukiwania</string>
     <string name="app_lock">Zablokuj Aplikacje</string>
     <string name="app_lock_desc">Zablokuj aplikację hasłem\n( ͡° ͜ʖ ͡°)</string>
