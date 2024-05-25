@@ -908,8 +908,8 @@
     <string name="failed_to_fix">সুধাৰণ কৰিবলৈ বিফল</string>
     <string name="running_fixes">সুধাৰণ চলি আছে...</string>
     <string name="test_search">পৰীক্ষাৰ অনুসন্ধান</string>
-    <string name="app_lock">App Lock</string>
-    <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="password_mismatch">Passwords do not match or are empty!</string>
+    <string name="app_lock">এপ লক</string>
+    <string name="app_lock_desc">এপটো এখন পাছৱৰ্ডেৰে লক কৰক\n( ͡° ͜ʖ ͡°)</string>
+    <string name="confirm_password">পাছৱৰ্ড নিশ্চিত কৰক</string>
+    <string name="password_mismatch">পাছৱৰ্ডবোৰ মেল খোৱা নাই বা খালি আছে!</string>
 </resources>
