@@ -916,4 +916,8 @@
     <string name="app_lock_desc">Verrouillez l\'application avec un mot de passe\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">Confirmer le Mot de Passe</string>
     <string name="password_mismatch">Les mots de passe ne correspondent pas ou sont vides!</string>
+    <string name="enable_biometric">Enable Biometric</string>
+    <string name="bio_prompt_info_title">Biometric Authentication</string>
+    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
+    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
 </resources>
