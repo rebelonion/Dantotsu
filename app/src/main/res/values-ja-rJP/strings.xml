@@ -911,8 +911,8 @@
     <string name="failed_to_fix">修正に失敗しました</string>
     <string name="running_fixes">修正を実行中...</string>
     <string name="test_search">テスト検索</string>
-    <string name="app_lock">App Lock</string>
-    <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="password_mismatch">Passwords do not match or are empty!</string>
+    <string name="app_lock">アプリロック</string>
+    <string name="app_lock_desc">パスワードでアプリをロックする\n( ͡° ͜ʖ ͡°)</string>
+    <string name="confirm_password">パスワードを確認</string>
+    <string name="password_mismatch">パスワードが一致しないか、空です！</string>
 </resources>
