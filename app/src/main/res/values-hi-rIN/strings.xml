@@ -912,4 +912,8 @@
     <string name="app_lock_desc">ऐप को पासवर्ड से लॉक करें\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">पासवर्ड की पुष्टि करें</string>
     <string name="password_mismatch">पासवर्ड मेल नहीं खाते या खाली हैं!</string>
+    <string name="enable_biometric">Enable Biometric</string>
+    <string name="bio_prompt_info_title">Biometric Authentication</string>
+    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
+    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
 </resources>
