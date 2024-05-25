@@ -912,8 +912,8 @@
     <string name="app_lock_desc">Uygulamayı şifreyle kilitle\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">Şifreyi Onayla</string>
     <string name="password_mismatch">Şifre uyuşmuyor ya da boş!</string>
-    <string name="enable_biometric">Enable Biometric</string>
-    <string name="bio_prompt_info_title">Biometric Authentication</string>
-    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
-    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="enable_biometric">Biyometriğe İzin Ver</string>
+    <string name="bio_prompt_info_title">Biyometrik Doğrulaması</string>
+    <string name="bio_prompt_info_desc">Uygulamayı açmak için parmak izini veye yüzünü kullan</string>
+    <string name="enable_forgot_password">Şifremi Unuttum\'a izin ver (temizle butonuna 10 saniye basılı tutun)</string>
 </resources>
