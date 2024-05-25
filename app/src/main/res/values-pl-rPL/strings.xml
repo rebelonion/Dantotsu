@@ -11,7 +11,7 @@
     <string name="browse_anime">Przeglądaj Anime</string>
     <string name="manga">Manga</string>
     <string name="browse_manga">Przeglądaj Mangę</string>
-    <string name="novels">Powieści</string>
+    <string name="novels">Nowele</string>
     <string name="info">Informacje</string>
     <string name="watch">Obejrzyj</string>
     <string name="read">Czytaj</string>
@@ -21,43 +21,43 @@
     <string name="sad">X(</string>
     <string name="oh">:o</string>
     <string name="colon">" : "</string>
-    <string name="no_internet">Brak połączenia internetowego</string>
+    <string name="no_internet">Problemy z połączeniem</string>
     <string name="refresh">Odśwież</string>
     <string name="search">Szukaj</string>
     <string name="search_results">Wyniki wyszukiwania</string>
-    <string name="sort_by">Sortuj Według</string>
+    <string name="sort_by">Sortuj według</string>
     <string name="genre">Gatunek</string>
-    <string name="top_score">Najlepsze Wyniki</string>
+    <string name="top_score">Najlepsze wyniki</string>
     <string name="updated">Ostatnio zaktualizowane</string>
     <string name="trending_anime">Popularne Anime</string>
     <string name="popular_anime">Popularne Anime</string>
     <string name="trending_manga">Popularna Manga</string>
-    <string name="trending_novel">Popularna Powieść</string>
-    <string name="popular_manga">Najczęściej czytana Manga</string>
-    <string name="username">Nazwa użytkownika</string>
+    <string name="trending_novel">Popularna Nowela</string>
+    <string name="popular_manga">Popularna Manga</string>
+    <string name="username">Nazwa Użytkownika</string>
     <string name="chapters_read">Przeczytane rozdziały</string>
-    <string name="chapters_read_n">Rozdziały\nPrzeczytane</string>
+    <string name="chapters_read_n">Przeczytane\nrozdziały</string>
     <string name="episodes_watched">Obejrzane odcinki</string>
-    <string name="episodes_watched_n">Odcinki\nObejrzane</string>
+    <string name="episodes_watched_n">Obejrzane\nodcinki</string>
     <string name="continue_reading">Kontynuuj czytanie</string>
     <string name="continue_watching">Kontynuuj oglądanie</string>
     <string name="recommended">Polecane</string>
-    <string name="get_recommendations">Obejrzyj/Czytaj trochę Anime lub Mangi, aby uzyskać rekomendacje</string>
-    <string name="empty">Wszystko przeczytane, kiedy nowe?</string>
+    <string name="get_recommendations">Obejrzyj lub przeczytaj kilka Anime lub Mang, aby uzyskać rekomendacje</string>
+    <string name="empty">Wszystko nadrobiono, kiedy nowe?</string>
     <string name="action_settings">Ustawienia</string>
     <string name="add">Dodaj do listy</string>
     <string name="list_editor">Edytor listy</string>
     <string name="add_fav">Dodaj do ulubionych</string>
     <string name="notifications">Powiadomienia</string>
     <string-array name="keys">
-        <item>Czytanie</item>
-        <item>Oglądanie</item>
+        <item>Czytane</item>
+        <item>Oglądane</item>
         <item>Zakończone</item>
         <item>Wstrzymane</item>
-        <item>Odrzucone</item>
-        <item>Planowanie</item>
+        <item>Porzucone</item>
+        <item>Planowane</item>
         <item>Ulubione</item>
-        <item>Ponowne oglądanie</item>
+        <item>Ponownie oglądane</item>
         <item>Ponowne czytanie</item>
         <item>Wszystko</item>
     </string-array>
@@ -70,7 +70,7 @@
         <item>ZAKOŃCZONE</item>
         <item>PONOWNIE OGLĄDANE</item>
         <item>WSTRZYMANE</item>
-        <item>ODRZUCONE</item>
+        <item>PORZUCONE</item>
     </string-array>
     <string-array name="status_manga">
         <item>PLANOWANE</item>
@@ -78,10 +78,10 @@
         <item>ZAKOŃCZONE</item>
         <item>PONOWNIE CZYTANE</item>
         <item>WSTRZYMANE</item>
-        <item>ODRZUCONE</item>
+        <item>PORZUCONE</item>
     </string-array>
     <string name="progress">POSTĘP</string>
-    <string name="score">WYNIK</string>
+    <string name="score">OCENA</string>
     <string name="score_suffix">" / 10"</string>
     <string name="started_at">ROZPOCZĘTO</string>
     <string name="completed_at">ZAKOŃCZONO</string>
@@ -89,8 +89,8 @@
     <string name="delete">Usuń</string>
     <string name="remove">Usuń</string>
     <string name="name">Nazwa</string>
-    <string name="name_romaji">Nazwa w romaji</string>
-    <string name="mean_score">Średni wynik</string>
+    <string name="name_romaji">Nazwa rōmaji</string>
+    <string name="mean_score">Przeciętna ocena</string>
     <string name="format">Format</string>
     <string name="status_title">Status</string>
     <string name="total_eps">Liczba odcinków</string>
@@ -98,7 +98,7 @@
     <string name="chapters"> Rozdziały</string>
     <string name="total_divider"> | %1$s</string>
     <string name="total_chaps">Liczba rozdziałów</string>
-    <string name="ep_duration">Średni czas trwania</string>
+    <string name="ep_duration">Średnia Długość</string>
     <string name="min">" min"</string>
     <string name="season">Sezon</string>
     <string name="start_date">Data rozpoczęcia</string>
@@ -108,7 +108,7 @@
     <string name="genres">Gatunki</string>
     <string name="description">Opis</string>
     <string name="characters">Postacie</string>
-    <string name="relations">Relacje</string>
+    <string name="relations">Powiązania</string>
     <string name="staff">Personel</string>
     <string name="favourites">Ulubione</string>
     <string name="popularity">Popularność</string>
@@ -126,7 +126,7 @@
     <string name="not_supported">%1$s nie jest obsługiwane!</string>
     <string name="server_selector">Wybierz serwer</string>
     <string name="auto_select_server">Automatyczny wybór serwera</string>
-    <string name="make_default">Ustaw jako domyślne</string>
+    <string name="make_default">Ustaw jako domyślny</string>
     <string name="filler">Wypełniacz</string>
     <string name="adult">Dla dorosłych</string>
     <string name="list_only">Tylko lista</string>
