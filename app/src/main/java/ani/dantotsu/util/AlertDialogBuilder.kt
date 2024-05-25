@@ -135,6 +135,7 @@ class AlertDialogBuilder(private val context: Context) {
             } else if (checkedItems != null && onItemsSelected != null) {
                 builder.setMultiChoiceItems(items, checkedItems) { _, which, isChecked ->
                     checkedItems?.set(which, isChecked)
+                    onItemsSelected?.invoke(checkedItems!!)
                 }
             }
         }

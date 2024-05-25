@@ -103,15 +103,18 @@
 
     </FrameLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/listFrameLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/followSwipeRefresh"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
             android:clipChildren="false"
@@ -120,7 +123,7 @@
             <ani.dantotsu.FadingEdgeRecyclerView
                 android:id="@+id/listRecyclerView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:nestedScrollingEnabled="true"
                 android:requiresFadingEdge="vertical"
                 tools:listitem="@layout/item_follower" />
@@ -132,8 +135,8 @@
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="32dp"
-            android:visibility="gone" />
-    </FrameLayout>
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
 </LinearLayout>
