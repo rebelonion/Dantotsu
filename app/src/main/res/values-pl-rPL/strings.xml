@@ -237,7 +237,7 @@
     <string name="always_continue">Zawsze kontynuuj od miejsca, w którym przerwano</string>
     <string name="pause_video_focus">Wstrzymaj, gdy nie jest w fokusu</string>
     <string name="gestures">Gesty głośności i jasności</string>
-    <string name="double_tap">Podwójne stuknięcie, aby przewinąć</string>
+    <string name="double_tap">Kliknij dwukrotnie, aby przewinąć</string>
     <string name="fast_forward">Przewiń do przodu</string>
     <string name="double_tap_info">Wyłączenie spowoduje wyświetlenie przycisków przewijania do przodu i do tyłu</string>
     <string name="seek_time">Czas przewijania</string>
@@ -915,4 +915,8 @@
     <string name="app_lock_desc">Zablokuj aplikację hasłem\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">Potwierdź Hasło</string>
     <string name="password_mismatch">Hasła nie pasują lub pole jest puste!</string>
+    <string name="enable_biometric">Enable Biometric</string>
+    <string name="bio_prompt_info_title">Biometric Authentication</string>
+    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
+    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
 </resources>
