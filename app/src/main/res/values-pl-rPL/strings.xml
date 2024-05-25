@@ -244,46 +244,46 @@
     <string name="seek_time_info">Ilość czasu w sekundach na przewijanie do przodu i do tyłu.</string>
     <string name="skip_time">Czas pomijania</string>
     <string name="skip_time_info">Ustawienie na 0 ukrywa przycisk Pomijania.</string>
-    <string name="show_cast_button">Pokaż przycisk rzucania</string>
-    <string name="show_cast_button_info">Wymaga aplikacji „Web Video Caster”, aby rzucić.</string>
+    <string name="show_cast_button">Pokaż przycisk streamowania</string>
+    <string name="show_cast_button_info">Wymaga aplikacji „Web Video Caster”, aby streamować.</string>
     <string name="picture_in_picture">Obraz w obrazie</string>
     <string name="always_minimize">Zawsze minimalizuj</string>
-    <string name="always_minimize_info">Wymaga włączonego obrazu w obrazie, sprawia, że odtwarzacz zachowuje się jak odtwarzacz YouTube, ale lepiej.\n Ukrywa również przycisk obrazu w obrazie.</string>
+    <string name="always_minimize_info">Wymaga włączonej funkcji obrazu w obrazie, sprawia, że odtwarzacz zachowuje się jak odtwarzacz YouTube, ale lepiej.\n Ukrywa również przycisk obrazu w obrazie.</string>
     <string name="app">Aplikacja</string>
     <string name="immersive_mode">Ukryj pasek stanu</string>
     <string name="immersive_modelist">Ukryj pasek stanu na liście</string>
-    <string name="immersive_mode_info">Wymaga ponownego uruchomienia aplikacji, aby w pełni działało.</string>
+    <string name="immersive_mode_info">Wymaga restartu aplikacji, aby zadziałało.</string>
     <string name="home_layout_show">Pokaż/Ukryj układy na stronie głównej</string>
     <string-array name="home_layouts">
-        <item>Kontynuuj oglądanie</item>
-        <item>Ulubione anime</item>
-        <item>Zaplanowane anime</item>
-        <item>Kontynuuj czytanie</item>
-        <item>Ulubione manga</item>
-        <item>Zaplanowane manga</item>
+        <item>Kontynuuj Oglądanie</item>
+        <item>Ulubione Anime</item>
+        <item>Planowane Anime</item>
+        <item>Kontynuuj Czytanie</item>
+        <item>Ulubione Mangi</item>
+        <item>Planowane Mangi</item>
         <item>Polecane</item>
-        <item>Feed społecznościowy</item>
+        <item>Społeczność</item>
     </string-array>
     <string name="startUpTab">Domyślna karta startowa</string>
-    <string name="small_view">Mały widok w popularnych programach</string>
+    <string name="small_view">Mały widok w popularnych Show</string>
     <string name="animations">Animacje</string>
     <string name="banner_animations">Animacje banerów</string>
     <string name="layout_animations">Animacje układu</string>
     <string name="trending_scroller">Przewijanie popularnych</string>
     <string name="animation_speed">Całkowita prędkość</string>
-    <string name="empty_fav">Wygląda na to, że niczego nie lubisz,\nSpróbuj polubić program, aby go tutaj zachować.</string>
-    <string name="fav_anime">Ulubione anime</string>
-    <string name="fav_manga">Ulubione manga</string>
+    <string name="empty_fav">Wygląda na to, że niczego nie polubiłeś,\nSpróbuj polubić jakieś Show, aby je tutaj zachować.</string>
+    <string name="fav_anime">Ulubione Anime</string>
+    <string name="fav_manga">Ulubione Mangi</string>
     <string name="restart_app">Zrestartować aplikację?</string>
-    <string name="next">Następne</string>
-    <string name="previous">Poprzednie</string>
+    <string name="next">Następny</string>
+    <string name="previous">Poprzedni</string>
     <string name="current_page">Bieżąca strona</string>
-    <string name="dubbed">Dubbingowane</string>
-    <string name="subbed">Napisane</string>
+    <string name="dubbed">Dubbing</string>
+    <string name="subbed">Napisy</string>
     <string name="prefer_dub">Preferuj anime z dubbingiem</string>
     <string name="none">Brak</string>
-    <string name="selected_dns">Wybrane DNS</string>
-    <string name="dns_info">Zmień, jeśli twój dostawca blokuje jakiekolwiek źródło</string>
+    <string name="selected_dns">Wybrany DNS</string>
+    <string name="dns_info">Zmień, jeśli twój dostawca sieci blokuje jakiekolwiek źródło</string>
     <string name="keep_screen_on">Nie wygaszaj ekranu</string>
     <string name="layout">Układ</string>
     <string name="spaced_pages">Strony z odstępami</string>
