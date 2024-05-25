@@ -422,40 +422,40 @@
     <string name="getting_user_data">Pobieranie danych użytkownika</string>
     <string name="no_next_episode">Nie znaleziono następnego odcinka!</string>
     <string name="enable_banner_animations">Spróbuj włączyć \"Animacje banerów\" w ustawieniach</string>
-    <string name="please_login_anilist">Proszę zaloguj się na Anilist!</string>
+    <string name="please_login_anilist">Proszę zaloguj się na AniList!</string>
     <string name="auto_update_reset">Postęp automatycznej aktualizacji został zresetowany</string>
     <string name="cant_wait">Nie możesz się doczekać, co? dobrze X(</string>
     <string name="downloading">Pobieranie…</string>
     <string name="next_chapter_not_found">Nie znaleziono następnego rozdziału</string>
     <string name="first_chapter">To jest pierwszy rozdział!</string>
     <string name="adult_stuff">Rzeczy dla dorosłych? &#40; &#865;&#176; &#860;&#662; &#865;&#176; &#41;</string>
-    <string name="what_did_you_open">Co właściwie otworzyłeś?</string>
-    <string name="error_getting_data">Błąd podczas pobierania danych z Anilist.</string>
+    <string name="what_did_you_open">Co ty właściwie otworzyłeś?</string>
+    <string name="error_getting_data">Błąd podczas pobierania danych z AniList.</string>
     <string name="empty_response">Pusta odpowiedź! A może twój internet ssie?</string>
-    <string name="error_loading_mal_user_data">Błąd wczytywania danych użytkownika MAL</string>
+    <string name="error_loading_mal_user_data">Błąd wczytywania danych z MAL</string>
     <string name="error_loading_mal_data">Nie udało się wczytać danych z MAL</string>
-    <string name="error_loading_anilist_user_data">Błąd wczytywania danych użytkownika Anilist</string>
+    <string name="error_loading_anilist_user_data">Błąd wczytywania danych użytkownika AniList</string>
     <string name="episode_not_found">Nie można znaleźć odcinka: %1$s</string>
     <string name="list_updated">Lista zaktualizowana</string>
     <string name="deleted_from_list">Usunięto z listy</string>
     <string name="no_list_id">Nie znaleziono identyfikatora listy...</string>
-    <string name="checking_for_update">Sprawdzanie aktualizacji</string>
+    <string name="checking_for_update">Szukanie aktualizacji</string>
     <string name="dont_show_again">Nie pokazuj ponownie dla wersji %1$s</string>
     <string name="no_update_found">Nie znaleziono aktualizacji</string>
     <string name="downloading_update">Pobieranie aktualizacji %1$s</string>
-    <string name="permission_required">Proszę udziel uprawnień dostępu do Plików i Folderów w Ustawieniach, i spróbuj ponownie.</string>
+    <string name="permission_required">Proszę udziel uprawnień dostępu do Plików i Folderów w Ustawieniach, spróbuj ponownie.</string>
     <string name="started_downloading">Rozpoczęto pobieranie\n%1$s</string>
     <string name="install_1dm">Proszę zainstaluj 1DM</string>
     <string name="install_adm">Proszę zainstaluj ADM</string>
     <string name="error_getting_image_data">Błąd pobierania danych obrazu</string>
     <string name="loading_image_failed">Wczytywanie obrazu nie powiodło się</string>
-    <string name="copied_device_info">Skopiowane informacje o urządzeniu</string>
+    <string name="copied_device_info">Skopiowano informacje o urządzeniu</string>
     <string name="anilist_down">Wygląda na to, że Anilist jest niedostępny, może spróbuj użyć VPN lub poczekaj, aż wróci.</string>
     <string name="failed_to_load_data">Nie udało się wczytać zapisanych danych %1$d</string>
     <string name="access_not_available">Nie udało się uzyskać dostępu</string>
-    <string name="mal_login_uri_not_found">Logowanie Mal: Uri nie znaleziono</string>
-    <string name="mal_login_code_challenge_not_found">Logowanie Mal: brak codeChallenge</string>
-    <string name="mal_login_code_not_present">Logowanie Mal: Brak kodu w przekierowanym URI</string>
+    <string name="mal_login_uri_not_found">Logowanie MAL: Nie znaleziono URI</string>
+    <string name="mal_login_code_challenge_not_found">Logowanie MAL: nie znaleziono codeChallenge</string>
+    <string name="mal_login_code_not_present">Logowanie MAL: Brak kodu w przekierowanym URI</string>
     <string name="refresh_token_load_failed">Odśwież token: Nie udało się wczytać zapisanego tokena</string>
     <string name="refreshing_token_failed">Odświeżanie tokena nie powiodło się</string>
     <string name="episode_release_countdown">Odcinek %1$d zostanie wydany za</string>
@@ -469,17 +469,17 @@
         <item>Nowe wydania</item>
         <item>A-Z</item>
         <item>Z-A</item>
-        <item>Przekleństwo</item>
+        <item>Czysty Ból</item>
     </string-array>
     <string name="main_role">GŁÓWNA</string>
     <string name="supporting_role">PODRZĘDNA</string>
     <string name="status_finished">ZAKOŃCZONE</string>
-    <string name="status_releasing">WYDARZENIE</string>
+    <string name="status_releasing">WYDAWANE</string>
     <string name="status_not_yet_released">NIE WYDANO</string>
     <string name="status_cancelled">ANULOWANE</string>
     <string name="status_hiatus">PRZERWA</string>
     <string name="type_adaptation">ADAPTACJA</string>
-    <string name="type_parent">MACIERZYSTA</string>
+    <string name="type_parent">PIERWOWZÓR</string>
     <string name="type_character">POSTAĆ</string>
     <string name="type_summary">STRESZCZENIE</string>
     <string name="type_alternative">ALTERNATYWA</string>
@@ -500,10 +500,10 @@
     <string name="checking_subscriptions_title">Sprawdzanie subskrypcji</string>
     <string name="user_list">%1$s lista %2$s</string>
     <string name="speed">Prędkość</string>
-    <string name="auto_update">Automatyczna aktualizacja postępu dla %1$s?</string>
+    <string name="auto_update">Czy aktualizować automatycznie postęp dla %1$s?</string>
     <string name="continue_from">Kontynuuj od %1$s?</string>
-    <string name="title_update_progress">Aktualizacja postępu na AniList?</string>
-    <string name="incognito_will_not_update">Tryb incognito nadal ignoruje postęp.</string>
+    <string name="title_update_progress">Aktualizować postęp na AniList?</string>
+    <string name="incognito_will_not_update">Tryb incognito nadal ignoruje postępy.</string>
     <string name="dont_ask_again">"Nie pytaj ponownie dla %1$s"</string>
     <string name="default_speed">Domyślna prędkość</string>
     <string name="default_resize_mode">Domyślny tryb zmiany rozmiaru</string>
@@ -546,29 +546,29 @@
     <string name="gender">\n\"__Płeć:__ \"</string>
     <string name="male">Mężczyzna</string>
     <string name="female">Kobieta</string>
-    <string name="question_1">Co to jest Dantotsu?</string>
-    <string name="answer_1">Dantotsu powstał z popiołów Saikou i opiera się na prostocie, a jednocześnie na nowoczesnej elegancji. Jest to klient tylko dla AniList, który umożliwia również przesyłanie i pobieranie Anime / Mangi za pomocą rozszerzeń. \n&gt;Dantotsu (断トツ; Dan-totsu) oznacza dosłownie najlepszy z najlepszych po japońsku. Cóż, chcielibyśmy powiedzieć, że to najlepsza aplikacja open source do oglądania anime i czytania mangi na Androidzie, ale hej, Wypróbuj sam i oceniaj!</string>
-    <string name="question_2">Jakie są niektóre funkcje Dantotsu?</string>
-    <string name="answer_2">Należy wymienić kilka funkcji Dantotsu\n\n- Łatwy i funkcjonalny sposób na oglądanie anime i czytanie mangi i lekkich powieści, bez reklam.\n- Całkowicie otwarta aplikacja z ładnym interfejsem użytkownika i animacjami\n- Obsługa wtyczek innych firm \n- Synchronizacja anime i mangi w czasie rzeczywistym z AniList. Łatwe kategoryzowanie anime i mangi na podstawie aktualnego statusu. (Napędzane przez AniList)\n- Znajdź wszystkie programy za pomocą regularnie aktualizowanej listy wszystkich trendingowych, popularnych i aktualnych anime na podstawie wyników.\n- Wyświetl szczegółowe informacje na temat programów anime, filmów i tytułów mangi. Posiada również funkcję odliczania czasu do następnego odcinka emitowanego anime. (Napędzane przez AniList &amp; MyAnimeList)</string>
+    <string name="question_1">Czym jest Dantotsu?</string>
+    <string name="answer_1">Dantotsu to aplikacja powstała z popiołów Saikou opierająca się na prostocie, a jednocześnie na zmodernizowanej elegancji. Jest to klient dedykowany AniList, który umożliwia również przesyłanie i pobieranie Anime i Mangi za pomocą dostępnych rozszerzeń. \n&gt;Dantotsu (断トツ; Dan-totsu) po japońsku oznacza dosłownie najlepszy z najlepszych. Cóż, chcielibyśmy powiedzieć, że to najlepsza aplikacja open-source do oglądania anime i czytania mangi na Androidzie, ale hej, Wypróbuj i oceń ją sam!</string>
+    <string name="question_2">Jakie są przykładowe funkcje Dantotsu?</string>
+    <string name="answer_2">Należy wymienić kilka ofert Dantotsu\n\n- Prosty i funkcjonalny sposób na oglądanie anime i czytanie mangi i light nowel, bez reklam.\n- Jest to całkowicie otwarta źródłowo aplikacja z przyjemnym interfejsem użytkownika i animacjami\n- Obsługa wtyczek stron trzecich\n- Synchronizacja anime i mangi w czasie rzeczywistym z AniList. Łatwe kategoryzowanie anime i mangi na podstawie aktualnego statusu. (Napędzane przez AniList)\n- Znajdź wszystkie programy za pomocą regularnie aktualizowanej listy wszystkich trendingowych, popularnych i aktualnych anime na podstawie wyników.\n- Wyświetl szczegółowe informacje na temat programów anime, filmów i tytułów mangi. Posiada również funkcję odliczania czasu do następnego odcinka emitowanego anime. (Napędzane przez AniList &amp; MyAnimeList)</string>
     <string name="question_3">Jaka jest różnica między wersjami stabilną, beta i alfa?</string>
-    <string name="answer_3">Wydanie stabilne to wersja, która została przetestowana tak dokładnie, jak to możliwe, i jest tak niezawodna, jak to możliwe.\n\nWydanie beta to wersja przeznaczona do testowania nowych funkcji lub dostarczania gorących poprawek.\n\nWydanie alfa to jak wersja beta, ale zawiera wiele błędów i można je znaleźć tylko na naszym serwerze [discord](https://discord.gg/invite/4HPZ5nAWwM). Otrzymuje częste aktualizacje i ma wysokie ryzyko awarii.\n\nJeśli chcesz niezawodnej aplikacji, wybierz stabilną. Jeśli chcesz najnowszych i najlepszych funkcji i błędów, wybierz wersję alfa.</string>
+    <string name="answer_3">Wydanie stabilne to wersja, która została przetestowana tak dokładnie, jak to możliwe, i jest tak niezawodna, jak to możliwe.\n\nWydanie beta to wersja przeznaczona do testowania nowych funkcji lub dostarczania wczesnych poprawek.\n\nWydanie alfa to jak wersja beta, ale zawiera wiele błędów i można ją znaleźć tylko na naszym serwerze [discord](https://discord.gg/invite/4HPZ5nAWwM). Otrzymuje częste aktualizacje jednak ma wyższe ryzyko awarii.\n\nJeśli chcesz niezawodnej aplikacji, wybierz wersję stabilną. Jeśli chcesz najnowszych i najlepszych funkcji i błędów, wybierz wersję alfa.</string>
     <string name="question_4">Czy Dantotsu jest dostępny na PC?</string>
-    <string name="answer_4">Obecnie nie (zarówno dla systemu Windows, jak i Linuxa). Nie ma żadnej szacowanej daty, kiedy będzie dostępny. Ale możesz pobrać dowolny emulator Androida i uruchomić Dantotsu na nim. Dla użytkowników systemu Windows 11 mogą użyć Podsystemu Windowsa dla Androida (WSA), aby uruchomić Dantotsu w systemie Windows.</string>
+    <string name="answer_4">Obecnie nie (zarówno dla systemu Windows, jak i Linuxa). Nie ma żadnej szacowanej daty, kiedy będzie dostępne. Ale możesz pobrać dowolny emulator Androida i uruchomić Dantotsu na nim. Użytkownicy systemu Windows 11 mogą użyć Podsystemu Windowsa dla Androida (WSA), aby uruchomić Dantotsu w systemie Windows.</string>
     <string name="question_5">Czy Dantotsu jest dostępny na iOS?</string>
-    <string name="answer_5">Nie, najlepsze, co możemy zrobić, to wyciąć Dantotsu na jabłku.</string>
+    <string name="answer_5">Nie, najlepsze, co możemy zrobić, to nie publikować Dantotsu apple.</string>
     <string name="question_6">Dlaczego moje statystyki się nie aktualizują?</string>
-    <string name="answer_6">To dlatego, że aktualizuje się automatycznie co 48 godzin (przez Anilist). Jeśli naprawdę musisz zaktualizować swoje statystyki, możesz wymusić aktualizację swoich statystyk po przejściu do tego [linku](https://anilist.co/settings/lists).</string>
+    <string name="answer_6">To dlatego, że AniList aktualizuje je automatycznie co 48 godzin (jeśli nie posiadasz u niech wspierania). Jeśli naprawdę musisz zaktualizować swoje obecne statystyki, możesz wymusić aktualizację swoich statystyk po przejściu do tego [linku](https://anilist.co/settings/lists).</string>
     <string name="question_7">Jak pobrać Anime?</string>
-    <string name="answer_7">Obecnie są dostępne dwie metody pobierania. Jedna jest wewnętrzna, a druga zewnętrzna. Jeśli pobierzesz wewnętrznie, możesz go oglądać w aplikacji, ale tylko aplikacja może otworzyć ten odcinek, nie możesz go przenosić ani udostępniać. Drugą opcją jest korzystanie z zewnętrznego pobierania. Wymaga to menedżera pobierania do pobrania i oddzielnego odtwarzacza wideo do oglądania. Zewnętrzne pobieranie można udostępniać, ale nie można go oglądać w aplikacji Dantotsu.\n\n• Aby pobrać wewnętrznie:\n\n1. Dotknij przycisku pobierania.\n2. Wybierz serwer i jakość wideo.\n3. Zyskaj.\n\n• Aby pobrać zewnętrznie:\n\n 1. Pobierz 1DM lub ADM z Google Play Store.
+    <string name="answer_7">Obecnie są dostępne dwie metody pobierania. Jedna jest wewnętrzna, a druga zewnętrzna. Jeśli pobierzesz wewnętrznie, możesz je oglądać w aplikacji, ale tylko aplikacja może otworzyć ten odcinek, nie możesz go przenosić ani udostępniać. Drugą opcją jest korzystanie z zewnętrznego pobierania. Wymaga to menedżera pobierania do pobrania i oddzielnego odtwarzacza wideo do oglądania. Zewnętrzne pobieranie można udostępniać, ale nie można go oglądać w aplikacji Dantotsu.\n\n• Aby pobrać wewnętrznie:\n\n1. Dotknij przycisku pobierania.\n2. Wybierz serwer i jakość wideo.\n3. Pobierz.\n\n• Aby pobrać zewnętrznie:\n\n 1. Pobierz 1DM lub ADM z Sklepu Play.
             \n2. Wejdź do aplikacji, udziel dostępu do pamięci i ustaw swoje preferencje (prędkość pobierania, ścieżkę pobierania itp. (opcjonalnie))
-            \n3. Teraz przejdź do \`Dantotsu &gt; Ustawienia &gt; Wspólne &gt; Menedżerzy pobierania\` i wybierz właśnie skonfigurowany menedżer pobierania.
+            \n3. Teraz przejdź do \`Dantotsu &gt; Ustawienia &gt; Ogólne &gt; Menedżer pobierania\` i wybierz właśnie skonfigurowany menedżer pobierania.
             \n4. Przejdź do wybranego odcinka i naciśnij ikonę pobierania dowolnego serwera. Może pojawić się okienko dialogowe, aby ponownie ustawić swoje preferencje, po prostu naciśnij \"Pobierz\", a zostanie zapisane w kierowanej ścieżce.
 
             \n\nUwaga: Bezpośrednie pobieranie jest również możliwe bez menedżera, ale nie jest zalecane.
-    \n\nNerd Note: Pobrane wewnętrznie odcinki są przechowywane w \`Android/data/ani.dantotsu.*/files/Anime_Downloads\`\nNie można odtwarzać tych plików, ponieważ są w formacie \`.exo\`, podzielone na setki kawałków i zaszyfrowane.</string>
+    \n\nNerd Notka: Pobrane wewnętrznie odcinki są przechowywane w \`Android/data/ani.dantotsu.*/files/Anime_Downloads\`\nNie można odtwarzać tych plików, ponieważ są w formacie \`.exo\`, podzielone na setki kawałków i zaszyfrowane.</string>
     <string name="question_9">Jak włączyć treści NSFW?</string>
     <string name="answer_9">Możesz włączyć treści NSFW, włączając treści dla dorosłych z tego [linku](https://anilist.co/settings/media). Musisz również włączyć rozszerzenia NSFW w \`Ustawienia &gt; Rozszerzenia &gt; Rozszerzenia NSFW\` </string>
-    <string name="question_10">Jak zaimportować moje listy MAL/Kitsu do Anilist?</string>
+    <string name="question_10">Jak zaimportować listy MAL/Kitsu do AniList?</string>
     <string name="answer_10">Oto, jak to zrobić,\n\nEksportuj:\n\n1. Przejdź do tego [linku](https://malscraper.azurewebsites.net).\n2. Podaj swoją nazwę użytkownika Kitsu/MAL i pobierz listę anime i mangi. (Będą w formacie XML)\nUwaga: Musisz podać nazwę użytkownika wybranego śledzenia\n\nImportuj:\n\n1. Po wyeksportowaniu listy anime i mangi z Kitsu/MAL, przejdź teraz [tutaj](https://anilist.co/settings/import) \n2. Wybierz/upuść plik XML z anime na polu powyżej.\n|→Wybierz/upuść plik XML z mangą na polu poniżej.</string>
     <string name="question_11">Jak zaimportować moje listy Anilist/Kitsu do MAL?</string>
     <string name="answer_11">Oto, jak to zrobić,\n\nEksportuj:\n\n1. Przejdź do tego [linku](https://malscraper.azurewebsites.net/). \n2. Podaj swoją nazwę użytkownika Anilist/Kitsu ID w polu \'Nazwa użytkownika/ID użytkownika Kitsu\'. \n3. Wybierz typ listy i włącz \'update_on_import\'. \n4. Pobierz plik; będzie w formacie .xml. Upewnij się, że pobierasz zarówno listy Anime, jak i Mangi.\n\nImportuj:\n1. Aby zaimportować go do swojego konta MAL, przejdź do tego [linku](https://myanimelist.net/import.php) i wybierz \'Import z MyAnimeList\' jako typ importu. \n2. Naciśnij na \'Wybierz plik\' i wybierz pobrany plik XML listy anime/mangi. \n3. Naciśnij na \'Importuj dane\'. \nGratulacje, właśnie zaimportowałeś wybraną listę do swojego konta MAL.</string>
