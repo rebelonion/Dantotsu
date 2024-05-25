@@ -182,7 +182,7 @@
         <item>OMG! ZNALAZŁEŚ EASTER EGGA!?</item>
         <item>Wiesz, kto jeszcze lubi tę animację?</item>
         <item>Wsparcie MAL? bruh.</item>
-        <item>Nowele? raczej NO vels.</item>
+        <item>Nowele? Bardziej jak (nie)wiele.</item>
         <item>Długie Kliknięcie logo, aby sprawdzić aktualizację aplikacji</item>
     </string-array>
     <string-array name="themes">
@@ -195,13 +195,13 @@
     <string name="video">Wideo</string>
     <string name="video_info">Pokaż informacje o wideo</string>
     <string name="source_info">Pokaż nazwę źródła</string>
-    <string name="video_info_info">Pokazuje rozdzielczość aktualnie odtwarzanego wideo, przydatne dla <b>\"Wielu jakości\"</b> serwerów.</string>
+    <string name="video_info_info">Pokazuje rozdzielczość obecnie odtwarzanego wideo, przydatne dla <b>\"multi-serwerów\"</b>.</string>
     <string name="default_quality">Domyślny wybór jakości</string>
     <string name="height">Wysokość</string>
     <string name="width">Szerokość</string>
-    <string name="default_quality_info">Automatycznie używa domyślnie najbliższej dostępnej jakości, Tylko stosowane dla \"Wielu jakości\" Serwerów. Automatycznie zmienia się podczas odtwarzania wideo.</string>
+    <string name="default_quality_info">Automatycznie używa domyślnie najlepszej dostępnej jakości, Tylko stosowane dla Serwerów multi-quality. Automatycznie zmienia się podczas odtwarzania wideo.</string>
     <string name="default_playback_speed">Domyślna prędkość odtwarzania: %1$s</string>
-    <string name="cursed_speeds">Zaklęte prędkości</string>
+    <string name="cursed_speeds">Przeklęte prędkości</string>
     <string name="resize_mode_button">Domyślny tryb zmiany rozmiaru</string>
     <string name="subtitles">Napisy</string>
     <string name="subtitle_toggle">Napisy</string>
@@ -210,29 +210,29 @@
     <string name="secondary_sub_outline_type_select">Typ konturu napisów</string>
     <string name="sub_background_color_select">Kolor tła napisów</string>
     <string name="sub_window_color_select">Kolor okna napisów</string>
-    <string name="sub_window_color_info">"Okno napisów to część po lewej i prawej stronie od nich. (gdzie tło nie jest)"</string>
-    <string name="sub_color_info"><b>Uwaga:</b> Zmiana powyższych ustawień wpływa tylko na Napisy Soft!</string>
+    <string name="sub_window_color_info">"Okno napisów to część po lewej i prawej stronie od nich. (gdzie tła nie ma)"</string>
+    <string name="sub_color_info"><b>Uwaga:</b> Zmiana powyższych ustawień wpływa tylko na Pływające Napisy!</string>
     <string name="sub_alpha">Przezroczystość napisów</string>
     <string name="sub_text_example">Przykładowy napis</string>
     <string name="sub_font_select">Czcionka napisów</string>
     <string name="subtitle_font_size">Rozmiar napisów</string>
     <string name="auto">Auto</string>
-    <string name="auto_play_next_episode">Automatyczne odtwarzanie następnego odcinka</string>
+    <string name="auto_play_next_episode">Auto-odtwarzanie następnego odcinka</string>
     <string name="auto_play_next_episode_info">Automatycznie wyłącza się, jeśli nie ma interakcji z odtwarzaczem przez 1 godzinę.</string>
-    <string name="auto_skip_fillers">Automatyczne pomijanie wypełniaczy</string>
-    <string name="auto_skip_fillers_info">Pomija odcinki wypełniaczy podczas przechodzenia do następnego odcinka.</string>
+    <string name="auto_skip_fillers">Automatyczne pomijanie Fillerów</string>
+    <string name="auto_skip_fillers_info">Pomija Fillery podczas przechodzenia do następnego odcinka.</string>
     <string name="update_progress">Aktualizuj postęp</string>
-    <string name="ask_update_progress_anime">Zapytaj o każde anime „indywidualnie”</string>
-    <string name="ask_update_progress_manga">Zapytaj o każde manga „indywidualnie”</string>
-    <string name="ask_update_progress_info_ep">Wyłączenie spowoduje zawsze automatyczne aktualizowanie postępu po obejrzeniu odcinka.</string>
-    <string name="ask_update_progress_info_chap">Wyłączenie spowoduje zawsze automatyczne aktualizowanie postępu po przeczytaniu rozdziału.</string>
+    <string name="ask_update_progress_anime">Pytaj przy każde anime „indywidualnie”</string>
+    <string name="ask_update_progress_manga">Pytaj przy każdej Mandze „indywidualnie”</string>
+    <string name="ask_update_progress_info_ep">Wyłączenie tego spowoduje automatyczne aktualizowanie postępu po obejrzeniu każdego odcinka.</string>
+    <string name="ask_update_progress_info_chap">Wyłączenie tego spowoduje automatyczne aktualizowanie postępu po przeczytaniu każdego rozdziału.</string>
     <string name="ask_update_progress_chapter_zero">Aktualizuj postęp dla Rozdziału 0</string>
-    <string name="ask_update_progress_info_zero">Włączenie spowoduje dodanie nowo rozpoczętych elementów do Anilist z postępem ustawionym na rozdział 0.</string>
+    <string name="ask_update_progress_info_zero">Włączenie spowoduje dodanie nowo rozpoczętych elementów do AniList z postępem ustawionym na rozdział 0.</string>
     <string name="ask_update_progress_hentai">Aktualizuj postęp dla Hentai</string>
     <string name="ask_update_progress_doujin">Aktualizuj postęp dla Doujinów</string>
-    <string name="very_bold">bardzo odważne z twojej strony</string>
-    <string name="watch_complete_percentage">Procent aktualizacji po obejrzeniu</string>
-    <string name="watch_complete_percentage_info">Procent, przy którym postęp na Anilist powinien zostać zaktualizowany po obejrzeniu odcinka. \nUstawia również \% dla wczytywania linków do następnego odcinka.</string>
+    <string name="very_bold">To było odważne z twojej strony</string>
+    <string name="watch_complete_percentage">Aktualizacja po procentach obejrzenia</string>
+    <string name="watch_complete_percentage_info">Procent, przy którym postęp na AniList powinien zostać zaktualizowany po obejrzeniu odcinka. \nUstawia również moment dla wczytywania linków do następnego odcinka.</string>
     <string name="behaviour">Zachowanie</string>
     <string name="always_continue">Zawsze kontynuuj od miejsca, w którym przerwano</string>
     <string name="pause_video_focus">Wstrzymaj, gdy nie jest w fokusu</string>
