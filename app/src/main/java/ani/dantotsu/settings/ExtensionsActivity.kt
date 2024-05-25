@@ -43,6 +43,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import uy.kohesive.injekt.injectLazy
+import java.util.Locale
 
 class ExtensionsActivity : AppCompatActivity() {
     lateinit var binding: ActivityExtensionsBinding
@@ -173,8 +174,11 @@ class ExtensionsActivity : AppCompatActivity() {
         initActivity(this)
         binding.languageselect.setOnClickListener {
             val languageOptions =
-                LanguageMapper.Companion.Language.entries.map { it.name }.toTypedArray()
-            val builder = AlertDialog.Builder(currContext(), R.style.MyPopup)
+                LanguageMapper.Companion.Language.entries.map { entry ->
+                    entry.name.lowercase().replace("_", " ")
+                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.ROOT) else it.toString() }
+                }.toTypedArray()
+            val builder = AlertDialog.Builder(this, R.style.MyPopup)
             val listOrder: String = PrefManager.getVal(PrefName.LangSort)
             val index = LanguageMapper.Companion.Language.entries.toTypedArray()
                 .indexOfFirst { it.code == listOrder }

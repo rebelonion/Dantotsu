@@ -101,6 +101,8 @@ dependencies {
     implementation 'androidx.preference:preference-ktx:1.2.1'
     implementation 'androidx.webkit:webkit:1.11.0'
     implementation "com.anggrayudi:storage:1.5.5"
+    implementation "androidx.biometric:biometric:1.1.0"
+
 
 //  Glide
     ext.glide_version = '4.16.0'
