@@ -911,8 +911,8 @@
     <string name="failed_to_fix">Αποτυχία επιδιόρθωσης</string>
     <string name="running_fixes">Εκτέλεση επιδιορθώσεων...</string>
     <string name="test_search">Δοκιμή αναζήτησης</string>
-    <string name="app_lock">App Lock</string>
-    <string name="app_lock_desc">Lock the app with a password\n( ͡° ͜ʖ ͡°)</string>
-    <string name="confirm_password">Confirm Password</string>
-    <string name="password_mismatch">Passwords do not match or are empty!</string>
+    <string name="app_lock">Κλείδωμα Εφαρμογής</string>
+    <string name="app_lock_desc">Κλειδώστε την εφαρμογή με έναν κωδικό πρόσβασης\n( ͡° ͜ʖ ͡°)</string>
+    <string name="confirm_password">Επιβεβαίωση Κωδικού</string>
+    <string name="password_mismatch">Οι κωδικοί πρόσβασης δεν ταιριάζουν ή είναι κενά!</string>
 </resources>
