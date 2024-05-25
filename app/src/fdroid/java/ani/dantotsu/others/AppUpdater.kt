@@ -1,10 +1,14 @@
 package ani.dantotsu.others
 
 import androidx.fragment.app.FragmentActivity
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 object AppUpdater {
     suspend fun check(activity: FragmentActivity, post: Boolean = false) {
-        //no-op
+        // no-op
     }
 
     @Serializable
@@ -27,6 +31,10 @@ object AppUpdater {
 
         fun timeStamp(): Long {
             return dateFormat.parse(createdAt)!!.time
+        }
+
+        companion object {
+            private val dateFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
         }
     }
 }
