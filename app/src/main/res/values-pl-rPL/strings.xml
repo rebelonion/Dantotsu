@@ -295,19 +295,19 @@
     <string name="default_settings">Domyślne ustawienia</string>
     <string name="horizontal_scroll_bar">Poziomy pasek przewijania</string>
     <string name="dual_page">Podwójna strona</string>
-    <string name="dual_page_info">Pokazuje 2 obrazy na jednej stronie, będzie wyglądać dziwnie, jeśli obrazy nie będą takiego samego rozmiaru</string>
-    <string name="true_colors">Prawdziwe kolory</string>
+    <string name="dual_page_info">Pokazuje 2 obrazy na jednej stronie, może wyglądać dziwnie, jeśli obrazy nie będą takiego samego rozmiaru</string>
+    <string name="true_colors">Odwzorowane kolory</string>
     <string name="true_colors_info">(Tryb kolorów 32-bitowy) Zmniejsza zniekształcenia na obrazach, może wpłynąć na wydajność.</string>
     <string name="image_rotation">Obracanie obrazów</string>
     <string name="hide_page_numbers">Ukryj numery stron</string>
     <string name="sort_by_title">Sortuj według tytułu</string>
-    <string name="sort_by_last_updated">Sortuj według ostatniej aktualizacji</string>
+    <string name="sort_by_last_updated">Sortuj według ostatnich zmian</string>
     <string name="sort_by_score">Sortuj według oceny</string>
     <string name="over_scroll">Przewijaj dalej/poprzedni rozdział</string>
     <string name="volume_buttons">Zmieniaj strony za pomocą przycisków głośności</string>
     <string name="list_private">Prywatne</string>
     <string name="wrap_images">Zawijanie obrazów</string>
-    <string name="wrap_images_info">Najczęściej używane na większych urządzeniach, usuwa odstępy między obrazami, jeśli istnieją.</string>
+    <string name="wrap_images_info">Użyteczne na większych urządzeniach, usuwa odstępy między obrazami, jeśli istnieją.</string>
     <string name="reload">Przeładuj</string>
     <string name="share">Udostępnij</string>
     <string name="skip">Pomiń</string>
@@ -326,48 +326,48 @@
     <string name="previous_season">Poprzedni sezon</string>
     <string name="include_media_in_list">Uwzględnij listę</string>
     <string name="release_calendar">Kalendarz</string>
-    <string name="planned_anime">Zaplanowane anime</string>
-    <string name="planned_manga">Zaplanowane manga</string>
-    <string name="image_long_clicking">Otwórz obraz przez długie kliknięcie</string>
+    <string name="planned_anime">Planowane Anime</string>
+    <string name="planned_manga">Planowane Mangi</string>
+    <string name="image_long_clicking">Otwórz obraz przytrzymując go</string>
     <string name="always_continue_content">Zawsze kontynuuj wcześniejsze elementy</string>
     <string name="search_source_list">Wyszukaj następne dostępne źródło</string>
     <string name="timestamp_proxy_desc">Przydatne, jeśli otrzymujesz błędy połączenia</string>
     <string name="timestamp_proxy">Użyj proxy dla znaczników czasowych</string>
-    <string name="check_app_updates">Sprawdź aktualizacje aplikacji</string>
+    <string name="check_app_updates">Sprawdź dostępność aktualizacji</string>
     <string name="author">Autor</string>
     <string name="forks">Wersje</string>
     <string name="faq">FAQ</string>
     <string name="accounts">Konta</string>
     <string name="addons">Dodatki</string>
     <string name="addons_desc">Otrzymaj więcej funkcji w swojej aplikacji</string>
-    <string name="myanimelist">Moja lista anime</string>
-    <string name="login_with_anilist">Zaloguj się za pomocą Anilist!</string>
-    <string name="anilist">Anilist</string>
+    <string name="myanimelist">MyAnimeList</string>
+    <string name="login_with_anilist">Zaloguj się za pomocą AniList!</string>
+    <string name="anilist">AniList</string>
     <string name="account_help">Jak to działa\?</string>
-    <string name="full_account_help">Dantotsu to aplikacja oparta na Anilist, więc aby zsynchronizować ją z Twoim kontem MAL, musi być zalogowane konto Anilist.
-    \nPo zalogowaniu się zarówno na konto Anilist, jak i MAL, aplikacja automatycznie aktualizuje Twoje konto MAL, gdy:
-    \n- Dodajesz nowe media
-    \n- Edytujesz media
-    \n- Usuwasz media
+    <string name="full_account_help">Dantotsu jest aplikacją opartą o AniList, więc aby zsynchronizować ją zarówno z Twoim kontem MAL, musisz wcześniej zalogować się przez konto AniList (konto bazowe).
+    \nPo zalogowaniu się zarówno na konto Anilist, jak i MAL, aplikacja automatycznie będzie aktualizować konto MAL, gdy:
+    \n- Dodajesz nowe wpisy
+    \n- Edytujesz wpisy
+    \n- Usuwasz wpisy
 
-    \n\nUwaga: aplikacja nie synchronizuje starych mediów z Anilist do MAL, zaleca się ich synchronizację.
-    \n- Sprawdź __FAQ__ dla _Prostej Metody_
+    \n\nUwaga: aplikacja nie synchronizuje starych wpisów z AniList do MAL, dlatego zaleca się ich wcześniejszą synchronizację.
+    \n- Sprawdź __FAQ__ aby znaleźć _Prosty Sposób_
 
     \n\nA dla _Średniozaawansowanych_ :
     \n- [Jak zsynchronizować dane Anilist z MAL](https://anilist.co/forum/thread/2654)
     \n- [Jak zsynchronizować dane MAL z Anilist](https://anilist.co/forum/thread/3393)
 
-    \n\n_Nie jest wymagane synchronizowanie obu kont MAL i Anilist._
+    \n\n_Nie jest jednak wymagane synchronizowanie obu kont MAL i Anilist. Synchronizacja pozwala tylko na lepsze doznania z korzystania_
     </string>
     <string name="notification_for_checking_subscriptions">Powiadomienie o sprawdzaniu subskrypcji</string>
     <string name="use_alarm_manager">Użyj menedżera alarmów</string>
     <string name="use_alarm_manager_reliable">Użyj menedżera alarmów dla niezawodnych powiadomień</string>
-    <string name="use_alarm_manager_confirm">Używanie menedżera alarmów może pomóc w walce z optymalizacją baterii, ale może zużywać więcej baterii. Wymaga również uprawnień menedżera alarmów.</string>
+    <string name="use_alarm_manager_confirm">Używanie menedżera alarmów może pomóc w walce z systemową optymalizacją baterii, ale może zużywać więcej baterii. Wymaga również uprawnień menedżera alarmów.</string>
     <string name="use">Użyj</string>
     <string name="checking_subscriptions">Powiadomienie o sprawdzaniu subskrypcji</string>
     <string name="subscriptions_checking_time_s">Częstotliwość aktualizacji subskrypcji: %1$s</string>
     <string name="subscriptions_checking_time">Częstotliwość aktualizacji subskrypcji</string>
-    <string name="subscriptions_info">Czas, po którym Dantotsu okresowo sprawdza nowe odcinki/rozdziały\n(Mniejszy czas spowoduje większe zużycie baterii)</string>
+    <string name="subscriptions_info">Czas, po którym Dantotsu okresowo sprawdza dostępność nowych odcinków/rozdziałów\n(Mniejszy czas spowoduje większe zużycie baterii)</string>
     <string name="do_not_update">Nie aktualizuj</string>
     <string name="loading_chap_number">Ładowanie rozdziału %1$s</string>
     <string name="sort_by_release_date">Sortuj według daty wydania</string>
@@ -376,24 +376,24 @@
     <string name="manage_extension_repos">Zarządzaj repozytoriami rozszerzeń</string>
     <string name="installing_extension">Instalowanie rozszerzenia</string>
     <string name="installation_failed">Nie udało się zainstalować: %1$s</string>
-    <string name="installation_complete">Instalacja zakończona</string>
+    <string name="installation_complete">Instalacja ukończona</string>
     <string name="extension_has_been_installed">Rozszerzenie zostało pomyślnie zainstalowane.</string>
     <string name="extension_installed">Rozszerzenie zainstalowane</string>
     <string name="installed">Zainstalowane</string>
     <string name="error_message">Błąd: %1$s</string>
     <string name="install_step">Krok: %1$s</string>
     <string name="review">Recenzja</string>
-    <string name="reviews">Reviews</string>
+    <string name="reviews">Recenzje</string>
     <string name="discord_nothing_button">Wyświetl tylko pierwszy przycisk</string>
-    <string name="discord_dantotsu_button">Wyświetl Dantotsu w drugim przycisku</string>
-    <string name="discord_anilist_button">Wyświetl swój profil AniList zamiast tego</string>
-    <string name="discord_rich_presence">Discord Rich Presence</string>
+    <string name="discord_dantotsu_button">Wyświetl promocję Dantotsu w drugim przycisku</string>
+    <string name="discord_anilist_button">Wyświetl profil AniList w drugim przycisku</string>
+    <string name="discord_rich_presence">Status na Discordzie</string>
     <string name="stream_on_dantotsu">Oglądaj na Dantotsu</string>
-    <string name="view_my_anilist">Zobacz mój profil AniList</string>
+    <string name="view_my_anilist">Zobacz mój AniList</string>
     <string name="jobless_message">CHOLERA! NA PRAWDĘ JESTEŚ BEZROBOTNY\n DOTARŁEŚ DO KOŃCA</string>
     <string name="file_manager_not_found">Nie można znaleźć menedżera plików do otwarcia karty SD</string>
     <string name="error_loading_data">Błąd wczytywania danych %1$s</string>
-    <string name="long_click_to_check_update">Długie kliknięcie, aby sprawdzić aktualizacje aplikacji</string>
+    <string name="long_click_to_check_update">Przytrzymaj, aby sprawdzić dostępność aktualizacji</string>
     <string name="saved_to_path">Zapisano w:\n%s</string>
     <string name="setting_progress">Ustawianie postępu na %1$d</string>
     <string name="login_anilist_account">Proszę zaloguj się na konto AniList!</string>
@@ -403,18 +403,18 @@
     <string name="back_to_exit">Naciśnij ponownie POWRÓT, aby wyjść</string>
     <string name="no_internet_connection">Brak połączenia z internetem</string>
     <string name="anilist_not_found">Wygląda na to, że tego nie znaleziono na AniList.</string>
-    <string name="disabled_auto_skip">Wyłączono Automatyczne Pomijanie Intro i Zakończenia</string>
+    <string name="disabled_auto_skip">Wyłączono Automatyczne Pomijanie OP i ED</string>
     <string name="auto_skip">Automatyczne Pomijanie Intro i Zakończenia</string>
-    <string name="show_skip_time_stamp_button">Pokaż przycisk Pomijania z znacznikiem czasowym</string>
+    <string name="show_skip_time_stamp_button">Pokaż przycisk pomijania ze znacznikiem czasowym</string>
     <string name="always_load_time_stamps">Zawsze wczytuj znaczniki czasowe</string>
     <string name="auto_hide_time_stamps">Automatycznie ukrywaj znaczniki czasowe</string>
     <string name="timestamps">Segmenty</string>
-    <string name="auto_skip_op_ed">Automatyczne Pomijanie Intro / Zakończenia</string>
+    <string name="auto_skip_op_ed">Automatyczne pomijanie OP i ED</string>
     <string name="requires_time_stamps_to_be_enabled">Wymaga włączonych znaczników czasowych</string>
     <string name="hide_skip_button">Spraw, by przycisk pomijania znacznika czasowego zniknął po 5 sekundach</string>
     <string name="copied_to_clipboard">Skopiowane do schowka</string>
     <string name="first_episode">To jest pierwszy odcinek!</string>
-    <string name="reset_auto_update">Długie kliknięcie przycisku \"Edytor listy\" w celu zresetowania automatycznej aktualizacji</string>
+    <string name="reset_auto_update">Przytrzymaj przycisk \"Edytor Listy\" w celu zresetowania automatycznych aktualizacji</string>
     <string name="autoplay_cancelled">Autoodtwarzanie anulowane, brak interakcji przez ponad 1 godzinę.</string>
     <string name="auto_select_server_error">Nie można automatycznie wybrać serwera, spróbuj ponownie!</string>
     <string name="stream_selection_empty">Brak dostępnych strumieni! Wypróbuj inne źródło.</string>
