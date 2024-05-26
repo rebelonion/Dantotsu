@@ -915,8 +915,8 @@
     <string name="app_lock_desc">Заблокируйте приложение паролем\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">Подтвердите Пароль</string>
     <string name="password_mismatch">Пароли не совпадают или пусты!</string>
-    <string name="enable_biometric">Enable Biometric</string>
-    <string name="bio_prompt_info_title">Biometric Authentication</string>
-    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
-    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="enable_biometric">Включить биометрию</string>
+    <string name="bio_prompt_info_title">Биометрическая аутентификация</string>
+    <string name="bio_prompt_info_desc">Используйте отпечаток пальца или лицо, чтобы разблокировать приложение</string>
+    <string name="enable_forgot_password">Включить функцию \"Забыли пароль\" (удерживайте кнопку очистки в течение 10 секунд)</string>
 </resources>
