@@ -11,17 +11,20 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.R
 import ani.dantotsu.databinding.ActivityFeedBinding
+import ani.dantotsu.databinding.ActivityNotificationBinding
 import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
 import ani.dantotsu.profile.activity.ActivityFragment.Companion.ActivityType
+import ani.dantotsu.profile.notification.NotificationActivity
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class FeedActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityFeedBinding
+    private lateinit var binding: ActivityNotificationBinding
     private var selected: Int = 0
     lateinit var navBar: AnimatedBottomBar
 
@@ -29,29 +32,27 @@ class FeedActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         ThemeManager(this).applyTheme()
         initActivity(this)
-        binding = ActivityFeedBinding.inflate(layoutInflater)
+        binding = ActivityNotificationBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        navBar = binding.feedNavBar
-        val navBarMargin = if (resources.configuration.orientation ==
-            Configuration.ORIENTATION_LANDSCAPE
-        ) 0 else navBarHeight
-        navBar.updateLayoutParams<ViewGroup.MarginLayoutParams> { bottomMargin = navBarMargin }
-        val personalTab = navBar.createTab(R.drawable.ic_round_person_24, "Following")
-        val globalTab = navBar.createTab(R.drawable.ic_globe_24, "Global")
-        navBar.addTab(personalTab)
-        navBar.addTab(globalTab)
-        binding.listTitle.text = getString(R.string.activities)
-        binding.feedViewPager.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin = navBarMargin
-            topMargin += statusBarHeight
+        binding.notificationTitle.text = getString(R.string.activities)
+        binding.notificationToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            topMargin = statusBarHeight
         }
-        binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
-        val activityId = intent.getIntExtra("activityId", -1)
-        if (activityId != -1) { navBar.visibility = View.GONE }
-        binding.feedViewPager.adapter =
-            ViewPagerAdapter(supportFragmentManager, lifecycle, activityId)
-        binding.feedViewPager.setCurrentItem(selected, false)
-        binding.feedViewPager.isUserInputEnabled = false
+        navBar = binding.notificationNavBar
+        binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
+        val tabs = listOf(
+            Pair(R.drawable.ic_round_person_24, "Following"),
+            Pair(R.drawable.ic_globe_24, "Global"),
+        )
+        tabs.forEach { (icon, title) -> navBar.addTab(navBar.createTab(icon, title)) }
+        binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
+        val getOne = intent.getIntExtra("activityId", -1)
+        if (getOne != -1) { navBar.visibility = View.GONE }
+        binding.notificationViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)
+        binding.notificationViewPager.setOffscreenPageLimit(4)
+        binding.notificationViewPager.setCurrentItem(selected, false)
         navBar.selectTabAt(selected)
         navBar.setOnTabSelectListener(object : AnimatedBottomBar.OnTabSelectListener {
             override fun onTabSelected(
@@ -61,24 +62,15 @@ class FeedActivity : AppCompatActivity() {
                 newTab: AnimatedBottomBar.Tab
             ) {
                 selected = newIndex
-                binding.feedViewPager.setCurrentItem(selected, true)
+                binding.notificationViewPager.setCurrentItem(selected, true)
             }
         })
-        binding.listBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        val margin =
-            if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) 0 else navBarHeight
-        val params: ViewGroup.MarginLayoutParams =
-            binding.feedViewPager.layoutParams as ViewGroup.MarginLayoutParams
-        val paramsNav: ViewGroup.MarginLayoutParams =
-            navBar.layoutParams as ViewGroup.MarginLayoutParams
-        params.updateMargins(bottom = margin)
-        paramsNav.updateMargins(bottom = margin)
+        binding.notificationViewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                navBar.selectTabAt(position)
+            }
+        })
     }
 
     override fun onResume() {

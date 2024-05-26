@@ -53,6 +53,7 @@ class NotificationFragment(
         binding.notificationRecyclerView.setBaseline(navbar)
         binding.notificationRecyclerView.adapter = adapter
         binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.notificationProgressBar.isVisible = true
         binding.notificationRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = navBarHeight
         }
@@ -78,6 +79,7 @@ class NotificationFragment(
                 super.onScrolled(recyclerView, dx, dy)
                 if (shouldLoadMore()) {
                     lifecycleScope.launch {
+                        binding.notificationRefresh.isVisible = true
                         getList()
                         binding.notificationRefresh.isVisible = false
                     }
@@ -94,7 +96,6 @@ class NotificationFragment(
             NotificationType.USER -> getNotificationsFiltered { it.media == null }
             NotificationType.SUBSCRIPTION -> getSubscriptions()
             NotificationType.COMMENT -> getComments()
-            else -> listOf()
         }
         adapter.addAll(list.map { NotificationItem(it, ::onClick) })
     }
