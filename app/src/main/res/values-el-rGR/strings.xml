@@ -915,8 +915,8 @@
     <string name="app_lock_desc">Κλειδώστε την εφαρμογή με έναν κωδικό πρόσβασης\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">Επιβεβαίωση Κωδικού</string>
     <string name="password_mismatch">Οι κωδικοί πρόσβασης δεν ταιριάζουν ή είναι κενά!</string>
-    <string name="enable_biometric">Enable Biometric</string>
-    <string name="bio_prompt_info_title">Biometric Authentication</string>
-    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
-    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="enable_biometric">Ενεργοποίηση βιομετρικών</string>
+    <string name="bio_prompt_info_title">Βιομετρικός έλεγχος ταυτότητας</string>
+    <string name="bio_prompt_info_desc">Χρησιμοποιήστε το δακτυλικό αποτύπωμα ή το πρόσωπό σας για να ξεκλειδώσετε την εφαρμογή</string>
+    <string name="enable_forgot_password">Ενεργοποίηση επιλογής \"Ξέχασα τον κωδικό\" (κρατήστε πατημένο το κουμπί εκκαθάρισης για 10 δευτερόλεπτα)</string>
 </resources>
