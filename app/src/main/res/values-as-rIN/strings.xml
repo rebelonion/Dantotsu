@@ -912,8 +912,8 @@
     <string name="app_lock_desc">এপটো এখন পাছৱৰ্ডেৰে লক কৰক\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">পাছৱৰ্ড নিশ্চিত কৰক</string>
     <string name="password_mismatch">পাছৱৰ্ডবোৰ মেল খোৱা নাই বা খালি আছে!</string>
-    <string name="enable_biometric">Enable Biometric</string>
-    <string name="bio_prompt_info_title">Biometric Authentication</string>
-    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
-    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="enable_biometric">বায়োমেট্ৰিক সক্ষম কৰক</string>
+    <string name="bio_prompt_info_title">বায়োমেট্ৰিক প্ৰমাণীকৰণ</string>
+    <string name="bio_prompt_info_desc">এপ্পখন আনলক কৰিবলৈ আপোনাৰ আঙুলিৰ ছাপ বা মুখ ব্যৱহাৰ কৰক</string>
+    <string name="enable_forgot_password">পাছৱৰ্ড পাহৰি গৈছে সক্ষম কৰক (10 ছেকেণ্ডৰ বাবে ক্লিয়াৰ বুটামত ধৰি ৰাখক)</string>
 </resources>
