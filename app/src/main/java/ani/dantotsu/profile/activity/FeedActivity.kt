@@ -2,6 +2,7 @@ package ani.dantotsu.profile.activity
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
@@ -16,6 +17,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.profile.activity.ActivityFragment.Companion.ActivityType
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class FeedActivity : AppCompatActivity() {
@@ -45,6 +47,7 @@ class FeedActivity : AppCompatActivity() {
         }
         binding.listToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> { topMargin += statusBarHeight }
         val activityId = intent.getIntExtra("activityId", -1)
+        if (activityId != -1) { navBar.visibility = View.GONE }
         binding.feedViewPager.adapter =
             ViewPagerAdapter(supportFragmentManager, lifecycle, activityId)
         binding.feedViewPager.setCurrentItem(selected, false)
@@ -88,12 +91,12 @@ class FeedActivity : AppCompatActivity() {
         lifecycle: Lifecycle,
         private val activityId: Int
     ) : FragmentStateAdapter(fragmentManager, lifecycle) {
-        override fun getItemCount(): Int = 2
+        override fun getItemCount(): Int = if (activityId != -1) 1 else 2
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> FeedFragment.newInstance(null, false, activityId)
-                else -> FeedFragment.newInstance(null, true, -1)
+                0 -> ActivityFragment(if (activityId != -1) ActivityType.ONE else ActivityType.USER, activityId = activityId)
+                else -> ActivityFragment(ActivityType.GLOBAL)
             }
         }
     }

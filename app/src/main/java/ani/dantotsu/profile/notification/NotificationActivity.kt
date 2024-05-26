@@ -15,6 +15,7 @@ import ani.dantotsu.initActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.statusBarHeight
 import ani.dantotsu.themes.ThemeManager
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationType
 import nl.joery.animatedbottombar.AnimatedBottomBar
 
 class NotificationActivity : AppCompatActivity() {
@@ -84,11 +85,11 @@ class NotificationActivity : AppCompatActivity() {
         override fun getItemCount(): Int = 4
 
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> NotificationFragment(if (id != -1) "getOne" else "media", id)
-            1 -> NotificationFragment("user")
-            2 -> NotificationFragment("subscription")
-            3 -> NotificationFragment("comment")
-            else -> NotificationFragment("media")
+            0 -> NotificationFragment(if (id != -1) NotificationType.ONE else NotificationType.MEDIA, id)
+            1 -> NotificationFragment(NotificationType.USER)
+            2 -> NotificationFragment(NotificationType.SUBSCRIPTION)
+            3 -> NotificationFragment(NotificationType.COMMENT)
+            else -> NotificationFragment(NotificationType.MEDIA)
         }
     }
 }

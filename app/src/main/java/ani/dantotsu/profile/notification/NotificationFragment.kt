@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.webkit.internal.ApiFeature.N
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Notification
@@ -28,7 +29,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class NotificationFragment(val type: String, private val getID: Int = -1) : Fragment() {
+class NotificationFragment(
+    val type: NotificationType,
+    val getID: Int = -1
+) : Fragment() {
     private lateinit var binding: FragmentNotificationsBinding
     private var adapter: GroupieAdapter = GroupieAdapter()
     private var currentPage = 1
@@ -232,6 +236,10 @@ class NotificationFragment(val type: String, private val getID: Int = -1) : Frag
     companion object {
         enum class NotificationClickType {
             USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED
+        }
+
+        enum class NotificationType {
+            MEDIA, USER, SUBSCRIPTION, COMMENT, ONE
         }
     }
 
