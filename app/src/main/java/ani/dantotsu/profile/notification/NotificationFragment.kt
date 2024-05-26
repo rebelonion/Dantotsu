@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.databinding.FragmentNotificationsBinding
 import ani.dantotsu.media.MediaDetailsActivity
+import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.comment.CommentStore
 import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.profile.ProfileActivity
@@ -25,9 +27,8 @@ import ani.dantotsu.setBaseline
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import com.xwray.groupie.GroupieAdapter
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+
 
 class NotificationFragment(
     val type: NotificationType,
@@ -49,61 +50,36 @@ class NotificationFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val navbar = (activity as NotificationActivity).navBar
-        binding.listRecyclerView.setBaseline(navbar)
-        binding.listRecyclerView.adapter = adapter
-        binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.notificationRecyclerView.setBaseline(navbar)
+        binding.notificationRecyclerView.adapter = adapter
+        binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)
+        binding.notificationRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+            bottomMargin = navBarHeight
+        }
         binding.emptyTextView.text = getString(R.string.no_notifications)
         lifecycleScope.launch {
-            val list = when (type) {
-                "getOne" -> getOne(getID)
-                "media" -> getMediaUpdates()
-                "user" -> getUserUpdates()
-                "subscription" -> getSubscriptions()
-                "comment" -> getComments()
-                else -> listOf()
-            }
-            adapter.addAll(list.map { NotificationItem(it, ::onClick) })
-            if (adapter.itemCount != 0) {
-                binding.listProgressBar.isVisible = false
-            }else{
-                binding.listProgressBar.isVisible = false
+            getList()
+            if (adapter.itemCount == 0) {
                 binding.emptyTextView.isVisible = true
             }
+            binding.notificationProgressBar.isVisible = false
         }
-        binding.followSwipeRefresh.setOnRefreshListener {
+        binding.notificationSwipeRefresh.setOnRefreshListener {
             lifecycleScope.launch {
                 adapter.clear()
                 currentPage = 1
-                val list = when (type) {
-                    "getOne" -> getOne(getID)
-                    "media" -> getMediaUpdates()
-                    "user" -> getUserUpdates()
-                    "subscription" -> getSubscriptions()
-                    "comment" -> getComments()
-                    else -> listOf()
-                }
-                adapter.addAll(list.map { NotificationItem(it, ::onClick) })
-                binding.followSwipeRefresh.isRefreshing = false
+                getList()
+                binding.notificationSwipeRefresh.isRefreshing = false
             }
         }
-        binding.listRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        binding.notificationRecyclerView.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
                 if (shouldLoadMore()) {
                     lifecycleScope.launch {
-                        val list = when (type) {
-                            "media" -> getMediaUpdates()
-                            "user" -> getUserUpdates()
-                            else -> listOf()
-                        }
-                        binding.followRefresh.visibility = View.VISIBLE
-                        adapter.addAll(list.map {
-                            NotificationItem(
-                                it,
-                                ::onClick
-                            )
-                        })
-                        binding.followRefresh.visibility = View.GONE
+                        getList()
+                        binding.notificationRefresh.isVisible = false
                     }
                 }
             }
@@ -111,26 +87,28 @@ class NotificationFragment(
 
     }
 
-    private suspend fun getNotificationsFiltered(filter: (Notification) -> Boolean): List<Notification> {
-        val userId = Anilist.userid ?: PrefManager.getVal<String>(PrefName.AnilistUserId).toIntOrNull() ?: 0
-        val res = withContext(Dispatchers.IO) {
-            Anilist.query.getNotifications(userId, currentPage)
+    private suspend fun getList() {
+        val list = when (type) {
+            NotificationType.ONE -> getNotificationsFiltered(false) { it.id == getID }
+            NotificationType.MEDIA -> getNotificationsFiltered { it.media != null }
+            NotificationType.USER -> getNotificationsFiltered { it.media == null }
+            NotificationType.SUBSCRIPTION -> getSubscriptions()
+            NotificationType.COMMENT -> getComments()
+            else -> listOf()
         }
-        currentPage = res?.data?.page?.pageInfo?.currentPage?.plus(1) ?: 1
-        hasNextPage = res?.data?.page?.pageInfo?.hasNextPage ?: false
-        return res?.data?.page?.notifications?.filter(filter) ?: listOf()
+        adapter.addAll(list.map { NotificationItem(it, ::onClick) })
     }
 
-    private suspend fun getMediaUpdates(): List<Notification> {
-        return getNotificationsFiltered { it.media != null }
-    }
-
-    private suspend fun getUserUpdates(): List<Notification> {
-        return getNotificationsFiltered { it.media == null }
-    }
-
-    private suspend fun getOne(id: Int): List<Notification> {
-        return getNotificationsFiltered { it.id == id }
+    private suspend fun getNotificationsFiltered(
+        reset: Boolean = true,
+        filter: (Notification) -> Boolean
+    ): List<Notification> {
+        val userId =
+            Anilist.userid ?: PrefManager.getVal<String>(PrefName.AnilistUserId).toIntOrNull() ?: 0
+        val res = Anilist.query.getNotifications(userId, currentPage, reset)?.data?.page
+        currentPage = res?.pageInfo?.currentPage?.plus(1) ?: 1
+        hasNextPage = res?.pageInfo?.hasNextPage ?: false
+        return res?.notifications?.filter(filter) ?: listOf()
     }
 
     private fun getSubscriptions(): List<Notification> {
@@ -138,20 +116,20 @@ class NotificationFragment(
             PrefName.SubscriptionNotificationStore,
             null
         ) ?: listOf()
-        return list.sortedByDescending{ (it.time / 1000L).toInt() }
-            .filter{ it.image != null }.map {
-            Notification(
-                it.type,
-                System.currentTimeMillis().toInt(),
-                commentId = it.mediaId,
-                mediaId = it.mediaId,
-                notificationType = it.type,
-                context = it.title + ": " + it.content,
-                createdAt = (it.time / 1000L).toInt(),
-                image = it.image,
-                banner = it.banner ?: it.image
-            )
-        }
+        return list.sortedByDescending { (it.time / 1000L).toInt() }
+            .filter { it.image != null }.map {
+                Notification(
+                    it.type,
+                    System.currentTimeMillis().toInt(),
+                    commentId = it.mediaId,
+                    mediaId = it.mediaId,
+                    notificationType = it.type,
+                    context = it.title + ": " + it.content,
+                    createdAt = (it.time / 1000L).toInt(),
+                    image = it.image,
+                    banner = it.banner ?: it.image
+                )
+            }
     }
 
     private fun getComments(): List<Notification> {
@@ -160,27 +138,28 @@ class NotificationFragment(
             null
         ) ?: listOf()
         return list
-            .sortedByDescending {(it.time / 1000L).toInt()}
+            .sortedByDescending { (it.time / 1000L).toInt() }
             .map {
-            Notification(
-                it.type.toString(),
-                System.currentTimeMillis().toInt(),
-                commentId = it.commentId,
-                notificationType = it.type.toString(),
-                mediaId = it.mediaId,
-                context = it.title + "\n" + it.content,
-                createdAt = (it.time / 1000L).toInt(),
-            )
-        }
+                Notification(
+                    it.type.toString(),
+                    System.currentTimeMillis().toInt(),
+                    commentId = it.commentId,
+                    notificationType = it.type.toString(),
+                    mediaId = it.mediaId,
+                    context = it.title + "\n" + it.content,
+                    createdAt = (it.time / 1000L).toInt(),
+                )
+            }
     }
 
     private fun shouldLoadMore(): Boolean {
-        val layoutManager = binding.listRecyclerView.layoutManager as LinearLayoutManager
-        val adapter = binding.listRecyclerView.adapter
+        val layoutManager =
+            (binding.notificationRecyclerView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
+        val adapter = binding.notificationRecyclerView.adapter
 
-        return hasNextPage && !binding.followRefresh.isVisible && adapter?.itemCount != 0 &&
-                layoutManager.findLastVisibleItemPosition() == (adapter!!.itemCount - 1) &&
-                !binding.listRecyclerView.canScrollVertically(1)
+        return hasNextPage && !binding.notificationRefresh.isVisible && adapter?.itemCount != 0 &&
+                layoutManager == (adapter!!.itemCount - 1) &&
+                !binding.notificationRecyclerView.canScrollVertically(1)
     }
 
     fun onClick(
@@ -191,28 +170,28 @@ class NotificationFragment(
         when (type) {
             NotificationClickType.USER -> {
                 ContextCompat.startActivity(
-                    requireContext(), Intent( requireContext(), ProfileActivity::class.java)
+                    requireContext(), Intent(requireContext(), ProfileActivity::class.java)
                         .putExtra("userId", id), null
                 )
             }
 
-           NotificationClickType.MEDIA -> {
+            NotificationClickType.MEDIA -> {
                 ContextCompat.startActivity(
-                    requireContext(), Intent( requireContext(), MediaDetailsActivity::class.java)
+                    requireContext(), Intent(requireContext(), MediaDetailsActivity::class.java)
                         .putExtra("mediaId", id), null
                 )
             }
 
             NotificationClickType.ACTIVITY -> {
                 ContextCompat.startActivity(
-                    requireContext(), Intent( requireContext(), FeedActivity::class.java)
+                    requireContext(), Intent(requireContext(), FeedActivity::class.java)
                         .putExtra("activityId", id), null
                 )
             }
 
             NotificationClickType.COMMENT -> {
                 ContextCompat.startActivity(
-                    requireContext(), Intent( requireContext(), MediaDetailsActivity::class.java)
+                    requireContext(), Intent(requireContext(), MediaDetailsActivity::class.java)
                         .putExtra("FRAGMENT_TO_LOAD", "COMMENTS")
                         .putExtra("mediaId", id)
                         .putExtra("commentId", optional ?: -1),
@@ -220,6 +199,7 @@ class NotificationFragment(
                 )
 
             }
+
             NotificationClickType.UNDEFINED -> {
                 // Do nothing
             }
@@ -233,6 +213,7 @@ class NotificationFragment(
             binding.root.setBaseline((activity as NotificationActivity).navBar)
         }
     }
+
     companion object {
         enum class NotificationClickType {
             USER, MEDIA, ACTIVITY, COMMENT, UNDEFINED
