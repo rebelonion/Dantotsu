@@ -916,8 +916,8 @@
     <string name="app_lock_desc">비밀번호로 앱을 잠그기\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">비밀번호 확인</string>
     <string name="password_mismatch">비밀번호가 일치하지 않거나 비어 있습니다!</string>
-    <string name="enable_biometric">Enable Biometric</string>
-    <string name="bio_prompt_info_title">Biometric Authentication</string>
-    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
-    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="enable_biometric">생체 인식 활성화</string>
+    <string name="bio_prompt_info_title">생체 인증</string>
+    <string name="bio_prompt_info_desc">앱 잠금을 해제하려면 지문이나 얼굴을 사용하세요</string>
+    <string name="enable_forgot_password">비밀번호 찾기 활성화 (지우기 버튼을 10초 동안 누르세요)</string>
 </resources>
