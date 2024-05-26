@@ -3,6 +3,7 @@ package ani.dantotsu.profile.notification
 import android.os.Bundle
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -36,18 +37,17 @@ class NotificationActivity : AppCompatActivity() {
         binding.root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = navBarHeight
         }
-        val mediaTab = navBar.createTab(R.drawable.ic_round_movie_filter_24, "Media")
-        val userTab = navBar.createTab(R.drawable.ic_round_person_24, "User")
-        val subscriptionTab = navBar.createTab(R.drawable.ic_round_notifications_active_24, "Subscriptions")
-        val commentTab = navBar.createTab(R.drawable.ic_round_comment_24, "Comments")
-        navBar.addTab(mediaTab)
-        navBar.addTab(userTab)
-        navBar.addTab(subscriptionTab)
-        navBar.addTab(commentTab)
-        binding.notificationBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        val tabs = listOf(
+            Pair(R.drawable.ic_round_movie_filter_24, "Media"),
+            Pair(R.drawable.ic_round_person_24, "User"),
+            Pair(R.drawable.ic_round_notifications_active_24, "Subs"),
+            Pair(R.drawable.ic_round_comment_24, "Comments")
+        )
+        tabs.forEach { (icon, title) -> navBar.addTab(navBar.createTab(icon, title)) }
+
+        binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         val getOne = intent.getIntExtra("activityId", -1)
+        if (getOne != -1) navBar.isVisible = false
         binding.notificationViewPager.adapter = ViewPagerAdapter(supportFragmentManager, lifecycle, getOne)
         binding.notificationViewPager.setOffscreenPageLimit(4)
         binding.notificationViewPager.setCurrentItem(selected, false)
@@ -72,17 +72,17 @@ class NotificationActivity : AppCompatActivity() {
         })
     }
     override fun onResume() {
+        super.onResume()
         if (this::navBar.isInitialized) {
             navBar.selectTabAt(selected)
         }
-        super.onResume()
     }
     private class ViewPagerAdapter(
         fragmentManager: FragmentManager,
         lifecycle: Lifecycle,
         val id: Int = -1
     ) : FragmentStateAdapter(fragmentManager, lifecycle) {
-        override fun getItemCount(): Int = 4
+        override fun getItemCount(): Int = if (id != -1) 1 else 4
 
         override fun createFragment(position: Int): Fragment = when (position) {
             0 -> NotificationFragment(if (id != -1) NotificationType.ONE else NotificationType.MEDIA, id)

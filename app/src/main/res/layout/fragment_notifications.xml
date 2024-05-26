@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/listProgressBar"
+        android:id="@+id/notificationProgressBar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
@@ -23,26 +22,29 @@
         android:id="@+id/listFrameLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
         <TextView
             android:id="@+id/emptyTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/poppins_semi_bold"
             android:gravity="center"
-            android:visibility="gone"
-            android:fontFamily="@font/poppins_semi_bold" />
+            android:visibility="gone" />
+
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-            android:id="@+id/followSwipeRefresh"
+            android:id="@+id/notificationSwipeRefresh"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
+            android:layout_weight="1"
             android:clipChildren="false"
             android:clipToPadding="false">
+
             <ani.dantotsu.FadingEdgeRecyclerView
-                android:id="@+id/listRecyclerView"
+                android:id="@+id/notificationRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="true"
@@ -52,12 +54,12 @@
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
         <ProgressBar
-            android:id="@+id/followRefresh"
+            android:id="@+id/notificationRefresh"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="32dp"
-            android:visibility="gone"
-            android:layout_gravity="center_horizontal" />
+            android:visibility="gone" />
     </LinearLayout>
 </LinearLayout>
