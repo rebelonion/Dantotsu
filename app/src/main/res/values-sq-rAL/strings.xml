@@ -915,8 +915,8 @@
     <string name="app_lock_desc">Blloko aplikacionin me një fjalëkalim\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">Konfirmo Fjalëkalimin</string>
     <string name="password_mismatch">Fjalëkalimet nuk përputhen ose janë bosh!</string>
-    <string name="enable_biometric">Enable Biometric</string>
-    <string name="bio_prompt_info_title">Biometric Authentication</string>
-    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
-    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="enable_biometric">Aktivizo Biometrinë</string>
+    <string name="bio_prompt_info_title">Autentifikimi Biometrik</string>
+    <string name="bio_prompt_info_desc">Përdorni shenjat e gishtit ose fytyrën tuaj për të zhbllokuar aplikacionin</string>
+    <string name="enable_forgot_password">Aktivizo Harroj Fjalëkalimin (mbani shtypur butonin e pastrimit për 10 sekonda)</string>
 </resources>
