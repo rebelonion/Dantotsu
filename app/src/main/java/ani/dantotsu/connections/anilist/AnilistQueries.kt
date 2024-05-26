@@ -435,7 +435,7 @@ class AnilistQueries {
                 response.data.page2.activities
             ).asSequence().flatten()
                 .filter { it.typename != "MessageActivity" }
-                .filter { if (Anilist.adult) true else it.media?.isAdult == false }
+                .filter { if (Anilist.adult) true else it.media?.isAdult != true }
                 .filter { it.createdAt * 1000L > threeDaysAgo }.toList()
                 .sortedByDescending { it.createdAt }
             val anilistActivities = mutableListOf<User>()

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.databinding.FragmentFeedBinding
@@ -54,6 +55,7 @@ class ActivityFragment(
         binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = navBarHeight
         }
+        binding.emptyTextView.text = getString(R.string.no_notifications)
         lifecycleScope.launch {
             getList()
             if (adapter.itemCount == 0) {
@@ -102,10 +104,10 @@ class ActivityFragment(
     ): List<Activity> {
         val res = Anilist.query.getFeed(userId, global, page, activityId)?.data?.page?.activities
         page += 1
-        return res?.filter {
-            if (Anilist.adult) true else it.media?.isAdult == false &&
-                    (it.recipient?.id == null || it.recipient.id == Anilist.userid)
-        } ?: emptyList()
+        return res
+            ?.filter { if (Anilist.adult) true else it.media?.isAdult != true }
+            ?.filterNot { it.recipient?.id != null && it.recipient.id != Anilist.userid }
+            ?: emptyList()
     }
 
     private fun shouldLoadMore(): Boolean {
