@@ -85,7 +85,7 @@
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="52dp"
                         android:layout_height="52dp"
-
+                        app:strokeColor="@color/transparent"
                         android:backgroundTint="@color/nav_bg_inv"
                         app:cardCornerRadius="26dp">
 
