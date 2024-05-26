@@ -913,8 +913,8 @@
     <string name="app_lock_desc">Vergrendel de app met een wachtwoord\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">Bevestig Wachtwoord</string>
     <string name="password_mismatch">Wachtwoorden komen niet overeen of zijn leeg!</string>
-    <string name="enable_biometric">Enable Biometric</string>
-    <string name="bio_prompt_info_title">Biometric Authentication</string>
-    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
-    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="enable_biometric">Biometrie inschakelen</string>
+    <string name="bio_prompt_info_title">Biometrische authenticatie</string>
+    <string name="bio_prompt_info_desc">Gebruik uw vingerafdruk of gezicht om de app te ontgrendelen</string>
+    <string name="enable_forgot_password">Wachtwoord vergeten inschakelen (houd de wis-knop 10 seconden ingedrukt)</string>
 </resources>
