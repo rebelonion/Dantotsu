@@ -915,8 +915,8 @@
     <string name="app_lock_desc">パスワードでアプリをロックする\n( ͡° ͜ʖ ͡°)</string>
     <string name="confirm_password">パスワードを確認</string>
     <string name="password_mismatch">パスワードが一致しないか、空です！</string>
-    <string name="enable_biometric">Enable Biometric</string>
-    <string name="bio_prompt_info_title">Biometric Authentication</string>
-    <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
-    <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="enable_biometric">バイオメトリクスを有効にする</string>
+    <string name="bio_prompt_info_title">生体認証</string>
+    <string name="bio_prompt_info_desc">アプリをアンロックするために指紋または顔を使用してください</string>
+    <string name="enable_forgot_password">パスワード忘れを有効にする（クリアボタンを10秒間押し続けてください）</string>
 </resources>
