@@ -47,6 +47,7 @@ class FeedActivity : AppCompatActivity() {
             Pair(R.drawable.ic_globe_24, "Global"),
         )
         tabs.forEach { (icon, title) -> navBar.addTab(navBar.createTab(icon, title)) }
+
         binding.notificationBack.setOnClickListener { onBackPressedDispatcher.onBackPressed() }
         val getOne = intent.getIntExtra("activityId", -1)
         if (getOne != -1) { navBar.visibility = View.GONE }
@@ -87,8 +88,8 @@ class FeedActivity : AppCompatActivity() {
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> ActivityFragment(if (activityId != -1) ActivityType.ONE else ActivityType.USER, activityId = activityId)
-                else -> ActivityFragment(ActivityType.GLOBAL)
+                0 -> ActivityFragment.newInstance(if (activityId != -1) ActivityType.ONE else ActivityType.USER, activityId = activityId)
+                else -> ActivityFragment.newInstance(ActivityType.GLOBAL)
             }
         }
     }

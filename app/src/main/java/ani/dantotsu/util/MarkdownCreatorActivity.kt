@@ -24,7 +24,9 @@ class MarkdownCreatorActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMarkdownCreatorBinding
     private lateinit var type: String
     private var text: String = ""
+    var ping: String? = null
     private var parentId: Int = 0
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,7 @@ class MarkdownCreatorActivity : AppCompatActivity() {
             bottomMargin += navBarHeight
         }
         setContentView(binding.root)
+
         if (intent.hasExtra("type")) {
             type = intent.getStringExtra("type")!!
         } else {
@@ -57,8 +60,11 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 }
                 getString(R.string.create_new_reply)
             }
+
             else -> ""
         }
+        ping = intent.getStringExtra("other")
+        text = ping ?: ""
         binding.editText.setText(text)
         binding.editText.addTextChangedListener {
             if (!binding.markdownCreatorPreviewCheckbox.isChecked) {
@@ -86,15 +92,26 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 setMessage(R.string.post_to_anilist_warning)
                 setPosButton(R.string.ok) {
                     launchIO {
+                        val editId = intent.getIntExtra("edit", -1)
+                        val isEdit = editId != -1
                         val success = when (type) {
-                            "activity" -> Anilist.mutation.postActivity(text)
+                            "activity" -> if (isEdit) {
+                                Anilist.mutation.postActivity(text, editId)
+                            } else {
+                                Anilist.mutation.postActivity(text)
+                            }
                             //"review" -> Anilist.mutation.postReview(text)
-                            "replyActivity" -> Anilist.mutation.postReply(parentId, text)
+                            "replyActivity" -> if (isEdit) {
+                                Anilist.mutation.postReply(parentId, text, editId)
+                            } else {
+                                Anilist.mutation.postReply(parentId, text)
+                            }
+
                             else -> "Error: Unknown type"
                         }
                         toast(success)
+                        finish()
                     }
-                    onBackPressedDispatcher.onBackPressed()
                 }
                 setNeutralButton(R.string.open_rules) {
                     openLinkInBrowser("https://anilist.co/forum/thread/14")

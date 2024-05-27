@@ -74,7 +74,9 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
                     replies.map {
                         ActivityReplyItem(
                             it,
+                            activityId,
                             requireActivity(),
+                            adapter,
                             clickCallback = { int, _ ->
                                 onClick(int)
                             }
@@ -109,7 +111,6 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
         super.onResume()
         loading(true)
         lifecycleScope.launch(Dispatchers.IO) {
-            delay(2000)
             loadData()
         }
     }

@@ -7,18 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.webkit.internal.ApiFeature.N
 import ani.dantotsu.R
 import ani.dantotsu.connections.anilist.Anilist
 import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.databinding.FragmentNotificationsBinding
 import ani.dantotsu.media.MediaDetailsActivity
-import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.comment.CommentStore
 import ani.dantotsu.notifications.subscription.SubscriptionStore
 import ani.dantotsu.profile.ProfileActivity
@@ -27,13 +24,13 @@ import ani.dantotsu.setBaseline
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefName
 import com.xwray.groupie.GroupieAdapter
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.launch
 
 
-class NotificationFragment(
-    val type: NotificationType,
-    val getID: Int = -1
-) : Fragment() {
+class NotificationFragment : Fragment() {
+    private lateinit var type : NotificationType
+    private var getID : Int = -1
     private lateinit var binding: FragmentNotificationsBinding
     private var adapter: GroupieAdapter = GroupieAdapter()
     private var currentPage = 1
@@ -49,14 +46,11 @@ class NotificationFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val navbar = (activity as NotificationActivity).navBar
-        binding.notificationRecyclerView.setBaseline(navbar)
+        type = arguments?.getSerializableCompat<NotificationType>("type") as NotificationType
+        getID = arguments?.getInt("id") ?: -1
         binding.notificationRecyclerView.adapter = adapter
         binding.notificationRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.notificationProgressBar.isVisible = true
-        binding.notificationRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-            bottomMargin = navBarHeight
-        }
         binding.emptyTextView.text = getString(R.string.no_notifications)
         lifecycleScope.launch {
             getList()
@@ -92,7 +86,7 @@ class NotificationFragment(
     private suspend fun getList() {
         val list = when (type) {
             NotificationType.ONE -> getNotificationsFiltered(false) { it.id == getID }
-            NotificationType.MEDIA -> getNotificationsFiltered { it.media != null }
+            NotificationType.MEDIA -> getNotificationsFiltered(type = true) { it.media != null }
             NotificationType.USER -> getNotificationsFiltered { it.media == null }
             NotificationType.SUBSCRIPTION -> getSubscriptions()
             NotificationType.COMMENT -> getComments()
@@ -102,11 +96,12 @@ class NotificationFragment(
 
     private suspend fun getNotificationsFiltered(
         reset: Boolean = true,
+        type: Boolean? = null,
         filter: (Notification) -> Boolean
     ): List<Notification> {
         val userId =
             Anilist.userid ?: PrefManager.getVal<String>(PrefName.AnilistUserId).toIntOrNull() ?: 0
-        val res = Anilist.query.getNotifications(userId, currentPage, reset)?.data?.page
+        val res = Anilist.query.getNotifications(userId, currentPage, reset, type)?.data?.page
         currentPage = res?.pageInfo?.currentPage?.plus(1) ?: 1
         hasNextPage = res?.pageInfo?.hasNextPage ?: false
         return res?.notifications?.filter(filter) ?: listOf()
@@ -222,6 +217,15 @@ class NotificationFragment(
 
         enum class NotificationType {
             MEDIA, USER, SUBSCRIPTION, COMMENT, ONE
+        }
+
+        fun newInstance(type: NotificationType, id: Int = -1): NotificationFragment {
+            return NotificationFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("type", type)
+                    putInt("id", id)
+                }
+            }
         }
     }
 

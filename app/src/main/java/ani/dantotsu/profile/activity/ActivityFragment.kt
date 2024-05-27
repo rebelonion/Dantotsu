@@ -21,13 +21,13 @@ import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.setBaseline
 import com.xwray.groupie.GroupieAdapter
+import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.launch
 
-class ActivityFragment(
-    var type: ActivityType,
-    val userId: Int? = null,
-    var activityId: Int? = null,
-) : Fragment() {
+class ActivityFragment : Fragment() {
+    private lateinit var type: ActivityType
+    private var userId: Int? = null
+    private var activityId: Int? = null
     private lateinit var binding: FragmentFeedBinding
     private var adapter: GroupieAdapter = GroupieAdapter()
     private var page: Int = 1
@@ -43,15 +43,13 @@ class ActivityFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val navBar = if (userId != null) {
-            (activity as ProfileActivity).navBar
-        } else {
-            (activity as FeedActivity).navBar
-        }
-        binding.listRecyclerView.setBaseline(navBar)
+        type = arguments?.getSerializableCompat<ActivityType>("type") as ActivityType
+        userId = arguments?.getInt("userId")
+        activityId = arguments?.getInt("activityId")
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.listProgressBar.isVisible = true
+
         binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = navBarHeight
         }
@@ -94,7 +92,7 @@ class ActivityFragment(
             ActivityType.OTHER_USER -> getActivities(userId = userId)
             ActivityType.ONE -> getActivities(activityId = activityId)
         }
-        adapter.addAll(list.map { ActivityItem(it, ::onActivityClick, requireActivity()) })
+        adapter.addAll(list.map { ActivityItem(it, ::onActivityClick, adapter ,requireActivity()) })
     }
 
     private suspend fun getActivities(
@@ -142,18 +140,23 @@ class ActivityFragment(
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-            val navBar = if (userId != null) {
-                (activity as ProfileActivity).navBar
-            } else {
-                (activity as FeedActivity).navBar
-            }
-            binding.listRecyclerView.setBaseline(navBar)
+
         }
     }
 
     companion object {
         enum class ActivityType {
             GLOBAL, USER, OTHER_USER, ONE
+        }
+
+        fun newInstance(type: ActivityType, userId: Int? = null, activityId: Int? = null): ActivityFragment {
+            return ActivityFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable("type", type)
+                    userId?.let { putInt("userId", it) }
+                    activityId?.let { putInt("activityId", it) }
+                }
+            }
         }
     }
 }

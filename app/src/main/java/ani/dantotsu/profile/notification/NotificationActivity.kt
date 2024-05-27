@@ -84,11 +84,11 @@ class NotificationActivity : AppCompatActivity() {
         override fun getItemCount(): Int = if (id != -1) 1 else 4
 
         override fun createFragment(position: Int): Fragment = when (position) {
-            0 -> NotificationFragment(if (id != -1) NotificationType.ONE else NotificationType.MEDIA, id)
-            1 -> NotificationFragment(NotificationType.USER)
-            2 -> NotificationFragment(NotificationType.SUBSCRIPTION)
-            3 -> NotificationFragment(NotificationType.COMMENT)
-            else -> NotificationFragment(NotificationType.MEDIA)
+            0 -> NotificationFragment.newInstance(if (id != -1) NotificationType.ONE else NotificationType.MEDIA, id)
+            1 -> NotificationFragment.newInstance(NotificationType.USER)
+            2 -> NotificationFragment.newInstance(NotificationType.SUBSCRIPTION)
+            3 -> NotificationFragment.newInstance(NotificationType.COMMENT)
+            else -> NotificationFragment.newInstance(NotificationType.MEDIA)
         }
     }
 }

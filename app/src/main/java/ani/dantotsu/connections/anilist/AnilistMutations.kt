@@ -3,9 +3,9 @@ package ani.dantotsu.connections.anilist
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.Query
+import ani.dantotsu.connections.anilist.api.ToggleLike
 import ani.dantotsu.currContext
 import com.google.gson.Gson
-import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 
 class AnilistMutations {
@@ -76,37 +76,65 @@ class AnilistMutations {
 
 
     suspend fun rateReview(reviewId: Int, rating: String): Query.RateReviewResponse? {
-        val query = "mutation{RateReview(reviewId:$reviewId,rating:$rating){id mediaId mediaType summary body(asHtml:true)rating ratingAmount userRating score private siteUrl createdAt updatedAt user{id name bannerImage avatar{medium large}}}}"
+        val query =
+            "mutation{RateReview(reviewId:$reviewId,rating:$rating){id mediaId mediaType summary body(asHtml:true)rating ratingAmount userRating score private siteUrl createdAt updatedAt user{id name bannerImage avatar{medium large}}}}"
         return executeQuery<Query.RateReviewResponse>(query)
     }
 
-    suspend fun postActivity(text:String): String {
+    suspend fun toggleFollow(id: Int): Query.ToggleFollow? {
+        return executeQuery<Query.ToggleFollow>(
+            """mutation{ToggleFollow(userId:$id){id, isFollowing, isFollower}}"""
+        )
+    }
+
+    suspend fun toggleLike(id: Int, type: String): ToggleLike? {
+        return executeQuery<ToggleLike>(
+            """mutation Like{ToggleLikeV2(id:$id,type:$type){__typename}}"""
+        )
+    }
+
+    suspend fun postActivity(text: String, edit : Int? = null): String {
         val encodedText = text.stringSanitizer()
-        val query = "mutation{SaveTextActivity(text:$encodedText){siteUrl}}"
+        val query = "mutation{SaveTextActivity(${if (edit != null) "id:$edit," else ""} text:$encodedText){siteUrl}}"
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString()
             ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
     }
-
+    suspend fun postReply(activityId: Int, text: String, edit: Int? = null ): String {
+        val encodedText = text.stringSanitizer()
+        val query = "mutation{SaveActivityReply(${if (edit != null) "id:$edit," else ""} activityId:$activityId,text:$encodedText){id}}"
+        val result = executeQuery<JsonObject>(query)
+        val errors = result?.get("errors")
+        return errors?.toString()
+            ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+    }
     suspend fun postReview(summary: String, body: String, mediaId: Int, score: Int): String {
         val encodedSummary = summary.stringSanitizer()
         val encodedBody = body.stringSanitizer()
-        val query = "mutation{SaveReview(mediaId:$mediaId,summary:$encodedSummary,body:$encodedBody,score:$score){siteUrl}}"
+        val query =
+            "mutation{SaveReview(mediaId:$mediaId,summary:$encodedSummary,body:$encodedBody,score:$score){siteUrl}}"
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString()
             ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
     }
 
-    suspend fun postReply(activityId: Int, text: String): String {
-        val encodedText = text.stringSanitizer()
-        val query = "mutation{SaveActivityReply(activityId:$activityId,text:$encodedText){id}}"
+    suspend fun deleteActivityReply(activityId: Int): Boolean {
+        val query = "mutation{DeleteActivityReply(id:$activityId){deleted}}"
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
-        return errors?.toString()
-            ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+        return errors == null
     }
+
+    suspend fun deleteActivity(activityId: Int): Boolean {
+        val query = "mutation{DeleteActivity(id:$activityId){deleted}}"
+        val result = executeQuery<JsonObject>(query)
+        val errors = result?.get("errors")
+        return errors == null
+    }
+
+
 
     private fun String.stringSanitizer(): String {
         val sb = StringBuilder()

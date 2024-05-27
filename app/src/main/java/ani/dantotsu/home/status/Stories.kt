@@ -422,14 +422,14 @@ class Stories @JvmOverloads constructor(
         }
         val likeColor = ContextCompat.getColor(context, R.color.yt_red)
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
+        binding.replyCount.text = story.replyCount.toString()
+        binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityRepliesContainer.setOnClickListener {
             RepliesBottomDialog.newInstance(story.id)
                 .show(activity.supportFragmentManager, "replies")
         }
         binding.activityLike.setColorFilter(if (story.isLiked == true) likeColor else notLikeColor)
-        binding.replyCount.text = story.replyCount.toString()
         binding.activityLikeCount.text = story.likeCount.toString()
-        binding.activityReplies.setColorFilter(ContextCompat.getColor(context, R.color.bg_opp))
         binding.activityLikeContainer.setOnClickListener {
             like()
         }
@@ -451,7 +451,7 @@ class Stories @JvmOverloads constructor(
         val notLikeColor = ContextCompat.getColor(context, R.color.bg_opp)
         val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         scope.launch {
-            val res = Anilist.query.toggleLike(story.id, "ACTIVITY")
+            val res = Anilist.mutation.toggleLike(story.id, "ACTIVITY")
             withContext(Dispatchers.Main) {
                 if (res != null) {
                     if (story.isLiked == true) {
