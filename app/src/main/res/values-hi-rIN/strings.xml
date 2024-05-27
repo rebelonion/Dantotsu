@@ -916,4 +916,5 @@
     <string name="bio_prompt_info_title">बायोमेट्रिक प्रमाणीकरण</string>
     <string name="bio_prompt_info_desc">ऐप को अनलॉक करने के लिए अपनी फिंगरप्रिंट या चेहरे का उपयोग करें</string>
     <string name="enable_forgot_password">पासवर्ड भूलने की सुविधा सक्षम करें (10 सेकंड के लिए क्लियर बटन दबाए रखें)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
 </resources>
