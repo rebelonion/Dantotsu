@@ -19,6 +19,7 @@ import ani.dantotsu.snackString
 import ani.dantotsu.util.MarkdownCreatorActivity
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -58,29 +59,32 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
         activityId = requireArguments().getInt("activityId")
         loading(true)
         lifecycleScope.launch(Dispatchers.IO) {
-            val response = Anilist.query.getReplies(activityId)
-            withContext(Dispatchers.Main) {
-                loading(false)
-                if (response != null) {
-                    replies.clear()
-                    replies.addAll(response.data.page.activityReplies)
-                    adapter.update(
-                        replies.map {
-                            ActivityReplyItem(
-                                it,
-                                requireActivity(),
-                                clickCallback = { int, _ ->
-                                    onClick(int)
-                                }
-                            )
-                        }
-                    )
-                } else {
-                    snackString("Failed to load replies")
-                }
+            loadData()
+        }
+    }
+
+    private suspend fun loadData() {
+        val response = Anilist.query.getReplies(activityId)
+        withContext(Dispatchers.Main) {
+            loading(false)
+            if (response != null) {
+                replies.clear()
+                replies.addAll(response.data.page.activityReplies)
+                adapter.update(
+                    replies.map {
+                        ActivityReplyItem(
+                            it,
+                            requireActivity(),
+                            clickCallback = { int, _ ->
+                                onClick(int)
+                            }
+                        )
+                    }
+                )
+            } else {
+                snackString("Failed to load replies")
             }
         }
-
     }
 
     private fun onClick(int: Int) {
@@ -99,6 +103,15 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loading(true)
+        lifecycleScope.launch(Dispatchers.IO) {
+            delay(2000)
+            loadData()
+        }
     }
 
     companion object {

@@ -51,7 +51,7 @@ import ani.dantotsu.others.CustomBottomDialog
 import ani.dantotsu.others.calc.CalcActivity
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.FeedActivity
-import ani.dantotsu.profile.activity.NotificationActivity
+import ani.dantotsu.profile.notification.NotificationActivity
 import ani.dantotsu.settings.ExtensionsActivity
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.settings.saving.PrefManager.asLiveBool
@@ -365,7 +365,6 @@ class MainActivity : AppCompatActivity() {
             } else if (fragmentToLoad == "NOTIFICATIONS" && activityId != -1) {
                 Logger.log("MainActivity, onCreate: $activityId")
                 val notificationIntent = Intent(this, NotificationActivity::class.java).apply {
-                    putExtra("FRAGMENT_TO_LOAD", "NOTIFICATIONS")
                     putExtra("activityId", activityId)
                 }
                 launched = true

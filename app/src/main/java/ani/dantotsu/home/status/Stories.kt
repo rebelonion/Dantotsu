@@ -74,8 +74,7 @@ class Stories @JvmOverloads constructor(
 
         if (context is StoriesCallback) storiesListener = context as StoriesCallback
 
-        binding.leftTouchPanel.setOnTouchListener(this)
-        binding.rightTouchPanel.setOnTouchListener(this)
+        binding.touchPanel.setOnTouchListener(this)
     }
 
 
@@ -264,49 +263,7 @@ class Stories @JvmOverloads constructor(
     }
 
 
-    private var startClickTime = 0L
-    private var startX = 0f
-    private var startY = 0f
-    private var isLongPress = false
-    private val swipeThreshold = 100
-    override fun onTouch(view: View?, event: MotionEvent?): Boolean {
-        val maxClickDuration = 200
-        when (event?.action) {
-            MotionEvent.ACTION_DOWN -> {
-                startX = event.x
-                startY = event.y
-                startClickTime = Calendar.getInstance().timeInMillis
-                pause()
-                isLongPress = false
-            }
 
-            MotionEvent.ACTION_MOVE -> {
-                val deltaX = event.x - startX
-                val deltaY = event.y - startY
-                if (!isLongPress && (abs(deltaX) > swipeThreshold || abs(deltaY) > swipeThreshold)) {
-                    isLongPress = true
-                }
-            }
-
-            MotionEvent.ACTION_UP -> {
-                val clickDuration = Calendar.getInstance().timeInMillis - startClickTime
-                if (clickDuration < maxClickDuration && !isLongPress) {
-                    when (view?.id) {
-                        R.id.leftTouchPanel -> leftPanelTouch()
-                        R.id.rightTouchPanel -> rightPanelTouch()
-                    }
-                } else {
-                    resume()
-                }
-                val deltaX = event.x - startX
-                if (abs(deltaX) > swipeThreshold) {
-                    if (deltaX > 0) onStoriesPrevious()
-                    else onStoriesCompleted()
-                }
-            }
-        }
-        return true
-    }
 
     private fun rightPanelTouch() {
         Logger.log("rightPanelTouch: $storyIndex")
@@ -359,6 +316,7 @@ class Stories @JvmOverloads constructor(
         timer.resume()
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun loadStory(story: Activity) {
         val key = "activities"
         val set = PrefManager.getCustomVal<Set<Int>>(key, setOf()).plus((story.id))
@@ -373,6 +331,15 @@ class Stories @JvmOverloads constructor(
                 Intent(context, ProfileActivity::class.java).putExtra("userId", story.userId),
                 null
             )
+        }
+
+        binding.textActivity.setOnTouchListener { v, event ->
+            onTouchView(v, event, true)
+            v.onTouchEvent(event)
+        }
+        binding.textActivityContainer.setOnTouchListener { v, event ->
+            onTouchView(v, event, true)
+            v.onTouchEvent(event)
         }
         fun visible(isList: Boolean) {
             binding.textActivity.isVisible = !isList
@@ -397,15 +364,15 @@ class Stories @JvmOverloads constructor(
                         }
                     }
                 } ${story.progress ?: story.media?.title?.userPreferred} " +
-                    if (
-                        story.status?.contains("completed") == false &&
-                        !story.status.contains("plans") &&
-                        !story.status.contains("repeating")
-                    ) {
-                        "of ${story.media?.title?.userPreferred}"
-                    } else {
-                        ""
-                    }
+                        if (
+                            story.status?.contains("completed") == false &&
+                            !story.status.contains("plans") &&
+                            !story.status.contains("repeating")
+                        ) {
+                            "of ${story.media?.title?.userPreferred}"
+                        } else {
+                            ""
+                        }
                 binding.infoText.text = text
                 val bannerAnimations: Boolean = PrefManager.getVal(PrefName.BannerAnimations)
                 blurImage(
@@ -499,6 +466,68 @@ class Stories @JvmOverloads constructor(
                 } else {
                     snackString("Failed to like activity")
                 }
+            }
+        }
+    }
+    private var startClickTime = 0L
+    private var startX = 0f
+    private var startY = 0f
+    private var isLongPress = false
+    private val swipeThreshold = 100
+    override fun onTouch(view: View, event: MotionEvent): Boolean {
+        onTouchView(view, event)
+        return true
+    }
+    private fun onTouchView(view: View, event: MotionEvent, isText: Boolean = false){
+        val maxClickDuration = 200
+        val screenWidth = view.width
+        val leftHalf = screenWidth / 2
+        val leftQuarter = screenWidth * 0.15
+        val rightQuarter = screenWidth * 0.85
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                startX = event.x
+                startY = event.y
+                startClickTime = Calendar.getInstance().timeInMillis
+                pause()
+                isLongPress = false
+            }
+            MotionEvent.ACTION_MOVE -> {
+                val deltaX = event.x - startX
+                val deltaY = event.y - startY
+                if (!isLongPress && (abs(deltaX) > swipeThreshold || abs(deltaY) > swipeThreshold)) {
+                    isLongPress = true
+                }
+            }
+            MotionEvent.ACTION_UP -> {
+                val clickDuration = Calendar.getInstance().timeInMillis - startClickTime
+                if (isText) {
+                    if (clickDuration < maxClickDuration && !isLongPress) {
+                        if (event.x < leftQuarter) {
+                            leftPanelTouch()
+                        } else if (event.x > rightQuarter) {
+                            rightPanelTouch()
+                        }
+                    } else {
+                        resume()
+                    }
+                } else {
+                    if (clickDuration < maxClickDuration && !isLongPress) {
+                        if (event.x < leftHalf) {
+                            leftPanelTouch()
+                        } else {
+                            rightPanelTouch()
+                        }
+                    } else {
+                        resume()
+                    }
+                }
+                val deltaX = event.x - startX
+                if (abs(deltaX) > swipeThreshold) {
+                    if (deltaX > 0) onStoriesPrevious()
+                    else onStoriesCompleted()
+                }
+
             }
         }
     }

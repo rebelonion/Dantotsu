@@ -1,4 +1,4 @@
-package ani.dantotsu.profile.activity
+package ani.dantotsu.profile.notification
 
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +8,8 @@ import ani.dantotsu.connections.anilist.api.Notification
 import ani.dantotsu.connections.anilist.api.NotificationType
 import ani.dantotsu.databinding.ItemNotificationBinding
 import ani.dantotsu.loadImage
-import ani.dantotsu.profile.activity.NotificationActivity.Companion.NotificationClickType
+import ani.dantotsu.profile.notification.NotificationFragment.Companion.NotificationClickType
+import ani.dantotsu.profile.activity.ActivityItemBuilder
 import ani.dantotsu.setAnimation
 import ani.dantotsu.toPx
 import com.xwray.groupie.viewbinding.BindableItem

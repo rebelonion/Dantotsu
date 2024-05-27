@@ -28,45 +28,36 @@
         android:src="@drawable/linear_gradient_bg"
         tools:ignore="ContentDescription" />
 
+    <FrameLayout
+        android:id="@+id/touchPanel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true" />
+
     <androidx.core.widget.NestedScrollView
         android:id="@+id/textActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="94dp"
+        android:clipToPadding="false"
+        android:scrollbars="none">
 
         <TextView
             android:id="@+id/textActivity"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:fontFamily="@font/poppins_semi_bold"
-            android:gravity="center"
             android:paddingHorizontal="12dp"
-            android:text="Play"
+            android:text="test"
+            android:textAlignment="center"
             android:textColor="@color/bg_white"
             android:textSize="18sp"
-            android:visibility="gone"
             tools:ignore="HardcodedText" />
     </androidx.core.widget.NestedScrollView>
 
-    <FrameLayout
-        android:id="@+id/leftTouchPanel"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
-
-
-    <FrameLayout
-        android:id="@+id/rightTouchPanel"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintWidth_percent="0.5" />
 
     <LinearLayout
         android:layout_width="match_parent"
