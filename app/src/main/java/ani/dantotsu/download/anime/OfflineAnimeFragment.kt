@@ -30,6 +30,7 @@ import ani.dantotsu.bottomBar
 import ani.dantotsu.connections.crashlytics.CrashlyticsInterface
 import ani.dantotsu.currActivity
 import ani.dantotsu.currContext
+import ani.dantotsu.download.DownloadCompat
 import ani.dantotsu.download.DownloadCompat.Companion.loadMediaCompat
 import ani.dantotsu.download.DownloadCompat.Companion.loadOfflineAnimeModelCompat
 import ani.dantotsu.download.DownloadedType
@@ -319,17 +320,20 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
             )
             val gson = GsonBuilder()
                 .registerTypeAdapter(SChapter::class.java, InstanceCreator<SChapter> {
-                    SChapterImpl() // Provide an instance of SChapterImpl
+                    SChapterImpl()
                 })
                 .registerTypeAdapter(SAnime::class.java, InstanceCreator<SAnime> {
-                    SAnimeImpl() // Provide an instance of SAnimeImpl
+                    SAnimeImpl()
                 })
                 .registerTypeAdapter(SEpisode::class.java, InstanceCreator<SEpisode> {
-                    SEpisodeImpl() // Provide an instance of SEpisodeImpl
+                    SEpisodeImpl()
                 })
                 .create()
             val media = directory?.findFile("media.json")
-                ?: return loadMediaCompat(downloadedType)
+            if (media == null) {
+                Logger.log("No media.json found at ${directory?.uri?.path}")
+                return loadMediaCompat(downloadedType)
+            }
             val mediaJson =
                 media.openInputStream(context ?: currContext()!!)?.bufferedReader().use {
                     it?.readText()
@@ -394,6 +398,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 bannerUri
             )
         } catch (e: Exception) {
+            Logger.log(e)
             return try {
                 loadOfflineAnimeModelCompat(downloadedType)
             } catch (e: Exception) {
@@ -401,7 +406,7 @@ class OfflineAnimeFragment : Fragment(), OfflineAnimeSearchListener {
                 Logger.log(e)
                 Injekt.get<CrashlyticsInterface>().logException(e)
                 OfflineAnimeModel(
-                    "unknown",
+                    downloadedType.titleName,
                     "0",
                     "??",
                     "??",

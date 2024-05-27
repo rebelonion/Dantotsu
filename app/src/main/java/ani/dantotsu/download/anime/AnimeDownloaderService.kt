@@ -181,7 +181,6 @@ class AnimeDownloaderService : Service() {
     }
 
     private fun updateNotification() {
-        // Update the notification to reflect the current state of the queue
         val pendingDownloads = AnimeServiceDataSingleton.downloadQueue.size
         val text = if (pendingDownloads > 0) {
             "Pending downloads: $pendingDownloads"
@@ -201,7 +200,7 @@ class AnimeDownloaderService : Service() {
 
     @androidx.annotation.OptIn(UnstableApi::class)
     suspend fun download(task: AnimeDownloadTask) {
-        withContext(Dispatchers.Main) {
+        withContext(Dispatchers.IO) {
             try {
                 val notifi = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                     ContextCompat.checkSelfPermission(
@@ -214,13 +213,21 @@ class AnimeDownloaderService : Service() {
 
                 builder.setContentText("Downloading ${getTaskName(task.title, task.episode)}")
                 if (notifi) {
-                    notificationManager.notify(NOTIFICATION_ID, builder.build())
+                    withContext(Dispatchers.Main) {
+                        notificationManager.notify(NOTIFICATION_ID, builder.build())
+                    }
                 }
 
-                val outputDir = getSubDirectory(
+                val baseOutputDir = getSubDirectory(
                     this@AnimeDownloaderService,
                     MediaType.ANIME,
                     false,
+                    task.title
+                ) ?: throw Exception("Failed to create output directory")
+                val outputDir = getSubDirectory(
+                    this@AnimeDownloaderService,
+                    MediaType.ANIME,
+                    true,
                     task.title,
                     task.episode
                 ) ?: throw Exception("Failed to create output directory")
@@ -277,7 +284,7 @@ class AnimeDownloaderService : Service() {
                 currentTasks.find { it.getTaskName() == task.getTaskName() }?.sessionId =
                     ffTask
 
-                saveMediaInfo(task)
+                saveMediaInfo(task, baseOutputDir)
 
                 // periodically check if the download is complete
                 while (ffExtension.getState(ffTask) != "COMPLETED") {
@@ -291,7 +298,11 @@ class AnimeDownloaderService : Service() {
                                 )
                             } Download failed"
                         )
-                        notificationManager.notify(NOTIFICATION_ID, builder.build())
+                        if (notifi) {
+                            withContext(Dispatchers.Main) {
+                                notificationManager.notify(NOTIFICATION_ID, builder.build())
+                            }
+                        }
                         toast("${getTaskName(task.title, task.episode)} Download failed")
                         Logger.log("Download failed: ${ffExtension.getStackTrace(ffTask)}")
                         downloadsManager.removeDownload(
@@ -324,7 +335,9 @@ class AnimeDownloaderService : Service() {
                         percent.coerceAtMost(99)
                     )
                     if (notifi) {
-                        notificationManager.notify(NOTIFICATION_ID, builder.build())
+                        withContext(Dispatchers.Main) {
+                            notificationManager.notify(NOTIFICATION_ID, builder.build())
+                        }
                     }
                     kotlinx.coroutines.delay(2000)
                 }
@@ -339,7 +352,11 @@ class AnimeDownloaderService : Service() {
                                 )
                             } Download failed"
                         )
-                        notificationManager.notify(NOTIFICATION_ID, builder.build())
+                        if (notifi) {
+                            withContext(Dispatchers.Main) {
+                                notificationManager.notify(NOTIFICATION_ID, builder.build())
+                            }
+                        }
                         snackString("${getTaskName(task.title, task.episode)} Download failed")
                         downloadsManager.removeDownload(
                             DownloadedType(
@@ -371,7 +388,11 @@ class AnimeDownloaderService : Service() {
                             )
                         } Download completed"
                     )
-                    notificationManager.notify(NOTIFICATION_ID, builder.build())
+                    if (notifi) {
+                        withContext(Dispatchers.Main) {
+                            notificationManager.notify(NOTIFICATION_ID, builder.build())
+                        }
+                    }
                     snackString("${getTaskName(task.title, task.episode)} Download completed")
                     PrefManager.getAnimeDownloadPreferences().edit().putString(
                         task.getTaskName(),
@@ -401,11 +422,8 @@ class AnimeDownloaderService : Service() {
         }
     }
 
-    private fun saveMediaInfo(task: AnimeDownloadTask) {
+    private fun saveMediaInfo(task: AnimeDownloadTask, directory: DocumentFile) {
         CoroutineScope(Dispatchers.IO).launch {
-            val directory =
-                getSubDirectory(this@AnimeDownloaderService, MediaType.ANIME, false, task.title)
-                    ?: throw Exception("Directory not found")
             directory.findFile("media.json")?.forceDelete(this@AnimeDownloaderService)
             val file = directory.createFile("application/json", "media.json")
                 ?: throw Exception("File not created")
