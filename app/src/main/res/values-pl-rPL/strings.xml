@@ -919,4 +919,5 @@
     <string name="bio_prompt_info_title">Autoryzuj Biometrie</string>
     <string name="bio_prompt_info_desc">Użyj odcisku palca lub twarzy, aby odblokować aplikację</string>
     <string name="enable_forgot_password">Włącz opcję Nie pamiętam hasła (przytrzymaj przycisk przez 10 sekund)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
 </resources>
