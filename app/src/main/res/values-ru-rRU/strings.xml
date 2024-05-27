@@ -919,4 +919,5 @@
     <string name="bio_prompt_info_title">Биометрическая аутентификация</string>
     <string name="bio_prompt_info_desc">Используйте отпечаток пальца или лицо, чтобы разблокировать приложение</string>
     <string name="enable_forgot_password">Включить функцию \"Забыли пароль\" (удерживайте кнопку очистки в течение 10 секунд)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
 </resources>
