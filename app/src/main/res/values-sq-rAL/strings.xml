@@ -919,4 +919,5 @@
     <string name="bio_prompt_info_title">Autentifikimi Biometrik</string>
     <string name="bio_prompt_info_desc">Përdorni shenjat e gishtit ose fytyrën tuaj për të zhbllokuar aplikacionin</string>
     <string name="enable_forgot_password">Aktivizo Harroj Fjalëkalimin (mbani shtypur butonin e pastrimit për 10 sekonda)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
 </resources>
