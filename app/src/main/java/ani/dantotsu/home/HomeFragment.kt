@@ -92,6 +92,7 @@ class HomeFragment : Fragment() {
                 )
                 binding.homeUserDataProgressBar.visibility = View.GONE
                 binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                        && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
                 binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
 
                 binding.homeAnimeList.setOnClickListener {
@@ -511,6 +512,7 @@ class HomeFragment : Fragment() {
         if (!model.loaded) Refresh.activity[1]!!.postValue(true)
         if (_binding != null) {
             binding.homeNotificationCount.isVisible = Anilist.unreadNotificationCount > 0
+                    && PrefManager.getVal<Boolean>(PrefName.ShowNotificationRedDot) == true
             binding.homeNotificationCount.text = Anilist.unreadNotificationCount.toString()
         }
         super.onResume()

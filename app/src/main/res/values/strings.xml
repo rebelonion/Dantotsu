@@ -1028,5 +1028,6 @@ Non quae tempore quo provident laudantium qui illo dolor vel quia dolor et exerc
     <string name="bio_prompt_info_title">Biometric Authentication</string>
     <string name="bio_prompt_info_desc">Use your fingerprint or face to unlock the app</string>
     <string name="enable_forgot_password">Enable Forgot Password (hold clear button for 10 seconds)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
 
 </resources>

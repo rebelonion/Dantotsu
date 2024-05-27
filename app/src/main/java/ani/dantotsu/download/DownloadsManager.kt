@@ -349,7 +349,8 @@ class DownloadsManager(private val context: Context) {
         private fun getBaseDirectory(context: Context): DocumentFile? {
             val baseDirectory = Uri.parse(PrefManager.getVal<String>(PrefName.DownloadsDir))
             if (baseDirectory == Uri.EMPTY) return null
-            return DocumentFile.fromTreeUri(context, baseDirectory)
+            val base = DocumentFile.fromTreeUri(context, baseDirectory) ?: return null
+            return base.findOrCreateFolder(BASE_LOCATION, false)
         }
 
         private val lock = Any()
@@ -364,7 +365,7 @@ class DownloadsManager(private val context: Context) {
                     createDirectory(validName)
                 } else {
                     val folder = findFolder(validName)
-                    return folder ?: createDirectory(validName)
+                    folder ?: createDirectory(validName)
                 }
             }
         }
