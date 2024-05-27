@@ -31,6 +31,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ani.dantotsu.FileUrl
 import ani.dantotsu.R
 import ani.dantotsu.addons.download.DownloadAddonManager
+import ani.dantotsu.connections.anilist.api.MediaStreamingEpisode
 import ani.dantotsu.databinding.FragmentAnimeWatchBinding
 import ani.dantotsu.download.DownloadedType
 import ani.dantotsu.download.DownloadsManager
@@ -230,6 +231,19 @@ class AnimeWatchFragment : Fragment() {
                 val episodes = loadedEpisodes[media.selected!!.sourceIndex]
                 if (episodes != null) {
                     episodes.forEach { (i, episode) ->
+                        fun getThumbnail(episodes: List<MediaStreamingEpisode>): List<Pair<String, FileUrl?>> {
+                            return episodes.mapNotNull { episode ->
+                                val regex = Regex("""Episode\s*(\d+)\s*-\s*(.*)""")
+                                val number = episode.title?.let {
+                                    val matchResult = regex.matchEntire(it)
+                                    matchResult?.destructured?.component1()
+                                }
+                                number?.let { number to FileUrl[episode.thumbnail] }
+                            }
+                        }
+
+                        val getThumbnail = getThumbnail(media.streamingEpisodes ?: emptyList())
+
                         if (media.anime?.fillerEpisodes != null) {
                             if (media.anime!!.fillerEpisodes!!.containsKey(i)) {
                                 episode.title =
@@ -247,8 +261,8 @@ class AnimeWatchFragment : Fragment() {
                                 ) media.anime!!.kitsuEpisodes!![i]?.title
                                     ?: episode.title else episode.title
                                     ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
-                                episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb
-                                    ?: FileUrl[media.cover]
+                                episode.thumb = getThumbnail.find { it.first == i }?.second
+                                    ?: media.anime!!.kitsuEpisodes!![i]?.thumb ?: episode.thumb
                             }
                         }
                     }
