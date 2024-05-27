@@ -919,4 +919,5 @@
     <string name="bio_prompt_info_title">Βιομετρικός έλεγχος ταυτότητας</string>
     <string name="bio_prompt_info_desc">Χρησιμοποιήστε το δακτυλικό αποτύπωμα ή το πρόσωπό σας για να ξεκλειδώσετε την εφαρμογή</string>
     <string name="enable_forgot_password">Ενεργοποίηση επιλογής \"Ξέχασα τον κωδικό\" (κρατήστε πατημένο το κουμπί εκκαθάρισης για 10 δευτερόλεπτα)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
 </resources>
