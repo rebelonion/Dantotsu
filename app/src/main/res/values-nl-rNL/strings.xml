@@ -917,4 +917,5 @@
     <string name="bio_prompt_info_title">Biometrische authenticatie</string>
     <string name="bio_prompt_info_desc">Gebruik uw vingerafdruk of gezicht om de app te ontgrendelen</string>
     <string name="enable_forgot_password">Wachtwoord vergeten inschakelen (houd de wis-knop 10 seconden ingedrukt)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
 </resources>
