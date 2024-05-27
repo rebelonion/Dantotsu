@@ -920,4 +920,5 @@
     <string name="bio_prompt_info_title">생체 인증</string>
     <string name="bio_prompt_info_desc">앱 잠금을 해제하려면 지문이나 얼굴을 사용하세요</string>
     <string name="enable_forgot_password">비밀번호 찾기 활성화 (지우기 버튼을 10초 동안 누르세요)</string>
+    <string name="hide_notification_dot">Hide Notification Dot</string>
 </resources>
