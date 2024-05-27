@@ -916,5 +916,5 @@
     <string name="bio_prompt_info_title">Biyometrik Doğrulaması</string>
     <string name="bio_prompt_info_desc">Uygulamayı açmak için parmak izini veye yüzünü kullan</string>
     <string name="enable_forgot_password">Şifremi Unuttum\'a izin ver (temizle butonuna 10 saniye basılı tutun)</string>
-    <string name="hide_notification_dot">Hide Notification Dot</string>
+    <string name="hide_notification_dot">Bildirim Noktasını Gizle</string>
 </resources>
