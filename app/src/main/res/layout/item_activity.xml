@@ -153,8 +153,6 @@
             android:textSize="12sp"
             android:visibility="gone"
             tools:visibility="visible"
-            app:layout_constraintStart_toEndOf="@+id/commentDownVote"
-            app:layout_constraintTop_toBottomOf="@+id/commentText"
             tools:ignore="HardcodedText" />
 
         <TextView
@@ -169,8 +167,6 @@
             android:textSize="12sp"
             android:visibility="gone"
             tools:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="@+id/commentReply"
-            app:layout_constraintStart_toEndOf="@+id/commentReply"
             tools:ignore="HardcodedText" />
     </LinearLayout>
     <FrameLayout
