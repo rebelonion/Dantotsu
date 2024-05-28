@@ -62,7 +62,9 @@
         <item>Wszystko</item>
     </string-array>
     <string name="no_notifications">Brak kolejnych powiadomień</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">Obserwujący</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">STATUS</string>
     <string-array name="status_anime">
         <item>PLANOWANE</item>
@@ -875,6 +877,7 @@
     <string name="create_new_activity">Utwórz nową aktywność</string>
     <string name="create_new_review">Utwórz nową recenzję</string>
     <string name="create_new_reply">Utwórz nową odpowiedź</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">Utwórz</string>
     <string name="preview">Podgląd</string>
     <string name="cannot_be_empty">Tekst nie może być pusty</string>
