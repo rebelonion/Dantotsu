@@ -62,7 +62,9 @@
         <item>সব</item>
     </string-array>
     <string name="no_notifications">নটিফিকেশন বন্ধ</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">অনুসারী</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">অবস্থা</string>
     <string-array name="status_anime">
         <item>পরিকল্পিত</item>
@@ -881,6 +883,7 @@
     <string name="create_new_activity">Create New Activity</string>
     <string name="create_new_review">Create New Review</string>
     <string name="create_new_reply">Create New Reply</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">Create</string>
     <string name="preview">Preview</string>
     <string name="cannot_be_empty">Text cannot be empty</string>
