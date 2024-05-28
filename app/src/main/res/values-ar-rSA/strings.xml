@@ -62,7 +62,9 @@
         <item>الكل</item>
     </string-array>
     <string name="no_notifications">لا مزيد من الإشعارات</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">المتابعين</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">الحالة</string>
     <string-array name="status_anime">
         <item>أخطط للشاهدة</item>
@@ -868,6 +870,7 @@
     <string name="create_new_activity">إنشاء نشاط جديد</string>
     <string name="create_new_review">إنشاء مراجعة جديدة</string>
     <string name="create_new_reply">إنشاء رد جديد</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">إنشاء</string>
     <string name="preview">معاينة</string>
     <string name="cannot_be_empty">لا يمكن أن يكون النص فارغًا</string>
