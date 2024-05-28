@@ -62,7 +62,9 @@
         <item>全部</item>
     </string-array>
     <string name="no_notifications">无更多通知</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">关注者</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">状态</string>
     <string-array name="status_anime">
         <item>计划中</item>
@@ -869,6 +871,7 @@
     <string name="create_new_activity">创建新活动</string>
     <string name="create_new_review">创建新评论</string>
     <string name="create_new_reply">创建新回复</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">创建</string>
     <string name="preview">预览</string>
     <string name="cannot_be_empty">文本不能为空</string>
