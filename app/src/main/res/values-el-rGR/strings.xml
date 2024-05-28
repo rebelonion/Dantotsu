@@ -62,7 +62,9 @@
         <item>Όλα</item>
     </string-array>
     <string name="no_notifications">Όχι άλλες ειδοποιήσεις</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">Ακόλουθη</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">Κατάσταση</string>
     <string-array name="status_anime">
         <item>Σχεδίαση</item>
@@ -875,6 +877,7 @@
     <string name="create_new_activity">Δημιουργία νέας δραστηριότητας</string>
     <string name="create_new_review">Δημιουργία νέας κριτικής</string>
     <string name="create_new_reply">Δημιουργία νέας απάντησης</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">Δημιουργία</string>
     <string name="preview">Προεπισκόπηση</string>
     <string name="cannot_be_empty">Το κείμενο δεν μπορεί να είναι κενό</string>
