@@ -62,7 +62,9 @@
         <item>全て</item>
     </string-array>
     <string name="no_notifications">No more notifications</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">Followers</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">ステータス</string>
     <string-array name="status_anime">
         <item>計画中</item>
@@ -875,6 +877,7 @@
     <string name="create_new_activity">新しいアクティビティを作成</string>
     <string name="create_new_review">新しいレビューを作成</string>
     <string name="create_new_reply">新しい返信を作成</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">作成</string>
     <string name="preview">プレビュー</string>
     <string name="cannot_be_empty">テキストは空にできません</string>
