@@ -62,7 +62,9 @@
         <item>Tutto</item>
     </string-array>
     <string name="no_notifications">Niente Più Notifiche</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">Followers</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">STATO</string>
     <string-array name="status_anime">
         <item>IN PIANIFICA</item>
@@ -875,6 +877,7 @@
     <string name="create_new_activity">Crea nuova attività</string>
     <string name="create_new_review">Crea nuova recensione</string>
     <string name="create_new_reply">Crea nuova risposta</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">Crea</string>
     <string name="preview">Anteprima</string>
     <string name="cannot_be_empty">Il testo non può essere vuoto</string>
