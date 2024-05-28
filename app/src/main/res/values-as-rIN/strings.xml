@@ -62,7 +62,9 @@
         <item>সকল</item>
     </string-array>
     <string name="no_notifications">আৰু কোনো অধিসূচনা নাই </string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">অনুসৰণকাৰী</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">ষ্টেটাছ</string>
     <string-array name="status_anime">
         <item>পৰিকল্পনা</item>
@@ -872,6 +874,7 @@
     <string name="create_new_activity">নতুন কার্য্য সৃষ্টি কৰক</string>
     <string name="create_new_review">নতুন পৰামৰ্শ সৃষ্টি কৰক</string>
     <string name="create_new_reply">নতুন উত্তৰ সৃষ্টি কৰক</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">সৃষ্টি কৰক</string>
     <string name="preview">পূৰ্বদৰ্শন</string>
     <string name="cannot_be_empty">পাঠ খালী হোৱা নোৱাৰিব</string>
