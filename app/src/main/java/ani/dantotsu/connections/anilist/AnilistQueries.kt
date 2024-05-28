@@ -6,6 +6,7 @@ import ani.dantotsu.checkGenreTime
 import ani.dantotsu.checkId
 import ani.dantotsu.connections.anilist.Anilist.authorRoles
 import ani.dantotsu.connections.anilist.Anilist.executeQuery
+import ani.dantotsu.connections.anilist.api.Activity
 import ani.dantotsu.connections.anilist.api.FeedResponse
 import ani.dantotsu.connections.anilist.api.FuzzyDate
 import ani.dantotsu.connections.anilist.api.NotificationResponse
@@ -453,13 +454,24 @@ class AnilistQueries {
                     )
                     if (user.id == Anilist.userid) {
                         anilistActivities.add(0, userToAdd)
+
                     } else {
                         list.add(userToAdd)
                     }
                 }
             }
 
-
+            if (anilistActivities.isEmpty() && Anilist.token != null){
+                anilistActivities.add(0,
+                    User(
+                        Anilist.userid!!,
+                        Anilist.username!!,
+                        Anilist.avatar,
+                        Anilist.bg,
+                        activity = listOf()
+                    )
+                )
+            }
             list.addAll(0, anilistActivities)
             return list.toCollection(ArrayList())
         } else return null

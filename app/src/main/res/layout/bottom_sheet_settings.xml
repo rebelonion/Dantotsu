@@ -27,7 +27,7 @@
                     android:id="@+id/homeUserAvatarContainer"
                     android:layout_width="52dp"
                     android:layout_height="52dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_margin="4dp"
                     android:backgroundTint="@color/nav_bg_inv"
                     app:cardCornerRadius="26dp">
 
@@ -165,7 +165,6 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginEnd="58dp"
             android:orientation="vertical">
 
             <Button
@@ -178,7 +177,7 @@
                 android:insetBottom="0dp"
                 android:paddingStart="32dp"
                 android:paddingEnd="32dp"
-                android:text="Activity"
+                android:text="@string/activities"
                 android:textAlignment="viewStart"
                 android:textAllCaps="false"
                 android:textColor="?attr/colorOnBackground"

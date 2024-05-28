@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="horizontal"
     tools:ignore="ContentDescription">
 
     <com.flaviofaria.kenburnsview.KenBurnsView
@@ -39,23 +40,29 @@
         android:id="@+id/textActivityContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="94dp"
-        android:clipToPadding="false"
+        android:layout_marginTop="88dp"
+        android:layout_marginBottom="108dp"
+        android:fillViewport="true"
+        android:requiresFadingEdge="vertical"
         android:scrollbars="none">
 
-        <TextView
-            android:id="@+id/textActivity"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fontFamily="@font/poppins_semi_bold"
-            android:paddingHorizontal="12dp"
-            android:text="test"
-            android:textAlignment="center"
-            android:textColor="@color/bg_white"
-            android:textSize="18sp"
-            tools:ignore="HardcodedText" />
+            android:paddingHorizontal="16dp">
+
+            <TextView
+                android:id="@+id/textActivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/poppins_semi_bold"
+                android:gravity="center"
+                android:text="@string/lorem_ipsum"
+                android:textColor="@color/bg_white"
+                android:textSize="18sp"
+                tools:ignore="HardcodedText" />
+        </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
 
@@ -129,7 +136,7 @@
 
             <TextView
                 android:id="@+id/statusUserTime"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="6dp"
                 android:layout_weight="1"
@@ -147,14 +154,11 @@
         android:id="@+id/itemCompactCard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="124dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dp"
         android:translationZ="8dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:cardElevation="4dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/coverImage"
@@ -172,12 +176,10 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
         android:layout_marginHorizontal="16dp"
         android:layout_marginVertical="32dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/infoText"
@@ -256,12 +258,9 @@
         android:id="@+id/androidStoriesLoadingView"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_gravity="center"
         android:indeterminate="true"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

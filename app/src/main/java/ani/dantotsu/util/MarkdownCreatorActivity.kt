@@ -51,6 +51,7 @@ class MarkdownCreatorActivity : AppCompatActivity() {
         binding.markdownCreatorTitle.text = when (type) {
             "activity" -> getString(R.string.create_new_activity)
             "review" -> getString(R.string.create_new_review)
+            "message" -> getString(R.string.create_new_message)
             "replyActivity" -> {
                 parentId = intent.getIntExtra("parentId", -1)
                 if (parentId == -1) {
@@ -64,6 +65,7 @@ class MarkdownCreatorActivity : AppCompatActivity() {
             else -> ""
         }
         ping = intent.getStringExtra("other")
+        val userId = intent.getIntExtra("userId", -1)
         text = ping ?: ""
         binding.editText.setText(text)
         binding.editText.addTextChangedListener {
@@ -106,7 +108,11 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                             } else {
                                 Anilist.mutation.postReply(parentId, text)
                             }
-
+                            "message" -> if (isEdit) { //TODO private
+                                Anilist.mutation.postMessage(userId , text, editId)
+                            } else {
+                                Anilist.mutation.postMessage(userId , text)
+                            }
                             else -> "Error: Unknown type"
                         }
                         toast(success)

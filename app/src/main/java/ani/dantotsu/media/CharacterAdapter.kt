@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.util.Pair
 import androidx.core.view.ViewCompat
 import androidx.recyclerview.widget.RecyclerView
+import ani.dantotsu.copyToClipboard
 import ani.dantotsu.databinding.ItemCharacterBinding
 import ani.dantotsu.loadImage
 import ani.dantotsu.setAnimation
@@ -32,6 +33,9 @@ class CharacterAdapter(
         binding.itemCompactRelation.text = whitespace
         binding.itemCompactImage.loadImage(character.image)
         binding.itemCompactTitle.text = character.name
+        binding.root.setOnClickListener {
+            copyToClipboard(character.name ?: "")
+        }
     }
 
     override fun getItemCount(): Int = characterList.size

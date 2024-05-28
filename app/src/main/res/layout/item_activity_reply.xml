@@ -46,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="Username"
+                tools:text="@string/username"
+                android:maxLines="1"
                 android:textSize="15sp"
                 tools:ignore="HardcodedText,RtlSymmetry" />
 
@@ -65,7 +66,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_semi_bold"
-                android:text="@string/time"
+                tools:text="Time"
+                android:maxLines="1"
                 android:textSize="14sp"
                 tools:ignore="HardcodedText" />
         </LinearLayout>
@@ -74,7 +76,7 @@
             android:id="@+id/activityLikeContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="20dp"
             android:orientation="vertical"
             tools:ignore="UseCompoundDrawables">
 
@@ -112,6 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
+        android:layout_marginTop="-12dp"
         android:orientation="horizontal">
 
         <TextView
