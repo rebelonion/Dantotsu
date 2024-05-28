@@ -62,7 +62,9 @@
         <item>Te Gjitha</item>
     </string-array>
     <string name="no_notifications">Nuk ka më njoftime</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">Ndjekësit</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">STATUSI</string>
     <string-array name="status_anime">
         <item>PLANIFIKUAR</item>
@@ -875,6 +877,7 @@
     <string name="create_new_activity">Krijo Aktivitet të Ri</string>
     <string name="create_new_review">Krijo Recension të Ri</string>
     <string name="create_new_reply">Krijo Përgjigje të Re</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">Krijo</string>
     <string name="preview">Parashiko</string>
     <string name="cannot_be_empty">Teksti nuk mund të jetë i zbrazët</string>
