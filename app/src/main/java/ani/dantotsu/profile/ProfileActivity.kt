@@ -157,15 +157,6 @@ class ProfileActivity : AppCompatActivity(), AppBarLayout.OnOffsetChangedListene
                                     true
                                 }
 
-                                R.id.action_create_new_activity -> {
-                                    ContextCompat.startActivity(
-                                        context,
-                                        Intent(context, MarkdownCreatorActivity::class.java)
-                                            .putExtra("type", "activity"),
-                                        null
-                                    )
-                                    true
-                                }
 
                                 else -> false
                             }

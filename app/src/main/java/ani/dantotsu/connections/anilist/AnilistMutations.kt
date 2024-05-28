@@ -101,6 +101,14 @@ class AnilistMutations {
         return errors?.toString()
             ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
     }
+    suspend fun postMessage(userId: Int, text: String, edit: Int? = null,isPrivate: Boolean = false): String {
+        val encodedText = text.stringSanitizer()
+        val query = "mutation{SaveMessageActivity(${if (edit != null) "id:$edit," else ""} recipientId:$userId,message:$encodedText,private:$isPrivate){id}}"
+        val result = executeQuery<JsonObject>(query)
+        val errors = result?.get("errors")
+        return errors?.toString()
+            ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
+    }
     suspend fun postReply(activityId: Int, text: String, edit: Int? = null ): String {
         val encodedText = text.stringSanitizer()
         val query = "mutation{SaveActivityReply(${if (edit != null) "id:$edit," else ""} activityId:$activityId,text:$encodedText){id}}"

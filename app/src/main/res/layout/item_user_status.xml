@@ -39,6 +39,7 @@
     <TextView
         android:id="@+id/profileUserName"
         android:layout_width="64dp"
+        android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|center_vertical"
         android:ellipsize="end"

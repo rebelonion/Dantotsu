@@ -20,6 +20,7 @@ import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.setBaseline
+import ani.dantotsu.util.MarkdownCreatorActivity
 import com.xwray.groupie.GroupieAdapter
 import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.launch
@@ -46,6 +47,27 @@ class ActivityFragment : Fragment() {
         type = arguments?.getSerializableCompat<ActivityType>("type") as ActivityType
         userId = arguments?.getInt("userId")
         activityId = arguments?.getInt("activityId")
+        binding.titleBar.visibility = if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE
+        binding.titleText.text = if (userId == Anilist.userid) getString(R.string.create_new_activity) else getString(R.string.write_a_message)
+        binding.titleImage.setOnClickListener {
+            if(userId == Anilist.userid) {
+                ContextCompat.startActivity(
+                    requireContext(),
+                    Intent(context, MarkdownCreatorActivity::class.java)
+                        .putExtra("type", "activity"),
+                    null
+                )
+            } else{
+                ContextCompat.startActivity(
+                    requireContext(),
+                    Intent(context, MarkdownCreatorActivity::class.java)
+                        .putExtra("type", "message")
+                        .putExtra("userId", userId),
+
+                    null
+                )
+            }
+        }
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.listProgressBar.isVisible = true
@@ -53,7 +75,7 @@ class ActivityFragment : Fragment() {
         binding.feedRefresh.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin = navBarHeight
         }
-        binding.emptyTextView.text = getString(R.string.no_notifications)
+        binding.emptyTextView.text = getString(R.string.no_activities)
         lifecycleScope.launch {
             getList()
             if (adapter.itemCount == 0) {
@@ -87,8 +109,8 @@ class ActivityFragment : Fragment() {
 
     private suspend fun getList() {
         val list = when (type) {
-            ActivityType.GLOBAL -> getActivities(true)
-            ActivityType.USER -> getActivities()
+            ActivityType.GLOBAL -> getActivities(global = true)
+            ActivityType.USER -> getActivities(filter = true)
             ActivityType.OTHER_USER -> getActivities(userId = userId)
             ActivityType.ONE -> getActivities(activityId = activityId)
         }
@@ -99,12 +121,13 @@ class ActivityFragment : Fragment() {
         global: Boolean = false,
         userId: Int? = null,
         activityId: Int? = null,
+        filter:Boolean = false
     ): List<Activity> {
         val res = Anilist.query.getFeed(userId, global, page, activityId)?.data?.page?.activities
         page += 1
         return res
             ?.filter { if (Anilist.adult) true else it.media?.isAdult != true }
-            ?.filterNot { it.recipient?.id != null && it.recipient.id != Anilist.userid }
+            ?.filterNot { it.recipient?.id != null && it.recipient.id != Anilist.userid && filter }
             ?: emptyList()
     }
 

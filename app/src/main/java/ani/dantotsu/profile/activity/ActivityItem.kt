@@ -68,12 +68,10 @@ class ActivityItem(
         }
         binding.activityLikeCount.text = (activity.likeCount ?: 0).toString()
         binding.activityLikeContainer.setOnClickListener {
-
             scope.launch {
                 val res = Anilist.mutation.toggleLike(activity.id, "ACTIVITY")
                 withContext(Dispatchers.Main) {
                     if (res != null) {
-
                         if (activity.isLiked == true) {
                             activity.likeCount = activity.likeCount?.minus(1)
                         } else {
@@ -89,7 +87,7 @@ class ActivityItem(
                 }
             }
         }
-        binding.activityDelete.isVisible = activity.userId == Anilist.userid
+        binding.activityDelete.isVisible = activity.userId == Anilist.userid || activity.messenger?.id == Anilist.userid
         binding.activityDelete.setOnClickListener {
             scope.launch {
                 val res = Anilist.mutation.deleteActivity(activity.id)
@@ -109,6 +107,7 @@ class ActivityItem(
                 val banner = activity.media?.bannerImage
                 binding.activityContent.visibility = View.GONE
                 binding.activityBannerContainer.visibility = View.VISIBLE
+                binding.activityPrivate.visibility = View.GONE
                 binding.activityMediaName.text = activity.media?.title?.userPreferred
                 val activityText = "${activity.user!!.name} ${activity.status} ${
                     activity.progress
@@ -135,6 +134,7 @@ class ActivityItem(
             "TextActivity" -> {
                 binding.activityBannerContainer.visibility = View.GONE
                 binding.activityContent.visibility = View.VISIBLE
+                binding.activityPrivate.visibility = View.GONE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(
@@ -164,6 +164,7 @@ class ActivityItem(
             "MessageActivity" -> {
                 binding.activityBannerContainer.visibility = View.GONE
                 binding.activityContent.visibility = View.VISIBLE
+                binding.activityPrivate.visibility = if (activity.isPrivate == true) View.VISIBLE else View.GONE
                 if (!(context as android.app.Activity).isDestroyed) {
                     val markwon = buildMarkwon(context, false)
                     markwon.setMarkdown(
@@ -178,6 +179,18 @@ class ActivityItem(
                     clickCallback(activity.messengerId ?: -1, "USER")
                 }
                 binding.activityEdit.isVisible = false
+                binding.activityEdit.isVisible = activity.messenger?.id == Anilist.userid
+                binding.activityEdit.setOnClickListener {
+                    ContextCompat.startActivity(
+                        context,
+                        Intent(context, MarkdownCreatorActivity::class.java)
+                            .putExtra("type", "message")
+                            .putExtra("other", activity.message)
+                            .putExtra("edit", activity.id)
+                            .putExtra("userId", activity.recipientId),
+                        null
+                    )
+                }
             }
         }
     }

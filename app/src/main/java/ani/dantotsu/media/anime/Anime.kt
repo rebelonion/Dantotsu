@@ -26,4 +26,5 @@ data class Anime(
     var slug: String? = null,
     var kitsuEpisodes: Map<String, Episode>? = null,
     var fillerEpisodes: Map<String, Episode>? = null,
+    var anifyEpisodes: Map<String, Episode>? = null,
 ) : Serializable

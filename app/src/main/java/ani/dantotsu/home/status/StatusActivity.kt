@@ -101,7 +101,7 @@ class StatusActivity : AppCompatActivity(), StoriesCallback {
 
     override fun onStoriesStart() {
         position -= 1
-        if (position >= 0) {
+        if (position >= 0 && activity[position].activity.isNotEmpty()) {
             val key = "activities"
             val watchedActivity = PrefManager.getCustomVal<Set<Int>>(key, setOf())
             val startFrom = findFirstNonMatch(watchedActivity, activity[position].activity )
