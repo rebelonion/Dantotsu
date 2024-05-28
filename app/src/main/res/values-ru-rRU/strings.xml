@@ -62,7 +62,9 @@
         <item>Все</item>
     </string-array>
     <string name="no_notifications">No more notifications</string>
+    <string name="no_activities">No more activities</string>
     <string name="followers">Followers</string>
+    <string name="write_a_message">Write a Message</string>
     <string name="status">СТАТУС</string>
     <string-array name="status_anime">
         <item>ПЛАНИРОВАНИЕ</item>
@@ -875,6 +877,7 @@
     <string name="create_new_activity">Создать новую активность</string>
     <string name="create_new_review">Создать новый отзыв</string>
     <string name="create_new_reply">Создать новый ответ</string>
+    <string name="create_new_message">Create New Message</string>
     <string name="create">Создать</string>
     <string name="preview">Просмотр</string>
     <string name="cannot_be_empty">Текст не может быть пустым</string>
