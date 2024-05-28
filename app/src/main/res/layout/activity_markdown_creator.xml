@@ -73,7 +73,7 @@
                 <EditText
                     android:id="@+id/editText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="590dp"
                     android:fontFamily="@font/poppins"
                     android:inputType="textMultiLine"
                     android:padding="16dp"
@@ -89,25 +89,26 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/markdownOptionsContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center|bottom"
-        android:orientation="vertical">
+        android:layout_gravity="bottom|end"
+        android:layout_marginHorizontal="13dp"
+        android:orientation="vertical"
+        android:padding="8dp"
+        android:windowSoftInputMode="adjustResize">
 
         <LinearLayout
-            android:id="@+id/markdownOptionsContainer"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:background="@color/nav_bg"
-            android:orientation="horizontal"
-            android:padding="8dp"
-            android:windowSoftInputMode="adjustResize">
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/formatBold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_bold_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
@@ -116,6 +117,8 @@
                 android:id="@+id/formatItalic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_italic_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
@@ -124,10 +127,127 @@
                 android:id="@+id/formatStrikethrough"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
                 android:src="@drawable/format_strikethrough_24"
                 app:tint="?attr/colorOnBackground"
                 tools:ignore="ContentDescription" />
 
+            <ImageView
+                android:id="@+id/formatSpoiler"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_spoiler_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatLink"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_link_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_image_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatYoutube"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_youtube_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatVideo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_video_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            
+            <ImageView
+                android:id="@+id/formatListOrdered"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_list_numbered_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatListUnordered"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_list_bulleted_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_title_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatCenter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_align_center_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatQuote"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_quote_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatCode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="6dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/format_code_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
         </LinearLayout>
     </LinearLayout>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
