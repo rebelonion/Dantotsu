@@ -2,6 +2,7 @@ package ani.dantotsu.util
 
 import android.os.Bundle
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.updateLayoutParams
 import androidx.core.widget.addTextChangedListener
@@ -26,6 +27,24 @@ class MarkdownCreatorActivity : AppCompatActivity() {
     private var text: String = ""
     var ping: String? = null
     private var parentId: Int = 0
+    private var isPreviewMode: Boolean = false
+
+    enum class MarkdownFormat(val syntax: String, val selectionOffset: Int) {
+        BOLD("**", 2),
+        ITALIC("*", 1),
+        STRIKETHROUGH("~~", 2),
+        SPOILER("||", 2),
+        LINK("[link](url)", 6),
+        IMAGE("![alt text](image url)", 11),
+        YOUTUBE("[![YouTube](thumbnail)](video url)", 27),
+        VIDEO("[video](url)", 7),
+        ORDERED_LIST("1. ", 3),
+        UNORDERED_LIST("- ", 2),
+        HEADING("# ", 2),
+        CENTERED("-> <-", 3),
+        QUOTE("> ", 2),
+        CODE("`", 1);
+    }
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,10 +55,14 @@ class MarkdownCreatorActivity : AppCompatActivity() {
         binding.markdownCreatorToolbar.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             topMargin = statusBarHeight
         }
-        binding.buttonContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+        binding.markdownOptionsContainer.updateLayoutParams<ViewGroup.MarginLayoutParams> {
             bottomMargin += navBarHeight
         }
         setContentView(binding.root)
+
+        val params = binding.createButton.layoutParams as ViewGroup.MarginLayoutParams
+        params.marginEnd = 16 * resources.displayMetrics.density.toInt()
+        binding.createButton.layoutParams = params
 
         if (intent.hasExtra("type")) {
             type = intent.getStringExtra("type")!!
@@ -67,17 +90,12 @@ class MarkdownCreatorActivity : AppCompatActivity() {
         text = ping ?: ""
         binding.editText.setText(text)
         binding.editText.addTextChangedListener {
-            if (!binding.markdownCreatorPreviewCheckbox.isChecked) {
+            if (!isPreviewMode) {
                 text = it.toString()
             }
         }
         previewMarkdown(false)
-        binding.markdownCreatorPreviewCheckbox.setOnClickListener {
-            previewMarkdown(binding.markdownCreatorPreviewCheckbox.isChecked)
-        }
-        binding.cancelButton.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+
         binding.markdownCreatorBack.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -87,10 +105,10 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 toast(getString(R.string.cannot_be_empty))
                 return@setOnClickListener
             }
-            AlertDialogBuilder(this).apply {
+            AlertDialog.Builder(this).apply {
                 setTitle(R.string.warning)
                 setMessage(R.string.post_to_anilist_warning)
-                setPosButton(R.string.ok) {
+                setPositiveButton(R.string.ok) { _, _ ->
                     launchIO {
                         val editId = intent.getIntExtra("edit", -1)
                         val isEdit = editId != -1
@@ -113,14 +131,45 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                         finish()
                     }
                 }
-                setNeutralButton(R.string.open_rules) {
+                setNeutralButton(R.string.open_rules) { _, _ ->
                     openLinkInBrowser("https://anilist.co/forum/thread/14")
                 }
-                setNegButton(R.string.cancel)
+                setNegativeButton(R.string.cancel, null)
             }.show()
         }
 
+        binding.createButton.setOnLongClickListener {
+            isPreviewMode = !isPreviewMode
+            previewMarkdown(isPreviewMode)
+            if (isPreviewMode) {
+                toast("Preview enabled")
+            } else {
+                toast("Preview disabled")
+            }
+            true
+        }
         binding.editText.requestFocus()
+        setupMarkdownButtons()
+    }
+
+    private fun setupMarkdownButtons() {
+        binding.formatBold.setOnClickListener { applyMarkdownFormat(MarkdownFormat.BOLD) }
+        binding.formatItalic.setOnClickListener { applyMarkdownFormat(MarkdownFormat.ITALIC) }
+        binding.formatStrikethrough.setOnClickListener { applyMarkdownFormat(MarkdownFormat.STRIKETHROUGH) }
+    }
+
+    private fun applyMarkdownFormat(format: MarkdownFormat) {
+        val start = binding.editText.selectionStart
+        val end = binding.editText.selectionEnd
+
+        if (start == end) {
+            binding.editText.text?.insert(start, format.syntax)
+            binding.editText.setSelection(start + format.selectionOffset)
+        } else {
+            binding.editText.text?.insert(end, format.syntax)
+            binding.editText.text?.insert(start, format.syntax)
+            binding.editText.setSelection(end + format.syntax.length, end + format.syntax.length)
+        }
     }
 
     private fun previewMarkdown(preview: Boolean) {

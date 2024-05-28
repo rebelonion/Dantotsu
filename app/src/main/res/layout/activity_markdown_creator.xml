@@ -1,107 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <FrameLayout
-        android:id="@+id/markdownCreatorToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageView
-            android:id="@+id/markdownCreatorBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start|center_vertical"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_round_arrow_back_ios_new_24"
-            app:tint="?attr/colorOnBackground"
-            tools:ignore="ContentDescription" />
-
-        <TextView
-            android:id="@+id/markdownCreatorTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="44dp"
-            android:ellipsize="end"
-            android:fontFamily="@font/poppins_bold"
-            android:gravity="center|start"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-            android:textColor="?attr/colorOnBackground"
-            android:textSize="18sp"
-            tools:text="@string/placeholder" />
-
-        <CheckBox
-            android:id="@+id/markdownCreatorPreviewCheckbox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="8dp"
-            android:contentDescription="@string/preview"
-            android:text="@string/preview"
-            tools:ignore="ContentDescription" />
-    </FrameLayout>
-
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_margin="16dp"
-        android:fontFamily="@font/poppins"
-        android:inputType="textMultiLine"
-        android:padding="16dp"
-        android:nestedScrollingEnabled="true"
-        android:gravity="top|start"
-        android:textColor="?attr/colorOnBackground"
-        android:textIsSelectable="true"
-        android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/markdownCreatorToolbar"
-        tools:ignore="LabelFor" />
+    android:fitsSystemWindows="false">
 
     <LinearLayout
-        android:id="@+id/buttonContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="24dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <Button
-            android:id="@+id/cancelButton"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:layout_marginEnd="16dp"
-            android:fontFamily="@font/poppins_bold"
-            android:maxLines="1"
-            android:text="@string/cancel"
-            app:cornerRadius="16dp"
-            tools:ignore="ButtonStyle" />
+        <FrameLayout
+            android:id="@+id/markdownCreatorToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/createButton"
-            android:layout_width="wrap_content"
-            android:layout_height="64dp"
-            android:layout_marginStart="16dp"
-            android:fontFamily="@font/poppins_bold"
-            android:maxLines="1"
-            android:text="@string/create"
-            app:cornerRadius="16dp"
-            tools:ignore="ButtonStyle" />
+            <ImageView
+                android:id="@+id/markdownCreatorBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_marginStart="12dp"
+                android:src="@drawable/ic_round_arrow_back_ios_new_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
 
+            <TextView
+                android:id="@+id/markdownCreatorTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="44dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/poppins_bold"
+                android:gravity="center|start"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
+                android:textColor="?attr/colorOnBackground"
+                android:textSize="18sp"
+                tools:text="@string/placeholder" />
+
+            <Button
+                android:id="@+id/createButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:fontFamily="@font/poppins_bold"
+                android:maxLines="1"
+                android:text="@string/publish"
+                app:cornerRadius="16dp"
+                tools:ignore="ButtonStyle" />
+        </FrameLayout>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fontFamily="@font/poppins"
+                    android:inputType="textMultiLine"
+                    android:padding="16dp"
+                    android:nestedScrollingEnabled="true"
+                    android:gravity="top|start"
+                    android:textColor="?attr/colorOnBackground"
+                    android:textIsSelectable="true"
+                    android:textSize="12sp"
+                    android:hint="@string/reply_hint"
+                    tools:ignore="LabelFor" />
+            </LinearLayout>
+        </ScrollView>
     </LinearLayout>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/markdownOptionsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:background="@color/nav_bg"
+            android:orientation="horizontal"
+            android:padding="8dp"
+            android:windowSoftInputMode="adjustResize">
+
+            <ImageView
+                android:id="@+id/formatBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/format_bold_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatItalic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/format_italic_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+            <ImageView
+                android:id="@+id/formatStrikethrough"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/format_strikethrough_24"
+                app:tint="?attr/colorOnBackground"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
