@@ -216,7 +216,7 @@ class AnimeWatchFragment : Fragment() {
                         } else {
                             awaitAll(
                                 //async { model.loadKitsuEpisodes(media) }, if someday anify dies
-                                //async { model.loadFillerEpisodes(media) },
+                                async { model.loadFillerEpisodes(media) },
                                 async { model.loadAnifyEpisodes(media.id)}
                             )
                         }
@@ -242,15 +242,12 @@ class AnimeWatchFragment : Fragment() {
                         }
                         if (media.anime?.kitsuEpisodes != null) {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
-                                episode.desc =
-                                    media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
+                                episode.desc = media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
                                 episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
                                         episode.title ?: ""
                                     ).isBlank()
-                                )
-                                media.anime!!.kitsuEpisodes!![i]?.title
-                                    ?: episode.title else episode.title
-                                    ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
+                                ) media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title else episode.title
+                                ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
                                 episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb ?: episode.thumb
                             }
                         }
