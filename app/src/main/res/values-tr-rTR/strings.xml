@@ -62,9 +62,9 @@
         <item>Hepsi</item>
     </string-array>
     <string name="no_notifications">Başka bildirim yok</string>
-    <string name="no_activities">No more activities</string>
+    <string name="no_activities">Baika aktivite yok</string>
     <string name="followers">Takipçiler</string>
-    <string name="write_a_message">Write a Message</string>
+    <string name="write_a_message">Mesaj Yaz</string>
     <string name="status">DURUM</string>
     <string-array name="status_anime">
         <item>PLANLANIYOR</item>
@@ -874,7 +874,7 @@
     <string name="create_new_activity">Yeni aktivite oluştur</string>
     <string name="create_new_review">Yeni inceleme oluştur</string>
     <string name="create_new_reply">Yeni yenıt oluştur</string>
-    <string name="create_new_message">Create New Message</string>
+    <string name="create_new_message">Yeni Mesaj Oluştur</string>
     <string name="create">Oluştur</string>
     <string name="preview">Ön izleme</string>
     <string name="cannot_be_empty">Metin boş olamaz</string>
