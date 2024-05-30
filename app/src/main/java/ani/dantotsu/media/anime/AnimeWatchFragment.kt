@@ -214,11 +214,11 @@ class AnimeWatchFragment : Fragment() {
                         if (offline) {
                             media.selected!!.sourceIndex = model.watchSources!!.list.lastIndex
                         } else {
-                            awaitAll(
-                                //async { model.loadKitsuEpisodes(media) }, if someday anify dies
-                                async { model.loadFillerEpisodes(media) },
-                                async { model.loadAnifyEpisodes(media.id)}
-                            )
+                            val kitsuEpisodes = async { model.loadKitsuEpisodes(media) }
+                            val anifyEpisodes = async { model.loadAnifyEpisodes(media.id) }
+                            val fillerEpisodes = async { model.loadFillerEpisodes(media) }
+
+                            awaitAll(kitsuEpisodes, anifyEpisodes, fillerEpisodes)
                         }
                         model.loadEpisodes(media, media.selected!!.sourceIndex)
                     }
@@ -233,6 +233,18 @@ class AnimeWatchFragment : Fragment() {
                 val episodes = loadedEpisodes[media.selected!!.sourceIndex]
                 if (episodes != null) {
                     episodes.forEach { (i, episode) ->
+                        if (media.anime?.anifyEpisodes != null) {
+                            if (media.anime!!.anifyEpisodes!!.containsKey(i)) {
+                                episode.desc = media.anime!!.anifyEpisodes!![i]?.desc ?: episode.desc
+                                episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
+                                        episode.title ?: ""
+                                    ).isBlank()
+                                ) media.anime!!.anifyEpisodes!![i]?.title ?: episode.title else episode.title
+                                    ?: media.anime!!.anifyEpisodes!![i]?.title ?: episode.title
+                                episode.thumb = media.anime!!.anifyEpisodes!![i]?.thumb ?: episode.thumb
+
+                            }
+                        }
                         if (media.anime?.fillerEpisodes != null) {
                             if (media.anime!!.fillerEpisodes!!.containsKey(i)) {
                                 episode.title =
@@ -249,18 +261,6 @@ class AnimeWatchFragment : Fragment() {
                                 ) media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title else episode.title
                                 ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
                                 episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb ?: episode.thumb
-                            }
-                        }
-                        if (media.anime?.anifyEpisodes != null) {
-                            if (media.anime!!.anifyEpisodes!!.containsKey(i)) {
-                                episode.desc = media.anime!!.anifyEpisodes!![i]?.desc ?: episode.desc
-                                episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
-                                        episode.title ?: ""
-                                    ).isBlank()
-                                ) media.anime!!.anifyEpisodes!![i]?.title ?: episode.title else episode.title
-                                ?: media.anime!!.anifyEpisodes!![i]?.title ?: episode.title
-                                episode.thumb = media.anime!!.anifyEpisodes!![i]?.thumb ?: episode.thumb
-
                             }
                         }
                     }

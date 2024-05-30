@@ -10,37 +10,37 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.decodeFromJsonElement
 
 object Anify {
-    suspend fun fetchAndParseMetadata(id :Int): Map<String, Episode>? {
+    suspend fun fetchAndParseMetadata(id :Int): Map<String, Episode> {
         val response = client.get("https://api.anify.tv/content-metadata/$id")
             .parsed<JsonArray>().map {
-                Mapper.json.decodeFromJsonElement<ContentMetadata>(it)
+                Mapper.json.decodeFromJsonElement<AnifyElement>(it)
             }
-        return response.first().data.associate {
+        return response.firstOrNull()?.data?.associate {
             it.number.toString() to Episode(
                 number = it.number.toString(),
                 title = it.title,
                 desc = it.description,
                 thumb = FileUrl[it.img],
-                filler = it.isFiller,
             )
-        }
+        } ?: emptyMap()
     }
     @Serializable
-    data class ContentMetadata(
-        @SerialName("providerId") val providerId: String,
-        @SerialName("data") val data: List<ProviderData>
+    data class AnifyElement (
+        @SerialName("providerId")
+        val providerID: String? = null,
+        val data: List<Datum>? = null
     )
 
     @Serializable
-    data class ProviderData(
-        @SerialName("id") val id: String,
-        @SerialName("description") val description: String,
-        @SerialName("hasDub") val hasDub: Boolean,
-        @SerialName("img") val img: String,
-        @SerialName("isFiller") val isFiller: Boolean,
-        @SerialName("number") val number: Int,
-        @SerialName("title") val title: String,
-        @SerialName("updatedAt") val updatedAt: Long,
-        @SerialName("rating") val rating: Double? = null
+    data class Datum (
+        val id: String? = null,
+        val description: String? = null,
+        val hasDub: Boolean? = null,
+        val img: String? = null,
+        val isFiller: Boolean? = null,
+        val number: Long? = null,
+        val title: String? = null,
+        val updatedAt: Long? = null,
+        val rating: Double? = null
     )
 }

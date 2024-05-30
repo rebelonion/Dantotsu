@@ -33,9 +33,6 @@ class CharacterAdapter(
         binding.itemCompactRelation.text = whitespace
         binding.itemCompactImage.loadImage(character.image)
         binding.itemCompactTitle.text = character.name
-        binding.root.setOnClickListener {
-            copyToClipboard(character.name ?: "")
-        }
     }
 
     override fun getItemCount(): Int = characterList.size
@@ -59,6 +56,7 @@ class CharacterAdapter(
                     ).toBundle()
                 )
             }
+            itemView.setOnLongClickListener { copyToClipboard(characterList[bindingAdapterPosition].name ?: ""); true }
         }
     }
 }
