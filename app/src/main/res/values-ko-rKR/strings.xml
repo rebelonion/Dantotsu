@@ -62,9 +62,9 @@
         <item>모두</item>
     </string-array>
     <string name="no_notifications">더 이상 알림이 없습니다</string>
-    <string name="no_activities">No more activities</string>
+    <string name="no_activities">활동이 더 이상 없습니다</string>
     <string name="followers">팔로워</string>
-    <string name="write_a_message">Write a Message</string>
+    <string name="write_a_message">메시지 작성</string>
     <string name="status">상태</string>
     <string-array name="status_anime">
         <item>계획 중</item>
@@ -878,7 +878,7 @@
     <string name="create_new_activity">새로운 활동 생성</string>
     <string name="create_new_review">새로운 리뷰 생성</string>
     <string name="create_new_reply">새로운 답글 생성</string>
-    <string name="create_new_message">Create New Message</string>
+    <string name="create_new_message">새 메시지 작성</string>
     <string name="create">생성</string>
     <string name="preview">미리보기</string>
     <string name="cannot_be_empty">텍스트를 비워둘 수 없습니다</string>
@@ -923,5 +923,5 @@
     <string name="bio_prompt_info_title">생체 인증</string>
     <string name="bio_prompt_info_desc">앱 잠금을 해제하려면 지문이나 얼굴을 사용하세요</string>
     <string name="enable_forgot_password">비밀번호 찾기 활성화 (지우기 버튼을 10초 동안 누르세요)</string>
-    <string name="hide_notification_dot">Hide Notification Dot</string>
+    <string name="hide_notification_dot">알림 점 숨기기</string>
 </resources>
