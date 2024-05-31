@@ -62,9 +62,9 @@
         <item>全て</item>
     </string-array>
     <string name="no_notifications">No more notifications</string>
-    <string name="no_activities">No more activities</string>
+    <string name="no_activities">これ以上のアクティビティはありません</string>
     <string name="followers">Followers</string>
-    <string name="write_a_message">Write a Message</string>
+    <string name="write_a_message">メッセージを書く</string>
     <string name="status">ステータス</string>
     <string-array name="status_anime">
         <item>計画中</item>
@@ -877,7 +877,7 @@
     <string name="create_new_activity">新しいアクティビティを作成</string>
     <string name="create_new_review">新しいレビューを作成</string>
     <string name="create_new_reply">新しい返信を作成</string>
-    <string name="create_new_message">Create New Message</string>
+    <string name="create_new_message">新しいメッセージを作成</string>
     <string name="create">作成</string>
     <string name="preview">プレビュー</string>
     <string name="cannot_be_empty">テキストは空にできません</string>
@@ -922,5 +922,5 @@
     <string name="bio_prompt_info_title">生体認証</string>
     <string name="bio_prompt_info_desc">アプリをアンロックするために指紋または顔を使用してください</string>
     <string name="enable_forgot_password">パスワード忘れを有効にする（クリアボタンを10秒間押し続けてください）</string>
-    <string name="hide_notification_dot">Hide Notification Dot</string>
+    <string name="hide_notification_dot">通知ドットを非表示</string>
 </resources>
