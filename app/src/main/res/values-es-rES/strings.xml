@@ -62,9 +62,9 @@
         <item>Todo</item>
     </string-array>
     <string name="no_notifications">No más notificaciones</string>
-    <string name="no_activities">No more activities</string>
+    <string name="no_activities">No hay más actividades</string>
     <string name="followers">Seguidores</string>
-    <string name="write_a_message">Write a Message</string>
+    <string name="write_a_message">Escribir un mensaje</string>
     <string name="status">Estado</string>
     <string-array name="status_anime">
         <item>PLANEANDO</item>
@@ -875,7 +875,7 @@
     <string name="create_new_activity">Crear nueva actividad</string>
     <string name="create_new_review">Crear nueva reseña</string>
     <string name="create_new_reply">Crear nueva respuesta</string>
-    <string name="create_new_message">Create New Message</string>
+    <string name="create_new_message">Crear nuevo mensaje</string>
     <string name="create">Crear</string>
     <string name="preview">Vista previa</string>
     <string name="cannot_be_empty">El texto no puede estar vacío</string>
@@ -920,5 +920,5 @@
     <string name="bio_prompt_info_title">Autenticación biométrica</string>
     <string name="bio_prompt_info_desc">Use su huella digital o rostro para desbloquear la aplicación</string>
     <string name="enable_forgot_password">Habilitar olvidó contraseña (mantenga presionado el botón de borrar durante 10 segundos)</string>
-    <string name="hide_notification_dot">Hide Notification Dot</string>
+    <string name="hide_notification_dot">Ocultar punto de notificación</string>
 </resources>
