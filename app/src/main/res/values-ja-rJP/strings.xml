@@ -925,4 +925,5 @@
     <string name="bio_prompt_info_desc">アプリをアンロックするために指紋または顔を使用してください</string>
     <string name="enable_forgot_password">パスワード忘れを有効にする（クリアボタンを10秒間押し続けてください）</string>
     <string name="hide_notification_dot">通知ドットを非表示</string>
+    <string name="private_mode">Private</string>
 </resources>
