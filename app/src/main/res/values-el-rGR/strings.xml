@@ -323,6 +323,8 @@
     <string name="apply">Εφαρμογή</string>
     <string name="cancel">Ακύρωση</string>
     <string name="edit">Επεξεργασία</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">Αυτή τη σεζόν</string>
     <string name="next_season">Επόμενη σεζόν</string>
     <string name="previous_season">Προηγούμενη σεζόν</string>
