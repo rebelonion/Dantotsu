@@ -62,7 +62,7 @@
         <item>Wszystko</item>
     </string-array>
     <string name="no_notifications">Brak kolejnych powiadomień</string>
-    <string name="no_activities">Brak innych aktywności</string>
+    <string name="no_activities">Brak innych wpisów</string>
     <string name="followers">Obserwujący</string>
     <string name="write_a_message">Napisz wiadomość</string>
     <string name="status">STATUS</string>
@@ -323,8 +323,8 @@
     <string name="apply">Zastosuj</string>
     <string name="cancel">Anuluj</string>
     <string name="edit">Edytuj</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">Opublikuj</string>
+    <string name="reply_hint">Napisz odpowiedź…</string>
     <string name="this_season">Ten sezon</string>
     <string name="next_season">Następny sezon</string>
     <string name="previous_season">Poprzedni sezon</string>
@@ -707,7 +707,7 @@
     <string name="anilist_notification_filters">Filtruj powiadomienia</string>
     <string name="anilist_notifications_checking_time">Częstotliwość aktualizacji powiadomień AniList: %1$s</string>
     <string name="comment_notification_checking_time">Częstotliwość aktualizacji powiadomień o komentarzach: %1$s</string>
-    <string name="activities">Aktywności</string>
+    <string name="activities">Wpisy</string>
     <string name="incorrect_password">Nieprawidłowe hasło</string>
     <string name="password_cannot_be_empty">Hasło nie może być puste</string>
     <string name="unknown_file_type">Nieznany typ pliku</string>
@@ -876,7 +876,7 @@
     <string name="no_video_selected">Nie wybrano wideo</string>
     <string name="no_subtitles_available">Brak dostępnych napisów</string>
     <string name="vote_out_of_total">(%1$s z %2$s lubi tą recenzję)</string>
-    <string name="create_new_activity">Utwórz nową aktywność</string>
+    <string name="create_new_activity">Utwórz nowy wpis</string>
     <string name="create_new_review">Utwórz nową recenzję</string>
     <string name="create_new_reply">Utwórz nową odpowiedź</string>
     <string name="create_new_message">Utwórz nową wiadomość</string>
