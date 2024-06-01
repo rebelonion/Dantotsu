@@ -923,4 +923,5 @@
     <string name="bio_prompt_info_desc">Usa tu huella digital o rostro para desbloquear la aplicación</string>
     <string name="enable_forgot_password">Habilitar olvidar contraseña (mantén presionado el botón de borrar por 10 segundos)</string>
     <string name="hide_notification_dot">Ocultar punto de notificación</string>
+    <string name="private_mode">Private</string>
 </resources>
