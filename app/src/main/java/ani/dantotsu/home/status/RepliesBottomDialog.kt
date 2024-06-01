@@ -16,10 +16,9 @@ import ani.dantotsu.databinding.BottomSheetRecyclerBinding
 import ani.dantotsu.profile.ProfileActivity
 import ani.dantotsu.profile.activity.ActivityReplyItem
 import ani.dantotsu.snackString
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -50,7 +49,7 @@ class RepliesBottomDialog : BottomSheetDialogFragment() {
         binding.replyButton.setOnClickListener {
             ContextCompat.startActivity(
                 context,
-                Intent(context, MarkdownCreatorActivity::class.java)
+                Intent(context, ActivityMarkdownCreator::class.java)
                     .putExtra("type", "replyActivity")
                     .putExtra("parentId", activityId),
                 null

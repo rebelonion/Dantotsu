@@ -93,30 +93,41 @@ class AnilistMutations {
         )
     }
 
-    suspend fun postActivity(text: String, edit : Int? = null): String {
+    suspend fun postActivity(text: String, edit: Int? = null): String {
         val encodedText = text.stringSanitizer()
-        val query = "mutation{SaveTextActivity(${if (edit != null) "id:$edit," else ""} text:$encodedText){siteUrl}}"
+        val query =
+            "mutation{SaveTextActivity(${if (edit != null) "id:$edit," else ""} text:$encodedText){siteUrl}}"
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString()
             ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
     }
-    suspend fun postMessage(userId: Int, text: String, edit: Int? = null,isPrivate: Boolean = false): String {
-        val encodedText = text.replace("","").stringSanitizer()
-        val query = "mutation{SaveMessageActivity(${if (edit != null) "id:$edit," else ""} recipientId:$userId,message:$encodedText,private:$isPrivate){id}}"
+
+    suspend fun postMessage(
+        userId: Int,
+        text: String,
+        edit: Int? = null,
+        isPrivate: Boolean = false
+    ): String {
+        val encodedText = text.replace("", "").stringSanitizer()
+        val query =
+            "mutation{SaveMessageActivity(${if (edit != null) "id:$edit," else ""} recipientId:$userId,message:$encodedText,private:$isPrivate){id}}"
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString()
             ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
     }
-    suspend fun postReply(activityId: Int, text: String, edit: Int? = null ): String {
+
+    suspend fun postReply(activityId: Int, text: String, edit: Int? = null): String {
         val encodedText = text.stringSanitizer()
-        val query = "mutation{SaveActivityReply(${if (edit != null) "id:$edit," else ""} activityId:$activityId,text:$encodedText){id}}"
+        val query =
+            "mutation{SaveActivityReply(${if (edit != null) "id:$edit," else ""} activityId:$activityId,text:$encodedText){id}}"
         val result = executeQuery<JsonObject>(query)
         val errors = result?.get("errors")
         return errors?.toString()
             ?: (currContext()?.getString(ani.dantotsu.R.string.success) ?: "Success")
     }
+
     suspend fun postReview(summary: String, body: String, mediaId: Int, score: Int): String {
         val encodedSummary = summary.stringSanitizer()
         val encodedBody = body.stringSanitizer()
@@ -141,7 +152,6 @@ class AnilistMutations {
         val errors = result?.get("errors")
         return errors == null
     }
-
 
 
     private fun String.stringSanitizer(): String {

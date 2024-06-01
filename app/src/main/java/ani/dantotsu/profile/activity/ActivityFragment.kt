@@ -19,8 +19,7 @@ import ani.dantotsu.databinding.FragmentFeedBinding
 import ani.dantotsu.media.MediaDetailsActivity
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.profile.ProfileActivity
-import ani.dantotsu.setBaseline
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
 import eu.kanade.tachiyomi.util.system.getSerializableCompat
 import kotlinx.coroutines.launch
@@ -53,14 +52,14 @@ class ActivityFragment : Fragment() {
             if(userId == Anilist.userid) {
                 ContextCompat.startActivity(
                     requireContext(),
-                    Intent(context, MarkdownCreatorActivity::class.java)
+                    Intent(context, ActivityMarkdownCreator::class.java)
                         .putExtra("type", "activity"),
                     null
                 )
             } else{
                 ContextCompat.startActivity(
                     requireContext(),
-                    Intent(context, MarkdownCreatorActivity::class.java)
+                    Intent(context, ActivityMarkdownCreator::class.java)
                         .putExtra("type", "message")
                         .putExtra("userId", userId),
 

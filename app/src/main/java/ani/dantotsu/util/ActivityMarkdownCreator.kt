@@ -26,7 +26,7 @@ import io.noties.markwon.editor.MarkwonEditorTextWatcher
 import kotlinx.coroutines.DelicateCoroutinesApi
 import tachiyomi.core.util.lang.launchIO
 
-class MarkdownCreatorActivity : AppCompatActivity() {
+class ActivityMarkdownCreator : AppCompatActivity() {
     private lateinit var binding: ActivityMarkdownCreatorBinding
     private lateinit var type: String
     private var text: String = ""
@@ -80,24 +80,28 @@ class MarkdownCreatorActivity : AppCompatActivity() {
             finish()
             return
         }
-        binding.markdownCreatorTitle.text = when (type) {
-            "activity" -> getString(R.string.create_new_activity)
-            "review" -> getString(R.string.create_new_review)
-            "message" -> getString(R.string.create_new_message)
-            "replyActivity" -> {
-                parentId = intent.getIntExtra("parentId", -1)
-                if (parentId == -1) {
-                    toast("Error: No parent ID")
-                    finish()
-                    return
-                }
-                getString(R.string.create_new_reply)
+        val editId = intent.getIntExtra("edit", -1)
+        val userId = intent.getIntExtra("userId", -1)
+        parentId = intent.getIntExtra("parentId", -1)
+        when (type) {
+            "replyActivity" -> if (parentId == -1) {
+                toast("Error: No parent ID")
+                finish()
+                return
             }
 
-            else -> ""
+            "message" -> {
+                if (editId == -1) {
+                    binding.privateCheckbox.visibility = ViewGroup.VISIBLE
+                }
+            }
         }
+        var private = false
+        binding.privateCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            private = isChecked
+        }
+
         ping = intent.getStringExtra("other")
-        val userId = intent.getIntExtra("userId", -1)
         text = ping ?: ""
         binding.editText.setText(text)
         binding.editText.addTextChangedListener {
@@ -121,7 +125,7 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 setMessage(R.string.post_to_anilist_warning)
                 setPositiveButton(R.string.ok) { _, _ ->
                     launchIO {
-                        val editId = intent.getIntExtra("edit", -1)
+
                         val isEdit = editId != -1
                         val success = when (type) {
                             "activity" -> if (isEdit) {
@@ -135,11 +139,13 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                             } else {
                                 Anilist.mutation.postReply(parentId, text)
                             }
-                            "message" -> if (isEdit) { //TODO private
-                                Anilist.mutation.postMessage(userId , text, editId)
+
+                            "message" -> if (isEdit) {
+                                Anilist.mutation.postMessage(userId, text, editId)
                             } else {
-                                Anilist.mutation.postMessage(userId , text)
+                                Anilist.mutation.postMessage(userId, text, isPrivate = private)
                             }
+
                             else -> "Error: Unknown type"
                         }
                         toast(success)
@@ -153,7 +159,7 @@ class MarkdownCreatorActivity : AppCompatActivity() {
             }.show()
         }
 
-        binding.createButton.setOnLongClickListener {
+        binding.previewCheckbox.setOnClickListener {
             isPreviewMode = !isPreviewMode
             previewMarkdown(isPreviewMode)
             if (isPreviewMode) {
@@ -161,7 +167,6 @@ class MarkdownCreatorActivity : AppCompatActivity() {
             } else {
                 toast("Preview disabled")
             }
-            true
         }
         binding.editText.requestFocus()
         setupMarkdownButtons()
@@ -187,9 +192,11 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 MarkdownFormat.UNORDERED_LIST -> {
                     lines.joinToString("\n") { "- $it" }
                 }
+
                 MarkdownFormat.ORDERED_LIST -> {
                     lines.mapIndexed { index, line -> "${index + 1}. $line" }.joinToString("\n")
                 }
+
                 else -> {
                     if (format.syntax.contains("%s")) {
                         String.format(format.syntax, selectedText)
@@ -222,7 +229,6 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.WRAP_CONTENT
             )
             boxBackgroundMode = TextInputLayout.BOX_BACKGROUND_OUTLINE
-            hint = "Paste your link here"
             isHintEnabled = true
         }
 
@@ -241,30 +247,20 @@ class MarkdownCreatorActivity : AppCompatActivity() {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT
             )
-            setPadding(64, 64, 64, 0)
+            setPadding(0, 0, 0, 0)
         }
-
-        val dialog = AlertDialog.Builder(this, R.style.MyPopup).apply {
-            setView(container)
-            setPositiveButton(getString(R.string.ok)) { dialog, _ ->
+        customAlertDialog().apply {
+            setTitle("Paste your link here")
+            setCustomView(container)
+            setPosButton(getString(R.string.ok)) {
                 val input = inputEditText.text.toString()
                 val formattedText = String.format(format.syntax, input)
                 binding.editText.text?.insert(position, formattedText)
                 binding.editText.setSelection(position + formattedText.length)
-                dialog.dismiss()
             }
-            setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                dialog.dismiss()
-            }
-        }.create()
+            setNegButton(getString(R.string.cancel))
+        }.show()
 
-        val widthInDp = 245
-        val layoutParams = ViewGroup.LayoutParams(
-            (widthInDp * resources.displayMetrics.density).toInt(),
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
-        dialog.window?.setLayout(layoutParams.width, layoutParams.height)
-        dialog.show()
         inputEditText.requestFocus()
     }
 

@@ -5,7 +5,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.FragmentActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import ani.dantotsu.R
 import ani.dantotsu.blurImage
 import ani.dantotsu.buildMarkwon
@@ -19,7 +18,7 @@ import ani.dantotsu.profile.UsersDialogFragment
 import ani.dantotsu.setAnimation
 import ani.dantotsu.snackString
 import ani.dantotsu.util.AniMarkdown.Companion.getBasicAniHTML
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.viewbinding.BindableItem
 import kotlinx.coroutines.CoroutineScope
@@ -152,7 +151,7 @@ class ActivityItem(
                 binding.activityEdit.setOnClickListener {
                     ContextCompat.startActivity(
                         context,
-                        Intent(context, MarkdownCreatorActivity::class.java)
+                        Intent(context, ActivityMarkdownCreator::class.java)
                             .putExtra("type", "activity")
                             .putExtra("other", activity.text)
                             .putExtra("edit", activity.id),
@@ -183,7 +182,7 @@ class ActivityItem(
                 binding.activityEdit.setOnClickListener {
                     ContextCompat.startActivity(
                         context,
-                        Intent(context, MarkdownCreatorActivity::class.java)
+                        Intent(context, ActivityMarkdownCreator::class.java)
                             .putExtra("type", "message")
                             .putExtra("other", activity.message)
                             .putExtra("edit", activity.id)

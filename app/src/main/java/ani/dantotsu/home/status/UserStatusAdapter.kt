@@ -1,6 +1,5 @@
 package ani.dantotsu.home.status
 
-import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -16,7 +15,7 @@ import ani.dantotsu.profile.User
 import ani.dantotsu.setAnimation
 import ani.dantotsu.settings.saving.PrefManager
 import ani.dantotsu.snackString
-import ani.dantotsu.util.MarkdownCreatorActivity
+import ani.dantotsu.util.ActivityMarkdownCreator
 
 class UserStatusAdapter(private val user: ArrayList<User>) :
     RecyclerView.Adapter<UserStatusAdapter.UsersViewHolder>() {
@@ -43,7 +42,7 @@ class UserStatusAdapter(private val user: ArrayList<User>) :
                 if (user[bindingAdapterPosition].id == Anilist.userid) {
                     ContextCompat.startActivity(
                         itemView.context,
-                        Intent(itemView.context, MarkdownCreatorActivity::class.java)
+                        Intent(itemView.context, ActivityMarkdownCreator::class.java)
                             .putExtra("type", "activity"),
                         null
                     )

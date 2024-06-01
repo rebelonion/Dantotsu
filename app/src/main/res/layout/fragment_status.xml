@@ -65,19 +65,6 @@
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <ImageButton
-        android:id="@+id/addStory"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleX="2.2"
-        android:scaleY="2.2"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_circle_add"
-        app:layout_goneMarginBottom="40dp"
-        app:layout_goneMarginRight="8dp"
-        app:layout_constraintBottom_toBottomOf="@id/textActivityContainer"
-        app:layout_constraintEnd_toEndOf="@id/textActivityContainer" />
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
