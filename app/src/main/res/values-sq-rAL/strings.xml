@@ -925,4 +925,5 @@
     <string name="bio_prompt_info_desc">Përdorni shenjat e gishtit ose fytyrën tuaj për të zhbllokuar aplikacionin</string>
     <string name="enable_forgot_password">Aktivizo Harroj Fjalëkalimin (mbani shtypur butonin e pastrimit për 10 sekonda)</string>
     <string name="hide_notification_dot">Fshih Pikën e Njoftimit</string>
+    <string name="private_mode">Private</string>
 </resources>
