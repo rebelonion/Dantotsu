@@ -49,6 +49,7 @@ import ani.dantotsu.media.MediaType
 import ani.dantotsu.navBarHeight
 import ani.dantotsu.notifications.subscription.SubscriptionHelper
 import ani.dantotsu.notifications.subscription.SubscriptionHelper.Companion.saveSubscription
+import ani.dantotsu.others.Anify
 import ani.dantotsu.others.LanguageMapper
 import ani.dantotsu.parsers.AnimeParser
 import ani.dantotsu.parsers.AnimeSources
@@ -213,10 +214,11 @@ class AnimeWatchFragment : Fragment() {
                         if (offline) {
                             media.selected!!.sourceIndex = model.watchSources!!.list.lastIndex
                         } else {
-                            awaitAll(
-                                async { model.loadKitsuEpisodes(media) },
-                                async { model.loadFillerEpisodes(media) }
-                            )
+                            val kitsuEpisodes = async { model.loadKitsuEpisodes(media) }
+                            val anifyEpisodes = async { model.loadAnifyEpisodes(media.id) }
+                            val fillerEpisodes = async { model.loadFillerEpisodes(media) }
+
+                            awaitAll(kitsuEpisodes, anifyEpisodes, fillerEpisodes)
                         }
                         model.loadEpisodes(media, media.selected!!.sourceIndex)
                     }
@@ -231,19 +233,18 @@ class AnimeWatchFragment : Fragment() {
                 val episodes = loadedEpisodes[media.selected!!.sourceIndex]
                 if (episodes != null) {
                     episodes.forEach { (i, episode) ->
-                        fun getThumbnail(episodes: List<MediaStreamingEpisode>): List<Pair<String, FileUrl?>> {
-                            return episodes.mapNotNull { episode ->
-                                val regex = Regex("""Episode\s*(\d+)\s*-\s*(.*)""")
-                                val number = episode.title?.let {
-                                    val matchResult = regex.matchEntire(it)
-                                    matchResult?.destructured?.component1()
-                                }
-                                number?.let { number to FileUrl[episode.thumbnail] }
+                        if (media.anime?.anifyEpisodes != null) {
+                            if (media.anime!!.anifyEpisodes!!.containsKey(i)) {
+                                episode.desc = media.anime!!.anifyEpisodes!![i]?.desc ?: episode.desc
+                                episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
+                                        episode.title ?: ""
+                                    ).isBlank()
+                                ) media.anime!!.anifyEpisodes!![i]?.title ?: episode.title else episode.title
+                                    ?: media.anime!!.anifyEpisodes!![i]?.title ?: episode.title
+                                episode.thumb = media.anime!!.anifyEpisodes!![i]?.thumb ?: episode.thumb
+
                             }
                         }
-
-                        val getThumbnail = getThumbnail(media.streamingEpisodes ?: emptyList())
-
                         if (media.anime?.fillerEpisodes != null) {
                             if (media.anime!!.fillerEpisodes!!.containsKey(i)) {
                                 episode.title =
@@ -253,16 +254,13 @@ class AnimeWatchFragment : Fragment() {
                         }
                         if (media.anime?.kitsuEpisodes != null) {
                             if (media.anime!!.kitsuEpisodes!!.containsKey(i)) {
-                                episode.desc =
-                                    media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
+                                episode.desc = media.anime!!.kitsuEpisodes!![i]?.desc ?: episode.desc
                                 episode.title = if (MediaNameAdapter.removeEpisodeNumberCompletely(
                                         episode.title ?: ""
                                     ).isBlank()
-                                ) media.anime!!.kitsuEpisodes!![i]?.title
-                                    ?: episode.title else episode.title
-                                    ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
-                                episode.thumb = getThumbnail.find { it.first == i }?.second
-                                    ?: media.anime!!.kitsuEpisodes!![i]?.thumb ?: episode.thumb
+                                ) media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title else episode.title
+                                ?: media.anime!!.kitsuEpisodes!![i]?.title ?: episode.title
+                                episode.thumb = media.anime!!.kitsuEpisodes!![i]?.thumb ?: episode.thumb
                             }
                         }
                     }
@@ -308,6 +306,10 @@ class AnimeWatchFragment : Fragment() {
         model.getFillerEpisodes().observe(viewLifecycleOwner) { i ->
             if (i != null)
                 media.anime?.fillerEpisodes = i
+        }
+        model.getAnifyEpisodes().observe(viewLifecycleOwner) { i ->
+            if (i != null)
+                media.anime?.anifyEpisodes = i
         }
     }
 
