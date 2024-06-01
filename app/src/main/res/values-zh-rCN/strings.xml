@@ -323,6 +323,8 @@
     <string name="apply">应用</string>
     <string name="cancel">取消</string>
     <string name="edit">编辑</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">本季</string>
     <string name="next_season">下一季</string>
     <string name="previous_season">上一季</string>
