@@ -323,6 +323,8 @@
     <string name="apply">लागू करें</string>
     <string name="cancel">रद्द करें</string>
     <string name="edit">संपादित करें</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">इस सीजन</string>
     <string name="next_season">अगला सीजन</string>
     <string name="previous_season">पिछला सीजन</string>
