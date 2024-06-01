@@ -931,4 +931,5 @@
     <string name="bio_prompt_info_desc">অ্যাপটি আনলক করতে আপনার আঙ্গুল বা মুখের ব্যবহার করুন</string>
     <string name="enable_forgot_password">ভুলে গেলে পাসওয়ার্ড সক্রিয় করুন (10 সেকেন্ডের জন্য পরিষ্কার বোতাম চাপুন)</string>
     <string name="hide_notification_dot">নোটিফিকেশন ডট লুকান</string>
+    <string name="private_mode">Private</string>
 </resources>
