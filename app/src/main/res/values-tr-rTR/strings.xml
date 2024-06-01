@@ -323,8 +323,8 @@
     <string name="apply">Uygula</string>
     <string name="cancel">İptal Et</string>
     <string name="edit">Düzenle</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">Yayınla</string>
+    <string name="reply_hint">Bir yanıt yaz…</string>
     <string name="this_season">Bu Sezon</string>
     <string name="next_season">Sonraki Sezon</string>
     <string name="previous_season">Önceki Sezon</string>
