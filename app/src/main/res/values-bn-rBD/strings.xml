@@ -323,6 +323,8 @@
     <string name="apply">প্রয়োগ করুন</string>
     <string name="cancel">বাতিল করুন</string>
     <string name="edit">সম্পাদনা করুন</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">এই ঋতুতে</string>
     <string name="next_season">পরের ঋতুতে</string>
     <string name="previous_season">পূর্ববর্তী ঋতুতে</string>
