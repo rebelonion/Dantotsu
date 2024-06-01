@@ -323,6 +323,8 @@
     <string name="apply">Applica</string>
     <string name="cancel">Cancella</string>
     <string name="edit">Modifica</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">Questa Stagione</string>
     <string name="next_season">Prossima Stagione</string>
     <string name="previous_season">Stagione Precedente</string>
