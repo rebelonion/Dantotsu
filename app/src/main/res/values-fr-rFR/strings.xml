@@ -926,4 +926,5 @@
     <string name="bio_prompt_info_desc">Utilisez votre empreinte digitale ou votre visage pour déverrouiller l\'application</string>
     <string name="enable_forgot_password">Activer le mot de passe oublié (maintenez le bouton de suppression enfoncé pendant 10 secondes)</string>
     <string name="hide_notification_dot">Masquer le point de notification</string>
+    <string name="private_mode">Private</string>
 </resources>
