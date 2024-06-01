@@ -925,4 +925,5 @@
     <string name="bio_prompt_info_desc">Используйте отпечаток пальца или лицо, чтобы разблокировать приложение</string>
     <string name="enable_forgot_password">Включить функцию \"Забыли пароль\" (удерживайте кнопку очистки в течение 10 секунд)</string>
     <string name="hide_notification_dot">Скрыть точку уведомления</string>
+    <string name="private_mode">Private</string>
 </resources>
