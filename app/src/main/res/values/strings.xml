@@ -367,6 +367,8 @@
     <string name="apply">Apply</string>
     <string name="cancel">Cancel</string>
     <string name="edit">Edit</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">This Season</string>
     <string name="next_season">Next Season</string>
     <string name="previous_season">Previous Season</string>
