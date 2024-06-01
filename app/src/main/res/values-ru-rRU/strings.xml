@@ -323,6 +323,8 @@
     <string name="apply">Применить</string>
     <string name="cancel">Отмена</string>
     <string name="edit">Редактировать</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">Текущий сезон</string>
     <string name="next_season">Следующий сезон</string>
     <string name="previous_season">Предыдущий сезон</string>
