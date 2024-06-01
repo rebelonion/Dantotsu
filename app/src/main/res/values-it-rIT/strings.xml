@@ -925,4 +925,5 @@
     <string name="bio_prompt_info_desc">Usa la tua impronta digitale o il tuo viso per sbloccare l\'app</string>
     <string name="enable_forgot_password">Abilita \"Password dimenticata\" (tieni premuto il pulsante di cancellazione per 10 secondi)</string>
     <string name="hide_notification_dot">Nascondi Punto di Notifica</string>
+    <string name="private_mode">Private</string>
 </resources>
