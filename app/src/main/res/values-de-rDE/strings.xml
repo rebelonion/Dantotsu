@@ -926,4 +926,5 @@
     <string name="bio_prompt_info_desc">Verwenden Sie Ihren Fingerabdruck oder Ihr Gesicht, um die App zu entsperren</string>
     <string name="enable_forgot_password">Passwort vergessen aktivieren (halten Sie die Löschtaste 10 Sekunden lang gedrückt)</string>
     <string name="hide_notification_dot">Benachrichtigungspunkt ausblenden</string>
+    <string name="private_mode">Private</string>
 </resources>
