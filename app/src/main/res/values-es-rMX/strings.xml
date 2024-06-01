@@ -62,9 +62,9 @@
         <item>Todo</item>
     </string-array>
     <string name="no_notifications">No más notificaciones</string>
-    <string name="no_activities">No more activities</string>
+    <string name="no_activities">No hay más actividades</string>
     <string name="followers">Seguidores</string>
-    <string name="write_a_message">Write a Message</string>
+    <string name="write_a_message">Escribe un mensaje</string>
     <string name="status">Estado</string>
     <string-array name="status_anime">
         <item>PLANEANDO</item>
@@ -340,8 +340,8 @@
     <string name="forks">Versiones</string>
     <string name="faq">Preguntas frecuentes</string>
     <string name="accounts">Cuentas</string>
-    <string name="addons">Add-ons</string>
-    <string name="addons_desc">Get more features out of your app</string>
+    <string name="addons">Complementos</string>
+    <string name="addons_desc">Obtén más funciones de tu aplicación</string>
     <string name="myanimelist">MyAnimeList</string>
     <string name="login_with_anilist">¡Iniciar sesión con Anilist!</string>
     <string name="anilist">Anilist</string>
@@ -713,7 +713,7 @@
     <string name="you_cursed">has sido mald*to :pwayge:</string>
     <string name="purge_confirm">¿Estás seguro de que quieres purgar todas las descargas de %1$s?</string>
     <string name="delete_fail_reason">Error al borrar debido a... %1$s</string>
-    <string name="delete_fail">Failed to delete</string>
+    <string name="delete_fail">Error al eliminar</string>
     <string name="hide_replies">Ocultar respuestas</string>
     <string name="view_reply">Ver respuesta</string>
     <string name="view_replies">Ver las respuestas</string>
@@ -836,16 +836,16 @@
     <string name="use_unique_theme_for_each_item_desc">Utilice el color del banner del show</string>
     <string name="use_custom_theme_desc">Usa tu propio color para el tema</string>
     <string name="color_picker_desc">Elige un color</string>
-    <string name="torrent_addon">Torrent Add-on</string>
-    <string name="enable_torrent">Enable Torrent</string>
-    <string name="anime_downloader_addon">Anime Downloader Add-on</string>
-    <string name="install_torrent_addon">Install Torrent Add-on</string>
+    <string name="torrent_addon">Complemento Torrent</string>
+    <string name="enable_torrent">Habilitar Torrent</string>
+    <string name="anime_downloader_addon">Complemento de Descargador de Anime</string>
+    <string name="install_torrent_addon">Instalar Complemento Torrent</string>
     <string name="loaded_successfully">Cargado correctamente</string>
     <string name="not_installed">No instalado</string>
-    <string name="torrent_extension_not_supported">Torrent Add-on not supported on this device</string>
-    <string name="update_addon">Add-on update available</string>
-    <string name="install_addon">Install Add-on</string>
-    <string name="download_addon_not_found">Add-on not found</string>
+    <string name="torrent_extension_not_supported">El complemento Torrent no es compatible con este dispositivo</string>
+    <string name="update_addon">Actualización de complemento disponible</string>
+    <string name="install_addon">Instalar complemento</string>
+    <string name="download_addon_not_found">Complemento no encontrado</string>
     <string name="image">Imagen</string>
     <string name="failed_ext_install_conflict">No se pudo instalar la extensión debido a un conflicto</string>
     <string name="reading">LEYENDO</string>
