@@ -925,4 +925,5 @@
     <string name="bio_prompt_info_desc">Use sua impressão digital ou rosto para desbloquear o aplicativo</string>
     <string name="enable_forgot_password">Ativar Esqueci a Senha (mantenha pressionado o botão limpar por 10 segundos)</string>
     <string name="hide_notification_dot">Ocultar ponto de notificação</string>
+    <string name="private_mode">Private</string>
 </resources>
