@@ -323,6 +323,8 @@
     <string name="apply">প্ৰয়াৱ কৰক</string>
     <string name="cancel">বাতিল কৰক</string>
     <string name="edit">সম্পাদনা কৰক</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">এই ছিজন</string>
     <string name="next_season">পৰৱৰ্তী ছিজন</string>
     <string name="previous_season">পূৰ্বৱৰ্তী ছিজন</string>
