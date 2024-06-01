@@ -922,4 +922,5 @@
     <string name="bio_prompt_info_desc">এপ্পখন আনলক কৰিবলৈ আপোনাৰ আঙুলিৰ ছাপ বা মুখ ব্যৱহাৰ কৰক</string>
     <string name="enable_forgot_password">পাছৱৰ্ড পাহৰি গৈছে সক্ষম কৰক (10 ছেকেণ্ডৰ বাবে ক্লিয়াৰ বুটামত ধৰি ৰাখক)</string>
     <string name="hide_notification_dot">বিজ্ঞাপনৰ বিন্দু লুকাওক</string>
+    <string name="private_mode">Private</string>
 </resources>
