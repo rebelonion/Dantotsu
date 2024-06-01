@@ -323,6 +323,8 @@
     <string name="apply">Apliko</string>
     <string name="cancel">Anulo</string>
     <string name="edit">Redakto</string>
+    <string name="publish">Publish</string>
+    <string name="reply_hint">Write a response…</string>
     <string name="this_season">Kjo Stinë</string>
     <string name="next_season">Stina e Ardhshme</string>
     <string name="previous_season">Stina e Mëparshme</string>
