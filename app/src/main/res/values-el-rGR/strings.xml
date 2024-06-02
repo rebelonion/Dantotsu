@@ -323,8 +323,8 @@
     <string name="apply">Εφαρμογή</string>
     <string name="cancel">Ακύρωση</string>
     <string name="edit">Επεξεργασία</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">Δημοσίευση</string>
+    <string name="reply_hint">Γράψτε μια απάντηση…</string>
     <string name="this_season">Αυτή τη σεζόν</string>
     <string name="next_season">Επόμενη σεζόν</string>
     <string name="previous_season">Προηγούμενη σεζόν</string>
@@ -925,5 +925,5 @@
     <string name="bio_prompt_info_desc">Χρησιμοποιήστε το δακτυλικό αποτύπωμα ή το πρόσωπό σας για να ξεκλειδώσετε την εφαρμογή</string>
     <string name="enable_forgot_password">Ενεργοποίηση επιλογής \"Ξέχασα τον κωδικό\" (κρατήστε πατημένο το κουμπί εκκαθάρισης για 10 δευτερόλεπτα)</string>
     <string name="hide_notification_dot">Απόκρυψη κουκίδας ειδοποίησης</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">Ιδιωτικό</string>
 </resources>
