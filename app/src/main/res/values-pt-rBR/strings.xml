@@ -323,8 +323,8 @@
     <string name="apply">Aplicar</string>
     <string name="cancel">Cancelar</string>
     <string name="edit">Editar</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">Publicar</string>
+    <string name="reply_hint">Escreva uma resposta…</string>
     <string name="this_season">Essa Temporada</string>
     <string name="next_season">Próxima Temporada</string>
     <string name="previous_season">Temporada Anterior</string>
@@ -925,5 +925,5 @@
     <string name="bio_prompt_info_desc">Use sua impressão digital ou rosto para desbloquear o aplicativo</string>
     <string name="enable_forgot_password">Ativar Esqueci a Senha (mantenha pressionado o botão limpar por 10 segundos)</string>
     <string name="hide_notification_dot">Ocultar ponto de notificação</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">Privado</string>
 </resources>
