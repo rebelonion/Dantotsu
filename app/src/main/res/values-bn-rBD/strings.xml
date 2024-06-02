@@ -323,8 +323,8 @@
     <string name="apply">প্রয়োগ করুন</string>
     <string name="cancel">বাতিল করুন</string>
     <string name="edit">সম্পাদনা করুন</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">প্রকাশ করুন</string>
+    <string name="reply_hint">একটি প্রতিক্রিয়া লিখুন…</string>
     <string name="this_season">এই ঋতুতে</string>
     <string name="next_season">পরের ঋতুতে</string>
     <string name="previous_season">পূর্ববর্তী ঋতুতে</string>
@@ -931,5 +931,5 @@
     <string name="bio_prompt_info_desc">অ্যাপটি আনলক করতে আপনার আঙ্গুল বা মুখের ব্যবহার করুন</string>
     <string name="enable_forgot_password">ভুলে গেলে পাসওয়ার্ড সক্রিয় করুন (10 সেকেন্ডের জন্য পরিষ্কার বোতাম চাপুন)</string>
     <string name="hide_notification_dot">নোটিফিকেশন ডট লুকান</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">ব্যক্তিগত</string>
 </resources>
