@@ -323,8 +323,8 @@
     <string name="apply">প্ৰয়াৱ কৰক</string>
     <string name="cancel">বাতিল কৰক</string>
     <string name="edit">সম্পাদনা কৰক</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">প্ৰকাশ কৰক</string>
+    <string name="reply_hint">এটা উত্তৰ লিখক…</string>
     <string name="this_season">এই ছিজন</string>
     <string name="next_season">পৰৱৰ্তী ছিজন</string>
     <string name="previous_season">পূৰ্বৱৰ্তী ছিজন</string>
@@ -922,5 +922,5 @@
     <string name="bio_prompt_info_desc">এপ্পখন আনলক কৰিবলৈ আপোনাৰ আঙুলিৰ ছাপ বা মুখ ব্যৱহাৰ কৰক</string>
     <string name="enable_forgot_password">পাছৱৰ্ড পাহৰি গৈছে সক্ষম কৰক (10 ছেকেণ্ডৰ বাবে ক্লিয়াৰ বুটামত ধৰি ৰাখক)</string>
     <string name="hide_notification_dot">বিজ্ঞাপনৰ বিন্দু লুকাওক</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">ব্যক্তিগত</string>
 </resources>
