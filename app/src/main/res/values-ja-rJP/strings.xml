@@ -323,8 +323,8 @@
     <string name="apply">適用</string>
     <string name="cancel">キャンセル</string>
     <string name="edit">編集</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">公開</string>
+    <string name="reply_hint">返信を書いてください…</string>
     <string name="this_season">今期</string>
     <string name="next_season">来期</string>
     <string name="previous_season">前期</string>
@@ -925,5 +925,5 @@
     <string name="bio_prompt_info_desc">アプリをアンロックするために指紋または顔を使用してください</string>
     <string name="enable_forgot_password">パスワード忘れを有効にする（クリアボタンを10秒間押し続けてください）</string>
     <string name="hide_notification_dot">通知ドットを非表示</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">プライベート</string>
 </resources>
