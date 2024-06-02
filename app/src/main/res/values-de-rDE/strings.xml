@@ -324,8 +324,8 @@
     <string name="apply">Anwenden</string>
     <string name="cancel">Abbrechen</string>
     <string name="edit">Bearbeiten</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">Veröffentlichen</string>
+    <string name="reply_hint">Schreiben Sie eine Antwort…</string>
     <string name="this_season">Diese Saison</string>
     <string name="next_season">Nächste Saison</string>
     <string name="previous_season">Vorherige Saison</string>
@@ -926,5 +926,5 @@
     <string name="bio_prompt_info_desc">Verwenden Sie Ihren Fingerabdruck oder Ihr Gesicht, um die App zu entsperren</string>
     <string name="enable_forgot_password">Passwort vergessen aktivieren (halten Sie die Löschtaste 10 Sekunden lang gedrückt)</string>
     <string name="hide_notification_dot">Benachrichtigungspunkt ausblenden</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">Privat</string>
 </resources>
