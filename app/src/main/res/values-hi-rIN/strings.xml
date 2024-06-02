@@ -323,8 +323,8 @@
     <string name="apply">लागू करें</string>
     <string name="cancel">रद्द करें</string>
     <string name="edit">संपादित करें</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">प्रकाशित करें</string>
+    <string name="reply_hint">एक उत्तर लिखें…</string>
     <string name="this_season">इस सीजन</string>
     <string name="next_season">अगला सीजन</string>
     <string name="previous_season">पिछला सीजन</string>
@@ -922,5 +922,5 @@
     <string name="bio_prompt_info_desc">ऐप को अनलॉक करने के लिए अपनी फिंगरप्रिंट या चेहरे का उपयोग करें</string>
     <string name="enable_forgot_password">पासवर्ड भूलने की सुविधा सक्षम करें (10 सेकंड के लिए क्लियर बटन दबाए रखें)</string>
     <string name="hide_notification_dot">सूचना बिंदु छिपाएँ</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">निजी</string>
 </resources>
