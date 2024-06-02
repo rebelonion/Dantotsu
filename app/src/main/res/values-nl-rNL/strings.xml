@@ -321,8 +321,8 @@
     <string name="apply">Toepassen</string>
     <string name="cancel">Annuleren</string>
     <string name="edit">Bewerken</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">Publiceren</string>
+    <string name="reply_hint">Schrijf een reactie…</string>
     <string name="this_season">Dit Seizoen</string>
     <string name="next_season">Volgend Seizoen</string>
     <string name="previous_season">Vorig Seizoen</string>
@@ -923,5 +923,5 @@
     <string name="bio_prompt_info_desc">Gebruik uw vingerafdruk of gezicht om de app te ontgrendelen</string>
     <string name="enable_forgot_password">Wachtwoord vergeten inschakelen (houd de wis-knop 10 seconden ingedrukt)</string>
     <string name="hide_notification_dot">Verberg Meldingsstip</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">Privé</string>
 </resources>
