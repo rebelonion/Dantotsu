@@ -323,8 +323,8 @@
     <string name="apply">Apliko</string>
     <string name="cancel">Anulo</string>
     <string name="edit">Redakto</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">Publiko</string>
+    <string name="reply_hint">Shkruani një përgjigje…</string>
     <string name="this_season">Kjo Stinë</string>
     <string name="next_season">Stina e Ardhshme</string>
     <string name="previous_season">Stina e Mëparshme</string>
@@ -925,5 +925,5 @@
     <string name="bio_prompt_info_desc">Përdorni shenjat e gishtit ose fytyrën tuaj për të zhbllokuar aplikacionin</string>
     <string name="enable_forgot_password">Aktivizo Harroj Fjalëkalimin (mbani shtypur butonin e pastrimit për 10 sekonda)</string>
     <string name="hide_notification_dot">Fshih Pikën e Njoftimit</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">Privat</string>
 </resources>
