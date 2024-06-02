@@ -323,8 +323,8 @@
     <string name="apply">应用</string>
     <string name="cancel">取消</string>
     <string name="edit">编辑</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">发布</string>
+    <string name="reply_hint">写一个回应…</string>
     <string name="this_season">本季</string>
     <string name="next_season">下一季</string>
     <string name="previous_season">上一季</string>
@@ -919,5 +919,5 @@
     <string name="bio_prompt_info_desc">使用指纹或面部解锁应用</string>
     <string name="enable_forgot_password">启用忘记密码（按住清除按钮10秒）</string>
     <string name="hide_notification_dot">隐藏通知点</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">私人</string>
 </resources>
