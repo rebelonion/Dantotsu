@@ -323,8 +323,8 @@
     <string name="apply">적용</string>
     <string name="cancel">취소</string>
     <string name="edit">편집</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">게시</string>
+    <string name="reply_hint">답글 작성…</string>
     <string name="this_season">이번 시즌</string>
     <string name="next_season">다음 시즌</string>
     <string name="previous_season">이전 시즌</string>
@@ -926,5 +926,5 @@
     <string name="bio_prompt_info_desc">앱 잠금을 해제하려면 지문이나 얼굴을 사용하세요</string>
     <string name="enable_forgot_password">비밀번호 찾기 활성화 (지우기 버튼을 10초 동안 누르세요)</string>
     <string name="hide_notification_dot">알림 점 숨기기</string>
-    <string name="private_mode">Private</string>
+    <string name="private_mode">비공개</string>
 </resources>
