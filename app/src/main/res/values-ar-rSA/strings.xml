@@ -323,8 +323,8 @@
     <string name="apply">تطبيق</string>
     <string name="cancel">إلغاء</string>
     <string name="edit">التعديل</string>
-    <string name="publish">Publish</string>
-    <string name="reply_hint">Write a response…</string>
+    <string name="publish">نشر</string>
+    <string name="reply_hint">أكتب الرد…</string>
     <string name="this_season">هذا الموسم</string>
     <string name="next_season">الموسم القادم</string>
     <string name="previous_season">الموسم السابق</string>
