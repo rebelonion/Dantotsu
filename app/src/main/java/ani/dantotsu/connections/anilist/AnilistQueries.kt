@@ -1055,171 +1055,109 @@ query (${"$"}page: Int = 1, ${"$"}id: Int, ${"$"}type: MediaType, ${"$"}isAdult:
         return null
     }
 
-    private val onListAnime =
-        (if (PrefManager.getVal(PrefName.IncludeAnimeList)) "" else "onList:false").replace(
-            "\"",
-            ""
-        )
-    private val isAdult =
-        (if (PrefManager.getVal(PrefName.AdultOnly)) "isAdult:true" else "").replace("\"", "")
+    private fun mediaList(media1: Page?): ArrayList<Media> {
+        val combinedList = arrayListOf<Media>()
+        media1?.media?.mapTo(combinedList) { Media(it) }
+        return combinedList
+    }
+    private fun getPreference(pref: PrefName): Boolean = PrefManager.getVal(pref)
+    private fun buildQueryString(sort: String, type: String, format: String? = null, country: String? = null): String {
+        val includeList = if (type == "ANIME" && !getPreference(PrefName.IncludeAnimeList)) "onList:false" else if (type == "MANGA" && !getPreference(PrefName.IncludeMangaList)) "onList:false" else ""
+        val isAdult = if (getPreference(PrefName.AdultOnly)) "isAdult:true" else ""
+        val formatFilter = format?.let { "format: $it, " } ?: ""
+        val countryFilter = country?.let { "countryOfOrigin: $it, " } ?: ""
+
+        return """Page(page:1,perPage:50){
+        pageInfo{hasNextPage total}
+        media(sort:$sort, type:$type, $formatFilter $countryFilter $includeList $isAdult){
+            id idMal status chapters episodes nextAiringEpisode{episode}
+            isAdult type meanScore isFavourite format bannerImage countryOfOrigin
+            coverImage{large} title{english romaji userPreferred}
+            mediaListEntry{progress private score(format:POINT_100) status}
+        }
+    }"""
+    }
 
     private fun recentAnimeUpdates(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}airingSchedules(airingAt_greater:0 airingAt_lesser:${System.currentTimeMillis() / 1000 - 10000} sort:TIME_DESC){episode airingAt media{id idMal status chapters episodes nextAiringEpisode{episode} isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large} title{english romaji userPreferred} mediaListEntry{progress private score(format:POINT_100) status}}}}"""
+        val currentTime = System.currentTimeMillis() / 1000
+        return """Page(page:$page,perPage:50){
+        pageInfo{hasNextPage total}
+        airingSchedules(airingAt_greater:0 airingAt_lesser:${currentTime - 10000} sort:TIME_DESC){
+            episode airingAt media{
+                id idMal status chapters episodes nextAiringEpisode{episode}
+                isAdult type meanScore isFavourite format bannerImage countryOfOrigin
+                coverImage{large} title{english romaji userPreferred}
+                mediaListEntry{progress private score(format:POINT_100) status}
+            }
+        }
+    }"""
     }
-
-    private fun trendingMovies(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: ANIME, format: MOVIE, $onListAnime, $isAdult){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    private fun queryAnimeList(): String {
+        return """{
+        recentUpdates:${recentAnimeUpdates(1)}
+        recentUpdates2:${recentAnimeUpdates(2)}
+        trendingMovies:${buildQueryString("POPULARITY_DESC", "ANIME", "MOVIE")}
+        topRated:${buildQueryString("SCORE_DESC", "ANIME")}
+        mostFav:${buildQueryString("FAVOURITES_DESC", "ANIME")}
+    }"""
     }
-
-    private fun topRatedAnime(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}media(sort: SCORE_DESC, type: ANIME, $onListAnime, $isAdult){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
-    }
-
-    private fun mostFavAnime(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}media(sort:FAVOURITES_DESC,type: ANIME, $onListAnime, $isAdult){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
+    private fun queryMangaList(): String {
+        return """{
+        trendingManga:${buildQueryString("POPULARITY_DESC", "MANGA", country = "JP")}
+        trendingManhwa:${buildQueryString("POPULARITY_DESC", "MANGA", country = "KR")}
+        trendingNovel:${buildQueryString("POPULARITY_DESC", "MANGA", format = "NOVEL", country = "JP")}
+        topRated:${buildQueryString("SCORE_DESC", "MANGA")}
+        mostFav:${buildQueryString("FAVOURITES_DESC", "MANGA")}
+ 
+    }"""
     }
 
     suspend fun loadAnimeList(): Map<String, ArrayList<Media>> {
         val list = mutableMapOf<String, ArrayList<Media>>()
-        fun query(): String {
-            return """{
-                recentUpdates:${recentAnimeUpdates(1)}
-                recentUpdates2:${recentAnimeUpdates(2)}
-                trendingMovies:${trendingMovies(1)}
-                trendingMovies2:${trendingMovies(2)}
-                topRated:${topRatedAnime(1)}
-                topRated2:${topRatedAnime(2)}
-                mostFav:${mostFavAnime(1)}
-                mostFav2:${mostFavAnime(2)}
-            }""".trimIndent()
-        }
-        executeQuery<Query.AnimeList>(query(), force = true)?.data?.apply {
+
+        fun filterRecentUpdates(
+            page: Page?,
+        ): ArrayList<Media> {
             val listOnly: Boolean = PrefManager.getVal(PrefName.RecentlyListOnly)
             val adultOnly: Boolean = PrefManager.getVal(PrefName.AdultOnly)
             val idArr = mutableListOf<Int>()
-            list["recentUpdates"] = recentUpdates?.airingSchedules?.mapNotNull { i ->
+            return page?.airingSchedules?.mapNotNull { i ->
                 i.media?.let {
-                    if (!idArr.contains(it.id))
-                        if (!listOnly && it.countryOfOrigin == "JP" && Anilist.adult && adultOnly && it.isAdult == true) {
-                            idArr.add(it.id)
-                            Media(it)
-                        } else if (!listOnly && !adultOnly && (it.countryOfOrigin == "JP" && it.isAdult == false)) {
-                            idArr.add(it.id)
-                            Media(it)
-                        } else if ((listOnly && it.mediaListEntry != null)) {
+                    if (!idArr.contains(it.id)) {
+                        val shouldAdd = when {
+                            !listOnly && it.countryOfOrigin == "JP" && Anilist.adult && adultOnly && it.isAdult == true -> true
+                            !listOnly && !adultOnly && it.countryOfOrigin == "JP" && it.isAdult == false -> true
+                            listOnly && it.mediaListEntry != null -> true
+                            else -> false
+                        }
+                        if (shouldAdd) {
                             idArr.add(it.id)
                             Media(it)
                         } else null
-                    else null
+                    } else null
                 }
             }?.toCollection(ArrayList()) ?: arrayListOf()
-
-            list["trendingMovies"] =
-                trendingMovies?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["topRated"] =
-                topRated?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["mostFav"] =
-                mostFav?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-
-            list["recentUpdates"]?.addAll(recentUpdates2?.airingSchedules?.mapNotNull { i ->
-                i.media?.let {
-                    if (!idArr.contains(it.id))
-                        if (!listOnly && it.countryOfOrigin == "JP" && Anilist.adult && adultOnly && it.isAdult == true) {
-                            idArr.add(it.id)
-                            Media(it)
-                        } else if (!listOnly && !adultOnly && (it.countryOfOrigin == "JP" && it.isAdult == false)) {
-                            idArr.add(it.id)
-                            Media(it)
-                        } else if ((listOnly && it.mediaListEntry != null)) {
-                            idArr.add(it.id)
-                            Media(it)
-                        } else null
-                    else null
-                }
-            }?.toCollection(ArrayList()) ?: arrayListOf())
-            list["trendingMovies"]?.addAll(trendingMovies2?.media?.map { Media(it) }
-                ?.toCollection(ArrayList()) ?: arrayListOf())
-            list["topRated"]?.addAll(
-                topRated2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            )
-            list["mostFav"]?.addAll(
-                mostFav2?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            )
+        }
+        executeQuery<Query.AnimeList>(queryAnimeList(), force = true)?.data?.apply {
+            list["recentUpdates"] = filterRecentUpdates(recentUpdates)
+            list["trendingMovies"] = mediaList(trendingMovies)
+            list["topRated"] = mediaList(topRated)
+            list["mostFav"] = mediaList(mostFav)
         }
         return list
     }
-
-    private val onListManga =
-        (if (PrefManager.getVal(PrefName.IncludeMangaList)) "" else "onList:false").replace(
-            "\"",
-            ""
-        )
-
-    private fun trendingManga(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA,countryOfOrigin:JP, $onListManga, $isAdult){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
-    }
-
-    private fun trendingManhwa(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA, countryOfOrigin:KR, $onListManga, $isAdult){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
-    }
-
-    private fun trendingNovel(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}media(sort:POPULARITY_DESC, type: MANGA, format: NOVEL, countryOfOrigin:JP, $onListManga, $isAdult){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
-    }
-
-    private fun topRatedManga(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}media(sort: SCORE_DESC, type: MANGA, $onListManga, $isAdult){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
-    }
-
-    private fun mostFavManga(page: Int): String {
-        return """Page(page:$page,perPage:50){pageInfo{hasNextPage total}media(sort:FAVOURITES_DESC,type: MANGA, $onListManga, $isAdult){id idMal status chapters episodes nextAiringEpisode{episode}isAdult type meanScore isFavourite format bannerImage countryOfOrigin coverImage{large}title{english romaji userPreferred}mediaListEntry{progress private score(format:POINT_100)status}}}"""
-    }
-
     suspend fun loadMangaList(): Map<String, ArrayList<Media>> {
         val list = mutableMapOf<String, ArrayList<Media>>()
-        fun query(): String {
-            return """{
-                trendingManga:${trendingManga(1)}
-                trendingManga2:${trendingManga(2)}
-                trendingManhwa:${trendingManhwa(1)}
-                trendingManhwa2:${trendingManhwa(2)}
-                trendingNovel:${trendingNovel(1)}
-                trendingNovel2:${trendingNovel(2)}
-                topRated:${topRatedManga(1)}
-                topRated2:${topRatedManga(2)}
-                mostFav:${mostFavManga(1)}
-                mostFav2:${mostFavManga(2)}
-            }""".trimIndent()
+        executeQuery<Query.MangaList>(queryMangaList(), force = true)?.data?.apply {
+            list["trendingManga"] = mediaList(trendingManga)
+            list["trendingManhwa"] = mediaList(trendingManhwa)
+            list["trendingNovel"] = mediaList(trendingNovel)
+            list["topRated"] = mediaList(topRated)
+            list["mostFav"] = mediaList(mostFav)
         }
-
-        executeQuery<Query.MangaList>(query(), force = true)?.data?.apply {
-            list["trendingManga"] =
-                trendingManga?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["trendingManhwa"] =
-                trendingManhwa?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["trendingNovel"] =
-                trendingNovel?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["topRated"] =
-                topRated?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-            list["mostFav"] =
-                mostFav?.media?.map { Media(it) }?.toCollection(ArrayList()) ?: arrayListOf()
-
-            list["trendingManga"]?.addAll(
-                trendingManga2?.media?.map { Media(it) }?.toList() ?: arrayListOf()
-            )
-            list["trendingManhwa"]?.addAll(
-                trendingManhwa2?.media?.map { Media(it) }?.toList() ?: arrayListOf()
-            )
-            list["trendingNovel"]?.addAll(
-                trendingNovel2?.media?.map { Media(it) }?.toList() ?: arrayListOf()
-            )
-            list["topRated"]?.addAll(topRated2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
-            list["mostFav"]?.addAll(mostFav2?.media?.map { Media(it) }?.toList() ?: arrayListOf())
-        }
-
-
         return list
     }
+
 
     suspend fun recentlyUpdated(
         greater: Long = 0,
