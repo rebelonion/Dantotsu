@@ -43,30 +43,14 @@ class ActivityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        type = arguments?.getSerializableCompat<ActivityType>("type") as ActivityType
-        userId = arguments?.getInt("userId")
-        activityId = arguments?.getInt("activityId")
+        arguments?.let {
+            type = it.getSerializableCompat<ActivityType>("type") as ActivityType
+            userId = it.getInt("userId")
+            activityId = it.getInt("activityId")
+        }
         binding.titleBar.visibility = if (type == ActivityType.OTHER_USER) View.VISIBLE else View.GONE
         binding.titleText.text = if (userId == Anilist.userid) getString(R.string.create_new_activity) else getString(R.string.write_a_message)
-        binding.titleImage.setOnClickListener {
-            if(userId == Anilist.userid) {
-                ContextCompat.startActivity(
-                    requireContext(),
-                    Intent(context, ActivityMarkdownCreator::class.java)
-                        .putExtra("type", "activity"),
-                    null
-                )
-            } else{
-                ContextCompat.startActivity(
-                    requireContext(),
-                    Intent(context, ActivityMarkdownCreator::class.java)
-                        .putExtra("type", "message")
-                        .putExtra("userId", userId),
-
-                    null
-                )
-            }
-        }
+        binding.titleImage.setOnClickListener{handleTitleImageClick() }
         binding.listRecyclerView.adapter = adapter
         binding.listRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.listProgressBar.isVisible = true
@@ -104,7 +88,13 @@ class ActivityFragment : Fragment() {
             }
         })
     }
-
+    private fun handleTitleImageClick() {
+        val intent = Intent(context, ActivityMarkdownCreator::class.java).apply {
+            putExtra("type", if (userId == Anilist.userid) "activity" else "message")
+            putExtra("userId", userId)
+        }
+        ContextCompat.startActivity(requireContext(), intent, null)
+    }
 
     private suspend fun getList() {
         val list = when (type) {
@@ -141,35 +131,23 @@ class ActivityFragment : Fragment() {
     }
 
     private fun onActivityClick(id: Int, type: String) {
-        when (type) {
-            "USER" -> {
-                ContextCompat.startActivity(
-                    requireContext(), Intent(requireContext(), ProfileActivity::class.java)
-                        .putExtra("userId", id), null
-                )
-            }
-
-            "MEDIA" -> {
-                ContextCompat.startActivity(
-                    requireContext(), Intent(requireContext(), MediaDetailsActivity::class.java)
-                        .putExtra("mediaId", id), null
-                )
-            }
+        val intent = when (type) {
+            "USER" -> Intent(requireContext(), ProfileActivity::class.java).putExtra("userId", id)
+            "MEDIA" -> Intent(requireContext(), MediaDetailsActivity::class.java).putExtra("mediaId", id)
+            else -> return
         }
+        ContextCompat.startActivity(requireContext(), intent, null)
     }
 
     override fun onResume() {
         super.onResume()
         if (this::binding.isInitialized) {
             binding.root.requestLayout()
-
         }
     }
 
     companion object {
-        enum class ActivityType {
-            GLOBAL, USER, OTHER_USER, ONE
-        }
+        enum class ActivityType { GLOBAL, USER, OTHER_USER, ONE }
 
         fun newInstance(type: ActivityType, userId: Int? = null, activityId: Int? = null): ActivityFragment {
             return ActivityFragment().apply {
