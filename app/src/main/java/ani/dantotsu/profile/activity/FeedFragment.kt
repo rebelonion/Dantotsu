@@ -87,7 +87,7 @@ class FeedFragment : Fragment() {
                             val filtered =
                                 activityList
                                     .filter { if (Anilist.adult) true else it.media?.isAdult == false }
-                                    .filterNot {  //filter out messages that are not directed to the user
+                                    .filterNot {  // filter out messages that are not directed to the user
                                     it.recipient?.id != null && it.recipient.id != Anilist.userid
                                 }
                             adapter.update(filtered.map {
